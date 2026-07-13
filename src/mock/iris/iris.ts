@@ -1,0 +1,5 @@
+export enum IrisMode { Coach = "coach", Explication = "explication", Motivation = "motivation", Decouverte = "découverte" }
+export interface IrisMessage { id: string; role: "iris" | "user"; content: string; createdAt: string; }
+export interface ConversationIRIS { id: string; userId: string; mode: IrisMode; lastQuestion: string; nextAction: string; messages: readonly IrisMessage[]; }
+export const mockIrisConversations: readonly ConversationIRIS[] = [{ id: "iris_usr_001", userId: "usr_001", mode: IrisMode.Explication, lastQuestion: "Par quoi commencer ?", nextAction: "Choisir le premier micro-défi", messages: [{ id: "msg_1", role: "user", content: "Par quoi commencer ?", createdAt: "2026-07-12T10:00:00.000Z" }, { id: "msg_2", role: "iris", content: "Vos résultats indiquent une priorité sociale. Commençons par une action courte et réaliste cette semaine.", createdAt: "2026-07-12T10:00:10.000Z" }] }];
+export const getMockIrisConversation = (userId: string): ConversationIRIS | undefined => mockIrisConversations.find((item) => item.userId === userId);
