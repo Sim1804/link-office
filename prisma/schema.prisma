@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AssessmentStatus {
+  DRAFT
+  SUBMITTED
+}
+enum QuestionKind {
+  REFERENCE
+  ADAPTIVE
+}
+enum Dimension {
+  SOCIAL
+  AFFECTIVE
+  SENTIMENTAL
+  PROFESSIONAL
+  SELF
+}
+
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  firstName String
+  lastName String
+  assessments Assessment[]
+  createdAt DateTime @default(now())
+}
+
+model Assessment {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status AssessmentStatus @default(DRAFT)
+  consentInformation Boolean @default(false)
+  consentResearch Boolean @default(false)
+  consentParticipation Boolean @default(false)
+  demographic DemographicProfile?
+  answers QuestionnaireAnswer[]
+  adaptiveAnswers AdaptiveAnswer[]
+  result IqrhResult?
+  startedAt DateTime @default(now())
+  submittedAt DateTime?
+  updatedAt DateTime @updatedAt
+  @@index([userId, status])
+}
+
+model DemographicProfile {
+  id String @id @default(cuid())
+  assessmentId String @unique
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  gender String
+  ageRange String
+  country String
+  department String?
+  occupation String
+  organizationSize String?
+  relationshipStatus String
+  children Boolean
+  childrenCount Int?
+  livingSituation String
+  livingSituationOther String?
+  selectedSituations String[]
+  primarySituation String?
+}
+
+model AdaptiveModule {
+  id String @id
+  triggerSituation String @unique
+  title String
+  objective String
+  position Int
+  questions AdaptiveQuestion[]
+}
+
+model Question {
+  id String @id
+  kind QuestionKind @default(REFERENCE)
+  dimension Dimension
+  text String
+  position Int @unique
+  required Boolean @default(true)
+  answers QuestionnaireAnswer[]
+}
+
+model AdaptiveQuestion {
+  id String @id
+  moduleId String
+  module AdaptiveModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  text String
+  position Int
+  required Boolean @default(true)
+  answers AdaptiveAnswer[]
+  @@unique([moduleId, position])
+}
+
+model QuestionnaireAnswer {
+  id String @id @default(cuid())
+  assessmentId String
+  questionId String
+  value Int
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Restrict)
+  @@unique([assessmentId, questionId])
+}
+
+model AdaptiveAnswer {
+  id String @id @default(cuid())
+  assessmentId String
+  adaptiveQuestionId String
+  value Int
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  question AdaptiveQuestion @relation(fields: [adaptiveQuestionId], references: [id], onDelete: Restrict)
+  @@unique([assessmentId, adaptiveQuestionId])
+}
+
+model IqrhResult {
+  id String @id @default(cuid())
+  assessmentId String @unique
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  globalScore Float
+  socialScore Float
+  affectiveScore Float
+  sentimentalScore Float
+  professionalScore Float
+  selfScore Float
+  weather String
+  balanceIndex Float
+  priorityDimension Dimension
+  strengths String[]
+  watchpoints String[]
+  primaryProfile String
+  secondaryProfile String
+  profileSummary String
+  createdAt DateTime @default(now())
+}
