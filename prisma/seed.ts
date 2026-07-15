@@ -1,4 +1,5 @@
 import { PrismaClient, Dimension, QuestionKind } from "@prisma/client";
+import library from "./link-office-library.json";
 const prisma = new PrismaClient();
 const reference = [
   ["Q1","SOCIAL","Je peux compter sur plusieurs personnes si je rencontre une difficulté importante."],["Q2","SOCIAL","Je me sens entouré(e) au quotidien."],["Q3","SOCIAL","Je participe régulièrement à des activités ou à des échanges avec d'autres personnes."],["Q4","SOCIAL","Je me sens accepté(e) tel(le) que je suis par les personnes qui m'entourent."],["Q5","SOCIAL","Lorsque je traverse une période difficile, je sais vers qui me tourner."],["Q6","SOCIAL","Je crée facilement de nouvelles relations."],
@@ -23,5 +24,48 @@ const modules = [
   ["Divorce / séparation récente","identifier les ressources mobilisées dans la reconstruction.",["Je bénéficie d'un entourage sur lequel je peux m'appuyer.","Cette période m'a amené(e) à développer de nouvelles relations.","Les aspects administratifs ou financiers pèsent encore sur mon équilibre.","Je retrouve progressivement des repères dans ma vie quotidienne.","Je me sens libre de construire un nouveau projet de vie."]],
   ["Deuil récent","comprendre les ressources disponibles pendant le processus de deuil.",["Je peux parler librement de la personne disparue si je le souhaite.","Mon entourage respecte mon rythme dans cette épreuve.","Je connais les ressources d'accompagnement disponibles si j'en ressens le besoin.","Je retrouve progressivement des activités qui me procurent du plaisir.","Je parviens à maintenir des liens avec les personnes importantes pour moi."]],
 ] as const;
-async function main() { await prisma.question.deleteMany(); await prisma.adaptiveModule.deleteMany(); await prisma.question.createMany({ data: reference.map(([id, dimension, text], index) => ({ id, text, position: index + 1, kind: QuestionKind.REFERENCE, dimension: dimension as Dimension })) }); for (const [index, [triggerSituation, objective, questions]] of modules.entries()) { await prisma.adaptiveModule.create({ data: { id: `MOD${index + 1}`, triggerSituation, title: `Module ${triggerSituation}`, objective, position: index + 1, questions: { create: questions.map((text, questionIndex) => ({ id: `MOD${index + 1}_Q${questionIndex + 1}`, position: questionIndex + 1, text })) } } }); } await prisma.user.upsert({ where: { email: "demo@linkoffice.fr" }, create: { id: "demo-user", email: "demo@linkoffice.fr", firstName: "Camille", lastName: "Demo" }, update: {} }); }
+type LibraryRow = Record<string, string | number | boolean | null>;
+
+const libraryMappings: ReadonlyArray<{ sheet: keyof typeof library; id: string; title: string; category?: string }> = [
+  { sheet: "Tags", id: "tag_value", title: "tag_value", category: "tag_type" },
+  { sheet: "Besoins", id: "besoin_id", title: "besoin", category: "dimensions_iqrh" },
+  { sheet: "Facteurs", id: "factor_id", title: "facteur", category: "type" },
+  { sheet: "Recommandations", id: "recommendation_id", title: "titre", category: "categorie" },
+  { sheet: "Micro-défis", id: "micro_defi_id", title: "titre", category: "categorie" },
+  { sheet: "Partenaires", id: "partenaire_id", title: "nom", category: "categorie" },
+  { sheet: "Ressources", id: "ressource_id", title: "titre", category: "categorie" },
+  { sheet: "Programmes LO", id: "programme_id", title: "nom_programme", category: "niveau" },
+];
+
+async function seedLibrary() {
+  const items = libraryMappings.flatMap(({ sheet, id, title, category }) => (library[sheet] as LibraryRow[]).map((row) => ({
+    id: String(row[id]),
+    library: sheet,
+    title: String(row[title]),
+    category: category ? String(row[category] ?? "") : null,
+    data: row,
+  })));
+  await prisma.libraryItem.deleteMany();
+  await prisma.libraryItem.createMany({ data: items });
+}
+
+async function main() {
+  await prisma.prescriptionItem.deleteMany();
+  await prisma.relationalPrescription.deleteMany();
+  await prisma.icrResult.deleteMany();
+  await prisma.profileResult.deleteMany();
+  await prisma.iqrhResult.deleteMany();
+  await prisma.adaptiveAnswer.deleteMany();
+  await prisma.questionnaireAnswer.deleteMany();
+  await prisma.demographicProfile.deleteMany();
+  await prisma.assessment.deleteMany();
+  await prisma.question.deleteMany();
+  await prisma.adaptiveModule.deleteMany();
+  await prisma.question.createMany({ data: reference.map(([id, dimension, text], index) => ({ id, text, position: index + 1, kind: QuestionKind.REFERENCE, dimension: dimension as Dimension })) });
+  for (const [index, [triggerSituation, objective, questions]] of modules.entries()) {
+    await prisma.adaptiveModule.create({ data: { id: `MOD${index + 1}`, triggerSituation, title: `Module ${triggerSituation}`, objective, position: index + 1, questions: { create: questions.map((text, questionIndex) => ({ id: `MOD${index + 1}_Q${questionIndex + 1}`, position: questionIndex + 1, text })) } } });
+  }
+  await seedLibrary();
+  await prisma.user.upsert({ where: { email: "demo@linkoffice.fr" }, create: { id: "demo-user", email: "demo@linkoffice.fr", firstName: "Camille", lastName: "Demo" }, update: {} });
+}
 main().finally(() => prisma.$disconnect());

@@ -22,6 +22,10 @@ enum Dimension {
   PROFESSIONAL
   SELF
 }
+enum AdaptivePolarity {
+  POSITIVE
+  NEGATIVE
+}
 
 model User {
   id String @id @default(cuid())
@@ -29,6 +33,7 @@ model User {
   firstName String
   lastName String
   assessments Assessment[]
+  prescriptions RelationalPrescription[]
   createdAt DateTime @default(now())
 }
 
@@ -95,6 +100,7 @@ model AdaptiveQuestion {
   text String
   position Int
   required Boolean @default(true)
+  polarity AdaptivePolarity @default(POSITIVE)
   answers AdaptiveAnswer[]
   @@unique([moduleId, position])
 }
@@ -130,12 +136,114 @@ model IqrhResult {
   professionalScore Float
   selfScore Float
   weather String
+  weatherIcon String @default("")
   balanceIndex Float
+  balanceLevel String @default("")
+  balanceInterpretation String @default("")
   priorityDimension Dimension
   strengths String[]
   watchpoints String[]
+  strengthDetails Json
+  watchpointDetails Json
   primaryProfile String
   secondaryProfile String
   profileSummary String
+  bestDimension Dimension @default(SOCIAL)
+  secondBestDimension Dimension @default(SOCIAL)
+  thirdBestDimension Dimension @default(SOCIAL)
+  weakDimension Dimension @default(SOCIAL)
+  weatherTitle String @default("")
+  weatherText String @default("")
+  icr IcrResult?
+  profile ProfileResult?
+  prescription RelationalPrescription?
   createdAt DateTime @default(now())
+}
+
+model IcrResult {
+  id String @id @default(cuid())
+  iqrhResultId String @unique
+  iqrhResult IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
+  score Int
+  familyComplexity Int
+  professionalComplexity Int
+  lifeTransitions Int
+  relationalLoad Int
+  protectiveResources Int
+  level String
+  interpretation String
+  riskFactors String[]
+  protectiveFactors String[]
+  resources String[]
+  vulnerabilities String[]
+  barriers String[]
+  levers String[]
+  dominantNeeds String[]
+}
+
+model ProfileResult {
+  id String @id @default(cuid())
+  iqrhResultId String @unique
+  iqrhResult IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
+  primaryName String
+  secondaryName String
+  primaryScore Int
+  secondaryScore Int
+  primaryConfidence Int
+  secondaryConfidence Int
+  signature String
+  scores Json
+  irisContext Json
+  definition String @default("")
+  typicalResults String[]
+  mainNeeds String[]
+  strengths String[]
+  watchpoints String[]
+  recommendations String[]
+}
+
+/// Source catalogue imported verbatim from Bibliotheques_LINK_OFFICE_V1.xlsm.
+/// `data` deliberately preserves every original spreadsheet column and its text.
+model LibraryItem {
+  id String @id
+  library String
+  title String
+  category String?
+  data Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  prescriptionItems PrescriptionItem[]
+  @@index([library])
+  @@index([library, category])
+}
+
+model RelationalPrescription {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  iqrhResultId String @unique
+  iqrhResult IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
+  title String
+  summary String
+  priorityDimension Dimension
+  status String @default("ACTIVE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  items PrescriptionItem[]
+  @@index([userId, status])
+}
+
+model PrescriptionItem {
+  id String @id @default(cuid())
+  prescriptionId String
+  prescription RelationalPrescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+  libraryItemId String
+  libraryItem LibraryItem @relation(fields: [libraryItemId], references: [id], onDelete: Restrict)
+  kind String
+  position Int
+  rationale String
+  status String @default("PROPOSED")
+  createdAt DateTime @default(now())
+  @@unique([prescriptionId, libraryItemId])
+  @@unique([prescriptionId, position])
 }
