@@ -7,14 +7,236 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String                   @id @default(cuid())
+  email         String                   @unique
+  firstName     String
+  lastName      String
+  createdAt     DateTime                 @default(now())
+  assessments   Assessment[]
+  prescriptions RelationalPrescription[]
+}
+
+model Assessment {
+  id                   String                @id @default(cuid())
+  userId               String
+  status               AssessmentStatus      @default(DRAFT)
+  consentInformation   Boolean               @default(false)
+  consentResearch      Boolean               @default(false)
+  consentParticipation Boolean               @default(false)
+  startedAt            DateTime              @default(now())
+  submittedAt          DateTime?
+  updatedAt            DateTime              @updatedAt
+  adaptiveAnswers      AdaptiveAnswer[]
+  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  demographic          DemographicProfile?
+  result               IqrhResult?
+  answers              QuestionnaireAnswer[]
+
+  @@index([userId, status])
+}
+
+model DemographicProfile {
+  id                   String     @id @default(cuid())
+  assessmentId         String     @unique
+  gender               String
+  ageRange             String
+  country              String
+  department           String?
+  occupation           String
+  organizationSize     String?
+  relationshipStatus   String
+  children             Boolean
+  childrenCount        Int?
+  livingSituation      String
+  livingSituationOther String?
+  selectedSituations   String[]
+  primarySituation     String?
+  assessment           Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+}
+
+model AdaptiveModule {
+  id               String             @id
+  triggerSituation String             @unique
+  title            String
+  objective        String
+  position         Int
+  questions        AdaptiveQuestion[]
+}
+
+model Question {
+  id        String                @id
+  kind      QuestionKind          @default(REFERENCE)
+  dimension Dimension
+  text      String
+  position  Int                   @unique
+  required  Boolean               @default(true)
+  answers   QuestionnaireAnswer[]
+}
+
+model AdaptiveQuestion {
+  id       String           @id
+  moduleId String
+  text     String
+  position Int
+  required Boolean          @default(true)
+  polarity AdaptivePolarity @default(POSITIVE)
+  answers  AdaptiveAnswer[]
+  module   AdaptiveModule   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, position])
+}
+
+model QuestionnaireAnswer {
+  id           String     @id @default(cuid())
+  assessmentId String
+  questionId   String
+  value        Int
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  question     Question   @relation(fields: [questionId], references: [id])
+
+  @@unique([assessmentId, questionId])
+}
+
+model AdaptiveAnswer {
+  id                 String           @id @default(cuid())
+  assessmentId       String
+  adaptiveQuestionId String
+  value              Int
+  question           AdaptiveQuestion @relation(fields: [adaptiveQuestionId], references: [id])
+  assessment         Assessment       @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@unique([assessmentId, adaptiveQuestionId])
+}
+
+model IqrhResult {
+  id                    String                  @id @default(cuid())
+  assessmentId          String                  @unique
+  globalScore           Float
+  socialScore           Float
+  affectiveScore        Float
+  sentimentalScore      Float
+  professionalScore     Float
+  selfScore             Float
+  weather               String
+  balanceIndex          Float
+  priorityDimension     Dimension
+  strengths             String[]
+  watchpoints           String[]
+  primaryProfile        String
+  secondaryProfile      String
+  profileSummary        String
+  createdAt             DateTime                @default(now())
+  bestDimension         Dimension               @default(SOCIAL)
+  secondBestDimension   Dimension               @default(SOCIAL)
+  thirdBestDimension    Dimension               @default(SOCIAL)
+  weakDimension         Dimension               @default(SOCIAL)
+  weatherText           String                  @default("")
+  weatherTitle          String                  @default("")
+  balanceInterpretation String                  @default("")
+  balanceLevel          String                  @default("")
+  weatherIcon           String                  @default("")
+  icr                   IcrResult?
+  assessment            Assessment              @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  profile               ProfileResult?
+  prescription          RelationalPrescription?
+}
+
+model IcrResult {
+  id                     String     @id @default(cuid())
+  iqrhResultId           String     @unique
+  score                  Int
+  familyComplexity       Int
+  professionalComplexity Int
+  lifeTransitions        Int
+  relationalLoad         Int
+  protectiveResources    Int
+  level                  String
+  interpretation         String
+  riskFactors            String[]
+  protectiveFactors      String[]
+  resources              String[]
+  vulnerabilities        String[]
+  barriers               String[]
+  levers                 String[]
+  dominantNeeds          String[]
+  iqrhResult             IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
+}
+
+model ProfileResult {
+  id                  String     @id @default(cuid())
+  iqrhResultId        String     @unique
+  primaryName         String
+  secondaryName       String
+  primaryScore        Int
+  secondaryScore      Int
+  primaryConfidence   Int
+  secondaryConfidence Int
+  signature           String
+  scores              Json
+  irisContext         Json
+  iqrhResult          IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
+}
+
+/// Source catalogue imported verbatim from Bibliotheques_LINK_OFFICE_V1.xlsm.
+/// `data` deliberately preserves every original spreadsheet column and its text.
+model LibraryItem {
+  id                String             @id
+  library           String
+  title             String
+  category          String?
+  data              Json
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  prescriptionItems PrescriptionItem[]
+
+  @@index([library])
+  @@index([library, category])
+}
+
+model RelationalPrescription {
+  id                String             @id @default(cuid())
+  userId            String
+  iqrhResultId      String             @unique
+  title             String
+  summary           String
+  priorityDimension Dimension
+  status            String             @default("ACTIVE")
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  items             PrescriptionItem[]
+  iqrhResult        IqrhResult         @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+model PrescriptionItem {
+  id             String                 @id @default(cuid())
+  prescriptionId String
+  libraryItemId  String
+  kind           String
+  position       Int
+  rationale      String
+  status         String                 @default("PROPOSED")
+  createdAt      DateTime               @default(now())
+  libraryItem    LibraryItem            @relation(fields: [libraryItemId], references: [id])
+  prescription   RelationalPrescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+
+  @@unique([prescriptionId, libraryItemId])
+  @@unique([prescriptionId, position])
+}
+
 enum AssessmentStatus {
   DRAFT
   SUBMITTED
 }
+
 enum QuestionKind {
   REFERENCE
   ADAPTIVE
 }
+
 enum Dimension {
   SOCIAL
   AFFECTIVE
@@ -22,228 +244,8 @@ enum Dimension {
   PROFESSIONAL
   SELF
 }
+
 enum AdaptivePolarity {
   POSITIVE
   NEGATIVE
-}
-
-model User {
-  id String @id @default(cuid())
-  email String @unique
-  firstName String
-  lastName String
-  assessments Assessment[]
-  prescriptions RelationalPrescription[]
-  createdAt DateTime @default(now())
-}
-
-model Assessment {
-  id String @id @default(cuid())
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status AssessmentStatus @default(DRAFT)
-  consentInformation Boolean @default(false)
-  consentResearch Boolean @default(false)
-  consentParticipation Boolean @default(false)
-  demographic DemographicProfile?
-  answers QuestionnaireAnswer[]
-  adaptiveAnswers AdaptiveAnswer[]
-  result IqrhResult?
-  startedAt DateTime @default(now())
-  submittedAt DateTime?
-  updatedAt DateTime @updatedAt
-  @@index([userId, status])
-}
-
-model DemographicProfile {
-  id String @id @default(cuid())
-  assessmentId String @unique
-  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  gender String
-  ageRange String
-  country String
-  department String?
-  occupation String
-  organizationSize String?
-  relationshipStatus String
-  children Boolean
-  childrenCount Int?
-  livingSituation String
-  livingSituationOther String?
-  selectedSituations String[]
-  primarySituation String?
-}
-
-model AdaptiveModule {
-  id String @id
-  triggerSituation String @unique
-  title String
-  objective String
-  position Int
-  questions AdaptiveQuestion[]
-}
-
-model Question {
-  id String @id
-  kind QuestionKind @default(REFERENCE)
-  dimension Dimension
-  text String
-  position Int @unique
-  required Boolean @default(true)
-  answers QuestionnaireAnswer[]
-}
-
-model AdaptiveQuestion {
-  id String @id
-  moduleId String
-  module AdaptiveModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  text String
-  position Int
-  required Boolean @default(true)
-  polarity AdaptivePolarity @default(POSITIVE)
-  answers AdaptiveAnswer[]
-  @@unique([moduleId, position])
-}
-
-model QuestionnaireAnswer {
-  id String @id @default(cuid())
-  assessmentId String
-  questionId String
-  value Int
-  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  question Question @relation(fields: [questionId], references: [id], onDelete: Restrict)
-  @@unique([assessmentId, questionId])
-}
-
-model AdaptiveAnswer {
-  id String @id @default(cuid())
-  assessmentId String
-  adaptiveQuestionId String
-  value Int
-  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  question AdaptiveQuestion @relation(fields: [adaptiveQuestionId], references: [id], onDelete: Restrict)
-  @@unique([assessmentId, adaptiveQuestionId])
-}
-
-model IqrhResult {
-  id String @id @default(cuid())
-  assessmentId String @unique
-  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  globalScore Float
-  socialScore Float
-  affectiveScore Float
-  sentimentalScore Float
-  professionalScore Float
-  selfScore Float
-  weather String
-  weatherIcon String @default("")
-  balanceIndex Float
-  balanceLevel String @default("")
-  balanceInterpretation String @default("")
-  priorityDimension Dimension
-  strengths String[]
-  watchpoints String[]
-  strengthDetails Json?
-  watchpointDetails Json?
-  primaryProfile String
-  secondaryProfile String
-  profileSummary String
-  bestDimension Dimension @default(SOCIAL)
-  secondBestDimension Dimension @default(SOCIAL)
-  thirdBestDimension Dimension @default(SOCIAL)
-  weakDimension Dimension @default(SOCIAL)
-  weatherTitle String @default("")
-  weatherText String @default("")
-  icr IcrResult?
-  profile ProfileResult?
-  prescription RelationalPrescription?
-  createdAt DateTime @default(now())
-}
-
-model IcrResult {
-  id String @id @default(cuid())
-  iqrhResultId String @unique
-  iqrhResult IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
-  score Int
-  familyComplexity Int
-  professionalComplexity Int
-  lifeTransitions Int
-  relationalLoad Int
-  protectiveResources Int
-  level String
-  interpretation String
-  riskFactors String[]
-  protectiveFactors String[]
-  resources String[]
-  vulnerabilities String[]
-  barriers String[]
-  levers String[]
-  dominantNeeds String[]
-}
-
-model ProfileResult {
-  id String @id @default(cuid())
-  iqrhResultId String @unique
-  iqrhResult IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
-  primaryName String
-  secondaryName String
-  primaryScore Int
-  secondaryScore Int
-  primaryConfidence Int
-  secondaryConfidence Int
-  signature String
-  scores Json
-  irisContext Json
-  definition String @default("")
-  typicalResults String[]
-  mainNeeds String[]
-  strengths String[]
-  watchpoints String[]
-  recommendations String[]
-}
-
-/// Source catalogue imported verbatim from Bibliotheques_LINK_OFFICE_V1.xlsm.
-/// `data` deliberately preserves every original spreadsheet column and its text.
-model LibraryItem {
-  id String @id
-  library String
-  title String
-  category String?
-  data Json
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  prescriptionItems PrescriptionItem[]
-  @@index([library])
-  @@index([library, category])
-}
-
-model RelationalPrescription {
-  id String @id @default(cuid())
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  iqrhResultId String @unique
-  iqrhResult IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
-  title String
-  summary String
-  priorityDimension Dimension
-  status String @default("ACTIVE")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  items PrescriptionItem[]
-  @@index([userId, status])
-}
-
-model PrescriptionItem {
-  id String @id @default(cuid())
-  prescriptionId String
-  prescription RelationalPrescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
-  libraryItemId String
-  libraryItem LibraryItem @relation(fields: [libraryItemId], references: [id], onDelete: Restrict)
-  kind String
-  position Int
-  rationale String
-  status String @default("PROPOSED")
-  createdAt DateTime @default(now())
-  @@unique([prescriptionId, libraryItemId])
-  @@unique([prescriptionId, position])
 }

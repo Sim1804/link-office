@@ -5,7 +5,6 @@ const situations = ["Célibataire", "En couple", "Parent", "Famille monoparental
 export default function QuestionnairePage() {
     const [questions, setQuestions] = useState<Question[]>([]); const [modules, setModules] = useState<Module[]>([]); const [selected, setSelected] = useState<string[]>([]); const [answers, setAnswers] = useState<Record<string, number>>({}); const [stage, setStage] = useState<
         "consent" |
-
         "context" |
         "reference" |
         "adaptive"
