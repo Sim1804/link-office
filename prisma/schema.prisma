@@ -143,8 +143,8 @@ model IqrhResult {
   priorityDimension Dimension
   strengths String[]
   watchpoints String[]
-  strengthDetails Json
-  watchpointDetails Json
+  strengthDetails Json?
+  watchpointDetails Json?
   primaryProfile String
   secondaryProfile String
   profileSummary String
