@@ -13,11 +13,11 @@ export default function QuestionnairePage() {
 }
 
 const likertScale = [
-    { value: 1, label: "Pas du tout d&apos;accord" },
-    { value: 2, label: "Plutôt pas d&apos;accord" },
-    { value: 3, label: "Ni d&apos;accord ni pas d&apos;accord" },
-    { value: 4, label: "Plutôt d&apos;accord" },
-    { value: 5, label: "Tout à fait d&apos;accord" },
+    { value: 1, label: "Pas du tout d'accord" },
+    { value: 2, label: "Plutôt pas d'accord" },
+    { value: 3, label: "Ni d'accord ni pas d'accord" },
+    { value: 4, label: "Plutôt d'accord" },
+    { value: 5, label: "Tout à fait d'accord" },
 ];
 function Questions({ questions, answers, setAnswers }: { questions: Question[]; answers: Record<string, number>; setAnswers: (value: Record<string, number>) => void }) {
     return <div className="mt-8 space-y-6">{questions.map(q => <fieldset key={q.id} className="rounded-xl border p-5"><legend className="font-medium">{q.position}. {q.text}</legend><div className="mt-4 flex flex-wrap gap-2">{likertScale.map(({ value, label }) => <label key={value} className={`cursor-pointer rounded border px-3 py-2 ${answers[q.id] === value ? "border-indigo-600 bg-indigo-50" : ""}`}><input className="sr-only" type="radio" name={q.id} checked={answers[q.id] === value} onChange={() => setAnswers({ ...answers, [q.id]: value })} /><div className="text-center">
