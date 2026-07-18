@@ -38,8 +38,8 @@ const libraryMappings: ReadonlyArray<{ sheet: keyof typeof library; id: string; 
 ];
 
 async function seedLibrary() {
-  const items = libraryMappings.flatMap(({ sheet, id, title, category }) => (library[sheet] as LibraryRow[]).map((row) => ({
-    id: String(row[id]),
+  const items = libraryMappings.flatMap(({ sheet, id, title, category }) => (library[sheet] as LibraryRow[]).map((row, index) => ({
+    id: `${sheet}_${index}`,
     library: sheet,
     title: String(row[title]),
     category: category ? String(row[category] ?? "") : null,

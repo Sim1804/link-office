@@ -23,8 +23,8 @@ export class ResultService {
         demographic: true,
       },
     });
-    if (!assessment.consentInformation || !assessment.consentResearch || !assessment.consentParticipation || !assessment.demographic) {
-      throw new Error("Consentements et profil démographique obligatoires.");
+    if (!assessment.consentInformation || !assessment.consentResearch || !assessment.demographic) {
+      throw new Error("Consentements obligatoires (information et recherche) et profil démographique requis.");
     }
     const iqrh = IQRHCalculationService.calculate(assessment.answers.map(({ question, value }) => ({ dimension: question.dimension as IqrhDimension, value })));
     const scores = Object.fromEntries(iqrh.dimensions.map(({ dimension, score }) => [dimension, score])) as Record<IqrhDimension, number>;
@@ -42,7 +42,7 @@ export class ResultService {
     });
     const profile = ProfileCalculationService.calculate({ globalScore: iqrh.globalScore, balanceIndex: iqrh.balanceIndex, icrScore: icr.score, scores, situations: assessment.demographic.selectedSituations });
     const ranked = [...iqrh.dimensions].sort((left, right) => right.score - left.score);
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: import("@prisma/client").Prisma.TransactionClient) => {
       await tx.assessment.update({ where: { id: assessmentId }, data: { status: "SUBMITTED", submittedAt: new Date() } });
       const stored = await tx.iqrhResult.upsert({
         where: { assessmentId },

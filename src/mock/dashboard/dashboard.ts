@@ -1,10 +1,93 @@
-import { getMockChallenges } from "../microChallenges";
-import { getMockResult } from "../iqrh";
 import { mockUsers } from "../users";
 
-export interface Badge { id: string; label: string; earnedAt: string; }
-export interface Progress { userId: string; scoreDelta: number; activeDays: number; completionRate: number; }
-export interface HistoryEvent { id: string; userId: string; type: "assessment_completed" | "prescription_generated" | "challenge_completed"; occurredAt: string; label: string; }
-export interface Dashboard { userId: string; result: ReturnType<typeof getMockResult>; progress: Progress; badges: readonly Badge[]; history: readonly HistoryEvent[]; }
-export const mockDashboards: readonly Dashboard[] = mockUsers.map((user, index) => { const challenges = getMockChallenges(user.id); const complete = challenges.filter((item) => item.status === "completed").length; return { userId: user.id, result: getMockResult(user.id), progress: { userId: user.id, scoreDelta: 2 + (index % 9), activeDays: 3 + (index % 20), completionRate: Math.round((complete / challenges.length) * 100) }, badges: complete > 0 ? [{ id: `badge_${user.id}`, label: "Premier pas", earnedAt: "2026-07-08T09:00:00.000Z" }] : [], history: [{ id: `event_assessment_${user.id}`, userId: user.id, type: "assessment_completed", occurredAt: "2026-07-01T09:09:00.000Z", label: "Questionnaire IQRH complété" }, { id: `event_prescription_${user.id}`, userId: user.id, type: "prescription_generated", occurredAt: "2026-07-01T09:10:00.000Z", label: "Ordonnance relationnelle générée" }] }; });
-export const getMockDashboard = (userId: string): Dashboard | undefined => mockDashboards.find((item) => item.userId === userId);
+export interface DashboardData {
+  userId: string;
+  iqrh: {
+    score_global: number;
+    best_dimension: string;
+    priority_dimension: string;
+    weather: {
+      icon: string;
+      label: string;
+      title: string;
+      text: string;
+    };
+    ier_score: number;
+    ier_level: string;
+    radar: {
+      relations_sociales: number;
+      relations_affectives: number;
+      vie_sentimentale: number;
+      vie_professionnelle_engagement: number;
+      relation_a_soi_sens: number;
+    };
+    dimensions: Array<{
+      code: string;
+      nom: string;
+      score: number;
+    }>;
+  };
+  icr: {
+    icr_score: number;
+    niveau_icr: string;
+    family_complexity: number;
+    professional_complexity: number;
+    transition_complexity: number;
+    relational_load: number;
+    protective_resources: number;
+  };
+  profil: {
+    profile_primary: string;
+    profile_secondary: string;
+    profile_description: string;
+  };
+}
+
+export const mockDashboards: readonly DashboardData[] = mockUsers.map((user) => {
+  return {
+    userId: user.id,
+    iqrh: {
+      score_global: 72,
+      best_dimension: "Relations sociales",
+      priority_dimension: "Vie sentimentale",
+      weather: {
+        icon: "⛅",
+        label: "Éclaircies",
+        title: "Bonne qualité relationnelle",
+        text: "Votre météo est globalement positive avec quelques nuages."
+      },
+      ier_score: 65,
+      ier_level: "Modéré",
+      radar: {
+        relations_sociales: 80,
+        relations_affectives: 70,
+        vie_sentimentale: 55,
+        vie_professionnelle_engagement: 85,
+        relation_a_soi_sens: 70
+      },
+      dimensions: [
+        { code: "D1", nom: "Relations sociales", score: 80 },
+        { code: "D2", nom: "Relations affectives", score: 70 },
+        { code: "D3", nom: "Vie sentimentale", score: 55 },
+        { code: "D4", nom: "Vie professionnelle", score: 85 },
+        { code: "D5", nom: "Relation à soi", score: 70 },
+      ]
+    },
+    icr: {
+      icr_score: 45,
+      niveau_icr: "Complexe",
+      family_complexity: 12,
+      professional_complexity: 8,
+      transition_complexity: 15,
+      relational_load: 10,
+      protective_resources: 20
+    },
+    profil: {
+      profile_primary: "L'Architecte Relationnel",
+      profile_secondary: "L'Explorateur",
+      profile_description: "Vous construisez vos relations sur des bases solides tout en gardant une ouverture au changement."
+    }
+  };
+});
+
+export const getMockDashboard = (userId: string): DashboardData | undefined => mockDashboards.find((item) => item.userId === userId);
