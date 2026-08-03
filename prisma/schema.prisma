@@ -8,18 +8,28 @@ datasource db {
 }
 
 model User {
-  id            String                   @id @default(cuid())
-  email         String                   @unique
-  firstName     String
-  lastName      String
-  createdAt     DateTime                 @default(now())
-  assessments   Assessment[]
-  prescriptions RelationalPrescription[]
+  id             String                   @id @default(cuid())
+  email          String                   @unique
+  firstName      String
+  lastName       String
+  password       String?
+  points         Int                      @default(0)
+  role           UserRole                 @default(EMPLOYEE)
+  organizationId String?
+  createdAt      DateTime                 @default(now())
+  
+  organization   Organization?            @relation(fields: [organizationId], references: [id])
+  assessments    Assessment[]
+  prescriptions  RelationalPrescription[]
+  badges         UserBadge[]
+  pairsInitiated RelationalPair[]         @relation("PairInitiator")
+  pairsReceived  RelationalPair[]         @relation("PairReceiver")
 }
 
 model Assessment {
   id                   String                @id @default(cuid())
   userId               String
+  campaignId           String?
   status               AssessmentStatus      @default(DRAFT)
   consentInformation   Boolean               @default(false)
   consentResearch      Boolean               @default(false)
@@ -29,6 +39,7 @@ model Assessment {
   updatedAt            DateTime              @updatedAt
   adaptiveAnswers      AdaptiveAnswer[]
   user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaign             Campaign?             @relation(fields: [campaignId], references: [id], onDelete: SetNull)
   demographic          DemographicProfile?
   result               IqrhResult?
   answers              QuestionnaireAnswer[]
@@ -248,4 +259,121 @@ enum Dimension {
 enum AdaptivePolarity {
   POSITIVE
   NEGATIVE
+}
+
+model Badge {
+  id             String      @id @default(cuid())
+  name           String      @unique
+  description    String
+  icon           String
+  pointsRequired Int
+  createdAt      DateTime    @default(now())
+  users          UserBadge[]
+}
+
+model UserBadge {
+  id         String   @id @default(cuid())
+  userId     String
+  badgeId    String
+  unlockedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge      Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+}
+
+model RelationalPair {
+  id          String     @id @default(cuid())
+  initiatorId String
+  receiverId  String
+  status      PairStatus @default(PENDING)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  initiator User @relation("PairInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  receiver  User @relation("PairReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([initiatorId, receiverId])
+}
+
+enum PairStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum OrganizationType {
+  B2B           // Entreprises / RH
+  B2B2C         // Mutuelles / Assurances
+  COLLECTIVITE  // Mairies / Régions / Territoires
+}
+
+enum UserRole {
+  EMPLOYEE
+  CITIZEN
+  MEMBER
+  ADMIN_B2B
+  ADMIN_B2B2C
+  ADMIN_COLLECTIVITE
+  SUPER_ADMIN
+}
+
+model Organization {
+  id              String           @id @default(cuid())
+  name            String           // Ex: "Acme Corp", "Harmonie Mutuelle", "Mairie de Lyon"
+  type            OrganizationType
+  siren           String?
+  domainName      String?          // Pour le SSO (ex: "acme.com")
+  codeAccess      String           @unique // Ex: "ACME-2026", "LYON-69"
+  logoUrl         String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  users           User[]
+  campaigns       Campaign[]
+  services        OrganizationService[]
+  subscription    Subscription?
+}
+
+model OrganizationService {
+  id              String       @id @default(cuid())
+  organizationId  String
+  title           String       // Ex: "Atelier Parentalité", "Café des Aidants"
+  description     String
+  targetNeed      String       // Ex: "Soutien parental", "Isolement social"
+  linkUrl         String?
+  createdAt       DateTime     @default(now())
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model Campaign {
+  id              String         @id @default(cuid())
+  organizationId  String
+  title           String
+  startDate       DateTime
+  endDate         DateTime
+  status          CampaignStatus @default(ACTIVE)
+
+  organization    Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assessments     Assessment[]
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  CLOSED
+}
+
+model Subscription {
+  id               String       @id @default(cuid())
+  organizationId   String       @unique
+  stripeCustomerId String?      @unique
+  stripePriceId    String?
+  status           String       @default("INCOMPLETE") // ex: ACTIVE, CANCELED, PAST_DUE
+  currentPeriodEnd DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }

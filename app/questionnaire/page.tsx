@@ -178,10 +178,8 @@ export default function QuestionnairePage() {
                 Question {current + 1} / {questionsList.length}
               </span>
               <span style={{
-                fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase",
-                color: dimColor, background: `${dimColor}22`,
-                border: `1px solid ${dimColor}44`,
-                padding: "3px 10px", borderRadius: 999,
+                fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase",
+                color: dimColor,
               }}>
                 {currentDimension}
               </span>

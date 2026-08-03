@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Brain, ArrowRight, Star, CheckCircle2, ChevronRight } from "lucide-react";
+import { Brain, ArrowRight, Star, CheckCircle2, ChevronRight, Building2 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
@@ -70,8 +70,8 @@ export default function HomePage() {
               <Link href="/auth/register" className="btn btn-primary btn-lg" style={{ textDecoration: "none" }}>
                 Faire le test gratuitement <ArrowRight size={16} />
               </Link>
-              <Link href="#methode" className="btn btn-secondary btn-lg" style={{ textDecoration: "none" }}>
-                Découvrir la méthode
+              <Link href="/business" className="btn btn-secondary btn-lg" style={{ textDecoration: "none", border: "1px solid rgba(124,58,237,0.3)", background: "rgba(124,58,237,0.05)" }}>
+                <Building2 size={16} style={{ marginRight: 8, color: "#a78bfa" }} /> Solutions Entreprises
               </Link>
             </div>
 

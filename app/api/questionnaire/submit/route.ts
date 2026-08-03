@@ -11,6 +11,13 @@ const submitSchema = z.object({
 export async function POST(request: Request) {
   try {
     const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Vous devez être connecté pour soumettre votre évaluation." },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const { assessmentId } = submitSchema.parse(body);
 
@@ -21,15 +28,18 @@ export async function POST(request: Request) {
     });
 
     if (!assessment) {
-      return NextResponse.json({ error: "Évaluation introuvable." }, { status: 404 });
+      return NextResponse.json(
+        { error: "Évaluation introuvable." },
+        { status: 404 }
+      );
     }
 
     // Sécurité: Vérifier que l'utilisateur soumet bien SON évaluation
-    if (!session?.user?.id && assessment.userId !== "demo-user") {
-      return NextResponse.json({ error: "Non autorisé. Vous devez être connecté." }, { status: 401 });
-    }
-    if (session?.user?.id && assessment.userId !== session.user.id && assessment.userId !== "demo-user") {
-      return NextResponse.json({ error: "Accès refusé. Vous ne pouvez pas soumettre cette évaluation." }, { status: 403 });
+    if (assessment.userId !== session.user.id) {
+      return NextResponse.json(
+        { error: "Accès refusé. Vous ne pouvez pas soumettre cette évaluation." },
+        { status: 403 }
+      );
     }
 
     const result = await ResultService.submit(assessmentId);
@@ -37,10 +47,20 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("SUBMIT ERROR:", error);
 
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: "Données invalides.", details: error.issues },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
       {
-        error: error instanceof Error ? error.message : "Soumission impossible.",
-        stack: error instanceof Error && process.env.NODE_ENV === "development" ? error.stack : undefined,
+        error:
+          error instanceof Error ? error.message : "Soumission impossible.",
+        ...(process.env.NODE_ENV === "development" && error instanceof Error
+          ? { stack: error.stack }
+          : {}),
       },
       { status: 400 }
     );

@@ -3,7 +3,7 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
@@ -32,34 +32,7 @@ export default function AdaptivePage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
-    const demogStr = sessionStorage.getItem("iqrh_demographic");
-    if (!demogStr) {
-      router.replace("/profil");
-      return;
-    }
-    const demog = JSON.parse(demogStr);
-
-    fetch("/api/questions")
-      .then((r) => r.json())
-      .then(async (d) => {
-        const selectedSituations = demog.selectedSituations || [];
-        const matchingModules = (d.modules || []).filter((m: any) =>
-          selectedSituations.includes(m.triggerSituation)
-        );
-
-        if (matchingModules.length === 0) {
-          // Aucun module adaptatif requis, on soumet tout de suite
-          await submitAll({}, true);
-        } else {
-          setModules(matchingModules);
-          setLoading(false);
-        }
-      })
-      .catch(() => setLoading(false));
-  }, [router]);
-
-  const submitAll = async (currentAdaptiveAnswers: Record<string, number> = answers, redirecting = false) => {
+  const submitAll = useCallback(async (currentAdaptiveAnswers: Record<string, number> = answers, redirecting = false) => {
     if (!redirecting) setSubmitting(true);
     try {
       const consentStr = sessionStorage.getItem("iqrh_consent");
@@ -78,7 +51,7 @@ export default function AdaptivePage() {
       const startRes = await fetch("/api/questionnaire/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: session?.user?.id || "demo-user" }),
+        body: JSON.stringify({ userId: session?.user?.id }),
       });
       const { id: assessmentId } = await startRes.json();
 
@@ -118,7 +91,34 @@ export default function AdaptivePage() {
         alert("Une erreur est survenue lors de la sauvegarde finale.");
       }
     }
-  };
+  }, [answers, session, router]);
+
+  useEffect(() => {
+    const demogStr = sessionStorage.getItem("iqrh_demographic");
+    if (!demogStr) {
+      router.replace("/profil");
+      return;
+    }
+    const demog = JSON.parse(demogStr);
+
+    fetch("/api/questions")
+      .then((r) => r.json())
+      .then(async (d) => {
+        const selectedSituations = demog.selectedSituations || [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const matchingModules = (d.modules || []).filter((m: any) =>
+          selectedSituations.includes(m.triggerSituation)
+        );
+
+        if (matchingModules.length === 0) {
+          await submitAll({}, true);
+        } else {
+          setModules(matchingModules);
+          setLoading(false);
+        }
+      })
+      .catch(() => setLoading(false));
+  }, [router, submitAll]);
 
   if (loading) {
     return <div style={{ minHeight: "100vh", background: "#0b0f19" }} />;
@@ -211,10 +211,8 @@ export default function AdaptivePage() {
                 Module {currentModuleIndex + 1} / {modules.length}
               </span>
               <span style={{
-                fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase",
-                color: dimColor, background: `${dimColor}22`,
-                border: `1px solid ${dimColor}44`,
-                padding: "3px 10px", borderRadius: 999,
+                fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase",
+                color: dimColor,
               }}>
                 {currentModule.title}
               </span>
@@ -228,6 +226,18 @@ export default function AdaptivePage() {
                 width: `${progress}%`,
                 transition: "width 0.5s ease",
               }} />
+            </div>
+
+            {/* Module dots */}
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, paddingLeft: 2, paddingRight: 2 }}>
+              {modules.map((m, idx) => (
+                <div key={m.id || idx} title={m.title} style={{
+                  width: 8, height: 8, borderRadius: "50%",
+                  background: currentModuleIndex === idx ? dimColor : currentModuleIndex > idx ? `${dimColor}66` : "rgba(255,255,255,0.10)",
+                  transition: "all 0.3s",
+                  boxShadow: currentModuleIndex === idx ? `0 0 8px ${dimColor}` : "none",
+                }} />
+              ))}
             </div>
           </div>
 

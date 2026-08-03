@@ -36,7 +36,6 @@ yarn-error.log*
 .env.test
 .env.production
 .env.local
-# !.env.example is usually committed as a template
 
 # vercel
 .vercel
@@ -51,15 +50,13 @@ next-env.d.ts
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.idea/
-*.swp
-*.swo
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Prisma / Databases
-*.sqlite
-*.db
-*.db-journal
-
-# Agent tooling
-.agents/
-.gemini/
+# custom
+Documentation/
+node_modules

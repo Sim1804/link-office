@@ -1,13 +1,17 @@
 /**
- * auth.ts — Configuration NextAuth.js
- * ─────────────────────────────────────
- * Credentials Provider : valide email/password via l'API interne Next.js.
+ * src/lib/auth.ts — Configuration NextAuth.js
+ * ─────────────────────────────────────────────────────────
+ * Credentials Provider : valide email/password via Prisma.
+ * Propage `role` et `organizationId` dans le JWT et la Session.
  */
-
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
+import { rateLimit, getRetryAfterSeconds } from "@/lib/rate-limit";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "my-super-secret-auth-key-1234",
   providers: [
     Credentials({
       name: "credentials",
@@ -18,33 +22,44 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        try {
-          // Appel interne vers l'API du projet via le proxy Next.js
-          const url = new URL(
-            "/api/v1/users/login",
-            process.env.NEXTAUTH_URL || "http://localhost:3000"
-          ).toString();
+        // ── Rate limiting : 5 tentatives max par email par minute ──
+        const key = `login:${String(credentials.email).toLowerCase()}`;
+        if (!rateLimit(key, { limit: 5, windowMs: 60_000 })) {
+          const retry = getRetryAfterSeconds(key);
+          throw new Error(`RATE_LIMITED:${retry}`);
+        }
 
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: credentials.email,
-              password: credentials.password,
-            }),
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email as string },
+            select: {
+              id: true,
+              email: true,
+              firstName: true,
+              lastName: true,
+              password: true,
+              role: true,
+              organizationId: true,
+            },
           });
 
-          if (!res.ok) return null;
+          if (!user || !user.password) return null;
 
-          const user = await res.json();
+          const isValid = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          );
+          if (!isValid) return null;
+
           return {
-            id: user.user_id,
+            id: user.id,
             email: user.email,
-            name: `${user.prenom} ${user.nom}`,
-            // Le token JWT renvoyé par le backend
-            accessToken: user.access_token,
+            name: `${user.firstName} ${user.lastName}`,
+            role: user.role,
+            organizationId: user.organizationId,
           };
-        } catch {
+        } catch (error) {
+          console.error("AUTH ERROR:", error);
           return null;
         }
       },
@@ -52,18 +67,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // Persister le token d'accès et l'ID utilisateur dans le JWT de session
       if (user) {
-        token.accessToken = (user as Record<string, unknown>).accessToken as string;
         token.userId = user.id;
+        token.role = (user as { role: string }).role;
+        token.organizationId =
+          (user as { organizationId: string | null }).organizationId ?? null;
       }
       return token;
     },
     async session({ session, token }) {
-      // Rendre le token et l'ID accessibles côté client via useSession()
       session.user.id = token.userId as string;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (session as unknown as any).accessToken = token.accessToken;
+      session.user.role = token.role as string;
+      session.user.organizationId = (token.organizationId as string | null) ?? null;
       return session;
     },
   },

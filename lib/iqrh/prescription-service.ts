@@ -29,26 +29,66 @@ export class PrescriptionService {
     });
     const targetDimension = dimensionLabels[result.priorityDimension];
     const situations = result.assessment.demographic?.selectedSituations ?? [];
+    const profileName = result.primaryProfile; // e.g. "Connecteur", "Bâtisseur"
+
+    // 1. Fetch and sort Recommendations
     const recommendations = await prisma.libraryItem.findMany({
       where: { library: "Recommandations" },
       orderBy: { id: "asc" },
     });
+    
     const selectedRecommendations = recommendations
-      .filter((item) => contains(text(item.data, "dimensions_ciblees"), targetDimension))
+      .filter((item) => {
+        const dim = text(item.data, "dimensions_ciblees") || text(item.data, "dimension_ciblee");
+        return contains(dim, targetDimension);
+      })
       .sort((left, right) => {
-        const leftSituation = situations.some((situation) => contains(text(left.data, "situations_ciblees"), situation)) ? 1 : 0;
-        const rightSituation = situations.some((situation) => contains(text(right.data, "situations_ciblees"), situation)) ? 1 : 0;
-        return rightSituation - leftSituation || left.id.localeCompare(right.id);
+        // Points for Situation match
+        const leftSitMatch = situations.some((sit) => contains(text(left.data, "situations_ciblees") || text(left.data, "public_cible"), sit)) ? 1 : 0;
+        const rightSitMatch = situations.some((sit) => contains(text(right.data, "situations_ciblees") || text(right.data, "public_cible"), sit)) ? 1 : 0;
+        
+        // Points for Profile match (profils_cibles)
+        const leftProfMatch = profileName && contains(text(left.data, "profils_cibles"), profileName) ? 2 : 0; // Profile match is weighted higher
+        const rightProfMatch = profileName && contains(text(right.data, "profils_cibles"), profileName) ? 2 : 0;
+
+        const leftScore = leftSitMatch + leftProfMatch;
+        const rightScore = rightSitMatch + rightProfMatch;
+
+        return rightScore - leftScore || left.id.localeCompare(right.id);
       })
       .slice(0, 3);
-    const challenges = await prisma.libraryItem.findMany({
-      where: { library: "Micro-défis", data: { path: ["dimension_ciblee"], string_contains: targetDimension } },
+
+    // 2. Fetch and sort Micro-défis
+    const allChallenges = await prisma.libraryItem.findMany({
+      where: { library: "Micro-défis" },
       orderBy: { id: "asc" },
-      take: 2,
     });
+
+    const challenges = allChallenges
+      .filter((item) => {
+        const dim = text(item.data, "dimensions_ciblees") || text(item.data, "dimension_ciblee");
+        return contains(dim, targetDimension);
+      })
+      .sort((left, right) => {
+        // Points for Situation match
+        const leftSitMatch = situations.some((sit) => contains(text(left.data, "situations_ciblees") || text(left.data, "public_cible"), sit)) ? 1 : 0;
+        const rightSitMatch = situations.some((sit) => contains(text(right.data, "situations_ciblees") || text(right.data, "public_cible"), sit)) ? 1 : 0;
+        
+        // Points for Profile match
+        const leftProfMatch = profileName && contains(text(left.data, "profils_cibles"), profileName) ? 2 : 0;
+        const rightProfMatch = profileName && contains(text(right.data, "profils_cibles"), profileName) ? 2 : 0;
+
+        const leftScore = leftSitMatch + leftProfMatch;
+        const rightScore = rightSitMatch + rightProfMatch;
+
+        return rightScore - leftScore || left.id.localeCompare(right.id);
+      })
+      .slice(0, 2);
+
     const candidates = [...selectedRecommendations, ...challenges];
     const existing = await prisma.relationalPrescription.findUnique({ where: { iqrhResultId: result.id } });
     if (existing) await prisma.relationalPrescription.delete({ where: { id: existing.id } });
+    
     return prisma.relationalPrescription.create({
       data: {
         userId: result.assessment.userId,

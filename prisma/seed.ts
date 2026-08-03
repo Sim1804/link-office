@@ -1,6 +1,9 @@
 import { PrismaClient, Dimension, QuestionKind } from "@prisma/client";
 import library from "./link-office-library.json";
+import bcrypt from "bcryptjs";
+
 const prisma = new PrismaClient();
+
 const reference = [
   ["Q1","SOCIAL","Je peux compter sur plusieurs personnes si je rencontre une difficulté importante."],["Q2","SOCIAL","Je me sens entouré(e) au quotidien."],["Q3","SOCIAL","Je participe régulièrement à des activités ou à des échanges avec d'autres personnes."],["Q4","SOCIAL","Je me sens accepté(e) tel(le) que je suis par les personnes qui m'entourent."],["Q5","SOCIAL","Lorsque je traverse une période difficile, je sais vers qui me tourner."],["Q6","SOCIAL","Je crée facilement de nouvelles relations."],
   ["Q7","AFFECTIVE","Je me sens aimé(e) et apprécié(e)."],["Q8","AFFECTIVE","Je peux exprimer facilement mes émotions auprès des personnes en qui j'ai confiance."],["Q9","AFFECTIVE","Je reçois le soutien affectif dont j'ai besoin lorsque je traverse une période difficile."],["Q10","AFFECTIVE","Je me sens émotionnellement en sécurité dans mes relations importantes."],["Q11","AFFECTIVE","Je peux être pleinement moi-même avec les personnes qui comptent pour moi."],["Q12","AFFECTIVE","Je reçois régulièrement des marques d'affection, de bienveillance ou d'attention."],
@@ -8,6 +11,7 @@ const reference = [
   ["Q19","PROFESSIONAL","Je me sens reconnu(e) dans l'activité qui occupe aujourd'hui la plus grande place dans mon quotidien."],["Q20","PROFESSIONAL","Je peux compter sur les personnes avec lesquelles j'interagis dans cette activité."],["Q21","PROFESSIONAL","Je peux exprimer librement mes idées et mon point de vue."],["Q22","PROFESSIONAL","Les relations que j'entretiens dans cette activité sont globalement positives et respectueuses."],["Q23","PROFESSIONAL","Je me sens utile à travers cette activité."],["Q24","PROFESSIONAL","Cette activité contribue positivement à mon équilibre de vie."],
   ["Q25","SELF","Je me sens en accord avec mes valeurs."],["Q26","SELF","J'ai le sentiment que ma vie a du sens."],["Q27","SELF","Je prends régulièrement du temps pour prendre soin de moi."],["Q28","SELF","Je suis satisfait(e) de l'équilibre entre les différentes sphères de ma vie."],["Q29","SELF","Je me projette avec confiance dans les prochaines années."],["Q30","SELF","Globalement, je suis satisfait(e) de ma qualité de vie relationnelle."],
 ] as const;
+
 const modules = [
   ["Célibataire","comprendre les opportunités, les freins et les ressources dans la vie sentimentale.",["Les occasions de rencontrer de nouvelles personnes me semblent suffisantes.","Mon entourage respecte ma situation sentimentale actuelle.","Les outils actuels (applications, réseaux, activités…) répondent à mes attentes pour faire des rencontres.","Mon célibat me permet aujourd'hui de développer d'autres projets de vie importants.","Je sais clairement quel type de relation je souhaite construire."]],
   ["En couple","identifier les leviers favorisant l'équilibre du couple.",["Notre organisation quotidienne laisse une place suffisante à notre relation.","Nous parvenons à préserver des moments de qualité malgré nos contraintes.","Les responsabilités extérieures ont peu d'impact sur notre relation.","Nous savons demander de l'aide lorsque notre couple traverse une difficulté.","Nous partageons une vision commune de notre avenir."]],
@@ -24,6 +28,7 @@ const modules = [
   ["Divorce / séparation récente","identifier les ressources mobilisées dans la reconstruction.",["Je bénéficie d'un entourage sur lequel je peux m'appuyer.","Cette période m'a amené(e) à développer de nouvelles relations.","Les aspects administratifs ou financiers pèsent encore sur mon équilibre.","Je retrouve progressivement des repères dans ma vie quotidienne.","Je me sens libre de construire un nouveau projet de vie."]],
   ["Deuil récent","comprendre les ressources disponibles pendant le processus de deuil.",["Je peux parler librement de la personne disparue si je le souhaite.","Mon entourage respecte mon rythme dans cette épreuve.","Je connais les ressources d'accompagnement disponibles si j'en ressens le besoin.","Je retrouve progressivement des activités qui me procurent du plaisir.","Je parviens à maintenir des liens avec les personnes importantes pour moi."]],
 ] as const;
+
 type LibraryRow = Record<string, string | number | boolean | null>;
 
 const libraryMappings: ReadonlyArray<{ sheet: keyof typeof library; id: string; title: string; category?: string }> = [
@@ -49,6 +54,99 @@ async function seedLibrary() {
   await prisma.libraryItem.createMany({ data: items });
 }
 
+async function seedOrganizations() {
+  console.log("🏢 Seeding organisations de test...");
+
+  const acme = await prisma.organization.upsert({
+    where: { codeAccess: "ACME-2026-TEST" },
+    create: { name: "Acme Corp (B2B Test)", type: "B2B", codeAccess: "ACME-2026-TEST", siren: "123456789" },
+    update: {},
+  });
+
+  const mutu = await prisma.organization.upsert({
+    where: { codeAccess: "MUTU-2026-TEST" },
+    create: { name: "Mutuelle Solis (B2B2C Test)", type: "B2B2C", codeAccess: "MUTU-2026-TEST", siren: "987654321" },
+    update: {},
+  });
+
+  const ville = await prisma.organization.upsert({
+    where: { codeAccess: "VILLE-2026-TEST" },
+    create: { name: "Ville de Testville (Collectivité)", type: "COLLECTIVITE", codeAccess: "VILLE-2026-TEST" },
+    update: {},
+  });
+
+  // Mot de passe pour TOUS les comptes de test : "Admin1234!"
+  const adminPasswordHash = bcrypt.hashSync("Admin1234!", 10);
+
+  // ── Comptes admins de test ───────────────────────────────────────
+  await prisma.user.upsert({
+    where: { email: "admin.b2b@linkoffice.fr" },
+    create: {
+      email: "admin.b2b@linkoffice.fr",
+      firstName: "RH", lastName: "Admin B2B",
+      password: adminPasswordHash,
+      role: "ADMIN_B2B",
+      organizationId: acme.id,
+    },
+    update: { password: adminPasswordHash, role: "ADMIN_B2B", organizationId: acme.id },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "admin.b2b2c@linkoffice.fr" },
+    create: {
+      email: "admin.b2b2c@linkoffice.fr",
+      firstName: "Gestionnaire", lastName: "Mutuelle",
+      password: adminPasswordHash,
+      role: "ADMIN_B2B2C",
+      organizationId: mutu.id,
+    },
+    update: { password: adminPasswordHash, role: "ADMIN_B2B2C", organizationId: mutu.id },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "admin.collectivite@linkoffice.fr" },
+    create: {
+      email: "admin.collectivite@linkoffice.fr",
+      firstName: "Direction", lastName: "Ville",
+      password: adminPasswordHash,
+      role: "ADMIN_COLLECTIVITE",
+      organizationId: ville.id,
+    },
+    update: { password: adminPasswordHash, role: "ADMIN_COLLECTIVITE", organizationId: ville.id },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "superadmin@linkoffice.fr" },
+    create: {
+      email: "superadmin@linkoffice.fr",
+      firstName: "Super", lastName: "Admin",
+      password: adminPasswordHash,
+      role: "SUPER_ADMIN",
+    },
+    update: { password: adminPasswordHash, role: "SUPER_ADMIN" },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "demo@linkoffice.fr" },
+    create: {
+      id: "demo-user",
+      email: "demo@linkoffice.fr",
+      firstName: "Camille",
+      lastName: "Demo",
+      password: adminPasswordHash,
+      role: "EMPLOYEE",
+    },
+    update: { password: adminPasswordHash, role: "EMPLOYEE" },
+  });
+
+  console.log("✅ Organisations et utilisateurs de test créés avec succès !");
+  console.log(`  B2B Admin     : admin.b2b@linkoffice.fr | Admin1234!`);
+  console.log(`  B2B2C Admin   : admin.b2b2c@linkoffice.fr | Admin1234!`);
+  console.log(`  Collectivité  : admin.collectivite@linkoffice.fr | Admin1234!`);
+  console.log(`  Super Admin   : superadmin@linkoffice.fr | Admin1234!`);
+  console.log(`  Demo User     : demo@linkoffice.fr | Admin1234!`);
+}
+
 async function main() {
   await prisma.prescriptionItem.deleteMany();
   await prisma.relationalPrescription.deleteMany();
@@ -61,11 +159,38 @@ async function main() {
   await prisma.assessment.deleteMany();
   await prisma.question.deleteMany();
   await prisma.adaptiveModule.deleteMany();
-  await prisma.question.createMany({ data: reference.map(([id, dimension, text], index) => ({ id, text, position: index + 1, kind: QuestionKind.REFERENCE, dimension: dimension as Dimension })) });
+
+  await prisma.question.createMany({
+    data: reference.map(([id, dimension, text], index) => ({
+      id,
+      text,
+      position: index + 1,
+      kind: QuestionKind.REFERENCE,
+      dimension: dimension as Dimension,
+    })),
+  });
+
   for (const [index, [triggerSituation, objective, questions]] of modules.entries()) {
-    await prisma.adaptiveModule.create({ data: { id: `MOD${index + 1}`, triggerSituation, title: `Module ${triggerSituation}`, objective, position: index + 1, questions: { create: questions.map((text, questionIndex) => ({ id: `MOD${index + 1}_Q${questionIndex + 1}`, position: questionIndex + 1, text })) } } });
+    await prisma.adaptiveModule.create({
+      data: {
+        id: `MOD${index + 1}`,
+        triggerSituation,
+        title: `Module ${triggerSituation}`,
+        objective,
+        position: index + 1,
+        questions: {
+          create: questions.map((text, questionIndex) => ({
+            id: `MOD${index + 1}_Q${questionIndex + 1}`,
+            position: questionIndex + 1,
+            text,
+          })),
+        },
+      },
+    });
   }
+
   await seedLibrary();
-  await prisma.user.upsert({ where: { email: "demo@linkoffice.fr" }, create: { id: "demo-user", email: "demo@linkoffice.fr", firstName: "Camille", lastName: "Demo" }, update: {} });
+  await seedOrganizations();
 }
+
 main().finally(() => prisma.$disconnect());

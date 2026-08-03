@@ -18,8 +18,8 @@ export function Footer() {
               </span>
             </Link>
             <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.7, maxWidth: 320 }}>
-              Évaluez votre qualité de vie relationnelle avec l'IQRH.
-              Guidé par l'IA IRIS, développez vos relations et votre équilibre.
+              Évaluez votre qualité de vie relationnelle avec l&apos;IQRH.
+              Guidé par l&apos;IA IRIS, développez vos relations et votre équilibre.
             </p>
           </div>
 
@@ -39,9 +39,15 @@ export function Footer() {
           <div>
             <h4 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 14, marginBottom: 16 }}>Légal</h4>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
-              {["Confidentialité", "CGU", "Mentions légales", "Contact"].map((item) => (
-                <li key={item}>
-                  <span style={{ color: "var(--text-2)", fontSize: 13, cursor: "pointer" }}>{item}</span>
+              {[
+                { label: "Politique de confidentialité", href: "/politique-confidentialite" },
+                { label: "Mentions légales", href: "/mentions-legales" },
+                { label: "Contact", href: "mailto:contact@link-office.fr" },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href} style={{ color: "var(--text-2)", fontSize: 13, textDecoration: "none" }}>
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -49,8 +55,8 @@ export function Footer() {
         </div>
 
         <div style={{ paddingTop: 32, borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-          <p style={{ color: "var(--text-3)", fontSize: 13 }}>© 2025 LinkOffice. Tous droits réservés.</p>
-          <p style={{ color: "var(--text-3)", fontSize: 12 }}>Propulsé par l'Intelligence Artificielle IRIS</p>
+          <p style={{ color: "var(--text-3)", fontSize: 13 }}>© 2026 LinkOffice. Tous droits réservés.</p>
+          <p style={{ color: "var(--text-3)", fontSize: 12 }}>Propulsé par l&apos;Intelligence Artificielle IRIS</p>
         </div>
       </div>
 

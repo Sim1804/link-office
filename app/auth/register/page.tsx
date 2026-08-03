@@ -20,7 +20,7 @@ export default function RegisterPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/v1/users/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -30,7 +30,7 @@ export default function RegisterPage() {
         throw new Error(data.detail || "Erreur lors de l'inscription");
       }
       await signIn("credentials", { email: form.email, password: form.password, redirect: false });
-      router.push("/profil");
+      router.push("/consentement");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur lors de l'inscription");
     } finally {
