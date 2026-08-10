@@ -17,13 +17,12 @@ model User {
   role           UserRole                 @default(EMPLOYEE)
   organizationId String?
   createdAt      DateTime                 @default(now())
-  
-  organization   Organization?            @relation(fields: [organizationId], references: [id])
   assessments    Assessment[]
-  prescriptions  RelationalPrescription[]
-  badges         UserBadge[]
   pairsInitiated RelationalPair[]         @relation("PairInitiator")
   pairsReceived  RelationalPair[]         @relation("PairReceiver")
+  prescriptions  RelationalPrescription[]
+  organization   Organization?            @relation(fields: [organizationId], references: [id])
+  badges         UserBadge[]
 }
 
 model Assessment {
@@ -38,8 +37,8 @@ model Assessment {
   submittedAt          DateTime?
   updatedAt            DateTime              @updatedAt
   adaptiveAnswers      AdaptiveAnswer[]
+  campaign             Campaign?             @relation(fields: [campaignId], references: [id])
   user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  campaign             Campaign?             @relation(fields: [campaignId], references: [id], onDelete: SetNull)
   demographic          DemographicProfile?
   result               IqrhResult?
   answers              QuestionnaireAnswer[]
@@ -238,6 +237,90 @@ model PrescriptionItem {
   @@unique([prescriptionId, position])
 }
 
+model Badge {
+  id             String      @id @default(cuid())
+  name           String      @unique
+  description    String
+  icon           String
+  pointsRequired Int
+  createdAt      DateTime    @default(now())
+  users          UserBadge[]
+}
+
+model UserBadge {
+  id         String   @id @default(cuid())
+  userId     String
+  badgeId    String
+  unlockedAt DateTime @default(now())
+  badge      Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+}
+
+model RelationalPair {
+  id          String     @id @default(cuid())
+  initiatorId String
+  receiverId  String
+  status      PairStatus @default(PENDING)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  initiator   User       @relation("PairInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  receiver    User       @relation("PairReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([initiatorId, receiverId])
+}
+
+model Organization {
+  id           String                @id @default(cuid())
+  name         String
+  type         OrganizationType
+  siren        String?
+  domainName   String?
+  codeAccess   String                @unique
+  logoUrl      String?
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  campaigns    Campaign[]
+  services     OrganizationService[]
+  subscription Subscription?
+  users        User[]
+}
+
+model OrganizationService {
+  id             String       @id @default(cuid())
+  organizationId String
+  title          String
+  description    String
+  targetNeed     String
+  linkUrl        String?
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model Campaign {
+  id             String         @id @default(cuid())
+  organizationId String
+  title          String
+  startDate      DateTime
+  endDate        DateTime
+  status         CampaignStatus @default(ACTIVE)
+  assessments    Assessment[]
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model Subscription {
+  id               String       @id @default(cuid())
+  organizationId   String       @unique
+  stripeCustomerId String?      @unique
+  stripePriceId    String?
+  status           String       @default("INCOMPLETE")
+  currentPeriodEnd DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
 enum AssessmentStatus {
   DRAFT
   SUBMITTED
@@ -261,41 +344,6 @@ enum AdaptivePolarity {
   NEGATIVE
 }
 
-model Badge {
-  id             String      @id @default(cuid())
-  name           String      @unique
-  description    String
-  icon           String
-  pointsRequired Int
-  createdAt      DateTime    @default(now())
-  users          UserBadge[]
-}
-
-model UserBadge {
-  id         String   @id @default(cuid())
-  userId     String
-  badgeId    String
-  unlockedAt DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  badge      Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, badgeId])
-}
-
-model RelationalPair {
-  id          String     @id @default(cuid())
-  initiatorId String
-  receiverId  String
-  status      PairStatus @default(PENDING)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  initiator User @relation("PairInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
-  receiver  User @relation("PairReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
-
-  @@unique([initiatorId, receiverId])
-}
-
 enum PairStatus {
   PENDING
   ACCEPTED
@@ -303,9 +351,9 @@ enum PairStatus {
 }
 
 enum OrganizationType {
-  B2B           // Entreprises / RH
-  B2B2C         // Mutuelles / Assurances
-  COLLECTIVITE  // Mairies / Régions / Territoires
+  B2B
+  B2B2C
+  COLLECTIVITE
 }
 
 enum UserRole {
@@ -318,62 +366,8 @@ enum UserRole {
   SUPER_ADMIN
 }
 
-model Organization {
-  id              String           @id @default(cuid())
-  name            String           // Ex: "Acme Corp", "Harmonie Mutuelle", "Mairie de Lyon"
-  type            OrganizationType
-  siren           String?
-  domainName      String?          // Pour le SSO (ex: "acme.com")
-  codeAccess      String           @unique // Ex: "ACME-2026", "LYON-69"
-  logoUrl         String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-
-  users           User[]
-  campaigns       Campaign[]
-  services        OrganizationService[]
-  subscription    Subscription?
-}
-
-model OrganizationService {
-  id              String       @id @default(cuid())
-  organizationId  String
-  title           String       // Ex: "Atelier Parentalité", "Café des Aidants"
-  description     String
-  targetNeed      String       // Ex: "Soutien parental", "Isolement social"
-  linkUrl         String?
-  createdAt       DateTime     @default(now())
-
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-}
-
-model Campaign {
-  id              String         @id @default(cuid())
-  organizationId  String
-  title           String
-  startDate       DateTime
-  endDate         DateTime
-  status          CampaignStatus @default(ACTIVE)
-
-  organization    Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  assessments     Assessment[]
-}
-
 enum CampaignStatus {
   DRAFT
   ACTIVE
   CLOSED
-}
-
-model Subscription {
-  id               String       @id @default(cuid())
-  organizationId   String       @unique
-  stripeCustomerId String?      @unique
-  stripePriceId    String?
-  status           String       @default("INCOMPLETE") // ex: ACTIVE, CANCELED, PAST_DUE
-  currentPeriodEnd DateTime?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
