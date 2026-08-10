@@ -60,7 +60,7 @@ export default function ConsentementPage() {
       consentParticipation: form.consentement_participation,
     }));
     
-    router.push("/profil");
+    router.push("/profil?onboarding=true");
   };
 
   if (loadingStatus) return <div style={{ minHeight: "100vh", background: "#0b0f19" }} />;
