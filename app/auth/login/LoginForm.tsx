@@ -24,11 +24,8 @@ export function LoginForm() {
       const role = session.user.role;
       let target = callbackUrl;
 
-      // Redirection prioritaire par rôle pour les comptes administrateurs
-      if (role === "ADMIN_B2B") target = "/dashboard/b2b";
-      else if (role === "ADMIN_B2B2C") target = "/dashboard/b2b2c";
-      else if (role === "ADMIN_COLLECTIVITE") target = "/dashboard/collectivites";
-      else if (role === "SUPER_ADMIN") target = "/admin";
+      // Redirection unique vers le traffic controller
+      if (role === "SUPER_ADMIN") target = "/admin";
       else if (callbackUrl === "/dashboard" || callbackUrl === "/" || callbackUrl.startsWith("/auth/")) {
         target = "/dashboard";
       }
@@ -58,16 +55,12 @@ export function LoginForm() {
         }
         setLoading(false);
       } else {
-        // Récupérer le rôle de l'utilisateur fraîchement connecté
         const sessionRes = await fetch("/api/auth/session");
         const sessionData = await sessionRes.json();
         const role = sessionData?.user?.role;
 
         let target = callbackUrl;
-        if (role === "ADMIN_B2B") target = "/dashboard/b2b";
-        else if (role === "ADMIN_B2B2C") target = "/dashboard/b2b2c";
-        else if (role === "ADMIN_COLLECTIVITE") target = "/dashboard/collectivites";
-        else if (role === "SUPER_ADMIN") target = "/admin";
+        if (role === "SUPER_ADMIN") target = "/admin";
         else if (!searchParams.has("callbackUrl") || callbackUrl === "/dashboard" || callbackUrl === "/" || callbackUrl.startsWith("/auth/")) {
           target = "/dashboard";
         }
@@ -112,7 +105,7 @@ export function LoginForm() {
         </div>
 
         {/* Form card */}
-        <div className="glass-strong" style={{ borderRadius: 20, padding: 36 }}>
+        <div className="card" style={{ padding: 40, borderRadius: 24 }}>
           {registered === "business" && (
             <div style={{
               display: "flex", alignItems: "center", gap: 8,

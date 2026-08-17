@@ -72,11 +72,16 @@ export default function AdaptivePage() {
         throw new Error("Erreur de sauvegarde: " + JSON.stringify(errorData));
       }
 
-      await fetch("/api/questionnaire/submit", {
+      const submitRes = await fetch("/api/questionnaire/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ assessmentId }),
       });
+
+      if (!submitRes.ok) {
+        const errorData = await submitRes.json();
+        throw new Error("Erreur de soumission finale: " + JSON.stringify(errorData));
+      }
 
       if (!redirecting) {
         setSubmitted(true);
@@ -242,15 +247,21 @@ export default function AdaptivePage() {
           </div>
 
           {/* ── Carte Question ── */}
-          <div style={{
-            background: "rgba(26,34,54,0.85)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-            border: "1px solid rgba(255,255,255,0.12)", borderRadius: 24, padding: 32,
-            flex: 1, display: "flex", flexDirection: "column",
+          <div className="card" style={{
+            padding: 32, flex: 1, display: "flex", flexDirection: "column",
           }}>
             {/* Sous-titre dimension */}
             <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
               {currentModule.title} — {currentQuestionIndex + 1}/{currentModule.questions.length}
             </p>
+
+            {/* Objectif du module */}
+            {currentModule.objective && (
+              <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 20, lineHeight: 1.5 }}>
+                <strong style={{ color: dimColor }}>Objectif : </strong>
+                {currentModule.objective}
+              </p>
+            )}
 
             {/* Question */}
             <h2 style={{

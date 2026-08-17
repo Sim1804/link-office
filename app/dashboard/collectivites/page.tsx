@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
+import { DashboardSkeleton } from "@/components/dashboard/LoadingSkeleton";
 import { MapPin, RefreshCw, Users, TrendingUp, Lightbulb, ShieldAlert } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, Radar } from "recharts";
 
@@ -51,27 +52,38 @@ export default function CollectivitesDashboard() {
         <div className="page-container-wide" style={{ position: "relative", zIndex: 1 }}>
 
           {/* Header */}
-          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 32 }}>
-            <div style={{ width: 52, height: 52, background: "rgba(6,182,212,0.12)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <MapPin style={{ width: 26, height: 26, color: "#06b6d4" }} />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              <div style={{ width: 52, height: 52, background: "rgba(6,182,212,0.12)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <MapPin style={{ width: 26, height: 26, color: "#06b6d4" }} />
+              </div>
+              <div>
+                <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "#f8fafc" }}>
+                  Observatoire du Lien Social
+                </h1>
+                <p style={{ color: "#64748b", fontSize: 14 }}>
+                  Données territoriales agrégées • Anonymat garanti
+                  {data && <> • {data.respondentCount} citoyens</>}
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "#f8fafc" }}>
-                Observatoire du Lien Social
-              </h1>
-              <p style={{ color: "#64748b", fontSize: 14 }}>
-                Données territoriales agrégées • Anonymat garanti
-                {data && <> • {data.respondentCount} citoyens</>}
-              </p>
+            <div style={{ display: "flex", gap: 12 }}>
+              <a 
+                href="/dashboard/actions"
+                style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(6,182,212,0.15)", color: "#06b6d4", padding: "10px 16px", borderRadius: 10, fontSize: 14, fontWeight: 600, border: "1px solid rgba(6,182,212,0.3)", textDecoration: "none", transition: "all 0.2s" }}
+              >
+                Plan d'action
+              </a>
+              <a 
+                href="/dashboard/collectivites/campaigns"
+                style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(124,58,237,0.15)", color: "#a78bfa", padding: "10px 16px", borderRadius: 10, fontSize: 14, fontWeight: 600, border: "1px solid rgba(124,58,237,0.3)", textDecoration: "none", transition: "all 0.2s" }}
+              >
+                Gérer les campagnes
+              </a>
             </div>
           </div>
 
-          {loading && (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 300, gap: 12, color: "#64748b" }}>
-              <RefreshCw size={20} style={{ animation: "spin 1s linear infinite" }} />
-              Chargement des données territoriales…
-            </div>
-          )}
+          {loading && <DashboardSkeleton />}
 
           {!loading && data?.anonymityBlocked && (
             <div style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: 16, padding: 32, textAlign: "center" }}>

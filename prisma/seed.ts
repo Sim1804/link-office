@@ -1,5 +1,5 @@
 import { PrismaClient, Dimension, QuestionKind } from "@prisma/client";
-import library from "./link-office-library.json";
+import library from "./link-office-library.json" assert { type: "json" };
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -44,7 +44,7 @@ const libraryMappings: ReadonlyArray<{ sheet: keyof typeof library; id: string; 
 
 async function seedLibrary() {
   const items = libraryMappings.flatMap(({ sheet, id, title, category }) => (library[sheet] as LibraryRow[]).map((row, index) => ({
-    id: `${sheet}_${index}`,
+    id: (sheet === "Tags" || !row[id]) ? `${sheet}_${index}` : String(row[id]),
     library: sheet,
     title: String(row[title]),
     category: category ? String(row[category] ?? "") : null,

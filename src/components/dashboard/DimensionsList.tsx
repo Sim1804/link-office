@@ -1,3 +1,9 @@
+/**
+ * @file DimensionsList.tsx
+ * @module src/components/dashboard
+ * @description Liste premium des 5 dimensions IQRH avec barres de progression colorées.
+ */
+
 import { getDimensionStatusInfo } from "@/lib/iqrh/types";
 
 interface Dimension {
@@ -12,45 +18,77 @@ interface DimensionsListProps {
   priorityDimension: string;
 }
 
-export function DimensionsList({ dimensions }: DimensionsListProps) {
+const DIM_ICONS: Record<string, string> = {
+  D1: "🤝",
+  D2: "💛",
+  D3: "💫",
+  D4: "⚡",
+  D5: "🧘",
+};
+
+export function DimensionsList({ dimensions, bestDimension, priorityDimension }: DimensionsListProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      {dimensions.map((dim) => {
-        const info = getDimensionStatusInfo(dim.score);
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {dimensions.map((dimension) => {
+        const statusInfo = getDimensionStatusInfo(dimension.score);
+        const isBest = dimension.nom.toUpperCase().includes(bestDimension) || bestDimension?.includes(dimension.code);
+        const isPriority = dimension.nom.toUpperCase().includes(priorityDimension) || priorityDimension?.includes(dimension.code);
+
         return (
-          <div key={dim.code}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8, flexWrap: "wrap", gap: 6 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <div key={dimension.code} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {/* Header row */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                {/* Code badge */}
                 <span style={{
-                  fontSize: 11, fontWeight: 700, color: "#a78bfa",
-                  background: "rgba(124,58,237,0.12)", padding: "2px 8px", borderRadius: 6,
+                  width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                  background: "rgba(124,58,237,0.1)",
+                  border: "1px solid rgba(124,58,237,0.15)",
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 12, fontWeight: 700, color: "#a78bfa",
                 }}>
-                  {dim.code}
+                  {DIM_ICONS[dimension.code] || dimension.code}
                 </span>
-                <span style={{ fontSize: 13, color: "#f8fafc", fontWeight: 600 }}>{dim.nom}</span>
-                
-                {/* Badge de Statut Officiel IQRH */}
+                {/* Name */}
+                <span style={{ fontSize: 13, color: "#f8fafc", fontWeight: 600 }}>{dimension.nom}</span>
+                {/* Best/Priority badges */}
+                {isBest && (
+                  <span style={{
+                    fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 6,
+                    background: "rgba(52,211,153,0.12)", color: "#34d399",
+                    border: "1px solid rgba(52,211,153,0.2)",
+                  }}>↑ Top</span>
+                )}
+                {isPriority && !isBest && (
+                  <span style={{
+                    fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 6,
+                    background: "rgba(245,158,11,0.12)", color: "#f59e0b",
+                    border: "1px solid rgba(245,158,11,0.2)",
+                  }}>⚠ Priorité</span>
+                )}
+              </div>
+              {/* Score */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{
-                  display: "inline-flex", alignItems: "center", gap: 4,
-                  fontSize: 11, fontWeight: 600, padding: "2px 10px", borderRadius: 999,
-                  background: info.bg, color: info.color, border: `1px solid ${info.border}`,
+                  fontSize: 10, fontWeight: 600, padding: "2px 8px", borderRadius: 6,
+                  background: statusInfo.bg, color: statusInfo.color,
+                  border: `1px solid ${statusInfo.border}`,
                 }}>
-                  <span>{info.icon}</span>
-                  <span>{info.statusLabel}</span>
-                  <span style={{ opacity: 0.75, fontWeight: 400, marginLeft: 2 }}>({info.levelLabel})</span>
+                  {statusInfo.statusLabel}
+                </span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: statusInfo.color, minWidth: 30, textAlign: "right" }}>
+                  {dimension.score}
                 </span>
               </div>
-
-              <span style={{ fontSize: 13, fontWeight: 700, color: "#f8fafc", flexShrink: 0 }}>
-                {dim.score}<span style={{ color: "#64748b", fontWeight: 400 }}>/100</span>
-              </span>
             </div>
 
-            <div style={{ height: 8, background: "rgba(255,255,255,0.06)", borderRadius: 999, overflow: "hidden" }}>
+            {/* Progress bar */}
+            <div style={{ height: 6, borderRadius: 999, background: "rgba(255,255,255,0.04)", overflow: "hidden", marginLeft: 36 }}>
               <div style={{
                 height: "100%", borderRadius: 999,
-                background: info.gradient,
-                width: `${Math.min(100, Math.max(0, dim.score))}%`, transition: "width 0.7s ease",
+                background: statusInfo.gradient,
+                width: `${Math.min(100, Math.max(0, dimension.score))}%`,
+                transition: "width 0.8s cubic-bezier(0.4,0,0.2,1)",
               }} />
             </div>
           </div>
@@ -59,4 +97,3 @@ export function DimensionsList({ dimensions }: DimensionsListProps) {
     </div>
   );
 }
-

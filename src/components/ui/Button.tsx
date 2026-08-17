@@ -1,48 +1,94 @@
 /**
- * Button.tsx — Composant Button réutilisable
+ * @file Button.tsx
+ * @module src/components/ui
+ * @description Composant Button réutilisable avec variantes, tailles et état de chargement.
+ *
+ * Composant de base du design system LinkOffice. Encapsule un élément `<button>` natif
+ * tout en appliquant automatiquement :
+ * - Les styles de variantes (couleur, effet glow, hover)
+ * - La gestion des états `disabled` et `loading`
+ * - Les styles d'accessibilité (focus ring, cursor not-allowed)
+ *
+ * Variantes disponibles :
+ * | Variante    | Usage principal                                  |
+ * | ----------- | ------------------------------------------------ |
+ * | `primary`   | Action principale (CTA, validation)              |
+ * | `secondary` | Action secondaire (navigation, options)          |
+ * | `ghost`     | Action tertiaire (annulation, liens)             |
+ * | `danger`    | Action destructive (suppression)                 |
+ * | `amber`     | Action spéciale (upgrade, alerte positive)       |
+ *
+ * @see src/index.css — Variables CSS utilisées (couleurs, shadows, transitions)
+ *
+ * @example
+ * <Button variant="primary" size="md" onClick={handleSubmit}>
+ *   Valider
+ * </Button>
+ *
+ * @example
+ * <Button variant="danger" loading={isDeleting}>
+ *   Supprimer le compte
+ * </Button>
  */
 "use client";
 
 import { ButtonHTMLAttributes, forwardRef } from "react";
 import { clsx } from "clsx";
 
+/** Props du composant Button (étend tous les attributs natifs du bouton HTML) */
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /**
+   * Variante visuelle du bouton.
+   * @default "primary"
+   */
   variant?: "primary" | "secondary" | "ghost" | "danger" | "amber";
+  /**
+   * Taille du bouton.
+   * @default "md"
+   */
   size?: "sm" | "md" | "lg";
+  /**
+   * Si true : affiche un spinner SVG et désactive le bouton.
+   * Utilisé pendant les appels API pour éviter les doubles soumissions.
+   */
   loading?: boolean;
 }
 
+/**
+ * Bouton interactif avec système de design intégré.
+ * Utilise `forwardRef` pour permettre l'usage de `ref` par les composants parents
+ * (formulaires React Hook Form, animations, focus management).
+ */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = "primary", size = "md", loading, children, className, disabled, ...props }, ref) => {
-    const base =
-      "inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0B0F19] disabled:opacity-50 disabled:cursor-not-allowed";
+  ({ variant = "primary", size = "md", loading, children, className, disabled, ...rest }, ref) => {
+    /** Classes CSS communes à toutes les variantes */
+    const baseClasses = "btn";
 
-    const variants = {
-      primary:
-        "bg-primary hover:bg-primary-hover text-white focus:ring-primary shadow-glow-violet hover:shadow-glow-violet hover:-translate-y-0.5",
-      secondary:
-        "bg-surface-2 hover:bg-surface-3 text-text-primary border border-border hover:border-border-strong focus:ring-primary",
-      ghost:
-        "text-text-secondary hover:text-text-primary hover:bg-surface-2 focus:ring-primary",
-      danger:
-        "bg-accent-rose hover:opacity-90 text-white focus:ring-accent-rose",
-      amber:
-        "bg-accent-amber hover:opacity-90 text-black font-bold focus:ring-accent-amber shadow-glow-amber hover:-translate-y-0.5",
+    /** Classes spécifiques à chaque variante */
+    const variantClasses = {
+      primary: "btn-primary",
+      secondary: "btn-secondary",
+      ghost: "btn-ghost",
+      danger: "btn-danger",
+      amber: "btn-amber",
     };
 
-    const sizes = {
-      sm: "px-4 py-2 text-sm",
-      md: "px-6 py-3 text-sm",
-      lg: "px-8 py-4 text-base",
+    /** Classes de taille (padding + taille du texte) */
+    const sizeClasses = {
+      sm: "btn-sm",
+      md: "btn-md",
+      lg: "btn-lg",
     };
 
     return (
       <button
         ref={ref}
-        className={clsx(base, variants[variant], sizes[size], className)}
+        className={clsx(baseClasses, variantClasses[variant], sizeClasses[size], className)}
+        // Désactivé si `disabled` ou `loading` (évite les doubles soumissions)
         disabled={disabled || loading}
-        {...props}
+        {...rest}
       >
+        {/* Spinner SVG affiché pendant le chargement */}
         {loading && (
           <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />

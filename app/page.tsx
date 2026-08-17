@@ -1,8 +1,12 @@
 import Link from "next/link";
-import { Brain, ArrowRight, Star, CheckCircle2, ChevronRight, Building2 } from "lucide-react";
+import { Brain, ArrowRight, Star, CheckCircle2, ChevronRight, Building2, ClipboardList, BarChart3, Bot, Target, Sparkles, ShieldCheck } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
+/**
+ * Données statistiques affichées dans la section STATS.
+ * Met en avant l'efficacité et la précision de la plateforme.
+ */
 const STATS = [
   { value: "98%", label: "Satisfaction" },
   { value: "5 min", label: "Pour vos résultats" },
@@ -10,18 +14,29 @@ const STATS = [
   { value: "12", label: "Profils relationnels" },
 ];
 
+/**
+ * Étapes du parcours utilisateur (How it works).
+ * Explique le fonctionnement de l'évaluation IQRH.
+ */
 const STEPS = [
-  { step: "01", title: "Répondez au questionnaire", desc: "30 questions pour mesurer vos 5 dimensions relationnelles.", icon: "📋" },
-  { step: "02", title: "Découvrez votre profil", desc: "Score IQRH, profil relationnel, météo et radar.", icon: "📊" },
-  { step: "03", title: "Guidé par IRIS", desc: "Votre IA coach vous propose un plan de développement personnalisé.", icon: "🧠" },
+  { step: "01", title: "Répondez au questionnaire", desc: "30 questions pour mesurer vos 5 dimensions relationnelles.", icon: <ClipboardList size={32} color="#a78bfa" /> },
+  { step: "02", title: "Découvrez votre profil", desc: "Score IQRH, profil relationnel, météo et radar.", icon: <BarChart3 size={32} color="#34d399" /> },
+  { step: "03", title: "Guidé par IRIS", desc: "Votre IA coach vous propose un plan de développement personnalisé.", icon: <Bot size={32} color="#06b6d4" /> },
 ];
 
+/**
+ * Fonctionnalités principales (Features).
+ * Met en avant les points forts (Mesure, IA, Sécurité).
+ */
 const FEATURES = [
-  { title: "Score IQRH précis", desc: "5 dimensions : social, affectif, sentimental, professionnel, relation à soi.", icon: "🎯", badge: "Mesure" },
-  { title: "IA IRIS personnalisée", desc: "Un coach IA qui comprend votre contexte et vous guide avec bienveillance.", icon: "⚡", badge: "IA" },
-  { title: "Données sécurisées", desc: "Vos données restent confidentielles. Aucun partage sans votre consentement.", icon: "🛡️", badge: "Sécurité" },
+  { title: "Score IQRH précis", desc: "5 dimensions : social, affectif, sentimental, professionnel, relation à soi.", icon: <Target size={24} color="#a78bfa" />, badge: "Mesure" },
+  { title: "IA IRIS personnalisée", desc: "Un coach IA qui comprend votre contexte et vous guide avec bienveillance.", icon: <Sparkles size={24} color="#06b6d4" />, badge: "IA" },
+  { title: "Données sécurisées", desc: "Vos données restent confidentielles. Aucun partage sans votre consentement.", icon: <ShieldCheck size={24} color="#34d399" />, badge: "Sécurité" },
 ];
 
+/**
+ * Témoignages fictifs ou réels d'utilisateurs.
+ */
 const TESTIMONIALS = [
   { name: "Marie L.", role: "Entrepreneuse", text: "IRIS m'a aidé à comprendre pourquoi je me sentais si isolée malgré mon réseau. Un vrai déclic.", stars: 5 },
   { name: "Thomas R.", role: "Manager", text: "Le rapport IQRH est d'une précision surprenante. J'ai appris des choses sur moi que je n'aurais jamais verbalisées.", stars: 5 },
@@ -75,9 +90,11 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Hero preview card */}
+            {/* Carte de prévisualisation du score (Hero preview card) */}
             <div className="anim-fade-up delay-4" style={{ width: "100%", maxWidth: 480 }}>
-              <div className="glass-strong" style={{ borderRadius: 24, padding: 28 }}>
+              <div className="card" style={{ borderRadius: 28, padding: 32 }}>
+                
+                {/* En-tête de la carte avec le score global */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                   <span style={{ color: "var(--text-2)", fontSize: 13 }}>Score global IQRH</span>
                   <span className="badge badge-cyan">⛅ Éclaircies</span>
@@ -87,6 +104,8 @@ export default function HomePage() {
                   <span style={{ color: "var(--text-2)", fontSize: 20 }}>/100</span>
                 </div>
                 <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 20 }}>Bonne qualité relationnelle</p>
+                
+                {/* Liste des scores par dimension relationnelle */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   {[
                     { label: "Relations sociales", score: 80 },
@@ -94,13 +113,15 @@ export default function HomePage() {
                     { label: "Vie sentimentale", score: 55 },
                     { label: "Vie professionnelle", score: 85 },
                     { label: "Relation à soi", score: 70 },
-                  ].map((d) => (
-                    <div key={d.label} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ color: "var(--text-3)", fontSize: 12, width: 140, flexShrink: 0 }}>{d.label}</span>
+                  ].map((dimension) => (
+                    <div key={dimension.label} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <span style={{ color: "var(--text-3)", fontSize: 12, width: 140, flexShrink: 0 }}>{dimension.label}</span>
                       <div className="progress-bar" style={{ flex: 1 }}>
-                        <div className="progress-fill" style={{ width: `${d.score}%` }} />
+                        <div className="progress-fill" style={{ width: `${dimension.score}%` }} />
                       </div>
-                      <span style={{ color: "var(--text-2)", fontSize: 12, fontWeight: 600, width: 24, textAlign: "right" }}>{d.score}</span>
+                      <span style={{ color: "var(--text-2)", fontSize: 12, fontWeight: 600, width: 24, textAlign: "right" }}>
+                        {dimension.score}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -138,18 +159,18 @@ export default function HomePage() {
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, position: "relative" }}>
-              {STEPS.map((s, i) => (
-                <div key={s.step} style={{ position: "relative" }}>
-                  {i < 2 && (
+              {STEPS.map((stepData, index) => (
+                <div key={stepData.step} style={{ position: "relative" }}>
+                  {index < 2 && (
                     <div style={{ position: "absolute", right: -20, top: 40, zIndex: 10, color: "var(--text-3)" }}>
                       <ChevronRight size={20} />
                     </div>
                   )}
                   <div className="card card-hover" style={{ height: "100%" }}>
-                    <div style={{ fontSize: 36, marginBottom: 16 }}>{s.icon}</div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: "var(--primary-light)", letterSpacing: "0.1em", marginBottom: 8 }}>{s.step}</div>
-                    <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--text-1)", marginBottom: 10 }}>{s.title}</h3>
-                    <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.6 }}>{s.desc}</p>
+                    <div style={{ fontSize: 36, marginBottom: 16 }}>{stepData.icon}</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: "var(--primary-light)", letterSpacing: "0.1em", marginBottom: 8 }}>{stepData.step}</div>
+                    <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--text-1)", marginBottom: 10 }}>{stepData.title}</h3>
+                    <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.6 }}>{stepData.desc}</p>
                   </div>
                 </div>
               ))}
@@ -217,8 +238,8 @@ export default function HomePage() {
         {/* ── CTA FINAL ─────────────────────────────── */}
         <section style={{ padding: "80px 24px" }}>
           <div style={{ maxWidth: 760, margin: "0 auto" }}>
-            <div className="glass-strong" style={{
-              borderRadius: 28, padding: "64px 48px", textAlign: "center",
+            <div className="card" style={{
+              borderRadius: 32, padding: "64px 48px", textAlign: "center",
               background: "linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(6,182,212,0.08) 100%)",
               border: "1px solid rgba(124,58,237,0.25)"
             }}>

@@ -16,6 +16,40 @@ export default async function BinomePage() {
 
   const userId = session.user.id;
 
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { subscription: true }
+  });
+
+  if (user?.subscription !== "PREMIUM_PLUS") {
+    return (
+      <>
+        <Navbar />
+        <main className="page-main">
+          <div className="blob-violet" />
+          <div className="page-container" style={{ maxWidth: 600, textAlign: "center", paddingTop: 80 }}>
+            <div style={{ width: 64, height: 64, background: "rgba(124,58,237,0.15)", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
+              <ShieldAlert style={{ width: 32, height: 32, color: "#a78bfa" }} />
+            </div>
+            <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 24, fontWeight: 700, color: "#f8fafc", marginBottom: 16 }}>
+              Fonctionnalité Premium+
+            </h1>
+            <p style={{ color: "#94a3b8", fontSize: 16, lineHeight: 1.6, marginBottom: 32 }}>
+              Le programme Binôme Relationnel est réservé aux abonnés Premium+. Il vous permet de vous associer à un collègue de confiance pour partager vos défis et progresser ensemble.
+            </p>
+            <button style={{
+              background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "#fff",
+              fontWeight: 600, padding: "12px 28px", borderRadius: 14, border: "none", cursor: "pointer",
+              boxShadow: "0 4px 20px rgba(124,58,237,0.4)"
+            }}>
+              Découvrir Premium+
+            </button>
+          </div>
+        </main>
+      </>
+    );
+  }
+
   // 1. Fetch pending received invitations
   const pendingReceived = await prisma.relationalPair.findMany({
     where: { receiverId: userId, status: "PENDING" },
@@ -43,8 +77,9 @@ export default async function BinomePage() {
     <>
       <Navbar />
       <main className="page-main">
+        <div className="blob-violet" />
+        <div className="blob-cyan" />
         <div className="page-container" style={{ maxWidth: 800 }}>
-          
           <div style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 48, height: 48, background: "rgba(124,58,237,0.15)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Users style={{ width: 24, height: 24, color: "#a78bfa" }} />

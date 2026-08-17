@@ -8,12 +8,14 @@ import { useSession } from "next-auth/react";
 import { Brain, Send, Sparkles, MessageCircle } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { startIrisConversation, sendIrisMessage, getIrisExplication } from "@/lib/api";
+import Link from "next/link";
 
 interface Message {
   id: string;
   sender: "user" | "iris";
   text: string;
   timestamp: Date;
+  isPremiumCTA?: boolean;
 }
 
 export default function IRISPage() {
@@ -75,8 +77,17 @@ export default function IRISPage() {
       const res = await sendIrisMessage(conversationId, text, history);
       const irisMsg: Message = { id: `iris-${Date.now()}`, sender: "iris", text: res.message_iris, timestamp: new Date() };
       setMessages((prev) => [...prev, irisMsg]);
-    } catch {
-      setMessages((prev) => [...prev, { id: "err", sender: "iris", text: "IRIS est temporairement indisponible.", timestamp: new Date() }]);
+    } catch (err: any) {
+      if (err.message && err.message.toLowerCase().includes("quota")) {
+        setMessages((prev) => [...prev, { 
+          id: "err", sender: "iris", 
+          text: "Vous avez atteint votre limite mensuelle de messages avec IRIS. L'accès illimité au coach est réservé aux abonnés Premium.", 
+          timestamp: new Date(),
+          isPremiumCTA: true 
+        }]);
+      } else {
+        setMessages((prev) => [...prev, { id: "err", sender: "iris", text: "IRIS est temporairement indisponible.", timestamp: new Date() }]);
+      }
     } finally {
       setLoading(false);
     }
@@ -96,19 +107,13 @@ export default function IRISPage() {
   return (
     <>
       <Navbar />
-      <main style={{
-        minHeight: "100vh", background: "#0b0f19",
-        paddingTop: 88, paddingBottom: 24,
-        paddingLeft: 24, paddingRight: 24,
-        position: "relative",
+      <main className="page-main" style={{
+        paddingTop: 88, paddingBottom: 24, paddingLeft: 24, paddingRight: 24,
         display: "flex", flexDirection: "column",
       }}>
-        {/* Blob */}
-        <div style={{
-          position: "fixed", top: "-15%", right: "-8%", width: 600, height: 600,
-          background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)",
-          pointerEvents: "none", zIndex: 0,
-        }} />
+        {/* Blobs */}
+        <div className="blob-violet" />
+        <div className="blob-cyan" />
 
         <div style={{
           maxWidth: 820, margin: "0 auto", width: "100%",
@@ -164,10 +169,8 @@ export default function IRISPage() {
 
             {/* ── Onglet Explication ── */}
             {activeTab === "explication" && (
-              <div style={{
-                background: "rgba(17,24,39,0.75)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
-                border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20,
-                flex: 1, overflowY: "auto", padding: 28,
+              <div className="card" style={{
+                flex: 1, overflowY: "auto", padding: 32, display: "flex", flexDirection: "column"
               }}>
                 {!explication ? (
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: 16 }}>
@@ -206,18 +209,26 @@ export default function IRISPage() {
                   </div>
                 ) : (
                   <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-                      <Brain style={{ width: 16, height: 16, color: "#a78bfa" }} />
-                      <span style={{ color: "#a78bfa", fontWeight: 600, fontSize: 13 }}>IRIS</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                      <div style={{
+                        width: 28, height: 28, background: "linear-gradient(135deg, #7c3aed, #0ea5e9)", borderRadius: 8,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        boxShadow: "0 0 12px rgba(124,58,237,0.4)"
+                      }}>
+                        <Brain size={14} color="white" />
+                      </div>
+                      <span style={{ color: "#f8fafc", fontWeight: 700, fontSize: 14 }}>IRIS</span>
                     </div>
                     <p style={{ color: "#94a3b8", lineHeight: 1.8, whiteSpace: "pre-wrap", fontSize: 14 }}>{explication}</p>
                     <button
                       onClick={loadExplication}
+                      className="btn-regenerate"
                       style={{
                         marginTop: 20, padding: "8px 16px", borderRadius: 10,
                         background: "transparent", color: "#64748b",
                         border: "1px solid rgba(255,255,255,0.08)",
                         fontSize: 12, fontFamily: "inherit", cursor: "pointer",
+                        transition: "all 0.2s"
                       }}
                     >
                       Régénérer l'analyse
@@ -231,9 +242,7 @@ export default function IRISPage() {
             {activeTab === "coach" && (
               <>
                 {/* Messages */}
-                <div style={{
-                  background: "rgba(17,24,39,0.75)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
-                  border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20,
+                <div className="card" style={{
                   flex: 1, overflowY: "auto", padding: 20,
                   display: "flex", flexDirection: "column", gap: 16, marginBottom: 14,
                 }}>
@@ -248,23 +257,36 @@ export default function IRISPage() {
                     >
                       {msg.sender === "iris" && (
                         <div style={{
-                          width: 32, height: 32, background: "rgba(124,58,237,0.2)", borderRadius: "50%",
+                          width: 32, height: 32, background: "linear-gradient(135deg, #7c3aed, #0ea5e9)", borderRadius: 10,
                           display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 4,
+                          boxShadow: "0 0 16px rgba(124,58,237,0.4)"
                         }}>
-                          <Brain style={{ width: 16, height: 16, color: "#a78bfa" }} />
+                          <Brain style={{ width: 16, height: 16, color: "white" }} />
                         </div>
                       )}
                       <div style={{
-                        padding: "12px 16px", borderRadius: 18, fontSize: 13, lineHeight: 1.6,
+                        padding: "12px 16px", borderRadius: 18, fontSize: 14, lineHeight: 1.6,
                         ...(msg.sender === "iris" ? {
-                          background: "rgba(17,24,39,0.9)", border: "1px solid rgba(255,255,255,0.08)",
-                          color: "#94a3b8", borderTopLeftRadius: 4,
+                          background: "rgba(30, 41, 59, 0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)",
+                          color: "#e2e8f0", borderTopLeftRadius: 4, boxShadow: "0 4px 20px rgba(0,0,0,0.2)"
                         } : {
-                          background: "#7c3aed", color: "white",
-                          boxShadow: "0 0 16px rgba(124,58,237,0.35)", borderTopRightRadius: 4,
+                          background: "linear-gradient(135deg, #7c3aed, #0ea5e9)", color: "white",
+                          boxShadow: "0 4px 20px rgba(124,58,237,0.3)", borderTopRightRadius: 4,
                         }),
                       }}>
                         {msg.text}
+                        {msg.isPremiumCTA && (
+                          <div style={{ marginTop: 12 }}>
+                            <Link href="/premium" style={{
+                              display: "inline-flex", alignItems: "center", gap: 8,
+                              background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
+                              color: "#fff", fontWeight: 600, padding: "8px 16px", borderRadius: 10,
+                              border: "none", cursor: "pointer", fontSize: 13, textDecoration: "none",
+                            }}>
+                              Découvrir Premium
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -326,6 +348,11 @@ export default function IRISPage() {
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
         @keyframes bounce-dot { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+        .btn-regenerate:hover {
+          background: rgba(255,255,255,0.05) !important;
+          color: #f8fafc !important;
+          border-color: rgba(255,255,255,0.2) !important;
+        }
       `}</style>
     </>
   );

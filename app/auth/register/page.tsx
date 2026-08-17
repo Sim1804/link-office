@@ -69,7 +69,7 @@ export default function RegisterPage() {
         </div>
 
         {/* Formulaire */}
-        <div className="glass-strong" style={{ borderRadius: 20, padding: 36 }}>
+        <div className="card" style={{ padding: 40, borderRadius: 24 }}>
 
           {error && (
             <div style={{
@@ -163,25 +163,15 @@ export default function RegisterPage() {
             {/* Submit */}
             <button
               type="submit"
+              className="btn btn-primary btn-lg"
               disabled={loading}
-              style={{
-                marginTop: 8,
-                width: "100%", padding: "16px 24px",
-                background: "var(--primary)", color: "white",
-                border: "none", borderRadius: 12,
-                fontSize: 15, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer",
-                opacity: loading ? 0.7 : 1,
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                boxShadow: "0 0 24px rgba(124,58,237,0.35)",
-                transition: "all 0.2s",
-                fontFamily: "inherit",
-              }}
+              style={{ width: "100%", marginTop: 8, position: "relative" }}
             >
               {loading ? (
-                <>
+                <span style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}>
                   <span style={{ width: 16, height: 16, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
                   Création du compte…
-                </>
+                </span>
               ) : (
                 <>Créer mon compte <ArrowRight size={16} /></>
               )}

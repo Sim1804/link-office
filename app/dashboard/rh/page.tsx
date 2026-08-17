@@ -10,6 +10,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Navbar } from "@/components/layout/Navbar";
+import { DashboardSkeleton } from "@/components/dashboard/LoadingSkeleton";
 import {
   Users, ShieldAlert, TrendingUp, TrendingDown, AlertTriangle,
   CheckCircle2, BarChart3, QrCode, Link2, Copy, Download,
@@ -165,6 +166,12 @@ export default function B2BDashboard() {
               <span className="badge badge-violet" style={{ padding: "6px 12px", fontSize: 12 }}>
                 <ShieldAlert size={12} /> RGPD Conforme
               </span>
+              <a 
+                href="/dashboard/actions"
+                style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(124,58,237,0.15)", color: "#a78bfa", padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 600, border: "1px solid rgba(124,58,237,0.3)", textDecoration: "none", transition: "all 0.2s" }}
+              >
+                Plan d'action
+              </a>
               <button
                 onClick={() => { setLoading(true); fetch("/api/b2b/stats").then(r => r.json()).then(setStats).finally(() => setLoading(false)); }}
                 style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, color: "#94a3b8", fontSize: 12, cursor: "pointer" }}
@@ -202,12 +209,7 @@ export default function B2BDashboard() {
           </div>
 
           {/* ── Loading ── */}
-          {loading && (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 300, gap: 12, color: "#64748b" }}>
-              <RefreshCw size={20} style={{ animation: "spin 1s linear infinite" }} />
-              <span>Chargement des données…</span>
-            </div>
-          )}
+          {loading && <DashboardSkeleton />}
 
           {/* Notification Devis en cours */}
           {stats && stats.subscriptionStatus === "PENDING_QUOTE" && (

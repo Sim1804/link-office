@@ -1,23 +1,66 @@
 /**
- * app/api/collectivites/stats/route.ts — Observatoire territorial
- * ─────────────────────────────────────────────────────────────────
- * Agrège les données des citoyens d'une collectivité et génère
- * des recommandations de politiques publiques.
- * Seuil anonymat : 5 répondants minimum.
+ * @file route.ts
+ * @module app/api/collectivites/stats
+ * @description Route API de l'Observatoire Territorial — statistiques agrégées pour les collectivités.
+ *
+ * Accessible uniquement aux administrateurs de collectivités (ADMIN_COLLECTIVITE, SUPER_ADMIN).
+ * Cette route agrège les données anonymisées des citoyens évalués dans le territoire
+ * et génère des recommandations de politiques publiques basées sur les résultats IQRH.
+ *
+ * RÈGLE D'ANONYMAT : Seuil minimum de 5 répondants (même principe que B2B).
+ * Aucune donnée individuelle n'est jamais exposée.
+ *
+ * Statistiques calculées :
+ * - Moyennes IQRH par dimension (5 dimensions)
+ * - Distribution des météos relationnelles
+ * - Top 5 profils relationnels les plus fréquents
+ * - Segmentation démographique (seniors, jeunes, aidants)
+ *
+ * Recommandations de politiques publiques générées dynamiquement selon les seuils :
+ * - > 15% d'aidants → Café des Aidants
+ * - Seniors + score social < 40 → Groupes de marche
+ * - > 20% de profils indépendants → Tiers-lieux
+ * - Tissu associatif faible → Subventions associations
+ * - Jeunes + score soi < 50 → Parrainages intergénérationnels
+ *
+ * @method GET
+ * @returns Statistiques agrégées + recommandations politiques ou bloc d'anonymat
+ * @throws {401} Si l'utilisateur n'est pas connecté
+ * @throws {403} Si l'utilisateur n'est pas ADMIN_COLLECTIVITE ou SUPER_ADMIN
+ * @throws {404} Si l'administrateur n'est associé à aucune collectivité
+ *
+ * @see app/dashboard/collectivites/page.tsx — Dashboard qui consomme ces données
  */
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
+/**
+ * Seuil minimal de répondants pour garantir l'anonymat des données territoriales.
+ */
 const ANONYMITY_THRESHOLD = 5;
 
+/**
+ * Structure d'une recommandation de politique publique générée par l'algorithme.
+ */
 interface PolicyRecommendation {
+  /** Titre du constat (ex: "Solitude & Sédentarité des Seniors") */
   constat: string;
+  /** Indicateur chiffré justifiant le constat */
   indicateur: string;
+  /** Action concrète recommandée à la collectivité */
   action: string;
+  /** Emoji illustratif de la recommandation */
   icon: string;
 }
 
+/**
+ * Génère des recommandations de politiques publiques basées sur les statistiques territoriales.
+ * Les recommandations sont conditionnelles aux seuils dépassés par la population analysée.
+ *
+ * @param data - Statistiques agrégées de la collectivité
+ * @returns Liste de recommandations de politiques publiques
+ */
 function generatePolicyRecommendations(
   data: {
     avgSocial: number;
@@ -30,11 +73,12 @@ function generatePolicyRecommendations(
     totalCount: number;
   }
 ): PolicyRecommendation[] {
-  const recs: PolicyRecommendation[] = [];
+  const policyRecommendations: PolicyRecommendation[] = [];
   const { avgSocial, avgSelf, situations, retireeCount, youngCount, solisteCount, aidantCount, totalCount } = data;
 
+  // Seuil > 15% d'aidants familiaux → risque d'isolement
   if (aidantCount / totalCount > 0.15) {
-    recs.push({
+    policyRecommendations.push({
       constat: "Isolement des Aidants Familiaux",
       indicateur: `${Math.round((aidantCount / totalCount) * 100)}% de profils aidants sous tension`,
       action: "Créer des \"Cafés des Aidants\" hebdomadaires et des espaces d'écoute municipaux",
@@ -42,8 +86,9 @@ function generatePolicyRecommendations(
     });
   }
 
+  // Population retraitée avec score social faible → risque de sédentarité
   if (retireeCount > 0 && avgSocial < 40) {
-    recs.push({
+    policyRecommendations.push({
       constat: "Solitude & Sédentarité des Seniors",
       indicateur: `Score social moyen : ${avgSocial}/100 sur population retraitée`,
       action: "Créer des Groupes de Marche Conviviaux et parcours santé seniors",
@@ -51,8 +96,9 @@ function generatePolicyRecommendations(
     });
   }
 
+  // Forte proportion d'indépendants → besoin d'espaces de travail collectif
   if (solisteCount / totalCount > 0.2) {
-    recs.push({
+    policyRecommendations.push({
       constat: "Manque d'Espaces d'Échange & Travail",
       indicateur: `${Math.round((solisteCount / totalCount) * 100)}% de profils indépendants / entrepreneurs`,
       action: "Développer les Tiers-Lieux, Coworking Municipaux et tiers-lieux citoyens",
@@ -60,8 +106,9 @@ function generatePolicyRecommendations(
     });
   }
 
+  // Besoin d'appartenance fort avec faible tissu associatif déclaré
   if (avgSocial < 50 && situations.some((s) => s.includes("association") || s.includes("bénévolat"))) {
-    recs.push({
+    policyRecommendations.push({
       constat: "Fragilité du Tissu Associatif",
       indicateur: `Besoin d'appartenance fort (score social : ${avgSocial}/100)`,
       action: "Soutenir et Subventionner les Associations de quartier et de bénévolat",
@@ -69,8 +116,9 @@ function generatePolicyRecommendations(
     });
   }
 
+  // Population jeune avec faible score relation à soi → précarité relationnelle
   if (youngCount > 0 && avgSelf < 50) {
-    recs.push({
+    policyRecommendations.push({
       constat: "Précarité Relationnelle des Jeunes",
       indicateur: `Score relation à soi moyen : ${avgSelf}/100 sur population jeune`,
       action: "Mettre en place des Parrainages Intergénérationnels et bureaux des étudiants",
@@ -78,9 +126,14 @@ function generatePolicyRecommendations(
     });
   }
 
-  return recs;
+  return policyRecommendations;
 }
 
+
+/**
+ * Calcule et retourne les statistiques IQRH du territoire de la collectivité.
+ * Génère des recommandations de politiques publiques basées sur les profils détectés.
+ */
 export async function GET() {
   const session = await auth();
   if (!session?.user?.id) {
@@ -179,7 +232,7 @@ export async function GET() {
 
   // Météo distribution
   const weatherDist = results.reduce((acc, r) => {
-    const key = r.weatherTitle ?? r.weather;
+    const key = r.weatherTitle || r.weather;
     acc[key] = (acc[key] ?? 0) + 1;
     return acc;
   }, {} as Record<string, number>);

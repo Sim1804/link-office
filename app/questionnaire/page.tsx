@@ -26,6 +26,14 @@ const DIMENSIONS: Record<string, string> = {
   SELF: "Relation à soi et au sens",
 };
 
+const DIMENSION_OBJECTIVES: Record<string, string> = {
+  SOCIAL: "Cette dimension mesure la qualité du réseau relationnel, le sentiment d'appartenance, le soutien social perçu et la capacité à créer et maintenir des liens.",
+  AFFECTIVE: "Cette dimension évalue la qualité des relations de proximité, le niveau de sécurité affective, et la capacité à exprimer et recevoir de l'affection.",
+  SENTIMENTAL: "Cette dimension explore la satisfaction amoureuse, l'équilibre dans le couple ou le célibat, et le niveau d'intimité émotionnelle.",
+  PROFESSIONAL: "Cette dimension mesure l'épanouissement au travail, la qualité des relations professionnelles, le sentiment de reconnaissance et l'alignement avec les valeurs.",
+  SELF: "Cette dimension évalue la relation à soi-même, l'estime de soi, le niveau de cohérence personnelle et la capacité à trouver du sens à sa vie.",
+};
+
 const DIM_COLORS: Record<string, string> = {
   SOCIAL: "rgba(124,58,237,1)",
   AFFECTIVE: "rgba(6,182,212,1)",
@@ -209,20 +217,21 @@ export default function QuestionnairePage() {
           </div>
 
           {/* ── Carte Question ── */}
-          <div style={{
-            background: "rgba(26,34,54,0.85)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: "1px solid rgba(255,255,255,0.12)",
-            borderRadius: 24,
+          <div className="card" style={{
             padding: 32,
             flex: 1,
             display: "flex",
             flexDirection: "column",
           }}>
             {/* Sous-titre dimension */}
-            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
+            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6 }}>
               {currentDimension} — {questionIndexInDimension}/{questionsInDimension.length}
+            </p>
+
+            {/* Objectif de la dimension */}
+            <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 20, lineHeight: 1.5 }}>
+              <strong style={{ color: dimColor }}>Objectif : </strong>
+              {question ? DIMENSION_OBJECTIVES[question.dimension] : ""}
             </p>
 
             {/* Question */}

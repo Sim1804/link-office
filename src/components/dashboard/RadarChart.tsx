@@ -1,6 +1,9 @@
 /**
- * RadarChart.tsx — Graphique Radar IQRH (D1-D5)
+ * @file RadarChart.tsx
+ * @module src/components/dashboard
+ * @description Graphique Radar des 5 dimensions IQRH — design premium avec gradient fill et tooltip custom.
  */
+
 "use client";
 
 import {
@@ -10,7 +13,6 @@ import {
   Radar,
   ResponsiveContainer,
   Tooltip,
-  PolarRadiusAxis,
 } from "recharts";
 
 interface RadarData {
@@ -27,23 +29,47 @@ interface IQRHRadarChartProps {
 }
 
 const DIMENSION_LABELS: Record<string, string> = {
-  relations_sociales: "D1 - Social",
-  relations_affectives: "D2 - Affectif",
-  vie_sentimentale: "D3 - Sentimental",
-  vie_professionnelle_engagement: "D4 - Professionnel",
-  relation_a_soi_sens: "D5 - Soi & Sens",
+  relations_sociales: "Social",
+  relations_affectives: "Affectif",
+  vie_sentimentale: "Sentimental",
+  vie_professionnelle_engagement: "Professionnel",
+  relation_a_soi_sens: "Soi & Sens",
 };
 
-const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ subject: string; value: number }> }) => {
+const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="glass rounded-xl px-3 py-2 text-sm">
-        <p className="text-text-primary font-semibold">{payload[0].subject}</p>
-        <p className="text-accent-cyan">{payload[0].value}/100</p>
+      <div style={{
+        background: "rgba(17,24,39,0.95)",
+        border: "1px solid rgba(124,58,237,0.3)",
+        borderRadius: 12, padding: "10px 14px",
+        backdropFilter: "blur(12px)",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+      }}>
+        <p style={{ color: "#a78bfa", fontSize: 12, fontWeight: 600, marginBottom: 2 }}>{payload[0].subject}</p>
+        <p style={{ color: "#f8fafc", fontSize: 16, fontWeight: 800 }}>{payload[0].value}<span style={{ color: "#475569", fontSize: 12, fontWeight: 400 }}>/100</span></p>
       </div>
     );
   }
   return null;
+};
+
+const CustomAngleAxis = ({ x, y, payload, cx, cy }: any) => {
+  const score = payload?.value;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="#64748b"
+        fontSize={11}
+        fontWeight={500}
+        fontFamily="'Plus Jakarta Sans', Inter, sans-serif"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
 };
 
 export function IQRHRadarChart({ data }: IQRHRadarChartProps) {
@@ -54,26 +80,30 @@ export function IQRHRadarChart({ data }: IQRHRadarChartProps) {
   }));
 
   return (
-    <div className="w-full h-72">
+    <div style={{ width: "100%", height: 280 }}>
       <ResponsiveContainer width="100%" height="100%">
-        <RadarChart data={chartData}>
-          <PolarGrid stroke="rgba(255,255,255,0.08)" />
+        <RadarChart data={chartData} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
+          <defs>
+            <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.5} />
+              <stop offset="100%" stopColor="#06b6d4" stopOpacity={0.2} />
+            </linearGradient>
+          </defs>
+          <PolarGrid
+            stroke="rgba(255,255,255,0.05)"
+            strokeDasharray="2 4"
+          />
           <PolarAngleAxis
             dataKey="subject"
-            tick={{ fill: "#94A3B8", fontSize: 11, fontWeight: 500 }}
-          />
-          <PolarRadiusAxis
-            angle={90}
-            domain={[0, 100]}
-            tick={{ fill: "#475569", fontSize: 10 }}
+            tick={{ fill: "#64748b", fontSize: 11, fontWeight: 500, fontFamily: "'Plus Jakarta Sans', Inter, sans-serif" }}
           />
           <Radar
             name="Score"
             dataKey="A"
-            stroke="#7C3AED"
-            fill="#7C3AED"
-            fillOpacity={0.25}
+            stroke="#a78bfa"
+            fill="url(#radarGrad)"
             strokeWidth={2}
+            dot={{ fill: "#a78bfa", strokeWidth: 0, r: 4 }}
           />
           <Tooltip content={<CustomTooltip />} />
         </RadarChart>

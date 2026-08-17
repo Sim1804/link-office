@@ -40,6 +40,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               password: true,
               role: true,
               organizationId: true,
+              mustChangePassword: true,
             },
           });
 
@@ -57,6 +58,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             name: `${user.firstName} ${user.lastName}`,
             role: user.role,
             organizationId: user.organizationId,
+            mustChangePassword: user.mustChangePassword,
           };
         } catch (error) {
           console.error("AUTH ERROR:", error);
@@ -70,8 +72,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (user) {
         token.userId = user.id;
         token.role = (user as { role: string }).role;
-        token.organizationId =
-          (user as { organizationId: string | null }).organizationId ?? null;
+        token.organizationId = (user as { organizationId: string | null }).organizationId ?? null;
+        token.mustChangePassword = (user as any).mustChangePassword;
       }
       return token;
     },
@@ -79,6 +81,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       session.user.id = token.userId as string;
       session.user.role = token.role as string;
       session.user.organizationId = (token.organizationId as string | null) ?? null;
+      (session.user as any).mustChangePassword = token.mustChangePassword as boolean;
       return session;
     },
   },

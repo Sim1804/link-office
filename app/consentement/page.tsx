@@ -5,27 +5,16 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { ShieldCheck, ArrowRight, Check } from "lucide-react";
 import { getUserStatus } from "@/lib/api";
 
-const S = {
-  page: { minHeight: "100vh", background: "#0b0f19", paddingTop: 88, paddingBottom: 64, position: "relative" as const, overflowY: "auto" as const },
-  blobTop: { position: "fixed" as const, top: "-15%", right: "-8%", width: 600, height: 600, background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)", pointerEvents: "none" as const, zIndex: 0 },
-  blobBot: { position: "fixed" as const, bottom: "-15%", left: "-8%", width: 500, height: 500, background: "radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%)", pointerEvents: "none" as const, zIndex: 0 },
-  container: { maxWidth: 680, margin: "0 auto", padding: "0 24px", position: "relative" as const, zIndex: 1 },
-  header: { display: "flex", alignItems: "center", gap: 16, marginBottom: 32 },
-  headerIcon: { width: 44, height: 44, background: "rgba(124,58,237,0.2)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
-  title: { fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "#f8fafc", margin: 0 },
-  subtitle: { fontFamily: "Inter, sans-serif", color: "#64748b", fontSize: 14, marginTop: 4 },
-  card: { background: "rgba(26, 34, 54, 0.85)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.10)", borderRadius: 20, padding: 28, marginBottom: 16 },
-  sectionTitle: { fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 600, fontSize: 15, color: "#f8fafc", display: "flex", alignItems: "center", gap: 10, marginBottom: 20 },
-};
-
 export default function ConsentementPage() {
   const { data: session } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isRetake = searchParams.get("retake") === "true";
   const [loadingStatus, setLoadingStatus] = useState(true);
 
   const [form, setForm] = useState({
@@ -37,6 +26,11 @@ export default function ConsentementPage() {
   const setF = (key: string, val: boolean) => setForm((f) => ({ ...f, [key]: val }));
 
   useEffect(() => {
+    if (isRetake) {
+      setLoadingStatus(false);
+      return;
+    }
+    
     if (session?.user?.id) {
       getUserStatus(session.user.id)
         .then((status) => {
@@ -50,94 +44,92 @@ export default function ConsentementPage() {
     } else if (session === null) {
       setLoadingStatus(false);
     }
-  }, [session, router]);
+  }, [session, router, isRetake]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     sessionStorage.setItem("iqrh_consent", JSON.stringify({
       consentInformation: form.consentement_informations,
-      consentResearch: form.consentement_utilisation, // mapping to new schema
+      consentResearch: form.consentement_utilisation,
       consentParticipation: form.consentement_participation,
     }));
     
     router.push("/profil?onboarding=true");
   };
 
-  if (loadingStatus) return <div style={{ minHeight: "100vh", background: "#0b0f19" }} />;
+  if (loadingStatus) return <div className="page-main" />;
 
   const canSubmit = form.consentement_informations && form.consentement_utilisation;
 
   return (
     <>
       <Navbar />
-      <main style={S.page}>
-        <div style={S.blobTop} />
-        <div style={S.blobBot} />
+      <main className="page-main">
+        <div className="blob-violet" />
+        <div className="blob-cyan" />
 
-        <div style={S.container}>
-          <div style={S.header}>
-            <div style={S.headerIcon}>
-              <ShieldCheck style={{ width: 22, height: 22, color: "#a78bfa" }} />
+        <div className="page-container">
+          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 32 }}>
+            <div style={{ width: 48, height: 48, background: "rgba(124,58,237,0.15)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <ShieldCheck style={{ width: 24, height: 24, color: "#a78bfa" }} />
             </div>
             <div>
-              <h1 style={S.title}>Consentements</h1>
-              <p style={S.subtitle}>Avant de commencer, veuillez valider les éléments suivants</p>
+              <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "#f8fafc", margin: 0 }}>Bienvenue</h1>
+              <p style={{ color: "#94a3b8", fontSize: 14, marginTop: 4 }}>Avant de commencer, veuillez prendre connaissance des informations suivantes</p>
             </div>
           </div>
 
+          <div className="card" style={{ marginBottom: 24 }}>
+            <p style={{ color: "#e2e8f0", fontSize: 15, lineHeight: 1.6, marginBottom: 12 }}>
+              Bienvenue dans le questionnaire IQRH (Indice de Qualité des Relations Humaines).
+            </p>
+            <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
+              Ce questionnaire vise à mieux comprendre la qualité des relations humaines dans les différentes sphères de vie : personnelle, familiale, sociale, professionnelle et affective.
+            </p>
+            <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6, marginBottom: 8 }}>
+              Les réponses que vous fournirez permettront :
+            </p>
+            <ul style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6, paddingLeft: 20, margin: "0 0 16px 0", listStyleType: "disc" }}>
+              <li style={{ marginBottom: 4 }}>d'établir votre profil relationnel ;</li>
+              <li style={{ marginBottom: 4 }}>de calculer votre Indice de Qualité des Relations Humaines (IQRH) ;</li>
+              <li style={{ marginBottom: 4 }}>de vous proposer des recommandations personnalisées ;</li>
+              <li style={{ marginBottom: 0 }}>d'alimenter, sous une forme strictement anonymisée, des travaux de recherche destinés à améliorer la compréhension des relations humaines.</li>
+            </ul>
+            <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
+              La participation est entièrement volontaire.<br />
+              Vous pouvez interrompre le questionnaire à tout moment.<br />
+              La durée moyenne est de 8 à 10 minutes.
+            </p>
+            <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6, marginBottom: 0 }}>
+              Les informations recueillies sont confidentielles et traitées conformément à la réglementation en vigueur relative à la protection des données personnelles.
+            </p>
+          </div>
+
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={S.card}>
+            <div className="card">
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 {[
-                  {
-                    key: "consentement_informations",
-                    label: "J'accepte la charte d'information et de confidentialité",
-                    required: true,
-                  },
-                  {
-                    key: "consentement_utilisation",
-                    label: "J'accepte l'utilisation de mes données pour l'évaluation personnalisée",
-                    required: true,
-                  },
-                  {
-                    key: "consentement_participation",
-                    label: "J'accepte de participer à la démarche de recherche (données anonymisées)",
-                    required: false,
-                  },
+                  { key: "consentement_informations", label: "J'ai pris connaissance des informations ci-dessus.", required: true },
+                  { key: "consentement_utilisation", label: "J'accepte que mes réponses soient utilisées de manière anonyme à des fins statistiques et scientifiques.", required: true },
+                  { key: "consentement_participation", label: "Je consens à participer à cette étude.", required: false },
                 ].map(({ key, label, required }) => {
                   const checked = form[key as keyof typeof form];
                   return (
                     <div
                       key={key}
                       onClick={() => setF(key, !checked)}
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 14,
-                        cursor: "pointer",
-                        padding: "8px 0",
-                      }}
+                      style={{ display: "flex", alignItems: "flex-start", gap: 14, cursor: "pointer", padding: "8px 0" }}
                     >
-                      <div
-                        style={{
-                          width: 22,
-                          height: 22,
-                          borderRadius: 6,
-                          transition: "all 0.18s",
-                          marginTop: 0,
-                          flexShrink: 0,
-                          border: checked ? "2px solid #7c3aed" : "2px solid rgba(255,255,255,0.18)",
-                          background: checked ? "#7c3aed" : "transparent",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
+                      <div style={{
+                        width: 22, height: 22, borderRadius: 6, transition: "all 0.18s",
+                        flexShrink: 0, border: checked ? "2px solid #7c3aed" : "2px solid rgba(255,255,255,0.18)",
+                        background: checked ? "#7c3aed" : "transparent",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}>
                         {checked && <Check style={{ width: 14, height: 14, color: "white" }} />}
                       </div>
                       <span style={{ fontSize: 15, color: "#94a3b8", lineHeight: 1.5, userSelect: "none" }}>
-                        {label}
-                        {required && <span style={{ color: "#f43f5e", marginLeft: 4 }}>*</span>}
+                        {label} {required && <span style={{ color: "#f43f5e", marginLeft: 4 }}>*</span>}
                       </span>
                     </div>
                   );
@@ -147,30 +139,11 @@ export default function ConsentementPage() {
 
             <button
               type="submit"
+              className="btn btn-primary btn-lg"
               disabled={!canSubmit}
-              style={{
-                width: "100%",
-                padding: "16px 32px",
-                border: "none",
-                borderRadius: 16,
-                fontSize: 15,
-                fontWeight: 600,
-                fontFamily: "inherit",
-                background: canSubmit ? "#7c3aed" : "rgba(124,58,237,0.3)",
-                color: canSubmit ? "white" : "rgba(255,255,255,0.4)",
-                cursor: canSubmit ? "pointer" : "not-allowed",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 10,
-                boxShadow: canSubmit ? "0 0 32px rgba(124,58,237,0.35)" : "none",
-                transition: "all 0.2s",
-                marginTop: 8,
-                marginBottom: 32,
-              }}
+              style={{ width: "100%", marginTop: 8, marginBottom: 32 }}
             >
-              Continuer vers le profil
-              <ArrowRight style={{ width: 18, height: 18 }} />
+              Continuer vers le profil <ArrowRight size={18} />
             </button>
           </form>
         </div>

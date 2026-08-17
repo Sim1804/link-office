@@ -1,0 +1,37 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const { plan, organization, contactName, email, phone, companySize, populationSize, beneficiaries } = body;
+
+    if (!plan || !organization || !contactName || !email) {
+      return NextResponse.json(
+        { error: "Veuillez remplir tous les champs obligatoires." },
+        { status: 400 }
+      );
+    }
+
+    const lead = await prisma.lead.create({
+      data: {
+        planType: plan,
+        organization,
+        contactName,
+        email,
+        phone,
+        companySize,
+        populationSize,
+        beneficiaries,
+      }
+    });
+
+    return NextResponse.json({ success: true, leadId: lead.id }, { status: 201 });
+  } catch (error: any) {
+    console.error("Lead Creation Error:", error);
+    return NextResponse.json(
+      { error: "Une erreur est survenue lors de l'envoi de votre demande." },
+      { status: 500 }
+    );
+  }
+}

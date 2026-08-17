@@ -70,7 +70,7 @@ async function apiFetch<T>(
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ detail: "Erreur réseau" }));
-    throw new Error(error.detail || `HTTP ${res.status}`);
+    throw new Error(error.error || error.detail || `HTTP ${res.status}`);
   }
 
   return res.json() as Promise<T>;

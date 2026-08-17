@@ -80,23 +80,10 @@ export default function JoinPage() {
     }
   };
 
-  const inputStyle: React.CSSProperties = {
-    width: "100%",
-    background: "var(--surface-2)",
-    border: "1px solid var(--border)",
-    borderRadius: 12,
-    padding: "12px 16px 12px 44px",
-    color: "var(--text-1)",
-    fontSize: 14,
-    fontFamily: "inherit",
-    outline: "none",
-  };
-
   return (
-    <div style={{
-      minHeight: "100vh", background: "var(--bg)",
+    <div className="page-main" style={{
       display: "flex", alignItems: "center", justifyContent: "center",
-      padding: "40px 20px", position: "relative", overflow: "hidden",
+      padding: "40px 20px",
     }}>
       <div style={{ position: "absolute", top: "-10%", right: "-5%", width: 500, height: 500, background: "radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: "-10%", left: "-5%", width: 400, height: 400, background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
@@ -154,7 +141,7 @@ export default function JoinPage() {
         </div>
 
         {/* Formulaire */}
-        <div style={{ background: "rgba(17,24,39,0.75)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: 28 }}>
+        <div className="card" style={{ padding: 32, borderRadius: 24 }}>
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -166,7 +153,7 @@ export default function JoinPage() {
                   <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 6 }}>{label}</label>
                   <div style={{ position: "relative" }}>
                     <User size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)", pointerEvents: "none" }} />
-                    <input type="text" value={form[field as "prenom" | "nom"]} onChange={set(field)} placeholder={placeholder} required style={inputStyle} />
+                    <input type="text" value={form[field as "prenom" | "nom"]} onChange={set(field)} placeholder={placeholder} required className="input-field has-icon" />
                   </div>
                 </div>
               ))}
@@ -176,7 +163,7 @@ export default function JoinPage() {
               <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 6 }}>Email</label>
               <div style={{ position: "relative" }}>
                 <Mail size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)", pointerEvents: "none" }} />
-                <input type="email" value={form.email} onChange={set("email")} placeholder="marie@exemple.fr" required style={inputStyle} />
+                <input type="email" value={form.email} onChange={set("email")} placeholder="marie@exemple.fr" required className="input-field has-icon" />
               </div>
             </div>
 
@@ -184,7 +171,7 @@ export default function JoinPage() {
               <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 6 }}>Mot de passe</label>
               <div style={{ position: "relative" }}>
                 <Lock size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)", pointerEvents: "none" }} />
-                <input type="password" value={form.password} onChange={set("password")} placeholder="8 caractères min, 1 majuscule, 1 chiffre" required style={inputStyle} />
+                <input type="password" value={form.password} onChange={set("password")} placeholder="8 caractères min, 1 majuscule, 1 chiffre" required className="input-field has-icon" />
               </div>
             </div>
 

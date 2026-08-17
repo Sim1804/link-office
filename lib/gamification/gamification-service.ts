@@ -1,14 +1,23 @@
 import { prisma } from "@/lib/prisma";
 
+/**
+ * Service gérant la logique de gamification de la plateforme.
+ * Inclut l'attribution des points et le déblocage dynamique des badges de réussite.
+ */
 export class GamificationService {
+  /** Points par défaut attribués pour la réussite d'un défi si la base de données ne le précise pas. */
   static readonly POINTS_PER_CHALLENGE = 50;
 
   /**
-   * Marque un défi comme complété, attribue des points à l'utilisateur,
-   * et débloque d'éventuels badges.
+   * Marque un défi relationnel comme "complété" par l'utilisateur.
+   * Cette action attribue les points correspondants au défi, 
+   * et vérifie automatiquement si l'utilisateur franchit un palier pour débloquer de nouveaux badges.
+   * 
+   * @param userId - L'identifiant de l'utilisateur réalisant l'action
+   * @param prescriptionItemId - L'identifiant unique du défi (Micro-défi)
+   * @returns Un objet de statut contenant le nombre de points gagnés, le nouveau total et la liste des badges fraîchement débloqués.
    */
   static async completeChallenge(userId: string, prescriptionItemId: string) {
-    // 1. Vérifier si l'item existe et appartient bien à l'utilisateur
     const item = await prisma.prescriptionItem.findUnique({
       where: { id: prescriptionItemId },
       include: { prescription: true, libraryItem: true },
@@ -22,59 +31,63 @@ export class GamificationService {
       throw new Error("Défi déjà complété.");
     }
 
-    // 2. Marquer comme complété
+    // Mise à jour du statut du défi
     await prisma.prescriptionItem.update({
       where: { id: prescriptionItemId },
       data: { status: "COMPLETED" },
     });
 
-    // 3. Ajouter les points à l'utilisateur
-    const pointsData = item.libraryItem?.data as any;
-    const pointsToAward = pointsData?.points ? Number(pointsData.points) : GamificationService.POINTS_PER_CHALLENGE;
+    // Détermination du nombre de points à attribuer (lecture depuis le JSON de l'item ou fallback par défaut)
+    const libraryMetadata = item.libraryItem?.data as any;
+    const pointsToAward = libraryMetadata?.points ? Number(libraryMetadata.points) : GamificationService.POINTS_PER_CHALLENGE;
 
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: { points: { increment: pointsToAward } },
     });
 
-    // 4. Vérifier les badges débloqués
-    const newBadges = await this.checkAndAwardBadges(userId, updatedUser.points);
+    const newlyUnlockedBadges = await this.checkAndAwardBadges(userId, updatedUser.points);
 
     return {
       success: true,
       pointsEarned: pointsToAward,
       totalPoints: updatedUser.points,
-      newBadges,
+      newBadges: newlyUnlockedBadges,
     };
   }
 
   /**
-   * Vérifie si les points actuels permettent de débloquer de nouveaux badges
+   * Vérifie si le total de points actuel de l'utilisateur lui permet de débloquer de nouveaux badges
+   * qu'il ne possède pas encore, puis les lui attribue en base de données.
+   * 
+   * @param userId - L'identifiant de l'utilisateur
+   * @param currentPoints - Le solde de points actuel de l'utilisateur (après une action)
+   * @returns Le tableau des badges qui viennent d'être débloqués
    */
   private static async checkAndAwardBadges(userId: string, currentPoints: number) {
-    // Badges disponibles que l'utilisateur pourrait débloquer avec ses points actuels
-    const availableBadges = await prisma.badge.findMany({
+    // Récupération des badges éligibles que l'utilisateur ne possède pas encore
+    const eligibleBadges = await prisma.badge.findMany({
       where: {
         pointsRequired: { lte: currentPoints },
         users: {
-          none: { userId: userId }, // Seulement ceux non possédés
+          none: { userId: userId },
         },
       },
     });
 
-    const newBadgesUnlocked = [];
+    const unlockedBadges = [];
 
-    // Attribuer les badges
-    for (const badge of availableBadges) {
+    // Attribution des nouveaux badges
+    for (const badge of eligibleBadges) {
       await prisma.userBadge.create({
         data: {
           userId,
           badgeId: badge.id,
         },
       });
-      newBadgesUnlocked.push(badge);
+      unlockedBadges.push(badge);
     }
 
-    return newBadgesUnlocked;
+    return unlockedBadges;
   }
 }

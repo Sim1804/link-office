@@ -14,6 +14,10 @@ const DEPARTEMENTS = [
   "01 - Ain", "02 - Aisne", "03 - Allier", "04 - Alpes-de-Haute-Provence", "05 - Hautes-Alpes", "06 - Alpes-Maritimes", "07 - Ardèche", "08 - Ardennes", "09 - Ariège", "10 - Aube", "11 - Aude", "12 - Aveyron", "13 - Bouches-du-Rhône", "14 - Calvados", "15 - Cantal", "16 - Charente", "17 - Charente-Maritime", "18 - Cher", "19 - Corrèze", "2A - Corse-du-Sud", "2B - Haute-Corse", "21 - Côte-d'Or", "22 - Côtes-d'Armor", "23 - Creuse", "24 - Dordogne", "25 - Doubs", "26 - Drôme", "27 - Eure", "28 - Eure-et-Loir", "29 - Finistère", "30 - Gard", "31 - Haute-Garonne", "32 - Gers", "33 - Gironde", "34 - Hérault", "35 - Ille-et-Vilaine", "36 - Indre", "37 - Indre-et-Loire", "38 - Isère", "39 - Jura", "40 - Landes", "41 - Loir-et-Cher", "42 - Loire", "43 - Haute-Loire", "44 - Loire-Atlantique", "45 - Loiret", "46 - Lot", "47 - Lot-et-Garonne", "48 - Lozère", "49 - Maine-et-Loire", "50 - Manche", "51 - Marne", "52 - Haute-Marne", "53 - Mayenne", "54 - Meurthe-et-Moselle", "55 - Meuse", "56 - Morbihan", "57 - Moselle", "58 - Nièvre", "59 - Nord", "60 - Oise", "61 - Orne", "62 - Pas-de-Calais", "63 - Puy-de-Dôme", "64 - Pyrénées-Atlantiques", "65 - Hautes-Pyrénées", "66 - Pyrénées-Orientales", "67 - Bas-Rhin", "68 - Haut-Rhin", "69 - Rhône", "70 - Haute-Saône", "71 - Saône-et-Loire", "72 - Sarthe", "73 - Savoie", "74 - Haute-Savoie", "75 - Paris", "76 - Seine-Maritime", "77 - Seine-et-Marne", "78 - Yvelines", "79 - Deux-Sèvres", "80 - Somme", "81 - Tarn", "82 - Tarn-et-Garonne", "83 - Var", "84 - Vaucluse", "85 - Vendée", "86 - Vienne", "87 - Haute-Vienne", "88 - Vosges", "89 - Yonne", "90 - Territoire de Belfort", "91 - Essonne", "92 - Hauts-de-Seine", "93 - Seine-Saint-Denis", "94 - Val-de-Marne", "95 - Val-d'Oise", "971 - Guadeloupe", "972 - Martinique", "973 - Guyane", "974 - La Réunion", "976 - Mayotte"
 ];
 
+const PAYS = [
+  "Afghanistan", "Afrique du Sud", "Albanie", "Algérie", "Allemagne", "Andorre", "Angola", "Antigua-et-Barbuda", "Arabie Saoudite", "Argentine", "Arménie", "Australie", "Autriche", "Azerbaïdjan", "Bahamas", "Bahreïn", "Bangladesh", "Barbade", "Belgique", "Belize", "Bénin", "Bhoutan", "Biélorussie", "Birmanie (Myanmar)", "Bolivie", "Bosnie-Herzégovine", "Botswana", "Brésil", "Brunei", "Bulgarie", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodge", "Cameroun", "Canada", "Chili", "Chine", "Chypre", "Colombie", "Comores", "Congo-Brazzaville", "Congo-Kinshasa", "Corée du Nord", "Corée du Sud", "Costa Rica", "Côte d'Ivoire", "Croatie", "Cuba", "Danemark", "Djibouti", "Dominique", "Égypte", "Émirats Arabes Unis", "Équateur", "Érythrée", "Espagne", "Estonie", "Eswatini", "États-Unis", "Éthiopie", "Fidji", "Finlande", "France", "Gabon", "Gambie", "Géorgie", "Ghana", "Grèce", "Grenade", "Guatemala", "Guinée", "Guinée équatoriale", "Guinée-Bissau", "Guyana", "Haïti", "Honduras", "Hongrie", "Inde", "Indonésie", "Irak", "Iran", "Irlande", "Islande", "Israël", "Italie", "Jamaïque", "Japon", "Jordanie", "Kazakhstan", "Kenya", "Kirghizistan", "Kiribati", "Koweït", "Laos", "Lesotho", "Lettonie", "Liban", "Liberia", "Libye", "Liechtenstein", "Lituanie", "Luxembourg", "Macédoine du Nord", "Madagascar", "Malaisie", "Malawi", "Maldives", "Mali", "Malte", "Maroc", "Marshall", "Maurice", "Mauritanie", "Mexique", "Micronésie", "Moldavie", "Monaco", "Mongolie", "Monténégro", "Mozambique", "Namibie", "Nauru", "Népal", "Nicaragua", "Niger", "Nigeria", "Norvège", "Nouvelle-Zélande", "Oman", "Ouganda", "Ouzbékistan", "Pakistan", "Palaos", "Panama", "Papouasie-Nouvelle-Guinée", "Paraguay", "Pays-Bas", "Pérou", "Philippines", "Pologne", "Portugal", "Qatar", "République centrafricaine", "République dominicaine", "Roumanie", "Royaume-Uni", "Russie", "Rwanda", "Saint-Kitts-et-Nevis", "Saint-Marin", "Saint-Vincent-et-les-Grenadines", "Sainte-Lucie", "Salomon", "Salvador", "Samoa", "Sao Tomé-et-Principe", "Sénégal", "Serbie", "Seychelles", "Sierra Leone", "Singapour", "Slovaquie", "Slovénie", "Somalie", "Soudan", "Soudan du Sud", "Sri Lanka", "Suède", "Suisse", "Suriname", "Syrie", "Tadjikistan", "Tanzanie", "Tchad", "Tchéquie", "Thaïlande", "Timor oriental", "Togo", "Tonga", "Trinité-et-Tobago", "Tunisie", "Turkménistan", "Turquie", "Tuvalu", "Ukraine", "Uruguay", "Vanuatu", "Vatican", "Venezuela", "Viêt Nam", "Yémen", "Zambie", "Zimbabwe", "Autre"
+];
+
 const SITUATIONS_IMPACTANTES = [
   "Célibataire",
   "En couple",
@@ -74,20 +78,20 @@ const S = {
   blobBot: { position: "fixed" as const, bottom: "-15%", left: "-8%", width: 500, height: 500, background: "radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%)", pointerEvents: "none" as const, zIndex: 0 },
   container: { maxWidth: 680, margin: "0 auto", padding: "0 24px", position: "relative" as const, zIndex: 1 },
   header: { display: "flex", alignItems: "center", gap: 16, marginBottom: 24 },
-  headerIcon: { width: 44, height: 44, background: "rgba(124,58,237,0.2)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
+  headerIcon: { width: 44, height: 44, background: "rgba(124,58,237,0.15)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
   title: { fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "#f8fafc", margin: 0 },
   subtitle: { fontFamily: "Inter, sans-serif", color: "#64748b", fontSize: 14, marginTop: 4 },
-  card: { background: "rgba(26, 34, 54, 0.85)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.10)", borderRadius: 20, padding: 28, marginBottom: 16 },
+  card: { background: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(17,24,39,0.7) 100%)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 20, padding: 28, marginBottom: 16 },
   sectionTitle: { fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 600, fontSize: 15, color: "#f8fafc", display: "flex", alignItems: "center", gap: 10, marginBottom: 20 },
-  sectionBadge: { width: 26, height: 26, background: "rgba(124,58,237,0.25)", color: "#a78bfa", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0 },
+  sectionBadge: { width: 26, height: 26, background: "rgba(124,58,237,0.2)", color: "#a78bfa", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0 },
   label: { display: "block", fontSize: 13, fontWeight: 500, color: "#94a3b8", marginBottom: 8 },
-  input: { width: "100%", background: "#1a2236", border: "1px solid rgba(255,255,255,0.10)", borderRadius: 12, padding: "11px 16px", color: "#f8fafc", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, transition: "border-color 0.2s" },
-  select: { width: "100%", background: "#1a2236", border: "1px solid rgba(255,255,255,0.10)", borderRadius: 12, padding: "11px 16px", color: "#f8fafc", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, cursor: "pointer", appearance: "auto" as const },
+  input: { width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "12px 16px", color: "#f8fafc", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, transition: "border-color 0.2s" },
+  select: { width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "12px 16px", color: "#f8fafc", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, cursor: "pointer", appearance: "auto" as const },
   grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 },
   fieldGroup: { display: "flex", flexDirection: "column" as const, gap: 16 },
   tabButton: (active: boolean) => ({
     padding: "12px 20px", fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-    background: active ? "rgba(124,58,237,0.15)" : "transparent",
+    background: active ? "rgba(124,58,237,0.12)" : "transparent",
     color: active ? "#a78bfa" : "#94a3b8",
     border: "none", borderBottom: active ? "2px solid #a78bfa" : "2px solid transparent",
     display: "flex", alignItems: "center", gap: 8
@@ -108,6 +112,10 @@ function ProfilContent() {
   const [activeTab, setActiveTab] = useState<'account' | 'demographics'>(initialTab);
   const [isOnboarding] = useState(onboardingMode);
   const [loadingStatus, setLoadingStatus] = useState(true);
+  const [campaignConfig, setCampaignConfig] = useState<any>(null);
+  const [allowedSituations, setAllowedSituations] = useState<string[]>(SITUATIONS_IMPACTANTES);
+  const [matchingOptIn, setMatchingOptIn] = useState(false);
+  const [updatingOptIn, setUpdatingOptIn] = useState(false);
 
   const [form, setForm] = useState({
     sexe: "",
@@ -171,6 +179,26 @@ function ProfilContent() {
               situations_impactantes: d.selectedSituations || [],
               situation_impact_principale: d.primarySituation || "",
             });
+          }
+          if (data && data.campaignConfig) {
+            setCampaignConfig(data.campaignConfig);
+            if (data.campaignConfig.allowedSituations) {
+              setAllowedSituations(data.campaignConfig.allowedSituations);
+            } else if (data.availableSituations) {
+              setAllowedSituations(data.availableSituations);
+            }
+          } else if (data && data.availableSituations) {
+             setAllowedSituations(data.availableSituations);
+          }
+        })
+        .catch(console.error);
+
+      // Fetch User Settings
+      fetch("/api/v1/user/settings")
+        .then(r => r.json())
+        .then(data => {
+          if (data && typeof data.matchingOptIn === "boolean") {
+            setMatchingOptIn(data.matchingOptIn);
           }
         })
         .catch(console.error);
@@ -298,7 +326,15 @@ function ProfilContent() {
 
   if (loadingStatus) return <div style={{ minHeight: "100vh", background: "#0b0f19" }} />;
 
-  const canSubmit = form.sexe && form.age_range && form.pays && form.situation_professionnelle && (form.situation_sentimentale_base || form.situation_sentimentale_exclusif) && form.enfants && form.habitation;
+  const isHidden = (field: string) => campaignConfig?.hiddenDemographics?.includes(field);
+
+  const canSubmit = (!isHidden('sexe') ? form.sexe : true) 
+    && (!isHidden('age_range') ? form.age_range : true) 
+    && (!isHidden('pays') ? form.pays : true) 
+    && (!isHidden('situation_professionnelle') ? form.situation_professionnelle : true) 
+    && (!isHidden('situation_sentimentale') ? (form.situation_sentimentale_base || form.situation_sentimentale_exclusif) : true) 
+    && (!isHidden('enfants') ? form.enfants : true) 
+    && (!isHidden('habitation') ? form.habitation : true);
   const requiresOrgSize = ["Salarié", "Manager", "Entrepreneur / Indépendant / Profession libérale / Dirigeant"].includes(form.situation_professionnelle);
 
   return (
@@ -388,171 +424,237 @@ function ProfilContent() {
                   Modifier mon mot de passe
                 </button>
               </div>
+
+              <div style={S.card}>
+                <div style={S.sectionTitle}>
+                  <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(236,72,153,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <User size={14} style={{ color: "#ec4899" }} />
+                  </div>
+                  Programme Binôme Relationnel
+                </div>
+                <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 16 }}>
+                  Acceptez-vous d'être mis en relation avec un pair de votre organisation pour partager vos défis et progresser ensemble ?
+                </p>
+                
+                <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: updatingOptIn ? "wait" : "pointer" }}>
+                  <div style={{
+                    width: 44, height: 24, background: matchingOptIn ? "#ec4899" : "rgba(255,255,255,0.1)",
+                    borderRadius: 999, position: "relative", transition: "background 0.3s"
+                  }}>
+                    <div style={{
+                      width: 18, height: 18, background: "white", borderRadius: "50%",
+                      position: "absolute", top: 3, left: matchingOptIn ? 23 : 3, transition: "left 0.3s"
+                    }} />
+                  </div>
+                  <span style={{ color: "#f8fafc", fontSize: 14, fontWeight: 500 }}>
+                    {matchingOptIn ? "Oui, j'autorise le matching." : "Non, je ne souhaite pas participer."}
+                  </span>
+                  
+                  {/* Invisible checkbox to handle toggle logic easily */}
+                  <input 
+                    type="checkbox" 
+                    checked={matchingOptIn}
+                    disabled={updatingOptIn}
+                    onChange={async (e) => {
+                      const val = e.target.checked;
+                      setMatchingOptIn(val);
+                      setUpdatingOptIn(true);
+                      try {
+                        await fetch("/api/v1/user/settings", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ matchingOptIn: val })
+                        });
+                      } catch (err) {
+                        setMatchingOptIn(!val); // revert on error
+                      } finally {
+                        setUpdatingOptIn(false);
+                      }
+                    }} 
+                    style={{ display: "none" }} 
+                  />
+                </label>
+              </div>
             </div>
           )}
 
           {activeTab === 'demographics' && (
             <form onSubmit={handleSubmit}>
-              <div style={S.card}>
-                <div style={S.sectionTitle}><span style={S.sectionBadge}>1</span>Votre genre</div>
-                <div style={S.fieldGroup}>
-                  {handleRadioChoice("sexe", ["Homme", "Femme", "Non binaire", "Je préfère ne pas le dire"], form.sexe, v => setF("sexe", v))}
-                </div>
-              </div>
-
-              <div style={S.card}>
-                <div style={S.sectionTitle}><span style={S.sectionBadge}>2</span>Votre tranche d'âge</div>
-                <div style={S.fieldGroup}>
-                  {handleRadioChoice("age_range", AGE_RANGES, form.age_range, v => setF("age_range", v))}
-                </div>
-              </div>
-
-              <div style={S.card}>
-                <div style={S.sectionTitle}><span style={S.sectionBadge}>3</span>Localisation</div>
-                <div style={S.grid2}>
-                  <div>
-                    <label style={S.label}>Pays de résidence</label>
-                    <select value={form.pays} onChange={e => { setF("pays", e.target.value); if (e.target.value !== "France") setF("departement", ""); }} style={S.select} required>
-                      <option value="France">France</option>
-                      <option value="Belgique">Belgique</option>
-                      <option value="Suisse">Suisse</option>
-                      <option value="Canada">Canada</option>
-                      <option value="Autre">Autre</option>
-                    </select>
+              {!isHidden('sexe') && (
+                <div style={S.card}>
+                  <div style={S.sectionTitle}><span style={S.sectionBadge}>1</span>Votre genre</div>
+                  <div style={S.fieldGroup}>
+                    {handleRadioChoice("sexe", ["Homme", "Femme", "Non binaire", "Je préfère ne pas le dire"], form.sexe, v => setF("sexe", v))}
                   </div>
-                  {form.pays === "France" && (
-                    <div>
-                      <label style={S.label}>Département</label>
-                      <select value={form.departement} onChange={e => setF("departement", e.target.value)} style={S.select} required>
-                        <option value="">Sélectionner un département</option>
-                        {DEPARTEMENTS.map(d => <option key={d} value={d}>{d}</option>)}
-                      </select>
-                    </div>
-                  )}
                 </div>
-              </div>
+              )}
 
-              <div style={S.card}>
-                <div style={S.sectionTitle}><span style={S.sectionBadge}>4</span>Situation professionnelle</div>
-                <div style={S.fieldGroup}>
-                  {handleRadioChoice("situation_professionnelle", SITUATIONS_PRO, form.situation_professionnelle, v => { setF("situation_professionnelle", v); setF("taille_organisation", ""); })}
-                  
-                  {form.situation_professionnelle === "Autre" && (
-                      <input type="text" placeholder="Précisez..." value={form.situation_professionnelle_autre} onChange={e => setF("situation_professionnelle_autre", e.target.value)} style={S.input} required />
-                  )}
-
-                  {requiresOrgSize && (
-                    <div style={{ marginTop: 12 }}>
-                      <div style={S.sectionTitle}><span style={S.sectionBadge}>5</span>Taille de votre organisation</div>
-                      <select value={form.taille_organisation} onChange={e => setF("taille_organisation", e.target.value)} style={S.select} required>
-                        <option value="">Sélectionner</option>
-                        {ORG_SIZES.map(s => <option key={s} value={s}>{s}</option>)}
-                      </select>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div style={S.card}>
-                <div style={S.sectionTitle}><span style={S.sectionBadge}>6</span>Situation sentimentale</div>
-                <div style={S.fieldGroup}>
-                  <div style={{ display: "flex", gap: 10 }}>
-                      {["Célibataire", "En couple"].map(opt => {
-                          const selected = form.situation_sentimentale_base === opt;
-                          return (
-                              <button
-                                  key={opt} type="button"
-                                  onClick={() => { setF("situation_sentimentale_base", opt); setF("situation_sentimentale_exclusif", ""); }}
-                                  style={{
-                                      flex: 1, padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-                                      border: selected ? "1.5px solid rgba(124,58,237,0.6)" : "1.5px solid rgba(255,255,255,0.10)",
-                                      background: selected ? "rgba(124,58,237,0.2)" : "rgba(26,34,54,0.6)",
-                                      color: selected ? "#a78bfa" : "#94a3b8"
-                                  }}
-                              >
-                                  {opt}
-                              </button>
-                          );
-                      })}
+              {!isHidden('age_range') && (
+                <div style={S.card}>
+                  <div style={S.sectionTitle}><span style={S.sectionBadge}>2</span>Votre tranche d'âge</div>
+                  <div style={S.fieldGroup}>
+                    {handleRadioChoice("age_range", AGE_RANGES, form.age_range, v => setF("age_range", v))}
                   </div>
-                  {form.situation_sentimentale_base === "En couple" && (
-                      <div style={{ display: "flex", gap: 10, paddingLeft: 20 }}>
-                          {["Marié(e)", "Pacsé(e)"].map(opt => {
-                              const selected = form.situation_sentimentale_couple === opt;
-                              return (
-                                  <button
-                                      key={opt} type="button"
-                                      onClick={() => setF("situation_sentimentale_couple", selected ? "" : opt)}
-                                      style={{
-                                          padding: "8px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-                                          border: selected ? "1.5px solid rgba(6,182,212,0.6)" : "1.5px solid rgba(255,255,255,0.10)",
-                                          background: selected ? "rgba(6,182,212,0.2)" : "transparent",
-                                          color: selected ? "#22d3ee" : "#94a3b8"
-                                      }}
-                                  >
-                                      {opt}
-                                  </button>
-                              );
-                          })}
+                </div>
+              )}
+
+              {!isHidden('pays') && !isHidden('departement') && (
+                <div style={S.card}>
+                  <div style={S.sectionTitle}><span style={S.sectionBadge}>3</span>Localisation</div>
+                  <div style={S.grid2}>
+                    {!isHidden('pays') && (
+                      <div>
+                        <label style={S.label}>Pays de résidence</label>
+                        <select value={form.pays} onChange={e => { setF("pays", e.target.value); if (e.target.value !== "France") setF("departement", ""); }} style={S.select} required>
+                          {PAYS.map(p => <option key={p} value={p}>{p}</option>)}
+                        </select>
                       </div>
-                  )}
-
-                  <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-                      {["Séparé(e) / Divorcé(e)", "Veuf(ve)"].map(opt => {
-                          const selected = form.situation_sentimentale_exclusif === opt;
-                          return (
-                              <button
-                                  key={opt} type="button"
-                                  onClick={() => { setF("situation_sentimentale_exclusif", opt); setF("situation_sentimentale_base", ""); setF("situation_sentimentale_couple", ""); }}
-                                  style={{
-                                      flex: 1, padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-                                      border: selected ? "1.5px solid rgba(124,58,237,0.6)" : "1.5px solid rgba(255,255,255,0.10)",
-                                      background: selected ? "rgba(124,58,237,0.2)" : "rgba(26,34,54,0.6)",
-                                      color: selected ? "#a78bfa" : "#94a3b8"
-                                  }}
-                              >
-                                  {opt}
-                              </button>
-                          );
-                      })}
+                    )}
+                    {form.pays === "France" && !isHidden('departement') && (
+                      <div>
+                        <label style={S.label}>Département</label>
+                        <select value={form.departement} onChange={e => setF("departement", e.target.value)} style={S.select} required>
+                          <option value="">Sélectionner un département</option>
+                          {DEPARTEMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+                        </select>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
+              )}
 
-              <div style={S.card}>
-                <div style={S.sectionTitle}><span style={S.sectionBadge}>7</span>Avez-vous des enfants ?</div>
-                <div style={S.fieldGroup}>
-                  {handleRadioChoice("enfants", ["Oui", "Non"], form.enfants, v => setF("enfants", v))}
-                  {form.enfants === "Oui" && (
-                    <div>
-                      <label style={S.label}>Nombre d'enfants</label>
-                      <input type="number" min={1} max={20} value={form.nombre_enfants || ""} onChange={e => setF("nombre_enfants", parseInt(e.target.value) || 0)} style={S.input} required />
+              {!isHidden('situation_professionnelle') && (
+                <div style={S.card}>
+                  <div style={S.sectionTitle}><span style={S.sectionBadge}>4</span>Situation professionnelle</div>
+                  <div style={S.fieldGroup}>
+                    {handleRadioChoice("situation_professionnelle", SITUATIONS_PRO, form.situation_professionnelle, v => { setF("situation_professionnelle", v); setF("taille_organisation", ""); })}
+                    
+                    {form.situation_professionnelle === "Autre" && (
+                        <input type="text" placeholder="Précisez..." value={form.situation_professionnelle_autre} onChange={e => setF("situation_professionnelle_autre", e.target.value)} style={S.input} required />
+                    )}
+
+                    {requiresOrgSize && !isHidden('taille_organisation') && (
+                      <div style={{ marginTop: 12 }}>
+                        <div style={S.sectionTitle}><span style={S.sectionBadge}>5</span>Taille de votre organisation</div>
+                        <select value={form.taille_organisation} onChange={e => setF("taille_organisation", e.target.value)} style={S.select} required>
+                          <option value="">Sélectionner</option>
+                          {ORG_SIZES.map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {!isHidden('situation_sentimentale') && (
+                <div style={S.card}>
+                  <div style={S.sectionTitle}><span style={S.sectionBadge}>6</span>Situation sentimentale</div>
+                  <div style={S.fieldGroup}>
+                    <div style={{ display: "flex", gap: 10 }}>
+                        {["Célibataire", "En couple"].map(opt => {
+                            const selected = form.situation_sentimentale_base === opt;
+                            return (
+                                <button
+                                    key={opt} type="button"
+                                    onClick={() => { setF("situation_sentimentale_base", opt); setF("situation_sentimentale_exclusif", ""); }}
+                                    style={{
+                                        flex: 1, padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
+                                        border: selected ? "1.5px solid rgba(124,58,237,0.6)" : "1.5px solid rgba(255,255,255,0.10)",
+                                        background: selected ? "rgba(124,58,237,0.2)" : "rgba(26,34,54,0.6)",
+                                        color: selected ? "#a78bfa" : "#94a3b8"
+                                    }}
+                                >
+                                    {opt}
+                                </button>
+                            );
+                        })}
                     </div>
-                  )}
-                </div>
-              </div>
+                    {form.situation_sentimentale_base === "En couple" && (
+                        <div style={{ display: "flex", gap: 10, paddingLeft: 20 }}>
+                            {["Marié(e)", "Pacsé(e)"].map(opt => {
+                                const selected = form.situation_sentimentale_couple === opt;
+                                return (
+                                    <button
+                                        key={opt} type="button"
+                                        onClick={() => setF("situation_sentimentale_couple", selected ? "" : opt)}
+                                        style={{
+                                            padding: "8px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
+                                            border: selected ? "1.5px solid rgba(6,182,212,0.6)" : "1.5px solid rgba(255,255,255,0.10)",
+                                            background: selected ? "rgba(6,182,212,0.2)" : "transparent",
+                                            color: selected ? "#22d3ee" : "#94a3b8"
+                                        }}
+                                    >
+                                        {opt}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
 
-              <div style={S.card}>
-                <div style={S.sectionTitle}><span style={S.sectionBadge}>8</span>Vous vivez actuellement :</div>
-                <div style={S.fieldGroup}>
-                  {handleRadioChoice("habitation", HABITATIONS, form.habitation, v => setF("habitation", v))}
-                  {form.habitation === "Autre" && (
-                      <input type="text" placeholder="Précisez..." value={form.habitation_autre} onChange={e => setF("habitation_autre", e.target.value)} style={S.input} required />
-                  )}
+                    <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+                        {["Séparé(e) / Divorcé(e)", "Veuf(ve)"].map(opt => {
+                            const selected = form.situation_sentimentale_exclusif === opt;
+                            return (
+                                <button
+                                    key={opt} type="button"
+                                    onClick={() => { setF("situation_sentimentale_exclusif", opt); setF("situation_sentimentale_base", ""); setF("situation_sentimentale_couple", ""); }}
+                                    style={{
+                                        flex: 1, padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
+                                        border: selected ? "1.5px solid rgba(124,58,237,0.6)" : "1.5px solid rgba(255,255,255,0.10)",
+                                        background: selected ? "rgba(124,58,237,0.2)" : "rgba(26,34,54,0.6)",
+                                        color: selected ? "#a78bfa" : "#94a3b8"
+                                    }}
+                                >
+                                    {opt}
+                                </button>
+                            );
+                        })}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {!isHidden('enfants') && (
+                <div style={S.card}>
+                  <div style={S.sectionTitle}><span style={S.sectionBadge}>7</span>Avez-vous des enfants ?</div>
+                  <div style={S.fieldGroup}>
+                    {handleRadioChoice("enfants", ["Oui", "Non"], form.enfants, v => setF("enfants", v))}
+                    {form.enfants === "Oui" && (
+                      <div>
+                        <label style={S.label}>Nombre d'enfants</label>
+                        <input type="number" min={1} max={20} value={form.nombre_enfants || ""} onChange={e => setF("nombre_enfants", parseInt(e.target.value) || 0)} style={S.input} required />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {!isHidden('habitation') && (
+                <div style={S.card}>
+                  <div style={S.sectionTitle}><span style={S.sectionBadge}>8</span>Vous vivez actuellement :</div>
+                  <div style={S.fieldGroup}>
+                    {handleRadioChoice("habitation", HABITATIONS, form.habitation, v => setF("habitation", v))}
+                    {form.habitation === "Autre" && (
+                        <input type="text" placeholder="Précisez..." value={form.habitation_autre} onChange={e => setF("habitation_autre", e.target.value)} style={S.input} required />
+                    )}
+                  </div>
+                </div>
+              )}
 
               <div style={S.card}>
                 <div style={S.sectionTitle}>
                   <span style={S.sectionBadge}>9</span>
                   Situations à fort impact relationnel
                 </div>
-                <p style={{ color: "#64748b", fontSize: 13, marginBottom: 16, marginTop: -8 }}>
-                  Sélectionnez jusqu'à 4 situations qui vous concernent actuellement
-                </p>
+                <div style={{ color: "#64748b", fontSize: 13, marginBottom: 16, marginTop: -8, lineHeight: 1.5 }}>
+                  <strong style={{ color: "#f8fafc", display: "block", marginBottom: 4 }}>Consigne</strong>
+                  Parmi les situations suivantes, sélectionnez au maximum 4 situations qui ont aujourd'hui le plus d'impact sur votre qualité de vie relationnelle.<br />
+                  Vous pouvez sélectionner de 0 à 4 réponses maximum.<br />
+                  Les réponses sélectionnées déclencheront automatiquement les modules complémentaires du questionnaire.
+                </div>
 
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {SITUATIONS_IMPACTANTES.map((sit) => {
+                  {allowedSituations.map((sit) => {
                     const selected = form.situations_impactantes.includes(sit);
                     return (
                       <button
