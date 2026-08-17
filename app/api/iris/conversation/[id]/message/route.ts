@@ -216,7 +216,7 @@ export async function POST(
         opt_in_matching: tool({
           description: "Enregistre le consentement de l'utilisateur pour participer au programme de Binôme Relationnel.",
           parameters: z.object({}),
-          // @ts-expect-error
+          // @ts-expect-error AI SDK tool typing mismatch
           execute: async () => {
             try {
               await MatchingService.setOptIn(userId, true);
@@ -233,7 +233,7 @@ export async function POST(
         find_relational_partner: tool({
           description: "Cherche un partenaire de binôme compatible dans la même campagne et crée l'invitation.",
           parameters: z.object({}),
-          // @ts-expect-error
+          // @ts-expect-error AI SDK tool typing mismatch
           execute: async () => {
             try {
               const result = await MatchingService.findAndInvitePartner(userId);

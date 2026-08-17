@@ -137,7 +137,7 @@ export default function B2B2CDashboard() {
                   <div style={{ background: "rgba(244,63,94,0.15)", padding: 12, borderRadius: 12 }}><AlertCircle size={24} color="#f43f5e" /></div>
                   <div>
                     <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 4 }}>Adhérents à Risque Élevé</p>
-                    <p style={{ fontSize: 32, fontWeight: 800, color: "#f43f5e", lineHeight: 1 }}>{stats.icrDistribution?.eleve! + stats.icrDistribution?.critique!}</p>
+                    <p style={{ fontSize: 32, fontWeight: 800, color: "#f43f5e", lineHeight: 1 }}>{(stats.icrDistribution?.eleve || 0) + (stats.icrDistribution?.critique || 0)}</p>
                   </div>
                 </div>
               </div>

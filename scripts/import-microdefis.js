@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
 const path = require('path');
 
@@ -52,3 +53,4 @@ libraryJson['Micro-défis'] = defis;
 
 fs.writeFileSync(jsonPath, JSON.stringify(libraryJson, null, 2), 'utf8');
 console.log('Successfully updated prisma/link-office-library.json with Micro-défis');
+
