@@ -51,7 +51,7 @@ export async function GET(request: Request) {
 
     // Appel au LLM pour générer la restitution narrative
     const { text: explanationText } = await generateText({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groq("openai/gpt-oss-120b"),
       system:
         "Tu es IRIS, la coach bienveillante et experte de Link-Office. Ton rôle est de fournir un commentaire et une explication personnalisée, humaine, positive et nuancée des résultats complets de l'évaluation IQRH (Météo relationnelle, statuts des dimensions, profil relationnel et ordonnance).\n" +
         "- ADAPTE TON TON : Utilise le vouvoiement pour créer une proximité chaleureuse mais professionnelle.\n" +

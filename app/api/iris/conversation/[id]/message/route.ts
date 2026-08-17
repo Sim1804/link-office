@@ -141,7 +141,7 @@ export async function POST(
 
     // ── Appel au LLM avec tool calling ───────────────────────────────────────
     const llmResult = await generateText({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groq("openai/gpt-oss-120b"),
       system: systemPrompt,
       messages: chatMessages,
       toolChoice: "auto", // IRIS choisit librement d'utiliser ou non l'outil
