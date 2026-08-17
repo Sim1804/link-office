@@ -8,40 +8,47 @@ datasource db {
 }
 
 model User {
-  id             String                   @id @default(cuid())
-  email          String                   @unique
-  firstName      String
-  lastName       String
-  password       String?
-  points         Int                      @default(0)
-  role           UserRole                 @default(EMPLOYEE)
-  organizationId String?
-  createdAt      DateTime                 @default(now())
-  assessments    Assessment[]
-  pairsInitiated RelationalPair[]         @relation("PairInitiator")
-  pairsReceived  RelationalPair[]         @relation("PairReceiver")
-  prescriptions  RelationalPrescription[]
-  organization   Organization?            @relation(fields: [organizationId], references: [id])
-  badges         UserBadge[]
+  id                 String                   @id @default(cuid())
+  email              String                   @unique
+  firstName          String
+  lastName           String
+  createdAt          DateTime                 @default(now())
+  organizationId     String?
+  password           String?
+  points             Int                      @default(0)
+  role               UserRole                 @default(EMPLOYEE)
+  subscription       SubscriptionTier         @default(FREEMIUM)
+  matchingOptIn      Boolean                  @default(false)
+  mustChangePassword Boolean                  @default(false)
+  irisUsageCount     Int                      @default(0)
+  lastIrisUsage      DateTime?
+  assessments        Assessment[]
+  pairsInitiated     RelationalPair[]         @relation("PairInitiator")
+  pairsReceived      RelationalPair[]         @relation("PairReceiver")
+  prescriptions      RelationalPrescription[]
+  organization       Organization?            @relation(fields: [organizationId], references: [id])
+  badges             UserBadge[]
+  UserSubscription   UserSubscription?
 }
 
 model Assessment {
-  id                   String                @id @default(cuid())
-  userId               String
-  campaignId           String?
-  status               AssessmentStatus      @default(DRAFT)
-  consentInformation   Boolean               @default(false)
-  consentResearch      Boolean               @default(false)
-  consentParticipation Boolean               @default(false)
-  startedAt            DateTime              @default(now())
-  submittedAt          DateTime?
-  updatedAt            DateTime              @updatedAt
-  adaptiveAnswers      AdaptiveAnswer[]
-  campaign             Campaign?             @relation(fields: [campaignId], references: [id])
-  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  demographic          DemographicProfile?
-  result               IqrhResult?
-  answers              QuestionnaireAnswer[]
+  id                     String                   @id @default(cuid())
+  userId                 String
+  status                 AssessmentStatus         @default(DRAFT)
+  consentInformation     Boolean                  @default(false)
+  consentResearch        Boolean                  @default(false)
+  consentParticipation   Boolean                  @default(false)
+  startedAt              DateTime                 @default(now())
+  submittedAt            DateTime?
+  updatedAt              DateTime                 @updatedAt
+  campaignId             String?
+  adaptiveAnswers        AdaptiveAnswer[]
+  campaign               Campaign?                @relation(fields: [campaignId], references: [id])
+  user                   User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  CampaignVariableAnswer CampaignVariableAnswer[]
+  demographic            DemographicProfile?
+  result                 IqrhResult?
+  answers                QuestionnaireAnswer[]
 
   @@index([userId, status])
 }
@@ -120,36 +127,45 @@ model AdaptiveAnswer {
 }
 
 model IqrhResult {
-  id                    String                  @id @default(cuid())
-  assessmentId          String                  @unique
-  globalScore           Float
-  socialScore           Float
-  affectiveScore        Float
-  sentimentalScore      Float
-  professionalScore     Float
-  selfScore             Float
-  weather               String
-  balanceIndex          Float
-  priorityDimension     Dimension
-  strengths             String[]
-  watchpoints           String[]
-  primaryProfile        String
-  secondaryProfile      String
-  profileSummary        String
-  createdAt             DateTime                @default(now())
-  bestDimension         Dimension               @default(SOCIAL)
-  secondBestDimension   Dimension               @default(SOCIAL)
-  thirdBestDimension    Dimension               @default(SOCIAL)
-  weakDimension         Dimension               @default(SOCIAL)
-  weatherText           String                  @default("")
-  weatherTitle          String                  @default("")
-  balanceInterpretation String                  @default("")
-  balanceLevel          String                  @default("")
-  weatherIcon           String                  @default("")
-  icr                   IcrResult?
-  assessment            Assessment              @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  profile               ProfileResult?
-  prescription          RelationalPrescription?
+  id                           String                  @id @default(cuid())
+  assessmentId                 String                  @unique
+  globalScore                  Float
+  socialScore                  Float
+  affectiveScore               Float
+  sentimentalScore             Float
+  professionalScore            Float
+  selfScore                    Float
+  weather                      String
+  balanceIndex                 Float
+  priorityDimension            Dimension
+  strengths                    String[]
+  watchpoints                  String[]
+  primaryProfile               String
+  secondaryProfile             String
+  profileSummary               String
+  createdAt                    DateTime                @default(now())
+  bestDimension                Dimension               @default(SOCIAL)
+  secondBestDimension          Dimension               @default(SOCIAL)
+  thirdBestDimension           Dimension               @default(SOCIAL)
+  weakDimension                Dimension               @default(SOCIAL)
+  weatherText                  String                  @default("")
+  weatherTitle                 String                  @default("")
+  balanceInterpretation        String                  @default("")
+  balanceLevel                 String                  @default("")
+  weatherIcon                  String                  @default("")
+  weatherTextPremium           String                  @default("")
+  weatherTitleFull             String                  @default("")
+  dimensionDetails             Json                    @default("[]")
+  balanceInterpretationPremium String                  @default("")
+  radarSummary                 String                  @default("")
+  strengthDetails              Json                    @default("[]")
+  watchpointDetails            Json                    @default("[]")
+  globalScoreText              String                  @default("")
+  globalScoreTextPremium       String                  @default("")
+  icr                          IcrResult?
+  assessment                   Assessment              @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  profile                      ProfileResult?
+  prescription                 RelationalPrescription?
 }
 
 model IcrResult {
@@ -170,6 +186,10 @@ model IcrResult {
   barriers               String[]
   levers                 String[]
   dominantNeeds          String[]
+  interpretationPremium  String     @default("")
+  vulnerabilityDetails   Json       @default("[]")
+  dominantNeedDetails    Json       @default("[]")
+  moduleDetails          Json       @default("[]")
   iqrhResult             IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
 }
 
@@ -281,6 +301,7 @@ model Organization {
   logoUrl      String?
   createdAt    DateTime              @default(now())
   updatedAt    DateTime              @updatedAt
+  ActionItem   ActionItem[]
   campaigns    Campaign[]
   services     OrganizationService[]
   subscription Subscription?
@@ -299,14 +320,19 @@ model OrganizationService {
 }
 
 model Campaign {
-  id             String         @id @default(cuid())
-  organizationId String
-  title          String
-  startDate      DateTime
-  endDate        DateTime
-  status         CampaignStatus @default(ACTIVE)
-  assessments    Assessment[]
-  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  id                  String             @id @default(cuid())
+  organizationId      String
+  title               String
+  startDate           DateTime
+  endDate             DateTime
+  status              CampaignStatus     @default(ACTIVE)
+  offer               CampaignOffer      @default(PREMIUM)
+  targetPopulation    Int?
+  codeAccess          String?            @unique
+  questionnaireConfig Json               @default("{}")
+  assessments         Assessment[]
+  organization        Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  CampaignVariable    CampaignVariable[]
 }
 
 model Subscription {
@@ -318,7 +344,72 @@ model Subscription {
   currentPeriodEnd DateTime?
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
+  planType         String?
   organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model ActionItem {
+  id             String       @id
+  organizationId String
+  title          String
+  description    String?
+  status         ActionStatus @default(TODO)
+  priority       String       @default("MEDIUM")
+  pilot          String?
+  dueDate        DateTime?
+  dimension      Dimension?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime
+  Organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model CampaignVariable {
+  id                     String                   @id
+  campaignId             String
+  question               String
+  options                String[]
+  required               Boolean                  @default(false)
+  Campaign               Campaign                 @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  CampaignVariableAnswer CampaignVariableAnswer[]
+}
+
+model CampaignVariableAnswer {
+  id               String           @id
+  variableId       String
+  assessmentId     String
+  value            String
+  Assessment       Assessment       @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  CampaignVariable CampaignVariable @relation(fields: [variableId], references: [id], onDelete: Cascade)
+
+  @@unique([variableId, assessmentId])
+}
+
+model Lead {
+  id             String   @id
+  organization   String
+  contactName    String
+  email          String
+  phone          String?
+  planType       String
+  companySize    String?
+  populationSize String?
+  beneficiaries  String?
+  status         String   @default("NEW")
+  createdAt      DateTime @default(now())
+}
+
+model UserSubscription {
+  id                   String    @id
+  userId               String    @unique
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  stripePriceId        String?
+  status               String    @default("INCOMPLETE")
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean   @default(false)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime
+  User                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum AssessmentStatus {
@@ -370,4 +461,21 @@ enum CampaignStatus {
   DRAFT
   ACTIVE
   CLOSED
+}
+
+enum ActionStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum CampaignOffer {
+  PREMIUM
+  PREMIUM_PLUS
+}
+
+enum SubscriptionTier {
+  FREEMIUM
+  PREMIUM
+  PREMIUM_PLUS
 }
