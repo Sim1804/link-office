@@ -78,6 +78,41 @@ async function seedOrganizations() {
   // Mot de passe pour TOUS les comptes de test : "Admin1234!"
   const adminPasswordHash = bcrypt.hashSync("Admin1234!", 10);
 
+  // ── Campagnes de test ───────────────────────────────────────
+  const d = new Date();
+  const nextMonth = new Date(d);
+  nextMonth.setMonth(d.getMonth() + 1);
+
+  const campaignAcme = await prisma.campaign.upsert({
+    where: { id: "camp-acme-2026" },
+    create: {
+      id: "camp-acme-2026",
+      organizationId: acme.id,
+      title: "Campagne QVT Acme 2026",
+      status: "ACTIVE",
+      offer: "PREMIUM",
+      startDate: d,
+      endDate: nextMonth,
+      targetPopulation: 100,
+    },
+    update: {}
+  });
+
+  const campaignMutu = await prisma.campaign.upsert({
+    where: { id: "camp-mutu-2026" },
+    create: {
+      id: "camp-mutu-2026",
+      organizationId: mutu.id,
+      title: "Campagne Nationale Mutuelle Solis 2026",
+      status: "ACTIVE",
+      offer: "PREMIUM_PLUS",
+      startDate: d,
+      endDate: nextMonth,
+      targetPopulation: 5000,
+    },
+    update: {}
+  });
+
   // ── Comptes admins de test ───────────────────────────────────────
   await prisma.user.upsert({
     where: { email: "admin.b2b@linkoffice.fr" },
@@ -135,16 +170,33 @@ async function seedOrganizations() {
       lastName: "Demo",
       password: adminPasswordHash,
       role: "EMPLOYEE",
+      subscription: "FREEMIUM",
     },
-    update: { password: adminPasswordHash, role: "EMPLOYEE" },
+    update: { password: adminPasswordHash, role: "EMPLOYEE", subscription: "FREEMIUM" },
   });
 
-  console.log("✅ Organisations et utilisateurs de test créés avec succès !");
+  await prisma.user.upsert({
+    where: { email: "demo.b2b2c@linkoffice.fr" },
+    create: {
+      id: "demo-user-b2b2c",
+      email: "demo.b2b2c@linkoffice.fr",
+      firstName: "Sacha",
+      lastName: "Bénéficiaire",
+      password: adminPasswordHash,
+      role: "EMPLOYEE",
+      subscription: "PREMIUM_PLUS",
+      campaignId: campaignMutu.id,
+    },
+    update: { password: adminPasswordHash, role: "EMPLOYEE", subscription: "PREMIUM_PLUS", campaignId: campaignMutu.id },
+  });
+
+  console.log("✅ Organisations, campagnes et utilisateurs de test créés avec succès !");
   console.log(`  B2B Admin     : admin.b2b@linkoffice.fr | Admin1234!`);
   console.log(`  B2B2C Admin   : admin.b2b2c@linkoffice.fr | Admin1234!`);
   console.log(`  Collectivité  : admin.collectivite@linkoffice.fr | Admin1234!`);
   console.log(`  Super Admin   : superadmin@linkoffice.fr | Admin1234!`);
-  console.log(`  Demo User     : demo@linkoffice.fr | Admin1234!`);
+  console.log(`  Demo Freemium : demo@linkoffice.fr | Admin1234!`);
+  console.log(`  Demo B2B2C (Premium+) : demo.b2b2c@linkoffice.fr | Admin1234!`);
 }
 
 async function main() {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
-import { Settings, Save, CheckCircle, ShieldAlert, ArrowLeft, Layers, Key } from "lucide-react";
+import { Settings, Save, CheckCircle, ShieldAlert, ArrowLeft, Layers, Key, Plus, Trash2 } from "lucide-react";
 
 export default function CampaignConfigPage() {
   const params = useParams();
@@ -18,6 +18,7 @@ export default function CampaignConfigPage() {
   const [allowedSituations, setAllowedSituations] = useState<string[]>([]);
   
   const [allSituations, setAllSituations] = useState<string[]>([]);
+  const [variables, setVariables] = useState<any[]>([]);
 
   const DEMOGRAPHICS_FIELDS = [
     { id: "sexe", label: "Genre" },
@@ -44,6 +45,12 @@ export default function CampaignConfigPage() {
           setAllowedSituations(config.allowedSituations || data.availableSituations);
           setAllSituations(data.availableSituations || []);
         }
+      });
+      
+    fetch(`/api/campaigns/${params.id}/variables`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.variables) setVariables(data.variables);
       })
       .finally(() => setLoading(false));
   }, [params.id]);
@@ -74,7 +81,14 @@ export default function CampaignConfigPage() {
           }
         })
       });
-      if (res.ok) {
+      
+      const resVar = await fetch(`/api/campaigns/${params.id}/variables`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ variables })
+      });
+
+      if (res.ok && resVar.ok) {
         alert("Configuration sauvegardée avec succès.");
       } else {
         alert("Erreur lors de la sauvegarde.");
@@ -169,6 +183,69 @@ export default function CampaignConfigPage() {
                 );
               })}
             </div>
+          </div>
+
+          <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24, marginBottom: 24 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <h2 style={{ fontSize: 16, fontWeight: 600, color: "#f8fafc", display: "flex", alignItems: "center", gap: 8, margin: 0 }}>
+                <Layers size={18} color="#f59e0b" /> Variables Complémentaires (Ciblage)
+              </h2>
+              <button 
+                onClick={() => setVariables([...variables, { question: "", options: [], required: true }])}
+                style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(245,158,11,0.1)", color: "#f59e0b", border: "1px solid rgba(245,158,11,0.2)", padding: "6px 12px", borderRadius: 8, fontSize: 13, cursor: "pointer" }}
+              >
+                <Plus size={14} /> Ajouter une variable
+              </button>
+            </div>
+            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+              Créez des questions personnalisées pour cette campagne (ex: "Quel est votre quartier ?"). Elles permettront de filtrer le baromètre relationnel par la suite.
+            </p>
+            
+            {variables.length === 0 ? (
+              <div style={{ background: "rgba(255,255,255,0.02)", padding: 16, borderRadius: 10, textAlign: "center", color: "#64748b", fontSize: 13 }}>
+                Aucune variable spécifique pour le moment.
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {variables.map((v, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: 16, position: "relative" }}>
+                    <button 
+                      onClick={() => setVariables(prev => prev.filter((_, idx) => idx !== i))}
+                      style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", color: "#f43f5e", cursor: "pointer" }}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                    <div style={{ marginBottom: 12, paddingRight: 32 }}>
+                      <label style={{ display: "block", fontSize: 12, color: "#cbd5e1", marginBottom: 4 }}>Question (ex: Votre quartier ?)</label>
+                      <input 
+                        type="text" 
+                        value={v.question}
+                        onChange={e => {
+                          const newV = [...variables];
+                          newV[i].question = e.target.value;
+                          setVariables(newV);
+                        }}
+                        style={{ width: "100%", background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 12px", color: "white", outline: "none", fontSize: 13 }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: 12, color: "#cbd5e1", marginBottom: 4 }}>Options (séparées par une virgule)</label>
+                      <input 
+                        type="text" 
+                        value={v.options.join(", ")}
+                        onChange={e => {
+                          const newV = [...variables];
+                          newV[i].options = e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean);
+                          setVariables(newV);
+                        }}
+                        placeholder="Ex: Centre-ville, Nord, Sud"
+                        style={{ width: "100%", background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 12px", color: "white", outline: "none", fontSize: 13 }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24 }}>

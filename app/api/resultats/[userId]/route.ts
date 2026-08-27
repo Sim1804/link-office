@@ -17,6 +17,7 @@
 
 import { NextResponse } from "next/server";
 import { ResultService } from "@/lib/iqrh/result-service";
+import { auth } from "@/lib/auth";
 
 /**
  * Retourne le résultat IQRH le plus récent d'un utilisateur identifié par son `userId`.
@@ -30,6 +31,15 @@ export async function GET(
 ) {
   try {
     const { userId } = await params;
+    
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+    }
+    if (session.user.id !== userId && !["SUPER_ADMIN", "ADMIN_B2B"].includes(session.user.role || "")) {
+      return NextResponse.json({ error: "Interdit" }, { status: 403 });
+    }
+
     const userResult = await ResultService.byUser(userId);
     return NextResponse.json(userResult);
   } catch {

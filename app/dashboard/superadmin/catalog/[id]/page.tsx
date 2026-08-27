@@ -29,31 +29,14 @@ export default async function EditCatalogItemPage(props: { params: Promise<{ id:
   };
 
   return (
-    <>
-      <Navbar />
-      <main className="page-main">
-        <div className="blob-violet" />
-        <div className="blob-cyan" />
-        
-        <div className="page-container-wide">
-          <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 20px" }}>
-            <div style={{ marginBottom: 32 }}>
-        <Link href="/dashboard/superadmin/catalog" style={{ color: "#94a3b8", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 14, marginBottom: 16 }}>
+    <div style={{ maxWidth: 860, margin: "0 auto", paddingBottom: "40px" }}>
+      <div style={{ marginBottom: 24 }}>
+        <Link href="/dashboard/superadmin/catalog" style={{ color: "#94a3b8", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 14 }}>
           <ArrowLeft size={16} /> Retour au catalogue
         </Link>
-        <h1 style={{ fontSize: 28, fontWeight: 700, color: "#f8fafc", display: "flex", alignItems: "center", gap: 12 }}>
-          <Edit3 size={28} color="#c084fc" />
-          Éditer l'élément {item.id}
-        </h1>
-        <p style={{ color: "#94a3b8", marginTop: 8 }}>Modifiez les informations ou les métadonnées JSON de cet élément.</p>
       </div>
 
-      <div className="mt-8">
-        <CatalogForm initialData={itemData} isEdit={true} />
-      </div>
-          </div>
-        </div>
-      </main>
-    </>
+      <CatalogForm initialData={itemData} isEdit={true} />
+    </div>
   );
 }

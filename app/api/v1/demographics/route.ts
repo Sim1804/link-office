@@ -23,6 +23,7 @@ export async function GET() {
       return NextResponse.json({ 
         demographic: null, 
         campaignConfig: assessment?.campaign?.questionnaireConfig || null,
+        campaignOffer: assessment?.campaign?.offer || null,
         availableSituations: situationsList 
       });
     }
@@ -30,6 +31,7 @@ export async function GET() {
     return NextResponse.json({ 
       demographic: assessment.demographic, 
       campaignConfig: assessment.campaign?.questionnaireConfig || null,
+      campaignOffer: assessment.campaign?.offer || null,
       availableSituations: situationsList
     });
   } catch (error) {

@@ -14,6 +14,7 @@ model User {
   lastName           String
   createdAt          DateTime                 @default(now())
   organizationId     String?
+  campaignId         String?
   password           String?
   points             Int                      @default(0)
   role               UserRole                 @default(EMPLOYEE)
@@ -27,8 +28,15 @@ model User {
   pairsReceived      RelationalPair[]         @relation("PairReceiver")
   prescriptions      RelationalPrescription[]
   organization       Organization?            @relation(fields: [organizationId], references: [id])
+  campaign           Campaign?                @relation(fields: [campaignId], references: [id])
   badges             UserBadge[]
   UserSubscription   UserSubscription?
+  stats              UserStats?
+  notifications      Notification[]
+
+  @@index([organizationId])
+  @@index([campaignId])
+  @@index([role])
 }
 
 model Assessment {
@@ -263,6 +271,8 @@ model Badge {
   description    String
   icon           String
   pointsRequired Int
+  category       String?
+  bonusPoints    Int?
   createdAt      DateTime    @default(now())
   users          UserBadge[]
 }
@@ -271,11 +281,50 @@ model UserBadge {
   id         String   @id @default(cuid())
   userId     String
   badgeId    String
+  source     String?
   unlockedAt DateTime @default(now())
   badge      Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, badgeId])
+}
+
+model UserStats {
+  userId        String   @id
+  totalPoints   Int      @default(0)
+  weeklyPoints  Int      @default(0)
+  monthlyPoints Int      @default(0)
+  currentLevel  Int      @default(1)
+  lastUpdated   DateTime @default(now()) @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id         String             @id @default(cuid())
+  userId     String
+  type       NotificationType
+  title      String
+  message    String
+  actionLink String?
+  status     NotificationStatus @default(UNREAD)
+  createdAt  DateTime           @default(now())
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+model EventLog {
+  id             String   @id @default(cuid())
+  userId         String?
+  organizationId String?
+  campaignId     String?
+  eventType      String
+  eventData      Json     @default("{}")
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+  @@index([organizationId])
+  @@index([eventType])
 }
 
 model RelationalPair {
@@ -292,20 +341,32 @@ model RelationalPair {
 }
 
 model Organization {
-  id           String                @id @default(cuid())
-  name         String
-  type         OrganizationType
-  siren        String?
-  domainName   String?
-  codeAccess   String                @unique
-  logoUrl      String?
-  createdAt    DateTime              @default(now())
-  updatedAt    DateTime              @updatedAt
-  ActionItem   ActionItem[]
-  campaigns    Campaign[]
-  services     OrganizationService[]
-  subscription Subscription?
-  users        User[]
+  id               String                @id @default(cuid())
+  name             String
+  type             OrganizationType
+  siren            String?
+  domainName       String?
+  codeAccess       String                @unique
+  logoUrl          String?
+  
+  // Nouveaux champs B2B2C / B2B pour le contrat partenaire
+  contactName      String?
+  contactEmail     String?
+  contactPhone     String?
+  contractType     String?
+  startDate        DateTime?
+  endDate          DateTime?
+  targetPopulation Int?
+  territory        String?
+  quota            Int?
+
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  ActionItem       ActionItem[]
+  campaigns        Campaign[]
+  services         OrganizationService[]
+  subscription     Subscription?
+  users            User[]
 }
 
 model OrganizationService {
@@ -323,16 +384,49 @@ model Campaign {
   id                  String             @id @default(cuid())
   organizationId      String
   title               String
+  description         String?
   startDate           DateTime
   endDate             DateTime
   status              CampaignStatus     @default(ACTIVE)
   offer               CampaignOffer      @default(PREMIUM)
   targetPopulation    Int?
+  quota               Int?
+  territory           String?
   codeAccess          String?            @unique
+  logoUrl             String?
   questionnaireConfig Json               @default("{}")
+  parentCampaignId    String?
   assessments         Assessment[]
+  users               User[]
+  invites             CampaignInvite[]
   organization        Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  parentCampaign      Campaign?          @relation("CampaignRenewal", fields: [parentCampaignId], references: [id])
+  childCampaigns      Campaign[]         @relation("CampaignRenewal")
   CampaignVariable    CampaignVariable[]
+  snapshot            CampaignSnapshot?
+
+  @@index([organizationId, status])
+}
+
+model CampaignSnapshot {
+  id          String   @id @default(cuid())
+  campaignId  String   @unique
+  data        Json
+  createdAt   DateTime @default(now())
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CampaignInvite {
+  id         String   @id @default(cuid())
+  campaignId String
+  email      String
+  status     String   @default("INVITED") // INVITED | ACTIVATED | STARTED | COMPLETED
+  invitedAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, email])
+  @@index([campaignId, status])
 }
 
 model Subscription {
@@ -349,11 +443,11 @@ model Subscription {
 }
 
 model ActionItem {
-  id             String       @id
+  id             String       @id @default(cuid())
   organizationId String
   title          String
   description    String?
-  status         ActionStatus @default(TODO)
+  status         ActionStatus @default(PROPOSEE)
   priority       String       @default("MEDIUM")
   pilot          String?
   dueDate        DateTime?
@@ -361,6 +455,8 @@ model ActionItem {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime
   Organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, status])
 }
 
 model CampaignVariable {
@@ -459,14 +555,19 @@ enum UserRole {
 
 enum CampaignStatus {
   DRAFT
+  PLANIFIEE
   ACTIVE
+  EN_CLOTURE
   CLOSED
+  RENOUVELEE
 }
 
 enum ActionStatus {
-  TODO
-  IN_PROGRESS
-  DONE
+  PROPOSEE
+  VALIDEE
+  PLANIFIEE
+  EN_COURS
+  REALISEE
 }
 
 enum CampaignOffer {
@@ -478,4 +579,91 @@ enum SubscriptionTier {
   FREEMIUM
   PREMIUM
   PREMIUM_PLUS
+}
+
+model Recommendation {
+  id                 String   @id
+  title              String
+  category           String?
+  dimensions         String[]
+  profiles           String[]
+  situations         String[]
+  riskFactors        String[]
+  protectiveFactors  String[]
+  needs              String[]
+  priorityLevel      String?
+  difficulty         String?
+  estimatedTime      String?
+  expectedImpact     Int?
+  resultDelay        String?
+  frequency          String?
+  programmes         String[]
+  partners           String[]
+  displayText        String   @default("")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+
+model PartnerMatching {
+  id             String   @id
+  partnerName    String
+  category       String?
+  publics        String[]
+  territories    String[]
+  needs          String[]
+  situations     String[]
+  validation     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model MicroDefi {
+  id                   String   @id
+  title                String
+  description          String
+  dimension            String?
+  need                 String?
+  public               String?
+  difficulty           String?
+  estimatedTime        String?
+  points               Int?
+  expectedImpact       Int?
+  compatibleBinome     Boolean  @default(false)
+  compatibleIris       Boolean  @default(false)
+  category             String?
+  expectedValidation   String?
+  notificationText     String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model EcosystemActor {
+  id               String   @id @default(cuid())
+  segment          String
+  name             String
+  target           String
+  territory        String
+  linkScoreLevel   String
+  description      String
+  strategicReading String
+  status           String   @default("TO_CONTACT")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+enum NotificationType {
+  QUESTIONNAIRE_REMINDER
+  CHALLENGE_REMINDER
+  BINOME_CHECKIN
+  NEW_PRESCRIPTION
+  IRIS_MESSAGE
+  REPORT_AVAILABLE
+  CAMPAIGN_LAUNCHED
+}
+
+enum NotificationStatus {
+  UNREAD
+  READ
+  CLICKED
 }

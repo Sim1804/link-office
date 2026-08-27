@@ -44,23 +44,46 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
     const data = await request.json();
     
-    // Si l'utilisateur passe un nouveau code d'accès, on le met à jour
-    const updateData: any = {
-      questionnaireConfig: data.questionnaireConfig
-    };
+    const updateData: any = {};
+    if (data.questionnaireConfig !== undefined) {
+      updateData.questionnaireConfig = data.questionnaireConfig;
+    }
     
     if (data.codeAccess !== undefined) {
       updateData.codeAccess = data.codeAccess || null;
     }
 
-    const campaign = await prisma.campaign.update({
-      where: { id: params.id },
-      data: updateData
-    });
+    let campaign;
+    if (Object.keys(updateData).length > 0) {
+      campaign = await prisma.campaign.update({
+        where: { id: params.id },
+        data: updateData
+      });
+    } else {
+      campaign = await prisma.campaign.findUnique({ where: { id: params.id } });
+    }
+
+    if (data.variable) {
+      await prisma.campaignVariable.upsert({
+        where: { id: `${params.id}_${data.variable.id}` },
+        update: {
+          question: data.variable.question,
+          options: data.variable.options || [],
+          required: data.variable.required || false,
+        },
+        create: {
+          id: `${params.id}_${data.variable.id}`, // Ensure unique ID
+          campaignId: params.id,
+          question: data.variable.question,
+          options: data.variable.options || [],
+          required: data.variable.required || false,
+        }
+      });
+    }
 
     return NextResponse.json(campaign);
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    return NextResponse.json({ error: "Erreur serveur: " + error.message }, { status: 500 });
   }
 }

@@ -39,3 +39,16 @@ npm run dev
 - **Questionnaire interactif** : 30 questions évaluées sur une échelle de Likert.
 - **Coach IRIS** : Chat IA pour l'introspection et le développement personnel basé sur vos résultats.
 - **Profil Utilisateur** : Analyse de votre Indice de Complexité Relationnelle (ICR) et de votre profil type.
+
+## Comptes de test (Environnement de dev)
+
+Lors de l'initialisation de la base de données via Prisma Seed, les comptes de test suivants sont générés (mot de passe commun : `Admin1234!`) :
+
+| Rôle | Email | Organisation / Contexte |
+| --- | --- | --- |
+| **Super Admin** | `superadmin@linkoffice.fr` | Console d'administration globale |
+| **Admin B2B (RH)** | `admin.b2b@linkoffice.fr` | Acme Corp (B2B) |
+| **Admin B2B2C** | `admin.b2b2c@linkoffice.fr` | Mutuelle Solis (B2B2C) |
+| **Admin Collectivité** | `admin.collectivite@linkoffice.fr` | Ville de Testville (B2G / Collectivité) |
+| **Bénéficiaire (B2C)** | `demo@linkoffice.fr` | Compte classique Freemium |
+| **Bénéficiaire (B2B2C)**| `demo.b2b2c@linkoffice.fr` | Campagne Mutuelle Solis (Premium+) |

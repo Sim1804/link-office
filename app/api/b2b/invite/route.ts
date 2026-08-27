@@ -11,7 +11,7 @@ import QRCode from "qrcode";
 
 const ADMIN_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
 
-export async function GET() {
+export async function GET(request: Request) {
   const session = await auth();
   if (!session?.user?.id || !ADMIN_ROLES.includes(session.user.role)) {
     return NextResponse.json(
@@ -19,6 +19,9 @@ export async function GET() {
       { status: 403 }
     );
   }
+
+  const { searchParams } = new URL(request.url);
+  const campaignId = searchParams.get("campaignId");
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
@@ -32,17 +35,36 @@ export async function GET() {
     );
   }
 
-  const org = await prisma.organization.findUnique({
-    where: { id: user.organizationId },
-    select: { codeAccess: true, name: true },
-  });
+  let inviteCode = "";
+  let organizationName = "";
 
-  if (!org) {
-    return NextResponse.json({ error: "Organisation introuvable." }, { status: 404 });
+  if (campaignId) {
+    // Cas B2B2C ou B2B spécifique : Le lien doit lier à une campagne précise
+    const campaign = await prisma.campaign.findUnique({
+      where: { id: campaignId },
+      include: { organization: true },
+    });
+
+    if (!campaign || campaign.organizationId !== user.organizationId) {
+      return NextResponse.json({ error: "Campagne introuvable ou non autorisée." }, { status: 404 });
+    }
+    inviteCode = campaign.id;
+    organizationName = campaign.organization.name;
+  } else {
+    // Cas fallback : B2B générique lié à l'organisation globale
+    const org = await prisma.organization.findUnique({
+      where: { id: user.organizationId },
+      select: { codeAccess: true, name: true },
+    });
+    if (!org) {
+      return NextResponse.json({ error: "Organisation introuvable." }, { status: 404 });
+    }
+    inviteCode = org.codeAccess;
+    organizationName = org.name;
   }
 
   const baseUrl = process.env.NEXTAUTH_URL ?? "https://link-office.fr";
-  const inviteUrl = `${baseUrl}/join/${org.codeAccess}`;
+  const inviteUrl = `${baseUrl}/join/${inviteCode}`;
 
   // Générer le QR code en Data URL (PNG base64) pour affichage direct
   const qrCodeDataUrl = await QRCode.toDataURL(inviteUrl, {
@@ -55,8 +77,8 @@ export async function GET() {
   });
 
   return NextResponse.json({
-    organizationName: org.name,
-    codeAccess: org.codeAccess,
+    organizationName,
+    codeAccess: inviteCode,
     inviteUrl,
     qrCode: qrCodeDataUrl,
   });

@@ -31,8 +31,9 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import {
   Menu, X, Brain, LayoutDashboard, MessageCircle, User, LogOut,
-  ChevronDown, Shield, Building2, HeartPulse, Landmark, BookOpen
+  ChevronDown, Shield, Building2, HeartPulse, Landmark, BookOpen, Users
 } from "lucide-react";
+import { NotificationBell } from "./NotificationBell";
 
 /** Liens de navigation pour les visiteurs non connectés */
 const publicLinks = [
@@ -70,7 +71,9 @@ export function Navbar() {
   const profileDropdownRef = useRef<HTMLDivElement>(null);
 
   const currentPathname = usePathname();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const isLoading = status === "loading";
+  
   /** true si l'utilisateur est connecté (session NextAuth active) */
   const isAuthenticated = !!session;
   const userRole = (session?.user?.role as RoleType) ?? "EMPLOYEE";
@@ -97,24 +100,33 @@ export function Navbar() {
     if (!isAuthenticated) return publicLinks;
 
     if (userRole === "ADMIN_B2B") {
-      return [{ href: "/dashboard/b2b", label: "Tableau de bord RH", icon: Building2 }];
+      return [
+        { href: "/dashboard/rh", label: "Tableau de bord RH", icon: Building2 },
+        { href: "/dashboard/rh/campaigns", label: "Campagnes", icon: Users },
+      ];
     } else if (userRole === "ADMIN_B2B2C") {
       return [{ href: "/dashboard/b2b2c", label: "Portail Mutuelle", icon: HeartPulse }];
     } else if (userRole === "ADMIN_COLLECTIVITE") {
       return [{ href: "/dashboard/collectivites", label: "Observatoire", icon: Landmark }];
     } else if (userRole === "SUPER_ADMIN") {
       return [
-        { href: "/admin", label: "Console Admin", icon: Shield },
-        { href: "/dashboard/superadmin/catalog", label: "Catalogue", icon: BookOpen },
-        { href: "/dashboard/b2b", label: "Démo Tableau de bord B2B", icon: Building2 },
+        { href: "/dashboard/superadmin/leads", label: "Console Admin", icon: Shield },
+        { href: "/dashboard/rh", label: "Demo Tableau de bord B2B", icon: Building2 },
       ];
     } else {
       // Utilisateurs standard : EMPLOYEE, MEMBER, CITIZEN
-      return [
-        { href: "/dashboard", label: "Mon Évaluation", icon: LayoutDashboard },
+      const subscription = (session?.user as any)?.subscription ?? "FREEMIUM";
+      const isPremiumPlus = subscription === "PREMIUM_PLUS";
+      const links = [
+        { href: "/dashboard", label: "Mon Evaluation", icon: LayoutDashboard },
         { href: "/mon-profil", label: "Ma Progression", icon: User },
         { href: "/iris", label: "IA IRIS", icon: MessageCircle },
       ];
+      // Binome uniquement visible pour les abonnes PREMIUM+
+      if (isPremiumPlus) {
+        links.push({ href: "/binome", label: "Binome", icon: Users });
+      }
+      return links;
     }
   };
 
@@ -132,14 +144,23 @@ export function Navbar() {
       <div className="container" style={{ display: "flex", alignItems: "center", height: 64, gap: 16 }}>
 
         {/* Logo LinkOffice — redirige vers le bon point d'entrée selon le rôle */}
-        <Link href={session ? (userRole === "SUPER_ADMIN" ? "/admin" : userRole.startsWith("ADMIN_") ? navLinks[0].href : "/dashboard") : "/"}
+        <Link href={session ? (userRole === "SUPER_ADMIN" ? "/dashboard/superadmin/leads" : userRole.startsWith("ADMIN_") ? navLinks[0].href : "/dashboard") : "/"}
           style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
-          <div style={{ width: 34, height: 34, background: "var(--primary)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 16px rgba(124,58,237,0.4)" }}>
-            <Brain size={18} color="white" />
-          </div>
-          <span style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 19, color: "#f8fafc" }}>
-            Link<span className="gradient-text">Office</span>
-          </span>
+          {(session?.user as any)?.logoUrl ? (
+            <div style={{ height: 34, display: "flex", alignItems: "center" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={(session?.user as any).logoUrl} alt="Logo Partenaire" style={{ maxHeight: "100%", maxWidth: 120, objectFit: "contain" }} />
+            </div>
+          ) : (
+            <>
+              <div style={{ width: 34, height: 34, background: "var(--primary)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 16px rgba(124,58,237,0.4)" }}>
+                <Brain size={18} color="white" />
+              </div>
+              <span style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 19, color: "#f8fafc" }}>
+                Link<span className="gradient-text">Office</span>
+              </span>
+            </>
+          )}
         </Link>
 
         {/* Navigation Desktop — liens actifs surlignés selon la route courante */}
@@ -164,7 +185,9 @@ export function Navbar() {
         {/* Espace Utilisateur Desktop */}
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }} className="hide-mobile">
           {session ? (
-            <div style={{ position: "relative" }} ref={profileDropdownRef}>
+            <>
+              <NotificationBell />
+              <div style={{ position: "relative" }} ref={profileDropdownRef}>
               <button
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
                 style={{
@@ -243,7 +266,7 @@ export function Navbar() {
                   {userRole === "SUPER_ADMIN" && (
                     <>
                       <div style={{ fontSize: 10, fontWeight: 700, color: "#64748b", padding: "8px 12px 4px", textTransform: "uppercase" }}>Sélecteur Démos</div>
-                      <Link href="/dashboard/b2b" onClick={() => setIsProfileDropdownOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 12, color: "#a78bfa", textDecoration: "none" }}>
+                      <Link href="/dashboard/rh" onClick={() => setIsProfileDropdownOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 12, color: "#a78bfa", textDecoration: "none" }}>
                         <Building2 size={14} /> Dashboard RH B2B
                       </Link>
                       <Link href="/dashboard/b2b2c" onClick={() => setIsProfileDropdownOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 12, color: "#34d399", textDecoration: "none" }}>
@@ -271,6 +294,9 @@ export function Navbar() {
                 </div>
               )}
             </div>
+            </>
+          ) : isLoading ? (
+            <div style={{ width: 120, height: 36, background: "rgba(255,255,255,0.05)", borderRadius: 8, animation: "pulse 2s infinite" }} />
           ) : (
             <>
               <Link href="/auth/login" className="btn btn-ghost btn-sm" style={{ textDecoration: "none" }}>Connexion</Link>
@@ -305,7 +331,9 @@ export function Navbar() {
           ))}
 
           <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: 8 }}>
-            {session ? (
+            {isLoading ? (
+              <div style={{ height: 40, background: "rgba(255,255,255,0.05)", borderRadius: 10, animation: "pulse 2s infinite" }} />
+            ) : session ? (
               <button onClick={() => { signOut({ callbackUrl: "/" }); setIsMobileMenuOpen(false); }}
                 style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "#f43f5e", background: "none", border: "none", cursor: "pointer", padding: "8px 14px" }}>
                 <LogOut size={16} /> Déconnexion

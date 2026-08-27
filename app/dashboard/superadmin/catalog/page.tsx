@@ -2,9 +2,10 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { Plus, BookOpen, Edit2, Trash2, ArrowLeft } from "lucide-react";
+import { Plus, BookOpen, Edit2, ArrowLeft } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/Button";
+import { CatalogDeleteButton } from "@/components/admin/CatalogDeleteButton";
 
 export const metadata = { title: "Catalogue (Back-Office) — LinkOffice" };
 export const dynamic = "force-dynamic";
@@ -18,7 +19,10 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
   const currentPage = Math.max(1, parseInt(params.page || "1", 10));
   const ITEMS_PER_PAGE = 20;
 
-  const whereClause = filter !== "ALL" ? { library: filter } : undefined;
+  const allowedLibraries = ["Recommandations", "Micro-défis", "Partenaires"];
+  const whereClause = filter !== "ALL" 
+    ? { library: filter } 
+    : { library: { in: allowedLibraries } };
 
   const [items, totalItems] = await Promise.all([
     prisma.libraryItem.findMany({
@@ -34,24 +38,13 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
 
   return (
     <>
-      <Navbar />
-      <main className="page-main">
-        <div className="blob-violet" />
-        <div className="blob-cyan" />
-        
-        <div className="page-container-wide">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-            <Link href="/dashboard" style={{ color: "#94a3b8", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 14 }}>
-              <ArrowLeft size={16} /> Retour
-            </Link>
-          </div>
           <h1 style={{ fontSize: 32, fontWeight: 700, color: "#f8fafc", display: "flex", alignItems: "center", gap: 12 }}>
             <BookOpen size={32} color="#c084fc" />
-            Catalogue 
+            Catalogue Central
           </h1>
-          <p style={{ color: "#94a3b8", marginTop: 8 }}>Gérez les recommandations, les défis et les partenaires de l'application.</p>
+          <p style={{ color: "#94a3b8", marginTop: 8 }}>Gérez les recommandations, les micro-défis et la liste des partenaires.</p>
         </div>
         
         <Link href="/dashboard/superadmin/catalog/new" style={{ textDecoration: "none" }}>
@@ -61,14 +54,17 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
         </Link>
       </div>
 
-      <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
-        {["ALL", "Recommandations", "Micro-défis", "Partenaires"].map((f) => (
+      <div style={{ display: "flex", gap: 8, marginBottom: 24, borderBottom: "1px solid rgba(255,255,255,0.05)", paddingBottom: 16 }}>
+        {["ALL", "Recommandations", "Micro-défis", "Partenaires"].map(f => (
           <Link key={f} href={`/dashboard/superadmin/catalog?filter=${f}`} style={{ textDecoration: "none" }}>
-            <span style={{
-              padding: "8px 16px", borderRadius: 20, fontSize: 14, fontWeight: 600,
-              background: filter === f ? "rgba(192,132,252,0.2)" : "rgba(30,41,59,0.5)",
-              color: filter === f ? "#c084fc" : "#cbd5e1",
-              border: filter === f ? "1px solid rgba(192,132,252,0.4)" : "1px solid transparent",
+            <span style={{ 
+              padding: "6px 16px", 
+              borderRadius: 20, 
+              fontSize: 13, 
+              fontWeight: 600,
+              background: filter === f ? "rgba(192,132,252,0.15)" : "rgba(30,41,59,0.5)",
+              color: filter === f ? "#c084fc" : "#94a3b8",
+              border: filter === f ? "1px solid rgba(192,132,252,0.3)" : "1px solid rgba(255,255,255,0.05)",
               transition: "all 0.2s"
             }}>
               {f === "ALL" ? "Tout voir" : f}
@@ -81,11 +77,9 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
         <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
           <thead>
             <tr style={{ background: "rgba(30,41,59,0.8)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>ID</th>
-              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Type</th>
-              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Titre</th>
-              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Catégorie</th>
-              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Détails clés</th>
+              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Titre & Type</th>
+              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Thèmes</th>
+              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Ciblage</th>
               <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase", textAlign: "right" }}>Actions</th>
             </tr>
           </thead>
@@ -93,7 +87,7 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
             {items.map((item) => {
               const data = item.data as any || {};
               return (
-              <tr key={item.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+              <tr key={item.id} className="table-row-hover" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", transition: "background 0.15s" }}>
                 <td style={{ padding: "16px 24px", color: "#cbd5e1", fontFamily: "monospace", fontSize: 13 }}>
                   {item.id}
                 </td>
@@ -106,7 +100,7 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
                     {item.library}
                   </span>
                 </td>
-                <td style={{ padding: "16px 24px", color: "#f8fafc", fontWeight: 500, fontSize: 14, textTransform: item.library === "Partenaires" ? "capitalize" : "none" }}>{item.library === "Partenaires" ? item.title.toLowerCase() : item.title}</td>
+                <td style={{ padding: "16px 24px", color: "#f8fafc", fontWeight: 500, fontSize: 14 }}>{item.title}</td>
                 <td style={{ padding: "16px 24px", color: "#94a3b8", fontSize: 14 }}>{item.category || "—"}</td>
                 <td style={{ padding: "16px 24px" }}>
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
@@ -127,10 +121,11 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
                 <td style={{ padding: "16px 24px", textAlign: "right" }}>
                   <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
                     <Link href={`/dashboard/superadmin/catalog/${item.id}`} style={{ textDecoration: "none" }}>
-                      <Button variant="secondary" size="sm" style={{ padding: "8px" }}>
+                      <Button variant="secondary" size="sm" style={{ padding: "8px" }} title="Modifier">
                         <Edit2 size={16} />
                       </Button>
                     </Link>
+                    <CatalogDeleteButton itemId={item.id} />
                   </div>
                 </td>
               </tr>
@@ -176,8 +171,6 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
         </div>
       )}
 
-    </div>
-    </main>
     </>
   );
 }

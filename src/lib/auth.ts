@@ -40,7 +40,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               password: true,
               role: true,
               organizationId: true,
+              campaignId: true,
               mustChangePassword: true,
+              organization: { select: { logoUrl: true } },
+              campaign: { select: { logoUrl: true } },
             },
           });
 
@@ -58,6 +61,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             name: `${user.firstName} ${user.lastName}`,
             role: user.role,
             organizationId: user.organizationId,
+            logoUrl: user.campaign?.logoUrl || user.organization?.logoUrl || null,
             mustChangePassword: user.mustChangePassword,
           };
         } catch (error) {
@@ -73,6 +77,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.userId = user.id;
         token.role = (user as { role: string }).role;
         token.organizationId = (user as { organizationId: string | null }).organizationId ?? null;
+        token.logoUrl = (user as any).logoUrl ?? null;
         token.mustChangePassword = (user as any).mustChangePassword;
       }
       return token;
@@ -81,6 +86,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       session.user.id = token.userId as string;
       session.user.role = token.role as string;
       session.user.organizationId = (token.organizationId as string | null) ?? null;
+      (session.user as any).logoUrl = (token.logoUrl as string | null) ?? null;
       (session.user as any).mustChangePassword = token.mustChangePassword as boolean;
       return session;
     },

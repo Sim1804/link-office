@@ -10,6 +10,24 @@ import { Navbar } from "@/components/layout/Navbar";
 import { startIrisConversation, sendIrisMessage, getIrisExplication } from "@/lib/api";
 import Link from "next/link";
 
+const formatText = (text: string) => {
+  if (!text) return null;
+  return text.split("\n").map((line, idx, array) => {
+    const parts = line.split(/(\*\*.*?\*\*)/g);
+    return (
+      <span key={idx}>
+        {parts.map((part, i) => {
+          if (part.startsWith("**") && part.endsWith("**")) {
+            return <strong key={i} style={{ color: "#f8fafc", fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
+          }
+          return <span key={i}>{part}</span>;
+        })}
+        {idx < array.length - 1 && <br />}
+      </span>
+    );
+  });
+};
+
 interface Message {
   id: string;
   sender: "user" | "iris";
@@ -219,7 +237,7 @@ export default function IRISPage() {
                       </div>
                       <span style={{ color: "#f8fafc", fontWeight: 700, fontSize: 14 }}>IRIS</span>
                     </div>
-                    <p style={{ color: "#94a3b8", lineHeight: 1.8, whiteSpace: "pre-wrap", fontSize: 14 }}>{explication}</p>
+                    <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: 14 }}>{formatText(explication)}</div>
                     <button
                       onClick={loadExplication}
                       className="btn-regenerate"
@@ -274,7 +292,7 @@ export default function IRISPage() {
                           boxShadow: "0 4px 20px rgba(124,58,237,0.3)", borderTopRightRadius: 4,
                         }),
                       }}>
-                        {msg.text}
+                        {formatText(msg.text)}
                         {msg.isPremiumCTA && (
                           <div style={{ marginTop: 12 }}>
                             <Link href="/premium" style={{

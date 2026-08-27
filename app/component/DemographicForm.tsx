@@ -26,6 +26,7 @@ type Props = {
   value: Demographic | null;
   onChange: (value: Demographic) => void;
   onNext: () => void;
+  isB2B?: boolean;
 };
 
 const departments = [
@@ -131,6 +132,7 @@ export default function DemographicForm({
   value,
   onChange,
   onNext,
+  isB2B = false,
 }: Props) {
   const [data, setData] = useState<Demographic>(
     value ?? {
@@ -166,6 +168,13 @@ export default function DemographicForm({
     setData(next);
     onChange(next);
   }
+
+  // Occupations B2B (Q4 restreinte selon spec)
+  const B2B_OCCUPATIONS = ["Salarie", "Manager", "Etudiant"];
+  // Situations exclues du contexte B2B (spec etape 9)
+  const B2B_EXCLUDED_SITUATIONS = ["Entrepreneur", "Retraite", "Demandeur d emploi", "Creation d entreprise",
+    "Entrepreneur / Independant", "Retraite / Retraite", "Demandeur d emploi / En recherche d emploi"];
+
     return (
     <div className="mt-8 space-y-8">
 
@@ -306,16 +315,23 @@ export default function DemographicForm({
           4. Situation professionnelle
         </h2>
 
-        {[
-          "Étudiant",
-          "Salarié",
-          "Manager",
-          "Entrepreneur / Indépendant / Profession libérale / Dirigeant",
-          "Demandeur d'emploi",
-          "Parent au foyer",
-          "Retraité",
-          "Autre",
-        ].map((item) => (
+        {(isB2B
+          ? [
+              "Salarie",
+              "Manager",
+              "Etudiant",
+            ]
+          : [
+              "Etudiant",
+              "Salarie",
+              "Manager",
+              "Entrepreneur / Independant / Profession liberale / Dirigeant",
+              "Demandeur d emploi",
+              "Parent au foyer",
+              "Retraite",
+              "Autre",
+            ]
+        ).map((item) => (
 
           <label
             key={item}
@@ -359,10 +375,11 @@ export default function DemographicForm({
 
       )}
 
-      {(data.occupation === "Salarié" ||
+      {/* Q5 : Taille organisation — masquee en B2B (l entreprise est connue) */}
+      {!isB2B && (data.occupation === "Salarie" ||
         data.occupation === "Manager" ||
         data.occupation ===
-          "Entrepreneur / Indépendant / Profession libérale / Dirigeant") && (
+          "Entrepreneur / Independant / Profession liberale / Dirigeant") && (
 
         <div className="space-y-3">
 
@@ -684,11 +701,12 @@ export default function DemographicForm({
               !data.occupationOther
             ) ||
             (
+              !isB2B &&
               (
-                data.occupation === "Salarié" ||
+                data.occupation === "Salarie" ||
                 data.occupation === "Manager" ||
                 data.occupation ===
-                  "Entrepreneur / Indépendant / Profession libérale / Dirigeant"
+                  "Entrepreneur / Independant / Profession liberale / Dirigeant"
               ) &&
               !data.organisationSize
             ) ||

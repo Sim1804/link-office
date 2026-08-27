@@ -45,13 +45,16 @@ export async function POST(req: Request) {
         await prisma.userSubscription.upsert({
           where: { userId },
           create: {
+            id: userId + "_sub",
             userId,
             stripeCustomerId: session.customer as string,
             status: "ACTIVE",
+            updatedAt: new Date(),
           },
           update: {
             stripeCustomerId: session.customer as string,
             status: "ACTIVE",
+            updatedAt: new Date(),
           }
         });
       }

@@ -50,11 +50,11 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
 
-  // Vérification du rôle administrateur (B2B ou Super Admin)
-  const ADMIN_ROLES = ["ADMIN_B2B", "SUPER_ADMIN"];
+  // Vérification du rôle administrateur (B2B, B2B2C ou Super Admin)
+  const ADMIN_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "SUPER_ADMIN"];
   if (!ADMIN_ROLES.includes(session.user.role)) {
     return NextResponse.json(
-      { error: "Accès réservé aux responsables RH." },
+      { error: "Accès réservé aux responsables RH ou partenaires." },
       { status: 403 }
     );
   }
@@ -80,19 +80,42 @@ export async function GET(request: Request) {
   const campaignId = searchParams.get("campaignId");
 
   // Récupération de tous les assessments soumis et du compte d'utilisateurs
-  const [submittedAssessments, registeredUsersCount] = await Promise.all([
+  const [submittedAssessments, registeredUsersCount, campaignsList] = await Promise.all([
     prisma.assessment.findMany({
       where: {
         status: "SUBMITTED",
         campaignId: campaignId || undefined,
         user: { organizationId: adminUser.organizationId },
       },
-      include: {
-        result: { include: { icr: true } },
+      select: {
+        result: {
+          select: {
+            globalScore: true,
+            socialScore: true,
+            affectiveScore: true,
+            sentimentalScore: true,
+            professionalScore: true,
+            selfScore: true,
+            weather: true,
+            weatherTitle: true,
+            icr: {
+              select: {
+                score: true,
+                riskFactors: true,
+                protectiveFactors: true,
+                dominantNeeds: true,
+              }
+            }
+          }
+        }
       },
     }),
     prisma.user.count({
       where: { organizationId: adminUser.organizationId },
+    }),
+    prisma.campaign.findMany({
+      where: { organizationId: adminUser.organizationId },
+      select: { id: true, title: true, status: true, snapshot: true }
     })
   ]);
 
@@ -109,6 +132,7 @@ export async function GET(request: Request) {
       registeredUsersCount,
       threshold: ANONYMITY_THRESHOLD,
       subscriptionStatus,
+      campaignsList,
       message: `Les résultats ne sont pas disponibles : au moins ${ANONYMITY_THRESHOLD} répondants sont nécessaires pour garantir l'anonymat. Actuellement : ${respondentCount} répondant(s).`,
     });
   }
@@ -194,6 +218,7 @@ export async function GET(request: Request) {
     registeredUsersCount,
     threshold: ANONYMITY_THRESHOLD,
     subscriptionStatus,
+    campaignsList,
     averages: {
       global: avgGlobalScore,
       social: avgSocialScore,

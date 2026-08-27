@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
-import { Plus, Settings, Users, ArrowRight, ArrowLeft } from "lucide-react";
+import { Plus, Settings, Users, ArrowRight, ArrowLeft, Copy, Archive } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function CampaignsListPage() {
@@ -18,6 +18,20 @@ export default function CampaignsListPage() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  const handleClose = async (id: string) => {
+    if (!confirm("Voulez-vous vraiment clôturer cette campagne ? Un rapport final sera généré.")) return;
+    try {
+      const res = await fetch(`/api/campaigns/${id}/close`, { method: "POST" });
+      if (res.ok) {
+        setCampaigns(prev => prev.map(c => c.id === id ? { ...c, status: "CLOSED" } : c));
+      } else {
+        alert("Erreur lors de la clôture.");
+      }
+    } catch (e) {
+      alert("Erreur réseau.");
+    }
+  };
 
   return (
     <>
@@ -93,19 +107,27 @@ export default function CampaignsListPage() {
                     <span style={{ color: "#06b6d4", fontWeight: 600 }}>{camp._count?.assessments || 0}</span>
                   </div>
                   
-                  <div style={{ marginTop: "auto", display: "flex", gap: 8 }}>
+                  <div style={{ marginTop: "auto", display: "flex", flexWrap: "wrap", gap: 8 }}>
                     <button 
                       onClick={() => router.push(`/dashboard/collectivites/campaigns/${camp.id}/config`)}
-                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#f8fafc", padding: "8px", borderRadius: 8, fontSize: 13, cursor: "pointer", transition: "all 0.2s" }}
+                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#f8fafc", padding: "8px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "all 0.2s" }}
                     >
-                      <Settings size={14} /> Configuration
+                      <Settings size={14} /> Configurer
                     </button>
                     <button 
-                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(6,182,212,0.1)", border: "1px solid rgba(6,182,212,0.3)", color: "#06b6d4", padding: "8px 12px", borderRadius: 8, fontSize: 13, cursor: "not-allowed", opacity: 0.7 }}
-                      title="Résultats détaillés (prochainement)"
+                      onClick={() => router.push(`/dashboard/collectivites/campaigns/${camp.id}/renew`)}
+                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)", color: "#a78bfa", padding: "8px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "all 0.2s" }}
                     >
-                      Voir <ArrowRight size={14} />
+                      <Copy size={14} /> Dupliquer
                     </button>
+                    {camp.status === "ACTIVE" && (
+                      <button 
+                        onClick={() => handleClose(camp.id)}
+                        style={{ flex: "1 1 100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(244,63,94,0.1)", border: "1px solid rgba(244,63,94,0.2)", color: "#fb7185", padding: "8px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "all 0.2s" }}
+                      >
+                        <Archive size={14} /> Clôturer la campagne
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

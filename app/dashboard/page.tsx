@@ -55,8 +55,26 @@ export default async function DashboardPage() {
   let data: any = null;
   let hasResults = false;
 
+  // VERIFICATION FIN DE CAMPAGNE (Fallback Freemium)
+  let currentSubscriptionTier = dbUser?.subscription || "FREEMIUM";
+  if (dbUser?.campaignId && currentSubscriptionTier !== "FREEMIUM") {
+    const campaign = await prisma.campaign.findUnique({
+      where: { id: dbUser.campaignId },
+      select: { endDate: true }
+    });
+    
+    // Si la campagne a une date de fin et qu'elle est dépassée
+    if (campaign?.endDate && new Date(campaign.endDate) < new Date()) {
+      await prisma.user.update({
+        where: { id: dbUser.id },
+        data: { subscription: "FREEMIUM" }
+      });
+      currentSubscriptionTier = "FREEMIUM";
+    }
+  }
+
   try {
-    const subscriptionTier = dbUser?.subscription || "FREEMIUM";
+    const subscriptionTier = currentSubscriptionTier;
     if (result) {
       let weatherIcon = result.weatherIcon || "☀️";
       let weatherLabel = result.weatherTitleFull?.includes("—") ? result.weatherTitleFull.split("—")[1].trim() : "Épanouissement relationnel élevé";

@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { calculateLevel } from "@/lib/gamification";
 import { Trophy, Star, Target, CheckCircle, Zap, Shield } from "lucide-react";
 import Link from "next/link";
+import { SituationChangementButton } from "./SituationChangementButton";
 
 export const metadata = {
   title: "Ma Progression — LinkOffice",
@@ -207,6 +208,8 @@ export default async function MonProfilPage() {
               )}
             </div>
           </div>
+
+          <SituationChangementButton />
         </div>
       </main>
     </>

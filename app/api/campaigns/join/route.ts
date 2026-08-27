@@ -14,12 +14,26 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Code manquant" }, { status: 400 });
     }
 
-    const campaign = await prisma.campaign.findUnique({
+    // Rechercher l'organisation correspondant au code d'accès
+    const org = await prisma.organization.findUnique({
       where: { codeAccess }
     });
 
-    if (!campaign) {
+    if (!org) {
       return NextResponse.json({ error: "Code d'accès invalide ou expiré" }, { status: 404 });
+    }
+
+    // Trouver la campagne active (ou planifiée) pour cette organisation
+    const campaign = await prisma.campaign.findFirst({
+      where: { 
+        organizationId: org.id,
+        status: { in: ["ACTIVE", "PLANIFIEE"] }
+      },
+      orderBy: { startDate: "desc" }
+    });
+
+    if (!campaign) {
+      return NextResponse.json({ error: "Aucune campagne active pour ce code d'accès" }, { status: 404 });
     }
 
     // Rattacher le user (et son dernier assessment) à cette campagne
@@ -37,6 +51,29 @@ export async function POST(request: Request) {
         where: { id: assessment.id },
         data: { campaignId: campaign.id }
       });
+    }
+
+    // Mettre à jour le rattachement direct de l'utilisateur
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { 
+        campaignId: campaign.id,
+        organizationId: org.id,
+        subscription: campaign.offer as any // Cast for TS, should match SubscriptionTier enum
+      }
+    });
+
+    // Mettre à jour le statut de l'invitation si elle existe (passe à ACTIVATED)
+    if (session.user.email) {
+      const invite = await prisma.campaignInvite.findUnique({
+        where: { campaignId_email: { campaignId: campaign.id, email: session.user.email } }
+      });
+      if (invite && invite.status === "INVITED") {
+        await prisma.campaignInvite.update({
+          where: { campaignId_email: { campaignId: campaign.id, email: session.user.email } },
+          data: { status: "ACTIVATED" }
+        });
+      }
     }
 
     return NextResponse.json({ success: true, campaignId: campaign.id });

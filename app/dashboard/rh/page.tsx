@@ -162,21 +162,21 @@ export default function B2BDashboard() {
                 </p>
               </div>
             </div>
-            <div style={{ display: "flex", gap: 8 }}>
-              <span className="badge badge-violet" style={{ padding: "6px 12px", fontSize: 12 }}>
-                <ShieldAlert size={12} /> RGPD Conforme
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <span className="badge badge-violet" style={{ padding: "8px 12px", fontSize: 13, height: "100%" }}>
+                <ShieldAlert size={14} /> RGPD Conforme
               </span>
-              <a 
-                href="/dashboard/actions"
-                style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(124,58,237,0.15)", color: "#a78bfa", padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 600, border: "1px solid rgba(124,58,237,0.3)", textDecoration: "none", transition: "all 0.2s" }}
-              >
+              <Link href="/dashboard/rh/campaigns" className="btn btn-secondary" style={{ padding: "8px 16px", fontSize: 13, textDecoration: "none" }}>
+                Campagnes
+              </Link>
+              <Link href="/dashboard/actions" className="btn btn-primary" style={{ padding: "8px 16px", fontSize: 13, textDecoration: "none" }}>
                 Plan d'action
-              </a>
+              </Link>
               <button
                 onClick={() => { setLoading(true); fetch("/api/b2b/stats").then(r => r.json()).then(setStats).finally(() => setLoading(false)); }}
-                style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, color: "#94a3b8", fontSize: 12, cursor: "pointer" }}
+                className="btn btn-secondary" style={{ padding: "8px 16px", fontSize: 13 }}
               >
-                <RefreshCw size={12} />
+                <RefreshCw size={14} />
                 Actualiser
               </button>
             </div>
@@ -187,7 +187,6 @@ export default function B2BDashboard() {
             {([
               { key: "barometre", label: "Tableau de bord IQRH", icon: BarChart3 },
               { key: "risques", label: "Risques & Leviers", icon: TrendingDown },
-              { key: "invitation", label: "Inviter mes équipes", icon: QrCode },
             ] as const).map(({ key, label, icon: Icon }) => (
               <button
                 key={key}
@@ -241,9 +240,9 @@ export default function B2BDashboard() {
               <p style={{ color: "#94a3b8", maxWidth: 500, margin: "0 auto 20px", lineHeight: 1.6 }}>
                 {stats.message}
               </p>
-              <button onClick={() => { setActiveTab("invitation"); loadInvite(); }} className="btn btn-primary btn-md">
-                <QrCode size={15} /> Inviter des collaborateurs
-              </button>
+              <Link href="/dashboard/rh/campaigns" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
+                Gérer mes campagnes
+              </Link>
             </div>
           )}
 
@@ -406,66 +405,7 @@ export default function B2BDashboard() {
             </>
           )}
 
-          {/* ── TAB : Invitation ── */}
-          {activeTab === "invitation" && (
-            <div style={{ maxWidth: 600, margin: "0 auto" }}>
-              <div className="card">
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                  <div style={{ width: 44, height: 44, background: "rgba(124,58,237,0.15)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <QrCode size={22} style={{ color: "#a78bfa" }} />
-                  </div>
-                  <div>
-                    <h2 style={{ color: "#f8fafc", fontWeight: 700, fontSize: 18 }}>Inviter vos collaborateurs</h2>
-                    <p style={{ color: "#64748b", fontSize: 13 }}>QR code ou lien direct à partager</p>
-                  </div>
-                </div>
 
-                {stats?.subscriptionStatus === "PENDING_QUOTE" ? (
-                  <div style={{ textAlign: "center", padding: "30px 20px", background: "rgba(255,255,255,0.03)", borderRadius: 12 }}>
-                    <Lock size={32} style={{ color: "#64748b", margin: "0 auto 16px" }} />
-                    <h3 style={{ fontSize: 15, fontWeight: 600, color: "#94a3b8", marginBottom: 8 }}>Invitations bloquées</h3>
-                    <p style={{ fontSize: 13, color: "#64748b" }}>Génération des invitations désactivée le temps de valider votre demande de licence Enterprise.</p>
-                  </div>
-                ) : !showQR ? (
-                  <button onClick={loadInvite} disabled={inviteLoading} className="btn btn-primary btn-md" style={{ width: "100%" }}>
-                    {inviteLoading ? "Génération en cours…" : <><QrCode size={16} /> Générer le QR code et le lien d'invitation</>}
-                  </button>
-                ) : invite ? (
-                  <div>
-                    {/* QR Code */}
-                    <div style={{ textAlign: "center", background: "#f8fafc", borderRadius: 16, padding: 24, marginBottom: 20 }}>
-                      <img src={invite.qrCode} alt="QR Code invitation" style={{ width: 200, height: 200, borderRadius: 8 }} />
-                      <p style={{ color: "#1a0533", fontSize: 12, marginTop: 8, fontWeight: 500 }}>
-                        Code : {invite.codeAccess}
-                      </p>
-                    </div>
-
-                    {/* Lien */}
-                    <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 14px", display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-                      <Link2 size={14} style={{ color: "#64748b", flexShrink: 0 }} />
-                      <span style={{ color: "#94a3b8", fontSize: 13, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{invite.inviteUrl}</span>
-                      <button onClick={copyLink} style={{ background: "none", border: "none", cursor: "pointer", color: copied ? "#34d399" : "#94a3b8", flexShrink: 0 }}>
-                        {copied ? <CheckCircle2 size={16} /> : <Copy size={16} />}
-                      </button>
-                    </div>
-
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <button onClick={copyLink} className="btn btn-secondary btn-md" style={{ flex: 1 }}>
-                        {copied ? <><CheckCircle2 size={14} /> Copié !</> : <><Copy size={14} /> Copier le lien</>}
-                      </button>
-                      <button onClick={downloadQR} className="btn btn-secondary btn-md" style={{ flex: 1 }}>
-                        <Download size={14} /> Télécharger le QR code
-                      </button>
-                    </div>
-
-                    <p style={{ color: "#475569", fontSize: 12, marginTop: 16, textAlign: "center" }}>
-                      Partagez ce lien sur votre Intranet, Slack/Teams, ou imprimez le QR code pour vos affichages QVCT.
-                    </p>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          )}
 
         </div>
       </main>

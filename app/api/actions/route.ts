@@ -17,6 +17,10 @@ export async function GET() {
     return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
   }
 
+  if (user.role !== "ADMIN_B2B" && user.role !== "ADMIN_COLLECTIVITE" && user.role !== "ADMIN_B2B2C" && user.role !== "SUPER_ADMIN") {
+    return NextResponse.json({ error: "Permission refusée" }, { status: 403 });
+  }
+
   const actions = await prisma.actionItem.findMany({
     where: { organizationId: user.organizationId },
     orderBy: { createdAt: "desc" },
@@ -40,7 +44,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
   }
 
-  if (!user.role.startsWith("ADMIN_") && user.role !== "SUPER_ADMIN") {
+  if (user.role !== "ADMIN_B2B" && user.role !== "ADMIN_COLLECTIVITE" && user.role !== "ADMIN_B2B2C" && user.role !== "SUPER_ADMIN") {
     return NextResponse.json({ error: "Permission refusée" }, { status: 403 });
   }
 
@@ -55,12 +59,13 @@ export async function POST(request: Request) {
     data: {
       title,
       description,
-      status: status || "TODO",
+      status: status || "PROPOSEE",
       priority: priority || "MEDIUM",
       pilot,
       dueDate: dueDate ? new Date(dueDate) : null,
       dimension,
       organizationId: user.organizationId,
+      updatedAt: new Date(),
     },
   });
 

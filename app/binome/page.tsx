@@ -5,6 +5,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Users, UserPlus, Check, X, ShieldAlert } from "lucide-react";
 import { BinomeInviteForm } from "./BinomeInviteForm";
 import { BinomeRespondButtons } from "./BinomeRespondButtons";
+import { BinomeSettings } from "./BinomeSettings";
+import { BinomeSuggest } from "./BinomeSuggest";
 
 export const metadata = {
   title: "Binôme Relationnel — LinkOffice",
@@ -18,10 +20,14 @@ export default async function BinomePage() {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { subscription: true }
+    select: { matchingOptIn: true, subscription: true, campaignId: true, campaign: { select: { offer: true, status: true } } }
   });
 
-  if (user?.subscription !== "PREMIUM_PLUS") {
+  const isPremiumPlus = user?.campaign 
+    ? (user.campaign.offer === "PREMIUM_PLUS" && user.campaign.status === "ACTIVE")
+    : (user?.subscription === "PREMIUM_PLUS");
+
+  if (!isPremiumPlus) {
     return (
       <>
         <Navbar />
@@ -95,6 +101,10 @@ export default async function BinomePage() {
           </div>
 
           <div style={{ display: "grid", gap: 24 }}>
+            <BinomeSettings initialOptIn={user?.matchingOptIn ?? false} />
+            
+            <BinomeSuggest optIn={user?.matchingOptIn ?? false} />
+
             {/* Formulaire d'invitation */}
             <div className="card">
               <h3 style={{ fontSize: 16, fontWeight: 600, color: "#f8fafc", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
@@ -164,6 +174,9 @@ export default async function BinomePage() {
                           <p style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15 }}>{partner.firstName} {partner.lastName}</p>
                           <p style={{ color: "#34d399", fontSize: 13 }}>Partenaire de développement</p>
                         </div>
+                        <button style={{ marginLeft: "auto", background: "rgba(16,185,129,0.1)", color: "#10b981", border: "1px solid rgba(16,185,129,0.2)", padding: "8px 16px", borderRadius: 8, fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.2s" }}>
+                          Voir le défi commun
+                        </button>
                       </div>
                     )
                   })}

@@ -162,9 +162,25 @@ export async function GET() {
       status: "SUBMITTED",
       user: { organizationId: user.organizationId },
     },
-    include: {
-      result: { include: { icr: true, profile: true } },
+    select: {
       demographic: true,
+      result: {
+        select: {
+          globalScore: true,
+          socialScore: true,
+          affectiveScore: true,
+          sentimentalScore: true,
+          professionalScore: true,
+          selfScore: true,
+          weather: true,
+          weatherTitle: true,
+          primaryProfile: true,
+          icr: { select: { score: true } }
+        }
+      },
+      CampaignVariableAnswer: {
+        include: { CampaignVariable: true }
+      }
     },
   });
 
@@ -237,6 +253,30 @@ export async function GET() {
     return acc;
   }, {} as Record<string, number>);
 
+  // Cartographie (Grouping by CampaignVariableAnswer)
+  const cartographie: Record<string, { label: string, question: string, respondentCount: number, avgScore: number }> = {};
+  
+  assessments.forEach(a => {
+    if (!a.result) return;
+    a.CampaignVariableAnswer?.forEach(ans => {
+      const q = ans.CampaignVariable.question;
+      const val = ans.value;
+      const key = `${q}::${val}`;
+      if (!cartographie[key]) {
+        cartographie[key] = { label: val, question: q, respondentCount: 0, avgScore: 0 };
+      }
+      cartographie[key].respondentCount++;
+      cartographie[key].avgScore += a.result.globalScore;
+    });
+  });
+
+  const cartographyArray = Object.values(cartographie)
+    .filter(item => item.respondentCount >= ANONYMITY_THRESHOLD)
+    .map(item => ({
+      ...item,
+      avgScore: Math.round(item.avgScore / item.respondentCount)
+    }));
+
   return NextResponse.json({
     anonymityBlocked: false,
     respondentCount,
@@ -252,6 +292,7 @@ export async function GET() {
     weatherDistribution: weatherDist,
     topProfiles,
     recommendations,
+    cartography: cartographyArray,
     demographics: {
       retireeCount,
       youngCount,

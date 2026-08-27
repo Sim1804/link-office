@@ -36,6 +36,7 @@ yarn-error.log*
 .env.test
 .env.production
 .env.local
+.env.vercel*
 
 # vercel
 .vercel
@@ -55,8 +56,16 @@ next-env.d.ts
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
-
 # custom
+*.bak
 Documentation/
-node_modules
+scripts/
+
+# uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# database
+*.db
+*.db-journal
+.neon

@@ -20,6 +20,7 @@ interface CollectiviteData {
   weatherDistribution?: Record<string, number>;
   topProfiles?: Array<{ profile: string; count: number; pct: number }>;
   recommendations?: PolicyRecommendation[];
+  cartography?: Array<{ label: string; question: string; respondentCount: number; avgScore: number }>;
   demographics?: { retireeCount: number; youngCount: number; aidantCount: number };
 }
 
@@ -155,6 +156,41 @@ export default function CollectivitesDashboard() {
                   </div>
                 </div>
               </div>
+
+              {/* Cartographie Relationnelle */}
+              {(data.cartography ?? []).length > 0 && (
+                <div className="card">
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+                    <MapPin size={18} style={{ color: "#a78bfa" }} />
+                    <h3 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 16 }}>
+                      Cartographie Relationnelle (Segmentation)
+                    </h3>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    {(data.cartography ?? []).map((carto, i) => (
+                      <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", background: "rgba(255,255,255,0.03)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <div>
+                          <p style={{ color: "#f8fafc", fontWeight: 600, fontSize: 14 }}>{carto.label}</p>
+                          <p style={{ color: "#64748b", fontSize: 12 }}>{carto.question}</p>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+                          <div style={{ textAlign: "right" }}>
+                            <p style={{ color: "#94a3b8", fontSize: 11 }}>Répondants</p>
+                            <p style={{ color: "#e2e8f0", fontWeight: 600, fontSize: 14 }}>{carto.respondentCount}</p>
+                          </div>
+                          <div style={{ textAlign: "right" }}>
+                            <p style={{ color: "#94a3b8", fontSize: 11 }}>Score IQRH moyen</p>
+                            <p style={{ color: "#06b6d4", fontWeight: 700, fontSize: 18 }}>{carto.avgScore}/100</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <p style={{ color: "#64748b", fontSize: 12, marginTop: 16, display: "flex", alignItems: "center", gap: 6 }}>
+                    <ShieldAlert size={12} /> Seuls les segments ayant atteint le seuil d'anonymat de {data.threshold} citoyens sont affichés.
+                  </p>
+                </div>
+              )}
 
               {/* Recommandations de politiques publiques */}
               {(data.recommendations ?? []).length > 0 && (

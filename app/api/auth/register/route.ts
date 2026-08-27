@@ -101,13 +101,38 @@ export async function POST(request: Request) {
     let userRole: "EMPLOYEE" | "CITIZEN" | "MEMBER" = "EMPLOYEE";
 
     if (codeAccess) {
+      // 1. Check if codeAccess is a Campaign ID
+      const matchingCampaign = await prisma.campaign.findUnique({
+        where: { id: codeAccess },
+        include: { organization: true },
+      });
+
+      if (matchingCampaign) {
+        organizationId = matchingCampaign.organizationId;
+        userRole = "EMPLOYEE"; // B2B2C beneficiaries are considered employees
+        
+        // Link to campaign
+        const campaignUpdate = {
+          campaignId: matchingCampaign.id,
+          subscription: matchingCampaign.offer, // PREMIUM or PREMIUM_PLUS
+        };
+        
+        // Create user with campaign link
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const user = await prisma.user.create({
+          data: { prenom, nom, email, password: hashedPassword, organizationId, role: userRole, ...campaignUpdate },
+          select: { id: true, email: true, prenom: true, nom: true, role: true, organizationId: true, subscription: true },
+        });
+        return NextResponse.json(user, { status: 201 });
+      }
+
+      // 2. Fallback: Check if codeAccess is an Organization codeAccess
       const matchingOrganization = await prisma.organization.findUnique({
         where: { codeAccess },
         select: { id: true, type: true },
       });
       if (matchingOrganization) {
         organizationId = matchingOrganization.id;
-        // Attribution du rôle selon le type d'organisation
         if (matchingOrganization.type === "B2B") userRole = "EMPLOYEE";
         else if (matchingOrganization.type === "B2B2C") userRole = "MEMBER";
         else if (matchingOrganization.type === "COLLECTIVITE") userRole = "CITIZEN";

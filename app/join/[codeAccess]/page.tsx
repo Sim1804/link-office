@@ -116,8 +116,12 @@ export default function JoinPage() {
               borderRadius: 14, padding: "14px 20px", marginBottom: 8,
               display: "flex", alignItems: "center", gap: 12,
             }}>
-              <div style={{ width: 40, height: 40, background: "rgba(124,58,237,0.15)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <Building2 size={20} style={{ color: "#a78bfa" }} />
+              <div style={{ width: 40, height: 40, background: "rgba(124,58,237,0.15)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden" }}>
+                {org.logoUrl ? (
+                  <img src={org.logoUrl} alt={`Logo ${org.name}`} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                ) : (
+                  <Building2 size={20} style={{ color: "#a78bfa" }} />
+                )}
               </div>
               <div style={{ textAlign: "left" }}>
                 <p style={{ color: "#a78bfa", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>

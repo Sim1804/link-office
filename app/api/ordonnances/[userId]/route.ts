@@ -16,6 +16,7 @@
 
 import { NextResponse } from "next/server";
 import { PrescriptionService } from "@/lib/iqrh/prescription-service";
+import { auth } from "@/lib/auth";
 
 /**
  * Récupère l'ordonnance relationnelle (recommandations + défis) d'un utilisateur.
@@ -29,6 +30,15 @@ export async function GET(
 ) {
   try {
     const { userId } = await context.params;
+
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+    }
+    if (session.user.id !== userId && !["SUPER_ADMIN", "ADMIN_B2B"].includes(session.user.role || "")) {
+      return NextResponse.json({ error: "Interdit" }, { status: 403 });
+    }
+
     const prescription = await PrescriptionService.byUser(userId);
     return NextResponse.json({ prescription });
   } catch (error) {

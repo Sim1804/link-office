@@ -114,7 +114,9 @@ function ProfilContent() {
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [campaignConfig, setCampaignConfig] = useState<any>(null);
   const [allowedSituations, setAllowedSituations] = useState<string[]>(SITUATIONS_IMPACTANTES);
+  const [allowedOccupations, setAllowedOccupations] = useState<string[]>(SITUATIONS_PRO);
   const [matchingOptIn, setMatchingOptIn] = useState(false);
+  const [campaignOffer, setCampaignOffer] = useState<string | null>(null);
   const [updatingOptIn, setUpdatingOptIn] = useState(false);
 
   const [form, setForm] = useState({
@@ -187,8 +189,14 @@ function ProfilContent() {
             } else if (data.availableSituations) {
               setAllowedSituations(data.availableSituations);
             }
+            if (data.campaignConfig.allowedOccupations) {
+              setAllowedOccupations(data.campaignConfig.allowedOccupations);
+            }
           } else if (data && data.availableSituations) {
              setAllowedSituations(data.availableSituations);
+          }
+          if (data && data.campaignOffer) {
+            setCampaignOffer(data.campaignOffer);
           }
         })
         .catch(console.error);
@@ -425,9 +433,10 @@ function ProfilContent() {
                 </button>
               </div>
 
-              <div style={S.card}>
-                <div style={S.sectionTitle}>
-                  <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(236,72,153,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {campaignOffer === "PREMIUM_PLUS" && (
+                <div style={S.card}>
+                  <div style={S.sectionTitle}>
+                    <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(236,72,153,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <User size={14} style={{ color: "#ec4899" }} />
                   </div>
                   Programme Binôme Relationnel
@@ -475,6 +484,7 @@ function ProfilContent() {
                   />
                 </label>
               </div>
+              )}
             </div>
           )}
 
@@ -527,7 +537,7 @@ function ProfilContent() {
                 <div style={S.card}>
                   <div style={S.sectionTitle}><span style={S.sectionBadge}>4</span>Situation professionnelle</div>
                   <div style={S.fieldGroup}>
-                    {handleRadioChoice("situation_professionnelle", SITUATIONS_PRO, form.situation_professionnelle, v => { setF("situation_professionnelle", v); setF("taille_organisation", ""); })}
+                    {handleRadioChoice("situation_professionnelle", allowedOccupations, form.situation_professionnelle, v => { setF("situation_professionnelle", v); setF("taille_organisation", ""); })}
                     
                     {form.situation_professionnelle === "Autre" && (
                         <input type="text" placeholder="Précisez..." value={form.situation_professionnelle_autre} onChange={e => setF("situation_professionnelle_autre", e.target.value)} style={S.input} required />
@@ -660,10 +670,11 @@ function ProfilContent() {
                       <button
                         key={sit} type="button" onClick={() => toggleSituation(sit)}
                         style={{
-                          padding: "7px 14px", borderRadius: 999, fontSize: 12, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.18s",
-                          border: selected ? "1.5px solid rgba(124,58,237,0.55)" : "1.5px solid rgba(255,255,255,0.10)",
-                          background: selected ? "rgba(124,58,237,0.18)" : "rgba(26,34,54,0.5)",
+                          padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
+                          border: selected ? "1.5px solid rgba(124,58,237,0.6)" : "1.5px solid rgba(255,255,255,0.10)",
+                          background: selected ? "rgba(124,58,237,0.2)" : "rgba(26,34,54,0.6)",
                           color: selected ? "#a78bfa" : "#94a3b8",
+                          textAlign: "center"
                         }}
                       >
                         {sit}

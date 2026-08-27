@@ -16,9 +16,11 @@ interface ActionItem {
 }
 
 const STATUSES = {
-  TODO: { label: "À faire", color: "#94a3b8", bg: "rgba(148, 163, 184, 0.1)", icon: Circle },
-  IN_PROGRESS: { label: "En cours", color: "#3b82f6", bg: "rgba(59, 130, 246, 0.1)", icon: Clock },
-  DONE: { label: "Terminé", color: "#22c55e", bg: "rgba(34, 197, 94, 0.1)", icon: CheckCircle2 },
+  PROPOSEE: { label: "Proposée", color: "#94a3b8", bg: "rgba(148, 163, 184, 0.1)", icon: Circle },
+  VALIDEE: { label: "Validée", color: "#8b5cf6", bg: "rgba(139, 92, 246, 0.1)", icon: CheckCircle2 },
+  PLANIFIEE: { label: "Planifiée", color: "#f59e0b", bg: "rgba(245, 158, 11, 0.1)", icon: Calendar },
+  EN_COURS: { label: "En cours", color: "#3b82f6", bg: "rgba(59, 130, 246, 0.1)", icon: Clock },
+  REALISEE: { label: "Réalisée", color: "#22c55e", bg: "rgba(34, 197, 94, 0.1)", icon: Target },
 };
 
 const PRIORITIES: Record<string, string> = { LOW: "Basse", MEDIUM: "Moyenne", HIGH: "Haute" };
@@ -32,6 +34,7 @@ export default function ActionsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ title: "", description: "", pilot: "", priority: "MEDIUM", status: "TODO", dueDate: "" });
   const [saving, setSaving] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const fetchActions = async () => {
     setLoading(true);
@@ -60,7 +63,7 @@ export default function ActionsPage() {
       });
     } else {
       setEditingId(null);
-      setForm({ title: "", description: "", pilot: "", priority: "MEDIUM", status: "TODO", dueDate: "" });
+      setForm({ title: "", description: "", pilot: "", priority: "MEDIUM", status: "PROPOSEE", dueDate: "" });
     }
     setIsModalOpen(true);
   };
@@ -101,9 +104,9 @@ export default function ActionsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer cette action ?")) return;
     const original = [...actions];
     setActions(actions.filter(a => a.id !== id));
+    setConfirmDeleteId(null);
     try {
       const res = await fetch(`/api/actions/${id}`, { method: "DELETE" });
       if (!res.ok) setActions(original);
@@ -178,7 +181,7 @@ export default function ActionsPage() {
                               <h3 style={{ fontSize: 15, fontWeight: 600, color: "#f8fafc", margin: 0, lineHeight: 1.4 }}>{action.title}</h3>
                               <div style={{ display: "flex", gap: 4 }}>
                                 <button onClick={() => handleOpenModal(action)} style={{ background: "none", border: "none", color: "#64748b", cursor: "pointer", padding: 4 }}><Edit3 size={14} /></button>
-                                <button onClick={() => handleDelete(action.id)} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", padding: 4 }}><Trash2 size={14} /></button>
+                                <button onClick={() => setConfirmDeleteId(action.id)} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", padding: 4 }}><Trash2 size={14} /></button>
                               </div>
                             </div>
                             
@@ -203,9 +206,11 @@ export default function ActionsPage() {
                               onChange={(e) => handleStatusChange(action.id, e.target.value)}
                               style={{ marginTop: 8, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)", color: "#cbd5e1", borderRadius: 6, padding: "6px 8px", fontSize: 12, cursor: "pointer" }}
                             >
-                              <option value="TODO">À faire</option>
-                              <option value="IN_PROGRESS">En cours</option>
-                              <option value="DONE">Terminé</option>
+                              <option value="PROPOSEE">Proposée</option>
+                              <option value="VALIDEE">Validée</option>
+                              <option value="PLANIFIEE">Planifiée</option>
+                              <option value="EN_COURS">En cours</option>
+                              <option value="REALISEE">Réalisée</option>
                             </select>
                           </div>
                         ))
@@ -246,9 +251,11 @@ export default function ActionsPage() {
                 <div>
                   <label style={{ display: "block", fontSize: 13, color: "#94a3b8", marginBottom: 6, fontWeight: 500 }}>Statut</label>
                   <select value={form.status} onChange={e => setForm({...form, status: e.target.value})} className="input-field">
-                    <option value="TODO">À faire</option>
-                    <option value="IN_PROGRESS">En cours</option>
-                    <option value="DONE">Terminé</option>
+                    <option value="PROPOSEE">Proposée</option>
+                    <option value="VALIDEE">Validée</option>
+                    <option value="PLANIFIEE">Planifiée</option>
+                    <option value="EN_COURS">En cours</option>
+                    <option value="REALISEE">Réalisée</option>
                   </select>
                 </div>
                 <div>
@@ -279,6 +286,31 @@ export default function ActionsPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Danger Zone Modal for Deletion */}
+      {confirmDeleteId && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(2,6,23,0.8)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20 }}>
+          <div className="card" style={{ width: "100%", maxWidth: 400, padding: 24, background: "rgba(15,23,42,0.9)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 16, animation: "fadeIn 0.2s ease-out" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, color: "#fca5a5", fontWeight: 700, marginBottom: 12, fontSize: 18 }}>
+              <div style={{ width: 40, height: 40, background: "rgba(239,68,68,0.15)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Trash2 size={20} color="#ef4444" />
+              </div>
+              Supprimer l'action ?
+            </div>
+            <p style={{ fontSize: 14, color: "#94a3b8", marginBottom: 24, lineHeight: 1.5 }}>
+              Cette action sera définitivement retirée de votre plan d'action. Voulez-vous continuer ?
+            </p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "flex-end" }}>
+              <button onClick={() => setConfirmDeleteId(null)} className="btn btn-secondary btn-md" style={{ background: "rgba(255,255,255,0.05)", border: "none", color: "white" }}>
+                Annuler
+              </button>
+              <button onClick={() => handleDelete(confirmDeleteId)} className="btn btn-primary btn-md" style={{ background: "#ef4444", color: "white", border: "none" }}>
+                Oui, supprimer
+              </button>
+            </div>
           </div>
         </div>
       )}
