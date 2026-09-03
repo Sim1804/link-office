@@ -2,27 +2,28 @@
 
 import { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
-import { Check, Sparkles, ArrowRight, ShieldCheck, Zap, LockOpen } from "lucide-react";
+import { Check, Sparkles, ArrowRight, ShieldCheck, Zap, LockOpen, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function PremiumPage() {
   const [loading, setLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleCheckout = async () => {
+    setCheckoutError(null);
     try {
       setLoading(true);
       const res = await fetch("/api/stripe/checkout", { method: "POST" });
-      if (!res.ok) throw new Error("Erreur lors de la création de la session");
-      
+      if (!res.ok) throw new Error("Erreur lors de la création de la session de paiement.");
       const { url } = await res.json();
       if (url) {
         window.location.href = url;
       } else {
-        throw new Error("URL invalide");
+        throw new Error("URL de paiement invalide. Veuillez réessayer.");
       }
-    } catch (err) {
-      alert("Une erreur s'est produite lors de la redirection vers le paiement.");
+    } catch (err: any) {
+      setCheckoutError(err.message || "Une erreur est survenue. Veuillez réessayer.");
       setLoading(false);
     }
   };
@@ -122,7 +123,18 @@ export default function PremiumPage() {
                 {loading ? "Redirection..." : "Débloquer le Premium"}
                 {!loading && <ArrowRight size={18} />}
               </button>
-              
+
+              {checkoutError && (
+                <div style={{
+                  display: "flex", alignItems: "flex-start", gap: 8,
+                  padding: "12px 14px", borderRadius: 10, marginTop: 12,
+                  background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)",
+                }}>
+                  <AlertCircle size={14} style={{ color: "#f87171", flexShrink: 0, marginTop: 1 }} />
+                  <p style={{ color: "#f87171", fontSize: 13, margin: 0 }}>{checkoutError}</p>
+                </div>
+              )}
+
               <p style={{ textAlign: "center", fontSize: 12, color: "#64748b", marginTop: 16 }}>
                 Paiement sécurisé par Stripe
               </p>

@@ -40,25 +40,28 @@ model User {
 }
 
 model Assessment {
-  id                     String                   @id @default(cuid())
-  userId                 String
-  status                 AssessmentStatus         @default(DRAFT)
-  consentInformation     Boolean                  @default(false)
-  consentResearch        Boolean                  @default(false)
-  consentParticipation   Boolean                  @default(false)
-  startedAt              DateTime                 @default(now())
-  submittedAt            DateTime?
-  updatedAt              DateTime                 @updatedAt
-  campaignId             String?
-  adaptiveAnswers        AdaptiveAnswer[]
-  campaign               Campaign?                @relation(fields: [campaignId], references: [id])
-  user                   User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  CampaignVariableAnswer CampaignVariableAnswer[]
-  demographic            DemographicProfile?
-  result                 IqrhResult?
-  answers                QuestionnaireAnswer[]
+  id                           String                   @id @default(cuid())
+  userId                       String
+  status                       AssessmentStatus         @default(DRAFT)
+  consentInformation           Boolean                  @default(false)
+  consentResearch              Boolean                  @default(false)
+  consentParticipation         Boolean                  @default(false)
+  startedAt                    DateTime                 @default(now())
+  submittedAt                  DateTime?
+  updatedAt                    DateTime                 @updatedAt
+  campaignId                   String?
+  /// Snapshot du questionnaireConfig au moment de la passation (versionnage)
+  questionnaireConfigSnapshot  Json?
+  adaptiveAnswers              AdaptiveAnswer[]
+  campaign                     Campaign?                @relation(fields: [campaignId], references: [id])
+  user                         User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  CampaignVariableAnswer       CampaignVariableAnswer[]
+  demographic                  DemographicProfile?
+  result                       IqrhResult?
+  answers                      QuestionnaireAnswer[]
 
   @@index([userId, status])
+  @@index([campaignId, status])
 }
 
 model DemographicProfile {
@@ -331,13 +334,17 @@ model RelationalPair {
   id          String     @id @default(cuid())
   initiatorId String
   receiverId  String
-  status      PairStatus @default(PENDING)
+  /// Campagne B2G à laquelle ce binôme appartient (obligatoire pour B2G, null pour B2C)
+  campaignId  String?
+  status      PairStatus @default(DISPONIBLE)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  campaign    Campaign?  @relation(fields: [campaignId], references: [id])
   initiator   User       @relation("PairInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
   receiver    User       @relation("PairReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
 
   @@unique([initiatorId, receiverId])
+  @@index([campaignId, status])
 }
 
 model Organization {
@@ -399,6 +406,7 @@ model Campaign {
   assessments         Assessment[]
   users               User[]
   invites             CampaignInvite[]
+  pairs               RelationalPair[]
   organization        Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   parentCampaign      Campaign?          @relation("CampaignRenewal", fields: [parentCampaignId], references: [id])
   childCampaigns      Campaign[]         @relation("CampaignRenewal")
@@ -532,9 +540,20 @@ enum AdaptivePolarity {
 }
 
 enum PairStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
+  /// Bénéficiaire disponible pour matching
+  DISPONIBLE
+  /// Matching en cours par IRIS
+  MATCHING_EN_COURS
+  /// Proposition envoyée au second bénéficiaire
+  PROPOSITION_ENVOYEE
+  /// Proposition refusée par le second bénéficiaire
+  REFUSEE
+  /// Binôme accepté par les deux parties
+  ACCEPTEE
+  /// Binôme actif et en cours
+  ACTIF
+  /// Binôme terminé (quittée par l'un ou l'autre)
+  TERMINE
 }
 
 enum OrganizationType {
@@ -568,6 +587,7 @@ enum ActionStatus {
   PLANIFIEE
   EN_COURS
   REALISEE
+  ABANDONNEE
 }
 
 enum CampaignOffer {

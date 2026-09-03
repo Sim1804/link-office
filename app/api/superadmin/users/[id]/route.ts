@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id || session.user.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
     }
 
-    const { id } = await params;
+    const { id } = await context.params;
     const body = await req.json();
 
     const updateData: any = {};
@@ -28,14 +28,14 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id || session.user.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
     }
 
-    const { id } = await params;
+    const { id } = await context.params;
 
     await prisma.user.delete({
       where: { id },

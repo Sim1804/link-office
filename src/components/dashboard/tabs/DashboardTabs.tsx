@@ -118,23 +118,72 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
   );
 }
 
+const DIMENSION_CONFIG = [
+  { key: "socialScore",        label: "Social",       color: "#38bdf8", short: "S" },
+  { key: "affectiveScore",     label: "Affectif",     color: "#a78bfa", short: "A" },
+  { key: "sentimentalScore",   label: "Sentimental",  color: "#f472b6", short: "Se" },
+  { key: "professionalScore",  label: "Pro.",          color: "#34d399", short: "P" },
+  { key: "selfScore",          label: "Soi",           color: "#fb923c", short: "So" },
+];
+
+function ScoreBar({ value, color, previousValue }: { value: number; color: string; previousValue?: number }) {
+  const diff = previousValue !== undefined ? Math.round(value - previousValue) : null;
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <div style={{
+        flex: 1, height: 5, borderRadius: 3,
+        background: "rgba(255,255,255,0.06)",
+        overflow: "hidden",
+      }}>
+        <div style={{
+          width: `${Math.min(value, 100)}%`,
+          height: "100%",
+          background: color,
+          borderRadius: 3,
+          opacity: 0.85,
+          transition: "width 0.6s ease-out",
+        }} />
+      </div>
+      <span style={{ fontSize: 11, fontWeight: 700, color: "#f8fafc", minWidth: 24, textAlign: "right" }}>
+        {Math.round(value)}
+      </span>
+      {diff !== null && diff !== 0 && (
+        <span style={{
+          fontSize: 10, fontWeight: 700,
+          color: diff > 0 ? "#10b981" : "#ef4444",
+          minWidth: 22, textAlign: "right",
+        }}>
+          {diff > 0 ? "+" : ""}{diff}
+        </span>
+      )}
+    </div>
+  );
+}
+
 function HistoriqueTab({ router, history, isPremium }: { router: any, history: any[], isPremium: boolean }) {
   return (
     <div style={{ animation: "fadeSlideIn 0.4s ease-out" }}>
-      <div style={{
-        display: "flex", flexDirection: "column", gap: 24,
-      }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+
+        {/* Header */}
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "center",
+          flexWrap: "wrap", gap: 16,
           background: "linear-gradient(135deg, rgba(17,24,39,0.95) 0%, rgba(30,27,75,0.6) 100%)",
-          padding: "24px 32px", borderRadius: 20, border: "1px solid rgba(255,255,255,0.08)"
+          padding: "24px 28px", borderRadius: 20, border: "1px solid rgba(255,255,255,0.08)",
         }}>
           <div>
-            <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", color: "#f8fafc", fontSize: 22, fontWeight: 700, marginBottom: 4 }}>
-              Carnet de Santé Relationnelle
-            </h3>
-            <p style={{ color: "#94a3b8", fontSize: 14 }}>
-              Suivez l'évolution de votre équilibre relationnel au fil du temps.
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+              <span style={{ fontSize: 18 }}>📋</span>
+              <h3 style={{
+                fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
+                color: "#f8fafc", fontSize: 20, fontWeight: 800, margin: 0,
+              }}>
+                Carnet de Santé Relationnelle
+              </h3>
+            </div>
+            <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>
+              {history?.length ?? 0} passation{(history?.length ?? 0) > 1 ? "s" : ""} enregistrée{(history?.length ?? 0) > 1 ? "s" : ""}
             </p>
           </div>
           <button
@@ -142,97 +191,201 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
             style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
-              color: "#fff", fontWeight: 600, padding: "12px 24px", borderRadius: 14,
-              border: "none", cursor: "pointer", fontSize: 14,
-              boxShadow: "0 4px 20px rgba(124,58,237,0.4)", transition: "all 0.2s",
+              color: "#fff", fontWeight: 600, padding: "11px 22px", borderRadius: 12,
+              border: "none", cursor: "pointer", fontSize: 13,
+              boxShadow: "0 4px 20px rgba(124,58,237,0.35)", transition: "all 0.2s",
             }}
           >
-            Ma situation a changé — Nouveau test
+            🔄 Nouveau test
           </button>
         </div>
 
-        {/* Timeline */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {!isPremium && (
+        {/* Paywall */}
+        {!isPremium && (
+          <div style={{
+            background: "rgba(11,15,25,0.8)", border: "1px solid rgba(124,58,237,0.3)",
+            padding: "40px", borderRadius: 20, textAlign: "center",
+          }}>
             <div style={{
-              background: "rgba(11,15,25,0.8)", border: "1px solid rgba(124,58,237,0.3)",
-              padding: "40px", borderRadius: 20, textAlign: "center",
+              width: 52, height: 52, borderRadius: 14,
+              background: "rgba(124,58,237,0.12)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              margin: "0 auto 16px",
             }}>
-              <h4 style={{ color: "#f8fafc", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Historique Premium</h4>
-              <p style={{ color: "#94a3b8", fontSize: 14, marginBottom: 20 }}>L'accès à l'historique complet de vos passations est réservé aux abonnés Premium.</p>
-              <Link href="/premium" style={{
-                display: "inline-block",
-                background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "#fff",
-                fontWeight: 600, padding: "10px 20px", borderRadius: 12, border: "none", cursor: "pointer",
-                textDecoration: "none"
-              }}>
-                Débloquer l'historique
-              </Link>
+              <span style={{ fontSize: 22 }}>🔒</span>
             </div>
-          )}
-          <div style={!isPremium ? { filter: "blur(6px)", opacity: 0.4, pointerEvents: "none", userSelect: "none", display: "flex", flexDirection: "column", gap: 16 } : { display: "flex", flexDirection: "column", gap: 16 }}>
+            <h4 style={{ color: "#f8fafc", fontSize: 17, fontWeight: 700, marginBottom: 8 }}>
+              Historique réservé aux abonnés Premium
+            </h4>
+            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20, lineHeight: 1.6 }}>
+              Comparez vos passations dans le temps et visualisez l'évolution de chaque dimension relationnelle.
+            </p>
+            <Link href="/premium" style={{
+              display: "inline-block",
+              background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "#fff",
+              fontWeight: 600, padding: "11px 24px", borderRadius: 12,
+              textDecoration: "none", fontSize: 14,
+              boxShadow: "0 4px 16px rgba(124,58,237,0.35)",
+            }}>
+              Débloquer l'historique →
+            </Link>
+          </div>
+        )}
+
+        {/* Timeline */}
+        <div style={!isPremium ? {
+          filter: "blur(8px)", opacity: 0.3,
+          pointerEvents: "none", userSelect: "none",
+          display: "flex", flexDirection: "column", gap: 16,
+        } : { display: "flex", flexDirection: "column", gap: 16 }}>
+
           {history?.map((item: any, index: number) => {
-            const date = new Date(item.assessment?.submittedAt || item.createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+            const date = new Date(item.assessment?.submittedAt || item.createdAt)
+              .toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
             const isLatest = index === 0;
             const previousItem = history[index + 1];
-            const diff = previousItem ? (item.globalScore - previousItem.globalScore) : null;
-            
+            const globalDiff = previousItem ? Math.round(item.globalScore - previousItem.globalScore) : null;
+            const score = Math.round(item.globalScore);
+
+            // Couleur du score global
+            const scoreColor = score >= 70 ? "#10b981" : score >= 50 ? "#f59e0b" : "#ef4444";
+
             return (
               <div key={item.id} style={{
-                background: "rgba(17,24,39,0.5)", border: "1px solid rgba(255,255,255,0.05)",
-                padding: "24px", borderRadius: 20, display: "flex", alignItems: "center", gap: 24,
+                background: isLatest
+                  ? "linear-gradient(135deg, rgba(124,58,237,0.08) 0%, rgba(17,24,39,0.7) 100%)"
+                  : "rgba(17,24,39,0.5)",
+                border: isLatest
+                  ? "1px solid rgba(124,58,237,0.2)"
+                  : "1px solid rgba(255,255,255,0.05)",
+                padding: "22px 24px",
+                borderRadius: 20,
                 position: "relative",
+                transition: "border-color 0.2s",
               }}>
+                {/* Badge actuel */}
                 {isLatest && (
                   <div style={{
-                    position: "absolute", top: -10, left: 24, background: "#7c3aed",
-                    color: "white", fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 20, textTransform: "uppercase"
+                    position: "absolute", top: -11, left: 20,
+                    background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
+                    color: "white", fontSize: 10, fontWeight: 800,
+                    padding: "3px 12px", borderRadius: 999,
+                    textTransform: "uppercase", letterSpacing: "0.06em",
+                    boxShadow: "0 2px 12px rgba(124,58,237,0.4)",
                   }}>
-                    Actuel
+                    Passation actuelle
                   </div>
                 )}
-                
-                <div style={{ flexShrink: 0, textAlign: "center", width: 80 }}>
-                  <div style={{ fontSize: 32 }}>{item.weatherIcon}</div>
-                  <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 4, fontWeight: 500 }}>{date}</div>
-                </div>
 
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-                    <h4 style={{ color: "#f8fafc", fontSize: 18, fontWeight: 600 }}>{item.weatherTitle}</h4>
-                    {item.assessment?.campaign && (
-                      <span className="badge" style={{ background: "rgba(124,58,237,0.1)", color: "#a78bfa", borderColor: "rgba(124,58,237,0.3)" }}>
-                        Campagne : {item.assessment.campaign.title}
+                {/* Ligne supérieure : météo + score + date */}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 18 }}>
+                  {/* Icône météo */}
+                  <div style={{
+                    width: 54, height: 54, borderRadius: 14,
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 26, flexShrink: 0,
+                  }}>
+                    {item.weatherIcon}
+                  </div>
+
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>
+                      <h4 style={{ color: "#f8fafc", fontSize: 16, fontWeight: 700, margin: 0 }}>
+                        {item.weatherTitle}
+                      </h4>
+                      {item.assessment?.campaign && (
+                        <span style={{
+                          fontSize: 11, fontWeight: 600,
+                          background: "rgba(124,58,237,0.1)", color: "#a78bfa",
+                          border: "1px solid rgba(124,58,237,0.2)",
+                          padding: "2px 8px", borderRadius: 6,
+                        }}>
+                          {item.assessment.campaign.title}
+                        </span>
+                      )}
+                    </div>
+                    <p style={{ color: "#64748b", fontSize: 12, margin: 0 }}>{date}</p>
+                  </div>
+
+                  {/* Score global */}
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 4, justifyContent: "flex-end" }}>
+                      <span style={{ fontSize: 28, fontWeight: 800, color: scoreColor, lineHeight: 1 }}>
+                        {score}
                       </span>
+                      <span style={{ fontSize: 13, color: "#475569" }}>/100</span>
+                    </div>
+                    {globalDiff !== null && globalDiff !== 0 && (
+                      <div style={{
+                        display: "inline-flex", alignItems: "center", gap: 3, marginTop: 4,
+                        fontSize: 12, fontWeight: 700,
+                        color: globalDiff > 0 ? "#10b981" : "#ef4444",
+                        background: globalDiff > 0 ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)",
+                        padding: "2px 8px", borderRadius: 6,
+                      }}>
+                        {globalDiff > 0 ? "▲" : "▼"} {Math.abs(globalDiff)} pts
+                      </div>
+                    )}
+                    {globalDiff === null && (
+                      <p style={{ color: "#334155", fontSize: 11, margin: "4px 0 0", textAlign: "right" }}>
+                        1ère passation
+                      </p>
                     )}
                   </div>
-                  <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
-                    <div>
-                      <span style={{ fontSize: 13, color: "#64748b" }}>Score global</span>
-                      <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                        <span style={{ fontSize: 24, fontWeight: 700, color: "#fff" }}>{item.globalScore}</span>
-                        <span style={{ fontSize: 14, color: "#94a3b8" }}>/ 100</span>
-                        {diff !== null && diff !== 0 && (
-                          <span style={{ fontSize: 13, fontWeight: 600, color: diff > 0 ? "#10b981" : "#ef4444" }}>
-                            {diff > 0 ? "+" : ""}{diff}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div style={{ width: 1, height: 40, background: "rgba(255,255,255,0.1)" }} />
-                    <div>
-                      <span style={{ fontSize: 13, color: "#64748b" }}>Profil</span>
-                      <div style={{ fontSize: 15, fontWeight: 500, color: "#e2e8f0" }}>{item.primaryProfile}</div>
-                    </div>
-                  </div>
                 </div>
+
+                {/* Séparateur */}
+                <div style={{ height: 1, background: "rgba(255,255,255,0.05)", marginBottom: 16 }} />
+
+                {/* Barres de dimensions */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 24px" }}>
+                  {DIMENSION_CONFIG.map(dim => {
+                    const val = item[dim.key] ?? 0;
+                    const prevVal = previousItem?.[dim.key];
+                    return (
+                      <div key={dim.key}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                          <span style={{ fontSize: 11, color: "#64748b", fontWeight: 500 }}>
+                            {dim.label}
+                          </span>
+                        </div>
+                        <ScoreBar value={val} color={dim.color} previousValue={prevVal} />
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Profil */}
+                {item.primaryProfile && (
+                  <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ fontSize: 11, color: "#475569" }}>Profil :</span>
+                    <span style={{
+                      fontSize: 12, fontWeight: 600, color: "#a78bfa",
+                      background: "rgba(167,139,250,0.08)",
+                      border: "1px solid rgba(167,139,250,0.15)",
+                      padding: "2px 10px", borderRadius: 6,
+                    }}>
+                      {item.primaryProfile}
+                    </span>
+                  </div>
+                )}
               </div>
             );
           })}
-          </div>
+
           {(!history || history.length === 0) && (
-            <div style={{ padding: "40px", textAlign: "center", color: "#64748b" }}>
-              Aucun historique disponible.
+            <div style={{
+              padding: "48px 32px", textAlign: "center",
+              background: "rgba(255,255,255,0.015)",
+              border: "1px dashed rgba(255,255,255,0.07)",
+              borderRadius: 20,
+            }}>
+              <div style={{ fontSize: 32, marginBottom: 12 }}>📋</div>
+              <p style={{ color: "#475569", fontSize: 14, margin: 0 }}>
+                Aucune passation enregistrée pour le moment.
+              </p>
             </div>
           )}
         </div>

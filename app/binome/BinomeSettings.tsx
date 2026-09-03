@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Bot, Sparkles } from "lucide-react";
 
 export function BinomeSettings({ initialOptIn }: { initialOptIn: boolean }) {
   const [optIn, setOptIn] = useState(initialOptIn);
@@ -28,36 +29,77 @@ export function BinomeSettings({ initialOptIn }: { initialOptIn: boolean }) {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(255,255,255,0.02)", padding: 16, borderRadius: 12, marginBottom: 24, border: "1px solid rgba(255,255,255,0.05)" }}>
-      <div>
-        <p style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15 }}>Recommandations par IRIS</p>
-        <p style={{ color: "#94a3b8", fontSize: 13, marginTop: 4 }}>
-          J'accepte que l'assistant IA analyse mon profil de façon anonyme pour me suggérer des partenaires compatibles au sein de ma campagne.
-        </p>
+    <div style={{
+      background: optIn
+        ? "linear-gradient(135deg, rgba(124,58,237,0.12) 0%, rgba(16,185,129,0.08) 100%)"
+        : "rgba(255,255,255,0.02)",
+      border: optIn ? "1px solid rgba(124,58,237,0.3)" : "1px solid rgba(255,255,255,0.06)",
+      borderRadius: 20,
+      padding: "24px 28px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 20,
+      transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{
+          width: 48, height: 48,
+          borderRadius: 14,
+          background: optIn ? "rgba(168,85,247,0.15)" : "rgba(255,255,255,0.04)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          flexShrink: 0,
+          border: optIn ? "1px solid rgba(168,85,247,0.25)" : "1px solid rgba(255,255,255,0.06)",
+          transition: "all 0.3s",
+        }}>
+          {optIn
+            ? <Sparkles size={22} style={{ color: "#c084fc" }} />
+            : <Bot size={22} style={{ color: "#475569" }} />
+          }
+        </div>
+        <div>
+          <p style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15, marginBottom: 4 }}>
+            Suggestions intelligentes par IRIS
+          </p>
+          <p style={{ color: "#94a3b8", fontSize: 13, lineHeight: 1.5 }}>
+            {optIn
+              ? "IRIS analyse votre profil anonymisé pour vous suggérer des partenaires complémentaires."
+              : "Activez cette option pour que IRIS vous propose des binômes adaptés à votre profil."}
+          </p>
+        </div>
       </div>
-      <button 
+
+      {/* Toggle switch */}
+      <button
         onClick={toggleOptIn}
         disabled={loading}
+        aria-label={optIn ? "Désactiver les suggestions IRIS" : "Activer les suggestions IRIS"}
         style={{
-          width: 44,
-          height: 24,
-          borderRadius: 12,
-          background: optIn ? "#10b981" : "rgba(255,255,255,0.1)",
+          width: 52,
+          height: 28,
+          borderRadius: 14,
+          background: optIn
+            ? "linear-gradient(135deg, #7c3aed, #10b981)"
+            : "rgba(255,255,255,0.1)",
           border: "none",
           position: "relative",
           cursor: loading ? "not-allowed" : "pointer",
-          transition: "background 0.3s"
+          transition: "background 0.35s cubic-bezier(0.4,0,0.2,1)",
+          flexShrink: 0,
+          opacity: loading ? 0.6 : 1,
+          boxShadow: optIn ? "0 0 16px rgba(124,58,237,0.35)" : "none",
         }}
       >
         <div style={{
-          width: 20,
-          height: 20,
+          width: 22,
+          height: 22,
           borderRadius: "50%",
           background: "#fff",
           position: "absolute",
-          top: 2,
-          left: optIn ? 22 : 2,
-          transition: "left 0.3s"
+          top: 3,
+          left: optIn ? 27 : 3,
+          transition: "left 0.35s cubic-bezier(0.4,0,0.2,1)",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
         }} />
       </button>
     </div>

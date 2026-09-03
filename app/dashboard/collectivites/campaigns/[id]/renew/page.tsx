@@ -11,6 +11,7 @@ export default function RenewCampaignPage({ params }: { params: Promise<{ id: st
   const router = useRouter();
   
   const [loading, setLoading] = useState(false);
+  const [renewError, setRenewError] = useState<string | null>(null);
   const [parent, setParent] = useState<any>(null);
   const [formData, setFormData] = useState({
     title: "",
@@ -37,23 +38,23 @@ export default function RenewCampaignPage({ params }: { params: Promise<{ id: st
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setRenewError(null);
     setLoading(true);
     try {
       const res = await fetch(`/api/campaigns/${id}/renew`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
       if (res.ok) {
         router.push("/dashboard/collectivites/campaigns");
         router.refresh();
       } else {
         const error = await res.json();
-        alert(error.error || "Erreur de renouvellement");
+        setRenewError(error.error || "Erreur lors du renouvellement de la campagne.");
       }
-    } catch (err) {
-      console.error(err);
-      alert("Erreur de connexion");
+    } catch {
+      setRenewError("Erreur de connexion. Vérifiez votre réseau et réessayez.");
     } finally {
       setLoading(false);
     }
@@ -115,10 +116,21 @@ export default function RenewCampaignPage({ params }: { params: Promise<{ id: st
             <button 
               type="submit" 
               disabled={loading}
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "#7c3aed", color: "white", padding: "12px", borderRadius: 10, fontSize: 15, fontWeight: 600, border: "none", cursor: loading ? "not-allowed" : "pointer" }}
+              className="btn btn-primary btn-lg"
+              style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
             >
-              <Save size={18} /> {loading ? "Création..." : "Dupliquer la campagne"}
+              <Save size={18} /> {loading ? "Création en cours..." : "Dupliquer la campagne"}
             </button>
+
+            {renewError && (
+              <div style={{
+                display: "flex", alignItems: "flex-start", gap: 10,
+                padding: "12px 16px", borderRadius: 10,
+                background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)",
+              }}>
+                <p style={{ color: "#f87171", fontSize: 13, margin: 0 }}>{renewError}</p>
+              </div>
+            )}
           </form>
         </div>
       </main>

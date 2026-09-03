@@ -110,8 +110,10 @@ export function Navbar() {
       return [{ href: "/dashboard/collectivites", label: "Observatoire", icon: Landmark }];
     } else if (userRole === "SUPER_ADMIN") {
       return [
-        { href: "/dashboard/superadmin/leads", label: "Console Admin", icon: Shield },
-        { href: "/dashboard/rh", label: "Demo Tableau de bord B2B", icon: Building2 },
+        { href: "/dashboard/superadmin/organizations", label: "Console Admin", icon: Shield },
+        { href: "/dashboard/rh", label: "Vue B2B (RH)", icon: Building2 },
+        { href: "/dashboard/b2b2c", label: "Vue B2B2C", icon: HeartPulse },
+        { href: "/dashboard/collectivites", label: "Vue B2G", icon: Landmark },
       ];
     } else {
       // Utilisateurs standard : EMPLOYEE, MEMBER, CITIZEN

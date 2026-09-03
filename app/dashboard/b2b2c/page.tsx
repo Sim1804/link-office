@@ -14,6 +14,14 @@ import {
   Tooltip, Cell, PieChart, Pie, Legend
 } from "recharts";
 import Link from "next/link";
+import {
+  DIMENSION_LABELS,
+  buildIcrData,
+  buildRadarData,
+  buildWeatherData,
+  scoreToColor,
+  RECHARTS_TOOLTIP_STYLE,
+} from "@/lib/constants/dashboard";
 
 interface B2BStats {
   anonymityBlocked?: boolean;
@@ -37,19 +45,7 @@ interface B2BStats {
   orientationsCount?: { psychological: number; social: number; professional: number };
 }
 
-const DIMENSION_LABELS: Record<string, string> = {
-  social: "Relations sociales",
-  affective: "Relations affectives",
-  sentimental: "Vie sentimentale",
-  professional: "Vie pro & engagement",
-  self: "Relation à soi",
-};
-
-const ICR_COLORS = ["#34d399", "#f59e0b", "#f97316", "#f43f5e"];
-const WEATHER_ICONS: Record<string, string> = {
-  "Grand soleil": "☀️", "Éclaircies": "⛅", "Ciel couvert": "☁️",
-  "Orage": "🌩️", "Tempête": "⛈️",
-};
+// Constantes DIMENSION_LABELS, ICR_COLORS, WEATHER_ICONS importées depuis @/lib/constants/dashboard
 
 export default function B2B2CDashboard() {
   const { data: session } = useSession();
@@ -67,31 +63,11 @@ export default function B2B2CDashboard() {
       .finally(() => setLoading(false));
   }, [selectedCampaignId]);
 
-  const globalScore = stats?.averages?.global ?? 0;
-  const scoreColor = globalScore >= 80 ? "#34d399" : globalScore >= 60 ? "#a78bfa" : globalScore >= 40 ? "#f59e0b" : "#f43f5e";
-
-  const radarData = stats?.averages
-    ? Object.entries(DIMENSION_LABELS).map(([key, label]) => ({
-        dimension: label,
-        score: (stats.averages as any)[key] ?? 0,
-        fullMark: 100,
-      }))
-    : [];
-
-  const icrData = stats?.icrDistribution
-    ? [
-        { name: "Faible", value: stats.icrDistribution.faible, color: ICR_COLORS[0] },
-        { name: "Modéré", value: stats.icrDistribution.modere, color: ICR_COLORS[1] },
-        { name: "Élevé", value: stats.icrDistribution.eleve, color: ICR_COLORS[2] },
-        { name: "Critique", value: stats.icrDistribution.critique, color: ICR_COLORS[3] },
-      ].filter((d) => d.value > 0)
-    : [];
-
-  const weatherData = stats?.weatherDistribution
-    ? Object.entries(stats.weatherDistribution)
-        .map(([label, count]) => ({ label: `${WEATHER_ICONS[label] || ""} ${label}`, count }))
-        .sort((a, b) => b.count - a.count)
-    : [];
+  const radarData    = buildRadarData(stats?.averages as Record<string, number> ?? {});
+  const icrData      = stats?.icrDistribution ? buildIcrData(stats.icrDistribution) : [];
+  const weatherData  = stats?.weatherDistribution ? buildWeatherData(stats.weatherDistribution) : [];
+  const globalScore  = stats?.averages?.global ?? 0;
+  const scoreColor   = scoreToColor(globalScore);
 
   const orientationsData = stats?.orientationsCount
     ? [
@@ -105,8 +81,8 @@ export default function B2B2CDashboard() {
     <>
       <Navbar />
       <main className="page-main">
-        <div className="blob-violet" style={{ background: "rgba(16,185,129,0.1)" }} />
-        <div className="blob-cyan" style={{ background: "rgba(124,58,237,0.1)" }} />
+        <div className="blob-violet" />
+        <div className="blob-cyan" />
 
         <div className="page-container-wide" style={{ position: "relative", zIndex: 1 }}>
           {/* Header */}
@@ -244,7 +220,12 @@ export default function B2B2CDashboard() {
                       
                       {/* Top KPIs */}
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
-                        <div className="card" style={{ display: "flex", alignItems: "center", gap: 20, background: "linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(124,58,237,0.05) 100%)", borderColor: "rgba(16,185,129,0.2)" }}>
+                        <div className="card" style={{ display: "flex", alignItems: "center", gap: 20, background: "linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(124,58,237,0.05) 100%)", borderColor: "rgba(16,185,129,0.2)", position: "relative" }}>
+                          <div style={{ position: "absolute", top: 12, right: 12 }}>
+                            <span className="badge badge-emerald" style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 8px", fontSize: 10 }}>
+                              <ShieldAlert size={10} /> Anonymat garanti
+                            </span>
+                          </div>
                           <div style={{ background: "rgba(16,185,129,0.2)", padding: 12, borderRadius: 12 }}><Users size={24} color="#34d399" /></div>
                           <div>
                             <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 4 }}>Bénéficiaires analysés</p>
@@ -352,32 +333,40 @@ export default function B2B2CDashboard() {
                   )}
 
                   {activeTab === "risques" && (
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-                      <div className="card">
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-                          <TrendingDown size={18} style={{ color: "#f43f5e" }} />
-                          <h3 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15 }}>Top Facteurs de Risque</h3>
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                          {(stats.topRiskFactors ?? []).slice(0, 8).map((f, i) => (
-                            <div key={i}>
-                              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                                <span style={{ color: "#94a3b8", fontSize: 13 }}>{f.label}</span>
-                                <span style={{ color: "#f43f5e", fontSize: 12, fontWeight: 600 }}>{f.pct}%</span>
-                              </div>
-                              <div className="progress-bar">
-                                <div className="progress-fill" style={{ width: `${f.pct}%`, background: "#f43f5e" }} />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                    <>
+                      <div style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.2)", borderRadius: 12, padding: "16px 20px", marginBottom: 24, display: "flex", gap: 12, alignItems: "flex-start" }}>
+                        <AlertTriangle size={20} color="#34d399" style={{ flexShrink: 0, marginTop: 2 }} />
+                        <p style={{ color: "#cbd5e1", fontSize: 14, lineHeight: 1.6, margin: 0 }}>
+                          <strong style={{ color: "#f8fafc" }}>À quoi servent ces données ?</strong> Les facteurs de risque et de protection sont issus de l'Indice de Complexité Relationnelle (ICR). Ils vous permettent d'identifier les causes profondes du mal-être ou du bien-être des bénéficiaires, afin d'orienter précisément vos <strong>Plans de Prévention</strong> (ex: déploiement de cellules d'écoute, partenariats spécifiques).
+                        </p>
                       </div>
 
-                      <div className="card">
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-                          <TrendingUp size={18} style={{ color: "#34d399" }} />
-                          <h3 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15 }}>Top Facteurs Protecteurs</h3>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                        <div className="card">
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+                            <TrendingDown size={18} style={{ color: "#f43f5e" }} />
+                            <h3 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15 }}>Top Facteurs de Risque (Vulnérabilités)</h3>
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                            {(stats.topRiskFactors ?? []).slice(0, 8).map((f, i) => (
+                              <div key={i}>
+                                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                                  <span style={{ color: "#94a3b8", fontSize: 13 }}>{f.label}</span>
+                                  <span style={{ color: "#f43f5e", fontSize: 12, fontWeight: 600 }}>{f.pct}%</span>
+                                </div>
+                                <div className="progress-bar">
+                                  <div className="progress-fill" style={{ width: `${f.pct}%`, background: "#f43f5e" }} />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
+
+                        <div className="card">
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+                            <TrendingUp size={18} style={{ color: "#34d399" }} />
+                            <h3 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15 }}>Top Facteurs Protecteurs (Forces)</h3>
+                          </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                           {(stats.topProtectiveFactors ?? []).slice(0, 8).map((f, i) => (
                             <div key={i}>
@@ -407,7 +396,8 @@ export default function B2B2CDashboard() {
                           ))}
                         </div>
                       </div>
-                    </div>
+                      </div>
+                    </>
                   )}
                 </>
               ) : null}

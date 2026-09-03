@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     const updated = await prisma.relationalPair.update({
       where: { id: pairId },
-      data: { status: accept ? "ACCEPTED" : "REJECTED" }
+      data: { status: accept ? "ACCEPTEE" : "REFUSEE" }
     });
 
     return NextResponse.json({ success: true, pair: updated });

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+const BINOME_ALLOWED_ROLES = ["EMPLOYEE", "SUPER_ADMIN"];
+
 export async function GET() {
   try {
     const session = await auth();
@@ -9,12 +11,20 @@ export async function GET() {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    // [BUG FIX] Bloquer MEMBER et CITIZEN — spec §11
+    if (!BINOME_ALLOWED_ROLES.includes(session.user.role)) {
+      return NextResponse.json(
+        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium+.", code: "ROLE_NOT_ALLOWED" },
+        { status: 403 }
+      );
+    }
+
     const userId = session.user.id;
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { 
-        matchingOptIn: true, 
+      select: {
+        matchingOptIn: true,
         campaignId: true,
         assessments: {
           where: { status: "SUBMITTED" },
@@ -49,7 +59,6 @@ export async function GET() {
       }
     }
 
-
     const userResult = user.assessments[0]?.result;
 
     // Retrieve excluded users (already in pending or accepted pair with this user)
@@ -58,7 +67,9 @@ export async function GET() {
         OR: [
           { initiatorId: userId },
           { receiverId: userId }
-        ]
+        ],
+        // [BUG FIX] Ne pas exclure les REJECTED — ils peuvent recevoir une nouvelle invitation
+        NOT: { status: "REFUSEE" }
       }
     });
 
@@ -70,8 +81,8 @@ export async function GET() {
       where: {
         id: { notIn: excludedIds },
         matchingOptIn: true,
-        campaignId: user.campaignId, // Strict enforcement for B2B2C
-        // Ensure they are PREMIUM_PLUS via campaign or direct
+        campaignId: user.campaignId,
+        role: { in: BINOME_ALLOWED_ROLES as any },
       },
       include: {
         assessments: {
@@ -92,7 +103,7 @@ export async function GET() {
       if (!cResult) continue;
 
       let rationale = "IRIS a identifié une bonne complémentarité globale entre vos profils respectifs.";
-      
+
       if (userResult) {
         if (userResult.priorityDimension === cResult.priorityDimension) {
           rationale = `Vous partagez un objectif commun de développement sur la dimension ${userResult.priorityDimension}.`;
@@ -109,7 +120,7 @@ export async function GET() {
         rationale
       });
 
-      if (suggestions.length >= 3) break; // Return top 3
+      if (suggestions.length >= 3) break;
     }
 
     return NextResponse.json({ success: true, suggestions });

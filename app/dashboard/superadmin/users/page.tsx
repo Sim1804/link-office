@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Users, Search, Crown, ShieldAlert, X, Save, Trash2, AlertTriangle } from "lucide-react";
+import { Users, Search, Crown, ShieldAlert, X, Save, Trash2, AlertTriangle, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function SuperAdminUsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -33,28 +33,39 @@ export default function SuperAdminUsersPage() {
     setConfirmDelete(false);
   };
 
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
   const handleSave = async () => {
     if (!selectedUser) return;
     setIsSaving(true);
+    setSaveError(null);
+    setSaveSuccess(false);
     try {
       const res = await fetch(`/api/superadmin/users/${selectedUser.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editForm)
+        body: JSON.stringify(editForm),
       });
       if (res.ok) {
+        setSaveSuccess(true);
         loadUsers();
-        setSelectedUser(null);
+        setTimeout(() => setSelectedUser(null), 800);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setSaveError(data.error || "Erreur lors de la sauvegarde.");
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
+      setSaveError("Erreur réseau. Veuillez réessayer.");
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
   };
 
   const handleDelete = async () => {
     if (!selectedUser) return;
     setIsSaving(true);
+    setSaveError(null);
     try {
       const res = await fetch(`/api/superadmin/users/${selectedUser.id}`, {
         method: "DELETE",
@@ -62,21 +73,34 @@ export default function SuperAdminUsersPage() {
       if (res.ok) {
         loadUsers();
         setSelectedUser(null);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setSaveError(data.error || "Impossible de supprimer ce compte.");
+        setConfirmDelete(false);
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
+      setSaveError("Erreur réseau lors de la suppression.");
+      setConfirmDelete(false);
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
   };
 
   const filteredUsers = users.filter(user => {
-    const matchSearch = user.email.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        user.lastName.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    if (filterRole === "B2C") return matchSearch && ["CITIZEN", "INDIVIDUAL", "EMPLOYEE", "MEMBER"].includes(user.role) && !user.organizationId;
-    if (filterRole === "ADMINS") return matchSearch && (user.role.startsWith("ADMIN_") || user.role === "SUPER_ADMIN");
-    
+    const searchLower = searchTerm.toLowerCase();
+    const matchSearch =
+      user.email.toLowerCase().includes(searchLower) ||
+      user.firstName?.toLowerCase().includes(searchLower) ||
+      user.lastName?.toLowerCase().includes(searchLower);
+
+    // B2C = utilisateurs individuels sans organisation (CITIZEN, EMPLOYEE, MEMBER)
+    // Note: INDIVIDUAL n'existe pas dans l'enum Prisma UserRole
+    if (filterRole === "B2C") {
+      return matchSearch && ["CITIZEN", "EMPLOYEE", "MEMBER"].includes(user.role) && !user.organizationId;
+    }
+    if (filterRole === "ADMINS") {
+      return matchSearch && (user.role.startsWith("ADMIN_") || user.role === "SUPER_ADMIN");
+    }
     return matchSearch;
   });
 
@@ -191,8 +215,13 @@ export default function SuperAdminUsersPage() {
           display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100
         }}>
           <div className="card" style={{ width: "100%", maxWidth: 500, padding: 32, position: "relative" }}>
-            <button 
-              onClick={() => setSelectedUser(null)} 
+            <button
+              onClick={() => {
+                setSelectedUser(null);
+                setSaveError(null);
+                setSaveSuccess(false);
+                setConfirmDelete(false);
+              }}
               style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", color: "#94a3b8", cursor: "pointer" }}
             >
               <X size={20} />
@@ -238,6 +267,28 @@ export default function SuperAdminUsersPage() {
               </div>
 
               <div style={{ height: 1, background: "rgba(255,255,255,0.05)", margin: "8px 0" }} />
+
+              {/* Feedback inline succès / erreur */}
+              {saveSuccess && (
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 8, padding: "10px 14px",
+                  borderRadius: 10, background: "rgba(16,185,129,0.08)",
+                  border: "1px solid rgba(16,185,129,0.2)",
+                }}>
+                  <CheckCircle2 size={14} style={{ color: "#34d399", flexShrink: 0 }} />
+                  <span style={{ fontSize: 13, color: "#34d399" }}>Modifications enregistrées avec succès.</span>
+                </div>
+              )}
+              {saveError && (
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 8, padding: "10px 14px",
+                  borderRadius: 10, background: "rgba(239,68,68,0.08)",
+                  border: "1px solid rgba(239,68,68,0.2)",
+                }}>
+                  <AlertCircle size={14} style={{ color: "#f87171", flexShrink: 0 }} />
+                  <span style={{ fontSize: 13, color: "#f87171" }}>{saveError}</span>
+                </div>
+              )}
 
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <button onClick={() => setConfirmDelete(true)} className="btn btn-sm" style={{ background: "transparent", color: "#ef4444", border: "1px solid rgba(239,68,68,0.2)", display: confirmDelete ? "none" : "flex" }}>

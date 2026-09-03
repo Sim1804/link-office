@@ -120,10 +120,10 @@ export async function POST(request: Request) {
         // Create user with campaign link
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = await prisma.user.create({
-          data: { prenom, nom, email, password: hashedPassword, organizationId, role: userRole, ...campaignUpdate },
-          select: { id: true, email: true, prenom: true, nom: true, role: true, organizationId: true, subscription: true },
+          data: { firstName: prenom, lastName: nom, email, password: hashedPassword, organizationId, role: userRole, ...campaignUpdate },
+          select: { id: true, email: true, firstName: true, lastName: true, role: true, organizationId: true, subscription: true },
         });
-        return NextResponse.json(user, { status: 201 });
+        return NextResponse.json({ user_id: user.id, email: user.email, prenom: user.firstName, nom: user.lastName, role: user.role }, { status: 201 });
       }
 
       // 2. Fallback: Check if codeAccess is an Organization codeAccess

@@ -108,7 +108,7 @@ export default async function OrganizationsPage() {
             })}
             {organizations.length === 0 && (
               <tr>
-                <td colSpan={5} style={{ padding: "40px 24px", textAlign: "center", color: "#64748b" }}>
+                <td colSpan={6} style={{ padding: "40px 24px", textAlign: "center", color: "#64748b" }}>
                   Aucune organisation trouvée.
                 </td>
               </tr>

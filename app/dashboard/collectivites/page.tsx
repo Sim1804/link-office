@@ -8,6 +8,11 @@ import { Navbar } from "@/components/layout/Navbar";
 import { DashboardSkeleton } from "@/components/dashboard/LoadingSkeleton";
 import { MapPin, RefreshCw, Users, TrendingUp, Lightbulb, ShieldAlert } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, Radar } from "recharts";
+import {
+  buildRadarData,
+  buildWeatherData,
+  RECHARTS_TOOLTIP_STYLE,
+} from "@/lib/constants/dashboard";
 
 interface PolicyRecommendation {
   constat: string; indicateur: string; action: string; icon: string;
@@ -24,10 +29,7 @@ interface CollectiviteData {
   demographics?: { retireeCount: number; youngCount: number; aidantCount: number };
 }
 
-const DIMENSION_LABELS: Record<string, string> = {
-  social: "Relations sociales", affective: "Relations affectives",
-  sentimental: "Vie sentimentale", professional: "Vie pro", self: "Relation à soi",
-};
+// DIMENSION_LABELS importé depuis @/lib/constants/dashboard
 
 export default function CollectivitesDashboard() {
   const [data, setData] = useState<CollectiviteData | null>(null);
@@ -37,13 +39,8 @@ export default function CollectivitesDashboard() {
     fetch("/api/collectivites/stats").then(r => r.json()).then(setData).finally(() => setLoading(false));
   }, []);
 
-  const radarData = data?.averages
-    ? Object.entries(DIMENSION_LABELS).map(([key, name]) => ({ dimension: name, score: data.averages![key as keyof typeof data.averages] ?? 0, fullMark: 100 }))
-    : [];
-
-  const weatherData = data?.weatherDistribution
-    ? Object.entries(data.weatherDistribution).map(([label, count]) => ({ label, count }))
-    : [];
+  const radarData    = buildRadarData(data?.averages as Record<string, number> ?? {});
+  const weatherData  = data?.weatherDistribution ? buildWeatherData(data.weatherDistribution, false) : [];
 
   return (
     <>

@@ -116,7 +116,7 @@ export class MatchingService {
       data: {
         initiatorId: userId,
         receiverId: bestMatch.id,
-        status: "PENDING"
+        status: "PROPOSITION_ENVOYEE"
       }
     });
 

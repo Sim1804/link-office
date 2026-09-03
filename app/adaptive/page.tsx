@@ -31,6 +31,7 @@ export default function AdaptivePage() {
   
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const submitAll = useCallback(async (currentAdaptiveAnswers: Record<string, number> = answers, redirecting = false) => {
     if (!redirecting) setSubmitting(true);
@@ -93,7 +94,7 @@ export default function AdaptivePage() {
       console.error(err);
       if (!redirecting) {
         setSubmitting(false);
-        alert("Une erreur est survenue lors de la sauvegarde finale.");
+        setSubmitError("Une erreur est survenue lors de la sauvegarde finale. Veuillez réessayer.");
       }
     }
   }, [answers, session, router]);
@@ -362,6 +363,28 @@ export default function AdaptivePage() {
               </button>
             </div>
           </div>
+
+          {submitError && (
+            <div style={{
+              display: "flex", alignItems: "flex-start", gap: 10,
+              padding: "12px 16px", borderRadius: 12, marginTop: 16,
+              background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)",
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0, color: "#f87171", marginTop: 1 }}>
+                <circle cx="12" cy="12" r="10" stroke="#f87171" strokeWidth="2"/>
+                <path d="M12 8v4m0 4h.01" stroke="#f87171" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              <div>
+                <p style={{ color: "#f87171", fontSize: 13, margin: 0 }}>{submitError}</p>
+                <button
+                  onClick={() => submitAll(answers, false)}
+                  style={{ color: "#06b6d4", fontSize: 12, background: "none", border: "none", cursor: "pointer", padding: 0, marginTop: 6, fontFamily: "inherit", textDecoration: "underline" }}
+                >
+                  Réessayer
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>

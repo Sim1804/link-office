@@ -134,7 +134,7 @@ function generatePolicyRecommendations(
  * Calcule et retourne les statistiques IQRH du territoire de la collectivité.
  * Génère des recommandations de politiques publiques basées sur les profils détectés.
  */
-export async function GET() {
+export async function GET(req: Request) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
@@ -157,10 +157,14 @@ export async function GET() {
     return NextResponse.json({ error: "Aucune collectivité associée." }, { status: 404 });
   }
 
+  const url = new URL(req.url);
+  const campaignId = url.searchParams.get("campaignId");
+
   const assessments = await prisma.assessment.findMany({
     where: {
       status: "SUBMITTED",
       user: { organizationId: user.organizationId },
+      ...(campaignId ? { campaignId } : {}),
     },
     select: {
       demographic: true,
@@ -266,7 +270,7 @@ export async function GET() {
         cartographie[key] = { label: val, question: q, respondentCount: 0, avgScore: 0 };
       }
       cartographie[key].respondentCount++;
-      cartographie[key].avgScore += a.result.globalScore;
+      cartographie[key].avgScore += a.result!.globalScore;
     });
   });
 

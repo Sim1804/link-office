@@ -30,24 +30,19 @@ export default function NewOrganizationPage() {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const formData = new FormData();
     formData.append("file", file);
-
     try {
-      const res = await fetch("/api/v1/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch("/api/v1/upload", { method: "POST", body: formData });
       const data = await res.json();
       if (res.ok) {
         setForm({ ...form, logoUrl: data.url });
+        setError(null);
       } else {
-        alert(data.error || "Erreur d'upload");
+        setError(data.error || "Erreur lors du téléchargement du logo.");
       }
-    } catch (err) {
-      console.error(err);
-      alert("Erreur lors de l'upload");
+    } catch {
+      setError("Erreur réseau lors du téléchargement du logo.");
     }
   };
 

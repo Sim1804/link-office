@@ -2,11 +2,21 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+const BINOME_ALLOWED_ROLES = ["EMPLOYEE", "SUPER_ADMIN"];
+
 export async function POST(req: Request) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    }
+
+    // [BUG FIX] Bloquer MEMBER et CITIZEN — spec §11
+    if (!BINOME_ALLOWED_ROLES.includes(session.user.role)) {
+      return NextResponse.json(
+        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium+.", code: "ROLE_NOT_ALLOWED" },
+        { status: 403 }
+      );
     }
 
     const { matchingOptIn } = await req.json();

@@ -2,12 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
-import { Plus, Settings, Users, ArrowRight, ArrowLeft, Copy, Archive } from "lucide-react";
+import { Plus, Settings, Users, ArrowRight, ArrowLeft, Copy, Archive, AlertCircle, X, BarChart2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+const STATUS_LABELS: Record<string, { label: string; color: string; bg: string }> = {
+  ACTIVE:     { label: "Active",      color: "#34d399", bg: "rgba(52,211,153,0.1)" },
+  PLANIFIEE:  { label: "Planifiée",   color: "#a78bfa", bg: "rgba(167,139,250,0.1)" },
+  EN_CLOTURE: { label: "En clôture", color: "#fbbf24", bg: "rgba(251,191,36,0.1)" },
+  CLOSED:     { label: "Clôturée",   color: "#94a3b8", bg: "rgba(148,163,184,0.1)" },
+  RENOUVELEE: { label: "Renouvellée",color: "#06b6d4", bg: "rgba(6,182,212,0.1)" },
+  DRAFT:      { label: "Brouillon",  color: "#64748b", bg: "rgba(100,116,139,0.1)" },
+};
 
 export default function CampaignsListPage() {
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [closeError, setCloseError] = useState<string | null>(null);
+  const [closingId, setClosingId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,16 +31,22 @@ export default function CampaignsListPage() {
   }, []);
 
   const handleClose = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment clôturer cette campagne ? Un rapport final sera généré.")) return;
+    // Protection anti double-clic : on demande confirmation via un état
+    setClosingId(id);
+  };
+
+  const confirmClose = async (id: string) => {
+    setCloseError(null);
+    setClosingId(null);
     try {
       const res = await fetch(`/api/campaigns/${id}/close`, { method: "POST" });
       if (res.ok) {
         setCampaigns(prev => prev.map(c => c.id === id ? { ...c, status: "CLOSED" } : c));
       } else {
-        alert("Erreur lors de la clôture.");
+        setCloseError("Erreur lors de la clôture de la campagne.");
       }
-    } catch (e) {
-      alert("Erreur réseau.");
+    } catch {
+      setCloseError("Erreur réseau. Vérifiez votre connexion et réessayez.");
     }
   };
 
@@ -64,6 +81,59 @@ export default function CampaignsListPage() {
             </button>
           </div>
 
+          {/* Erreur clôture */}
+          {closeError && (
+            <div style={{
+              display: "flex", alignItems: "center", gap: 10, padding: "12px 16px",
+              marginBottom: 20, borderRadius: 10,
+              background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)",
+            }}>
+              <AlertCircle size={14} style={{ color: "#f87171", flexShrink: 0 }} />
+              <p style={{ color: "#f87171", fontSize: 13, margin: 0, flex: 1 }}>{closeError}</p>
+              <button onClick={() => setCloseError(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "#94a3b8" }}>
+                <X size={14} />
+              </button>
+            </div>
+          )}
+
+          {/* Modal de confirmation clôture */}
+          {closingId && (
+            <div style={{
+              position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)",
+              backdropFilter: "blur(4px)", zIndex: 50,
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <div style={{
+                background: "rgba(15,23,42,0.97)", border: "1px solid rgba(244,63,94,0.25)",
+                borderRadius: 20, padding: 32, maxWidth: 420, width: "90%",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(244,63,94,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Archive size={20} style={{ color: "#fb7185" }} />
+                  </div>
+                  <h3 style={{ fontSize: 17, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Clôturer la campagne ?</h3>
+                </div>
+                <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6, marginBottom: 24 }}>
+                  Un rapport final sera généré et la campagne sera archivée. Cette action est irréversible.
+                </p>
+                <div style={{ display: "flex", gap: 12 }}>
+                  <button
+                    onClick={() => setClosingId(null)}
+                    style={{ flex: 1, padding: "10px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#94a3b8", fontSize: 14, cursor: "pointer", fontFamily: "inherit" }}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={() => confirmClose(closingId)}
+                    style={{ flex: 1, padding: "10px", borderRadius: 10, border: "none", background: "rgba(244,63,94,0.85)", color: "white", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
+                  >
+                    Confirmer la clôture
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {loading ? (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 200, color: "#94a3b8" }}>
               Chargement des campagnes...
@@ -85,52 +155,79 @@ export default function CampaignsListPage() {
               </button>
             </div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
-              {campaigns.map((camp) => (
-                <div key={camp.id} style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24, display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 600, color: "#f8fafc", margin: 0 }}>{camp.title}</h3>
-                    <span style={{ background: camp.status === "ACTIVE" ? "rgba(52,211,153,0.1)" : "rgba(148,163,184,0.1)", color: camp.status === "ACTIVE" ? "#34d399" : "#94a3b8", padding: "4px 8px", borderRadius: 6, fontSize: 11, fontWeight: 600 }}>
-                      {camp.status}
-                    </span>
-                  </div>
-                  <div style={{ color: "#64748b", fontSize: 13, marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
-                    <span>Période :</span>
-                    <span style={{ color: "#e2e8f0" }}>{new Date(camp.startDate).toLocaleDateString()} - {new Date(camp.endDate).toLocaleDateString()}</span>
-                  </div>
-                  <div style={{ color: "#64748b", fontSize: 13, marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
-                    <span>Population cible :</span>
-                    <span style={{ color: "#e2e8f0" }}>{camp.targetPopulation || "Non définie"}</span>
-                  </div>
-                  <div style={{ color: "#64748b", fontSize: 13, marginBottom: 24, display: "flex", justifyContent: "space-between" }}>
-                    <span>Répondants actuels :</span>
-                    <span style={{ color: "#06b6d4", fontWeight: 600 }}>{camp._count?.assessments || 0}</span>
-                  </div>
-                  
-                  <div style={{ marginTop: "auto", display: "flex", flexWrap: "wrap", gap: 8 }}>
-                    <button 
-                      onClick={() => router.push(`/dashboard/collectivites/campaigns/${camp.id}/config`)}
-                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#f8fafc", padding: "8px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "all 0.2s" }}
-                    >
-                      <Settings size={14} /> Configurer
-                    </button>
-                    <button 
-                      onClick={() => router.push(`/dashboard/collectivites/campaigns/${camp.id}/renew`)}
-                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)", color: "#a78bfa", padding: "8px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "all 0.2s" }}
-                    >
-                      <Copy size={14} /> Dupliquer
-                    </button>
-                    {camp.status === "ACTIVE" && (
-                      <button 
-                        onClick={() => handleClose(camp.id)}
-                        style={{ flex: "1 1 100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(244,63,94,0.1)", border: "1px solid rgba(244,63,94,0.2)", color: "#fb7185", padding: "8px", borderRadius: 8, fontSize: 12, cursor: "pointer", transition: "all 0.2s" }}
-                      >
-                        <Archive size={14} /> Clôturer la campagne
-                      </button>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {campaigns.map((camp) => {
+                const completed = camp._count?.assessments ?? 0;
+                const target = camp.targetPopulation;
+                const completionPct = target ? Math.min(100, Math.round((completed / target) * 100)) : null;
+                const s = STATUS_LABELS[camp.status] ?? STATUS_LABELS.DRAFT;
+                return (
+                  <div key={camp.id} style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", gap: 0 }}>
+                    {/* Header card */}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <h3 style={{ fontSize: 16, fontWeight: 700, color: "#f8fafc", margin: "0 0 6px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{camp.title}</h3>
+                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                          <span style={{ background: s.bg, color: s.color, padding: "3px 8px", borderRadius: 6, fontSize: 11, fontWeight: 600 }}>{s.label}</span>
+                          {camp.territory && <span style={{ fontSize: 12, color: "#64748b" }}>📍 {camp.territory}</span>}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Infos */}
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 16px", fontSize: 13, marginBottom: 14 }}>
+                      <span style={{ color: "#64748b" }}>Période</span>
+                      <span style={{ color: "#e2e8f0", textAlign: "right" }}>{new Date(camp.startDate).toLocaleDateString("fr-FR", { month: "short", year: "numeric" })} → {new Date(camp.endDate).toLocaleDateString("fr-FR", { month: "short", year: "numeric" })}</span>
+                      <span style={{ color: "#64748b" }}>Répondants</span>
+                      <span style={{ color: "#06b6d4", fontWeight: 700, textAlign: "right" }}>{completed}</span>
+                    </div>
+
+                    {/* Barre de progression objectif */}
+                    {target && (
+                      <div style={{ marginBottom: 16 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 5 }}>
+                          <span style={{ color: "#64748b" }}>Atteinte de l'objectif</span>
+                          <span style={{ color: completionPct! >= 80 ? "#34d399" : completionPct! >= 50 ? "#fbbf24" : "#94a3b8", fontWeight: 600 }}>{completed} / {target} ({completionPct}%)</span>
+                        </div>
+                        <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 999, overflow: "hidden" }}>
+                          <div style={{ height: "100%", width: `${completionPct}%`, background: completionPct! >= 80 ? "linear-gradient(90deg, #34d399, #06b6d4)" : completionPct! >= 50 ? "#fbbf24" : "#94a3b8", borderRadius: 999, transition: "width 0.5s ease" }} />
+                        </div>
+                      </div>
                     )}
+
+                    {/* Actions */}
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                      {/* Tableau de bord — CTA principal */}
+                      <button
+                        onClick={() => router.push(`/dashboard/collectivites/campaigns/${camp.id}`)}
+                        style={{ flex: "1 1 100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 7, background: "linear-gradient(135deg, rgba(124,58,237,0.18), rgba(6,182,212,0.12))", border: "1px solid rgba(124,58,237,0.3)", color: "#c4b5fd", padding: "10px", borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.2s" }}
+                      >
+                        <BarChart2 size={14} /> Tableau de bord
+                      </button>
+                      <button
+                        onClick={() => router.push(`/dashboard/collectivites/campaigns/${camp.id}/config`)}
+                        style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#94a3b8", padding: "8px", borderRadius: 8, fontSize: 12, cursor: "pointer" }}
+                      >
+                        <Settings size={13} /> Configurer
+                      </button>
+                      <button
+                        onClick={() => router.push(`/dashboard/collectivites/campaigns/${camp.id}/renew`)}
+                        style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.15)", color: "#a78bfa", padding: "8px", borderRadius: 8, fontSize: 12, cursor: "pointer" }}
+                      >
+                        <Copy size={13} /> Dupliquer
+                      </button>
+                      {(camp.status === "ACTIVE" || camp.status === "PLANIFIEE") && (
+                        <button
+                          onClick={() => handleClose(camp.id)}
+                          style={{ flex: "1 1 100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(244,63,94,0.07)", border: "1px solid rgba(244,63,94,0.15)", color: "#fb7185", padding: "8px", borderRadius: 8, fontSize: 12, cursor: "pointer" }}
+                        >
+                          <Archive size={13} /> Clôturer la campagne
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

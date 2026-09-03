@@ -6,24 +6,22 @@ import { RefreshCw } from "lucide-react";
 
 export function SituationChangementButton() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleRenew = async () => {
+    setError(null);
     try {
       setIsLoading(true);
-      const res = await fetch("/api/demographics/renew", {
-        method: "POST",
-      });
+      const res = await fetch("/api/demographics/renew", { method: "POST" });
       const data = await res.json();
       if (data.success && data.assessmentId) {
-        // Redirige vers le profil pour mettre à jour les données démographiques
         router.push(`/profil?tab=demographics&id=${data.assessmentId}`);
       } else {
-        alert(data.error || "Une erreur est survenue");
+        setError(data.error || "Une erreur est survenue. Veuillez réessayer.");
       }
-    } catch (error) {
-      console.error(error);
-      alert("Erreur de connexion");
+    } catch {
+      setError("Erreur de connexion. Vérifiez votre réseau et réessayez.");
     } finally {
       setIsLoading(false);
     }
@@ -63,6 +61,15 @@ export function SituationChangementButton() {
           >
             {isLoading ? "Préparation..." : "Mettre à jour mon profil"}
           </button>
+          {error && (
+            <div style={{
+              display: "flex", alignItems: "flex-start", gap: 8, marginTop: 12,
+              padding: "10px 14px", borderRadius: 10,
+              background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)",
+            }}>
+              <p style={{ color: "#f87171", fontSize: 13, margin: 0 }}>{error}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

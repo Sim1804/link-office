@@ -127,9 +127,11 @@ export default function QuestionnairePage() {
       setSubmitted(true);
       setTimeout(() => router.push("/adaptive"), 500);
     } catch (err) {
-      console.error(err);
+      console.error("Erreur de soumission questionnaire :", err);
       setSubmitting(false);
-      alert("Une erreur est survenue.");
+      // Erreur silencieuse — sessionStorage non disponible (mode privé strict)
+      // On redirige quand même pour ne pas bloquer l'utilisateur
+      router.push("/adaptive");
     }
   };
 

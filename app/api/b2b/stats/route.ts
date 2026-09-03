@@ -115,7 +115,8 @@ export async function GET(request: Request) {
     }),
     prisma.campaign.findMany({
       where: { organizationId: adminUser.organizationId },
-      select: { id: true, title: true, status: true, snapshot: true }
+      select: { id: true, title: true, status: true, snapshot: true },
+      orderBy: { startDate: "desc" }
     })
   ]);
 

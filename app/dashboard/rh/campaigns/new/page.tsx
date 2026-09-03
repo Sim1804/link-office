@@ -21,6 +21,7 @@ const CAMPAIGN_VARIABLES_LIBRARY = [
 export default function NewCampaignPage() {
   const router = useRouter();
   const [step, setStep] = useState<1|2|3>(1);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string|null>(null);
 
@@ -43,24 +44,19 @@ export default function NewCampaignPage() {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const formData = new FormData();
     formData.append("file", file);
-
+    setUploadError(null);
     try {
-      const res = await fetch("/api/v1/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch("/api/v1/upload", { method: "POST", body: formData });
       const data = await res.json();
       if (res.ok) {
         setForm(f => ({ ...f, logoUrl: data.url }));
       } else {
-        alert(data.error || "Erreur d'upload");
+        setUploadError(data.error || "Erreur lors du téléchargement du logo.");
       }
-    } catch (err) {
-      console.error(err);
-      alert("Erreur lors de l'upload");
+    } catch {
+      setUploadError("Erreur réseau lors du téléchargement du logo.");
     }
   };
 
@@ -265,6 +261,9 @@ export default function NewCampaignPage() {
                     )}
                   </div>
                   <p style={{ fontSize: 11, color: "#64748b", marginTop: 6 }}>S'il n'y a pas de logo, le logo par défaut de l'organisation sera utilisé.</p>
+                  {uploadError && (
+                    <p style={{ fontSize: 12, color: "#f87171", marginTop: 4 }}>⚠ {uploadError}</p>
+                  )}
                 </div>
               </div>
               {error && <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 16, color: "#f43f5e", fontSize: 13 }}><AlertCircle size={14} />{error}</div>}

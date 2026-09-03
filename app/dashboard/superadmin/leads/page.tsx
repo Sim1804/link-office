@@ -30,6 +30,8 @@ export default function LeadsPage() {
   const [campaignOffer, setCampaignOffer] = useState<"PREMIUM" | "PREMIUM_PLUS">("PREMIUM");
   const [convertLoading, setConvertLoading] = useState(false);
   const [convertResult, setConvertResult] = useState<any>(null);
+  const [convertError, setConvertError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"pending" | "converted">("pending");
 
   useEffect(() => {
     if (status === "authenticated" && session?.user?.role !== "SUPER_ADMIN") {
@@ -52,6 +54,7 @@ export default function LeadsPage() {
   const handleConvertLead = async () => {
     if (!convertingLead) return;
     setConvertLoading(true);
+    setConvertError(null);
     try {
       const r = await fetch(`/api/admin/leads/${convertingLead.id}/convert`, {
         method: "POST",
@@ -63,7 +66,8 @@ export default function LeadsPage() {
       setConvertResult(data);
       loadData();
     } catch (err: any) {
-      alert(err.message);
+      // Remplacement du alert() natif par une notification inline
+      setConvertError(err.message || "Une erreur inattendue est survenue.");
     } finally {
       setConvertLoading(false);
     }
@@ -71,7 +75,8 @@ export default function LeadsPage() {
 
   if (status === "loading") return null;
 
-  const pendingLeads = leads.filter(l => l.status !== "CONVERTED");
+  const pendingLeads   = leads.filter(l => l.status !== "CONVERTED");
+  const convertedLeads = leads.filter(l => l.status === "CONVERTED");
 
   return (
     <>
@@ -83,6 +88,39 @@ export default function LeadsPage() {
           </h1>
           <p style={{ color: "#94a3b8", marginTop: 8 }}>Gérez les prospects et convertissez-les en clients avec génération automatique de compte.</p>
         </div>
+        {/* Compteur de leads en attente */}
+        {pendingLeads.length > 0 && (
+          <span style={{
+            background: "rgba(251,191,36,0.12)", color: "#fbbf24",
+            border: "1px solid rgba(251,191,36,0.25)",
+            padding: "6px 14px", borderRadius: 999, fontSize: 13, fontWeight: 700,
+          }}>
+            {pendingLeads.length} en attente
+          </span>
+        )}
+      </div>
+
+      {/* Tabs Pending / Convertis */}
+      <div style={{ display: "flex", gap: 4, marginBottom: 24, background: "rgba(17,24,39,0.5)", padding: 4, borderRadius: 12, width: "fit-content" }}>
+        {([
+          { key: "pending",   label: `En attente (${pendingLeads.length})` },
+          { key: "converted", label: `Convertis (${convertedLeads.length})` },
+        ] as const).map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setActiveTab(key)}
+            style={{
+              padding: "8px 16px", borderRadius: 8, border: "none",
+              fontSize: 13, fontWeight: 500, fontFamily: "inherit",
+              cursor: "pointer", transition: "all 0.2s",
+              background: activeTab === key ? "var(--primary, #7c3aed)" : "transparent",
+              color: activeTab === key ? "white" : "#94a3b8",
+              boxShadow: activeTab === key ? "0 0 16px rgba(124,58,237,0.3)" : "none",
+            }}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
       {convertingLead && (
@@ -97,10 +135,21 @@ export default function LeadsPage() {
                 Cela va créer l&apos;organisation, le compte <b style={{ color: "#cbd5e1" }}>{convertingLead.email}</b> et la première campagne.
               </p>
             </div>
-            <button onClick={() => { setConvertingLead(null); setConvertResult(null); }} className="btn btn-ghost btn-sm">
+            <button onClick={() => { setConvertingLead(null); setConvertResult(null); setConvertError(null); }} className="btn btn-ghost btn-sm">
               Fermer
             </button>
           </div>
+
+          {convertError && (
+            <div style={{
+              display: "flex", alignItems: "flex-start", gap: 10,
+              padding: "12px 16px", borderRadius: 10, marginBottom: 8,
+              background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)",
+            }}>
+              <ArrowRight size={14} style={{ color: "#f87171", flexShrink: 0, marginTop: 2 }} />
+              <p style={{ color: "#f87171", fontSize: 13, margin: 0 }}>{convertError}</p>
+            </div>
+          )}
 
           {!convertResult ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -189,6 +238,49 @@ export default function LeadsPage() {
           </table>
         )}
       </div>
+
+      {/* Onglet Convertis */}
+      {activeTab === "converted" && (
+        <div style={{ background: "rgba(15,23,42,0.6)", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)", overflow: "hidden" }}>
+          {loading ? (
+            <div style={{ padding: "40px", textAlign: "center", color: "#64748b" }}>Chargement...</div>
+          ) : convertedLeads.length === 0 ? (
+            <div style={{ padding: "40px", textAlign: "center", color: "#64748b" }}>Aucun lead converti pour le moment.</div>
+          ) : (
+            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+              <thead>
+                <tr style={{ background: "rgba(30,41,59,0.8)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                  <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Organisation</th>
+                  <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Contact</th>
+                  <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Offre</th>
+                  <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase", textAlign: "center" }}>Converti le</th>
+                </tr>
+              </thead>
+              <tbody>
+                {convertedLeads.map(lead => (
+                  <tr key={lead.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+                    <td style={{ padding: "16px 24px" }}>
+                      <div style={{ fontWeight: 600, color: "#f8fafc", fontSize: 15 }}>{lead.organization}</div>
+                    </td>
+                    <td style={{ padding: "16px 24px" }}>
+                      <div style={{ color: "#e2e8f0", fontSize: 14 }}>{lead.contactName}</div>
+                      <div style={{ color: "#94a3b8", fontSize: 12 }}>{lead.email}</div>
+                    </td>
+                    <td style={{ padding: "16px 24px" }}>
+                      <span style={{ padding: "4px 10px", borderRadius: 999, fontSize: 11, fontWeight: 700, background: "rgba(16,185,129,0.12)", color: "#34d399" }}>
+                        {lead.planType}
+                      </span>
+                    </td>
+                    <td style={{ padding: "16px 24px", textAlign: "center", color: "#64748b", fontSize: 13 }}>
+                      {new Date(lead.createdAt).toLocaleDateString("fr-FR")}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
     </>
   );
 }

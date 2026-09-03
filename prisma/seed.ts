@@ -59,19 +59,34 @@ async function seedOrganizations() {
 
   const acme = await prisma.organization.upsert({
     where: { codeAccess: "ACME-2026-TEST" },
-    create: { name: "Acme Corp (B2B Test)", type: "B2B", codeAccess: "ACME-2026-TEST", siren: "123456789" },
+    create: { 
+      name: "Acme Corp (B2B Test)", type: "B2B", codeAccess: "ACME-2026-TEST", siren: "123456789",
+      contactName: "Jean Dupont", contactEmail: "jean.dupont@acme.com", contactPhone: "0102030405",
+      contractType: "SaaS Annuel", territory: "France", targetPopulation: 100, quota: 100,
+      startDate: new Date(), endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+    },
     update: {},
   });
 
   const mutu = await prisma.organization.upsert({
     where: { codeAccess: "MUTU-2026-TEST" },
-    create: { name: "Mutuelle Solis (B2B2C Test)", type: "B2B2C", codeAccess: "MUTU-2026-TEST", siren: "987654321" },
+    create: { 
+      name: "Mutuelle Solis (B2B2C Test)", type: "B2B2C", codeAccess: "MUTU-2026-TEST", siren: "987654321",
+      contactName: "Marie Durant", contactEmail: "marie.durant@solis.com", contactPhone: "0607080910",
+      contractType: "Partenariat Premium", territory: "National", targetPopulation: 5000, quota: 5000,
+      startDate: new Date(), endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+    },
     update: {},
   });
 
   const ville = await prisma.organization.upsert({
     where: { codeAccess: "VILLE-2026-TEST" },
-    create: { name: "Ville de Testville (Collectivité)", type: "COLLECTIVITE", codeAccess: "VILLE-2026-TEST" },
+    create: { 
+      name: "Ville de Testville (Collectivité)", type: "COLLECTIVITE", codeAccess: "VILLE-2026-TEST",
+      contactName: "Marc Maire", contactEmail: "contact@testville.fr", contactPhone: "0101010101",
+      contractType: "Déploiement Territorial", territory: "Testville", targetPopulation: 50000, quota: 10000,
+      startDate: new Date(), endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+    },
     update: {},
   });
 

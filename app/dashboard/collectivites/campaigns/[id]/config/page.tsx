@@ -11,6 +11,7 @@ export default function CampaignConfigPage() {
   
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"success" | "error" | "network-error" | null>(null);
   const [campaign, setCampaign] = useState<any>(null);
   
   const [codeAccess, setCodeAccess] = useState("");
@@ -89,13 +90,14 @@ export default function CampaignConfigPage() {
       });
 
       if (res.ok && resVar.ok) {
-        alert("Configuration sauvegardée avec succès.");
+        setSaveStatus("success");
+        setTimeout(() => setSaveStatus(null), 4000);
       } else {
-        alert("Erreur lors de la sauvegarde.");
+        setSaveStatus("error");
       }
     } catch (err) {
       console.error(err);
-      alert("Erreur réseau.");
+      setSaveStatus("network-error");
     } finally {
       setSaving(false);
     }
@@ -141,6 +143,23 @@ export default function CampaignConfigPage() {
               Sauvegarder
             </button>
           </div>
+
+          {/* Feedback sauvegarde */}
+          {saveStatus && (
+            <div style={{
+              padding: "12px 16px", borderRadius: 10, marginBottom: 16,
+              display: "flex", alignItems: "center", gap: 10,
+              background: saveStatus === "success" ? "rgba(52,211,153,0.08)" : "rgba(239,68,68,0.08)",
+              border: `1px solid ${saveStatus === "success" ? "rgba(52,211,153,0.25)" : "rgba(239,68,68,0.25)"}`,
+            }}>
+              <span style={{ fontSize: 14 }}>{saveStatus === "success" ? "✅" : "⚠️"}</span>
+              <p style={{ color: saveStatus === "success" ? "#34d399" : "#f87171", fontSize: 13, margin: 0 }}>
+                {saveStatus === "success" && "Configuration sauvegardée avec succès."}
+                {saveStatus === "error" && "Erreur lors de la sauvegarde. Vérifiez les champs et réessayez."}
+                {saveStatus === "network-error" && "Erreur réseau. Vérifiez votre connexion et réessayez."}
+              </p>
+            </div>
+          )}
 
           <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24, marginBottom: 24 }}>
             <h2 style={{ fontSize: 16, fontWeight: 600, color: "#f8fafc", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
