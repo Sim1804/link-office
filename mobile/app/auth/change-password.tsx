@@ -1,0 +1,10 @@
+import { router } from "expo-router";
+import { useState } from "react";
+import { Alert, Pressable, StyleSheet, Text, TextInput } from "react-native";
+import { Screen } from "@/components/Screen";
+import { BrandMark } from "@/components/BrandMark";
+import { COLORS, RADIUS } from "@/constants/theme";
+import { useAuth } from "@/context/AuthContext";
+import { changePassword } from "@/services/auth";
+export default function ChangePasswordScreen(){const {token,refresh}=useAuth();const[p1,setP1]=useState("");const[p2,setP2]=useState("");const[busy,setBusy]=useState(false);const submit=async()=>{if(!token)return;if(p1!==p2)return Alert.alert("Vérification","Les mots de passe ne correspondent pas.");if(p1.length<8||!/[A-Z]/.test(p1)||!/[0-9]/.test(p1))return Alert.alert("Mot de passe","8 caractères, une majuscule et un chiffre minimum.");setBusy(true);try{await changePassword(token,p1);await refresh();router.replace("/")}catch(e){Alert.alert("Impossible",e instanceof Error?e.message:"Réessayez.")}finally{setBusy(false)}};return <Screen><BrandMark/><Text style={styles.title}>Sécurisons votre compte</Text><Text style={styles.text}>Un nouveau mot de passe est requis avant de poursuivre.</Text><TextInput style={styles.input} placeholder="Nouveau mot de passe" placeholderTextColor="#9AAEAC" secureTextEntry value={p1} onChangeText={setP1}/><TextInput style={styles.input} placeholder="Confirmer" placeholderTextColor="#9AAEAC" secureTextEntry value={p2} onChangeText={setP2}/><Pressable style={styles.button} onPress={submit} disabled={busy}><Text style={styles.buttonText}>{busy?"Enregistrement…":"Enregistrer"}</Text></Pressable></Screen>}
+const styles=StyleSheet.create({title:{color:COLORS.depth,fontSize:29,fontWeight:"800",marginTop:28},text:{color:COLORS.textMuted,fontSize:13,lineHeight:20,marginVertical:10},input:{height:52,borderWidth:1,borderColor:COLORS.border,borderRadius:RADIUS.md,paddingHorizontal:14,color:COLORS.depth,marginTop:10,backgroundColor:COLORS.white},button:{backgroundColor:COLORS.link,borderRadius:RADIUS.pill,paddingVertical:15,alignItems:"center",marginTop:18},buttonText:{color:COLORS.white,fontWeight:"800"}})

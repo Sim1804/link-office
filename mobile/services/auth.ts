@@ -1,0 +1,80 @@
+import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
+import { API_URL } from "./api";
+
+const TOKEN_KEY = "linkoffice.mobile.token";
+
+async function setStoredToken(token: string | null) {
+  if (Platform.OS === "web") {
+    if (token) localStorage.setItem(TOKEN_KEY, token);
+    else localStorage.removeItem(TOKEN_KEY);
+    return;
+  }
+  if (token) await SecureStore.setItemAsync(TOKEN_KEY, token);
+  else await SecureStore.deleteItemAsync(TOKEN_KEY);
+}
+
+export async function getStoredToken() {
+  if (Platform.OS === "web") return localStorage.getItem(TOKEN_KEY);
+  return SecureStore.getItemAsync(TOKEN_KEY);
+}
+
+export async function clearStoredToken() {
+  await setStoredToken(null);
+}
+
+async function request<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
+  if (!API_URL) throw new Error("EXPO_PUBLIC_API_URL n'est pas configurée.");
+  const response = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {}),
+    },
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || body.detail || "Une erreur est survenue.");
+  return body as T;
+}
+
+export type MobileUser = {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  organizationId: string | null;
+  mustChangePassword: boolean;
+};
+
+export type AuthResponse = { token: string; user: MobileUser };
+
+export async function login(email: string, password: string) {
+  const result = await request<AuthResponse>("/api/mobile/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+  await setStoredToken(result.token);
+  return result.user;
+}
+
+export async function register(data: { prenom: string; nom: string; email: string; password: string; codeAccess?: string }) {
+  await request("/api/mobile/auth/register", { method: "POST", body: JSON.stringify(data) });
+  return login(data.email, data.password);
+}
+
+export async function me(token: string) {
+  return request<{ user: MobileUser }>("/api/mobile/auth/me", {}, token);
+}
+
+export async function changePassword(token: string, password: string) {
+  return request<{ success: boolean }>("/api/mobile/auth/change-password", {
+    method: "POST",
+    body: JSON.stringify({ password }),
+  }, token);
+}
+
+export async function logout() {
+  await clearStoredToken();
+}

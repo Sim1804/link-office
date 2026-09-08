@@ -16,12 +16,11 @@
 # next.js
 /.next/
 /out/
-
-# production
 /build
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
 
 # debug
@@ -30,8 +29,14 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env
+.env*.local
+.env.development
+.env.test
+.env.production
+.env.local
+.env.vercel*
 
 # vercel
 .vercel
@@ -39,3 +44,28 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDEs and Editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+# custom
+*.bak
+Documentation/
+scripts/
+
+# uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# database
+*.db
+*.db-journal
+.neon

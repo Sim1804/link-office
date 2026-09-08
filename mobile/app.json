@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Link Office",
+    "slug": "link-office-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "linkoffice",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.linkoffice.mobile",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.linkoffice.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#F4F1E8"
+      }
+    },
+    "extra": {
+      "apiUrl": "",
+      "router": {},
+      "eas": {
+        "projectId": "22402af0-86fb-4b52-b063-53ca63251c9b"
+      }
+    },
+    "web": {
+      "output": "static",
+      "bundler": "metro",
+      "favicon": "./public/icon-192.png"
+    }
+  }
+}
