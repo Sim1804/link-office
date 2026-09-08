@@ -17,6 +17,7 @@ export function MobileAccessQr() {
     }).then(setSrc).catch(() => {});
   }, [target]);
 
+  if (!target) return null;
 
   return (
     <section style={{ padding: "48px 0" }}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, ExternalLink, Smartphone, ShieldCheck, Apple, Chrome, Share2 } from "lucide-react";
+import { Download, ExternalLink, Smartphone, ShieldCheck, Apple, Chrome } from "lucide-react";
 
 const mobileWebUrl = process.env.NEXT_PUBLIC_MOBILE_WEB_URL || "";
 const androidApkUrl = process.env.NEXT_PUBLIC_ANDROID_APK_URL || "";
@@ -53,7 +53,7 @@ export default function MobileDownloadPage() {
                   </a>
                 ) : (
                   <div style={{ padding: 14, borderRadius: 12, background: "#E3EBE6", color: "#123D46", fontSize: 14 }}>
-                    L'APK n'est pas encore publié. Configurez <code>NEXT_PUBLIC_ANDROID_APK_URL</code> avec l'URL directe du fichier APK.
+                    L'APK n'est pas encore publié. Configurez <code>NEXT_PUBLIC_ANDROID_APK_URL</code> avec l'URL de votre APK EAS.
                   </div>
                 )}
               </div>
@@ -65,36 +65,22 @@ export default function MobileDownloadPage() {
           <section style={{ background: "white", borderRadius: 24, padding: 28, boxShadow: "0 12px 40px rgba(18,61,70,.10)", marginBottom: 18 }}>
             <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
               <div style={{ width: 48, height: 48, borderRadius: 14, background: "rgba(89,101,232,.10)", display: "grid", placeItems: "center", flexShrink: 0 }}><Apple size={23} color="#5965E8" /></div>
-              <div style={{ flex: 1 }}>
+              <div>
                 <h2 style={{ margin: 0, fontSize: 21 }}>L'utiliser comme une application</h2>
-                <p style={{ color: "#46636A", lineHeight: 1.6, margin: "8px 0 16px" }}>
-                  Sur iPhone, la version web installable fonctionne sans Expo Go. Ouvrez Link Office dans <strong>Safari</strong>, puis ajoutez-le à l'écran d'accueil pour l'utiliser comme une application.
+                <p style={{ color: "#46636A", lineHeight: 1.6, margin: "8px 0 12px" }}>
+                  Sur iPhone, un APK Android ne peut pas être installé. Ouvrez la version mobile dans Safari, puis choisissez <strong>Partager → Sur l’écran d’accueil</strong> et activez <strong>Ouvrir comme application Web</strong> si iOS propose cette option. Le raccourci doit être créé depuis la version mobile Expo, pas depuis cette page d’installation.
                 </p>
-
-                <div style={{ display: "grid", gap: 12, marginBottom: 18 }}>
-                  <div style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: 14, borderRadius: 14, background: "#F4F1E8" }}>
-                    <span style={{ fontWeight: 800, color: "#5965E8" }}>1.</span>
-                    <span>Ouvrez Link Office dans <strong>Safari</strong>.</span>
-                  </div>
-                  <div style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: 14, borderRadius: 14, background: "#F4F1E8" }}>
-                    <span style={{ fontWeight: 800, color: "#5965E8" }}>2.</span>
-                    <span>Appuyez sur <strong>Partager</strong> <Share2 size={15} style={{ verticalAlign: "-2px" }} /> puis <strong>Sur l'écran d'accueil</strong>.</span>
-                  </div>
-                  <div style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: 14, borderRadius: 14, background: "#F4F1E8" }}>
-                    <span style={{ fontWeight: 800, color: "#5965E8" }}>3.</span>
-                    <span>Activez <strong>Ouvrir comme une app web</strong> si l'option est proposée, puis appuyez sur <strong>Ajouter</strong>.</span>
-                  </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                  {(iosAppUrl || mobileWebUrl) ? (
+                    <a href={iosAppUrl || mobileWebUrl} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 18px", borderRadius: 12, background: "#5965E8", color: "white", textDecoration: "none", fontWeight: 800 }}>
+                      Ouvrir Link Office <ExternalLink size={17} />
+                    </a>
+                  ) : (
+                    <div style={{ padding: 14, borderRadius: 12, background: "#E3EBE6", color: "#123D46", fontSize: 14 }}>
+                      La version web mobile n'est pas encore configurée. Définissez <code>NEXT_PUBLIC_MOBILE_WEB_URL</code> sur l'URL publique de l'application mobile Expo.
+                    </div>
+                  )}
                 </div>
-
-                {iosAppUrl || mobileWebUrl ? (
-                  <a href={iosAppUrl || mobileWebUrl} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 18px", borderRadius: 12, background: "#5965E8", color: "white", textDecoration: "none", fontWeight: 800 }}>
-                    Ouvrir Link Office <ExternalLink size={17} />
-                  </a>
-                ) : (
-                  <div style={{ padding: 14, borderRadius: 12, background: "#E3EBE6", color: "#123D46", fontSize: 14 }}>
-                    La version web mobile n'est pas encore configurée. Définissez <code>NEXT_PUBLIC_MOBILE_WEB_URL</code> avec l'URL publique de l'application Expo Web.
-                  </div>
-                )}
               </div>
             </div>
           </section>
@@ -103,14 +89,10 @@ export default function MobileDownloadPage() {
         {platform === "other" && (
           <section style={{ background: "white", borderRadius: 24, padding: 28, boxShadow: "0 12px 40px rgba(18,61,70,.10)", marginBottom: 18 }}>
             <h2 style={{ marginTop: 0 }}>Choisissez votre appareil</h2>
-            <p style={{ color: "#46636A", lineHeight: 1.6 }}>Android peut recevoir directement l'APK. Sur iPhone, utilisez la version web installable sans Expo Go.</p>
+            <p style={{ color: "#46636A", lineHeight: 1.6 }}>Android peut recevoir directement l'APK. Sur iPhone, utilisez la version web installable ou TestFlight/App Store.</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
               {androidApkUrl && <a href={androidApkUrl} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 18px", borderRadius: 12, background: "#00A99D", color: "white", textDecoration: "none", fontWeight: 800 }}><Download size={17}/> APK Android</a>}
-              {mobileWebUrl ? (
-                <a href={mobileWebUrl} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 18px", borderRadius: 12, background: "#123D46", color: "white", textDecoration: "none", fontWeight: 800 }}><Chrome size={17}/> Version web mobile</a>
-              ) : (
-                <div style={{ padding: 13, borderRadius: 12, background: "#E3EBE6", fontSize: 14 }}>Configurez <code>NEXT_PUBLIC_MOBILE_WEB_URL</code> pour publier la version web mobile.</div>
-              )}
+              <a href={mobileWebUrl} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 18px", borderRadius: 12, background: "#123D46", color: "white", textDecoration: "none", fontWeight: 800 }}><Chrome size={17}/> Version web mobile</a>
             </div>
           </section>
         )}

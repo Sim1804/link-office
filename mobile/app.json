@@ -12,10 +12,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.linkoffice.mobile",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+      "bundleIdentifier": "com.linkoffice.mobile"
     },
     "android": {
       "package": "com.linkoffice.mobile",
@@ -34,6 +31,7 @@
       "output": "static",
       "bundler": "metro",
       "favicon": "./public/icon-192.png"
-    }
+    },
+    "description": "Link Office — Laboratoire du lien humain"
   }
 }
