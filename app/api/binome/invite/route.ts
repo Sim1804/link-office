@@ -73,13 +73,13 @@ export async function POST(req: Request) {
     }
 
     // [BUG FIX] Ignorer les paires REJECTED pour permettre une ré-invitation
-    const existing = await prisma.relationalPair.findFirst({
+    const existing = await prisma.binomeSuggestion.findFirst({
       where: {
         OR: [
-          { initiatorId: session.user.id, receiverId: receiver.id },
-          { initiatorId: receiver.id, receiverId: session.user.id }
+          { userAId: session.user.id, userBId: receiver.id },
+          { userAId: receiver.id, userBId: session.user.id }
         ],
-        NOT: { status: "REFUSEE" }
+        NOT: { status: "REJECTED" }
       }
     });
 
@@ -87,25 +87,30 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Un binôme ou une invitation est déjà en cours avec cet utilisateur" }, { status: 400 });
     }
 
-    // Supprimer l'ancienne paire REJECTED si elle existe avant d'en créer une nouvelle
-    await prisma.relationalPair.deleteMany({
+    // Supprimer l'ancienne suggestion REJECTED si elle existe avant d'en créer une nouvelle
+    await prisma.binomeSuggestion.deleteMany({
       where: {
         OR: [
-          { initiatorId: session.user.id, receiverId: receiver.id, status: "REFUSEE" },
-          { initiatorId: receiver.id, receiverId: session.user.id, status: "REFUSEE" }
+          { userAId: session.user.id, userBId: receiver.id, status: "REJECTED" },
+          { userAId: receiver.id, userBId: session.user.id, status: "REJECTED" }
         ]
       }
     });
 
-    const pair = await prisma.relationalPair.create({
+    const suggestion = await prisma.binomeSuggestion.create({
       data: {
-        initiatorId: session.user.id,
-        receiverId: receiver.id,
-        status: "PROPOSITION_ENVOYEE"
+        userAId: session.user.id,
+        userBId: receiver.id,
+        compatibilityScore: 100, // Manual invite implies 100% intentional
+        compatibilityReasons: ["Invitation directe"],
+        irisRecommendation: "Invitation manuelle envoyée par l'utilisateur.",
+        responseA: "ACCEPTED", // Auto-accept since they are inviting
+        responseB: "PENDING",
+        status: "PENDING"
       }
     });
 
-    return NextResponse.json({ success: true, pair });
+    return NextResponse.json({ success: true, suggestion });
   } catch (error: any) {
     console.error("[BINOME_INVITE_ERROR]", error);
     return NextResponse.json({ error: "Erreur interne" }, { status: 500 });

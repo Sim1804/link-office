@@ -28,9 +28,9 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     let orgType: OrganizationType = "B2B";
     let userRole: UserRole = "ADMIN_B2B";
 
-    if (lead.planType === "B2G_COLLECTIVITE") {
-      orgType = "COLLECTIVITE";
-      userRole = "ADMIN_COLLECTIVITE";
+    if (lead.planType === "B2G") {
+      orgType = "B2G";
+      userRole = "ADMIN_B2G";
     } else if (lead.planType === "B2B2C_PARTENAIRE") {
       orgType = "B2B2C";
       userRole = "ADMIN_B2B2C";

@@ -4,7 +4,9 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { DashboardBilanTab } from "./DashboardBilanTab";
 import { DashboardOrdonnanceTab } from "./DashboardOrdonnanceTab";
 import { DashboardAnalyseTab } from "./DashboardAnalyseTab";
-import { LayoutDashboard, ListChecks, BrainCircuit, History, ChevronRight } from "lucide-react";
+import { DashboardJournalTab } from "./DashboardJournalTab";
+import { DashboardRelationsTab } from "./DashboardRelationsTab";
+import { LayoutDashboard, ListChecks, BrainCircuit, History, ChevronRight, Sparkles, Users, Book, Lock } from "lucide-react";
 import Link from "next/link";
 
 export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: any, isPremium: boolean, DIMENSIONS_LABELS: any }) {
@@ -12,13 +14,15 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
   const router = useRouter();
   const pathname = usePathname();
   
-  const currentTab = searchParams.get("tab") || "bilan";
+  const currentTab = searchParams.get("tab") || "sante";
 
   const tabs = [
-    { id: "bilan", label: "Mon Bilan", shortLabel: "Bilan", icon: LayoutDashboard, description: "Vue d'ensemble" },
-    { id: "ordonnance", label: "Mon Ordonnance", shortLabel: "Ordonnance", icon: ListChecks, description: "Plan d'action" },
-    { id: "analyse", label: "Analyse Profonde", shortLabel: "Analyse", icon: BrainCircuit, description: "Psychologie" },
-    { id: "historique", label: "Mon Historique", shortLabel: "Historique", icon: History, description: "Évolution" },
+    { id: "sante", label: "Santé & Bilans", shortLabel: "Santé", icon: LayoutDashboard, description: "Vue d'ensemble" },
+    { id: "evolution", label: "Évolution & Historique", shortLabel: "Évolution", icon: History, description: "Trajectoire" },
+    { id: "plan", label: "Mon Plan & Actions", shortLabel: "Plan", icon: ListChecks, description: "Priorités" },
+    { id: "ressources", label: "Ressources & Prescription", shortLabel: "Ressources", icon: Sparkles, description: "Soutien" },
+    { id: "relations", label: "Mes Relations & Binôme", shortLabel: "Relations", icon: Users, description: "Entourage" },
+    { id: "journal", label: "Mon Journal", shortLabel: "Journal", icon: Book, description: "Notes" },
   ];
 
   const handleTabChange = (tabId: string) => {
@@ -94,17 +98,31 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
 
       {/* ── Contenu des onglets ── */}
       <div>
-        {currentTab === "bilan" && (
-          <DashboardBilanTab iqrh={iqrh} DIMENSIONS_LABELS={DIMENSIONS_LABELS} />
+        {currentTab === "sante" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+            <DashboardBilanTab iqrh={iqrh} DIMENSIONS_LABELS={DIMENSIONS_LABELS} />
+            <div style={{ marginTop: "16px" }}>
+              <h3 style={{ fontSize: "20px", fontWeight: "700", color: "#f8fafc", marginBottom: "16px" }}>Analyse approfondie</h3>
+              <DashboardAnalyseTab iqrh={iqrh} profil={profil} icr={icr} isPremium={isPremium} />
+            </div>
+          </div>
         )}
-        {currentTab === "ordonnance" && (
+        {currentTab === "plan" && (
           <DashboardOrdonnanceTab iqrh={iqrh} isPremium={isPremium} DIMENSIONS_LABELS={DIMENSIONS_LABELS} />
         )}
-        {currentTab === "analyse" && (
-          <DashboardAnalyseTab iqrh={iqrh} profil={profil} icr={icr} isPremium={isPremium} />
-        )}
-        {currentTab === "historique" && (
+        {currentTab === "evolution" && (
           <HistoriqueTab router={router} history={iqrh.history} isPremium={isPremium} />
+        )}
+        {currentTab === "ressources" && (
+          <div style={{ padding: 24, textAlign: "center", color: "#94a3b8" }}>
+            Bibliothèque de ressources et prescription (En construction)
+          </div>
+        )}
+        {currentTab === "relations" && (
+          <DashboardRelationsTab isPremium={isPremium} />
+        )}
+        {currentTab === "journal" && (
+          <DashboardJournalTab isPremium={isPremium} />
         )}
       </div>
 
@@ -203,32 +221,54 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
         {/* Paywall */}
         {!isPremium && (
           <div style={{
-            background: "rgba(11,15,25,0.8)", border: "1px solid rgba(124,58,237,0.3)",
-            padding: "40px", borderRadius: 20, textAlign: "center",
+            marginTop: 8,
+            borderRadius: 24,
+            border: "1px solid rgba(124,58,237,0.2)",
+            overflow: "hidden",
+            position: "relative",
           }}>
-            <div style={{
-              width: 52, height: 52, borderRadius: 14,
-              background: "rgba(124,58,237,0.12)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 16px",
-            }}>
-              <span style={{ fontSize: 22 }}>🔒</span>
+            {/* Blurred preview content */}
+            <div style={{ filter: "blur(6px)", opacity: 0.4, padding: "24px", pointerEvents: "none" }}>
+              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.08)", padding: 24, borderRadius: 20 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
+                  <div style={{ width: 150, height: 20, background: "rgba(255,255,255,0.1)", borderRadius: 4 }} />
+                  <div style={{ width: 80, height: 20, background: "rgba(255,255,255,0.1)", borderRadius: 4 }} />
+                </div>
+                <div style={{ width: "100%", height: 120, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12 }} />
+              </div>
             </div>
-            <h4 style={{ color: "#f8fafc", fontSize: 17, fontWeight: 700, marginBottom: 8 }}>
-              Historique réservé aux abonnés Premium
-            </h4>
-            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20, lineHeight: 1.6 }}>
-              Comparez vos passations dans le temps et visualisez l'évolution de chaque dimension relationnelle.
-            </p>
-            <Link href="/premium" style={{
-              display: "inline-block",
-              background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "#fff",
-              fontWeight: 600, padding: "11px 24px", borderRadius: 12,
-              textDecoration: "none", fontSize: 14,
-              boxShadow: "0 4px 16px rgba(124,58,237,0.35)",
+            {/* Gradient overlay */}
+            <div style={{
+              position: "absolute", inset: 0,
+              background: "linear-gradient(to bottom, rgba(11,15,25,0) 0%, rgba(11,15,25,0.97) 50%)",
+            }} />
+            {/* CTA */}
+            <div style={{
+              position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 2,
+              padding: "40px 32px 32px",
+              textAlign: "center",
             }}>
-              Débloquer l'historique →
-            </Link>
+              <div style={{
+                width: 48, height: 48, margin: "0 auto 16px",
+                borderRadius: 12, background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                <Lock size={20} color="#94a3b8" />
+              </div>
+              <h4 style={{ fontFamily: "Inter, sans-serif", color: "#f8fafc", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+                Historique réservé aux abonnés Premium
+              </h4>
+              <p style={{ color: "#64748b", fontSize: 14, marginBottom: 24, maxWidth: 420, margin: "0 auto 24px", lineHeight: 1.6 }}>
+                Comparez vos passations dans le temps et visualisez l'évolution de chaque dimension relationnelle.
+              </p>
+              <Link href="/premium" style={{
+                display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 10,
+                background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "white", fontWeight: 600, textDecoration: "none"
+              }}>
+                Débloquer l'historique →
+              </Link>
+            </div>
           </div>
         )}
 

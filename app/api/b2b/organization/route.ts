@@ -11,11 +11,11 @@ import { auth } from "@/lib/auth";
 import { z } from "zod";
 import { randomBytes } from "crypto";
 
-const ADMIN_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
+const ADMIN_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "SUPER_ADMIN"];
 
 const createOrgSchema = z.object({
   name: z.string().min(2, "Le nom est requis.").max(100),
-  type: z.enum(["B2B", "B2B2C", "COLLECTIVITE"]),
+  type: z.enum(["B2B", "B2B2C", "B2G"]),
   siren: z.string().optional(),
   domainName: z.string().optional(),
   logoUrl: z.string().url().optional().or(z.literal("")),

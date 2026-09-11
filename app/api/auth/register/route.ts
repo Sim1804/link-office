@@ -135,7 +135,7 @@ export async function POST(request: Request) {
         organizationId = matchingOrganization.id;
         if (matchingOrganization.type === "B2B") userRole = "EMPLOYEE";
         else if (matchingOrganization.type === "B2B2C") userRole = "MEMBER";
-        else if (matchingOrganization.type === "COLLECTIVITE") userRole = "CITIZEN";
+        else if (matchingOrganization.type === "B2G") userRole = "CITIZEN";
       }
     }
 

@@ -9,7 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import QRCode from "qrcode";
 
-const ADMIN_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
+const ADMIN_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "SUPER_ADMIN"];
 
 export async function GET(request: Request) {
   const session = await auth();

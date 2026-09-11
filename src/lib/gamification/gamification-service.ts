@@ -125,7 +125,7 @@ export class GamificationService {
       // Notification
       await NotificationService.send({
         userId,
-        type: "CHALLENGE_REMINDER", // Faute de type BADGE on utilise un existant ou on pourrait rajouter BADGE_UNLOCKED
+        type: "BADGE_UNLOCKED",
         title: "Nouveau badge débloqué ! 🏆",
         message: `Félicitations, vous avez obtenu le badge : ${badge.name}`,
         actionLink: "/mon-profil"

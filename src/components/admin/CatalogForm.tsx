@@ -169,22 +169,9 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
   };
 
   return (
-    <div className="card glass-strong" style={{ padding: "32px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 32, paddingBottom: 24, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ background: "rgba(167,139,250,0.15)", color: "#a78bfa", padding: 12, borderRadius: 14, border: "1px solid rgba(167,139,250,0.2)" }}>
-          <BookPlus size={24} />
-        </div>
-        <div>
-          <h2 style={{ fontSize: 20, fontWeight: 700, color: "#f8fafc" }}>
-            {isEdit ? `Éditer l'élément ${formData.id}` : `Créer un nouvel élément`}
-          </h2>
-          <p style={{ fontSize: 13, color: "#94a3b8", marginTop: 4 }}>
-            Les données alimentent à la fois le moteur de recommandation et les dashboards.
-          </p>
-        </div>
-      </div>
+    <div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         {error && (
           <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(244,63,94,0.08)", border: "1px solid rgba(244,63,94,0.2)", borderRadius: 12, padding: "12px 16px" }}>
             <AlertCircle size={18} style={{ color: "#f43f5e", flexShrink: 0 }} />
@@ -193,9 +180,12 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
         )}
 
         {/* SECTION BASE */}
-        <div className="space-y-6">
-          <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #7c3aed", paddingLeft: 12 }}>Informations Primaires</h3>
-          <div className="card grid grid-cols-1 md:grid-cols-2 gap-6" style={{ padding: 24 }}>
+        <div className="card" style={{ padding: 32 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+            <BookPlus size={24} style={{ color: "#c084fc" }} />
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Informations Principales</h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <FormGroup label="Identifiant Unique (ID) *">
               <input 
                 type="text" required disabled={isEdit}
@@ -246,94 +236,103 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
 
         {/* DYNAMIC FIELDS: RECOMMANDATIONS */}
         {formData.library === "Recommandations" && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
-            <div className="space-y-6">
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #a855f7", paddingLeft: 12 }}>Texte prêt à afficher *</h3>
-              <div className="card" style={{ padding: 24 }}>
-                <textarea 
-                  className={`${inputClass} min-h-[100px] resize-y`} 
-                  value={dataObj.texte_affiche || ""} 
-                  onChange={e => updateData("texte_affiche", e.target.value)} 
-                  placeholder="Le texte concret qui s'affichera sur l'ordonnance de l'utilisateur."
-                  required
-                />
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }} className="animate-in fade-in slide-in-from-bottom-4">
+            <div className="card" style={{ padding: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <BookPlus size={24} style={{ color: "#a855f7" }} />
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Texte prêt à afficher *</h2>
               </div>
+              <textarea 
+                className={`${inputClass} min-h-[100px] resize-y`} 
+                value={dataObj.texte_affiche || ""} 
+                onChange={e => updateData("texte_affiche", e.target.value)} 
+                placeholder="Le texte concret qui s'affichera sur l'ordonnance de l'utilisateur."
+                required
+              />
             </div>
 
-            <div className="space-y-6">
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #a855f7", paddingLeft: 12 }}>Critères de matching *</h3>
-              <div className="card" style={{ padding: 24 }}>
-                <textarea 
-                  className={`${inputClass} min-h-[100px] resize-y`} 
-                  value={dataObj.criteres_matching || ""} 
-                  onChange={e => updateData("criteres_matching", e.target.value)} 
-                  placeholder="Ex: Dimensions : Relations sociales | Profils : Ancre | Situations : Parent..."
-                  required
-                />
+            <div className="card" style={{ padding: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <BookPlus size={24} style={{ color: "#a855f7" }} />
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Critères de matching *</h2>
               </div>
+              <textarea 
+                className={`${inputClass} min-h-[100px] resize-y`} 
+                value={dataObj.criteres_matching || ""} 
+                onChange={e => updateData("criteres_matching", e.target.value)} 
+                placeholder="Ex: Dimensions : Relations sociales | Profils : Ancre | Situations : Parent..."
+                required
+              />
             </div>
           </div>
         )}
 
         {/* DYNAMIC FIELDS: MICRO-DEFIS */}
         {formData.library === "Micro-défis" && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
-             <div className="space-y-6">
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #0ea5e9", paddingLeft: 12 }}>Texte prêt à afficher *</h3>
-              <div className="card" style={{ padding: 24 }}>
-                <textarea 
-                  className={`${inputClass} min-h-[100px] resize-y`} 
-                  required 
-                  value={dataObj.texte_affiche || ""} 
-                  onChange={e => updateData("texte_affiche", e.target.value)} 
-                  placeholder="Texte direct pour le micro-défi..."
-                />
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }} className="animate-in fade-in slide-in-from-bottom-4">
+            <div className="card" style={{ padding: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <BookPlus size={24} style={{ color: "#0ea5e9" }} />
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Texte prêt à afficher *</h2>
               </div>
+              <textarea 
+                className={`${inputClass} min-h-[100px] resize-y`} 
+                required 
+                value={dataObj.texte_affiche || ""} 
+                onChange={e => updateData("texte_affiche", e.target.value)} 
+                placeholder="Texte direct pour le micro-défi..."
+              />
             </div>
 
-            <div className="space-y-6">
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #0ea5e9", paddingLeft: 12 }}>Ciblage *</h3>
-              <div className="card" style={{ padding: 24 }}>
-                <textarea 
-                  className={`${inputClass} min-h-[80px] resize-y`} 
-                  required 
-                  value={dataObj.ciblage || ""} 
-                  onChange={e => updateData("ciblage", e.target.value)} 
-                  placeholder="Ex: Dimension : Relations sociales | Besoin : Écoute profonde | Public : Étudiants"
-                />
+            <div className="card" style={{ padding: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <BookPlus size={24} style={{ color: "#0ea5e9" }} />
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Ciblage *</h2>
               </div>
+              <textarea 
+                className={`${inputClass} min-h-[80px] resize-y`} 
+                required 
+                value={dataObj.ciblage || ""} 
+                onChange={e => updateData("ciblage", e.target.value)} 
+                placeholder="Ex: Dimension : Relations sociales | Besoin : Écoute profonde | Public : Étudiants"
+              />
             </div>
 
-            <div className="space-y-6">
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #0ea5e9", paddingLeft: 12 }}>Progression *</h3>
-              <div className="card" style={{ padding: 24 }}>
-                <textarea 
-                  className={`${inputClass} min-h-[80px] resize-y`} 
-                  required 
-                  value={dataObj.progression || ""} 
-                  onChange={e => updateData("progression", e.target.value)} 
-                  placeholder="Ex: Difficulté : Facile | Temps : 10 min | Impact : 5.0/5"
-                />
+            <div className="card" style={{ padding: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <BookPlus size={24} style={{ color: "#0ea5e9" }} />
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Progression *</h2>
               </div>
+              <textarea 
+                className={`${inputClass} min-h-[80px] resize-y`} 
+                required 
+                value={dataObj.progression || ""} 
+                onChange={e => updateData("progression", e.target.value)} 
+                placeholder="Ex: Difficulté : Facile | Temps : 10 min | Impact : 5.0/5"
+              />
             </div>
           </div>
         )}
 
         {/* DYNAMIC FIELDS: PARTENAIRES */}
         {formData.library === "Partenaires" && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
-             <div className="space-y-6">
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #f59e0b", paddingLeft: 12 }}>Contenus Textuels</h3>
-              <div className="card grid grid-cols-1 gap-6" style={{ padding: 24 }}>
-                <FormGroup label="Description du Partenaire *">
-                  <textarea className={`${inputClass} min-h-[100px] resize-y`} required value={dataObj.description || ""} onChange={e => updateData("description", e.target.value)} />
-                </FormGroup>
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }} className="animate-in fade-in slide-in-from-bottom-4">
+            <div className="card" style={{ padding: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <BookPlus size={24} style={{ color: "#f59e0b" }} />
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Contenus Textuels</h2>
               </div>
+              <FormGroup label="Description du Partenaire *">
+                <textarea className={`${inputClass} min-h-[100px] resize-y`} required value={dataObj.description || ""} onChange={e => updateData("description", e.target.value)} />
+              </FormGroup>
             </div>
 
-            <div className="space-y-6">
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #f59e0b", paddingLeft: 12 }}>Critères de Matching</h3>
-              <div className="card grid grid-cols-1 md:grid-cols-2 gap-6" style={{ padding: 24 }}>
+            <div className="card" style={{ padding: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <BookPlus size={24} style={{ color: "#f59e0b" }} />
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Critères de Matching</h2>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 <ArrayInput label="Besoins Couverts" value={dataObj.besoins_couverts || ""} onChange={v => updateData("besoins_couverts", v)} />
                 <ArrayInput label="Situations Ciblées" value={dataObj.situations_ciblees || ""} onChange={v => updateData("situations_ciblees", v)} />
                 <ArrayInput label="Publics Cibles" value={dataObj.public_cible || ""} onChange={v => updateData("public_cible", v)} />
@@ -343,15 +342,18 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
               </div>
             </div>
 
-            <div className="space-y-6">
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #f59e0b", paddingLeft: 12 }}>Statut & Compatibilités</h3>
-              <div className="card grid grid-cols-1 md:grid-cols-2 gap-6" style={{ padding: 24 }}>
+            <div className="card" style={{ padding: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <BookPlus size={24} style={{ color: "#f59e0b" }} />
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Statut & Compatibilités</h2>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
                  <FormGroup label="Type Partenaire"><input type="text" className={inputClass} value={dataObj.type_partenaire || ""} onChange={e => updateData("type_partenaire", e.target.value)} /></FormGroup>
                  <FormGroup label="Niveau Validation"><input type="text" className={inputClass} value={dataObj.niveau_validation || ""} onChange={e => updateData("niveau_validation", e.target.value)} /></FormGroup>
                  <FormGroup label="Tags (Mots clés internes)"><input type="text" className={inputClass} value={dataObj.tags || ""} onChange={e => updateData("tags", e.target.value)} /></FormGroup>
                  <FormGroup label="Source Interne"><input type="text" className={inputClass} value={dataObj.source_interne || ""} onChange={e => updateData("source_interne", e.target.value)} /></FormGroup>
               </div>
-              <div className="card grid grid-cols-2 md:grid-cols-4 gap-4 mt-4" style={{ padding: 24 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16 }}>
                  <ToggleButton label="B2C" checked={dataObj.compatible_b2c === "Oui"} onChange={c => updateData("compatible_b2c", c ? "Oui" : "Non")} />
                  <ToggleButton label="B2B" checked={dataObj.compatible_b2b === "Oui"} onChange={c => updateData("compatible_b2b", c ? "Oui" : "Non")} />
                  <ToggleButton label="B2B2C" checked={dataObj.compatible_b2b2c === "Oui"} onChange={c => updateData("compatible_b2b2c", c ? "Oui" : "Non")} />
@@ -363,16 +365,17 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
 
         {/* FALLBACK: unknown library type (ex: Besoins) */}
         {!['Recommandations', 'Micro-défis', 'Partenaires'].includes(formData.library) && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-            <h3 style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", borderLeft: "4px solid #64748b", paddingLeft: 12 }}>Données brutes ({formData.library})</h3>
-            <div className="card" style={{ padding: 24 }}>
-              <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 16 }}>
-                Ce type de bibliothèque (« {formData.library} ») est géré en lecture seule. Vous pouvez modifier le titre et la catégorie.
-              </p>
-              <FormGroup label="Description">
-                <textarea className={`${inputClass} min-h-[80px] resize-y`} value={dataObj.description || ""} onChange={e => updateData("description", e.target.value)} />
-              </FormGroup>
+          <div className="card animate-in fade-in slide-in-from-bottom-4" style={{ padding: 32 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+              <BookPlus size={24} style={{ color: "#64748b" }} />
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Données brutes ({formData.library})</h2>
             </div>
+            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 24 }}>
+              Ce type de bibliothèque (« {formData.library} ») est géré en lecture seule. Vous pouvez modifier le titre et la catégorie.
+            </p>
+            <FormGroup label="Description">
+              <textarea className={`${inputClass} min-h-[80px] resize-y`} value={dataObj.description || ""} onChange={e => updateData("description", e.target.value)} />
+            </FormGroup>
           </div>
         )}
 

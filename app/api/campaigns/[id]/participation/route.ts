@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const ALLOWED_ROLES = ["ADMIN_COLLECTIVITE", "ADMIN_B2B", "ADMIN_B2B2C", "SUPER_ADMIN"];
+const ALLOWED_ROLES = ["ADMIN_B2G", "ADMIN_B2B", "ADMIN_B2B2C", "SUPER_ADMIN"];
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;

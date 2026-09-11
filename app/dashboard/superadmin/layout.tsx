@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
-import { Building2, Inbox, BookOpen, Users } from "lucide-react";
+import { Building2, Inbox, BookOpen, Users, BrainCircuit, Newspaper } from "lucide-react";
 
 export default function SuperAdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -13,6 +13,8 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
     { name: "Utilisateurs", href: "/dashboard/superadmin/users", icon: Users },
     { name: "Prospects", href: "/dashboard/superadmin/leads", icon: Inbox },
     { name: "Catalogue", href: "/dashboard/superadmin/catalog", icon: BookOpen },
+    { name: "Matching IRIS", href: "/dashboard/superadmin/matching", icon: BrainCircuit },
+    { name: "Média (CMS)", href: "/dashboard/superadmin/media", icon: Newspaper },
   ];
 
   return (

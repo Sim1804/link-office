@@ -22,7 +22,7 @@ interface OrgInfo {
 function getRoleLabel(type: string) {
   if (type === "B2B") return "collaborateur";
   if (type === "B2B2C") return "adhérent";
-  if (type === "COLLECTIVITE") return "habitant";
+  if (type === "B2G") return "habitant";
   return "membre";
 }
 

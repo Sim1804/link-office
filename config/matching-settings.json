@@ -1,0 +1,7 @@
+{
+  "minimumThreshold": 75,
+  "synergyWeight": 60,
+  "similarityWeight": 40,
+  "geographicWeight": 0,
+  "ageWeight": 0
+}

@@ -312,9 +312,14 @@ function Placeholder({ title, text }: { title: string; text: string }) {
 
 function PremiumLock({ title, text }: { title: string; text: string }) {
   return (
-    <div style={{ padding: 32, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 24, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <div style={{ width: 48, height: 48, background: "rgba(255,255,255,0.05)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-        <Lock size={20} color="var(--text-3)" />
+    <div className="card" style={{ padding: 32, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", background: "radial-gradient(circle at center, rgba(17,24,39,0.3) 0%, rgba(11,15,25,0.6) 100%)" }}>
+      <div style={{
+        width: 52, height: 52, borderRadius: 16,
+        background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+        display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16,
+        boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
+      }}>
+        <Lock size={22} color="#f8fafc" />
       </div>
       <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)", marginBottom: 8 }}>{title}</h2>
       <p style={{ fontSize: 13, color: "var(--text-3)", lineHeight: 1.5, maxWidth: 300 }}>{text}</p>

@@ -9,7 +9,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
   try {
     const session = await auth();
     if (!session?.user?.id) return NextResponse.json({ error: "Non autorise" }, { status: 401 });
-    if (!["ADMIN_B2B","ADMIN_COLLECTIVITE","SUPER_ADMIN"].includes(session.user.role ?? "")) {
+    if (!["ADMIN_B2B","ADMIN_B2G","SUPER_ADMIN"].includes(session.user.role ?? "")) {
       return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
     }
 

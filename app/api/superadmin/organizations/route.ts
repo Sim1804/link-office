@@ -9,7 +9,7 @@ const mapTypeToRole = (type: string): UserRole => {
   switch (type) {
     case "B2B": return "ADMIN_B2B";
     case "B2B2C": return "ADMIN_B2B2C";
-    case "COLLECTIVITE": return "ADMIN_COLLECTIVITE";
+    case "B2G": return "ADMIN_B2G";
     default: return "ADMIN_B2B";
   }
 };
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       include: {
         _count: { select: { campaigns: true, users: true } },
         users: { 
-          where: { role: { in: ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_COLLECTIVITE"] } },
+          where: { role: { in: ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G"] } },
           select: { email: true, firstName: true, lastName: true },
           take: 1
         }

@@ -37,6 +37,7 @@ import { NotificationBell } from "./NotificationBell";
 
 /** Liens de navigation pour les visiteurs non connectés */
 const publicLinks = [
+  { href: "/media", label: "Média & Ressources" },
   { href: "/#features", label: "Fonctionnalités" },
   { href: "/#methode", label: "La méthode" },
   { href: "/business", label: "Pour les Entreprises" },
@@ -122,7 +123,7 @@ export function Navbar() {
       const links = [
         { href: "/dashboard", label: "Mon Evaluation", icon: LayoutDashboard },
         { href: "/mon-profil", label: "Ma Progression", icon: User },
-        { href: "/iris", label: "IA IRIS", icon: MessageCircle },
+        { href: "/media", label: "Espace média", icon: BookOpen },
       ];
       // Binome uniquement visible pour les abonnes PREMIUM+
       if (isPremiumPlus) {
@@ -136,7 +137,7 @@ export function Navbar() {
 
 
   return (
-    <header style={{
+    <header className="global-navbar" style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
       background: "rgba(11,15,25,0.85)",
       backdropFilter: "blur(16px)",

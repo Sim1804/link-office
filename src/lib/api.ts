@@ -84,8 +84,8 @@ export async function getDashboard(userId: string, token?: string): Promise<Dash
 }
 
 /** Explication des résultats par IRIS */
-export async function getIrisExplication(userId: string): Promise<{ explication: string }> {
-  return apiFetch<{ explication: string }>(`/api/iris/explication?user_id=${userId}`);
+export async function getIrisExplication(): Promise<{ explication: string }> {
+  return apiFetch<{ explication: string }>(`/api/iris/explication`);
 }
 
 /** Démarre une conversation IRIS Coach */

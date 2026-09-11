@@ -30,18 +30,63 @@ function contains(value: string, expected: string): boolean {
 }
 
 /**
- * Vérifie si la dimension extraite (qui peut contenir plusieurs valeurs séparées par des points-virgules)
- * correspond à la dimension cible de l'utilisateur.
- * @param rawDimensionString - La chaîne brute (ex: "Relations sociales;Relations affectives")
- * @param targetDimension - La dimension prioritaire calculée pour l'utilisateur
+ * Sépare une chaîne BDD par virgule ou point-virgule et cherche une correspondance exacte ou très proche.
+ */
+function containsValue(rawValues: string, expected: string): boolean {
+  if (!rawValues || !expected) return false;
+  const normalizedExpected = expected.toLocaleLowerCase("fr-FR").trim();
+  
+  return rawValues.split(/[,;]/).some(chunk => {
+    const normalizedChunk = chunk.trim().toLocaleLowerCase("fr-FR");
+    if (!normalizedChunk) return false;
+    return normalizedChunk.includes(normalizedExpected) || normalizedExpected.includes(normalizedChunk);
+  });
+}
+
+/**
+ * Normalise un nom de profil en enlevant les articles (Le, La, L') pour faciliter la comparaison.
+ */
+function normalizeProfile(profile: string): string {
+  return profile.toLocaleLowerCase("fr-FR")
+    .replace(/^(le |la |l'|les )/, "")
+    .trim();
+}
+
+/**
+ * Vérifie si la liste de profils cibles contient le profil attendu, de façon robuste.
+ */
+function containsProfile(rawProfiles: string, expectedProfile: string): boolean {
+  if (!rawProfiles || !expectedProfile) return false;
+  const normalizedExpected = normalizeProfile(expectedProfile);
+  
+  return rawProfiles.split(/[,;]/).some(chunk => {
+    const normalizedChunk = normalizeProfile(chunk);
+    if (!normalizedChunk) return false;
+    return normalizedChunk === normalizedExpected || normalizedChunk.includes(normalizedExpected) || normalizedExpected.includes(normalizedChunk);
+  });
+}
+
+/**
+ * Vérifie si la dimension extraite correspond à la dimension cible de l'utilisateur de manière stricte.
  */
 function matchesDimension(rawDimensionString: string, targetDimension: string): boolean {
   if (!rawDimensionString) return false;
   const normalizedTarget = targetDimension.toLocaleLowerCase("fr-FR");
   
-  return rawDimensionString.split(';').some(chunk => {
+  return rawDimensionString.split(/[,;]/).some(chunk => {
     const normalizedChunk = chunk.trim().toLocaleLowerCase("fr-FR");
-    return normalizedChunk && (normalizedTarget.includes(normalizedChunk) || normalizedChunk.includes(normalizedTarget));
+    if (!normalizedChunk) return false;
+    
+    if (normalizedTarget === normalizedChunk) return true;
+    if (normalizedChunk === "toutes" || normalizedChunk === "tous" || normalizedChunk === "toutes les dimensions") return true;
+    
+    if (normalizedTarget.includes("social") && normalizedChunk.includes("social")) return true;
+    if (normalizedTarget.includes("affecti") && normalizedChunk.includes("affecti")) return true;
+    if (normalizedTarget.includes("sentimental") && normalizedChunk.includes("sentimental")) return true;
+    if (normalizedTarget.includes("professionnel") && normalizedChunk.includes("professionnel")) return true;
+    if (normalizedTarget.includes("soi") && normalizedChunk.includes("soi")) return true;
+    
+    return false;
   });
 }
 
@@ -49,16 +94,16 @@ function calculateScore(item: any, context: { situations: string[]; profileName:
   let score = 0;
   
   // 1. Situation de vie
-  if (context.situations.some(sit => contains(text(item.data, "situations_ciblees") || text(item.data, "public_cible"), sit))) {
+  if (context.situations.some(sit => containsValue(text(item.data, "situations_ciblees") || text(item.data, "public_cible"), sit))) {
     score += 3;
   }
   
   // 2. Profils (Principal et Secondaire)
-  if (context.profileName && contains(text(item.data, "profils_cibles"), context.profileName)) score += 2;
-  if (context.secondaryProfileName && contains(text(item.data, "profils_cibles"), context.secondaryProfileName)) score += 1;
+  if (context.profileName && containsProfile(text(item.data, "profils_cibles"), context.profileName)) score += 2;
+  if (context.secondaryProfileName && containsProfile(text(item.data, "profils_cibles"), context.secondaryProfileName)) score += 1;
 
   // 3. Besoins dominants
-  if (context.dominantNeeds && context.dominantNeeds.some(need => contains(text(item.data, "besoins_cibles"), need))) {
+  if (context.dominantNeeds && context.dominantNeeds.some(need => containsValue(text(item.data, "besoins_cibles"), need))) {
     score += 2;
   }
 
@@ -210,8 +255,8 @@ export class PrescriptionService {
         const partnerNeeds = text(item.data, "besoins_cibles");
         const partnerSituations = text(item.data, "situations_ciblees") || text(item.data, "public_cible");
 
-        const matchesNeed = context.dominantNeeds.some(need => contains(partnerNeeds, need));
-        const matchesSituation = context.situations.some(sit => contains(partnerSituations, sit));
+        const matchesNeed = context.dominantNeeds.some(need => containsValue(partnerNeeds, need));
+        const matchesSituation = context.situations.some(sit => containsValue(partnerSituations, sit));
 
         return matchesNeed || matchesSituation;
       })

@@ -32,11 +32,7 @@ export default function PremiumPage() {
     <>
       <Navbar />
       <main className="page-main" style={{ position: "relative", overflow: "hidden" }}>
-        {/* Blobs for premium effect */}
-        <div className="blob-violet" style={{ top: "-10%", right: "-10%", width: 600, height: 600, opacity: 0.5 }} />
-        <div className="blob-cyan" style={{ bottom: "-10%", left: "-10%", width: 600, height: 600, opacity: 0.5 }} />
-
-        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "80px 20px", position: "relative", zIndex: 10 }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 20px 80px", position: "relative", zIndex: 10 }}>
           
           <div style={{ textAlign: "center", marginBottom: 60 }}>
             <div style={{

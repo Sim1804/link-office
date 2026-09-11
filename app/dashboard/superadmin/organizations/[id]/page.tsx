@@ -104,8 +104,8 @@ export default function OrganizationDetailPage(props: { params: Promise<{ id: st
           <div style={{ display: "flex", gap: 12, marginTop: 12, alignItems: "center" }}>
             <span style={{ 
               padding: "4px 10px", borderRadius: 999, fontSize: 11, fontWeight: 700, 
-              background: org.type === "B2B2C" ? "rgba(245,158,11,0.15)" : org.type === "COLLECTIVITE" ? "rgba(56,189,248,0.15)" : "rgba(124,58,237,0.15)",
-              color: org.type === "B2B2C" ? "#fcd34d" : org.type === "COLLECTIVITE" ? "#7dd3fc" : "#c084fc",
+              background: org.type === "B2B2C" ? "rgba(245,158,11,0.15)" : org.type === "B2G" ? "rgba(56,189,248,0.15)" : "rgba(124,58,237,0.15)",
+              color: org.type === "B2B2C" ? "#fcd34d" : org.type === "B2G" ? "#7dd3fc" : "#c084fc",
             }}>
               {org.type}
             </span>

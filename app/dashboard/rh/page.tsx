@@ -81,9 +81,6 @@ export default function B2BDashboard() {
     <>
       <Navbar />
       <main className="page-main">
-        <div className="blob-violet" />
-        <div className="blob-cyan" />
-
         <div className="page-container-wide" style={{ position: "relative", zIndex: 1 }}>
 
           {/* ── Header ── */}
@@ -93,7 +90,7 @@ export default function B2BDashboard() {
                 <Building2 style={{ width: 26, height: 26, color: "#a78bfa" }} />
               </div>
               <div>
-                <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "#f8fafc", marginBottom: 4 }}>
+                <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "#f8fafc", marginBottom: 4 }}>
                   Tableau de bord RH
                 </h1>
                 <p style={{ color: "#64748b", fontSize: 14 }}>

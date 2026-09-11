@@ -7,6 +7,9 @@ import { BinomeInviteForm } from "./BinomeInviteForm";
 import { BinomeRespondButtons } from "./BinomeRespondButtons";
 import { BinomeSettings } from "./BinomeSettings";
 import { BinomeSuggest } from "./BinomeSuggest";
+import { BinomeDiscovery } from "./BinomeDiscovery";
+import { BinomePreferencesForm } from "./BinomePreferencesForm";
+import { ActiveBinomeDashboard } from "./ActiveBinomeDashboard";
 
 export const metadata = {
   title: "Binôme Relationnel — LinkOffice",
@@ -30,6 +33,7 @@ export default async function BinomePage() {
       subscription: true,
       campaignId: true,
       campaign: { select: { offer: true, status: true } },
+      binomePreference: true,
     },
   });
 
@@ -118,26 +122,26 @@ export default async function BinomePage() {
 
   // Fetch data
   const [pendingReceived, pendingSent, acceptedPairs] = await Promise.all([
-    prisma.relationalPair.findMany({
-      where: { receiverId: userId, status: "PROPOSITION_ENVOYEE" },
-      include: { initiator: { select: { id: true, firstName: true, lastName: true, email: true } } },
-      orderBy: { createdAt: "desc" },
+    prisma.binomeSuggestion.findMany({
+      where: { userBId: userId, responseB: "PENDING" },
+      include: { userA: { select: { id: true, firstName: true, lastName: true, email: true } } },
+      orderBy: { suggestionDate: "desc" },
     }),
-    prisma.relationalPair.findMany({
-      where: { initiatorId: userId, status: "PROPOSITION_ENVOYEE" },
-      include: { receiver: { select: { id: true, firstName: true, lastName: true, email: true } } },
-      orderBy: { createdAt: "desc" },
+    prisma.binomeSuggestion.findMany({
+      where: { userAId: userId, responseA: "ACCEPTED", responseB: "PENDING" },
+      include: { userB: { select: { id: true, firstName: true, lastName: true, email: true } } },
+      orderBy: { suggestionDate: "desc" },
     }),
-    prisma.relationalPair.findMany({
+    prisma.binome.findMany({
       where: {
         OR: [
-          { initiatorId: userId, status: "ACCEPTEE" },
-          { receiverId: userId, status: "ACCEPTEE" },
+          { userAId: userId, status: "ACTIVE" },
+          { userBId: userId, status: "ACTIVE" },
         ],
       },
       include: {
-        initiator: { select: { id: true, firstName: true, lastName: true } },
-        receiver: { select: { id: true, firstName: true, lastName: true } },
+        userA: { select: { id: true, firstName: true, lastName: true } },
+        userB: { select: { id: true, firstName: true, lastName: true } },
       },
       orderBy: { updatedAt: "desc" },
     }),
@@ -214,11 +218,23 @@ export default async function BinomePage() {
 
           <div style={{ display: "grid", gap: 24 }}>
 
-            {/* ── 1. Paramètre IRIS ── */}
-            <BinomeSettings initialOptIn={user?.matchingOptIn ?? false} />
+            {/* ── 0. State Management (Discovery / Preferences / Dashboard) ── */}
+            {acceptedPairs.length > 0 ? (
+               <ActiveBinomeDashboard 
+                  binome={acceptedPairs[0]} 
+                  currentUserId={userId} 
+               />
+            ) : !user?.binomePreference ? (
+               <BinomeDiscovery />
+            ) : !user.binomePreference.optIn ? (
+               <BinomePreferencesForm initialData={user.binomePreference} />
+            ) : (
+              <>
+                {/* ── 1. Paramètre IRIS ── */}
+                <BinomeSettings initialOptIn={user.matchingOptIn} />
 
-            {/* ── 2. Suggestions IRIS ── */}
-            <BinomeSuggest optIn={user?.matchingOptIn ?? false} />
+                {/* ── 2. Suggestions IRIS ── */}
+                <BinomeSuggest optIn={user.matchingOptIn} />
 
             {/* ── 3. Invitations reçues (en attente) ── */}
             {pendingReceived.length > 0 && (
@@ -242,7 +258,7 @@ export default async function BinomePage() {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   {pendingReceived.map((pair, i) => {
-                    const p = pair.initiator;
+                    const p = pair.userA;
                     const initial = `${p.firstName[0]}${p.lastName[0]}`.toUpperCase();
                     const color = avatarColors[i % avatarColors.length];
                     return (
@@ -315,7 +331,7 @@ export default async function BinomePage() {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {pendingSent.map((pair, i) => {
-                    const p = pair.receiver;
+                    const p = pair.userB;
                     const initial = `${p.firstName[0]}${p.lastName[0]}`.toUpperCase();
                     const color = avatarColors[i % avatarColors.length];
                     return (
@@ -357,100 +373,8 @@ export default async function BinomePage() {
               </section>
             )}
 
-            {/* ── 6. Binômes actifs ── */}
-            {acceptedPairs.length > 0 && (
-              <section>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-                  <div style={{
-                    width: 6, height: 6, borderRadius: "50%", background: "#10b981",
-                    boxShadow: "0 0 8px #10b981",
-                  }} />
-                  <h2 style={{ color: "#f8fafc", fontSize: 15, fontWeight: 700, margin: 0 }}>
-                    Vos Binômes Actifs
-                    <span style={{
-                      marginLeft: 8, fontSize: 12, fontWeight: 700,
-                      background: "rgba(16,185,129,0.12)",
-                      color: "#34d399", border: "1px solid rgba(16,185,129,0.25)",
-                      padding: "2px 8px", borderRadius: 999,
-                    }}>
-                      {acceptedPairs.length}
-                    </span>
-                  </h2>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {acceptedPairs.map((pair, i) => {
-                    const partner = pair.initiatorId === userId ? pair.receiver : pair.initiator;
-                    const initial = `${partner.firstName[0]}${partner.lastName[0]}`.toUpperCase();
-                    const color = avatarColors[i % avatarColors.length];
-                    return (
-                      <div key={pair.id} style={{
-                        display: "flex", alignItems: "center", gap: 16,
-                        background: "linear-gradient(135deg, rgba(16,185,129,0.06) 0%, rgba(255,255,255,0.02) 100%)",
-                        border: "1px solid rgba(16,185,129,0.18)",
-                        padding: "18px 22px", borderRadius: 18,
-                        flexWrap: "wrap",
-                        transition: "border-color 0.2s",
-                      }}>
-                        {/* Avatar */}
-                        <div style={{
-                          width: 52, height: 52, borderRadius: "50%",
-                          background: `${color}20`,
-                          border: `2px solid ${color}60`,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          color, fontWeight: 800, fontSize: 18, flexShrink: 0,
-                          boxShadow: `0 0 20px ${color}25`,
-                        }}>
-                          {initial}
-                        </div>
-
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                            <p style={{ color: "#f8fafc", fontWeight: 700, fontSize: 16, margin: 0 }}>
-                              {partner.firstName} {partner.lastName}
-                            </p>
-                            <span style={{
-                              fontSize: 11, fontWeight: 600, color: "#34d399",
-                              background: "rgba(16,185,129,0.1)",
-                              padding: "2px 8px", borderRadius: 999,
-                            }}>
-                              Actif
-                            </span>
-                          </div>
-                          <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>
-                            Partenaire de développement relationnel
-                          </p>
-                        </div>
-
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                          <div style={{
-                            display: "flex", alignItems: "center", gap: 6,
-                            background: "rgba(255,255,255,0.04)",
-                            border: "1px solid rgba(255,255,255,0.07)",
-                            padding: "8px 14px", borderRadius: 10,
-                          }}>
-                            <Handshake size={14} style={{ color: "#34d399" }} />
-                            <span style={{ color: "#94a3b8", fontSize: 13, fontWeight: 500 }}>
-                              Défi commun
-                            </span>
-                            <span style={{
-                              fontSize: 11, color: "#475569",
-                              background: "rgba(255,255,255,0.04)",
-                              padding: "1px 6px", borderRadius: 4,
-                              border: "1px solid rgba(255,255,255,0.06)",
-                            }}>
-                              Bientôt
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
-
-            {/* ── État vide ── */}
-            {acceptedPairs.length === 0 && pendingReceived.length === 0 && pendingSent.length === 0 && (
+            {/* ── État vide (aucune invitation ni binôme) ── */}
+            {pendingReceived.length === 0 && pendingSent.length === 0 && (
               <div style={{
                 textAlign: "center",
                 padding: "48px 32px",
@@ -473,6 +397,9 @@ export default async function BinomePage() {
                   Activez les suggestions IRIS ou invitez directement un collègue pour commencer.
                 </p>
               </div>
+            )}
+
+            </>
             )}
 
           </div>

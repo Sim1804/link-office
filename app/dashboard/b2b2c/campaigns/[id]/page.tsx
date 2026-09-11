@@ -41,6 +41,8 @@ export default function PartnerCampaignDetailPage() {
           description: d.campaign.description || "",
           endDate: new Date(d.campaign.endDate).toISOString().split("T")[0],
           status: d.campaign.status,
+          binomeEnabled: d.campaign.questionnaireConfig?.binomeEnabled ?? false,
+          requireSameDepartment: d.campaign.questionnaireConfig?.requireSameDepartment ?? false,
         });
       }
       if ((r2 as any).ok) setStats(await (r2 as any).json());
@@ -58,7 +60,15 @@ export default function PartnerCampaignDetailPage() {
   const handleSaveEdit = async () => {
     setSaving(true);
     try {
-      const r = await fetch("/api/campaigns/" + id, { method: "PATCH", headers: { "Content-Type":"application/json" }, body: JSON.stringify(editForm) });
+      const payload = {
+        ...editForm,
+        questionnaireConfig: {
+          ...(campaign.questionnaireConfig || {}),
+          binomeEnabled: editForm.binomeEnabled,
+          requireSameDepartment: editForm.requireSameDepartment
+        }
+      };
+      const r = await fetch("/api/campaigns/" + id, { method: "PATCH", headers: { "Content-Type":"application/json" }, body: JSON.stringify(payload) });
       if (r.ok) { await loadCampaign(); setEditMode(false); }
     } finally { setSaving(false); }
   };
@@ -281,6 +291,23 @@ export default function PartnerCampaignDetailPage() {
                     ) : <p style={{ color:"#34d399", fontSize:14, fontWeight:600 }}>{STATUS_LABELS[campaign.status]}</p>}
                   </div>
                 </div>
+                
+                {isPP && (
+                  <>
+                    <hr style={{ border: 0, borderTop: "1px solid rgba(255,255,255,0.05)", margin: "8px 0" }} />
+                    <h3 style={{ fontSize:15, fontWeight:700, color:"#a78bfa" }}>Règles du Binôme Relationnel</h3>
+                    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+                      <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: editMode ? "pointer" : "default" }}>
+                        <input type="checkbox" checked={editForm.binomeEnabled} disabled={!editMode} onChange={e => setEditForm((f: any) => ({ ...f, binomeEnabled: e.target.checked }))} style={{ accentColor: "#7c3aed" }} />
+                        <span style={{ fontSize: 13, color: "#f8fafc" }}>Activer le module Binôme pour cette campagne</span>
+                      </label>
+                      <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: editMode ? "pointer" : "default" }}>
+                        <input type="checkbox" checked={editForm.requireSameDepartment} disabled={!editMode} onChange={e => setEditForm((f: any) => ({ ...f, requireSameDepartment: e.target.checked }))} style={{ accentColor: "#7c3aed" }} />
+                        <span style={{ fontSize: 13, color: "#f8fafc" }}>Restreindre le matching au même département</span>
+                      </label>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}

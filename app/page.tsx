@@ -48,10 +48,7 @@ export default function HomePage() {
     <>
       <Navbar />
 
-      {/* Global blobs */}
-      <div className="blob-violet" />
-      <div className="blob-cyan" />
-
+      {/* No global blobs */}
       <main style={{ position: "relative", zIndex: 1 }}>
 
         {/* ── HERO ─────────────────────────────────── */}
@@ -65,11 +62,11 @@ export default function HomePage() {
             </div>
 
             <h1 className="anim-fade-up delay-1" style={{
-              fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
+              fontFamily: "Inter, sans-serif",
               fontWeight: 800, fontSize: "clamp(36px, 6vw, 72px)",
               lineHeight: 1.1, color: "var(--text-1)", marginBottom: 24, maxWidth: 900
             }}>
-              Comprenez vos <span className="gradient-text">relations</span>,<br />
+              Comprenez vos <span style={{ color: "var(--primary)" }}>relations</span>,<br />
               transformez votre vie
             </h1>
 
@@ -92,7 +89,7 @@ export default function HomePage() {
 
             {/* Carte de prévisualisation du score (Hero preview card) */}
             <div className="anim-fade-up delay-4" style={{ width: "100%", maxWidth: 480 }}>
-              <div className="card" style={{ borderRadius: 28, padding: 32 }}>
+              <div className="card" style={{ padding: 32 }}>
                 
                 {/* En-tête de la carte avec le score global */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
@@ -100,7 +97,7 @@ export default function HomePage() {
                   <span className="badge badge-cyan">⛅ Éclaircies</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 6 }}>
-                  <span className="gradient-text" style={{ fontSize: 52, fontWeight: 800, lineHeight: 1 }}>72</span>
+                  <span style={{ fontSize: 52, fontWeight: 800, lineHeight: 1, color: "var(--text-1)" }}>72</span>
                   <span style={{ color: "var(--text-2)", fontSize: 20 }}>/100</span>
                 </div>
                 <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 20 }}>Bonne qualité relationnelle</p>
@@ -136,7 +133,7 @@ export default function HomePage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24 }}>
               {STATS.map(({ value, label }) => (
                 <div key={label} style={{ textAlign: "center" }}>
-                  <div className="gradient-text" style={{ fontSize: 32, fontWeight: 800, lineHeight: 1.1 }}>{value}</div>
+                  <div style={{ fontSize: 32, fontWeight: 800, lineHeight: 1.1, color: "var(--text-1)" }}>{value}</div>
                   <div style={{ color: "var(--text-2)", fontSize: 13, marginTop: 6 }}>{label}</div>
                 </div>
               ))}
@@ -150,8 +147,8 @@ export default function HomePage() {
           <div className="container">
             <div style={{ textAlign: "center", marginBottom: 64 }}>
               <span className="badge badge-violet" style={{ marginBottom: 16 }}>La méthode</span>
-              <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)", marginBottom: 16 }}>
-                Simple, rapide, et <span className="gradient-text">révélateur</span>
+              <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)", marginBottom: 16 }}>
+                Simple, rapide, et <span style={{ color: "var(--primary)" }}>révélateur</span>
               </h2>
               <p style={{ color: "var(--text-2)", maxWidth: 520, margin: "0 auto", lineHeight: 1.7 }}>
                 3 étapes pour comprendre votre qualité de vie relationnelle.
@@ -184,14 +181,14 @@ export default function HomePage() {
           <div className="container">
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <span className="badge badge-cyan" style={{ marginBottom: 16 }}>Fonctionnalités</span>
-              <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)" }}>
+              <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)" }}>
                 Tout ce dont vous avez besoin
               </h2>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
               {FEATURES.map(({ title, desc, icon, badge }) => (
                 <div key={title} className="card card-hover">
-                  <div style={{ width: 48, height: 48, background: "rgba(124,58,237,0.15)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, marginBottom: 20 }}>
+                  <div style={{ width: 40, height: 40, background: "rgba(255,255,255,0.05)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, marginBottom: 20, border: "1px solid rgba(255,255,255,0.1)" }}>
                     {icon}
                   </div>
                   <span className="badge badge-violet" style={{ marginBottom: 12 }}>{badge}</span>
@@ -209,7 +206,7 @@ export default function HomePage() {
           <div className="container">
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <span className="badge badge-amber" style={{ marginBottom: 16 }}>Témoignages</span>
-              <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)" }}>
+              <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)" }}>
                 Ce qu'ils en disent
               </h2>
             </div>
@@ -239,12 +236,11 @@ export default function HomePage() {
         <section style={{ padding: "80px 24px" }}>
           <div style={{ maxWidth: 760, margin: "0 auto" }}>
             <div className="card" style={{
-              borderRadius: 32, padding: "64px 48px", textAlign: "center",
-              background: "linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(6,182,212,0.08) 100%)",
-              border: "1px solid rgba(124,58,237,0.25)"
+              padding: "64px 48px", textAlign: "center",
+              borderTop: "3px solid var(--primary)"
             }}>
-              <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: "clamp(26px, 4vw, 40px)", color: "var(--text-1)", marginBottom: 16 }}>
-                Prêt à mieux vous <span className="gradient-text">comprendre</span> ?
+              <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: "clamp(26px, 4vw, 40px)", color: "var(--text-1)", marginBottom: 16 }}>
+                Prêt à mieux vous <span style={{ color: "var(--primary)" }}>comprendre</span> ?
               </h2>
               <p style={{ color: "var(--text-2)", marginBottom: 36, fontSize: 16, lineHeight: 1.6 }}>
                 Rejoignez des milliers de personnes qui ont transformé leurs relations grâce à l'IQRH.

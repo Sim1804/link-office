@@ -29,159 +29,84 @@ export function GamificationSummary({ points, badges }: GamificationSummaryProps
   const level = getLevel(points);
 
   return (
-    <div style={{ marginBottom: 28 }}>
+    <div style={{ marginBottom: 20 }}>
       <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
         gap: 16,
+        borderRadius: 16,
+        background: "rgba(17,24,39,0.4)",
+        border: "1px solid rgba(255,255,255,0.06)",
+        padding: "16px 24px",
       }}>
-        {/* ── Points Card ── */}
-        <div style={{
-          borderRadius: 20,
-          background: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(28,21,60,0.6) 100%)",
-          border: "1px solid rgba(251,191,36,0.15)",
-          padding: "22px 24px",
-          position: "relative",
-          overflow: "hidden",
-        }}>
-          {/* Background orb */}
-          <div style={{
-            position: "absolute", bottom: -30, right: -30, width: 120, height: 120,
-            background: "radial-gradient(circle, rgba(251,191,36,0.12) 0%, transparent 70%)",
-            borderRadius: "50%", pointerEvents: "none",
-          }} />
-
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16, position: "relative" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.2)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <Star size={18} style={{ color: "#fbbf24" }} />
-              </div>
-              <div>
-                <p style={{ fontSize: 11, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Points</p>
-                <p style={{ fontSize: 12, color: "#64748b", marginTop: 1 }}>Progression</p>
-              </div>
-            </div>
-            <span style={{
-              fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 8,
-              background: `rgba(251,191,36,0.1)`, color: "#fbbf24",
-              border: "1px solid rgba(251,191,36,0.2)",
+        {/* ── Points & Level ── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 24, flex: 1, minWidth: 280 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: 8,
+              background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.2)",
+              display: "flex", alignItems: "center", justifyContent: "center",
             }}>
-              {level.label}
-            </span>
-          </div>
-
-          {/* Score */}
-          <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 16, position: "relative" }}>
-            <span style={{
-              fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-              fontWeight: 800, fontSize: 38,
-              background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            }}>{points}</span>
-            <span style={{ color: "#475569", fontSize: 14, fontWeight: 500 }}>pts</span>
-          </div>
-
-          {/* Progress bar */}
-          {level.next && (
-            <div style={{ position: "relative" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                <span style={{ fontSize: 11, color: "#475569" }}>Vers {level.next}</span>
-                <span style={{ fontSize: 11, color: "#475569" }}>{level.nextPoints} pts</span>
+              <Star size={16} style={{ color: "#fbbf24" }} />
+            </div>
+            <div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                <span style={{
+                  fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 18,
+                  background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
+                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                }}>{points}</span>
+                <span style={{ color: "#64748b", fontSize: 12, fontWeight: 500 }}>pts</span>
               </div>
-              <div style={{ height: 5, borderRadius: 999, background: "rgba(255,255,255,0.05)" }}>
+              <p style={{ fontSize: 11, color: "#475569" }}>Progression</p>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, position: "relative" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: level.color }}>{level.label}</span>
+              {level.next && <span style={{ fontSize: 10, color: "#475569" }}>Vers {level.next}</span>}
+            </div>
+            {level.next && (
+              <div style={{ height: 4, borderRadius: 999, background: "rgba(255,255,255,0.05)" }}>
                 <div style={{
                   height: "100%", borderRadius: 999,
                   width: `${Math.min(100, level.progress)}%`,
                   background: "linear-gradient(90deg, #fbbf24, #f59e0b)",
-                  transition: "width 0.8s ease-out",
-                  boxShadow: "0 0 8px rgba(251,191,36,0.4)",
                 }} />
               </div>
-            </div>
-          )}
-
-          {!level.next && (
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <Trophy size={14} style={{ color: "#fbbf24" }} />
-              <span style={{ fontSize: 12, color: "#fbbf24", fontWeight: 600 }}>Niveau maximum atteint 🎉</span>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-        {/* ── Badges Card ── */}
-        <div style={{
-          borderRadius: 20,
-          background: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(6,28,45,0.5) 100%)",
-          border: "1px solid rgba(56,189,248,0.15)",
-          padding: "22px 24px",
-          position: "relative",
-          overflow: "hidden",
-        }}>
-          <div style={{
-            position: "absolute", bottom: -30, right: -30, width: 120, height: 120,
-            background: "radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%)",
-            borderRadius: "50%", pointerEvents: "none",
-          }} />
+        {/* ── Vertical Divider ── */}
+        <div style={{ width: 1, height: 32, background: "rgba(255,255,255,0.08)", display: "block" }} />
 
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16, position: "relative" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: "rgba(56,189,248,0.1)", border: "1px solid rgba(56,189,248,0.2)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <Award size={18} style={{ color: "#38bdf8" }} />
-              </div>
-              <div>
-                <p style={{ fontSize: 11, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Badges</p>
-                <p style={{ fontSize: 12, color: "#64748b", marginTop: 1 }}>{badges.length} obtenu{badges.length > 1 ? "s" : ""}</p>
-              </div>
-            </div>
-            <Link href="/mon-profil" style={{
-              display: "inline-flex", alignItems: "center", gap: 4,
-              fontSize: 12, color: "#38bdf8", textDecoration: "none", fontWeight: 500,
-            }}>
-              Voir tout <ChevronRight size={12} />
-            </Link>
+        {/* ── Badges ── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Trophy size={16} color="#94a3b8" />
+            <span style={{ fontSize: 12, color: "#94a3b8", fontWeight: 500 }}>Badges</span>
           </div>
-
-          <div style={{ position: "relative" }}>
-            {badges.length > 0 ? (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {badges.map((userBadge: any) => (
-                  <div
-                    key={userBadge.id}
-                    title={userBadge.badge.description}
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: 6,
-                      padding: "6px 12px", borderRadius: 10,
-                      background: "rgba(56,189,248,0.08)", border: "1px solid rgba(56,189,248,0.15)",
-                      fontSize: 12, color: "#cbd5e1", fontWeight: 500,
-                      transition: "all 0.2s",
-                    }}
-                  >
-                    <span style={{ fontSize: 15 }}>{userBadge.badge.icon}</span>
-                    <span>{userBadge.badge.name}</span>
-                  </div>
-                ))}
-              </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {badges.length === 0 ? (
+              <span style={{ fontSize: 12, color: "#475569", fontStyle: "italic" }}>Aucun badge</span>
             ) : (
-              <div style={{ textAlign: "center", paddingTop: 8 }}>
-                <div style={{
-                  width: 44, height: 44, margin: "0 auto 10px",
-                  borderRadius: 12, background: "rgba(255,255,255,0.03)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
+              badges.slice(0, 3).map(b => (
+                <div key={b.id} title={b.badge.description} style={{
+                  display: "flex", alignItems: "center", gap: 4,
+                  padding: "4px 10px", borderRadius: 999,
+                  background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)",
                 }}>
-                  <Award size={20} style={{ color: "#334155" }} />
+                  <Award size={12} color="#a78bfa" />
+                  <span style={{ fontSize: 11, color: "#c084fc", fontWeight: 600 }}>{b.badge.name}</span>
                 </div>
-                <p style={{ fontSize: 13, color: "#334155", lineHeight: 1.5 }}>
-                  Complétez vos défis pour débloquer vos premiers badges !
-                </p>
-              </div>
+              ))
+            )}
+            {badges.length > 3 && (
+              <span style={{ fontSize: 11, color: "#64748b", fontWeight: 600 }}>+{badges.length - 3}</span>
             )}
           </div>
         </div>

@@ -291,7 +291,7 @@ export default function QuestionnairePage() {
                 disabled={current === 0}
                 style={{
                   display: "flex", alignItems: "center", gap: 8,
-                  padding: "13px 20px", borderRadius: 14,
+                  padding: "12px 20px", borderRadius: 12,
                   background: "rgba(26,34,54,0.8)", border: "1px solid rgba(255,255,255,0.12)",
                   color: current === 0 ? "#475569" : "#94a3b8",
                   fontSize: 14, fontWeight: 500, fontFamily: "inherit",
@@ -309,7 +309,7 @@ export default function QuestionnairePage() {
                 disabled={!isAnswered || submitting}
                 style={{
                   flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  padding: "13px 20px", borderRadius: 14,
+                  padding: "12px 20px", borderRadius: 12,
                   background: isAnswered ? "#7c3aed" : "rgba(124,58,237,0.25)",
                   border: "none",
                   color: isAnswered ? "white" : "rgba(255,255,255,0.35)",

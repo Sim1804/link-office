@@ -21,7 +21,7 @@ export default async function MonProfilPage() {
   const userRole = session.user.role;
   if (userRole === "ADMIN_B2B") redirect("/dashboard/b2b");
   if (userRole === "ADMIN_B2B2C") redirect("/dashboard/b2b2c");
-  if (userRole === "ADMIN_COLLECTIVITE") redirect("/dashboard/collectivites");
+  if (userRole === "ADMIN_B2G") redirect("/dashboard/b2g");
   if (userRole === "SUPER_ADMIN") redirect("/admin");
 
   const user = await prisma.user.findUnique({
@@ -40,23 +40,29 @@ export default async function MonProfilPage() {
     take: 5,
   });
 
+  const totalCompletedChallenges = await prisma.prescriptionItem.count({
+    where: { prescription: { userId: user.id }, status: "COMPLETED" },
+  });
+
   const activePrescriptions = await prisma.relationalPrescription.count({
     where: { userId: user.id, status: "ACTIVE" },
   });
 
+  const nextBadge = await prisma.badge.findFirst({
+    where: { pointsRequired: { gt: user.points } },
+    orderBy: { pointsRequired: "asc" },
+  });
+
   const stats = [
     { icon: Zap, color: "#f59e0b", bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.2)", label: "Points totaux", value: totalPoints },
-    { icon: CheckCircle, color: "#34d399", bg: "rgba(52,211,153,0.1)", border: "rgba(52,211,153,0.2)", label: "Défis complétés", value: completedChallenges.length },
-    { icon: Target, color: "#06b6d4", bg: "rgba(6,182,212,0.1)", border: "rgba(6,182,212,0.2)", label: "Ordonnances actives", value: activePrescriptions },
+    { icon: CheckCircle, color: "#34d399", bg: "rgba(52,211,153,0.1)", border: "rgba(52,211,153,0.2)", label: "Défis complétés", value: totalCompletedChallenges },
+    { icon: Target, color: "#06b6d4", bg: "rgba(6,182,212,0.1)", border: "rgba(6,182,212,0.2)", label: "Plans actifs", value: activePrescriptions },
   ];
 
   return (
     <>
       <Navbar />
       <main className="page-main">
-        <div className="blob-violet" />
-        <div className="blob-cyan" />
-
         <div className="page-container-wide">
           {/* ── Hero Header ── */}
           <div style={{ marginBottom: 36, display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
@@ -65,11 +71,8 @@ export default async function MonProfilPage() {
                 <span style={{ fontSize: 22 }}>🏆</span>
                 <p style={{ fontSize: 15, color: "#64748b", fontWeight: 500 }}>Gamification & Défis</p>
               </div>
-              <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: 34, color: "#f8fafc", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-                Ma{" "}
-                <span style={{ background: "linear-gradient(135deg, #a78bfa 0%, #06b6d4 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                  Progression
-                </span>
+              <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 34, color: "#f8fafc", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+                Ma Progression
               </h1>
             </div>
             <Link href="/dashboard" style={{
@@ -83,21 +86,18 @@ export default async function MonProfilPage() {
           </div>
 
           {/* ── XP Hero Card ── */}
-          <div style={{
-            borderRadius: 24,
-            background: "linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(6,182,212,0.06) 100%)",
-            border: "1px solid rgba(124,58,237,0.25)",
+          <div className="card" style={{
             padding: "28px 32px", marginBottom: 24,
             position: "relative", overflow: "hidden",
+            borderLeft: "3px solid #7c3aed"
           }}>
-            <div style={{ position: "absolute", top: -40, right: -40, width: 200, height: 200, background: "radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%)", borderRadius: "50%", pointerEvents: "none" }} />
 
             <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 24, position: "relative" }}>
-              <div style={{ width: 64, height: 64, borderRadius: 18, background: "rgba(124,58,237,0.2)", border: "2px solid rgba(124,58,237,0.4)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 20px rgba(124,58,237,0.3)" }}>
-                <Star size={30} style={{ color: "#a78bfa" }} />
+              <div style={{ width: 64, height: 64, borderRadius: 12, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Star size={30} color="#94a3b8" />
               </div>
               <div>
-                <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: 26, color: "#f8fafc", marginBottom: 4 }}>
+                <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 26, color: "#f8fafc", marginBottom: 4 }}>
                   Niveau {level}
                 </h2>
                 <p style={{ color: "#64748b", fontSize: 14 }}>
@@ -106,7 +106,7 @@ export default async function MonProfilPage() {
               </div>
               <div style={{ marginLeft: "auto", textAlign: "right" }}>
                 <p style={{ fontSize: 11, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 4 }}>Points totaux</p>
-                <span style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: 32, background: "linear-gradient(135deg, #a78bfa 0%, #06b6d4 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 32, color: "#f8fafc" }}>
                   {totalPoints}
                 </span>
               </div>
@@ -117,8 +117,8 @@ export default async function MonProfilPage() {
                 <span style={{ fontSize: 12, color: "#475569", fontWeight: 600 }}>{currentLevelXp} XP</span>
                 <span style={{ fontSize: 12, color: "#475569", fontWeight: 600 }}>{xpNeededForNextLevel} XP</span>
               </div>
-              <div style={{ height: 10, borderRadius: 999, background: "rgba(0,0,0,0.3)", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${progressPercent}%`, background: "linear-gradient(90deg, #7c3aed, #06b6d4)", borderRadius: 999, boxShadow: "0 0 12px rgba(124,58,237,0.5)", transition: "width 1s cubic-bezier(0.4,0,0.2,1)" }} />
+              <div style={{ height: 8, borderRadius: 4, background: "rgba(0,0,0,0.3)", overflow: "hidden" }}>
+                <div style={{ height: "100%", width: `${progressPercent}%`, background: "#7c3aed", borderRadius: 4, transition: "width 1s cubic-bezier(0.4,0,0.2,1)" }} />
               </div>
               <div style={{ textAlign: "center", marginTop: 8 }}>
                 <span style={{ fontSize: 12, color: "#475569" }}>{progressPercent.toFixed(0)}% vers le niveau suivant</span>
@@ -129,14 +129,13 @@ export default async function MonProfilPage() {
           {/* ── Stats ── */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 24 }}>
             {stats.map(({ icon: Icon, color, bg, border, label, value }) => (
-              <div key={label} style={{ borderRadius: 20, background: "linear-gradient(145deg, rgba(17,24,39,0.98), rgba(17,24,39,0.7))", border: `1px solid ${border}`, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16, position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", bottom: -20, right: -20, width: 80, height: 80, background: `radial-gradient(circle, ${bg} 0%, transparent 70%)`, borderRadius: "50%", pointerEvents: "none" }} />
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: bg, border: `1px solid ${border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <Icon size={22} style={{ color }} />
+              <div key={label} className="card" style={{ padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Icon size={20} color="#94a3b8" />
                 </div>
                 <div>
-                  <p style={{ fontSize: 12, color: "#475569", marginBottom: 4, fontWeight: 500 }}>{label}</p>
-                  <div style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 26, fontWeight: 800, color }}>{value}</div>
+                  <p style={{ fontSize: 12, color: "#94a3b8", marginBottom: 4, fontWeight: 500 }}>{label}</p>
+                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: 24, fontWeight: 700, color: "#f8fafc" }}>{value}</div>
                 </div>
               </div>
             ))}
@@ -145,13 +144,13 @@ export default async function MonProfilPage() {
           {/* ── Badges & Défis ── */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
             {/* Badges */}
-            <div style={{ borderRadius: 24, border: "1px solid rgba(124,58,237,0.15)", background: "linear-gradient(145deg, rgba(17,24,39,0.98), rgba(30,14,60,0.2))", padding: 28 }}>
+            <div className="card" style={{ padding: 24 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Shield size={18} style={{ color: "#a78bfa" }} />
+                <div style={{ width: 32, height: 32, borderRadius: 6, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Shield size={16} color="#94a3b8" />
                 </div>
-                <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "#f8fafc" }}>Badges obtenus</h3>
-                <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 600, color: "#a78bfa", background: "rgba(124,58,237,0.1)", padding: "2px 10px", borderRadius: 999, border: "1px solid rgba(124,58,237,0.2)" }}>
+                <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "#f8fafc" }}>Badges obtenus</h3>
+                <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 600, color: "#94a3b8", background: "rgba(255,255,255,0.05)", padding: "2px 8px", borderRadius: 4, border: "1px solid rgba(255,255,255,0.1)" }}>
                   {user.badges.length}
                 </span>
               </div>
@@ -159,7 +158,7 @@ export default async function MonProfilPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))", gap: 16 }}>
                   {user.badges.map(ub => (
                     <div key={ub.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
-                      <div style={{ width: 60, height: 60, borderRadius: 16, background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26 }}>
+                      <div style={{ width: 56, height: 56, borderRadius: 8, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>
                         {ub.badge.icon}
                       </div>
                       <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 500, lineHeight: 1.2 }}>{ub.badge.name}</span>
@@ -171,25 +170,32 @@ export default async function MonProfilPage() {
                   <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
                     <Trophy size={24} style={{ color: "#334155" }} />
                   </div>
-                  <p style={{ color: "#64748b", fontSize: 14, lineHeight: 1.6 }}>Complétez des défis pour débloquer vos premiers badges !</p>
+                  <p style={{ color: "#64748b", fontSize: 14, lineHeight: 1.6 }}>
+                    Complétez des défis pour débloquer vos premiers badges !
+                  </p>
+                  {nextBadge && (
+                    <p style={{ color: "#a78bfa", fontSize: 13, marginTop: 8, fontWeight: 500 }}>
+                      Plus que {nextBadge.pointsRequired - user.points} points pour le badge : {nextBadge.name}.
+                    </p>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Historique défis */}
-            <div style={{ borderRadius: 24, border: "1px solid rgba(52,211,153,0.15)", background: "linear-gradient(145deg, rgba(17,24,39,0.98), rgba(6,46,30,0.2))", padding: 28 }}>
+            <div className="card" style={{ padding: 24 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <CheckCircle size={18} style={{ color: "#34d399" }} />
+                <div style={{ width: 32, height: 32, borderRadius: 6, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <CheckCircle size={16} color="#94a3b8" />
                 </div>
-                <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "#f8fafc" }}>Derniers défis réalisés</h3>
+                <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "#f8fafc" }}>Derniers défis réalisés</h3>
               </div>
               {completedChallenges.length > 0 ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   {completedChallenges.map(item => (
-                    <div key={item.id} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderLeft: "2px solid #34d399", borderRadius: 12, padding: "14px 16px", display: "flex", gap: 12, alignItems: "flex-start" }}>
-                      <div style={{ width: 28, height: 28, borderRadius: 8, background: "rgba(52,211,153,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <CheckCircle size={14} style={{ color: "#34d399" }} />
+                    <div key={item.id} style={{ background: "rgba(0,0,0,0.15)", border: "1px solid rgba(255,255,255,0.05)", borderLeft: "3px solid #64748b", borderRadius: 6, padding: "12px 16px", display: "flex", gap: 12, alignItems: "flex-start" }}>
+                      <div style={{ width: 24, height: 24, borderRadius: 4, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <CheckCircle size={14} color="#94a3b8" />
                       </div>
                       <div>
                         <h4 style={{ color: "#f8fafc", fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{item.libraryItem.title}</h4>

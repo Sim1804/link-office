@@ -3,6 +3,16 @@
 import { useState, useEffect } from "react";
 import { Users, Search, Crown, ShieldAlert, X, Save, Trash2, AlertTriangle, CheckCircle2, AlertCircle } from "lucide-react";
 
+const ROLE_LABELS: Record<string, string> = {
+  CITIZEN: "Client B2C",
+  EMPLOYEE: "Employé (B2B)",
+  MEMBER: "Membre (Mutuelle)",
+  ADMIN_B2B: "Admin RH",
+  ADMIN_B2B2C: "Admin Mutuelle",
+  ADMIN_B2G: "Admin B2G",
+  SUPER_ADMIN: "Super Admin"
+};
+
 export default function SuperAdminUsersPage() {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -108,8 +118,8 @@ export default function SuperAdminUsersPage() {
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
         <div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: "#f8fafc", display: "flex", alignItems: "center", gap: 12 }}>
-            <Users size={32} color="#34d399" />
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: "#f8fafc", display: "flex", alignItems: "center", gap: 10 }}>
+            <Users size={24} color="#34d399" />
             CRM Utilisateurs (B2C & Admins)
           </h1>
           <p style={{ color: "#94a3b8", marginTop: 8 }}>Gérez les utilisateurs individuels, abonnements et modérateurs.</p>
@@ -137,34 +147,39 @@ export default function SuperAdminUsersPage() {
 
       <div style={{ background: "rgba(15,23,42,0.6)", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)", overflow: "hidden" }}>
         {loading ? (
-          <div style={{ padding: 40, textAlign: "center", color: "#94a3b8" }}>Chargement...</div>
+          <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 12, animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}>
+            <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`}</style>
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} style={{ height: 64, background: "rgba(255,255,255,0.03)", borderRadius: 12 }} />
+            ))}
+          </div>
         ) : (
           <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
             <thead>
               <tr style={{ background: "rgba(30,41,59,0.8)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Utilisateur</th>
-                <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Rôle & Abonnement</th>
-                <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Rattachement</th>
-                <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase", textAlign: "center" }}>Passations</th>
-                <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase", textAlign: "right" }}>Actions</th>
+                <th style={{ padding: "12px 16px", color: "#94a3b8", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Utilisateur</th>
+                <th style={{ padding: "12px 16px", color: "#94a3b8", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Rôle & Abonnement</th>
+                <th style={{ padding: "12px 16px", color: "#94a3b8", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Rattachement</th>
+                <th style={{ padding: "12px 16px", color: "#94a3b8", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", textAlign: "center" }}>Passations</th>
+                <th style={{ padding: "12px 16px", color: "#94a3b8", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", textAlign: "right" }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredUsers.map((user) => (
                 <tr key={user.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)", transition: "background 0.2s" }} className="table-row-hover">
-                  <td style={{ padding: "16px 24px" }}>
-                    <div style={{ fontWeight: 600, color: "#f8fafc", fontSize: 15 }}>{user.firstName} {user.lastName}</div>
-                    <div style={{ color: "#94a3b8", fontSize: 13, marginTop: 2 }}>{user.email}</div>
+                  <td style={{ padding: "12px 16px" }}>
+                    <div style={{ fontWeight: 600, color: "#f8fafc", fontSize: 14 }}>{user.firstName} {user.lastName}</div>
+                    <div style={{ color: "#94a3b8", fontSize: 12, marginTop: 2 }}>{user.email}</div>
                   </td>
-                  <td style={{ padding: "16px 24px" }}>
+                  <td style={{ padding: "12px 16px" }}>
                     <span style={{ 
-                      display: "inline-flex", alignItems: "center", gap: 4, padding: "4px 10px", borderRadius: 999, fontSize: 11, fontWeight: 700, 
+                      display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 999, fontSize: 11, fontWeight: 700, 
                       background: user.role.startsWith("ADMIN") || user.role === "SUPER_ADMIN" ? "rgba(124,58,237,0.15)" : "rgba(100,116,139,0.15)",
                       color: user.role.startsWith("ADMIN") || user.role === "SUPER_ADMIN" ? "#c084fc" : "#94a3b8",
                       marginBottom: 6,
                     }}>
                       {user.role === "SUPER_ADMIN" ? <ShieldAlert size={12} /> : null}
-                      {user.role}
+                      {ROLE_LABELS[user.role] || user.role}
                     </span>
                     <br />
                     <span style={{ 
@@ -176,21 +191,21 @@ export default function SuperAdminUsersPage() {
                       {user.subscription}
                     </span>
                   </td>
-                  <td style={{ padding: "16px 24px" }}>
+                  <td style={{ padding: "12px 16px" }}>
                     {user.organization ? (
-                      <div style={{ color: "#e2e8f0", fontSize: 13 }}>🏢 {user.organization.name}</div>
+                      <div style={{ color: "#e2e8f0", fontSize: 12 }}>🏢 {user.organization.name}</div>
                     ) : (
-                      <div style={{ color: "#64748b", fontSize: 13, fontStyle: "italic" }}>Client Individuel (B2C)</div>
+                      <div style={{ color: "#64748b", fontSize: 12, fontStyle: "italic" }}>Client Individuel (B2C)</div>
                     )}
                     {user.campaign && (
-                      <div style={{ color: "#a78bfa", fontSize: 12, marginTop: 4 }}>🎯 {user.campaign.title}</div>
+                      <div style={{ color: "#94a3b8", fontSize: 11, marginTop: 4 }}>Campagne: {user.campaign.name}</div>
                     )}
                   </td>
-                  <td style={{ padding: "16px 24px", textAlign: "center", color: "#e2e8f0", fontSize: 14, fontWeight: 500 }}>
-                    {user._count?.assessments || 0}
+                  <td style={{ padding: "12px 16px", textAlign: "center" }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "#f8fafc" }}>{user._count?.results || user._count?.assessments || 0}</div>
                   </td>
-                  <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                    <button onClick={() => handleManageClick(user)} className="btn btn-secondary btn-sm">
+                  <td style={{ padding: "12px 16px", textAlign: "right" }}>
+                    <button onClick={() => handleManageClick(user)} className="btn btn-secondary btn-sm" style={{ padding: "6px 12px" }}>
                       Gérer
                     </button>
                   </td>
@@ -262,6 +277,7 @@ export default function SuperAdminUsersPage() {
                   <option value="MEMBER">Membre (MEMBER)</option>
                   <option value="ADMIN_B2B">Admin RH (ADMIN_B2B)</option>
                   <option value="ADMIN_B2B2C">Admin Mutuelle (ADMIN_B2B2C)</option>
+                  <option value="ADMIN_B2G">Admin B2G (ADMIN_B2G)</option>
                   <option value="SUPER_ADMIN" disabled>Super Admin (SUPER_ADMIN)</option>
                 </select>
               </div>

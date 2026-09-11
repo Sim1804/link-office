@@ -40,8 +40,8 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
         <div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: "#f8fafc", display: "flex", alignItems: "center", gap: 12 }}>
-            <BookOpen size={32} color="#c084fc" />
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: "#f8fafc", display: "flex", alignItems: "center", gap: 10 }}>
+            <BookOpen size={24} color="#c084fc" />
             Catalogue Central
           </h1>
           <p style={{ color: "#94a3b8", marginTop: 8 }}>Gérez les recommandations, les micro-défis et la liste des partenaires.</p>
@@ -77,10 +77,10 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
         <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
           <thead>
             <tr style={{ background: "rgba(30,41,59,0.8)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Titre & Type</th>
-              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Thèmes</th>
-              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Ciblage</th>
-              <th style={{ padding: "16px 24px", color: "#94a3b8", fontWeight: 600, fontSize: 13, textTransform: "uppercase", textAlign: "right" }}>Actions</th>
+              <th style={{ padding: "12px 16px", color: "#94a3b8", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Titre & Type</th>
+              <th style={{ padding: "12px 16px", color: "#94a3b8", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Thèmes</th>
+              <th style={{ padding: "12px 16px", color: "#94a3b8", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Ciblage</th>
+              <th style={{ padding: "12px 16px", color: "#94a3b8", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", textAlign: "right" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -88,41 +88,41 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
               const data = item.data as any || {};
               return (
               <tr key={item.id} className="table-row-hover" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", transition: "background 0.15s" }}>
-                <td style={{ padding: "16px 24px", color: "#cbd5e1", fontFamily: "monospace", fontSize: 13 }}>
+                <td style={{ padding: "12px 16px", color: "#cbd5e1", fontFamily: "monospace", fontSize: 12 }}>
                   {item.id}
                 </td>
-                <td style={{ padding: "16px 24px" }}>
+                <td style={{ padding: "12px 16px" }}>
                   <span style={{
-                    fontSize: 12, fontWeight: 600, padding: "4px 10px", borderRadius: 8,
+                    fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6,
                     background: item.library === "Micro-défis" ? "rgba(56,189,248,0.15)" : item.library === "Partenaires" ? "rgba(249,115,22,0.15)" : "rgba(192,132,252,0.15)",
                     color: item.library === "Micro-défis" ? "#38bdf8" : item.library === "Partenaires" ? "#f97316" : "#c084fc",
                   }}>
                     {item.library}
                   </span>
                 </td>
-                <td style={{ padding: "16px 24px", color: "#f8fafc", fontWeight: 500, fontSize: 14 }}>{item.title}</td>
-                <td style={{ padding: "16px 24px", color: "#94a3b8", fontSize: 14 }}>{item.category || "—"}</td>
-                <td style={{ padding: "16px 24px" }}>
+                <td style={{ padding: "12px 16px", color: "#f8fafc", fontWeight: 500, fontSize: 13 }}>{item.title}</td>
+                <td style={{ padding: "12px 16px", color: "#94a3b8", fontSize: 13 }}>{item.category || "—"}</td>
+                <td style={{ padding: "12px 16px" }}>
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                     {item.library === "Recommandations" && data.impact_attendu_1_5 && (
-                      <span className="badge" style={{ borderColor: "rgba(16,185,129,0.3)", color: "#34d399", background: "rgba(16,185,129,0.1)" }}>⭐ Impact {data.impact_attendu_1_5}</span>
+                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderColor: "rgba(16,185,129,0.3)", color: "#34d399", background: "rgba(16,185,129,0.1)" }}>⭐ Impact {data.impact_attendu_1_5}</span>
                     )}
                     {item.library === "Micro-défis" && data.points && (
-                      <span className="badge" style={{ borderColor: "rgba(56,189,248,0.3)", color: "#38bdf8", background: "rgba(56,189,248,0.1)" }}>💎 {data.points} pts</span>
+                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderColor: "rgba(56,189,248,0.3)", color: "#38bdf8", background: "rgba(56,189,248,0.1)" }}>💎 {data.points} pts</span>
                     )}
                     {item.library === "Partenaires" && data.territoire && (
-                      <span className="badge" style={{ borderColor: "rgba(249,115,22,0.3)", color: "#f97316", background: "rgba(249,115,22,0.1)" }}>📍 {data.territoire}</span>
+                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderColor: "rgba(249,115,22,0.3)", color: "#f97316", background: "rgba(249,115,22,0.1)" }}>📍 {data.territoire}</span>
                     )}
                     {(data.difficulte) && (
-                      <span className="badge" style={{ borderColor: "rgba(255,255,255,0.1)", color: "#cbd5e1", background: "rgba(255,255,255,0.05)" }}>⏳ {data.difficulte}</span>
+                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderColor: "rgba(255,255,255,0.1)", color: "#cbd5e1", background: "rgba(255,255,255,0.05)" }}>⏳ {data.difficulte}</span>
                     )}
                   </div>
                 </td>
-                <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+                <td style={{ padding: "12px 16px", textAlign: "right" }}>
+                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 6 }}>
                     <Link href={`/dashboard/superadmin/catalog/${item.id}`} style={{ textDecoration: "none" }}>
-                      <Button variant="secondary" size="sm" style={{ padding: "8px" }} title="Modifier">
-                        <Edit2 size={16} />
+                      <Button variant="secondary" size="sm" style={{ padding: "6px" }} title="Modifier">
+                        <Edit2 size={14} />
                       </Button>
                     </Link>
                     <CatalogDeleteButton itemId={item.id} />

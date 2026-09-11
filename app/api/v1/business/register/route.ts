@@ -36,9 +36,9 @@ export async function POST(req: Request) {
     let orgType: OrganizationType = "B2B";
     let userRole: UserRole = "ADMIN_B2B";
     
-    if (selectedPlan.id === "B2G_COLLECTIVITE") {
-      orgType = "COLLECTIVITE";
-      userRole = "ADMIN_COLLECTIVITE";
+    if (selectedPlan.id === "B2G") {
+      orgType = "B2G";
+      userRole = "ADMIN_B2G";
     } else if (selectedPlan.id === "B2B2C_PARTENAIRE") {
       orgType = "B2B2C";
       userRole = "ADMIN_B2B2C";

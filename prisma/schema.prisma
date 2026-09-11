@@ -18,14 +18,20 @@ model User {
   password           String?
   points             Int                      @default(0)
   role               UserRole                 @default(EMPLOYEE)
+  newsletterOptIn    Boolean                  @default(false)
   subscription       SubscriptionTier         @default(FREEMIUM)
   matchingOptIn      Boolean                  @default(false)
   mustChangePassword Boolean                  @default(false)
   irisUsageCount     Int                      @default(0)
   lastIrisUsage      DateTime?
   assessments        Assessment[]
-  pairsInitiated     RelationalPair[]         @relation("PairInitiator")
-  pairsReceived      RelationalPair[]         @relation("PairReceiver")
+  binomesAsUserA     Binome[]                 @relation("BinomeUserA")
+  binomesAsUserB     Binome[]                 @relation("BinomeUserB")
+  binomeSuggestionsA BinomeSuggestion[]       @relation("BinomeSuggestionUserA")
+  binomeSuggestionsB BinomeSuggestion[]       @relation("BinomeSuggestionUserB")
+  binomePreference   BinomePreference?
+  binomeCheckins     BinomeCheckin[]
+  binomeFeedbacks    BinomeFeedback[]
   prescriptions      RelationalPrescription[]
   organization       Organization?            @relation(fields: [organizationId], references: [id])
   campaign           Campaign?                @relation(fields: [campaignId], references: [id])
@@ -33,6 +39,13 @@ model User {
   UserSubscription   UserSubscription?
   stats              UserStats?
   notifications      Notification[]
+  meteoCheckins      MeteoCheckin[]
+  lifeEvents         LifeEvent[]
+  relationalPlans    RelationalPlan[]
+  userMicroDefis     UserMicroDefi[]
+  resourceRelations  ResourceRelation[]
+  journalEntries     JournalEntry[]
+  savedResources     SavedResource[]
 
   @@index([organizationId])
   @@index([campaignId])
@@ -40,25 +53,25 @@ model User {
 }
 
 model Assessment {
-  id                           String                   @id @default(cuid())
-  userId                       String
-  status                       AssessmentStatus         @default(DRAFT)
-  consentInformation           Boolean                  @default(false)
-  consentResearch              Boolean                  @default(false)
-  consentParticipation         Boolean                  @default(false)
-  startedAt                    DateTime                 @default(now())
-  submittedAt                  DateTime?
-  updatedAt                    DateTime                 @updatedAt
-  campaignId                   String?
+  id                          String                   @id @default(cuid())
+  userId                      String
+  status                      AssessmentStatus         @default(DRAFT)
+  consentInformation          Boolean                  @default(false)
+  consentResearch             Boolean                  @default(false)
+  consentParticipation        Boolean                  @default(false)
+  startedAt                   DateTime                 @default(now())
+  submittedAt                 DateTime?
+  updatedAt                   DateTime                 @updatedAt
+  campaignId                  String?
   /// Snapshot du questionnaireConfig au moment de la passation (versionnage)
-  questionnaireConfigSnapshot  Json?
-  adaptiveAnswers              AdaptiveAnswer[]
-  campaign                     Campaign?                @relation(fields: [campaignId], references: [id])
-  user                         User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  CampaignVariableAnswer       CampaignVariableAnswer[]
-  demographic                  DemographicProfile?
-  result                       IqrhResult?
-  answers                      QuestionnaireAnswer[]
+  questionnaireConfigSnapshot Json?
+  adaptiveAnswers             AdaptiveAnswer[]
+  campaign                    Campaign?                @relation(fields: [campaignId], references: [id])
+  user                        User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  CampaignVariableAnswer      CampaignVariableAnswer[]
+  demographic                 DemographicProfile?
+  result                      IqrhResult?
+  answers                     QuestionnaireAnswer[]
 
   @@index([userId, status])
   @@index([campaignId, status])
@@ -330,32 +343,114 @@ model EventLog {
   @@index([eventType])
 }
 
-model RelationalPair {
-  id          String     @id @default(cuid())
-  initiatorId String
-  receiverId  String
-  /// Campagne B2G à laquelle ce binôme appartient (obligatoire pour B2G, null pour B2C)
-  campaignId  String?
-  status      PairStatus @default(DISPONIBLE)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  campaign    Campaign?  @relation(fields: [campaignId], references: [id])
-  initiator   User       @relation("PairInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
-  receiver    User       @relation("PairReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+model BinomePreference {
+  id                     String    @id @default(cuid())
+  userId                 String    @unique
+  optIn                  Boolean   @default(false)
+  availability           String[] // matin, midi, apres-midi, soiree, week-end, flexible
+  communicationMode      String[] // messages, vocal
+  preferredFrequency     String // legere, reguliere, soutenue
+  agePreference          String // preference, indifferent
+  genderPreference       String // preference, indifferent
+  geographicalPreference String // souhaitee, indifferente
+  expectations           String[]
+  consentDate            DateTime?
+  charterVersion         String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
-  @@unique([initiatorId, receiverId])
+model BinomeSuggestion {
+  id                   String    @id @default(cuid())
+  userAId              String
+  userBId              String
+  campaignId           String?
+  compatibilityScore   Float
+  compatibilityReasons Json
+  irisRecommendation   String
+  suggestionDate       DateTime  @default(now())
+  responseA            String? // ACCEPTED, REFUSED, PENDING
+  responseB            String? // ACCEPTED, REFUSED, PENDING
+  status               String    @default("PENDING") // PENDING, ACCEPTED, REJECTED, EXPIRED
+  userA                User      @relation("BinomeSuggestionUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB                User      @relation("BinomeSuggestionUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  campaign             Campaign? @relation(fields: [campaignId], references: [id])
+
+  @@index([campaignId])
+}
+
+model Binome {
+  id          String       @id @default(cuid())
+  userAId     String
+  userBId     String
+  campaignId  String?
+  startDate   DateTime     @default(now())
+  endDate     DateTime?
+  status      BinomeStatus @default(ACTIVE)
+  healthScore Float        @default(100.0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  userA        User                @relation("BinomeUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB        User                @relation("BinomeUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  campaign     Campaign?           @relation(fields: [campaignId], references: [id])
+  checkins     BinomeCheckin[]
+  feedbacks    BinomeFeedback[]
+  gamification BinomeGamification?
+
   @@index([campaignId, status])
 }
 
+model BinomeCheckin {
+  id            String   @id @default(cuid())
+  binomeId      String
+  userId        String
+  date          DateTime @default(now())
+  mood          Int? // 1 to 5
+  actionStatus  String? // realissee, en_cours, pas_commencee, remplacee
+  encouragement String?
+  checkinType   String // RAPIDE, APPROFONDI
+  binome        Binome   @relation(fields: [binomeId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BinomeFeedback {
+  id                 String   @id @default(cuid())
+  binomeId           String
+  userId             String
+  satisfaction       Int?
+  usefulness         Int?
+  reciprocity        Int?
+  continuationIntent Boolean?
+  issueReason        String?
+  createdAt          DateTime @default(now())
+  binome             Binome   @relation(fields: [binomeId], references: [id], onDelete: Cascade)
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BinomeGamification {
+  id           String @id @default(cuid())
+  binomeId     String @unique
+  userAId      String
+  userBId      String
+  pointsUserA  Int    @default(0)
+  pointsUserB  Int    @default(0)
+  pointsBinome Int    @default(0)
+  badges       Json   @default("[]")
+  unlockDates  Json   @default("{}")
+  binome       Binome @relation(fields: [binomeId], references: [id], onDelete: Cascade)
+}
+
 model Organization {
-  id               String                @id @default(cuid())
-  name             String
-  type             OrganizationType
-  siren            String?
-  domainName       String?
-  codeAccess       String                @unique
-  logoUrl          String?
-  
+  id         String           @id @default(cuid())
+  name       String
+  type       OrganizationType
+  siren      String?
+  domainName String?
+  codeAccess String           @unique
+  logoUrl    String?
+
   // Nouveaux champs B2B2C / B2B pour le contrat partenaire
   contactName      String?
   contactEmail     String?
@@ -367,13 +462,13 @@ model Organization {
   territory        String?
   quota            Int?
 
-  createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @updatedAt
-  ActionItem       ActionItem[]
-  campaigns        Campaign[]
-  services         OrganizationService[]
-  subscription     Subscription?
-  users            User[]
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  ActionItem   ActionItem[]
+  campaigns    Campaign[]
+  services     OrganizationService[]
+  subscription Subscription?
+  users        User[]
 }
 
 model OrganizationService {
@@ -406,7 +501,8 @@ model Campaign {
   assessments         Assessment[]
   users               User[]
   invites             CampaignInvite[]
-  pairs               RelationalPair[]
+  binomes             Binome[]
+  binomeSuggestions   BinomeSuggestion[]
   organization        Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   parentCampaign      Campaign?          @relation("CampaignRenewal", fields: [parentCampaignId], references: [id])
   childCampaigns      Campaign[]         @relation("CampaignRenewal")
@@ -417,11 +513,11 @@ model Campaign {
 }
 
 model CampaignSnapshot {
-  id          String   @id @default(cuid())
-  campaignId  String   @unique
-  data        Json
-  createdAt   DateTime @default(now())
-  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  campaignId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 }
 
 model CampaignInvite {
@@ -539,27 +635,21 @@ enum AdaptivePolarity {
   NEGATIVE
 }
 
-enum PairStatus {
-  /// Bénéficiaire disponible pour matching
-  DISPONIBLE
-  /// Matching en cours par IRIS
-  MATCHING_EN_COURS
-  /// Proposition envoyée au second bénéficiaire
-  PROPOSITION_ENVOYEE
-  /// Proposition refusée par le second bénéficiaire
-  REFUSEE
-  /// Binôme accepté par les deux parties
-  ACCEPTEE
-  /// Binôme actif et en cours
-  ACTIF
-  /// Binôme terminé (quittée par l'un ou l'autre)
-  TERMINE
+enum BinomeStatus {
+  AWAITING_USER_B
+  ACTIVE
+  PAUSED
+  REPORTED
+  SUSPENDED
+  WITHDRAWN
+  COMPLETED
+  CLOSED
 }
 
 enum OrganizationType {
   B2B
   B2B2C
-  COLLECTIVITE
+  B2G
 }
 
 enum UserRole {
@@ -568,7 +658,7 @@ enum UserRole {
   MEMBER
   ADMIN_B2B
   ADMIN_B2B2C
-  ADMIN_COLLECTIVITE
+  ADMIN_B2G
   SUPER_ADMIN
 }
 
@@ -602,60 +692,59 @@ enum SubscriptionTier {
 }
 
 model Recommendation {
-  id                 String   @id
-  title              String
-  category           String?
-  dimensions         String[]
-  profiles           String[]
-  situations         String[]
-  riskFactors        String[]
-  protectiveFactors  String[]
-  needs              String[]
-  priorityLevel      String?
-  difficulty         String?
-  estimatedTime      String?
-  expectedImpact     Int?
-  resultDelay        String?
-  frequency          String?
-  programmes         String[]
-  partners           String[]
-  displayText        String   @default("")
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                String   @id
+  title             String
+  category          String?
+  dimensions        String[]
+  profiles          String[]
+  situations        String[]
+  riskFactors       String[]
+  protectiveFactors String[]
+  needs             String[]
+  priorityLevel     String?
+  difficulty        String?
+  estimatedTime     String?
+  expectedImpact    Int?
+  resultDelay       String?
+  frequency         String?
+  programmes        String[]
+  partners          String[]
+  displayText       String   @default("")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
-
 model PartnerMatching {
-  id             String   @id
-  partnerName    String
-  category       String?
-  publics        String[]
-  territories    String[]
-  needs          String[]
-  situations     String[]
-  validation     String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id          String   @id
+  partnerName String
+  category    String?
+  publics     String[]
+  territories String[]
+  needs       String[]
+  situations  String[]
+  validation  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model MicroDefi {
-  id                   String   @id
-  title                String
-  description          String
-  dimension            String?
-  need                 String?
-  public               String?
-  difficulty           String?
-  estimatedTime        String?
-  points               Int?
-  expectedImpact       Int?
-  compatibleBinome     Boolean  @default(false)
-  compatibleIris       Boolean  @default(false)
-  category             String?
-  expectedValidation   String?
-  notificationText     String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id                 String   @id
+  title              String
+  description        String
+  dimension          String?
+  need               String?
+  public             String?
+  difficulty         String?
+  estimatedTime      String?
+  points             Int?
+  expectedImpact     Int?
+  compatibleBinome   Boolean  @default(false)
+  compatibleIris     Boolean  @default(false)
+  category           String?
+  expectedValidation String?
+  notificationText   String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model EcosystemActor {
@@ -680,10 +769,221 @@ enum NotificationType {
   IRIS_MESSAGE
   REPORT_AVAILABLE
   CAMPAIGN_LAUNCHED
+  BADGE_UNLOCKED
 }
 
 enum NotificationStatus {
   UNREAD
   READ
   CLICKED
+}
+
+// =======================================================
+// CARNET DE SANTE RELATIONNELLE
+// =======================================================
+
+model MeteoCheckin {
+  id      String   @id @default(cuid())
+  userId  String
+  date    DateTime @default(now())
+  weather String // TRES_BIEN, PLUTOT_BIEN, MITIGE, FRAGILE, EN_DIFFICULTE
+  factors String[] // famille, couple, amis, travail, solitude, etc.
+  note    String?
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+model LifeEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  date        DateTime
+  category    String // couple, famille, travail, etudes, etc.
+  impact      String // BEAUCOUP, UN_PEU, PAS_VRAIMENT, JE_NE_SAIS_PAS
+  description String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+model RelationalPlan {
+  id         String         @id @default(cuid())
+  userId     String
+  campaignId String?
+  status     String         @default("ACTIVE") // ACTIVE, ARCHIVED
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  priorities PlanPriority[]
+
+  @@index([userId, status])
+}
+
+model PlanPriority {
+  id        String         @id @default(cuid())
+  planId    String
+  dimension Dimension
+  objective String
+  rationale String
+  status    String         @default("ACTIVE") // ACTIVE, COMPLETED, POSTPONED, DISMISSED
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  plan      RelationalPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  actions   PlanAction[]
+}
+
+model PlanAction {
+  id             String       @id @default(cuid())
+  priorityId     String
+  title          String
+  description    String?
+  status         String       @default("TODO") // TODO, IN_PROGRESS, DONE, CANCELLED
+  dueDate        DateTime?
+  completedAt    DateTime?
+  feedbackRating String? // TRES_BIEN, PLUTOT_BIEN, NEUTRE, DIFFICILE, NON_REALISE
+  feedbackImpact String? // BEAUCOUP, UN_PEU, PAS_VRAIMENT, PAS_DU_TOUT
+  note           String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  priority       PlanPriority @relation(fields: [priorityId], references: [id], onDelete: Cascade)
+}
+
+model UserMicroDefi {
+  id          String    @id @default(cuid())
+  userId      String
+  defiId      String
+  status      String    @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED, ABANDONED
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+  feedback    String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+model ResourceRelation {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String // Prénom ou libellé
+  category    String // famille, ami, collegue, etc.
+  frequency   String // quotidienne, hebdomadaire, etc.
+  proximity   String // tres_proche, proche, etc.
+  supportType String[] // emotionnel, pratique, etc.
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model JournalEntry {
+  id          String     @id @default(cuid())
+  userId      String
+  date        DateTime   @default(now())
+  content     String
+  dimension   Dimension?
+  lifeEventId String?
+  promptUsed  String?
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+model SavedResource {
+  id           String   @id @default(cuid())
+  userId       String
+  resourceType String // LIBRARY_ITEM, PRESCRIPTION, EXTERNAL
+  resourceId   String? // ID si interne
+  title        String
+  url          String?
+  category     String?
+  status       String   @default("SAVED") // SAVED, READ
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// =======================================================
+// MEDIA & PODCAST (CMS)
+// =======================================================
+
+enum MediaType {
+  ARTICLE
+  INTERVIEW
+  DOSSIER
+  TEMOIGNAGE
+  PORTRAIT
+  GUIDE
+  ANALYSE
+  PODCAST
+  INFOGRAPHIE
+  CHIFFRES_CLES
+  VIDEO
+  RESSOURCE
+}
+
+enum MediaCategoryType {
+  SUJET
+  PUBLIC
+  MOMENT_DE_VIE
+  DIMENSION_IQRH
+  TYPE_CONTENU
+}
+
+enum EclaireurType {
+  TEMOIN
+  PROFESSIONNEL
+}
+
+model MediaCategory {
+  id        String            @id @default(cuid())
+  name      String            @unique
+  slug      String            @unique
+  type      MediaCategoryType
+  createdAt DateTime          @default(now())
+  contents  MediaContent[]    @relation("MediaToCategory")
+}
+
+model MediaEclaireur {
+  id         String         @id @default(cuid())
+  name       String
+  type       EclaireurType
+  profession String?
+  bio        String?
+  photoUrl   String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  contents   MediaContent[] @relation("MediaToEclaireur")
+}
+
+model MediaContent {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  summary     String?
+  content     String // Markdown ou RichText
+  mediaType   MediaType
+  coverImage  String?
+  audioUrl    String? // Pour les podcasts
+  videoUrl    String? // Pour vidéos ou podcasts filmés
+  transcript  String? // Transcription
+  duration    Int? // Durée en minutes (lecture ou écoute)
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  categories MediaCategory[]  @relation("MediaToCategory")
+  eclaireurs MediaEclaireur[] @relation("MediaToEclaireur")
+
+  // Relations existantes IQRH / Partenaires
+  dimensionIqrh  Dimension?
+  linkedArticles MediaContent[] @relation("RelatedArticles")
+  relatedTo      MediaContent[] @relation("RelatedArticles")
+
+  @@index([slug])
+  @@index([mediaType])
+  @@index([published])
 }

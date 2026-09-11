@@ -85,12 +85,12 @@ const S = {
   sectionTitle: { fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 600, fontSize: 15, color: "#f8fafc", display: "flex", alignItems: "center", gap: 10, marginBottom: 20 },
   sectionBadge: { width: 26, height: 26, background: "rgba(124,58,237,0.2)", color: "#a78bfa", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0 },
   label: { display: "block", fontSize: 13, fontWeight: 500, color: "#94a3b8", marginBottom: 8 },
-  input: { width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "12px 16px", color: "#f8fafc", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, transition: "border-color 0.2s" },
-  select: { width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "12px 16px", color: "#f8fafc", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, cursor: "pointer", appearance: "auto" as const },
+  input: { width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 14px", color: "#f8fafc", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, transition: "border-color 0.2s" },
+  select: { width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 14px", color: "#f8fafc", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, cursor: "pointer", appearance: "auto" as const },
   grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 },
   fieldGroup: { display: "flex", flexDirection: "column" as const, gap: 16 },
   tabButton: (active: boolean) => ({
-    padding: "12px 20px", fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
+    padding: "10px 16px", fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
     background: active ? "rgba(124,58,237,0.12)" : "transparent",
     color: active ? "#a78bfa" : "#94a3b8",
     border: "none", borderBottom: active ? "2px solid #a78bfa" : "2px solid transparent",
@@ -241,7 +241,7 @@ function ProfilContent() {
               onClick={() => setValue(opt)}
               style={{
                 flex: options.length <= 4 ? 1 : "auto", minWidth: options.length > 4 ? "auto" : 0,
-                padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
+                padding: "8px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
                 border: selected ? "1.5px solid rgba(124,58,237,0.6)" : "1.5px solid rgba(255,255,255,0.10)",
                 background: selected ? "rgba(124,58,237,0.2)" : "rgba(26,34,54,0.6)",
                 color: selected ? "#a78bfa" : "#94a3b8",
@@ -670,7 +670,7 @@ function ProfilContent() {
                       <button
                         key={sit} type="button" onClick={() => toggleSituation(sit)}
                         style={{
-                          padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
+                          padding: "8px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
                           border: selected ? "1.5px solid rgba(124,58,237,0.6)" : "1.5px solid rgba(255,255,255,0.10)",
                           background: selected ? "rgba(124,58,237,0.2)" : "rgba(26,34,54,0.6)",
                           color: selected ? "#a78bfa" : "#94a3b8",
@@ -697,7 +697,7 @@ function ProfilContent() {
               <button
                 type="submit" disabled={!canSubmit || saving}
                 style={{
-                  width: "100%", padding: "16px 32px", border: "none", borderRadius: 16, fontSize: 15, fontWeight: 600, fontFamily: "inherit",
+                  width: "100%", padding: "12px 24px", border: "none", borderRadius: 12, fontSize: 15, fontWeight: 600, fontFamily: "inherit",
                   background: canSubmit ? "#7c3aed" : "rgba(124,58,237,0.3)", color: canSubmit ? "white" : "rgba(255,255,255,0.4)",
                   cursor: canSubmit && !saving ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
                   boxShadow: canSubmit ? "0 0 32px rgba(124,58,237,0.35)" : "none", transition: "all 0.2s", marginTop: 8, marginBottom: 32,

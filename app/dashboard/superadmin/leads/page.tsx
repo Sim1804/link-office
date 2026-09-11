@@ -217,8 +217,8 @@ export default function LeadsPage() {
                       borderRadius: 999, 
                       fontSize: 11, 
                       fontWeight: 700, 
-                      background: lead.planType === "B2B2C_PARTENAIRE" ? "rgba(245,158,11,0.15)" : lead.planType === "B2G_COLLECTIVITE" ? "rgba(56,189,248,0.15)" : "rgba(124,58,237,0.15)",
-                      color: lead.planType === "B2B2C_PARTENAIRE" ? "#fcd34d" : lead.planType === "B2G_COLLECTIVITE" ? "#7dd3fc" : "#c084fc",
+                      background: lead.planType === "B2B2C_PARTENAIRE" ? "rgba(245,158,11,0.15)" : lead.planType === "B2G" ? "rgba(56,189,248,0.15)" : "rgba(124,58,237,0.15)",
+                      color: lead.planType === "B2B2C_PARTENAIRE" ? "#fcd34d" : lead.planType === "B2G" ? "#7dd3fc" : "#c084fc",
                     }}>
                       {lead.planType}
                     </span>

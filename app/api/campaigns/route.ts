@@ -7,8 +7,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const GET_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
-const POST_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
+const GET_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "SUPER_ADMIN"];
+const POST_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "SUPER_ADMIN"];
 
 export async function GET() {
   try {

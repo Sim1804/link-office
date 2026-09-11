@@ -19,7 +19,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 /* ── Types ──────────────────────────────────────────────────── */
-type Plan = "B2B_ENTREPRISE" | "B2G_COLLECTIVITE" | "B2B2C_PARTENAIRE" | null;
+type Plan = "B2B_ENTREPRISE" | "B2G" | "B2B2C_PARTENAIRE" | null;
 
 /* ── Données ─────────────────────────────────────────────────── */
 
@@ -53,7 +53,7 @@ const PLANS: {
     icon: <Building2 size={22} />,
   },
   {
-    id: "B2G_COLLECTIVITE",
+    id: "B2G",
     label: "Modèle B2G",
     sub: "Pour les Collectivités",
     desc: "Baromètre territorial, action publique ciblée et cartographie de l'isolement social.",
@@ -142,10 +142,6 @@ export default function BusinessPage() {
     <>
       <Navbar />
 
-      {/* Blobs d'arrière-plan */}
-      <div className="blob-violet" />
-      <div className="blob-cyan" />
-
       <main style={{ position: "relative", zIndex: 1 }}>
 
         {/* ── HERO ─────────────────────────────────────────────── */}
@@ -159,12 +155,11 @@ export default function BusinessPage() {
             </div>
 
             <h1 className="anim-fade-up delay-1" style={{
-              fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
               fontWeight: 800, fontSize: "clamp(36px, 6vw, 68px)",
               lineHeight: 1.1, color: "var(--text-1)", marginBottom: 24, maxWidth: 860,
             }}>
               Investissez dans le{" "}
-              <span className="gradient-text">capital humain</span>
+              <span style={{ color: "#a78bfa" }}>capital humain</span>
               <br />& relationnel de votre organisation
             </h1>
 
@@ -190,13 +185,13 @@ export default function BusinessPage() {
 
             {/* Preview card — dashboard RH anonymisé */}
             <div className="anim-fade-up delay-4" style={{ width: "100%", maxWidth: 500 }}>
-              <div className="card" style={{ borderRadius: 28, padding: 28 }}>
+              <div className="card" style={{ padding: 28 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                   <span style={{ color: "var(--text-2)", fontSize: 13, fontWeight: 600 }}>Score IQRH moyen équipe</span>
                   <span className="badge badge-cyan">⛅ Éclaircies</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 20 }}>
-                  <span className="gradient-text" style={{ fontSize: 52, fontWeight: 800, lineHeight: 1 }}>74</span>
+                  <span style={{ color: "#a78bfa", fontSize: 52, fontWeight: 800, lineHeight: 1 }}>74</span>
                   <span style={{ color: "var(--text-2)", fontSize: 20 }}>/100</span>
                   <span style={{ marginLeft: "auto", color: "#34d399", fontSize: 13, fontWeight: 600 }}>↑ +6 pts</span>
                 </div>
@@ -234,7 +229,7 @@ export default function BusinessPage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24 }}>
               {STATS.map(({ value, label }) => (
                 <div key={label} style={{ textAlign: "center" }}>
-                  <div className="gradient-text" style={{ fontSize: 32, fontWeight: 800, lineHeight: 1.1 }}>{value}</div>
+                  <div style={{ color: "#a78bfa", fontSize: 32, fontWeight: 800, lineHeight: 1.1 }}>{value}</div>
                   <div style={{ color: "var(--text-2)", fontSize: 13, marginTop: 6 }}>{label}</div>
                 </div>
               ))}
@@ -248,11 +243,10 @@ export default function BusinessPage() {
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <span className="badge badge-violet" style={{ marginBottom: 16 }}>Fonctionnalités</span>
               <h2 style={{
-                fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
                 fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)", marginBottom: 16,
               }}>
                 Tout ce dont votre organisation{" "}
-                <span className="gradient-text">a besoin</span>
+                <span style={{ color: "#a78bfa" }}>a besoin</span>
               </h2>
               <p style={{ color: "var(--text-2)", maxWidth: 520, margin: "0 auto", lineHeight: 1.7 }}>
                 Une plateforme complète, sécurisée et déployée en 48h.
@@ -283,10 +277,9 @@ export default function BusinessPage() {
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <span className="badge badge-cyan" style={{ marginBottom: 16 }}>Tarification</span>
               <h2 style={{
-                fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
                 fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)",
               }}>
-                Choisissez votre <span className="gradient-text">modèle</span>
+                Choisissez votre <span style={{ color: "#a78bfa" }}>modèle</span>
               </h2>
             </div>
 
@@ -408,7 +401,7 @@ export default function BusinessPage() {
                       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                         <div>
                           <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-2)", marginBottom: 6 }}>
-                            {selectedPlan === "B2G_COLLECTIVITE"  ? "Nom de la collectivité *"  :
+                            {selectedPlan === "B2G"  ? "Nom de la collectivité *"  :
                              selectedPlan === "B2B2C_PARTENAIRE"  ? "Nom de l'organisme *"       : "Nom de l'entreprise *"}
                           </label>
                           <input
@@ -446,7 +439,7 @@ export default function BusinessPage() {
                           </div>
                         )}
 
-                        {selectedPlan === "B2G_COLLECTIVITE" && (
+                        {selectedPlan === "B2G" && (
                           <div>
                             <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-2)", marginBottom: 6 }}>Population concernée</label>
                             <input type="text" value={populationSize} onChange={e => setPopulationSize(e.target.value)} placeholder="Ex : 50 000 habitants" className="input-field" />
@@ -497,10 +490,9 @@ export default function BusinessPage() {
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <span className="badge badge-amber" style={{ marginBottom: 16 }}>Témoignages</span>
               <h2 style={{
-                fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
                 fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)",
               }}>
-                Ce que disent nos <span className="gradient-text">partenaires</span>
+                Ce que disent nos <span style={{ color: "#a78bfa" }}>partenaires</span>
               </h2>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
@@ -533,11 +525,10 @@ export default function BusinessPage() {
               border: "1px solid rgba(124,58,237,0.25)",
             }}>
               <h2 style={{
-                fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
                 fontWeight: 800, fontSize: "clamp(26px, 4vw, 40px)", color: "var(--text-1)", marginBottom: 16,
               }}>
                 Prêt à déployer l'IQRH dans votre{" "}
-                <span className="gradient-text">organisation</span> ?
+                <span style={{ color: "#a78bfa" }}>organisation</span> ?
               </h2>
               <p style={{ color: "var(--text-2)", marginBottom: 36, fontSize: 16, lineHeight: 1.6 }}>
                 Rejoignez les organisations qui ont fait du bien-être relationnel un avantage compétitif.

@@ -16,32 +16,21 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
     <div style={{ animation: "fadeSlideIn 0.4s ease-out", display: "flex", flexDirection: "column", gap: 20 }}>
 
       {/* ── IRIS CTA Banner ── */}
-      <div style={{
-        borderRadius: 24,
-        background: "linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(6,182,212,0.08) 50%, rgba(124,58,237,0.05) 100%)",
-        border: "1px solid rgba(124,58,237,0.2)",
+      <div className="card" style={{
+        borderTop: "3px solid var(--primary)",
         padding: "20px 28px",
         display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
-        position: "relative", overflow: "hidden",
       }}>
-        {/* Animated orbs */}
-        <div style={{
-          position: "absolute", top: -30, right: 80, width: 120, height: 120,
-          background: "radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%)",
-          borderRadius: "50%", animation: "orbFloat 6s ease-in-out infinite",
-          pointerEvents: "none",
-        }} />
-        <div style={{ display: "flex", alignItems: "center", gap: 16, position: "relative" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <div style={{
-            width: 48, height: 48, borderRadius: 14,
-            background: "rgba(124,58,237,0.2)", border: "1px solid rgba(124,58,237,0.3)",
+            width: 48, height: 48, borderRadius: 12,
+            background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            animation: "orbFloat 6s ease-in-out infinite",
           }}>
-            <Brain size={24} style={{ color: "#a78bfa" }} />
+            <Brain size={24} color="#94a3b8" />
           </div>
           <div>
-            <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "#f8fafc" }}>
+            <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "#f8fafc" }}>
               Parler à IRIS — Votre coach IA
             </h3>
             <p style={{ color: "#64748b", fontSize: 13, marginTop: 2 }}>
@@ -50,15 +39,12 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
           </div>
         </div>
         <div style={{ position: "relative" }}>
-          <Link href="/iris" style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
-            color: "#fff", fontWeight: 600, padding: "12px 24px", borderRadius: 14,
-            border: "none", cursor: "pointer", fontSize: 14, textDecoration: "none",
-            boxShadow: "0 4px 20px rgba(124,58,237,0.4)",
-          }}>
+          <button 
+            onClick={() => window.dispatchEvent(new CustomEvent("open-iris", { detail: { tab: "coach" } }))} 
+            className="btn btn-primary btn-md"
+          >
             Commencer avec IRIS
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -66,30 +52,19 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
 
         {/* Profil relationnel */}
-        <div style={{
-          borderRadius: 24,
-          border: "1px solid rgba(124,58,237,0.15)",
-          background: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(30,27,75,0.3) 100%)",
-          padding: 28,
-          position: "relative", overflow: "hidden",
-        }}>
-          <div style={{
-            position: "absolute", bottom: -40, right: -40, width: 160, height: 160,
-            background: "radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%)",
-            borderRadius: "50%", pointerEvents: "none",
-          }} />
+        <div className="card" style={{ padding: 24, position: "relative", overflow: "hidden" }}>
 
           {/* Header */}
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.2)",
+                width: 32, height: 32, borderRadius: 8,
+                background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
-                <User size={18} style={{ color: "#a78bfa" }} />
+                <User size={16} color="#94a3b8" />
               </div>
-              <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 15, color: "#f8fafc" }}>
+              <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 15, color: "#f8fafc" }}>
                 Profil Relationnel
               </h3>
             </div>
@@ -154,20 +129,22 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
             <div style={{
               position: "absolute", inset: 0,
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-              background: "rgba(11,15,25,0.5)", backdropFilter: "blur(2px)",
+              background: "radial-gradient(circle at center, rgba(17,24,39,0.6) 0%, rgba(11,15,25,0.85) 100%)",
+              backdropFilter: "blur(6px)",
               borderRadius: 24, zIndex: 10,
+              border: "1px solid rgba(255,255,255,0.05)"
             }}>
-              <Lock size={28} style={{ color: "#a78bfa", marginBottom: 12 }} />
-              <p style={{ color: "#f8fafc", fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Analyse Premium</p>
-              <p style={{ color: "#64748b", fontSize: 13, marginBottom: 20 }}>Profil détaillé réservé aux abonnés</p>
-              <Link href="/premium" style={{
-                display: "inline-block",
-                background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
-                color: "#fff", fontWeight: 600, padding: "10px 20px",
-                borderRadius: 12, border: "none", cursor: "pointer", fontSize: 13,
-                boxShadow: "0 4px 16px rgba(124,58,237,0.4)", textDecoration: "none"
+              <div style={{
+                width: 52, height: 52, borderRadius: 16,
+                background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
               }}>
-                <Sparkles size={14} style={{ marginRight: 6, verticalAlign: "text-bottom" }} />
+                <Lock size={22} color="#f8fafc" />
+              </div>
+              <p style={{ color: "#f8fafc", fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Détail du Profil</p>
+              <p style={{ color: "#64748b", fontSize: 13, marginBottom: 20 }}>Accessible en version Premium</p>
+              <Link href="/premium" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
                 Débloquer
               </Link>
             </div>
@@ -288,19 +265,22 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
               <div style={{
                 position: "absolute", inset: 0,
                 display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                background: "rgba(11,15,25,0.5)", backdropFilter: "blur(2px)",
+                background: "radial-gradient(circle at center, rgba(17,24,39,0.6) 0%, rgba(11,15,25,0.85) 100%)",
+                backdropFilter: "blur(6px)",
                 borderRadius: 24, zIndex: 10,
+                border: "1px solid rgba(255,255,255,0.05)"
               }}>
-                <Lock size={28} style={{ color: "#f59e0b", marginBottom: 12 }} />
+                <div style={{
+                  width: 52, height: 52, borderRadius: 16,
+                  background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                  display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16,
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
+                }}>
+                  <Lock size={22} color="#f8fafc" />
+                </div>
                 <p style={{ color: "#f8fafc", fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Détail ICR Premium</p>
                 <p style={{ color: "#64748b", fontSize: 13, marginBottom: 20 }}>Décomposition complète réservée aux abonnés</p>
-                <Link href="/premium" style={{
-                  display: "inline-block",
-                  background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
-                  color: "#fff", fontWeight: 600, padding: "10px 20px",
-                  borderRadius: 12, border: "none", cursor: "pointer", fontSize: 13,
-                  boxShadow: "0 4px 16px rgba(124,58,237,0.4)", textDecoration: "none"
-                }}>
+                <Link href="/premium" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
                   Débloquer
                 </Link>
               </div>

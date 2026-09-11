@@ -55,30 +55,42 @@ export async function buildIrisContext(userId: string): Promise<string> {
   });
 
   // Récupération du dernier assessment de l'utilisateur avec toutes ses données associées
-  const latestAssessment = await prisma.assessment.findFirst({
-    where: { userId },
-    orderBy: { updatedAt: "desc" },
-    include: {
-      demographic: true,
-      result: {
-        include: {
-          icr: true,
-          profile: true,
-          prescription: {
-            include: {
-              items: {
-                include: { libraryItem: true },
+  const [latestAssessment, activeBinome] = await Promise.all([
+    prisma.assessment.findFirst({
+      where: { userId },
+      orderBy: { updatedAt: "desc" },
+      include: {
+        demographic: true,
+        result: {
+          include: {
+            icr: true,
+            profile: true,
+            prescription: {
+              include: {
+                items: {
+                  include: { libraryItem: true },
+                },
               },
             },
           },
         },
       },
-    },
-  });
+    }),
+    prisma.binome.findFirst({
+      where: {
+        OR: [{ userAId: userId }, { userBId: userId }],
+        status: "ACTIVE",
+      },
+      include: {
+        userA: { select: { firstName: true } },
+        userB: { select: { firstName: true } },
+      },
+    }),
+  ]);
 
   // Cas : l'utilisateur n'a pas encore fait le questionnaire
   if (!latestAssessment?.result) {
-    return "L'utilisateur n'a pas encore complété son questionnaire IQRH.";
+    return "NO_ASSESSMENT";
   }
 
   const result = latestAssessment.result;
@@ -100,11 +112,16 @@ export async function buildIrisContext(userId: string): Promise<string> {
   };
 
   // ── Construction du contexte — Section principale ────────────────────────
+  const binomePartnerName = activeBinome
+    ? (activeBinome.userAId === userId ? activeBinome.userB.firstName : activeBinome.userA.firstName)
+    : null;
+
   let irisContext = `=== CONTEXTE PERSONNEL ET DÉMOGRAPHIQUE ===
 - Rôle / Type de contrat : ${user?.role || "Non spécifié"}
 - Âge : ${demo?.ageRange ? `${demo.ageRange}` : "Non spécifié"}
 - Situation pro. principale : ${demo?.occupation || "Non spécifiée"}
 - Situations spécifiques : ${demo?.selectedSituations?.join(", ") || "Aucune"}
+- Binôme Relationnel : ${activeBinome ? `Actif — partenaire : ${binomePartnerName}. NE PAS proposer de chercher un binôme, l'utilisateur en a déjà un.` : "Aucun binôme actif. Tu peux proposer le programme si l'utilisateur en exprime le besoin."}
 
 === BILAN IQRH DE L'UTILISATEUR ===
 - Score Global IQRH : ${result.globalScore}/100

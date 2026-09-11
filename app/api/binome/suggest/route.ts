@@ -62,18 +62,17 @@ export async function GET() {
     const userResult = user.assessments[0]?.result;
 
     // Retrieve excluded users (already in pending or accepted pair with this user)
-    const existingPairs = await prisma.relationalPair.findMany({
+    const existingPairs = await prisma.binome.findMany({
       where: {
         OR: [
-          { initiatorId: userId },
-          { receiverId: userId }
+          { userAId: userId },
+          { userBId: userId }
         ],
-        // [BUG FIX] Ne pas exclure les REJECTED — ils peuvent recevoir une nouvelle invitation
-        NOT: { status: "REFUSEE" }
+        NOT: { status: "CLOSED" }
       }
     });
 
-    const excludedIds = existingPairs.flatMap(p => [p.initiatorId, p.receiverId]);
+    const excludedIds = existingPairs.flatMap(p => [p.userAId, p.userBId]);
     excludedIds.push(userId); // Exclude self
 
     // Find candidates in the same campaign who opted in

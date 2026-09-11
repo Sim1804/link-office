@@ -132,26 +132,20 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
                 textAlign: "center",
               }}>
                 <div style={{
-                  width: 52, height: 52, margin: "0 auto 16px",
-                  borderRadius: 16, background: "rgba(124,58,237,0.15)",
-                  border: "1px solid rgba(124,58,237,0.3)",
+                  width: 48, height: 48, margin: "0 auto 16px",
+                  borderRadius: 12, background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
-                  <Lock size={24} style={{ color: "#a78bfa" }} />
+                  <Lock size={20} color="#94a3b8" />
                 </div>
-                <h4 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", color: "#f8fafc", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+                <h4 style={{ fontFamily: "Inter, sans-serif", color: "#f8fafc", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
                   {hiddenCount} contenu{hiddenCount > 1 ? "s" : ""} Premium restant{hiddenCount > 1 ? "s" : ""}
                 </h4>
                 <p style={{ color: "#64748b", fontSize: 14, marginBottom: 24, maxWidth: 420, margin: "0 auto 24px" }}>
                   Débloquez l'intégralité de votre ordonnance, cochez vos défis terminés et discutez avec IRIS.
                 </p>
-                <Link href="/premium" style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
-                  color: "#fff", fontWeight: 600, padding: "12px 28px", borderRadius: 14,
-                  border: "none", cursor: "pointer", fontSize: 14,
-                  boxShadow: "0 4px 20px rgba(124,58,237,0.4)", textDecoration: "none"
-                }}>
+                <Link href="/premium" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
                   <Sparkles size={16} />
                   Passer à Premium
                 </Link>

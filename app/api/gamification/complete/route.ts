@@ -64,8 +64,14 @@ export async function POST(request: Request) {
   } catch (error: any) {
     // Loggué avec un préfixe standardisé pour faciliter le filtrage dans les logs serveur
     console.error("[GAMIFICATION_COMPLETE_ERROR]", error);
+    
+    // Distinguer les erreurs métiers des erreurs internes
+    if (error.message === "Défi introuvable ou non autorisé." || error.message === "Défi déjà complété.") {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
     return NextResponse.json(
-      { error: error.message || "Erreur interne" },
+      { error: "Erreur interne" },
       { status: 500 }
     );
   }

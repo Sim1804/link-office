@@ -13,12 +13,15 @@ export default async function NewCatalogItemPage() {
   if (!session || session.user.role !== "SUPER_ADMIN") redirect("/dashboard");
 
   return (
-    <div style={{ maxWidth: 860, margin: "0 auto", paddingBottom: "40px" }}>
-      <div style={{ marginBottom: 24 }}>
-        <Link href="/dashboard/superadmin/catalog" style={{ color: "#94a3b8", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 14 }}>
-          <ArrowLeft size={16} /> Retour au catalogue
+    <div style={{ maxWidth: 700, margin: "0 auto", paddingBottom: 40 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
+        <Link href="/dashboard/superadmin/catalog" style={{ color: "#94a3b8", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 13 }}>
+          <ArrowLeft size={15} /> Retour au catalogue
         </Link>
       </div>
+
+      <h1 style={{ fontSize: 28, fontWeight: 800, color: "#f8fafc", marginBottom: 8 }}>Ajouter au catalogue</h1>
+      <p style={{ color: "#94a3b8", marginBottom: 32 }}>Créez de nouvelles recommandations, défis et partenaires pour l'IA.</p>
 
       <CatalogForm isEdit={false} />
     </div>

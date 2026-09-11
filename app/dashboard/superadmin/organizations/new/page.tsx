@@ -106,7 +106,7 @@ export default function NewOrganizationPage() {
                 <select required name="type" value={form.type} onChange={handleChange} className="input-field">
                   <option value="B2B">B2B (Ressources Humaines)</option>
                   <option value="B2B2C">B2B2C (Partenaire Financeur)</option>
-                  <option value="COLLECTIVITE">Collectivité (Mairie, Région)</option>
+                  <option value="B2G">Collectivité (Mairie, Région)</option>
                 </select>
               </div>
               <div>

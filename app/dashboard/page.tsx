@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { ResultService } from "@/lib/iqrh/result-service";
 import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/layout/Navbar";
+import { MeteoWidget } from "@/src/components/dashboard/MeteoWidget";
 import { GamificationSummary } from "@/components/dashboard/GamificationSummary";
 import { DashboardTabs } from "@/src/components/dashboard/tabs/DashboardTabs";
 import { B2b2cMemberRecommendations } from "@/components/dashboard/B2b2cMemberRecommendations";
@@ -37,7 +38,7 @@ export default async function DashboardPage() {
   const userRole = session.user.role;
   if (userRole === "ADMIN_B2B") redirect("/dashboard/rh");
   if (userRole === "ADMIN_B2B2C") redirect("/dashboard/b2b2c");
-  if (userRole === "ADMIN_COLLECTIVITE") redirect("/dashboard/collectivites");
+  if (userRole === "ADMIN_B2G") redirect("/dashboard/b2g");
   if (userRole === "SUPER_ADMIN") redirect("/admin");
 
   const [dbUser, result, history] = await Promise.all([
@@ -149,12 +150,12 @@ export default async function DashboardPage() {
             <div style={{
               width: 80, height: 80, background: "rgba(124,58,237,0.12)", borderRadius: 24,
               display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 24px", animation: "float 6s ease-in-out infinite",
+              margin: "0 auto 24px",
             }}>
               <FileQuestion style={{ width: 40, height: 40, color: "#a78bfa" }} />
             </div>
-            <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "#f8fafc", marginBottom: 12 }}>
-              Bienvenue, {session.user.name?.split(" ")[0]} !
+            <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 32, color: "#f8fafc", letterSpacing: "-0.02em" }}>
+              Bonjour, {session.user.name?.split(" ")[0]} !
             </h1>
             <p style={{ color: "#94a3b8", fontSize: 15, marginBottom: 32, lineHeight: 1.6 }}>
               Vous n'avez pas encore de résultats. Remplissez le questionnaire IQRH pour découvrir votre profil relationnel.
@@ -193,9 +194,6 @@ export default async function DashboardPage() {
     <>
       <Navbar />
       <main className="page-main">
-        {/* Blobs */}
-        <div className="blob-violet" />
-        <div className="blob-cyan" />
 
         <div className="page-container-wide">
 
@@ -208,7 +206,7 @@ export default async function DashboardPage() {
                   Bonjour, <span style={{ color: "#94a3b8", fontWeight: 600 }}>{session.user.name?.split(" ")[0]}</span>
                 </p>
               </div>
-              <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: 34, color: "#f8fafc", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+              <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 34, color: "#f8fafc", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
                 Votre espace
                 <span style={{
                   background: "linear-gradient(135deg, #a78bfa 0%, #06b6d4 100%)",
@@ -249,7 +247,10 @@ export default async function DashboardPage() {
 
           {userRole === "MEMBER" && <B2b2cMemberRecommendations />}
 
-          <GamificationSummary points={points} badges={badges} />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 28, alignItems: "start" }}>
+            <MeteoWidget />
+            <GamificationSummary points={points} badges={badges} />
+          </div>
 
           <DashboardTabs data={data} isPremium={isPremium} DIMENSIONS_LABELS={DIMENSIONS_LABELS} />
         </div>
