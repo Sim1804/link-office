@@ -23,5 +23,17 @@ export async function POST(request: Request) {
     }
     const user = await prisma.user.create({ data: { firstName: prenom, lastName: nom, email, password: await bcrypt.hash(password, 12), organizationId, campaignId, ...(subscription ? { subscription } : {}), role }, select: { id: true, email: true, firstName: true, lastName: true, role: true, organizationId: true, mustChangePassword: true } });
     return NextResponse.json({ user }, { status: 201 });
-  } catch (error) { return NextResponse.json({ error: error instanceof z.ZodError ? "Données d'inscription invalides." : "Erreur interne." }, { status: 400 }); }
+  } catch (error) {
+  console.error("MOBILE REGISTER ERROR:", error);
+
+  return NextResponse.json(
+    {
+      error:
+        error instanceof z.ZodError
+          ? "Données d'inscription invalides."
+          : "Erreur interne.",
+    },
+    { status: 400 }
+  );
+}
 }

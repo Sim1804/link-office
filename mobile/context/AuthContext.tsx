@@ -1,261 +1,94 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
-import {
-  clearStoredToken,
-  getStoredToken,
-  login as loginApi,
-  me,
-  register as registerApi,
-  MobileUser,
-} from "@/services/auth";
-
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { clearStoredToken, getStoredToken, login as loginApi, me, register as registerApi, MobileUser } from "@/services/auth";
 import { getOnboardingStatus } from "@/services/onboarding";
-
-type AuthStatus = {
-  hasConsent: boolean;
-  hasCompletedDemographics: boolean;
-  hasCompletedIqrh: boolean;
-};
-
-type RegisterData = {
-  prenom: string;
-  nom: string;
-  email: string;
-  password: string;
-  codeAccess?: string;
-};
 
 type AuthContextValue = {
   user: MobileUser | null;
   token: string | null;
-  status: AuthStatus | null;
+  status: { hasConsent: boolean; hasCompletedDemographics: boolean; hasCompletedIqrh: boolean } | null;
   loading: boolean;
-
   refresh: () => Promise<void>;
-
-  login: (
-    email: string,
-    password: string
-  ) => Promise<void>;
-
-  register: (
-    data: RegisterData
-  ) => Promise<void>;
-
+  login: (email: string, password: string) => Promise<void>;
+  register: (data: { prenom: string; nom: string; email: string; password: string; codeAccess?: string }) => Promise<void>;
   logout: () => Promise<void>;
 };
 
-const AuthContext =
-  createContext<AuthContextValue | null>(null);
+const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function AuthProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [user, setUser] =
-    useState<MobileUser | null>(null);
-
-  const [token, setToken] =
-    useState<string | null>(null);
-
-  const [status, setStatus] =
-    useState<AuthStatus | null>(null);
-
-  const [loading, setLoading] =
-    useState(true);
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<MobileUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [status, setStatus] = useState<AuthContextValue["status"]>(null);
+  const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    const storedToken =
-      await getStoredToken();
-
-    if (!storedToken) {
-      setToken(null);
-      setUser(null);
-      setStatus(null);
-      return;
+    const stored = await getStoredToken();
+    if (!stored) {
+      setToken(null); setUser(null); setStatus(null); return;
     }
-
     try {
-      const result =
-        await me(storedToken);
-
-      setToken(storedToken);
+      const result = await me(stored);
+      setToken(stored);
       setUser(result.user);
-
       try {
-        const onboarding =
-          await getOnboardingStatus(
-            storedToken
-          );
-
+        const onboarding = await getOnboardingStatus(stored);
         setStatus(onboarding);
       } catch (error) {
-        console.error(
-          "[AUTH ONBOARDING]",
-          error
-        );
-
+        // Une panne temporaire de l'onboarding ne doit pas déconnecter
+        // l'utilisateur : l'authentification est déjà valide.
+        console.warn("Impossible de récupérer le statut d'onboarding", error);
         setStatus(null);
       }
-    } catch (error) {
-      console.error(
-        "[AUTH REFRESH]",
-        error
-      );
-
+    } catch {
       await clearStoredToken();
+      setToken(null); setUser(null); setStatus(null);
+    }
+  }, []);
 
-      setToken(null);
-      setUser(null);
+  useEffect(() => { refresh().finally(() => setLoading(false)); }, [refresh]);
+
+  const login = useCallback(async (email: string, password: string) => {
+    const nextUser = await loginApi(email, password);
+    const nextToken = await getStoredToken();
+    if (!nextToken) throw new Error("Connexion réussie, mais la session n'a pas pu être enregistrée.");
+
+    // On valide l'authentification immédiatement. Le statut d'onboarding est
+    // secondaire : une erreur de cette requête ne doit pas bloquer la navigation.
+    setUser(nextUser);
+    setToken(nextToken);
+    try {
+      setStatus(await getOnboardingStatus(nextToken));
+    } catch (error) {
+      console.warn("Impossible de récupérer le statut d'onboarding", error);
       setStatus(null);
     }
   }, []);
 
-  useEffect(() => {
-    refresh().finally(() => {
-      setLoading(false);
-    });
-  }, [refresh]);
+  const register = useCallback(async (data: { prenom: string; nom: string; email: string; password: string; codeAccess?: string }) => {
+    const nextUser = await registerApi(data);
+    const nextToken = await getStoredToken();
+    if (!nextToken) throw new Error("Compte créé, mais la session n'a pas pu être enregistrée.");
 
-  const login = useCallback(
-    async (
-      email: string,
-      password: string
-    ) => {
-      const nextUser =
-        await loginApi(
-          email,
-          password
-        );
-
-      const nextToken =
-        await getStoredToken();
-
-      if (!nextToken) {
-        throw new Error(
-          "La connexion a réussi mais aucun jeton de session n'a été enregistré."
-        );
-      }
-
-      setUser(nextUser);
-      setToken(nextToken);
-
-      try {
-        const onboarding =
-          await getOnboardingStatus(
-            nextToken
-          );
-
-        setStatus(onboarding);
-      } catch (error) {
-        console.error(
-          "[LOGIN ONBOARDING]",
-          error
-        );
-
-        setStatus(null);
-      }
-    },
-    []
-  );
-
-  const register = useCallback(
-    async (
-      data: RegisterData
-    ) => {
-      const nextUser =
-        await registerApi(data);
-
-      const nextToken =
-        await getStoredToken();
-
-      if (!nextToken) {
-        throw new Error(
-          "Le compte a été créé mais aucun jeton de session n'a été enregistré."
-        );
-      }
-
-      setUser(nextUser);
-      setToken(nextToken);
-
-      try {
-        const onboarding =
-          await getOnboardingStatus(
-            nextToken
-          );
-
-        setStatus(onboarding);
-      } catch (error) {
-        console.error(
-          "[REGISTER ONBOARDING]",
-          error
-        );
-
-        setStatus(null);
-      }
-    },
-    []
-  );
-
-  const logout = useCallback(
-    async () => {
-      await clearStoredToken();
-
-      setToken(null);
-      setUser(null);
+    setUser(nextUser);
+    setToken(nextToken);
+    try {
+      setStatus(await getOnboardingStatus(nextToken));
+    } catch (error) {
+      console.warn("Impossible de récupérer le statut d'onboarding", error);
       setStatus(null);
-    },
-    []
-  );
+    }
+  }, []);
 
-  const value =
-    useMemo<AuthContextValue>(
-      () => ({
-        user,
-        token,
-        status,
-        loading,
-        refresh,
-        login,
-        register,
-        logout,
-      }),
-      [
-        user,
-        token,
-        status,
-        loading,
-        refresh,
-        login,
-        register,
-        logout,
-      ]
-    );
+  const logout = useCallback(async () => {
+    await clearStoredToken(); setToken(null); setUser(null); setStatus(null);
+  }, []);
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = useMemo(() => ({ user, token, status, loading, refresh, login, register, logout }), [user, token, status, loading, refresh, login, register, logout]);
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const context =
-    useContext(AuthContext);
-
-  if (!context) {
-    throw new Error(
-      "useAuth doit être utilisé dans AuthProvider"
-    );
-  }
-
-  return context;
+  const value = useContext(AuthContext);
+  if (!value) throw new Error("useAuth doit être utilisé dans AuthProvider");
+  return value;
 }

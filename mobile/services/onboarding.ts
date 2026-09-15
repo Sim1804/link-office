@@ -1,7 +1,7 @@
 import { API_URL } from "./api";
 
 async function request<T>(path: string, token: string, options: RequestInit = {}) {
-  const response = await fetch(`${API_URL}${path}`, {
+  const response = await fetch(`${API_URL.replace(/\/$/, "")}${path}`, {
     ...options,
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, ...(options.headers || {}) },
   });

@@ -1,7 +1,7 @@
 import { API_URL } from "./api";
 
 async function request<T>(path: string, token: string, options: RequestInit = {}) {
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, ...(options.headers || {}) } });
+  const response = await fetch(`${API_URL.replace(/\/$/, "")}${path}`, { ...options, headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, ...(options.headers || {}) } });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(body.error || body.detail || "Erreur questionnaire");
   return body as T;

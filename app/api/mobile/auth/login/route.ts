@@ -14,5 +14,17 @@ export async function POST(request: Request) {
     if (!user?.password || !(await bcrypt.compare(password, user.password))) return NextResponse.json({ error: "Email ou mot de passe incorrect." }, { status: 401 });
     const token = await createMobileToken(user);
     return NextResponse.json({ token, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role, organizationId: user.organizationId, mustChangePassword: user.mustChangePassword } });
-  } catch (error) { return NextResponse.json({ error: error instanceof z.ZodError ? "Identifiants invalides." : "Erreur interne." }, { status: 400 }); }
+  }  catch (error) {
+  console.error("MOBILE LOGIN ERROR:", error);
+
+  return NextResponse.json(
+    {
+      error:
+        error instanceof z.ZodError
+          ? "Identifiants invalides."
+          : "Erreur interne.",
+    },
+    { status: 400 }
+  );
+}
 }
