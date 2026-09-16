@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { clearStoredToken, getStoredToken, login as loginApi, me, register as registerApi, MobileUser } from "@/services/auth";
+import { clearStoredToken, deleteAccount as deleteAccountApi, getStoredToken, login as loginApi, me, register as registerApi, MobileUser } from "@/services/auth";
 import { getOnboardingStatus } from "@/services/onboarding";
 
 type AuthContextValue = {
@@ -11,6 +11,7 @@ type AuthContextValue = {
   login: (email: string, password: string) => Promise<void>;
   register: (data: { prenom: string; nom: string; email: string; password: string; codeAccess?: string }) => Promise<void>;
   logout: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -83,7 +84,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await clearStoredToken(); setToken(null); setUser(null); setStatus(null);
   }, []);
 
-  const value = useMemo(() => ({ user, token, status, loading, refresh, login, register, logout }), [user, token, status, loading, refresh, login, register, logout]);
+  const deleteAccount = useCallback(async () => {
+    if (!token) throw new Error("Votre session a expiré. Reconnectez-vous avant de supprimer votre compte.");
+    await deleteAccountApi(token);
+    await clearStoredToken();
+    setToken(null); setUser(null); setStatus(null);
+  }, [token]);
+
+  const value = useMemo(() => ({ user, token, status, loading, refresh, login, register, logout, deleteAccount }), [user, token, status, loading, refresh, login, register, logout, deleteAccount]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

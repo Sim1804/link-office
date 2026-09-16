@@ -27,6 +27,11 @@ Expo charge `mobile/.env` (`EXPO_PUBLIC_API_URL`) en priorité, puis
 `expo.extra.apiUrl` dans `mobile/app.json`. Les deux pointent vers le backend
 de test Link Office afin que le comportement soit reproductible.
 
+Pour tester Expo Web contre le Next.js local, créez `mobile/.env.local` avec
+`EXPO_PUBLIC_API_URL=http://localhost:3000`, puis relancez Expo avec
+`npx expo start -c`. Le middleware autorise cette origine Expo locale seulement
+en développement ; en production, seule l'origine mobile configurée est admise.
+
 ## APK Android installable par QR code
 
 Le profil `download` produit un APK installable directement :

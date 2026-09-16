@@ -10,7 +10,7 @@ Un second problème rendait le comportement plus fragile : après une authentifi
 
 ## Correctifs
 
-- URL API mobile configurée par défaut sur `https://link-office.fr`.
+- URL API mobile configurée par défaut sur `https://link-office-git-test-mobile-sim1804s-projects.vercel.app`.
 - L'URL reste surchargeable avec `EXPO_PUBLIC_API_URL` sur Vercel/EAS.
 - Connexion/inscription validées et session enregistrée avant de récupérer le statut d'onboarding.
 - Une panne temporaire de l'onboarding ne déconnecte plus l'utilisateur et n'annule plus la navigation.
@@ -21,6 +21,6 @@ Un second problème rendait le comportement plus fragile : après une authentifi
 
 Pour le projet Vercel qui utilise le dossier `mobile`, conserver la variable :
 
-`EXPO_PUBLIC_API_URL=https://link-office.fr`
+`EXPO_PUBLIC_API_URL=https://link-office-git-test-mobile-sim1804s-projects.vercel.app`
 
 Puis redéployer le projet mobile pour que le nouveau bundle soit généré.

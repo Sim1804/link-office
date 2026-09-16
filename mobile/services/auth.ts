@@ -86,6 +86,10 @@ export async function changePassword(token: string, password: string) {
   }, token);
 }
 
+export async function deleteAccount(token: string) {
+  return request<{ success: boolean }>("/api/mobile/auth/account", { method: "DELETE" }, token);
+}
+
 export async function logout() {
   await clearStoredToken();
 }

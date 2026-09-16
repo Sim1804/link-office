@@ -77,20 +77,22 @@ export async function middleware(request: NextRequest) {
     const origin = request.headers.get("origin") || "";
     const configuredOrigin = process.env.MOBILE_WEB_ORIGIN || process.env.NEXT_PUBLIC_MOBILE_WEB_URL || "";
     const allowedOrigin = configuredOrigin ? new URL(configuredOrigin).origin : "";
-    const isAllowedBrowserOrigin = Boolean(origin && allowedOrigin && origin === allowedOrigin);
+    const isLocalExpoOrigin = process.env.NODE_ENV !== "production" && /^http:\/\/(localhost|127\.0\.0\.1)(?::\d+)?$/.test(origin);
+    const isAllowedBrowserOrigin = Boolean(origin && (origin === allowedOrigin || isLocalExpoOrigin));
+    const corsOrigin = isAllowedBrowserOrigin ? origin : "";
     if (request.method === "OPTIONS") {
       if (!isAllowedBrowserOrigin) return new NextResponse(null, { status: 403 });
       const preflight = new NextResponse(null, { status: 204 });
-      preflight.headers.set("Access-Control-Allow-Origin", allowedOrigin);
-      preflight.headers.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+      preflight.headers.set("Access-Control-Allow-Origin", corsOrigin);
+      preflight.headers.set("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS");
       preflight.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
       preflight.headers.set("Access-Control-Max-Age", "86400");
       return preflight;
     }
     const response = NextResponse.next();
-    if (isAllowedBrowserOrigin) response.headers.set("Access-Control-Allow-Origin", allowedOrigin);
+    if (isAllowedBrowserOrigin) response.headers.set("Access-Control-Allow-Origin", corsOrigin);
     response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    response.headers.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    response.headers.set("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS");
     response.headers.set("Vary", "Origin");
     return response;
   }

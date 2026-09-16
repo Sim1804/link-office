@@ -33,6 +33,20 @@ npm run dev
 
 3. Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur pour tester l'application.
 
+### Application mobile Expo
+
+`npm run dev` démarre uniquement Next.js (site web et API) : il ne lance pas
+Expo et ne sert pas les routes de `mobile/app`. Dans un second terminal,
+démarrez l'application mobile avec :
+
+```bash
+npm run dev:mobile
+```
+
+ou depuis `mobile/` avec `npx expo start`. L'application Expo utilise
+`EXPO_PUBLIC_API_URL`, puis la valeur de secours `expo.extra.apiUrl`, toutes
+deux configurées vers le backend de test Link Office.
+
 ## Fonctionnalités Principales
 
 - **Dashboard IQRH** : Visualisation globale de votre qualité relationnelle (Score, Météo, Radar des 5 dimensions).

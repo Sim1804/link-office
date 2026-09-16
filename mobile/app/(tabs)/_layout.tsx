@@ -1,6 +1,7 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/theme";
+import { useAuth } from "@/context/AuthContext";
 
 const icons: Record<string, keyof typeof Ionicons.glyphMap> = {
   index: "home-outline",
@@ -11,6 +12,13 @@ const icons: Record<string, keyof typeof Ionicons.glyphMap> = {
 };
 
 export default function TabsLayout() {
+  const { loading, status, user } = useAuth();
+  if (loading) return null;
+  if (!user) return <Redirect href="/welcome" />;
+  if (user.mustChangePassword) return <Redirect href="/auth/change-password" />;
+  if (!status?.hasConsent) return <Redirect href="/onboarding/consent" />;
+  if (!status.hasCompletedDemographics) return <Redirect href="/onboarding/demographics" />;
+
   return (
     <Tabs screenOptions={({ route }) => ({
       headerShown: false,
