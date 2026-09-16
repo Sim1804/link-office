@@ -67,8 +67,12 @@ export async function login(email: string, password: string) {
 }
 
 export async function register(data: { prenom: string; nom: string; email: string; password: string; codeAccess?: string }) {
-  await request("/api/mobile/auth/register", { method: "POST", body: JSON.stringify(data) });
-  return login(data.email, data.password);
+  const result = await request<AuthResponse>("/api/mobile/auth/register", {
+    method: "POST",
+    body: JSON.stringify({ ...data, email: data.email.trim().toLowerCase() }),
+  });
+  await setStoredToken(result.token);
+  return result.user;
 }
 
 export async function me(token: string) {

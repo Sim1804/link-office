@@ -23,14 +23,21 @@ export default function RegisterPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, email: form.email.trim().toLowerCase() }),
       });
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.detail || "Erreur lors de l'inscription");
       }
-      await signIn("credentials", { email: form.email, password: form.password, redirect: false });
-      router.push("/consentement");
+      const result = await signIn("credentials", {
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+        redirect: false,
+      });
+      if (result?.error) {
+        throw new Error("Compte créé, mais la connexion a échoué. Connectez-vous avec vos identifiants.");
+      }
+      router.replace("/consentement");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur lors de l'inscription");
     } finally {

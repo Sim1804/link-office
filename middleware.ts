@@ -75,17 +75,20 @@ export async function middleware(request: NextRequest) {
   // API mobile : authentification par Bearer token + CORS pour la version web Expo.
   if (pathname.startsWith("/api/mobile")) {
     const origin = request.headers.get("origin") || "";
-    const configuredOrigin = process.env.MOBILE_WEB_ORIGIN || (process.env.NEXT_PUBLIC_MOBILE_WEB_URL ? new URL(process.env.NEXT_PUBLIC_MOBILE_WEB_URL).origin : origin);
+    const configuredOrigin = process.env.MOBILE_WEB_ORIGIN || process.env.NEXT_PUBLIC_MOBILE_WEB_URL || "";
+    const allowedOrigin = configuredOrigin ? new URL(configuredOrigin).origin : "";
+    const isAllowedBrowserOrigin = Boolean(origin && allowedOrigin && origin === allowedOrigin);
     if (request.method === "OPTIONS") {
+      if (!isAllowedBrowserOrigin) return new NextResponse(null, { status: 403 });
       const preflight = new NextResponse(null, { status: 204 });
-      if (configuredOrigin) preflight.headers.set("Access-Control-Allow-Origin", configuredOrigin);
+      preflight.headers.set("Access-Control-Allow-Origin", allowedOrigin);
       preflight.headers.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
       preflight.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
       preflight.headers.set("Access-Control-Max-Age", "86400");
       return preflight;
     }
     const response = NextResponse.next();
-    if (configuredOrigin) response.headers.set("Access-Control-Allow-Origin", configuredOrigin);
+    if (isAllowedBrowserOrigin) response.headers.set("Access-Control-Allow-Origin", allowedOrigin);
     response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
     response.headers.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
     response.headers.set("Vary", "Origin");
@@ -178,6 +181,6 @@ export const config = {
      * - /politique-confidentialite    : Page RGPD publique
      * - /mentions-legales             : Mentions légales publiques
      */
-    "/((?!_next/static|_next/image|favicon\\.ico|public/|api/auth|api/mobile|auth/|join/|politique-confidentialite|mentions-legales|$).*)",
+    "/((?!_next/static|_next/image|favicon\\.ico|public/|api/auth|auth/|join/|politique-confidentialite|mentions-legales|$).*)",
   ],
 };

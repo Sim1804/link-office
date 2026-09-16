@@ -1,15 +1,26 @@
 import { decode, encode } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
 
-const secret =
-  process.env.AUTH_SECRET ||
-  process.env.NEXTAUTH_SECRET ||
-  "my-super-secret-auth-key-1234";
+/**
+ * Mobile tokens deliberately use a fixed, public namespace as their salt and
+ * the Auth.js secret as their cryptographic key. Both must stay unchanged
+ * between requests and deployments for a stored session to remain valid.
+ */
+function mobileJwtConfig() {
+  const secret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("AUTH_SECRET (or NEXTAUTH_SECRET) must be configured in production.");
+    }
+    // Development-only fallback. It is never used by a production deployment.
+    return { secret: "link-office-development-secret", salt: "link-office-mobile-auth" };
+  }
 
-const salt =
-  process.env.AUTH_SECRET ||
-  process.env.NEXTAUTH_SECRET ||
-  "link-office-mobile-auth";
+  return {
+    secret,
+    salt: process.env.MOBILE_AUTH_SALT || "link-office-mobile-auth",
+  };
+}
 
 export async function createMobileToken(user: {
   id: string;
@@ -17,6 +28,7 @@ export async function createMobileToken(user: {
   organizationId?: string | null;
   mustChangePassword?: boolean;
 }) {
+  const { secret, salt } = mobileJwtConfig();
   return encode({
     secret,
     salt,
@@ -45,11 +57,14 @@ export async function getMobileUser(request: Request) {
     return null;
   }
 
-  const decoded = await decode({
-    token,
-    secret,
-    salt,
-  });
+  let decoded;
+  try {
+    const { secret, salt } = mobileJwtConfig();
+    decoded = await decode({ token, secret, salt });
+  } catch (error) {
+    console.error("MOBILE TOKEN DECODE ERROR:", error);
+    return null;
+  }
 
   const userId = decoded?.userId || decoded?.sub;
 

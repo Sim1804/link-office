@@ -70,9 +70,21 @@ export class ResultService {
   }
 
   static async byUser(userId: string) {
-    return prisma.iqrhResult.findFirstOrThrow({
+    return prisma.iqrhResult.findFirst({
       where: { assessment: { userId } }, orderBy: { createdAt: "desc" },
       include: { assessment: { select: { id: true, submittedAt: true } }, icr: true, profile: true, prescription: { include: { items: { orderBy: { position: "asc" }, include: { libraryItem: true } } } } },
+    });
+  }
+
+  static async userHistory(userId: string) {
+    return prisma.iqrhResult.findMany({
+      where: { assessment: { userId } },
+      orderBy: { createdAt: "desc" },
+      include: {
+        assessment: {
+          select: { id: true, submittedAt: true, campaign: { select: { title: true, offer: true } } },
+        },
+      },
     });
   }
 }

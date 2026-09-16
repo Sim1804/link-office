@@ -10,8 +10,13 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { rateLimit, getRetryAfterSeconds } from "@/lib/rate-limit";
 
+const authSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+if (!authSecret && process.env.NODE_ENV === "production") {
+  throw new Error("AUTH_SECRET (or NEXTAUTH_SECRET) must be configured in production.");
+}
+
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "my-super-secret-auth-key-1234",
+  secret: authSecret,
   providers: [
     Credentials({
       name: "credentials",
@@ -23,7 +28,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (!credentials?.email || !credentials?.password) return null;
 
         // ── Rate limiting : 5 tentatives max par email par minute ──
-        const key = `login:${String(credentials.email).toLowerCase()}`;
+        const email = String(credentials.email).trim().toLowerCase();
+        const key = `login:${email}`;
         if (!rateLimit(key, { limit: 5, windowMs: 60_000 })) {
           const retry = getRetryAfterSeconds(key);
           throw new Error(`RATE_LIMITED:${retry}`);
@@ -31,7 +37,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         try {
           const user = await prisma.user.findUnique({
-            where: { email: credentials.email as string },
+            where: { email },
             select: {
               id: true,
               email: true,

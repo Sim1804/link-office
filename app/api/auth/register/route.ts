@@ -83,7 +83,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const { prenom, nom, email, password, codeAccess } = parseResult.data;
+    const { prenom, nom, email: rawEmail, password, codeAccess } = parseResult.data;
+    const email = rawEmail.trim().toLowerCase();
 
     // Vérifier si l'email est déjà utilisé
     const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -120,7 +121,7 @@ export async function POST(request: Request) {
         // Create user with campaign link
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = await prisma.user.create({
-          data: { firstName: prenom, lastName: nom, email, password: hashedPassword, organizationId, role: userRole, ...campaignUpdate },
+          data: { firstName: prenom.trim(), lastName: nom.trim(), email, password: hashedPassword, organizationId, role: userRole, ...campaignUpdate },
           select: { id: true, email: true, firstName: true, lastName: true, role: true, organizationId: true, subscription: true },
         });
         return NextResponse.json({ user_id: user.id, email: user.email, prenom: user.firstName, nom: user.lastName, role: user.role }, { status: 201 });
@@ -144,8 +145,8 @@ export async function POST(request: Request) {
 
     const user = await prisma.user.create({
       data: {
-        firstName: prenom,
-        lastName: nom,
+        firstName: prenom.trim(),
+        lastName: nom.trim(),
         email,
         password: hashedPassword,
         role: userRole,

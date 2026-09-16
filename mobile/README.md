@@ -9,6 +9,24 @@ npm install
 npx expo start
 ```
 
+Cette commande démarre l'application mobile Expo/Metro. Depuis la racine du
+dépôt, `npm run dev` démarre uniquement le site et les API Next.js sur
+`http://localhost:3000` ; ce n'est pas le serveur Expo et il ne sert pas les
+routes `mobile/app/*`. Pour développer les deux applications, utilisez deux
+terminaux :
+
+```bash
+# Racine : backend et site Next.js
+npm run dev
+
+# mobile/ : application Expo
+npx expo start
+```
+
+Expo charge `mobile/.env` (`EXPO_PUBLIC_API_URL`) en priorité, puis
+`expo.extra.apiUrl` dans `mobile/app.json`. Les deux pointent vers le backend
+de test Link Office afin que le comportement soit reproductible.
+
 ## APK Android installable par QR code
 
 Le profil `download` produit un APK installable directement :

@@ -19,7 +19,9 @@ NEXT_PUBLIC_ANDROID_APK_URL=https://expo.dev/artifacts/eas/VOTRE_APK.apk
 NEXT_PUBLIC_IOS_APP_URL=
 ```
 
-Conserver aussi `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL` et `GROQ_API_KEY`.
+Conserver aussi `DATABASE_URL`, `AUTH_SECRET` (ou `NEXTAUTH_SECRET` pendant la transition), `NEXTAUTH_URL` et `GROQ_API_KEY`.
+
+`AUTH_SECRET` doit être une valeur longue, aléatoire et stable entre les déploiements. Pour les jetons mobiles, configurez aussi `MOBILE_AUTH_SALT` avec une chaîne stable (par exemple `link-office-mobile-auth`) : ne la régénérez pas à chaque déploiement.
 
 ## Vercel — projet Expo Web
 
