@@ -23,8 +23,8 @@ export class ResultService {
         demographic: true,
       },
     });
-    if (!assessment.consentInformation || !assessment.consentResearch || !assessment.consentParticipation || !assessment.demographic) {
-      throw new Error("Consentements et profil démographique obligatoires.");
+    if (!assessment.consentInformation || !assessment.consentResearch || !assessment.demographic) {
+      throw new Error("Les consentements obligatoires et le profil démographique sont requis.");
     }
     const iqrh = IQRHCalculationService.calculate(assessment.answers.map(({ question, value }) => ({ dimension: question.dimension as IqrhDimension, value })));
     const scores = Object.fromEntries(iqrh.dimensions.map(({ dimension, score }) => [dimension, score])) as Record<IqrhDimension, number>;
@@ -65,7 +65,13 @@ export class ResultService {
       await tx.profileResult.upsert({ where: { iqrhResultId: stored.id }, create: { iqrhResultId: stored.id, ...profile }, update: profile });
       return stored;
     });
-    await PrescriptionService.generateForResult(result.id);
+    // A catalogue incomplet ne doit pas empêcher la finalisation d'une
+    // évaluation déjà calculée et sauvegardée.
+    try {
+      await PrescriptionService.generateForResult(result.id);
+    } catch (error) {
+      console.error("PRESCRIPTION GENERATION ERROR:", error);
+    }
     return result;
   }
 

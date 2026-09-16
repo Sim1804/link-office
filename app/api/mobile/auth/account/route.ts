@@ -17,9 +17,29 @@ export async function DELETE(request: Request) {
       // EventLog intentionally has no Prisma relation to User, so it does not
       // participate in the schema-level cascade and must be removed manually.
       await tx.eventLog.deleteMany({ where: { userId: user.id } });
-      // Schema cascades remove assessments (and their answers, demographics and
-      // results), pairs, prescriptions, badges, stats, notifications and the
-      // optional user subscription atomically with the user.
+      const assessments = await tx.assessment.findMany({ where: { userId: user.id }, select: { id: true } });
+      const assessmentIds = assessments.map((assessment) => assessment.id);
+
+      // Delete explicitly as well as relying on the schema cascades. This
+      // makes account removal work against databases created by older schema
+      // revisions where every FK cascade may not yet have been applied.
+      await tx.prescriptionItem.deleteMany({ where: { prescription: { userId: user.id } } });
+      await tx.relationalPrescription.deleteMany({ where: { userId: user.id } });
+      if (assessmentIds.length > 0) {
+        await tx.campaignVariableAnswer.deleteMany({ where: { assessmentId: { in: assessmentIds } } });
+        await tx.adaptiveAnswer.deleteMany({ where: { assessmentId: { in: assessmentIds } } });
+        await tx.questionnaireAnswer.deleteMany({ where: { assessmentId: { in: assessmentIds } } });
+        await tx.demographicProfile.deleteMany({ where: { assessmentId: { in: assessmentIds } } });
+        await tx.icrResult.deleteMany({ where: { iqrhResult: { assessmentId: { in: assessmentIds } } } });
+        await tx.profileResult.deleteMany({ where: { iqrhResult: { assessmentId: { in: assessmentIds } } } });
+        await tx.iqrhResult.deleteMany({ where: { assessmentId: { in: assessmentIds } } });
+        await tx.assessment.deleteMany({ where: { id: { in: assessmentIds } } });
+      }
+      await tx.relationalPair.deleteMany({ where: { OR: [{ initiatorId: user.id }, { receiverId: user.id }] } });
+      await tx.userBadge.deleteMany({ where: { userId: user.id } });
+      await tx.userStats.deleteMany({ where: { userId: user.id } });
+      await tx.notification.deleteMany({ where: { userId: user.id } });
+      await tx.userSubscription.deleteMany({ where: { userId: user.id } });
       await tx.user.delete({ where: { id: user.id } });
     });
 

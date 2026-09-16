@@ -41,7 +41,11 @@ async function request<T>(path: string, options: RequestInit = {}, token?: strin
     throw new Error("Impossible de joindre Link Office. Vérifiez votre connexion internet.");
   }
   const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(body.error || body.detail || "Une erreur est survenue.");
+  if (!response.ok) {
+    const detail = body.error || body.detail || `Une erreur est survenue (${response.status}).`;
+    console.error("MOBILE AUTH API ERROR", { path, status: response.status, detail });
+    throw new Error(detail);
+  }
   return body as T;
 }
 
