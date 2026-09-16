@@ -49,7 +49,7 @@ export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; on
       zIndex: 100, padding: 20
     }}>
       <div style={{
-        background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)",
+        background: "var(--bg)", border: "1px solid var(--border)",
         borderRadius: 24, padding: 32, width: "100%", maxWidth: 500,
         position: "relative"
       }}>
@@ -57,21 +57,21 @@ export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; on
           onClick={onClose}
           style={{
             position: "absolute", top: 20, right: 20,
-            background: "transparent", border: "none", color: "#64748b",
+            background: "transparent", border: "none", color: "var(--text-3)",
             cursor: "pointer"
           }}
         >
           <X size={20} />
         </button>
 
-        <h2 style={{ fontSize: 20, fontWeight: 800, color: "#f8fafc", margin: "0 0 24px" }}>
+        <h2 style={{ fontSize: 20, fontWeight: 800, color: "var(--text-1)", margin: "0 0 24px" }}>
           Check-in rapide
         </h2>
 
         <div style={{ display: "grid", gap: 24 }}>
           {/* Mood */}
           <div>
-            <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#e2e8f0", marginBottom: 12 }}>
+            <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "var(--text-1)", marginBottom: 12 }}>
               Comment vous sentez-vous relationnellement aujourd'hui ?
             </label>
             <div style={{ display: "flex", gap: 12 }}>
@@ -87,9 +87,9 @@ export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; on
                     onClick={() => setMood(m.val)}
                     style={{
                       flex: 1, padding: "16px", borderRadius: 16,
-                      background: isSelected ? `${m.color}20` : "rgba(255,255,255,0.02)",
-                      border: `1px solid ${isSelected ? m.color : "rgba(255,255,255,0.05)"}`,
-                      color: isSelected ? m.color : "#64748b",
+                      background: isSelected ? `${m.color}20` : "var(--bg)",
+                      border: `1px solid ${isSelected ? m.color : "rgba(18,61,70,0.05)"}`,
+                      color: isSelected ? m.color : "var(--text-3)",
                       cursor: "pointer", transition: "all 0.2s",
                       display: "flex", justifyContent: "center"
                     }}
@@ -103,7 +103,7 @@ export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; on
 
           {/* Action */}
           <div>
-            <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#e2e8f0", marginBottom: 12 }}>
+            <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "var(--text-1)", marginBottom: 12 }}>
               Où en êtes-vous de votre action prévue ?
             </label>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -115,9 +115,9 @@ export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; on
                     onClick={() => setActionStatus(opt)}
                     style={{
                       padding: "8px 16px", borderRadius: 999, fontSize: 13, fontWeight: 600,
-                      background: isSelected ? "rgba(56,189,248,0.15)" : "rgba(255,255,255,0.04)",
-                      color: isSelected ? "#38bdf8" : "#94a3b8",
-                      border: `1px solid ${isSelected ? "rgba(56,189,248,0.3)" : "rgba(255,255,255,0.1)"}`,
+                      background: isSelected ? "rgba(0,169,157,0.15)" : "var(--bg)",
+                      color: isSelected ? "var(--primary)" : "var(--text-2)",
+                      border: `1px solid ${isSelected ? "rgba(0,169,157,0.3)" : "var(--border)"}`,
                       cursor: "pointer", transition: "all 0.2s"
                     }}
                   >
@@ -130,7 +130,7 @@ export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; on
 
           {/* Message */}
           <div>
-            <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#e2e8f0", marginBottom: 8 }}>
+            <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "var(--text-1)", marginBottom: 8 }}>
               Un mot pour votre binôme ? (Facultatif)
             </label>
             <textarea
@@ -139,8 +139,8 @@ export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; on
               placeholder="Ex: J'ai réussi mon défi ce matin !"
               style={{
             width: "100%", padding: "12px 16px", borderRadius: 12,
-              background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f8fafc", fontSize: 14, minHeight: 80,
+              background: "var(--bg)", border: "1px solid var(--border)",
+              color: "var(--text-1)", fontSize: 14, minHeight: 80,
               resize: "none", boxSizing: "border-box" as const, fontFamily: "inherit",
               outline: "none",
               }}
@@ -166,10 +166,9 @@ export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; on
         <button
           onClick={handleSubmit}
           disabled={loading || mood === null || actionStatus === null}
+          className="btn btn-primary btn-md"
           style={{
-            width: "100%", marginTop: 24, padding: "14px", borderRadius: 12,
-            background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
-            color: "#fff", border: "none", fontSize: 15, fontWeight: 700,
+            width: "100%", marginTop: 24, padding: "14px", borderRadius: 999,
             cursor: (loading || mood === null || actionStatus === null) ? "not-allowed" : "pointer",
             display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
             opacity: (mood === null || actionStatus === null) ? 0.5 : 1

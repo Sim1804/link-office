@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { ArrowLeft, Save } from "lucide-react";
 import { use } from "react";
+import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
 
 export default function RenewCampaignPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -66,22 +67,23 @@ export default function RenewCampaignPage({ params }: { params: Promise<{ id: st
     <>
       <Navbar />
       <main className="page-main" style={{ minHeight: "100vh", paddingTop: 88, paddingBottom: 64 }}>
+        <PartnerPortalsNavigation />
         <div className="blob-violet" />
         <div className="blob-cyan" />
         <div className="page-container-wide" style={{ maxWidth: 800 }}>
-          <button onClick={() => router.back()} style={{ display: "flex", alignItems: "center", gap: 8, color: "#94a3b8", background: "none", border: "none", cursor: "pointer", marginBottom: 24, fontSize: 14 }}>
+          <button onClick={() => router.back()} style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-3)", background: "none", border: "none", cursor: "pointer", marginBottom: 24, fontSize: 14 }}>
             <ArrowLeft size={16} /> Retour
           </button>
           
-          <h1 style={{ fontSize: 26, fontWeight: 700, color: "#f8fafc", marginBottom: 8 }}>Renouveler : {parent.title}</h1>
-          <p style={{ color: "#94a3b8", fontSize: 14, marginBottom: 32 }}>
+          <h1 style={{ fontSize: 26, fontWeight: 700, color: "var(--text-1)", marginBottom: 8 }}>Renouveler : {parent.title}</h1>
+          <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 32 }}>
             Une nouvelle campagne sera créée avec la même configuration de questionnaire.
             L'historique de l'ancienne campagne sera conservé.
           </p>
 
           <form onSubmit={handleSubmit} className="card" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <div>
-              <label style={{ display: "block", fontSize: 14, color: "#cbd5e1", marginBottom: 8 }}>Nom de la nouvelle campagne</label>
+              <label style={{ display: "block", fontSize: 14, color: "var(--text-2)", marginBottom: 8 }}>Nom de la nouvelle campagne</label>
               <input 
                 type="text" 
                 value={formData.title}
@@ -92,7 +94,7 @@ export default function RenewCampaignPage({ params }: { params: Promise<{ id: st
             </div>
             <div style={{ display: "flex", gap: 16 }}>
               <div style={{ flex: 1 }}>
-                <label style={{ display: "block", fontSize: 14, color: "#cbd5e1", marginBottom: 8 }}>Date de début</label>
+                <label style={{ display: "block", fontSize: 14, color: "var(--text-2)", marginBottom: 8 }}>Date de début</label>
                 <input 
                   type="date" 
                   value={formData.startDate}
@@ -102,7 +104,7 @@ export default function RenewCampaignPage({ params }: { params: Promise<{ id: st
                 />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={{ display: "block", fontSize: 14, color: "#cbd5e1", marginBottom: 8 }}>Date de fin</label>
+                <label style={{ display: "block", fontSize: 14, color: "var(--text-2)", marginBottom: 8 }}>Date de fin</label>
                 <input 
                   type="date" 
                   value={formData.endDate}

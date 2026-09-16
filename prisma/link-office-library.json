@@ -21548,5 +21548,779 @@
       "type": "boolean",
       "description": "Champ à créer pour ProgrammeLinkOffice.actif"
     }
+  ],
+  "Questions_IQRH": [
+    {
+      "id": "Q1",
+      "dimension": "SOCIAL",
+      "text": "Je peux compter sur plusieurs personnes si je rencontre une difficulté importante.",
+      "position": 1,
+      "version": 1
+    },
+    {
+      "id": "Q2",
+      "dimension": "SOCIAL",
+      "text": "Je me sens entouré(e) au quotidien.",
+      "position": 2,
+      "version": 1
+    },
+    {
+      "id": "Q3",
+      "dimension": "SOCIAL",
+      "text": "Je participe régulièrement à des activités ou à des échanges avec d'autres personnes.",
+      "position": 3,
+      "version": 1
+    },
+    {
+      "id": "Q4",
+      "dimension": "SOCIAL",
+      "text": "Je me sens accepté(e) tel(le) que je suis par les personnes qui m'entourent.",
+      "position": 4,
+      "version": 1
+    },
+    {
+      "id": "Q5",
+      "dimension": "SOCIAL",
+      "text": "Lorsque je traverse une période difficile, je sais vers qui me tourner.",
+      "position": 5,
+      "version": 1
+    },
+    {
+      "id": "Q6",
+      "dimension": "SOCIAL",
+      "text": "Je crée facilement de nouvelles relations.",
+      "position": 6,
+      "version": 1
+    },
+    {
+      "id": "Q7",
+      "dimension": "AFFECTIVE",
+      "text": "Je me sens aimé(e) et apprécié(e).",
+      "position": 7,
+      "version": 1
+    },
+    {
+      "id": "Q8",
+      "dimension": "AFFECTIVE",
+      "text": "Je peux exprimer facilement mes émotions auprès des personnes en qui j'ai confiance.",
+      "position": 8,
+      "version": 1
+    },
+    {
+      "id": "Q9",
+      "dimension": "AFFECTIVE",
+      "text": "Je reçois le soutien affectif dont j'ai besoin lorsque je traverse une période difficile.",
+      "position": 9,
+      "version": 1
+    },
+    {
+      "id": "Q10",
+      "dimension": "AFFECTIVE",
+      "text": "Je me sens émotionnellement en sécurité dans mes relations importantes.",
+      "position": 10,
+      "version": 1
+    },
+    {
+      "id": "Q11",
+      "dimension": "AFFECTIVE",
+      "text": "Je peux être pleinement moi-même avec les personnes qui comptent pour moi.",
+      "position": 11,
+      "version": 1
+    },
+    {
+      "id": "Q12",
+      "dimension": "AFFECTIVE",
+      "text": "Je reçois régulièrement des marques d'affection, de bienveillance ou d'attention.",
+      "position": 12,
+      "version": 1
+    },
+    {
+      "id": "Q13",
+      "dimension": "SENTIMENTAL",
+      "text": "Je suis satisfait(e) de ma vie sentimentale actuelle.",
+      "position": 13,
+      "version": 1
+    },
+    {
+      "id": "Q14",
+      "dimension": "SENTIMENTAL",
+      "text": "Ma situation sentimentale actuelle correspond à ce que je souhaite aujourd'hui.",
+      "position": 14,
+      "version": 1
+    },
+    {
+      "id": "Q15",
+      "dimension": "SENTIMENTAL",
+      "text": "Je peux exprimer librement mes besoins affectifs.",
+      "position": 15,
+      "version": 1
+    },
+    {
+      "id": "Q16",
+      "dimension": "SENTIMENTAL",
+      "text": "Je vis, ou j'espère vivre, des relations affectives épanouissantes.",
+      "position": 16,
+      "version": 1
+    },
+    {
+      "id": "Q17",
+      "dimension": "SENTIMENTAL",
+      "text": "Je parviens à gérer sereinement les difficultés liées à ma vie sentimentale.",
+      "position": 17,
+      "version": 1
+    },
+    {
+      "id": "Q18",
+      "dimension": "SENTIMENTAL",
+      "text": "J'ai confiance dans mon avenir sentimental.",
+      "position": 18,
+      "version": 1
+    },
+    {
+      "id": "Q19",
+      "dimension": "PROFESSIONAL",
+      "text": "Je me sens reconnu(e) dans l'activité qui occupe aujourd'hui la plus grande place dans mon quotidien.",
+      "position": 19,
+      "version": 1
+    },
+    {
+      "id": "Q20",
+      "dimension": "PROFESSIONAL",
+      "text": "Je peux compter sur les personnes avec lesquelles j'interagis dans cette activité.",
+      "position": 20,
+      "version": 1
+    },
+    {
+      "id": "Q21",
+      "dimension": "PROFESSIONAL",
+      "text": "Je peux exprimer librement mes idées et mon point de vue.",
+      "position": 21,
+      "version": 1
+    },
+    {
+      "id": "Q22",
+      "dimension": "PROFESSIONAL",
+      "text": "Les relations que j'entretiens dans cette activité sont globalement positives et respectueuses.",
+      "position": 22,
+      "version": 1
+    },
+    {
+      "id": "Q23",
+      "dimension": "PROFESSIONAL",
+      "text": "Je me sens utile à travers cette activité.",
+      "position": 23,
+      "version": 1
+    },
+    {
+      "id": "Q24",
+      "dimension": "PROFESSIONAL",
+      "text": "Cette activité contribue positivement à mon équilibre de vie.",
+      "position": 24,
+      "version": 1
+    },
+    {
+      "id": "Q25",
+      "dimension": "SELF",
+      "text": "Je me sens en accord avec mes valeurs.",
+      "position": 25,
+      "version": 1
+    },
+    {
+      "id": "Q26",
+      "dimension": "SELF",
+      "text": "J'ai le sentiment que ma vie a du sens.",
+      "position": 26,
+      "version": 1
+    },
+    {
+      "id": "Q27",
+      "dimension": "SELF",
+      "text": "Je prends régulièrement du temps pour prendre soin de moi.",
+      "position": 27,
+      "version": 1
+    },
+    {
+      "id": "Q28",
+      "dimension": "SELF",
+      "text": "Je suis satisfait(e) de l'équilibre entre les différentes sphères de ma vie.",
+      "position": 28,
+      "version": 1
+    },
+    {
+      "id": "Q29",
+      "dimension": "SELF",
+      "text": "Je me projette avec confiance dans les prochaines années.",
+      "position": 29,
+      "version": 1
+    },
+    {
+      "id": "Q30",
+      "dimension": "SELF",
+      "text": "Globalement, je suis satisfait(e) de ma qualité de vie relationnelle.",
+      "position": 30,
+      "version": 1
+    }
+  ],
+  "Modules_Adaptatifs": [
+    {
+      "id": "MOD1",
+      "triggerSituation": "Célibataire",
+      "title": "Module Célibataire",
+      "objective": "comprendre les opportunités, les freins et les ressources dans la vie sentimentale.",
+      "position": 1,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD1_Q1",
+          "text": "Les occasions de rencontrer de nouvelles personnes me semblent suffisantes.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD1_Q2",
+          "text": "Mon entourage respecte ma situation sentimentale actuelle.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD1_Q3",
+          "text": "Les outils actuels (applications, réseaux, activités…) répondent à mes attentes pour faire des rencontres.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD1_Q4",
+          "text": "Mon célibat me permet aujourd'hui de développer d'autres projets de vie importants.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD1_Q5",
+          "text": "Je sais clairement quel type de relation je souhaite construire.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD2",
+      "triggerSituation": "En couple",
+      "title": "Module En couple",
+      "objective": "identifier les leviers favorisant l'équilibre du couple.",
+      "position": 2,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD2_Q1",
+          "text": "Notre organisation quotidienne laisse une place suffisante à notre relation.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD2_Q2",
+          "text": "Nous parvenons à préserver des moments de qualité malgré nos contraintes.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD2_Q3",
+          "text": "Les responsabilités extérieures ont peu d'impact sur notre relation.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD2_Q4",
+          "text": "Nous savons demander de l'aide lorsque notre couple traverse une difficulté.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD2_Q5",
+          "text": "Nous partageons une vision commune de notre avenir.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD3",
+      "triggerSituation": "Parent",
+      "title": "Module Parent",
+      "objective": "identifier les facteurs influençant l'équilibre entre parentalité et vie personnelle.",
+      "position": 3,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD3_Q1",
+          "text": "Les responsabilités parentales limitent parfois mes relations sociales.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD3_Q2",
+          "text": "Je dispose de relais lorsque j'en ai besoin.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD3_Q3",
+          "text": "Je culpabilise lorsque je prends du temps pour moi.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD3_Q4",
+          "text": "Mon entourage reconnaît les responsabilités liées à mon rôle de parent.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD3_Q5",
+          "text": "Je parviens à préserver des espaces qui me sont entièrement consacrés.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD4",
+      "triggerSituation": "Famille monoparentale",
+      "title": "Module Famille monoparentale",
+      "objective": "identifier les contraintes spécifiques et les ressources disponibles.",
+      "position": 4,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD4_Q1",
+          "text": "Je peux compter sur un réseau d'entraide fiable.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD4_Q2",
+          "text": "Les contraintes d'organisation limitent mes possibilités de créer ou maintenir des relations.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD4_Q3",
+          "text": "Les démarches administratives ou logistiques représentent une charge importante.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD4_Q4",
+          "text": "Je trouve facilement du soutien lorsque je rencontre une difficulté.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD4_Q5",
+          "text": "Je parviens à conserver des projets personnels malgré mes responsabilités.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD5",
+      "triggerSituation": "Entrepreneur",
+      "title": "Module Entrepreneur",
+      "objective": "comprendre les facteurs relationnels liés à l'entrepreneuriat.",
+      "position": 5,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD5_Q1",
+          "text": "Je prends seul(e) la majorité des décisions importantes.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD5_Q2",
+          "text": "Mon entourage comprend les contraintes liées à mon activité.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD5_Q3",
+          "text": "Il m'est difficile de déconnecter mentalement de mon activité.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD5_Q4",
+          "text": "Je reporte régulièrement des moments personnels en raison de mes responsabilités professionnelles.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD5_Q5",
+          "text": "Je participe régulièrement à des réseaux ou communautés de dirigeants.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD6",
+      "triggerSituation": "Manager",
+      "title": "Module Manager",
+      "objective": "identifier les leviers relationnels du management.",
+      "position": 6,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD6_Q1",
+          "text": "Je dispose d'espaces pour échanger sur les difficultés liées à mon rôle de manager.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD6_Q2",
+          "text": "Les responsabilités managériales génèrent une charge émotionnelle importante.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD6_Q3",
+          "text": "Je dispose de suffisamment de temps pour accompagner mon équipe.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD6_Q4",
+          "text": "Je me sens soutenu(e) lorsque je dois gérer une situation complexe.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD6_Q5",
+          "text": "Je bénéficie de formations ou d'outils adaptés à mes responsabilités.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD7",
+      "triggerSituation": "Étudiant",
+      "title": "Module Étudiant",
+      "objective": "comprendre les facteurs favorisant l'intégration et la réussite.",
+      "position": 7,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD7_Q1",
+          "text": "Il est facile de créer des liens dans mon environnement d'études.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD7_Q2",
+          "text": "Je participe à des activités favorisant les rencontres.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD7_Q3",
+          "text": "Je connais les ressources disponibles lorsque je rencontre une difficulté.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD7_Q4",
+          "text": "Les exigences de mes études limitent parfois ma vie sociale.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD7_Q5",
+          "text": "Je me sens encouragé(e) dans mon parcours.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD8",
+      "triggerSituation": "Retraité",
+      "title": "Module Retraité",
+      "objective": "identifier les facteurs favorisant le maintien du lien social.",
+      "position": 8,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD8_Q1",
+          "text": "Je participe régulièrement à des activités favorisant les rencontres.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD8_Q2",
+          "text": "Je découvre encore de nouveaux centres d'intérêt.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD8_Q3",
+          "text": "Les changements liés à la retraite ont modifié mon réseau relationnel.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD8_Q4",
+          "text": "Je trouve facilement des occasions de partager des moments avec d'autres.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD8_Q5",
+          "text": "Je me sens acteur de cette nouvelle étape de vie.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD9",
+      "triggerSituation": "Aidant familial",
+      "title": "Module Aidant familial",
+      "objective": "mesurer la charge relationnelle spécifique des aidants.",
+      "position": 9,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD9_Q1",
+          "text": "Je connais les dispositifs pouvant m'aider dans mon rôle d'aidant.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD9_Q2",
+          "text": "J'accepte facilement de demander de l'aide.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD9_Q3",
+          "text": "Mon rôle d'aidant réduit le temps consacré à mes autres relations.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD9_Q4",
+          "text": "Je dispose de temps de répit réguliers.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD9_Q5",
+          "text": "Mon entourage comprend les contraintes liées à mon rôle.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD10",
+      "triggerSituation": "Personne vivant seule",
+      "title": "Module Personne vivant seule",
+      "objective": "distinguer le choix de vie de l'isolement subi.",
+      "position": 10,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD10_Q1",
+          "text": "Le fait de vivre seul(e) correspond à un choix qui me convient.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD10_Q2",
+          "text": "Mon logement favorise les visites et les échanges.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD10_Q3",
+          "text": "Je prends facilement l'initiative de proposer des activités.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD10_Q4",
+          "text": "Je participe régulièrement à la vie locale ou associative.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD10_Q5",
+          "text": "Je me sens connecté(e) à mon environnement de proximité.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD11",
+      "triggerSituation": "Demandeur d'emploi",
+      "title": "Module Demandeur d'emploi",
+      "objective": "identifier les impacts relationnels de la recherche d'emploi.",
+      "position": 11,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD11_Q1",
+          "text": "Ma recherche d'emploi me permet de conserver un rythme de vie structuré.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD11_Q2",
+          "text": "Je continue à développer mon réseau professionnel.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD11_Q3",
+          "text": "Je connais les dispositifs pouvant m'accompagner.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD11_Q4",
+          "text": "Ma situation actuelle limite certaines de mes activités sociales.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD11_Q5",
+          "text": "Je continue à développer mes compétences malgré cette période.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD12",
+      "triggerSituation": "Création d'entreprise",
+      "title": "Module Création d'entreprise",
+      "objective": "comprendre les enjeux relationnels des premières années d'entrepreneuriat.",
+      "position": 12,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD12_Q1",
+          "text": "Je suis accompagné(e) dans le développement de mon entreprise.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD12_Q2",
+          "text": "Je bénéficie d'un réseau facilitant mon développement.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD12_Q3",
+          "text": "Les responsabilités liées au lancement de mon activité influencent ma vie personnelle.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD12_Q4",
+          "text": "Je trouve facilement des interlocuteurs lorsque je rencontre une difficulté.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD12_Q5",
+          "text": "Je prends le temps de célébrer les réussites de mon projet.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD13",
+      "triggerSituation": "Divorce / séparation récente",
+      "title": "Module Divorce / séparation récente",
+      "objective": "identifier les ressources mobilisées dans la reconstruction.",
+      "position": 13,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD13_Q1",
+          "text": "Je bénéficie d'un entourage sur lequel je peux m'appuyer.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD13_Q2",
+          "text": "Cette période m'a amené(e) à développer de nouvelles relations.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD13_Q3",
+          "text": "Les aspects administratifs ou financiers pèsent encore sur mon équilibre.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD13_Q4",
+          "text": "Je retrouve progressivement des repères dans ma vie quotidienne.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD13_Q5",
+          "text": "Je me sens libre de construire un nouveau projet de vie.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    },
+    {
+      "id": "MOD14",
+      "triggerSituation": "Deuil récent",
+      "title": "Module Deuil récent",
+      "objective": "comprendre les ressources disponibles pendant le processus de deuil.",
+      "position": 14,
+      "version": 1,
+      "questions": [
+        {
+          "id": "MOD14_Q1",
+          "text": "Je peux parler librement de la personne disparue si je le souhaite.",
+          "position": 1,
+          "version": 1
+        },
+        {
+          "id": "MOD14_Q2",
+          "text": "Mon entourage respecte mon rythme dans cette épreuve.",
+          "position": 2,
+          "version": 1
+        },
+        {
+          "id": "MOD14_Q3",
+          "text": "Je connais les ressources d'accompagnement disponibles si j'en ressens le besoin.",
+          "position": 3,
+          "version": 1
+        },
+        {
+          "id": "MOD14_Q4",
+          "text": "Je retrouve progressivement des activités qui me procurent du plaisir.",
+          "position": 4,
+          "version": 1
+        },
+        {
+          "id": "MOD14_Q5",
+          "text": "Je parviens à maintenir des liens avec les personnes importantes pour moi.",
+          "position": 5,
+          "version": 1
+        }
+      ]
+    }
   ]
 }

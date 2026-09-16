@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { FileText } from "lucide-react";
 
 export const metadata = {
@@ -17,7 +18,7 @@ export default function MentionsLegales() {
             <div style={{ width: 48, height: 48, background: "rgba(6,182,212,0.1)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <FileText style={{ width: 24, height: 24, color: "#06b6d4" }} />
             </div>
-            <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 28, color: "#f8fafc" }}>
+            <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 28, color: "var(--text-1)" }}>
               Mentions légales
             </h1>
           </div>
@@ -57,10 +58,10 @@ export default function MentionsLegales() {
             },
           ].map(({ title, content }) => (
             <div key={title} className="card" style={{ marginBottom: 16 }}>
-              <h2 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 16, marginBottom: 14 }}>{title}</h2>
+              <h2 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 16, marginBottom: 14 }}>{title}</h2>
               <ul style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {content.map((item) => (
-                  <li key={item} style={{ display: "flex", gap: 10, color: "#94a3b8", fontSize: 14, lineHeight: 1.6 }}>
+                  <li key={item} style={{ display: "flex", gap: 10, color: "var(--text-2)", fontSize: 14, lineHeight: 1.6 }}>
                     <span style={{ color: "#06b6d4", flexShrink: 0, marginTop: 2 }}>·</span>
                     {item}
                   </li>
@@ -70,6 +71,7 @@ export default function MentionsLegales() {
           ))}
         </div>
       </main>
+      <Footer />
     </>
   );
 }

@@ -13,11 +13,11 @@ export default function LoginPage() {
         <div
           style={{
             minHeight: "100vh",
-            background: "#0b0f19",
+            background: "var(--bg)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "#94a3b8",
+            color: "var(--text-3)",
           }}
         >
           Chargement...

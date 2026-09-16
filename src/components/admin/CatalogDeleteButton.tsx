@@ -51,8 +51,8 @@ export function CatalogDeleteButton({ itemId }: CatalogDeleteButtonProps) {
           title="Annuler"
           style={{
             padding: "6px 10px", borderRadius: 8, fontSize: 12, fontWeight: 600,
-            background: "rgba(148,163,184,0.1)", color: "#94a3b8",
-            border: "1px solid rgba(255,255,255,0.05)", cursor: "pointer"
+            background: "rgba(148,163,184,0.1)", color: "var(--text-3)",
+            border: "1px solid rgba(18,61,70,0.05)", cursor: "pointer"
           }}
         >
           Non

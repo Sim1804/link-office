@@ -13,7 +13,7 @@ export async function GET() {
 
     if (!BINOME_ALLOWED_ROLES.includes(session.user.role)) {
       return NextResponse.json(
-        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium+.", code: "ROLE_NOT_ALLOWED" },
+        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium/Premium+.", code: "ROLE_NOT_ALLOWED" },
         { status: 403 }
       );
     }
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
 
     if (!BINOME_ALLOWED_ROLES.includes(session.user.role)) {
       return NextResponse.json(
-        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium+.", code: "ROLE_NOT_ALLOWED" },
+        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium/Premium+.", code: "ROLE_NOT_ALLOWED" },
         { status: 403 }
       );
     }
@@ -56,15 +56,15 @@ export async function POST(req: Request) {
         where: { id: currentUser.campaignId },
         select: { offer: true, status: true },
       });
-      if (!campaign || campaign.offer !== "PREMIUM_PLUS" || campaign.status !== "ACTIVE") {
+      if (!campaign || (campaign.offer !== "PREMIUM_PLUS" && campaign.offer !== "PREMIUM") || campaign.status !== "ACTIVE") {
         return NextResponse.json({
-          error: "Le module Binôme est réservé aux campagnes PREMIUM+ actives.",
+          error: "Le module Binôme est réservé aux campagnes PREMIUM ou PREMIUM+ actives.",
           code: "PREMIUM_PLUS_REQUIRED",
         }, { status: 403 });
       }
-    } else if (currentUser?.subscription !== "PREMIUM_PLUS") {
+    } else if (currentUser?.subscription !== "PREMIUM_PLUS" && currentUser?.subscription !== "PREMIUM") {
        return NextResponse.json({
-          error: "Le module Binôme est réservé aux abonnements PREMIUM+.",
+          error: "Le module Binôme est réservé aux abonnements PREMIUM ou PREMIUM+.",
           code: "PREMIUM_PLUS_REQUIRED",
         }, { status: 403 });
     }

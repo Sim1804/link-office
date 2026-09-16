@@ -1,6 +1,7 @@
 "use client";
 
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { XCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -19,25 +20,20 @@ export default function PremiumCancelPage() {
           </div>
 
           <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 16 }}>Paiement annulé</h1>
-          <p style={{ fontSize: 16, color: "#94a3b8", lineHeight: 1.6, marginBottom: 40 }}>
+          <p style={{ fontSize: 16, color: "var(--text-2)", lineHeight: 1.6, marginBottom: 40 }}>
             Votre paiement n'a pas été finalisé. Aucun montant n'a été débité de votre compte. Vous restez sur l'offre Freemium.
           </p>
 
-          <Link href="/premium" style={{
+          <Link href="/premium" className="btn btn-tertiary" style={{
             display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10,
-            width: "100%", padding: "16px", borderRadius: 16, background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            color: "white", fontSize: 16, fontWeight: 600, textDecoration: "none",
-            transition: "all 0.2s"
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)" }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.05)" }}
-          >
+            width: "100%", padding: "16px", borderRadius: 999, textDecoration: "none"
+          }}>
             <ArrowLeft size={20} />
             Retourner à l'offre Premium
           </Link>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

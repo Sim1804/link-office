@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -37,24 +38,23 @@ export default function PremiumSuccessPage() {
           </div>
 
           <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 16 }}>Paiement réussi !</h1>
-          <p style={{ fontSize: 16, color: "#94a3b8", lineHeight: 1.6, marginBottom: 40 }}>
+          <p style={{ fontSize: 16, color: "var(--text-2)", lineHeight: 1.6, marginBottom: 40 }}>
             {isMock 
               ? "Bienvenue dans l'expérience Premium (Mode test)."
               : "Félicitations, vous avez débloqué l'ensemble des fonctionnalités Premium. Vos nouvelles analyses sont prêtes."
             }
           </p>
 
-          <Link href="/dashboard" style={{
+          <Link href="/dashboard" className="btn btn-primary" style={{
             display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10,
-            width: "100%", padding: "16px", borderRadius: 16, background: "linear-gradient(135deg, #7c3aed, #0ea5e9)",
-            color: "white", fontSize: 16, fontWeight: 700, textDecoration: "none",
-            boxShadow: "0 10px 30px rgba(124,58,237,0.3)"
+            width: "100%", padding: "16px", borderRadius: 999, textDecoration: "none"
           }}>
             Accéder à mon Dashboard Premium
             <ArrowRight size={20} />
           </Link>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

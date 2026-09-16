@@ -105,8 +105,8 @@ export default function CampaignConfigPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: "100vh", background: "#0b0f19", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <p style={{ color: "#94a3b8" }}>Chargement de la configuration...</p>
+      <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <p style={{ color: "var(--text-3)" }}>Chargement de la configuration...</p>
       </div>
     );
   }
@@ -114,31 +114,31 @@ export default function CampaignConfigPage() {
   return (
     <>
       <Navbar />
-      <main style={{ minHeight: "100vh", background: "#0b0f19", paddingTop: 88, paddingBottom: 64, position: "relative" }}>
+      <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 88, paddingBottom: 64, position: "relative" }}>
         {/* Effets Glass */}
         <div style={{ position: "fixed", top: "-15%", right: "-8%", width: 600, height: 600, background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
         <div style={{ position: "fixed", bottom: "-15%", left: "-8%", width: 500, height: 500, background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
 
         <div style={{ maxWidth: 800, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
-          <button onClick={() => router.back()} style={{ display: "flex", alignItems: "center", gap: 8, color: "#94a3b8", background: "none", border: "none", cursor: "pointer", marginBottom: 24, fontSize: 14 }}>
+          <button onClick={() => router.back()} style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-3)", background: "none", border: "none", cursor: "pointer", marginBottom: 24, fontSize: 14 }}>
             <ArrowLeft size={16} /> Retour
           </button>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               <div style={{ width: 48, height: 48, background: "rgba(124,58,237,0.15)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Settings size={24} color="#a78bfa" />
+                <Settings size={24} color="var(--primary)" />
               </div>
               <div>
-                <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 24, color: "#f8fafc", margin: 0 }}>
+                <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 24, color: "var(--text-1)", margin: 0 }}>
                   Configuration B2G
                 </h1>
-                <p style={{ color: "#64748b", fontSize: 14, marginTop: 4 }}>
+                <p style={{ color: "var(--text-2)", fontSize: 14, marginTop: 4 }}>
                   Campagne : {campaign?.title}
                 </p>
               </div>
             </div>
-            <button onClick={handleSave} disabled={saving} style={{ display: "flex", alignItems: "center", gap: 8, background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)", color: "white", padding: "10px 20px", borderRadius: 10, fontSize: 14, fontWeight: 600, border: "none", cursor: saving ? "not-allowed" : "pointer", boxShadow: "0 0 16px rgba(124,58,237,0.4)" }}>
+            <button onClick={handleSave} disabled={saving} className="btn btn-primary btn-md" style={{ gap: 8, boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               {saving ? <div className="spinner" style={{ width: 16, height: 16, border: "2px solid white", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 1s linear infinite" }} /> : <Save size={16} />}
               Sauvegarder
             </button>
@@ -161,27 +161,27 @@ export default function CampaignConfigPage() {
             </div>
           )}
 
-          <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24, marginBottom: 24 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 600, color: "#f8fafc", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, marginBottom: 24 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
               <Key size={18} color="#06b6d4" /> Accès à la campagne
             </h2>
             <div style={{ marginBottom: 16 }}>
-              <label style={{ display: "block", fontSize: 13, color: "#94a3b8", marginBottom: 8 }}>Code d'accès spécifique (Optionnel)</label>
+              <label style={{ display: "block", fontSize: 13, color: "var(--text-3)", marginBottom: 8 }}>Code d'accès spécifique (Optionnel)</label>
               <input
                 type="text"
                 value={codeAccess}
                 onChange={e => setCodeAccess(e.target.value)}
                 placeholder="Ex: CAMPAGNE-2026"
-                style={{ width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "12px 16px", color: "#f8fafc", outline: "none" }}
+                style={{ width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "12px 16px", color: "var(--text-1)", outline: "none" }}
               />
             </div>
           </div>
 
-          <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24, marginBottom: 24 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 600, color: "#f8fafc", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-              <Layers size={18} color="#a78bfa" /> Profil Démographique (Contexte)
+          <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, marginBottom: 24 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+              <Layers size={18} color="var(--primary)" /> Profil Démographique (Contexte)
             </h2>
-            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+            <p style={{ color: "var(--text-3)", fontSize: 13, marginBottom: 20 }}>
               Sélectionnez les champs que vous souhaitez masquer pour les bénéficiaires de cette campagne.
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -195,7 +195,7 @@ export default function CampaignConfigPage() {
                       onChange={() => toggleDemographic(field.id)}
                       style={{ accentColor: "#f43f5e", width: 16, height: 16 }}
                     />
-                    <span style={{ color: isHidden ? "#f43f5e" : "#e2e8f0", fontSize: 14 }}>
+                    <span style={{ color: isHidden ? "#f43f5e" : "var(--text-2)", fontSize: 14 }}>
                       Masquer "{field.label}"
                     </span>
                   </label>
@@ -204,9 +204,9 @@ export default function CampaignConfigPage() {
             </div>
           </div>
 
-          <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24, marginBottom: 24 }}>
+          <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid var(--border)", borderRadius: 16, padding: 24, marginBottom: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <h2 style={{ fontSize: 16, fontWeight: 600, color: "#f8fafc", display: "flex", alignItems: "center", gap: 8, margin: 0 }}>
+              <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 8, margin: 0 }}>
                 <Layers size={18} color="#f59e0b" /> Variables Complémentaires (Ciblage)
               </h2>
               <button 
@@ -216,12 +216,12 @@ export default function CampaignConfigPage() {
                 <Plus size={14} /> Ajouter une variable
               </button>
             </div>
-            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+            <p style={{ color: "var(--text-3)", fontSize: 13, marginBottom: 20 }}>
               Créez des questions personnalisées pour cette campagne (ex: "Quel est votre quartier ?"). Elles permettront de filtrer le baromètre relationnel par la suite.
             </p>
             
             {variables.length === 0 ? (
-              <div style={{ background: "rgba(255,255,255,0.02)", padding: 16, borderRadius: 10, textAlign: "center", color: "#64748b", fontSize: 13 }}>
+              <div style={{ background: "rgba(255,255,255,0.02)", padding: 16, borderRadius: 10, textAlign: "center", color: "var(--text-2)", fontSize: 13 }}>
                 Aucune variable spécifique pour le moment.
               </div>
             ) : (
@@ -235,7 +235,7 @@ export default function CampaignConfigPage() {
                       <Trash2 size={16} />
                     </button>
                     <div style={{ marginBottom: 12, paddingRight: 32 }}>
-                      <label style={{ display: "block", fontSize: 12, color: "#cbd5e1", marginBottom: 4 }}>Question (ex: Votre quartier ?)</label>
+                      <label style={{ display: "block", fontSize: 12, color: "var(--text-2)", marginBottom: 4 }}>Question (ex: Votre quartier ?)</label>
                       <input 
                         type="text" 
                         value={v.question}
@@ -248,7 +248,7 @@ export default function CampaignConfigPage() {
                       />
                     </div>
                     <div>
-                      <label style={{ display: "block", fontSize: 12, color: "#cbd5e1", marginBottom: 4 }}>Options (séparées par une virgule)</label>
+                      <label style={{ display: "block", fontSize: 12, color: "var(--text-2)", marginBottom: 4 }}>Options (séparées par une virgule)</label>
                       <input 
                         type="text" 
                         value={v.options.join(", ")}
@@ -267,11 +267,11 @@ export default function CampaignConfigPage() {
             )}
           </div>
 
-          <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 600, color: "#f8fafc", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ background: "rgba(17,24,39,0.7)", backdropFilter: "blur(12px)", border: "1px solid var(--border)", borderRadius: 16, padding: 24 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
               <ShieldAlert size={18} color="#34d399" /> Situations à Fort Impact (Adaptatif)
             </h2>
-            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+            <p style={{ color: "var(--text-3)", fontSize: 13, marginBottom: 20 }}>
               Désactivez les situations qui ne sont pas pertinentes pour le public visé par cette campagne (ex: masquer "Manager" pour une campagne "Étudiants").
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -285,7 +285,7 @@ export default function CampaignConfigPage() {
                       onChange={() => toggleSituation(sit)}
                       style={{ accentColor: "#34d399", width: 16, height: 16 }}
                     />
-                    <span style={{ color: isAllowed ? "#34d399" : "#64748b", fontSize: 14 }}>
+                    <span style={{ color: isAllowed ? "#34d399" : "var(--text-2)", fontSize: 14 }}>
                       {sit}
                     </span>
                   </label>

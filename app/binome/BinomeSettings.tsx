@@ -29,39 +29,33 @@ export function BinomeSettings({ initialOptIn }: { initialOptIn: boolean }) {
   };
 
   return (
-    <div style={{
-      background: optIn
-        ? "linear-gradient(135deg, rgba(124,58,237,0.12) 0%, rgba(16,185,129,0.08) 100%)"
-        : "rgba(255,255,255,0.02)",
-      border: optIn ? "1px solid rgba(124,58,237,0.3)" : "1px solid rgba(255,255,255,0.06)",
-      borderRadius: 20,
-      padding: "24px 28px",
+    <div className="card" style={{
+      padding: "20px 24px",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
       gap: 20,
-      transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+      transition: "border-color 0.3s",
+      borderColor: optIn ? "rgba(0,169,157,0.35)" : "var(--border)",
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
         <div style={{
-          width: 48, height: 48,
-          borderRadius: 14,
-          background: optIn ? "rgba(168,85,247,0.15)" : "rgba(255,255,255,0.04)",
+          width: 44, height: 44, borderRadius: 12,
+          background: optIn ? "rgba(0,169,157,0.1)" : "var(--surface-2)",
+          border: `1px solid ${optIn ? "rgba(0,169,157,0.25)" : "var(--border)"}`,
           display: "flex", alignItems: "center", justifyContent: "center",
-          flexShrink: 0,
-          border: optIn ? "1px solid rgba(168,85,247,0.25)" : "1px solid rgba(255,255,255,0.06)",
-          transition: "all 0.3s",
+          flexShrink: 0, transition: "all 0.3s",
         }}>
           {optIn
-            ? <Sparkles size={22} style={{ color: "#c084fc" }} />
-            : <Bot size={22} style={{ color: "#475569" }} />
+            ? <Sparkles size={20} style={{ color: "var(--primary)" }} />
+            : <Bot size={20} style={{ color: "var(--text-2)" }} />
           }
         </div>
         <div>
-          <p style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15, marginBottom: 4 }}>
+          <p style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 14, marginBottom: 3 }}>
             Suggestions intelligentes par IRIS
           </p>
-          <p style={{ color: "#94a3b8", fontSize: 13, lineHeight: 1.5 }}>
+          <p style={{ color: "var(--text-2)", fontSize: 13, lineHeight: 1.5, margin: 0 }}>
             {optIn
               ? "IRIS analyse votre profil anonymisé pour vous suggérer des partenaires complémentaires."
               : "Activez cette option pour que IRIS vous propose des binômes adaptés à votre profil."}
@@ -75,31 +69,22 @@ export function BinomeSettings({ initialOptIn }: { initialOptIn: boolean }) {
         disabled={loading}
         aria-label={optIn ? "Désactiver les suggestions IRIS" : "Activer les suggestions IRIS"}
         style={{
-          width: 52,
-          height: 28,
-          borderRadius: 14,
-          background: optIn
-            ? "linear-gradient(135deg, #7c3aed, #10b981)"
-            : "rgba(255,255,255,0.1)",
-          border: "none",
-          position: "relative",
+          width: 50, height: 26, borderRadius: 13,
+          background: optIn ? "var(--primary)" : "var(--border-strong)",
+          border: "none", position: "relative",
           cursor: loading ? "not-allowed" : "pointer",
-          transition: "background 0.35s cubic-bezier(0.4,0,0.2,1)",
+          transition: "background 0.3s",
           flexShrink: 0,
           opacity: loading ? 0.6 : 1,
-          boxShadow: optIn ? "0 0 16px rgba(124,58,237,0.35)" : "none",
         }}
       >
         <div style={{
-          width: 22,
-          height: 22,
-          borderRadius: "50%",
+          width: 20, height: 20, borderRadius: "50%",
           background: "#fff",
-          position: "absolute",
-          top: 3,
+          position: "absolute", top: 3,
           left: optIn ? 27 : 3,
-          transition: "left 0.35s cubic-bezier(0.4,0,0.2,1)",
-          boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
+          transition: "left 0.3s cubic-bezier(0.4,0,0.2,1)",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
         }} />
       </button>
     </div>

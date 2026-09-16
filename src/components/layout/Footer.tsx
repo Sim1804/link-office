@@ -16,11 +16,19 @@
  * @see app/mentions-legales/page.tsx — Page liée depuis ce footer
  */
 
+"use client";
+
 import Link from "next/link";
 import { Brain } from "lucide-react";
 
-/** Liens de la section Produit (informatifs, non encore routés) */
-const PRODUCT_LINKS = ["Questionnaire IQRH", "IA IRIS", "Tableau de bord", "Mon profil"];
+/** Liens de la section Produit avec leurs routes */
+const PRODUCT_LINKS = [
+  { label: "Questionnaire IQRH", href: "/questionnaire" },
+  { label: "IA IRIS", href: "/#iris" },
+  { label: "Tableau de bord", href: "/dashboard" },
+  { label: "Mon profil", href: "/mon-profil" },
+  { label: "Partenaires", href: "/business" },
+];
 
 /** Liens de la section Légal avec leurs routes */
 const LEGAL_LINKS = [
@@ -35,7 +43,7 @@ const LEGAL_LINKS = [
  */
 export function Footer() {
   return (
-    <footer style={{ borderTop: "1px solid var(--border)", background: "rgba(17,24,39,0.6)", paddingTop: 56, paddingBottom: 40 }}>
+    <footer style={{ borderTop: "1px solid var(--border)", background: "var(--bg)", paddingTop: 56, paddingBottom: 40 }}>
       <div className="container">
         {/* Grille principale : Brand | Produit | Légal */}
         <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 48, marginBottom: 48 }}>
@@ -60,9 +68,11 @@ export function Footer() {
           <div>
             <h4 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 14, marginBottom: 16 }}>Produit</h4>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
-              {PRODUCT_LINKS.map((productLink) => (
-                <li key={productLink}>
-                  <span style={{ color: "var(--text-2)", fontSize: 13, cursor: "pointer" }}>{productLink}</span>
+              {PRODUCT_LINKS.map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href} className="footer-link">
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -74,7 +84,7 @@ export function Footer() {
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
               {LEGAL_LINKS.map(({ label, href }) => (
                 <li key={label}>
-                  <Link href={href} style={{ color: "var(--text-2)", fontSize: 13, textDecoration: "none" }}>
+                  <Link href={href} className="footer-link">
                     {label}
                   </Link>
                 </li>

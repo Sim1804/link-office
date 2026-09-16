@@ -60,7 +60,7 @@ export async function POST(req: Request) {
       }
       
       // B2B/B2G Subscription
-      if (organizationId && (plan === "B2B_MEDECIN" || plan === "B2B_PSY" || plan === "B2B_PARTNER")) {
+      if (organizationId && (plan === "B2B_PARTNER")) {
         await prisma.subscription.update({
           where: { organizationId },
           data: {

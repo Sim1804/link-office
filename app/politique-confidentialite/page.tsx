@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { Shield, Lock, Database, UserX, Mail } from "lucide-react";
 
 export const metadata = {
@@ -11,18 +12,17 @@ export default function PolitiqueConfidentialite() {
     <>
       <Navbar />
       <main className="page-main">
-        <div className="blob-violet" />
         <div className="page-container" style={{ position: "relative", zIndex: 1 }}>
 
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 32 }}>
             <div style={{ width: 48, height: 48, background: "rgba(124,58,237,0.12)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Shield style={{ width: 24, height: 24, color: "#a78bfa" }} />
+              <Shield style={{ width: 24, height: 24, color: "var(--primary)" }} />
             </div>
             <div>
-              <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 28, color: "#f8fafc" }}>
+              <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 28, color: "var(--text-1)" }}>
                 Politique de confidentialité
               </h1>
-              <p style={{ color: "#64748b", fontSize: 13 }}>Dernière mise à jour : 1er août 2026</p>
+              <p style={{ color: "var(--text-2)", fontSize: 13 }}>Dernière mise à jour : 1er août 2026</p>
             </div>
           </div>
 
@@ -85,13 +85,13 @@ export default function PolitiqueConfidentialite() {
           ].map(({ icon: Icon, title, content }) => (
             <div key={title} className="card" style={{ marginBottom: 16 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-                <Icon size={16} style={{ color: "#a78bfa" }} />
-                <h2 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 16 }}>{title}</h2>
+                <Icon size={16} style={{ color: "var(--primary)" }} />
+                <h2 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 16 }}>{title}</h2>
               </div>
               <ul style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {content.map((item) => (
-                  <li key={item} style={{ display: "flex", gap: 10, color: "#94a3b8", fontSize: 14, lineHeight: 1.6 }}>
-                    <span style={{ color: "#a78bfa", flexShrink: 0, marginTop: 2 }}>·</span>
+                  <li key={item} style={{ display: "flex", gap: 10, color: "var(--text-2)", fontSize: 14, lineHeight: 1.6 }}>
+                    <span style={{ color: "var(--primary)", flexShrink: 0, marginTop: 2 }}>·</span>
                     {item}
                   </li>
                 ))}
@@ -100,15 +100,16 @@ export default function PolitiqueConfidentialite() {
           ))}
 
           <div style={{ textAlign: "center", marginTop: 24, padding: "20px", background: "rgba(124,58,237,0.05)", borderRadius: 12, border: "1px solid rgba(124,58,237,0.1)" }}>
-            <p style={{ color: "#64748b", fontSize: 13 }}>
+            <p style={{ color: "var(--text-2)", fontSize: 13 }}>
               Pour toute question relative à la protection de vos données :{" "}
-              <a href="mailto:privacy@link-office.fr" style={{ color: "#a78bfa", textDecoration: "none" }}>
+              <a href="mailto:privacy@link-office.fr" style={{ color: "var(--primary)", textDecoration: "none" }}>
                 privacy@link-office.fr
               </a>
             </p>
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

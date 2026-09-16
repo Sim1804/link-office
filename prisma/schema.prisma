@@ -102,6 +102,8 @@ model AdaptiveModule {
   title            String
   objective        String
   position         Int
+  isActive         Boolean            @default(true)
+  version          Int                @default(1)
   questions        AdaptiveQuestion[]
 }
 
@@ -110,9 +112,13 @@ model Question {
   kind      QuestionKind          @default(REFERENCE)
   dimension Dimension
   text      String
-  position  Int                   @unique
+  position  Int
   required  Boolean               @default(true)
+  isActive  Boolean               @default(true)
+  version   Int                   @default(1)
   answers   QuestionnaireAnswer[]
+
+  @@unique([position, version])
 }
 
 model AdaptiveQuestion {
@@ -122,10 +128,12 @@ model AdaptiveQuestion {
   position Int
   required Boolean          @default(true)
   polarity AdaptivePolarity @default(POSITIVE)
+  isActive Boolean          @default(true)
+  version  Int              @default(1)
   answers  AdaptiveAnswer[]
   module   AdaptiveModule   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
-  @@unique([moduleId, position])
+  @@unique([moduleId, position, version])
 }
 
 model QuestionnaireAnswer {
@@ -503,6 +511,7 @@ model Campaign {
   invites             CampaignInvite[]
   binomes             Binome[]
   binomeSuggestions   BinomeSuggestion[]
+  actions             ActionItem[]
   organization        Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   parentCampaign      Campaign?          @relation("CampaignRenewal", fields: [parentCampaignId], references: [id])
   childCampaigns      Campaign[]         @relation("CampaignRenewal")
@@ -556,11 +565,14 @@ model ActionItem {
   pilot          String?
   dueDate        DateTime?
   dimension      Dimension?
+  campaignId     String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime
   Organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  Campaign       Campaign?    @relation(fields: [campaignId], references: [id], onDelete: SetNull)
 
   @@index([organizationId, status])
+  @@index([campaignId])
 }
 
 model CampaignVariable {

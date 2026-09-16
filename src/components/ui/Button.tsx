@@ -67,7 +67,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     /** Classes spécifiques à chaque variante */
     const variantClasses = {
       primary: "btn-primary",
-      secondary: "btn-secondary",
+      secondary: "btn-tertiary",
       ghost: "btn-ghost",
       danger: "btn-danger",
       amber: "btn-amber",

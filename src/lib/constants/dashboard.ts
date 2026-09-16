@@ -75,15 +75,15 @@ export function buildWeatherData(
  */
 export function scoreToColor(score: number): string {
   if (score >= 80) return "#34d399";
-  if (score >= 60) return "#a78bfa";
+  if (score >= 60) return "var(--primary)";
   if (score >= 40) return "#f59e0b";
   return "#f43f5e";
 }
 
 /** Style commun des tooltips Recharts */
 export const RECHARTS_TOOLTIP_STYLE = {
-  background: "#111827",
-  border: "1px solid rgba(255,255,255,0.08)",
+  background: "var(--surface)",
+  border: "1px solid var(--border)",
   borderRadius: 8,
   fontSize: 13,
 } as const;

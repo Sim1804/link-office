@@ -16,39 +16,39 @@ interface WeatherCardProps {
 
 function getWeatherTheme(score: number) {
   if (score >= 81) return {
-    gradient: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(35,30,8,0.4) 100%)",
+    gradient: "linear-gradient(145deg, var(--surface) 0%, rgba(251,191,36,0.08) 100%)",
     border: "rgba(251,191,36,0.2)",
     orb: "rgba(251,191,36,0.15)",
     bar: "linear-gradient(90deg, #fbbf24, #f59e0b)",
-    score: "#fbbf24",
+    score: "#f59e0b",
   };
   if (score >= 61) return {
-    gradient: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(6,28,45,0.4) 100%)",
+    gradient: "linear-gradient(145deg, var(--surface) 0%, rgba(6,182,212,0.08) 100%)",
     border: "rgba(6,182,212,0.2)",
     orb: "rgba(6,182,212,0.12)",
     bar: "linear-gradient(90deg, #06b6d4, #0284c7)",
-    score: "#06b6d4",
+    score: "#0284c7",
   };
   if (score >= 41) return {
-    gradient: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(20,20,30,0.4) 100%)",
+    gradient: "linear-gradient(145deg, var(--surface) 0%, rgba(100,116,139,0.08) 100%)",
     border: "rgba(100,116,139,0.2)",
     orb: "rgba(100,116,139,0.1)",
     bar: "linear-gradient(90deg, #94a3b8, #64748b)",
-    score: "#94a3b8",
+    score: "var(--text-2)",
   };
   if (score >= 21) return {
-    gradient: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(45,18,5,0.4) 100%)",
+    gradient: "linear-gradient(145deg, var(--surface) 0%, rgba(249,115,22,0.08) 100%)",
     border: "rgba(249,115,22,0.2)",
     orb: "rgba(249,115,22,0.12)",
     bar: "linear-gradient(90deg, #f97316, #ef4444)",
-    score: "#f97316",
+    score: "#ef4444",
   };
   return {
-    gradient: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(40,5,15,0.4) 100%)",
+    gradient: "linear-gradient(145deg, var(--surface) 0%, rgba(244,63,94,0.08) 100%)",
     border: "rgba(244,63,94,0.2)",
     orb: "rgba(244,63,94,0.12)",
     bar: "linear-gradient(90deg, #f43f5e, #e11d48)",
-    score: "#f43f5e",
+    score: "#e11d48",
   };
 }
 
@@ -59,8 +59,8 @@ export function WeatherCard({ icon, label, title, text, score }: WeatherCardProp
     <div style={{
       background: theme.gradient,
       border: `1px solid ${theme.border}`,
-      borderRadius: 24,
-      padding: 24,
+      borderRadius: 16,
+      padding: 20,
       position: "relative",
       overflow: "hidden",
       height: "100%",
@@ -84,7 +84,7 @@ export function WeatherCard({ icon, label, title, text, score }: WeatherCardProp
 
       <div style={{ position: "relative", zIndex: 1 }}>
         {/* Header */}
-        <p style={{ fontSize: 10, color: "#475569", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 16 }}>
+        <p style={{ fontSize: 10, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 16 }}>
           Météo Relationnelle
         </p>
 
@@ -92,10 +92,10 @@ export function WeatherCard({ icon, label, title, text, score }: WeatherCardProp
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
           <span style={{ fontSize: 40, lineHeight: 1, animation: "weatherFloat 6s ease-in-out infinite" }}>{icon}</span>
           <div>
-            <p style={{ fontSize: 12, color: "#64748b", fontWeight: 500, marginBottom: 2 }}>{label}</p>
+            <p style={{ fontSize: 12, color: "var(--text-3)", fontWeight: 500, marginBottom: 2 }}>{label}</p>
             <h3 style={{
               fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-              fontWeight: 700, fontSize: 20, color: "#f8fafc",
+              fontWeight: 700, fontSize: 20, color: "var(--text-1)",
             }}>
               {title}
             </h3>
@@ -103,16 +103,16 @@ export function WeatherCard({ icon, label, title, text, score }: WeatherCardProp
         </div>
 
         {/* Text */}
-        <p style={{ color: "#64748b", fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>{text}</p>
+        <p style={{ color: "var(--text-3)", fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>{text}</p>
       </div>
 
       {/* Score bar */}
       <div style={{ position: "relative", zIndex: 1 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-          <span style={{ fontSize: 11, color: "#475569", fontWeight: 500 }}>Score global</span>
-          <span style={{ fontSize: 15, fontWeight: 800, color: theme.score }}>{score}<span style={{ fontSize: 11, color: "#475569", fontWeight: 400 }}>/100</span></span>
+          <span style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 500 }}>Score global</span>
+          <span style={{ fontSize: 15, fontWeight: 800, color: theme.score }}>{score}<span style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 400 }}>/100</span></span>
         </div>
-        <div style={{ height: 6, borderRadius: 999, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
+        <div style={{ height: 6, borderRadius: 999, background: "rgba(18,61,70,0.05)", overflow: "hidden" }}>
           <div style={{
             height: "100%", borderRadius: 999,
             background: theme.bar, width: `${score}%`,

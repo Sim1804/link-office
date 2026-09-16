@@ -53,7 +53,7 @@ export function BinomeInviteForm() {
             left: 14,
             top: "50%",
             transform: "translateY(-50%)",
-            color: "#475569",
+            color: "var(--text-2)",
             display: "flex",
             alignItems: "center",
             pointerEvents: "none",
@@ -68,22 +68,22 @@ export function BinomeInviteForm() {
             onChange={(e) => setEmail(e.target.value)}
             style={{
               width: "100%",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: "var(--bg)",
+              border: "1px solid var(--border)",
               borderRadius: 12,
               padding: "13px 16px 13px 40px",
-              color: "#f8fafc",
+              color: "var(--text-1)",
               fontSize: 14,
               outline: "none",
               transition: "border-color 0.2s, box-shadow 0.2s",
               boxSizing: "border-box",
             }}
             onFocus={e => {
-              e.target.style.borderColor = "rgba(124,58,237,0.5)";
-              e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.12)";
+              e.target.style.borderColor = "var(--primary)";
+              e.target.style.boxShadow = "0 0 0 3px rgba(0,169,157,0.12)";
             }}
             onBlur={e => {
-              e.target.style.borderColor = "rgba(255,255,255,0.08)";
+              e.target.style.borderColor = "var(--border)";
               e.target.style.boxShadow = "none";
             }}
           />
@@ -92,23 +92,17 @@ export function BinomeInviteForm() {
         <button
           type="submit"
           disabled={loading || !email}
+          className="btn btn-primary"
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             gap: 8,
-            background: loading || !email
-              ? "rgba(124,58,237,0.3)"
-              : "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
-            color: "#fff",
-            fontWeight: 600,
-            fontSize: 14,
+            borderRadius: 999,
             padding: "13px 24px",
-            borderRadius: 12,
-            border: "none",
+            fontSize: 14,
             cursor: loading || !email ? "not-allowed" : "pointer",
-            transition: "all 0.2s",
-            boxShadow: loading || !email ? "none" : "0 4px 20px rgba(124,58,237,0.35)",
+            opacity: loading || !email ? 0.6 : 1,
           }}
         >
           {loading

@@ -51,14 +51,14 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0b0f19", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Plus Jakarta Sans', Inter, sans-serif" }}>
-      <div style={{ maxWidth: 400, width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 24, padding: 32 }}>
+    <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Plus Jakarta Sans', Inter, sans-serif" }}>
+      <div style={{ maxWidth: 400, width: "100%", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 24, padding: 32 }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{ width: 64, height: 64, background: "rgba(124,58,237,0.15)", borderRadius: 20, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
-            <Key style={{ width: 32, height: 32, color: "#a78bfa" }} />
+            <Key style={{ width: 32, height: 32, color: "var(--primary)" }} />
           </div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: "white", marginBottom: 8 }}>Mise à jour requise</h1>
-          <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.5 }}>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-1)", marginBottom: 8 }}>Mise à jour requise</h1>
+          <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.5 }}>
             Pour des raisons de sécurité, vous devez personnaliser le mot de passe généré automatiquement avant d'accéder à votre espace.
           </p>
         </div>
@@ -75,29 +75,29 @@ export default function ChangePasswordPage() {
               </div>
             )}
             <div>
-              <label style={{ display: "block", color: "#e2e8f0", fontSize: 13, fontWeight: 500, marginBottom: 8 }}>Nouveau mot de passe</label>
+              <label style={{ display: "block", color: "var(--text-2)", fontSize: 13, fontWeight: 500, marginBottom: 8 }}>Nouveau mot de passe</label>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{
-                  width: "100%", background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: 12, padding: "12px 16px", color: "white", outline: "none",
+                  width: "100%", background: "var(--surface)", border: "1px solid var(--border)",
+                  borderRadius: 12, padding: "12px 16px", color: "var(--text-1)", outline: "none",
                   transition: "border 0.2s"
                 }}
               />
             </div>
             <div>
-              <label style={{ display: "block", color: "#e2e8f0", fontSize: 13, fontWeight: 500, marginBottom: 8 }}>Confirmer le mot de passe</label>
+              <label style={{ display: "block", color: "var(--text-2)", fontSize: 13, fontWeight: 500, marginBottom: 8 }}>Confirmer le mot de passe</label>
               <input
                 type="password"
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 style={{
-                  width: "100%", background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: 12, padding: "12px 16px", color: "white", outline: "none",
+                  width: "100%", background: "var(--surface)", border: "1px solid var(--border)",
+                  borderRadius: 12, padding: "12px 16px", color: "var(--text-1)", outline: "none",
                   transition: "border 0.2s"
                 }}
               />
@@ -106,7 +106,7 @@ export default function ChangePasswordPage() {
               type="submit"
               disabled={loading}
               style={{
-                width: "100%", background: "#7c3aed", color: "white", border: "none",
+                width: "100%", background: "var(--primary)", color: "#fff", border: "none",
                 borderRadius: 12, padding: "14px", fontSize: 14, fontWeight: 600,
                 cursor: loading ? "wait" : "pointer", marginTop: 8, transition: "background 0.2s",
                 opacity: loading ? 0.7 : 1

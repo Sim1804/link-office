@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertCircle, BookPlus, X, Plus, Check } from "lucide-react";
+import { Select } from "@/components/ui/Select";
 
 type LibraryItemData = {
   id: string;
@@ -47,7 +48,7 @@ const ArrayInput = ({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <label style={{ fontSize: 13, fontWeight: 500, color: "#94a3b8", display: "block" }}>{label}</label>
+      <label style={{ fontSize: 13, fontWeight: 500, color: "var(--text-2)", display: "block" }}>{label}</label>
       <div className="input-field" style={{ display: "flex", flexDirection: "column", gap: 8, height: "auto", minHeight: 44, padding: "8px 12px" }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {items.map((item, i) => (
@@ -62,7 +63,7 @@ const ArrayInput = ({
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <input 
             type="text" 
-            style={{ flex: 1, background: "transparent", border: "none", outline: "none", fontSize: 14, color: "#f8fafc" }}
+            style={{ flex: 1, background: "transparent", border: "none", outline: "none", fontSize: 14, color: "var(--text-1)" }}
             placeholder={items.length === 0 ? placeholder : "Ajouter..."}
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -73,7 +74,7 @@ const ArrayInput = ({
               }
             }}
           />
-          <button type="button" onClick={handleAdd} style={{ background: "none", border: "none", cursor: "pointer", color: "#64748b" }}>
+          <button type="button" onClick={handleAdd} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-3)" }}>
             <Plus size={16} />
           </button>
         </div>
@@ -84,14 +85,14 @@ const ArrayInput = ({
 
 const ToggleButton = ({ label, checked, onChange }: { label: string, checked: boolean, onChange: (c: boolean) => void }) => (
   <div className="input-field" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", cursor: "pointer" }} onClick={() => onChange(!checked)}>
-    <span style={{ fontSize: 13, fontWeight: 500, color: "#cbd5e1" }}>{label}</span>
+    <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text-3)" }}>{label}</span>
     <button 
       type="button"
       style={{
         position: "relative", display: "inline-flex", height: 24, width: 44,
         flexShrink: 0, cursor: "pointer", borderRadius: 9999, border: "2px solid transparent",
         transition: "background-color 0.2s",
-        background: checked ? "#7c3aed" : "rgba(100,116,139,0.4)",
+        background: checked ? "var(--primary)" : "rgba(100,116,139,0.4)",
         outline: "none"
       }}
     >
@@ -107,7 +108,7 @@ const ToggleButton = ({ label, checked, onChange }: { label: string, checked: bo
 
 const FormGroup = ({ label, children }: { label: string, children: React.ReactNode }) => (
   <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-    <label style={{ fontSize: 13, fontWeight: 500, color: "#94a3b8", display: "block" }}>{label}</label>
+    <label style={{ fontSize: 13, fontWeight: 500, color: "var(--text-2)", display: "block" }}>{label}</label>
     {children}
   </div>
 );
@@ -131,7 +132,6 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
   };
 
   const inputClass = "input-field";
-  const selectClass = "input-field appearance-none cursor-pointer";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -183,7 +183,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
         <div className="card" style={{ padding: 32 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
             <BookPlus size={24} style={{ color: "#c084fc" }} />
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Informations Principales</h2>
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Informations Principales</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <FormGroup label="Identifiant Unique (ID) *">
@@ -197,19 +197,19 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
             </FormGroup>
             
             <FormGroup label="Bibliothèque cible *">
-              <select 
-                required disabled={isEdit}
+              <Select 
+                disabled={isEdit}
                 value={formData.library}
-                onChange={(e) => {
-                  setFormData(f => ({ ...f, library: e.target.value }));
+                onChange={(value) => {
+                  setFormData(f => ({ ...f, library: value }));
                   if (!isEdit) setDataObj({});
                 }}
-                className={`${selectClass} font-medium ${isEdit ? 'opacity-60 cursor-not-allowed' : ''}`}
-              >
-                <option value="Recommandations">Recommandations</option>
-                <option value="Micro-défis">Micro-défis</option>
-                <option value="Partenaires">Partenaires</option>
-              </select>
+                options={[
+                  { value: "Recommandations", label: "Recommandations" },
+                  { value: "Micro-défis", label: "Micro-défis" },
+                  { value: "Partenaires", label: "Partenaires" }
+                ]}
+              />
             </FormGroup>
 
             <FormGroup label="Titre Principal *">
@@ -240,7 +240,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
                 <BookPlus size={24} style={{ color: "#a855f7" }} />
-                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Texte prêt à afficher *</h2>
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Texte prêt à afficher *</h2>
               </div>
               <textarea 
                 className={`${inputClass} min-h-[100px] resize-y`} 
@@ -254,7 +254,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
                 <BookPlus size={24} style={{ color: "#a855f7" }} />
-                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Critères de matching *</h2>
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Critères de matching *</h2>
               </div>
               <textarea 
                 className={`${inputClass} min-h-[100px] resize-y`} 
@@ -273,7 +273,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
                 <BookPlus size={24} style={{ color: "#0ea5e9" }} />
-                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Texte prêt à afficher *</h2>
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Texte prêt à afficher *</h2>
               </div>
               <textarea 
                 className={`${inputClass} min-h-[100px] resize-y`} 
@@ -287,7 +287,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
                 <BookPlus size={24} style={{ color: "#0ea5e9" }} />
-                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Ciblage *</h2>
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Ciblage *</h2>
               </div>
               <textarea 
                 className={`${inputClass} min-h-[80px] resize-y`} 
@@ -301,7 +301,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
                 <BookPlus size={24} style={{ color: "#0ea5e9" }} />
-                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Progression *</h2>
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Progression *</h2>
               </div>
               <textarea 
                 className={`${inputClass} min-h-[80px] resize-y`} 
@@ -320,7 +320,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
                 <BookPlus size={24} style={{ color: "#f59e0b" }} />
-                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Contenus Textuels</h2>
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Contenus Textuels</h2>
               </div>
               <FormGroup label="Description du Partenaire *">
                 <textarea className={`${inputClass} min-h-[100px] resize-y`} required value={dataObj.description || ""} onChange={e => updateData("description", e.target.value)} />
@@ -330,7 +330,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
                 <BookPlus size={24} style={{ color: "#f59e0b" }} />
-                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Critères de Matching</h2>
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Critères de Matching</h2>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 <ArrayInput label="Besoins Couverts" value={dataObj.besoins_couverts || ""} onChange={v => updateData("besoins_couverts", v)} />
@@ -345,7 +345,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
                 <BookPlus size={24} style={{ color: "#f59e0b" }} />
-                <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Statut & Compatibilités</h2>
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Statut & Compatibilités</h2>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
                  <FormGroup label="Type Partenaire"><input type="text" className={inputClass} value={dataObj.type_partenaire || ""} onChange={e => updateData("type_partenaire", e.target.value)} /></FormGroup>
@@ -367,10 +367,10 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
         {!['Recommandations', 'Micro-défis', 'Partenaires'].includes(formData.library) && (
           <div className="card animate-in fade-in slide-in-from-bottom-4" style={{ padding: 32 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-              <BookPlus size={24} style={{ color: "#64748b" }} />
-              <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", margin: 0 }}>Données brutes ({formData.library})</h2>
+              <BookPlus size={24} style={{ color: "var(--text-3)" }} />
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Données brutes ({formData.library})</h2>
             </div>
-            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 24 }}>
+            <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 24 }}>
               Ce type de bibliothèque (« {formData.library} ») est géré en lecture seule. Vous pouvez modifier le titre et la catégorie.
             </p>
             <FormGroup label="Description">
@@ -383,7 +383,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
           <button 
             type="button" 
             onClick={() => router.back()} 
-            className="btn btn-secondary btn-md"
+            className="btn btn-tertiary btn-md"
           >
             Annuler
           </button>

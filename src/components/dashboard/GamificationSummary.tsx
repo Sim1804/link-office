@@ -20,7 +20,7 @@ interface GamificationSummaryProps {
 
 function getLevel(points: number) {
   if (points >= 500) return { label: "Expert", next: null, progress: 100, color: "#fbbf24", nextPoints: 500 };
-  if (points >= 250) return { label: "Avancé", next: "Expert", progress: (points - 250) / 250 * 100, color: "#a78bfa", nextPoints: 500 };
+  if (points >= 250) return { label: "Avancé", next: "Expert", progress: (points - 250) / 250 * 100, color: "var(--primary)", nextPoints: 500 };
   if (points >= 100) return { label: "Actif", next: "Avancé", progress: (points - 100) / 150 * 100, color: "#34d399", nextPoints: 250 };
   return { label: "Débutant", next: "Actif", progress: points / 100 * 100, color: "#06b6d4", nextPoints: 100 };
 }
@@ -37,8 +37,8 @@ export function GamificationSummary({ points, badges }: GamificationSummaryProps
         flexWrap: "wrap",
         gap: 16,
         borderRadius: 16,
-        background: "rgba(17,24,39,0.4)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "var(--surface)",
+        border: "1px solid var(--border)",
         padding: "16px 24px",
       }}>
         {/* ── Points & Level ── */}
@@ -58,19 +58,19 @@ export function GamificationSummary({ points, badges }: GamificationSummaryProps
                   background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
                   WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                 }}>{points}</span>
-                <span style={{ color: "#64748b", fontSize: 12, fontWeight: 500 }}>pts</span>
+                <span style={{ color: "var(--text-3)", fontSize: 12, fontWeight: 500 }}>pts</span>
               </div>
-              <p style={{ fontSize: 11, color: "#475569" }}>Progression</p>
+              <p style={{ fontSize: 11, color: "var(--text-3)" }}>Progression</p>
             </div>
           </div>
 
           <div style={{ flex: 1, position: "relative" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
               <span style={{ fontSize: 11, fontWeight: 600, color: level.color }}>{level.label}</span>
-              {level.next && <span style={{ fontSize: 10, color: "#475569" }}>Vers {level.next}</span>}
+              {level.next && <span style={{ fontSize: 10, color: "var(--text-3)" }}>Vers {level.next}</span>}
             </div>
             {level.next && (
-              <div style={{ height: 4, borderRadius: 999, background: "rgba(255,255,255,0.05)" }}>
+              <div style={{ height: 4, borderRadius: 999, background: "rgba(18,61,70,0.05)" }}>
                 <div style={{
                   height: "100%", borderRadius: 999,
                   width: `${Math.min(100, level.progress)}%`,
@@ -82,17 +82,17 @@ export function GamificationSummary({ points, badges }: GamificationSummaryProps
         </div>
 
         {/* ── Vertical Divider ── */}
-        <div style={{ width: 1, height: 32, background: "rgba(255,255,255,0.08)", display: "block" }} />
+        <div style={{ width: 1, height: 32, background: "var(--surface-2)", display: "block" }} />
 
         {/* ── Badges ── */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Trophy size={16} color="#94a3b8" />
-            <span style={{ fontSize: 12, color: "#94a3b8", fontWeight: 500 }}>Badges</span>
+            <Trophy size={16} color="var(--text-3)" />
+            <span style={{ fontSize: 12, color: "var(--text-2)", fontWeight: 500 }}>Badges</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             {badges.length === 0 ? (
-              <span style={{ fontSize: 12, color: "#475569", fontStyle: "italic" }}>Aucun badge</span>
+              <span style={{ fontSize: 12, color: "var(--text-3)", fontStyle: "italic" }}>Aucun badge</span>
             ) : (
               badges.slice(0, 3).map(b => (
                 <div key={b.id} title={b.badge.description} style={{
@@ -100,13 +100,13 @@ export function GamificationSummary({ points, badges }: GamificationSummaryProps
                   padding: "4px 10px", borderRadius: 999,
                   background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)",
                 }}>
-                  <Award size={12} color="#a78bfa" />
+                  <Award size={12} color="var(--primary)" />
                   <span style={{ fontSize: 11, color: "#c084fc", fontWeight: 600 }}>{b.badge.name}</span>
                 </div>
               ))
             )}
             {badges.length > 3 && (
-              <span style={{ fontSize: 11, color: "#64748b", fontWeight: 600 }}>+{badges.length - 3}</span>
+              <span style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 600 }}>+{badges.length - 3}</span>
             )}
           </div>
         </div>

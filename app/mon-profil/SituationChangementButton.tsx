@@ -28,16 +28,16 @@ export function SituationChangementButton() {
   };
 
   return (
-    <div style={{ marginTop: 24, padding: 24, borderRadius: 24, border: "1px solid rgba(251,191,36,0.2)", background: "linear-gradient(145deg, rgba(251,191,36,0.05), rgba(17,24,39,0.98))" }}>
+    <div style={{ marginTop: 24, padding: 24, borderRadius: 24, border: "1px solid rgba(251,191,36,0.4)", background: "linear-gradient(145deg, rgba(251,191,36,0.1), rgba(251,191,36,0.02))" }}>
       <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
         <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(251,191,36,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <RefreshCw size={22} style={{ color: "#fbbf24" }} />
         </div>
         <div>
-          <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "#f8fafc", marginBottom: 6 }}>
+          <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "var(--text-1)", marginBottom: 6 }}>
             Ma situation a changé
           </h3>
-          <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.5, marginBottom: 16 }}>
+          <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.5, marginBottom: 16 }}>
             Si vous avez changé de poste, de situation familiale, ou de mode de vie, vous pouvez mettre à jour votre profil. 
             Cela clôturera votre profil actuel et initialisera une nouvelle évaluation pour mieux vous accompagner.
           </p>
@@ -49,7 +49,7 @@ export function SituationChangementButton() {
               color: "#fbbf24",
               border: "1px solid rgba(251,191,36,0.3)",
               padding: "10px 20px",
-              borderRadius: 12,
+              borderRadius: 999,
               fontSize: 14,
               fontWeight: 600,
               cursor: isLoading ? "not-allowed" : "pointer",

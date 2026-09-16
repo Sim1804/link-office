@@ -72,28 +72,26 @@ export function BinomeSuggest({ optIn }: { optIn: boolean }) {
   if (!optIn) return null;
 
   return (
-    <div style={{
-      background: "linear-gradient(135deg, rgba(168,85,247,0.08) 0%, rgba(124,58,237,0.04) 100%)",
-      border: "1px solid rgba(168,85,247,0.2)",
-      borderRadius: 20,
+    <div className="card" style={{
       padding: "24px 28px",
+      borderRadius: 20,
     }}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 12,
-            background: "rgba(168,85,247,0.15)",
-            border: "1px solid rgba(168,85,247,0.25)",
+            background: "rgba(0,169,157,0.1)",
+            border: "1px solid rgba(0,169,157,0.2)",
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <Sparkles size={18} style={{ color: "#c084fc" }} />
+            <Sparkles size={18} style={{ color: "var(--primary)" }} />
           </div>
           <div>
-            <h3 style={{ color: "#f8fafc", fontWeight: 700, fontSize: 15, margin: 0 }}>
+            <h3 style={{ color: "var(--text-1)", fontWeight: 700, fontSize: 15, margin: 0 }}>
               Suggestions IRIS
             </h3>
-            <p style={{ color: "#94a3b8", fontSize: 12, margin: "2px 0 0" }}>
+            <p style={{ color: "var(--text-2)", fontSize: 12, margin: "2px 0 0" }}>
               Matching par complémentarité de profil
             </p>
           </div>
@@ -102,19 +100,12 @@ export function BinomeSuggest({ optIn }: { optIn: boolean }) {
         {suggestions.length === 0 && !loading && !error && (
           <button
             onClick={handleSuggest}
+            className="btn btn-secondary btn-sm"
             style={{
               display: "flex",
               alignItems: "center",
               gap: 6,
-              background: "rgba(168,85,247,0.12)",
-              color: "#c084fc",
-              border: "1px solid rgba(168,85,247,0.25)",
-              padding: "9px 16px",
-              borderRadius: 10,
-              fontSize: 13,
-              fontWeight: 600,
-              cursor: "pointer",
-              transition: "all 0.2s",
+              borderRadius: 999,
             }}
           >
             <Sparkles size={14} />
@@ -136,12 +127,12 @@ export function BinomeSuggest({ optIn }: { optIn: boolean }) {
           <div style={{ position: "relative" }}>
             <div style={{
               width: 48, height: 48, borderRadius: "50%",
-              border: "2px solid rgba(168,85,247,0.15)",
-              borderTopColor: "#a855f7",
+              border: "2px solid rgba(0,169,157,0.15)",
+              borderTopColor: "var(--primary)",
               animation: "spin 1s linear infinite",
             }} />
           </div>
-          <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>
+          <p style={{ color: "var(--text-2)", fontSize: 14, margin: 0 }}>
             IRIS analyse les profils anonymisés…
           </p>
         </div>
@@ -164,7 +155,7 @@ export function BinomeSuggest({ optIn }: { optIn: boolean }) {
 
       {/* No suggestions yet */}
       {suggestions.length === 0 && !loading && !error && (
-        <p style={{ color: "#64748b", fontSize: 13, textAlign: "center", margin: "8px 0 0", lineHeight: 1.6 }}>
+        <p style={{ color: "var(--text-2)", fontSize: 13, textAlign: "center", margin: "8px 0 0", lineHeight: 1.6 }}>
           IRIS peut analyser les profils anonymisés de votre campagne pour vous suggérer le binôme idéal basé sur la complémentarité de vos dimensions relationnelles.
         </p>
       )}
@@ -181,8 +172,8 @@ export function BinomeSuggest({ optIn }: { optIn: boolean }) {
 
             return (
               <div key={s.id} style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.06)",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
                 borderRadius: 14,
                 padding: "16px 20px",
                 display: "flex",
@@ -205,10 +196,10 @@ export function BinomeSuggest({ optIn }: { optIn: boolean }) {
                 </div>
 
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15, margin: "0 0 4px" }}>
+                  <p style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 15, margin: "0 0 4px" }}>
                     {s.firstName}
                   </p>
-                  <p style={{ color: "#94a3b8", fontSize: 13, margin: 0, lineHeight: 1.5 }}>
+                  <p style={{ color: "var(--text-2)", fontSize: 13, margin: 0, lineHeight: 1.5 }}>
                     {s.rationale}
                   </p>
                 </div>
@@ -230,15 +221,11 @@ export function BinomeSuggest({ optIn }: { optIn: boolean }) {
                       <button
                         onClick={() => handleInvite(s.id)}
                         disabled={isInviting || inviting !== null}
+                        className="btn btn-primary btn-sm"
                         style={{
                           display: "flex", alignItems: "center", gap: 6,
-                          background: isInviting ? "rgba(168,85,247,0.15)" : "rgba(168,85,247,0.12)",
-                          color: "#c084fc",
-                          border: "1px solid rgba(168,85,247,0.25)",
-                          padding: "8px 14px", borderRadius: 8,
-                          fontSize: 13, fontWeight: 600,
-                          cursor: isInviting ? "not-allowed" : "pointer",
-                          transition: "all 0.2s",
+                          borderRadius: 999,
+                          opacity: isInviting ? 0.6 : 1,
                         }}
                       >
                         {isInviting
@@ -250,13 +237,9 @@ export function BinomeSuggest({ optIn }: { optIn: boolean }) {
                       <button
                         onClick={() => setSuggestions(suggestions.filter(x => x.id !== s.id))}
                         disabled={inviting !== null}
+                        className="btn btn-tertiary btn-sm"
                         style={{
-                          background: "rgba(255,255,255,0.04)",
-                          color: "#475569",
-                          border: "1px solid rgba(255,255,255,0.06)",
-                          padding: "8px 12px", borderRadius: 8,
-                          fontSize: 13, cursor: "pointer",
-                          transition: "all 0.2s",
+                          borderRadius: 999,
                         }}
                       >
                         Passer

@@ -2,7 +2,8 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/layout/Navbar";
-import { Users, UserPlus, Crown, Lock, Clock, Handshake } from "lucide-react";
+import { Users, UserPlus, Crown, Lock, Clock, Handshake, Sparkles } from "lucide-react";
+import { PremiumBadge } from "@/components/ui/PremiumBadge";
 import { BinomeInviteForm } from "./BinomeInviteForm";
 import { BinomeRespondButtons } from "./BinomeRespondButtons";
 import { BinomeSettings } from "./BinomeSettings";
@@ -40,12 +41,12 @@ export default async function BinomePage() {
   // Guard rôle — MEMBER et CITIZEN exclus
   const roleAllowed = BINOME_ALLOWED_ROLES.includes(user?.role ?? "");
 
-  const isPremiumPlus = user?.campaign
-    ? user.campaign.offer === "PREMIUM_PLUS" && user.campaign.status === "ACTIVE"
-    : user?.subscription === "PREMIUM_PLUS";
+  const isPremium = user?.campaign
+    ? (user.campaign.offer === "PREMIUM_PLUS" || user.campaign.offer === "PREMIUM") && user.campaign.status === "ACTIVE"
+    : (user?.subscription === "PREMIUM_PLUS" || user?.subscription === "PREMIUM");
 
-  // Écran de refus unifié (rôle non autorisé OU pas Premium+)
-  if (!roleAllowed || !isPremiumPlus) {
+  // Écran de refus unifié (rôle non autorisé OU pas Premium)
+  if (!roleAllowed || !isPremium) {
     const isRoleIssue = !roleAllowed;
     return (
       <>
@@ -56,62 +57,45 @@ export default async function BinomePage() {
             {/* Icon */}
             <div style={{
               width: 80, height: 80,
-              background: "linear-gradient(135deg, rgba(124,58,237,0.15), rgba(109,40,217,0.08))",
+              background: "linear-gradient(135deg, rgba(0,169,157,0.15), rgba(109,40,217,0.08))",
               borderRadius: 24,
               display: "flex", alignItems: "center", justifyContent: "center",
               margin: "0 auto 28px",
-              border: "1px solid rgba(124,58,237,0.2)",
-              boxShadow: "0 0 48px rgba(124,58,237,0.15)",
+              border: "1px solid rgba(0,169,157,0.2)",
+              boxShadow: "0 0 48px rgba(0,169,157,0.15)",
             }}>
               {isRoleIssue
-                ? <Lock style={{ width: 36, height: 36, color: "#a78bfa" }} />
-                : <Crown style={{ width: 36, height: 36, color: "#a78bfa" }} />
+                ? <Lock style={{ width: 36, height: 36, color: "var(--primary)" }} />
+                : <Crown style={{ width: 36, height: 36, color: "var(--primary)" }} />
               }
             </div>
 
-            {/* Badge */}
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              background: "rgba(124,58,237,0.1)",
-              border: "1px solid rgba(124,58,237,0.25)",
-              padding: "5px 14px", borderRadius: 999,
-              marginBottom: 20,
-            }}>
-              <Crown size={12} style={{ color: "#a78bfa" }} />
-              <span style={{ fontSize: 12, fontWeight: 700, color: "#a78bfa", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                Premium+
-              </span>
-            </div>
+            <PremiumBadge style={{ marginBottom: 16 }} />
 
             <h1 style={{
-              fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-              fontSize: 26, fontWeight: 800, color: "#f8fafc",
+              fontSize: 26, fontWeight: 800, color: "var(--text-1)",
               marginBottom: 14, lineHeight: 1.2,
             }}>
-              {isRoleIssue ? "Fonctionnalité non disponible" : "Passez à Premium+"}
+              {isRoleIssue ? "Fonctionnalité non disponible" : "Passez à Premium"}
             </h1>
-            <p style={{ color: "#94a3b8", fontSize: 15, lineHeight: 1.7, marginBottom: 36 }}>
+            <p style={{ color: "var(--text-2)", fontSize: 15, lineHeight: 1.7, marginBottom: 36 }}>
               {isRoleIssue
-                ? "Le programme Binôme Relationnel est réservé aux utilisateurs individuels (particuliers) disposant d'un abonnement Premium+. Les comptes mutuelle et collectivité n'ont pas accès à cette fonctionnalité."
+                ? "Le programme Binôme Relationnel est réservé aux utilisateurs individuels (particuliers) disposant d'un abonnement Premium. Les comptes mutuelle et collectivité n'ont pas accès à cette fonctionnalité."
                 : "Le programme Binôme Relationnel vous permet de vous associer à un collègue de confiance pour partager vos défis et progresser ensemble sur vos dimensions relationnelles."}
             </p>
 
             {!isRoleIssue && (
               <a
                 href="/premium"
+                className="btn btn-primary btn-md"
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 8,
-                  background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
-                  color: "#fff", fontWeight: 700, fontSize: 15,
-                  padding: "14px 32px", borderRadius: 14,
-                  border: "none", cursor: "pointer",
-                  boxShadow: "0 4px 24px rgba(124,58,237,0.45)",
-                  textDecoration: "none",
-                  transition: "all 0.2s",
+                  borderRadius: 999, padding: "14px 32px", fontSize: 15,
+                  textDecoration: "none"
                 }}
               >
                 <Crown size={18} />
-                Découvrir Premium+
+                Découvrir Premium
               </a>
             )}
           </div>
@@ -148,7 +132,7 @@ export default async function BinomePage() {
   ]);
 
   const totalNotifs = pendingReceived.length;
-  const avatarColors = ["#a855f7", "#06b6d4", "#10b981", "#f59e0b", "#ef4444"];
+  const avatarColors = ["#a855f7", "var(--primary)", "#10b981", "#f59e0b", "#ef4444"];
 
   return (
     <>
@@ -161,35 +145,25 @@ export default async function BinomePage() {
           {/* ── Hero Header ── */}
           <div style={{ marginBottom: 40 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
-              <div style={{
-                display: "inline-flex", alignItems: "center", gap: 6,
-                background: "rgba(124,58,237,0.12)",
-                border: "1px solid rgba(124,58,237,0.25)",
-                padding: "4px 12px", borderRadius: 999,
-              }}>
-                <Crown size={11} style={{ color: "#a78bfa" }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#a78bfa", textTransform: "uppercase", letterSpacing: "0.07em" }}>
-                  Premium+
-                </span>
-              </div>
+              <PremiumBadge />
             </div>
 
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
               <div>
                 <h1 style={{
                   fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-                  fontWeight: 800, fontSize: 32, color: "#f8fafc",
+                  fontWeight: 800, fontSize: 32, color: "var(--text-1)",
                   letterSpacing: "-0.02em", lineHeight: 1.1, margin: "0 0 10px",
                 }}>
                   Binôme{" "}
                   <span style={{
-                    background: "linear-gradient(135deg, #a78bfa 0%, #06b6d4 100%)",
+                    background: "linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%)",
                     WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                   }}>
                     Relationnel
                   </span>
                 </h1>
-                <p style={{ color: "#64748b", fontSize: 15, margin: 0 }}>
+                <p style={{ color: "var(--text-3)", fontSize: 15, margin: 0 }}>
                   Progressez ensemble sur vos dimensions relationnelles
                 </p>
               </div>
@@ -197,19 +171,19 @@ export default async function BinomePage() {
               {/* Stats rapides */}
               <div style={{ display: "flex", gap: 12 }}>
                 {[
-                  { label: "Actifs", value: acceptedPairs.length, color: "#10b981" },
-                  { label: "En attente", value: totalNotifs, color: "#f59e0b" },
+                  { label: "Actifs", value: acceptedPairs.length, color: "var(--primary)" },
+                  { label: "En attente", value: totalNotifs, color: "var(--text-2)" },
                 ].map(stat => (
                   <div key={stat.label} style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.07)",
+                    background: "var(--surface)",
+                    border: "1px solid var(--border)",
                     borderRadius: 14,
                     padding: "12px 20px",
                     textAlign: "center",
                     minWidth: 72,
                   }}>
                     <div style={{ fontSize: 22, fontWeight: 800, color: stat.color }}>{stat.value}</div>
-                    <div style={{ fontSize: 11, color: "#475569", fontWeight: 500, marginTop: 2 }}>{stat.label}</div>
+                    <div style={{ fontSize: 11, color: "var(--text-2)", fontWeight: 500, marginTop: 2 }}>{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -226,7 +200,7 @@ export default async function BinomePage() {
                />
             ) : !user?.binomePreference ? (
                <BinomeDiscovery />
-            ) : !user.binomePreference.optIn ? (
+            ) : (user.binomePreference.expectations?.length || 0) === 0 ? (
                <BinomePreferencesForm initialData={user.binomePreference} />
             ) : (
               <>
@@ -244,7 +218,7 @@ export default async function BinomePage() {
                     width: 6, height: 6, borderRadius: "50%", background: "#f59e0b",
                     boxShadow: "0 0 8px #f59e0b",
                   }} />
-                  <h2 style={{ color: "#f8fafc", fontSize: 15, fontWeight: 700, margin: 0 }}>
+                  <h2 style={{ color: "var(--text-1)", fontSize: 15, fontWeight: 700, margin: 0 }}>
                     Invitations reçues
                     <span style={{
                       marginLeft: 8, fontSize: 12, fontWeight: 700,
@@ -264,7 +238,7 @@ export default async function BinomePage() {
                     return (
                       <div key={pair.id} style={{
                         display: "flex", alignItems: "center", gap: 16,
-                        background: "linear-gradient(135deg, rgba(251,191,36,0.05) 0%, rgba(255,255,255,0.02) 100%)",
+                        background: "linear-gradient(135deg, rgba(251,191,36,0.05) 0%, var(--surface) 100%)",
                         border: "1px solid rgba(251,191,36,0.15)",
                         padding: "16px 20px", borderRadius: 16,
                         flexWrap: "wrap",
@@ -279,10 +253,10 @@ export default async function BinomePage() {
                           {initial}
                         </div>
                         <div style={{ flex: 1 }}>
-                          <p style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15, margin: "0 0 2px" }}>
+                          <p style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 15, margin: "0 0 2px" }}>
                             {p.firstName} {p.lastName}
                           </p>
-                          <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>{p.email}</p>
+                          <p style={{ color: "var(--text-3)", fontSize: 13, margin: 0 }}>{p.email}</p>
                         </div>
                         <BinomeRespondButtons pairId={pair.id} />
                       </div>
@@ -294,8 +268,8 @@ export default async function BinomePage() {
 
             {/* ── 4. Invitation manuelle ── */}
             <section style={{
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(255,255,255,0.07)",
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
               borderRadius: 20,
               padding: "24px 28px",
             }}>
@@ -309,11 +283,11 @@ export default async function BinomePage() {
                   <UserPlus size={18} style={{ color: "#38bdf8" }} />
                 </div>
                 <div>
-                  <h2 style={{ color: "#f8fafc", fontWeight: 700, fontSize: 15, margin: "0 0 2px" }}>
+                  <h2 style={{ color: "var(--text-1)", fontWeight: 700, fontSize: 15, margin: "0 0 2px" }}>
                     Inviter par email
                   </h2>
-                  <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>
-                    Invitez directement un collègue ou ami Premium+
+                  <p style={{ color: "var(--text-3)", fontSize: 13, margin: 0 }}>
+                    Invitez directement un collègue ou ami Premium
                   </p>
                 </div>
               </div>
@@ -324,8 +298,8 @@ export default async function BinomePage() {
             {pendingSent.length > 0 && (
               <section>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-                  <Clock size={14} style={{ color: "#475569" }} />
-                  <h2 style={{ color: "#94a3b8", fontSize: 14, fontWeight: 600, margin: 0 }}>
+                  <Clock size={14} style={{ color: "var(--text-2)" }} />
+                  <h2 style={{ color: "var(--text-2)", fontSize: 14, fontWeight: 600, margin: 0 }}>
                     Invitations envoyées
                   </h2>
                 </div>
@@ -337,8 +311,8 @@ export default async function BinomePage() {
                     return (
                       <div key={pair.id} style={{
                         display: "flex", alignItems: "center", gap: 14,
-                        background: "rgba(255,255,255,0.02)",
-                        border: "1px solid rgba(255,255,255,0.05)",
+                        background: "var(--surface)",
+                        border: "1px solid rgba(18,61,70,0.05)",
                         padding: "14px 18px", borderRadius: 14,
                       }}>
                         <div style={{
@@ -351,10 +325,10 @@ export default async function BinomePage() {
                           {initial}
                         </div>
                         <div style={{ flex: 1 }}>
-                          <p style={{ color: "#e2e8f0", fontWeight: 500, fontSize: 14, margin: "0 0 2px" }}>
+                          <p style={{ color: "var(--text-1)", fontWeight: 500, fontSize: 14, margin: "0 0 2px" }}>
                             {p.firstName} {p.lastName}
                           </p>
-                          <p style={{ color: "#475569", fontSize: 12, margin: 0 }}>{p.email}</p>
+                          <p style={{ color: "var(--text-2)", fontSize: 12, margin: 0 }}>{p.email}</p>
                         </div>
                         <span style={{
                           fontSize: 12, fontWeight: 600, color: "#f59e0b",
@@ -378,22 +352,22 @@ export default async function BinomePage() {
               <div style={{
                 textAlign: "center",
                 padding: "48px 32px",
-                background: "rgba(255,255,255,0.015)",
-                border: "1px dashed rgba(255,255,255,0.08)",
+                background: "var(--surface)",
+                border: "1px dashed var(--border)",
                 borderRadius: 20,
               }}>
                 <div style={{
                   width: 56, height: 56, borderRadius: 16,
-                  background: "rgba(124,58,237,0.1)",
+                  background: "rgba(0,169,157,0.1)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   margin: "0 auto 16px",
                 }}>
-                  <Users size={26} style={{ color: "#7c3aed" }} />
+                  <Users size={26} style={{ color: "var(--primary)" }} />
                 </div>
-                <p style={{ color: "#64748b", fontSize: 15, margin: "0 0 6px", fontWeight: 600 }}>
+                <p style={{ color: "var(--text-3)", fontSize: 15, margin: "0 0 6px", fontWeight: 600 }}>
                   Aucun binôme pour le moment
                 </p>
-                <p style={{ color: "#475569", fontSize: 13, margin: 0 }}>
+                <p style={{ color: "var(--text-2)", fontSize: 13, margin: 0 }}>
                   Activez les suggestions IRIS ou invitez directement un collègue pour commencer.
                 </p>
               </div>

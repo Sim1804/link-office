@@ -10,7 +10,8 @@ import { MeteoWidget } from "@/src/components/dashboard/MeteoWidget";
 import { GamificationSummary } from "@/components/dashboard/GamificationSummary";
 import { DashboardTabs } from "@/src/components/dashboard/tabs/DashboardTabs";
 import { B2b2cMemberRecommendations } from "@/components/dashboard/B2b2cMemberRecommendations";
-import { ArrowRight, FileQuestion, Sparkles, Crown } from "lucide-react";
+import { Brain, Star, Clock, Lock, Sparkles, TrendingUp, Search, User, ArrowRight, FileQuestion } from "lucide-react";
+import { PremiumBadge } from "@/components/ui/PremiumBadge";
 import Link from "next/link";
 
 
@@ -148,25 +149,19 @@ export default async function DashboardPage() {
         <main className="page-main">
           <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center", paddingTop: 80 }}>
             <div style={{
-              width: 80, height: 80, background: "rgba(124,58,237,0.12)", borderRadius: 24,
+              width: 80, height: 80, background: "rgba(0,169,157,0.12)", borderRadius: 16,
               display: "flex", alignItems: "center", justifyContent: "center",
               margin: "0 auto 24px",
             }}>
-              <FileQuestion style={{ width: 40, height: 40, color: "#a78bfa" }} />
+              <FileQuestion style={{ width: 40, height: 40, color: "var(--primary)" }} />
             </div>
-            <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 32, color: "#f8fafc", letterSpacing: "-0.02em" }}>
+            <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 32, color: "var(--text-1)", letterSpacing: "-0.02em" }}>
               Bonjour, {session.user.name?.split(" ")[0]} !
             </h1>
-            <p style={{ color: "#94a3b8", fontSize: 15, marginBottom: 32, lineHeight: 1.6 }}>
+            <p style={{ color: "var(--text-3)", fontSize: 15, marginBottom: 32, lineHeight: 1.6 }}>
               Vous n'avez pas encore de résultats. Remplissez le questionnaire IQRH pour découvrir votre profil relationnel.
             </p>
-            <Link href="/consentement" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              background: "#7c3aed", color: "white", fontWeight: 600,
-              padding: "16px 32px", borderRadius: 16, textDecoration: "none",
-              boxShadow: "0 0 32px rgba(124,58,237,0.35)", fontSize: 15,
-              transition: "all 0.2s",
-            }}>
+            <Link href="/consentement" className="btn btn-primary btn-lg">
               Commencer le questionnaire
               <ArrowRight style={{ width: 18, height: 18 }} />
             </Link>
@@ -202,44 +197,34 @@ export default async function DashboardPage() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 <span style={{ fontSize: 22 }}>👋</span>
-                <p style={{ fontSize: 15, color: "#64748b", fontWeight: 500 }}>
-                  Bonjour, <span style={{ color: "#94a3b8", fontWeight: 600 }}>{session.user.name?.split(" ")[0]}</span>
+                <p style={{ fontSize: 15, color: "var(--text-3)", fontWeight: 500 }}>
+                  Bonjour, <span style={{ color: "var(--text-3)", fontWeight: 600 }}>{session.user.name?.split(" ")[0]}</span>
                 </p>
               </div>
-              <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 34, color: "#f8fafc", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+              <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 34, color: "var(--text-1)", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
                 Votre espace
                 <span style={{
-                  background: "linear-gradient(135deg, #a78bfa 0%, #06b6d4 100%)",
+                  background: "linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%)",
                   WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                 }}> IQRH</span>
               </h1>
-              <p style={{ fontSize: 13, color: "#334155", marginTop: 8 }}>
+              <p style={{ fontSize: 13, color: "var(--text-3)", marginTop: 8 }}>
                 Dernière mise à jour — {new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
               </p>
             </div>
             {/* Subscription Badge */}
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               {isPremium ? (
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 8,
-                  background: "linear-gradient(135deg, rgba(124,58,237,0.2) 0%, rgba(6,182,212,0.1) 100%)",
-                  border: "1px solid rgba(124,58,237,0.3)",
-                  padding: "10px 18px", borderRadius: 14,
-                }}>
-                  <span style={{ fontSize: 16 }}>✨</span>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: "#a78bfa" }}>
-                    {subscription === "PREMIUM_PLUS" ? "Premium+" : "Premium"}
-                  </span>
-                </div>
+                <PremiumBadge label={subscription === "PREMIUM_PLUS" ? "Premium+" : "Premium"} />
               ) : (
                 <div style={{
                   display: "flex", alignItems: "center", gap: 8,
-                  background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
-                  padding: "10px 18px", borderRadius: 14,
+                  background: "var(--surface-2)", border: "1px solid var(--border)",
+                  padding: "10px 18px", borderRadius: 999,
                 }}>
-                  <span style={{ fontSize: 13, fontWeight: 500, color: "#475569" }}>Freemium</span>
-                  <span style={{ color: "#334155", fontSize: 13 }}>—</span>
-                  <Link href="/premium" style={{ fontSize: 12, color: "#7c3aed", fontWeight: 600, cursor: "pointer", textDecoration: "none" }}>Passer à Premium →</Link>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text-2)" }}>Freemium</span>
+                  <span style={{ color: "var(--text-3)", fontSize: 13 }}>—</span>
+                  <Link href="/premium" className="btn btn-primary btn-sm" style={{ borderRadius: 999 }}>Passer à Premium →</Link>
                 </div>
               )}
             </div>

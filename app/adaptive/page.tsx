@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { ChevronRight, ChevronLeft, CheckCircle } from "lucide-react";
 import { getAdaptiveQuestions, submitAdaptiveResponses, getUserStatus, AdaptiveModule } from "@/lib/api";
+import { Button } from "@/components/ui/Button";
 
 const CHOICES = [
   { value: 1, label: "Pas du tout d'accord" },
@@ -127,25 +128,25 @@ export default function AdaptivePage() {
   }, [router, submitAll]);
 
   if (loading) {
-    return <div style={{ minHeight: "100vh", background: "#0b0f19" }} />;
+    return <div style={{ minHeight: "100vh", background: "var(--bg)" }} />;
   }
 
   if (submitted) {
     return (
-      <div style={{ minHeight: "100vh", background: "#0b0f19", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center" }}>
           <CheckCircle style={{ width: 64, height: 64, color: "#34d399", margin: "0 auto 16px" }} />
-          <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 24, color: "#f8fafc", marginBottom: 8 }}>
+          <h2 style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 24, color: "var(--text-1)", marginBottom: 8 }}>
             Modules complétés !
           </h2>
-          <p style={{ color: "#64748b", fontSize: 14 }}>Calcul de vos scores en cours…</p>
+          <p style={{ color: "var(--text-3)", fontSize: 14 }}>Calcul de vos scores en cours…</p>
         </div>
       </div>
     );
   }
 
   if (!modules || modules.length === 0) {
-    return <div style={{ minHeight: "100vh", background: "#0b0f19" }} />;
+    return <div style={{ minHeight: "100vh", background: "var(--bg)" }} />;
   }
 
   const currentModule = modules[currentModuleIndex];
@@ -193,14 +194,14 @@ export default function AdaptivePage() {
     <>
       <Navbar />
       <main style={{
-        minHeight: "100vh", background: "#0b0f19",
+        minHeight: "100vh", background: "var(--bg)",
         paddingTop: 88, paddingBottom: 32, paddingLeft: 24, paddingRight: 24,
         position: "relative", display: "flex", flexDirection: "column",
       }}>
         {/* Blob */}
         <div style={{
           position: "fixed", top: "-15%", right: "-8%", width: 600, height: 600,
-          background: "radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)",
           pointerEvents: "none", zIndex: 0,
         }} />
 
@@ -213,7 +214,7 @@ export default function AdaptivePage() {
           {/* ── Barre de progression ── */}
           <div style={{ marginBottom: 28 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-              <span style={{ fontSize: 13, color: "#64748b" }}>
+              <span style={{ fontSize: 13, color: "var(--text-3)" }}>
                 Module {currentModuleIndex + 1} / {modules.length}
               </span>
               <span style={{
@@ -225,10 +226,10 @@ export default function AdaptivePage() {
             </div>
 
             {/* Track */}
-            <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 999, overflow: "hidden" }}>
+            <div style={{ height: 6, background: "var(--border-strong)", borderRadius: 999, overflow: "hidden" }}>
               <div style={{
                 height: "100%", borderRadius: 999,
-                background: "linear-gradient(90deg, #06b6d4, #7c3aed)",
+                background: "var(--primary)",
                 width: `${progress}%`,
                 transition: "width 0.5s ease",
               }} />
@@ -239,7 +240,7 @@ export default function AdaptivePage() {
               {modules.map((m, idx) => (
                 <div key={m.id || idx} title={m.title} style={{
                   width: 8, height: 8, borderRadius: "50%",
-                  background: currentModuleIndex === idx ? dimColor : currentModuleIndex > idx ? `${dimColor}66` : "rgba(255,255,255,0.10)",
+                  background: currentModuleIndex === idx ? dimColor : currentModuleIndex > idx ? `${dimColor}66` : "var(--border-strong)",
                   transition: "all 0.3s",
                   boxShadow: currentModuleIndex === idx ? `0 0 8px ${dimColor}` : "none",
                 }} />
@@ -252,13 +253,13 @@ export default function AdaptivePage() {
             padding: 32, flex: 1, display: "flex", flexDirection: "column",
           }}>
             {/* Sous-titre dimension */}
-            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
+            <p style={{ fontSize: 11, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
               {currentModule.title} — {currentQuestionIndex + 1}/{currentModule.questions.length}
             </p>
 
             {/* Objectif du module */}
             {currentModule.objective && (
-              <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 20, lineHeight: 1.5 }}>
+              <p style={{ fontSize: 13, color: "var(--text-2)", marginBottom: 20, lineHeight: 1.5 }}>
                 <strong style={{ color: dimColor }}>Objectif : </strong>
                 {currentModule.objective}
               </p>
@@ -266,8 +267,8 @@ export default function AdaptivePage() {
 
             {/* Question */}
             <h2 style={{
-              fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-              fontWeight: 600, fontSize: 20, color: "#f8fafc",
+              fontFamily: "var(--font-family-display)",
+              fontWeight: 600, fontSize: 20, color: "var(--text-1)",
               lineHeight: 1.55, marginBottom: 28, flex: 1,
             }}>
               {question?.text}
@@ -286,25 +287,25 @@ export default function AdaptivePage() {
                       padding: "14px 18px", borderRadius: 16, textAlign: "left",
                       cursor: "pointer", fontFamily: "inherit",
                       transition: "all 0.18s",
-                      background: selected ? "rgba(6,182,212,0.18)" : "rgba(26,34,54,0.5)",
-                      border: selected ? "1.5px solid rgba(6,182,212,0.55)" : "1.5px solid rgba(255,255,255,0.08)",
+                      background: selected ? "rgba(6,182,212,0.18)" : "var(--surface)",
+                      border: selected ? "1.5px solid var(--cyan)" : "1.5px solid var(--border-strong)",
                       boxShadow: selected ? "0 0 16px rgba(6,182,212,0.2)" : "none",
                     }}
                   >
                     {/* Radio indicator */}
                     <div style={{
                       width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
-                      border: selected ? "2px solid #06b6d4" : "2px solid rgba(255,255,255,0.20)",
+                      border: selected ? "2px solid #06b6d4" : "2px solid var(--border-strong)",
                       background: selected ? "#06b6d4" : "transparent",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       transition: "all 0.18s",
                     }}>
                       {selected && <div style={{ width: 8, height: 8, background: "white", borderRadius: "50%" }} />}
                     </div>
-                    <span style={{ fontSize: 14, fontWeight: 500, color: selected ? "#f8fafc" : "#94a3b8", flex: 1 }}>
+                    <span style={{ fontSize: 14, fontWeight: 500, color: selected ? "var(--text-1)" : "var(--text-2)", flex: 1 }}>
                       {choice.label}
                     </span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: selected ? "#22d3ee" : "#475569" }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: selected ? "#22d3ee" : "var(--text-2)" }}>
                       {choice.value}
                     </span>
                   </button>
@@ -314,53 +315,30 @@ export default function AdaptivePage() {
 
             {/* Navigation */}
             <div style={{ display: "flex", gap: 12 }}>
-              <button
+              <Button
+                variant="secondary"
+                size="lg"
                 onClick={handlePrev}
                 disabled={isFirst}
-                style={{
-                  display: "flex", alignItems: "center", gap: 8,
-                  padding: "12px 20px", borderRadius: 12,
-                  background: "rgba(26,34,54,0.8)", border: "1px solid rgba(255,255,255,0.12)",
-                  color: isFirst ? "#475569" : "#94a3b8",
-                  fontSize: 14, fontWeight: 500, fontFamily: "inherit",
-                  cursor: isFirst ? "not-allowed" : "pointer",
-                  opacity: isFirst ? 0.5 : 1,
-                  transition: "all 0.2s",
-                }}
               >
-                <ChevronLeft style={{ width: 16, height: 16 }} />
+                <ChevronLeft style={{ width: 16, height: 16, marginRight: 8 }} />
                 Précédent
-              </button>
+              </Button>
 
-              <button
+              <Button
+                variant="primary"
+                size="lg"
                 onClick={handleNext}
                 disabled={!isAnswered || submitting}
-                style={{
-                  flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  padding: "12px 20px", borderRadius: 12,
-                  background: isAnswered ? "#06b6d4" : "rgba(6,182,212,0.25)",
-                  border: "none",
-                  color: isAnswered ? "white" : "rgba(255,255,255,0.35)",
-                  fontSize: 14, fontWeight: 600, fontFamily: "inherit",
-                  cursor: isAnswered && !submitting ? "pointer" : "not-allowed",
-                  boxShadow: isAnswered ? "0 0 24px rgba(6,182,212,0.35)" : "none",
-                  transition: "all 0.2s",
-                }}
+                loading={submitting}
+                style={{ flex: 1 }}
               >
-                {submitting ? (
-                  <>
-                    <svg style={{ width: 16, height: 16, animation: "spin 0.7s linear infinite" }} viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.25)" strokeWidth="4" />
-                      <path fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" opacity="0.75" />
-                    </svg>
-                    Envoi…
-                  </>
-                ) : isLast ? (
+                {isLast ? (
                   "Soumettre"
                 ) : (
-                  <>Suivant <ChevronRight style={{ width: 16, height: 16 }} /></>
+                  <>Suivant <ChevronRight style={{ width: 16, height: 16, marginLeft: 8 }} /></>
                 )}
-              </button>
+              </Button>
             </div>
           </div>
 

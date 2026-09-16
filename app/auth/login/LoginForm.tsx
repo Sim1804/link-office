@@ -181,7 +181,7 @@ export function LoginForm() {
             >
               {loading ? (
                 <span style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}>
-                  <span style={{ width: 16, height: 16, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
+                  <span style={{ width: 16, height: 16, border: "2px solid var(--text-3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
                   Connexion en cours…
                 </span>
               ) : (

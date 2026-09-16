@@ -120,11 +120,11 @@ export default function JoinPage() {
                 {org.logoUrl ? (
                   <img src={org.logoUrl} alt={`Logo ${org.name}`} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                 ) : (
-                  <Building2 size={20} style={{ color: "#a78bfa" }} />
+                  <Building2 size={20} style={{ color: "var(--primary)" }} />
                 )}
               </div>
               <div style={{ textAlign: "left" }}>
-                <p style={{ color: "#a78bfa", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                <p style={{ color: "var(--primary)", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   Invitation de
                 </p>
                 <p style={{ color: "var(--text-1)", fontSize: 15, fontWeight: 700 }}>{org.name}</p>

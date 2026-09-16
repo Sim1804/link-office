@@ -6,7 +6,7 @@ export default function Loading() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "#0b0f19",
+      background: "var(--bg)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -16,7 +16,7 @@ export default function Loading() {
       {/* Glow blob */}
       <div style={{
         position: "absolute", top: "-15%", right: "-8%", width: 600, height: 600,
-        background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)",
+        background: "radial-gradient(circle, rgba(0,169,157,0.08) 0%, transparent 70%)",
         pointerEvents: "none",
       }} />
 
@@ -30,10 +30,10 @@ export default function Loading() {
         {/* Logo animé */}
         <div style={{
           width: 52, height: 52,
-          background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
+          background: "linear-gradient(135deg, var(--indigo) 0%, var(--primary) 100%)",
           borderRadius: 16,
           display: "flex", alignItems: "center", justifyContent: "center",
-          boxShadow: "0 0 32px rgba(124,58,237,0.4)",
+          boxShadow: "0 0 32px rgba(0,169,157,0.2)",
           animation: "pulse 2s cubic-bezier(0.4,0,0.6,1) infinite",
         }}>
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -45,8 +45,8 @@ export default function Loading() {
         {/* Texte */}
         <div style={{ textAlign: "center" }}>
           <div style={{
-            fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-            fontSize: 15, fontWeight: 600, color: "#94a3b8",
+            fontFamily: "var(--font-family-display)",
+            fontSize: 15, fontWeight: 600, color: "var(--text-2)",
             animation: "fadePulse 1.5s ease-in-out infinite",
           }}>
             Chargement…
@@ -56,13 +56,13 @@ export default function Loading() {
         {/* Barre de progression animée */}
         <div style={{
           width: 200, height: 3,
-          background: "rgba(255,255,255,0.06)",
+          background: "var(--border)",
           borderRadius: 999,
           overflow: "hidden",
         }}>
           <div style={{
             height: "100%",
-            background: "linear-gradient(90deg, #7c3aed, #06b6d4)",
+            background: "linear-gradient(90deg, var(--indigo), var(--primary))",
             borderRadius: 999,
             animation: "loadingBar 1.8s ease-in-out infinite",
           }} />

@@ -50,10 +50,10 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
   return (
     <>
       <Navbar />
-      <main style={{ minHeight: "100vh", background: "#0b0f19", paddingTop: 100, paddingBottom: 80 }}>
+      <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 100, paddingBottom: 80 }}>
         
         {/* Cover Section - Classic Header */}
-        <div style={{ paddingBottom: 40, borderBottom: "1px solid rgba(255,255,255,0.1)", marginBottom: 40 }}>
+        <div style={{ paddingBottom: 40, borderBottom: "1px solid var(--border)", marginBottom: 40 }}>
           {/* Header Image if any, displayed as a clean banner, not a blurry background */}
           {media.coverImage && (
             <div className="container" style={{ marginBottom: 40 }}>
@@ -66,39 +66,39 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
           )}
           
           <div className="container">
-            <Link href="/media" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#94a3b8", textDecoration: "none", marginBottom: 32, fontSize: 14, fontWeight: 500 }} className="hover-text-white">
+            <Link href="/media" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--text-3)", textDecoration: "none", marginBottom: 32, fontSize: 14, fontWeight: 500 }} className="hover-text-primary">
               <ArrowLeft size={16} /> Retour aux médias
             </Link>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
-              <span style={{ padding: "4px 12px", borderRadius: 4, background: "rgba(255,255,255,0.1)", color: "#f8fafc", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>
+              <span style={{ padding: "4px 12px", borderRadius: 4, background: "var(--surface)", border: "1px solid var(--border-strong)", color: "var(--text-2)", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>
                 {media.mediaType.replace("_", " ")}
               </span>
               {mainCategory && (
-                <span style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 4, border: "1px solid rgba(255,255,255,0.15)", color: "#cbd5e1", fontSize: 12, fontWeight: 500 }}>
+                <span style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 4, border: "1px solid var(--border)", color: "var(--text-3)", fontSize: 12, fontWeight: 500 }}>
                   <Folder size={12} /> {mainCategory.name}
                 </span>
               )}
             </div>
 
-            <h1 style={{ fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 800, color: "#f8fafc", marginBottom: 24, lineHeight: 1.2, fontFamily: "'Plus Jakarta Sans', sans-serif", maxWidth: 900 }}>
+            <h1 style={{ fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 800, color: "var(--text-1)", marginBottom: 24, lineHeight: 1.2, fontFamily: "var(--font-family-display)", maxWidth: 900 }}>
               {media.title}
             </h1>
 
             {media.summary && (
-               <p style={{ fontSize: 20, color: "#94a3b8", lineHeight: 1.6, maxWidth: 800, marginBottom: 40, fontWeight: 400 }}>
+               <p style={{ fontSize: 20, color: "var(--text-2)", lineHeight: 1.6, maxWidth: 800, marginBottom: 40, fontWeight: 400 }}>
                 {media.summary}
               </p>
             )}
 
-            <div style={{ display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 24, maxWidth: 900 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap", borderTop: "1px solid var(--border)", paddingTop: 24, maxWidth: 900 }}>
               {formattedDate && (
-                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#94a3b8", fontSize: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-3)", fontSize: 14 }}>
                   <Calendar size={16} /> Publié le {formattedDate}
                 </div>
               )}
               {media.duration && (
-                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#94a3b8", fontSize: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-2)", fontSize: 14 }}>
                   <Clock size={16} /> {media.duration} min {isPodcast ? "d'écoute" : "de lecture"}
                 </div>
               )}
@@ -132,19 +132,19 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
                 className="media-content-body"
                 dangerouslySetInnerHTML={{ __html: media.content }} 
                 style={{ 
-                  color: "#e2e8f0", fontSize: 18, lineHeight: 1.8, 
+                  color: "var(--text-2)", fontSize: 18, lineHeight: 1.8, 
                   fontFamily: "Inter, sans-serif"
                 }}
               />
 
               {/* Transcription (if Podcast) */}
               {isPodcast && media.transcript && (
-                <div style={{ marginTop: 60, padding: 32, background: "rgba(15,23,42,0.8)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 700, color: "#f8fafc", marginBottom: 24, display: "flex", alignItems: "center", gap: 10 }}>
-                    <FileText size={20} style={{ color: "#94a3b8" }} />
+                <div style={{ marginTop: 60, padding: 32, background: "rgba(15,23,42,0.8)", borderRadius: 12, border: "1px solid rgba(18,61,70,0.05)" }}>
+                  <h3 style={{ fontSize: 20, fontWeight: 700, color: "var(--text-1)", marginBottom: 24, display: "flex", alignItems: "center", gap: 10 }}>
+                    <FileText size={20} style={{ color: "var(--text-2)" }} />
                     Transcription intégrale
                   </h3>
-                  <div style={{ color: "#cbd5e1", fontSize: 16, lineHeight: 1.7, whiteSpace: "pre-wrap", fontFamily: "Inter, sans-serif" }}>
+                  <div style={{ color: "var(--text-2)", fontSize: 16, lineHeight: 1.7, whiteSpace: "pre-wrap", fontFamily: "Inter, sans-serif" }}>
                     {media.transcript}
                   </div>
                 </div>
@@ -157,7 +157,7 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
               {/* Eclaireurs (Guests/Authors) */}
               {media.eclaireurs.length > 0 && (
                 <div>
-                  <h3 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc", marginBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: 12 }}>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 16, borderBottom: "1px solid var(--border)", paddingBottom: 12 }}>
                     Dans cet épisode
                   </h3>
                   <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -171,13 +171,13 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
               {/* Categories / Tags */}
               {media.categories.length > 0 && (
                 <div>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, color: "#f8fafc", marginBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>
+                  <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 16, borderBottom: "1px solid var(--border)", paddingBottom: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>
                     Thématiques
                   </h3>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {media.categories.map(c => (
-                      <span key={c.id} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 4, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#cbd5e1", fontSize: 13 }}>
-                        <Tag size={12} style={{ color: "#94a3b8" }} /> {c.name}
+                      <span key={c.id} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 4, background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)", color: "var(--text-2)", fontSize: 13 }}>
+                        <Tag size={12} style={{ color: "var(--text-2)" }} /> {c.name}
                       </span>
                     ))}
                   </div>
@@ -189,8 +189,8 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
 
         {/* Related Content */}
         {media.linkedArticles.length > 0 && (
-          <div className="container" style={{ marginTop: 80, paddingTop: 60, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-            <h2 style={{ fontSize: 28, fontWeight: 700, color: "#f8fafc", marginBottom: 32 }}>Pour aller plus loin</h2>
+          <div className="container" style={{ marginTop: 80, paddingTop: 60, borderTop: "1px solid var(--border)" }}>
+            <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--text-1)", marginBottom: 32 }}>Pour aller plus loin</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }}>
               {media.linkedArticles.map(article => (
                 <MediaCard key={article.id} media={article as any} />
@@ -202,7 +202,7 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
       <Footer />
 
       <style>{`
-        .hover-text-white:hover { color: #f8fafc !important; }
+        .hover-text-white:hover { color: var(--primary) !important; }
         
         /* Styles pour le contenu riche - Typographie Journalistique Classique */
         .media-content-body {
@@ -213,7 +213,7 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
           font-weight: 400;
         }
         .media-content-body h2 {
-          font-size: 26px; font-weight: 700; color: #f8fafc; margin: 48px 0 20px; font-family: 'Plus Jakarta Sans', sans-serif;
+          font-size: 26px; font-weight: 700; color: var(--text-1); margin: 48px 0 20px; font-family: 'Plus Jakarta Sans', sans-serif;
         }
         .media-content-body h3 {
           font-size: 20px; font-weight: 600; color: #e2e8f0; margin: 36px 0 16px; font-family: 'Plus Jakarta Sans', sans-serif;
@@ -228,11 +228,11 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
         .media-content-body ul, .media-content-body ol { margin-bottom: 24px; padding-left: 24px; }
         .media-content-body li { margin-bottom: 8px; }
         .media-content-body blockquote {
-          border-left: 3px solid #64748b; padding: 16px 24px; margin: 32px 0; font-style: italic; color: #94a3b8; 
-          background: rgba(255,255,255,0.03); 
+          border-left: 3px solid #64748b; padding: 16px 24px; margin: 32px 0; font-style: italic; color: var(--text-2); 
+          background: var(--surface); 
           font-size: 19px; line-height: 1.7;
         }
-        .media-content-body img { max-width: 100%; border-radius: 8px; margin: 32px 0; border: 1px solid rgba(255,255,255,0.1); }
+        .media-content-body img { max-width: 100%; border-radius: 8px; margin: 32px 0; border: 1px solid var(--border); }
       `}</style>
     </>
   );

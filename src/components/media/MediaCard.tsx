@@ -68,7 +68,7 @@ export function MediaCard({ media }: MediaCardProps) {
         <div
           style={{
             height: 180,
-            background: media.coverImage ? `url(${media.coverImage}) center/cover` : "linear-gradient(135deg, rgba(124,58,237,0.2), rgba(30,27,75,0.8))",
+            background: media.coverImage ? `url(${media.coverImage}) center/cover` : "linear-gradient(135deg, rgba(0,169,157,0.1), rgba(89,101,232,0.1))",
             position: "relative",
           }}
         >
@@ -83,11 +83,9 @@ export function MediaCard({ media }: MediaCardProps) {
               display: "flex",
               alignItems: "center",
               gap: 6,
-              color: "#f8fafc",
-              fontSize: 11,
+              color: "white",
+              fontSize: 12,
               fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: 0.5,
             }}
           >
             {getIcon()}
@@ -98,7 +96,7 @@ export function MediaCard({ media }: MediaCardProps) {
         {/* Content */}
         <div style={{ padding: 20, display: "flex", flexDirection: "column", flexGrow: 1 }}>
           {mainCategory && (
-            <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#94a3b8", fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--text-2)", fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
               <Folder size={12} />
               {mainCategory.name}
             </div>
@@ -108,7 +106,7 @@ export function MediaCard({ media }: MediaCardProps) {
             style={{
               fontSize: 18,
               fontWeight: 700,
-              color: "#f8fafc",
+              color: "var(--text-1)",
               marginBottom: 8,
               lineHeight: 1.4,
               display: "-webkit-box",
@@ -122,7 +120,7 @@ export function MediaCard({ media }: MediaCardProps) {
 
           <p
             style={{
-              color: "#94a3b8",
+              color: "var(--text-2)",
               fontSize: 14,
               lineHeight: 1.5,
               marginBottom: 16,
@@ -136,13 +134,13 @@ export function MediaCard({ media }: MediaCardProps) {
             {media.summary}
           </p>
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: 6, color: "#64748b", fontSize: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", paddingTop: 16, borderTop: "1px solid rgba(18,61,70,0.05)" }}>
+            <span style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--text-3)", fontSize: 12 }}>
               <Clock size={14} />
               {media.duration ? `${media.duration} min` : "Lecture rapide"}
             </span>
-            <span style={{ color: "#94a3b8", fontSize: 13, fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
-              Découvrir <ExternalLink size={14} color="#64748b" />
+            <span style={{ color: "var(--text-2)", fontSize: 13, fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
+              Découvrir <ExternalLink size={14} color="var(--text-3)" />
             </span>
           </div>
         </div>

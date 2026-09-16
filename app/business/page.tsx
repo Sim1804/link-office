@@ -47,7 +47,7 @@ const PLANS: {
     sub: "Pour les Entreprises",
     desc: "Bilans relationnels pour vos équipes, dashboard RH anonymisé et prévention des RPS.",
     bullets: ["Dashboard RH anonymisé", "Indice de Charge Relationnelle (ICR)", "Plan d'action collaboratif", "Rapport PDF pour la Direction"],
-    color: "#a78bfa",
+    color: "var(--primary)",
     glow: "rgba(124,58,237,0.14)",
     border: "#7c3aed",
     icon: <Building2 size={22} />,
@@ -58,7 +58,7 @@ const PLANS: {
     sub: "Pour les Collectivités",
     desc: "Baromètre territorial, action publique ciblée et cartographie de l'isolement social.",
     bullets: ["Observatoire du lien social", "Segmentation géographique", "Recommandations de politiques publiques", "Anonymat CNIL garanti"],
-    color: "#38bdf8",
+    color: "var(--cyan)",
     glow: "rgba(14,165,233,0.14)",
     border: "#0ea5e9",
     icon: <Globe size={22} />,
@@ -69,7 +69,7 @@ const PLANS: {
     sub: "Mutuelles & Assurances",
     desc: "Financez l'accès Premium ou Premium+ pour vos bénéficiaires. Inclut le Binôme Relationnel IRIS (Premium+).",
     bullets: ["Accès Premium financé", "Entonnoir d'activation suivi", "Orientations vers vos services de soins", "Module Binôme (Premium+)"],
-    color: "#fbbf24",
+    color: "var(--amber)",
     glow: "rgba(245,158,11,0.14)",
     border: "#f59e0b",
     icon: <HeartPulse size={22} />,
@@ -77,12 +77,12 @@ const PLANS: {
 ];
 
 const FEATURES = [
-  { icon: <BarChart3 size={24} color="#a78bfa" />, label: "Dashboard anonymisé", desc: "Statistiques agrégées RGPD-conformes en temps réel.", badge: "Analyse" },
-  { icon: <ShieldCheck size={24} color="#34d399" />, label: "Sécurité garantie", desc: "Seuil d'anonymat à 5 répondants, données hébergées en France.", badge: "Sécurité" },
-  { icon: <TrendingUp size={24} color="#38bdf8" />, label: "Rapports détaillés", desc: "ICR, profils IQRH, météo relationnelle et plan d'action.", badge: "Rapports" },
-  { icon: <Zap size={24} color="#fbbf24" />, label: "Déploiement rapide", desc: "Sous 48h après signature : code d'accès, QR code et onboarding.", badge: "Rapidité" },
-  { icon: <Sparkles size={24} color="#f43f5e" />, label: "IA IRIS intégrée", desc: "Coach IA personnalisé pour chaque bénéficiaire de votre organisation.", badge: "IA" },
-  { icon: <Users size={24} color="#c084fc" />, label: "Binôme Relationnel", desc: "Connexion bienveillante entre collaborateurs (offre Premium+).", badge: "Premium+" },
+  { icon: <BarChart3 size={24} color="var(--primary)" />, label: "Dashboard anonymisé", desc: "Statistiques agrégées RGPD-conformes en temps réel.", badge: "Analyse", badgeClass: "badge-iqrh" },
+  { icon: <ShieldCheck size={24} color="var(--indigo)" />, label: "Sécurité garantie", desc: "Seuil d'anonymat à 5 répondants, données hébergées en France.", badge: "Sécurité", badgeClass: "badge-iris" },
+  { icon: <TrendingUp size={24} color="var(--cyan)" />, label: "Rapports détaillés", desc: "ICR, profils IQRH, météo relationnelle et plan d'action.", badge: "Rapports", badgeClass: "badge-barometre" },
+  { icon: <Zap size={24} color="var(--amber)" />, label: "Déploiement rapide", desc: "Sous 48h après signature : code d'accès, QR code et onboarding.", badge: "Rapidité", badgeClass: "badge-partenaires" },
+  { icon: <Sparkles size={24} color="var(--primary)" />, label: "IA IRIS intégrée", desc: "Coach IA personnalisé pour chaque bénéficiaire de votre organisation.", badge: "IA", badgeClass: "badge-iris" },
+  { icon: <Users size={24} color="var(--indigo)" />, label: "Binôme Relationnel", desc: "Connexion bienveillante entre collaborateurs (offre Premium+).", badge: "Premium+", badgeClass: "badge-media" },
 ];
 
 const TESTIMONIALS = [
@@ -155,11 +155,11 @@ export default function BusinessPage() {
             </div>
 
             <h1 className="anim-fade-up delay-1" style={{
-              fontWeight: 800, fontSize: "clamp(36px, 6vw, 68px)",
+              fontFamily: "var(--font-family-display)", fontWeight: 800, fontSize: "clamp(36px, 6vw, 68px)",
               lineHeight: 1.1, color: "var(--text-1)", marginBottom: 24, maxWidth: 860,
             }}>
               Investissez dans le{" "}
-              <span style={{ color: "#a78bfa" }}>capital humain</span>
+              <span style={{ color: "var(--primary)" }}>capital humain</span>
               <br />& relationnel de votre organisation
             </h1>
 
@@ -172,13 +172,10 @@ export default function BusinessPage() {
             </p>
 
             <div className="anim-fade-up delay-3" style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center", marginBottom: 72 }}>
-              <a href="#devis" className="btn btn-primary btn-lg" style={{ textDecoration: "none" }}>
+              <a href="#devis" className="btn btn-primary btn-lg">
                 Demander un devis <ArrowRight size={16} />
               </a>
-              <Link href="/auth/register" className="btn btn-secondary btn-lg" style={{
-                textDecoration: "none", border: "1px solid rgba(124,58,237,0.3)",
-                background: "rgba(124,58,237,0.05)",
-              }}>
+              <Link href="/auth/register" className="btn btn-tertiary btn-lg">
                 Découvrir l'offre B2C
               </Link>
             </div>
@@ -191,17 +188,17 @@ export default function BusinessPage() {
                   <span className="badge badge-cyan">⛅ Éclaircies</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 20 }}>
-                  <span style={{ color: "#a78bfa", fontSize: 52, fontWeight: 800, lineHeight: 1 }}>74</span>
+                  <span style={{ color: "var(--primary)", fontSize: 52, fontWeight: 800, lineHeight: 1 }}>74</span>
                   <span style={{ color: "var(--text-2)", fontSize: 20 }}>/100</span>
-                  <span style={{ marginLeft: "auto", color: "#34d399", fontSize: 13, fontWeight: 600 }}>↑ +6 pts</span>
+                  <span style={{ marginLeft: "auto", color: "var(--emerald)", fontSize: 13, fontWeight: 600 }}>↑ +6 pts</span>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   {[
-                    { label: "Relations sociales",     score: 82, color: "#34d399" },
-                    { label: "Relations affectives",   score: 71, color: "#a78bfa" },
+                    { label: "Relations sociales",     score: 82, color: "var(--emerald)" },
+                    { label: "Relations affectives",   score: 71, color: "var(--primary)" },
                     { label: "Vie sentimentale",       score: 58, color: "#f59e0b" },
-                    { label: "Vie professionnelle",    score: 88, color: "#34d399" },
-                    { label: "Relation à soi",         score: 70, color: "#a78bfa" },
+                    { label: "Vie professionnelle",    score: 88, color: "var(--emerald)" },
+                    { label: "Relation à soi",         score: 70, color: "var(--primary)" },
                   ].map(({ label, score, color }) => (
                     <div key={label} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                       <span style={{ color: "var(--text-3)", fontSize: 12, width: 150, flexShrink: 0 }}>{label}</span>
@@ -223,13 +220,13 @@ export default function BusinessPage() {
         {/* ── STATS ────────────────────────────────────────────── */}
         <section style={{
           borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)",
-          background: "rgba(17,24,39,0.5)", padding: "48px 0",
+          background: "var(--bg)", padding: "48px 0",
         }}>
           <div className="container">
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24 }}>
               {STATS.map(({ value, label }) => (
                 <div key={label} style={{ textAlign: "center" }}>
-                  <div style={{ color: "#a78bfa", fontSize: 32, fontWeight: 800, lineHeight: 1.1 }}>{value}</div>
+                  <div style={{ color: "var(--primary)", fontSize: 32, fontWeight: 800, lineHeight: 1.1 }}>{value}</div>
                   <div style={{ color: "var(--text-2)", fontSize: 13, marginTop: 6 }}>{label}</div>
                 </div>
               ))}
@@ -243,25 +240,25 @@ export default function BusinessPage() {
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <span className="badge badge-violet" style={{ marginBottom: 16 }}>Fonctionnalités</span>
               <h2 style={{
-                fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)", marginBottom: 16,
+                fontFamily: "var(--font-family-display)", fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)", marginBottom: 16,
               }}>
                 Tout ce dont votre organisation{" "}
-                <span style={{ color: "#a78bfa" }}>a besoin</span>
+                <span style={{ color: "var(--primary)" }}>a besoin</span>
               </h2>
               <p style={{ color: "var(--text-2)", maxWidth: 520, margin: "0 auto", lineHeight: 1.7 }}>
                 Une plateforme complète, sécurisée et déployée en 48h.
               </p>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
-              {FEATURES.map(({ label, desc, icon, badge }) => (
+              {FEATURES.map(({ label, desc, icon, badge, badgeClass }) => (
                 <div key={label} className="card card-hover">
                   <div style={{
-                    width: 48, height: 48, background: "rgba(124,58,237,0.12)", borderRadius: 14,
+                    width: 48, height: 48, background: "rgba(18,61,70,0.05)", borderRadius: 14,
                     display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20,
                   }}>
                     {icon}
                   </div>
-                  <span className="badge badge-violet" style={{ marginBottom: 12 }}>{badge}</span>
+                  <span className={`badge ${badgeClass}`} style={{ marginBottom: 12 }}>{badge}</span>
                   <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--text-1)", marginBottom: 10 }}>{label}</h3>
                   <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.6 }}>{desc}</p>
                 </div>
@@ -277,9 +274,9 @@ export default function BusinessPage() {
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <span className="badge badge-cyan" style={{ marginBottom: 16 }}>Tarification</span>
               <h2 style={{
-                fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)",
+                fontFamily: "var(--font-family-display)", fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)",
               }}>
-                Choisissez votre <span style={{ color: "#a78bfa" }}>modèle</span>
+                Choisissez votre <span style={{ color: "var(--primary)" }}>modèle</span>
               </h2>
             </div>
 
@@ -296,8 +293,8 @@ export default function BusinessPage() {
                       className="card card-hover"
                       style={{
                         cursor: "pointer", transition: "all 0.25s",
-                        background: isSelected ? plan.glow : "rgba(17,24,39,0.65)",
-                        borderColor: isSelected ? `${plan.border}90` : "rgba(255,255,255,0.08)",
+                        background: isSelected ? plan.glow : "var(--surface)",
+                        borderColor: isSelected ? `${plan.border}90` : "var(--border)",
                         outline: isSelected ? `2px solid ${plan.border}60` : "none",
                         outlineOffset: 2,
                       }}
@@ -320,7 +317,7 @@ export default function BusinessPage() {
                                 marginLeft: "auto", width: 20, height: 20, borderRadius: "50%",
                                 background: plan.color, display: "flex", alignItems: "center", justifyContent: "center",
                               }}>
-                                <Check size={12} color="#0b0f19" />
+                                <Check size={12} color="white" />
                               </span>
                             )}
                           </div>
@@ -339,9 +336,9 @@ export default function BusinessPage() {
                   );
                 })}
 
-                <p style={{ marginTop: 8, fontSize: 13, color: "#475569", textAlign: "center" }}>
+                <p style={{ marginTop: 8, fontSize: 13, color: "var(--text-3)", textAlign: "center" }}>
                   Vous êtes un particulier ?{" "}
-                  <Link href="/auth/register" style={{ color: "#a78bfa", fontWeight: 600, textDecoration: "none" }}>
+                  <Link href="/auth/register" style={{ color: "var(--primary)", fontWeight: 600, textDecoration: "none" }}>
                     Découvrez l'offre B2C
                   </Link>
                 </p>
@@ -356,7 +353,7 @@ export default function BusinessPage() {
                       background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.3)",
                       display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px",
                     }}>
-                      <Check size={30} color="#34d399" />
+                      <Check size={30} color="var(--emerald)" />
                     </div>
                     <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 10, color: "var(--text-1)" }}>
                       Demande envoyée !
@@ -367,7 +364,7 @@ export default function BusinessPage() {
                     </p>
                     <button
                       onClick={() => { setSubmitted(false); setSelectedPlan(null); setSubmitError(null); }}
-                      className="btn btn-secondary btn-md"
+                      className="btn btn-tertiary btn-md"
                     >
                       Nouvelle demande
                     </button>
@@ -392,8 +389,8 @@ export default function BusinessPage() {
                         borderRadius: 10, marginBottom: 16,
                         background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)",
                       }}>
-                        <AlertCircle size={14} style={{ color: "#f87171", flexShrink: 0, marginTop: 1 }} />
-                        <p style={{ color: "#f87171", fontSize: 13, margin: 0 }}>{submitError}</p>
+                        <AlertCircle size={14} style={{ color: "var(--rose)", flexShrink: 0, marginTop: 1 }} />
+                        <p style={{ color: "var(--rose)", fontSize: 13, margin: 0 }}>{submitError}</p>
                       </div>
                     )}
 
@@ -472,7 +469,7 @@ export default function BusinessPage() {
                         </p>
                       </form>
                     ) : (
-                      <div style={{ textAlign: "center", padding: "40px 0", color: "#475569" }}>
+                      <div style={{ textAlign: "center", padding: "40px 0", color: "var(--text-3)" }}>
                         <Building2 size={36} style={{ marginBottom: 16, opacity: 0.25 }} />
                         <p style={{ fontSize: 14 }}>Choisissez un modèle ci-contre<br />pour accéder au formulaire.</p>
                       </div>
@@ -490,9 +487,9 @@ export default function BusinessPage() {
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <span className="badge badge-amber" style={{ marginBottom: 16 }}>Témoignages</span>
               <h2 style={{
-                fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)",
+                fontFamily: "var(--font-family-display)", fontWeight: 800, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--text-1)",
               }}>
-                Ce que disent nos <span style={{ color: "#a78bfa" }}>partenaires</span>
+                Ce que disent nos <span style={{ color: "var(--primary)" }}>partenaires</span>
               </h2>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
@@ -528,7 +525,7 @@ export default function BusinessPage() {
                 fontWeight: 800, fontSize: "clamp(26px, 4vw, 40px)", color: "var(--text-1)", marginBottom: 16,
               }}>
                 Prêt à déployer l'IQRH dans votre{" "}
-                <span style={{ color: "#a78bfa" }}>organisation</span> ?
+                <span style={{ color: "var(--primary)" }}>organisation</span> ?
               </h2>
               <p style={{ color: "var(--text-2)", marginBottom: 36, fontSize: 16, lineHeight: 1.6 }}>
                 Rejoignez les organisations qui ont fait du bien-être relationnel un avantage compétitif.
@@ -537,7 +534,7 @@ export default function BusinessPage() {
                 <a href="#devis" className="btn btn-primary btn-lg" style={{ textDecoration: "none" }}>
                   Demander un devis <ArrowRight size={16} />
                 </a>
-                <Link href="/auth/register" className="btn btn-secondary btn-lg" style={{
+                <Link href="/auth/register" className="btn btn-tertiary btn-lg" style={{
                   textDecoration: "none",
                   border: "1px solid rgba(124,58,237,0.3)",
                   background: "rgba(124,58,237,0.05)",

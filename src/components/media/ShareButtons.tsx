@@ -34,13 +34,13 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-      <span style={{ color: "#94a3b8", fontSize: 14, fontWeight: 500 }}>Partager :</span>
+      <span style={{ color: "var(--text-2)", fontSize: 14, fontWeight: 500 }}>Partager :</span>
       
       <button 
         onClick={shareOnLinkedin}
         style={{ 
-          width: 44, height: 44, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.15)",
-          background: "rgba(255,255,255,0.08)", color: "#f1f5f9", cursor: "pointer",
+          width: 44, height: 44, borderRadius: "50%", border: "1px solid var(--border)",
+          background: "var(--surface)", color: "#f1f5f9", cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           backdropFilter: "blur(8px)"
         }}
@@ -53,8 +53,8 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
       <button 
         onClick={shareOnTwitter}
         style={{ 
-          width: 44, height: 44, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.15)",
-          background: "rgba(255,255,255,0.08)", color: "#f1f5f9", cursor: "pointer",
+          width: 44, height: 44, borderRadius: "50%", border: "1px solid var(--border)",
+          background: "var(--surface)", color: "#f1f5f9", cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           backdropFilter: "blur(8px)"
         }}
@@ -67,8 +67,8 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
       <button 
         onClick={copyToClipboard}
         style={{ 
-          width: 44, height: 44, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.15)",
-          background: "rgba(255,255,255,0.08)", color: copied ? "#34d399" : "#f1f5f9", cursor: "pointer",
+          width: 44, height: 44, borderRadius: "50%", border: "1px solid var(--border)",
+          background: "var(--surface)", color: copied ? "#34d399" : "#f1f5f9", cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           backdropFilter: "blur(8px)"
         }}

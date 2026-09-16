@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Zap, Crown, Calendar, Users, ChevronRight, CheckCircle2, Clock, Archive, RefreshCw, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
 
 interface Campaign {
   id: string;
@@ -20,12 +21,12 @@ interface Campaign {
 }
 
 const STATUS_META: Record<string, { label: string; color: string; bg: string; icon: any }> = {
-  DRAFT:       { label: "Brouillon",   color: "#94a3b8", bg: "rgba(148,163,184,0.12)", icon: Clock },
-  PLANIFIEE:   { label: "Planifiée",   color: "#38bdf8", bg: "rgba(56,189,248,0.12)",  icon: Calendar },
-  ACTIVE:      { label: "Active",      color: "#34d399", bg: "rgba(52,211,153,0.12)",  icon: CheckCircle2 },
+  DRAFT:       { label: "Brouillon",   color: "var(--text-3)", bg: "rgba(148,163,184,0.12)", icon: Clock },
+  PLANIFIEE:   { label: "Planifiée",   color: "var(--cyan)", bg: "rgba(56,189,248,0.12)",  icon: Calendar },
+  ACTIVE:      { label: "Active",      color: "var(--emerald)", bg: "rgba(52,211,153,0.12)",  icon: CheckCircle2 },
   EN_CLOTURE:  { label: "En clôture", color: "#f59e0b", bg: "rgba(245,158,11,0.12)",  icon: Clock },
-  CLOSED:      { label: "Clôturée",   color: "#f43f5e", bg: "rgba(244,63,94,0.12)",   icon: Archive },
-  RENOUVELEE:  { label: "Renouvelée", color: "#a78bfa", bg: "rgba(167,139,250,0.12)", icon: RefreshCw },
+  CLOSED:      { label: "Clôturée",   color: "var(--rose)", bg: "rgba(244,63,94,0.12)",   icon: Archive },
+  RENOUVELEE:  { label: "Renouvelée", color: "var(--primary)", bg: "rgba(167,139,250,0.12)", icon: RefreshCw },
 };
 
 export default function PartnerCampaignsListPage() {
@@ -59,12 +60,12 @@ export default function PartnerCampaignsListPage() {
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
-                <h3 style={{ fontSize: 15, fontWeight: 700, color: "#f8fafc", margin: 0 }}>{c.title}</h3>
+                <h3 style={{ fontSize: 15, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>{c.title}</h3>
                 <span style={{
                   display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 10px",
                   borderRadius: 999, fontSize: 11, fontWeight: 700,
                   background: isPP ? "rgba(245,158,11,0.15)" : "rgba(124,58,237,0.15)",
-                  color: isPP ? "#fbbf24" : "#a78bfa",
+                  color: isPP ? "var(--amber)" : "var(--primary)",
                   border: `1px solid ${isPP ? "rgba(245,158,11,0.3)" : "rgba(124,58,237,0.3)"}`,
                 }}>
                   {isPP ? <Crown size={10} /> : <Zap size={10} />}
@@ -74,39 +75,39 @@ export default function PartnerCampaignsListPage() {
                   <Icon size={10} /> {meta.label}
                 </span>
               </div>
-              {c.description && <p style={{ fontSize: 12, color: "#64748b", margin: 0 }}>{c.description}</p>}
+              {c.description && <p style={{ fontSize: 12, color: "var(--text-3)", margin: 0 }}>{c.description}</p>}
             </div>
-            <ChevronRight size={16} style={{ color: "#475569", flexShrink: 0, marginLeft: 8 }} />
+            <ChevronRight size={16} style={{ color: "var(--text-2)", flexShrink: 0, marginLeft: 8 }} />
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
-            <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: "10px 12px" }}>
-              <p style={{ fontSize: 10, color: "#64748b", fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>Invités</p>
-              <p style={{ fontSize: 20, fontWeight: 700, color: "#f8fafc" }}>{c._count.invites}</p>
+            <div style={{ background: "var(--surface-2)", borderRadius: 10, padding: "10px 12px" }}>
+              <p style={{ fontSize: 10, color: "var(--text-3)", fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>Invités</p>
+              <p style={{ fontSize: 20, fontWeight: 700, color: "var(--text-1)" }}>{c._count.invites}</p>
             </div>
-            <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: "10px 12px" }}>
-              <p style={{ fontSize: 10, color: "#64748b", fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>Complétées</p>
-              <p style={{ fontSize: 20, fontWeight: 700, color: "#34d399" }}>{c._count.assessments}</p>
+            <div style={{ background: "var(--surface-2)", borderRadius: 10, padding: "10px 12px" }}>
+              <p style={{ fontSize: 10, color: "var(--text-3)", fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>Complétées</p>
+              <p style={{ fontSize: 20, fontWeight: 700, color: "var(--emerald)" }}>{c._count.assessments}</p>
             </div>
-            <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: "10px 12px" }}>
-              <p style={{ fontSize: 10, color: "#64748b", fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>Taux</p>
-              <p style={{ fontSize: 20, fontWeight: 700, color: completion >= 70 ? "#34d399" : completion >= 40 ? "#f59e0b" : "#f43f5e" }}>{completion}%</p>
+            <div style={{ background: "var(--surface-2)", borderRadius: 10, padding: "10px 12px" }}>
+              <p style={{ fontSize: 10, color: "var(--text-3)", fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>Taux</p>
+              <p style={{ fontSize: 20, fontWeight: 700, color: completion >= 70 ? "var(--emerald)" : completion >= 40 ? "#f59e0b" : "var(--rose)" }}>{completion}%</p>
             </div>
           </div>
 
           {completion > 0 && (
             <div className="progress-bar" style={{ marginBottom: 12 }}>
-              <div className="progress-fill" style={{ width: `${completion}%`, background: completion >= 70 ? "#34d399" : completion >= 40 ? "#f59e0b" : "#f43f5e" }} />
+              <div className="progress-fill" style={{ width: `${completion}%`, background: completion >= 70 ? "var(--emerald)" : completion >= 40 ? "#f59e0b" : "var(--rose)" }} />
             </div>
           )}
 
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#475569" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--text-2)" }}>
             <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
               <Calendar size={11} />
               {new Date(c.startDate).toLocaleDateString("fr-FR")} — {new Date(c.endDate).toLocaleDateString("fr-FR")}
             </span>
             {c.status === "ACTIVE" && daysLeft > 0 && (
-              <span style={{ color: daysLeft <= 30 ? "#f59e0b" : "#64748b" }}>
+              <span style={{ color: daysLeft <= 30 ? "#f59e0b" : "var(--text-2)" }}>
                 {daysLeft} j restants
               </span>
             )}
@@ -120,40 +121,41 @@ export default function PartnerCampaignsListPage() {
     <>
       <Navbar />
       <main className="page-main">
+        <PartnerPortalsNavigation />
         <div className="blob-violet" style={{ background: "rgba(16,185,129,0.1)" }} />
         <div className="blob-cyan" style={{ background: "rgba(124,58,237,0.1)" }} />
         <div className="page-container-wide" style={{ position: "relative", zIndex: 1 }}>
 
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 36 }}>
             <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.25)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <ShieldCheck size={24} style={{ color: "#34d399" }} />
+              <ShieldCheck size={24} style={{ color: "var(--emerald)" }} />
             </div>
             <div>
-              <h1 style={{ fontFamily: "'Plus Jakarta Sans',Inter,sans-serif", fontWeight: 800, fontSize: 26, color: "#f8fafc", letterSpacing: "-0.02em" }}>
+              <h1 style={{ fontFamily: "'Plus Jakarta Sans',Inter,sans-serif", fontWeight: 800, fontSize: 26, color: "var(--text-1)", letterSpacing: "-0.02em" }}>
                 Campagnes Partenaire
               </h1>
-              <p style={{ color: "#64748b", fontSize: 14 }}>Suivez le déploiement chez vos bénéficiaires</p>
+              <p style={{ color: "var(--text-3)", fontSize: 14 }}>Suivez le déploiement chez vos bénéficiaires</p>
             </div>
             <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
-              <Link href="/dashboard/b2b2c" className="btn btn-secondary btn-sm" style={{ textDecoration: "none" }}>
+              <Link href="/dashboard/b2b2c" className="btn btn-tertiary btn-sm">
                 Vue d'ensemble B2B2C
               </Link>
-              <Link href="/dashboard/b2b2c/campaigns/new" className="btn btn-primary btn-sm" style={{ textDecoration: "none" }}>
+              <Link href="/dashboard/b2b2c/campaigns/new" className="btn btn-primary btn-sm">
                 Nouvelle campagne
               </Link>
             </div>
           </div>
 
           {loading ? (
-            <div style={{ textAlign: "center", padding: "60px 0", color: "#64748b" }}>Chargement...</div>
+            <div style={{ textAlign: "center", padding: "60px 0", color: "var(--text-3)" }}>Chargement...</div>
           ) : campaigns.length === 0 ? (
             <div className="card" style={{ textAlign: "center", padding: "60px 40px" }}>
               <div style={{ fontSize: 48, marginBottom: 16 }}>🚀</div>
-              <h2 style={{ color: "#f8fafc", fontWeight: 700, fontSize: 20, marginBottom: 10 }}>Aucune campagne</h2>
-              <p style={{ color: "#64748b", fontSize: 14, marginBottom: 28 }}>
+              <h2 style={{ color: "var(--text-1)", fontWeight: 700, fontSize: 20, marginBottom: 10 }}>Aucune campagne</h2>
+              <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 28 }}>
                 Lancez votre première campagne pour évaluer vos bénéficiaires.
               </p>
-              <Link href="/dashboard/b2b2c/campaigns/new" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
+              <Link href="/dashboard/b2b2c/campaigns/new" className="btn btn-primary btn-md">
                 Créer une campagne
               </Link>
             </div>
@@ -161,8 +163,8 @@ export default function PartnerCampaignsListPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
               {activeCampaigns.length > 0 && (
                 <div>
-                  <h2 style={{ fontSize: 14, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 14 }}>
-                    <CheckCircle2 size={14} style={{ display: "inline", marginRight: 6, color: "#34d399" }} />
+                  <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 14 }}>
+                    <CheckCircle2 size={14} style={{ display: "inline", marginRight: 6, color: "var(--emerald)" }} />
                     Campagnes actives ({activeCampaigns.length})
                   </h2>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(380px, 1fr))", gap: 16 }}>
@@ -172,8 +174,8 @@ export default function PartnerCampaignsListPage() {
               )}
               {plannedCampaigns.length > 0 && (
                 <div>
-                  <h2 style={{ fontSize: 14, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 14 }}>
-                    <Clock size={14} style={{ display: "inline", marginRight: 6, color: "#38bdf8" }} />
+                  <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 14 }}>
+                    <Clock size={14} style={{ display: "inline", marginRight: 6, color: "var(--cyan)" }} />
                     En préparation ({plannedCampaigns.length})
                   </h2>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(380px, 1fr))", gap: 16 }}>
@@ -183,8 +185,8 @@ export default function PartnerCampaignsListPage() {
               )}
               {closedCampaigns.length > 0 && (
                 <div>
-                  <h2 style={{ fontSize: 14, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 14 }}>
-                    <Archive size={14} style={{ display: "inline", marginRight: 6, color: "#475569" }} />
+                  <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 14 }}>
+                    <Archive size={14} style={{ display: "inline", marginRight: 6, color: "var(--text-2)" }} />
                     Historique ({closedCampaigns.length})
                   </h2>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(380px, 1fr))", gap: 16, opacity: 0.75 }}>

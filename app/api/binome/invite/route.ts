@@ -53,16 +53,16 @@ export async function POST(req: Request) {
 
     // Verification des accès Premium+ pour l'initiateur
     const initIsPPlus = initiatorUser?.campaign
-      ? (initiatorUser.campaign.offer === "PREMIUM_PLUS" && initiatorUser.campaign.status === "ACTIVE")
-      : (initiatorUser?.subscription === "PREMIUM_PLUS");
+      ? ((initiatorUser.campaign.offer === "PREMIUM_PLUS" || initiatorUser.campaign.offer === "PREMIUM") && initiatorUser.campaign.status === "ACTIVE")
+      : (initiatorUser?.subscription === "PREMIUM_PLUS" || initiatorUser?.subscription === "PREMIUM");
 
     // Verification des accès Premium+ pour le receveur
     const recIsPPlus = receiver?.campaign
-      ? (receiver.campaign.offer === "PREMIUM_PLUS" && receiver.campaign.status === "ACTIVE")
-      : (receiver?.subscription === "PREMIUM_PLUS");
+      ? ((receiver.campaign.offer === "PREMIUM_PLUS" || receiver.campaign.offer === "PREMIUM") && receiver.campaign.status === "ACTIVE")
+      : (receiver?.subscription === "PREMIUM_PLUS" || receiver?.subscription === "PREMIUM");
 
     if (!initIsPPlus || !recIsPPlus) {
-      return NextResponse.json({ error: "Les deux utilisateurs doivent disposer de l'offre Premium+" }, { status: 403 });
+      return NextResponse.json({ error: "Les deux utilisateurs doivent disposer de l'offre Premium ou Premium+" }, { status: 403 });
     }
 
     // Regle B2B2C: Si l'un est dans une campagne, ils doivent être dans la même

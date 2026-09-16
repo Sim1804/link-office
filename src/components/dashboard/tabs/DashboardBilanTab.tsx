@@ -7,7 +7,7 @@ import { TrendingUp, AlertTriangle, Zap, ShieldCheck } from "lucide-react";
 
 const SCORE_CONFIG = (score: number) => {
   if (score >= 80) return { grad: "linear-gradient(135deg, #34d399 0%, #059669 100%)", glow: "rgba(52,211,153,0.4)", text: "Excellent" };
-  if (score >= 60) return { grad: "linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)", glow: "rgba(124,58,237,0.4)", text: "Bon" };
+  if (score >= 60) return { grad: "linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%)", glow: "rgba(0,169,157,0.4)", text: "Bon" };
   if (score >= 40) return { grad: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)", glow: "rgba(245,158,11,0.4)", text: "À renforcer" };
   return { grad: "linear-gradient(135deg, #f87171 0%, #ef4444 100%)", glow: "rgba(239,68,68,0.4)", text: "Priorité" };
 };
@@ -25,10 +25,10 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
         {/* Hero Score */}
         <div style={{
           gridColumn: "1 / 2",
-          borderRadius: 24,
-          background: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(30,27,75,0.8) 100%)",
-          border: "1px solid rgba(124,58,237,0.2)",
-          padding: 28,
+          borderRadius: 16,
+          background: "var(--surface)",
+          border: "1px solid var(--border-strong)",
+          padding: 20,
           position: "relative",
           overflow: "hidden",
         }}>
@@ -39,14 +39,14 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
             borderRadius: "50%", pointerEvents: "none",
           }} />
           <div style={{ position: "relative", zIndex: 1 }}>
-            <p style={{ fontSize: 11, color: "#475569", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 20 }}>
+            <p style={{ fontSize: 11, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 20 }}>
               Score IQRH Global
             </p>
             {/* Score arc display */}
             <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 24 }}>
               <div style={{ position: "relative" }}>
                 <svg width="90" height="90" style={{ transform: "rotate(-90deg)" }}>
-                  <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6" />
+                  <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(18,61,70,0.05)" strokeWidth="6" />
                   <circle
                     cx="45" cy="45" r="38" fill="none"
                     stroke="url(#scoreGrad)"
@@ -57,7 +57,7 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
                   />
                   <defs>
                     <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#a78bfa" />
+                      <stop offset="0%" stopColor="var(--primary)" />
                       <stop offset="100%" stopColor="#06b6d4" />
                     </linearGradient>
                   </defs>
@@ -78,13 +78,13 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
               <div>
                 <div style={{
                   display: "inline-flex", alignItems: "center", gap: 6,
-                  background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.2)",
+                  background: "var(--primary-glow)", border: "1px solid var(--border-strong)",
                   padding: "4px 12px", borderRadius: 999, marginBottom: 8,
                 }}>
                   <div style={{ width: 6, height: 6, borderRadius: "50%", background: scoreConfig.grad }} />
-                  <span style={{ fontSize: 12, fontWeight: 600, color: "#a78bfa" }}>{scoreConfig.text}</span>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: "var(--primary)" }}>{scoreConfig.text}</span>
                 </div>
-                <p style={{ fontSize: 12, color: "#475569", lineHeight: 1.5 }}>sur 100 points</p>
+                <p style={{ fontSize: 12, color: "var(--text-3)", lineHeight: 1.5 }}>sur 100 points</p>
               </div>
             </div>
 
@@ -92,12 +92,12 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <div style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "10px 14px", borderRadius: 12,
+                padding: "10px 18px", borderRadius: 999,
                 background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.12)"
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <TrendingUp size={14} style={{ color: "#34d399" }} />
-                  <span style={{ fontSize: 12, color: "#94a3b8" }}>Point fort</span>
+                  <span style={{ fontSize: 12, color: "var(--text-2)" }}>Point fort</span>
                 </div>
                 <span style={{ fontSize: 12, fontWeight: 600, color: "#34d399" }}>
                   {iqrh?.best_dimension ? (DIMENSIONS_LABELS[iqrh.best_dimension] || iqrh.best_dimension) : "—"}
@@ -105,12 +105,12 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
               </div>
               <div style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "10px 14px", borderRadius: 12,
+                padding: "10px 18px", borderRadius: 999,
                 background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.12)"
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <AlertTriangle size={14} style={{ color: "#f59e0b" }} />
-                  <span style={{ fontSize: 12, color: "#94a3b8" }}>Priorité</span>
+                  <span style={{ fontSize: 12, color: "var(--text-2)" }}>Priorité</span>
                 </div>
                 <span style={{ fontSize: 12, fontWeight: 600, color: "#f59e0b" }}>
                   {iqrh?.priority_dimension ? (DIMENSIONS_LABELS[iqrh.priority_dimension] || iqrh.priority_dimension) : "—"}
@@ -137,14 +137,14 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
         {iqrh?.ier_score !== undefined && (
           <div style={{
             gridColumn: "3 / 4",
-            borderRadius: 24,
-            border: "1px solid rgba(255,255,255,0.06)",
-            background: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(17,24,39,0.7) 100%)",
-            padding: 28,
+            borderRadius: 16,
+            border: "1px solid var(--border)",
+            background: "var(--surface)",
+            padding: 20,
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           }}>
             <IERGauge score={iqrh.ier_score} level={iqrh.ier_level} />
-            <p style={{ color: "#475569", fontSize: 12, textAlign: "center", marginTop: 14, lineHeight: 1.6, maxWidth: 180 }}>
+            <p style={{ color: "var(--text-3)", fontSize: 12, textAlign: "center", marginTop: 14, lineHeight: 1.6, maxWidth: 180 }}>
               Homogénéité de votre profil relationnel
             </p>
           </div>
@@ -155,29 +155,29 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
       {iqrh?.radar && (
         <div style={{
           marginBottom: 20,
-          borderRadius: 24,
-          border: "1px solid rgba(255,255,255,0.06)",
-          background: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(15,20,40,0.85) 100%)",
-          padding: "28px 32px",
+          borderRadius: 16,
+          border: "1px solid var(--border)",
+          background: "var(--surface)",
+          padding: "20px",
         }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
             {/* Left: Radar chart */}
             <div>
               <div style={{ marginBottom: 16 }}>
-                <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 17, color: "#f8fafc", marginBottom: 4 }}>
+                <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 17, color: "var(--text-1)", marginBottom: 4 }}>
                   Radar Relationnel
                 </h3>
-                <p style={{ fontSize: 13, color: "#475569" }}>Vue d'ensemble de vos 5 dimensions</p>
+                <p style={{ fontSize: 13, color: "var(--text-3)" }}>Vue d'ensemble de vos 5 dimensions</p>
               </div>
               <IQRHRadarChart data={iqrh.radar} priorityDimension={iqrh.priority_dimension} />
             </div>
             {/* Right: Dimension bars */}
             <div>
               <div style={{ marginBottom: 16 }}>
-                <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 17, color: "#f8fafc", marginBottom: 4 }}>
+                <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 17, color: "var(--text-1)", marginBottom: 4 }}>
                   Détail des Scores
                 </h3>
-                <p style={{ fontSize: 13, color: "#475569" }}>Score de 0 à 100 par dimension</p>
+                <p style={{ fontSize: 13, color: "var(--text-3)" }}>Score de 0 à 100 par dimension</p>
               </div>
               {iqrh.dimensions && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 14, paddingTop: 8 }}>
@@ -186,10 +186,10 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
                     return (
                       <div key={dim.code}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                          <span style={{ fontSize: 13, color: "#94a3b8", fontWeight: 500 }}>{dim.nom}</span>
-                          <span style={{ fontSize: 14, fontWeight: 700, color: "#f8fafc" }}>{dim.score}<span style={{ color: "#334155", fontSize: 11, fontWeight: 400 }}>/100</span></span>
+                          <span style={{ fontSize: 13, color: "var(--text-2)", fontWeight: 500 }}>{dim.nom}</span>
+                          <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text-1)" }}>{dim.score}<span style={{ color: "var(--text-1)", fontSize: 11, fontWeight: 400 }}>/100</span></span>
                         </div>
-                        <div style={{ height: 6, borderRadius: 999, background: "rgba(255,255,255,0.04)", overflow: "hidden" }}>
+                        <div style={{ height: 6, borderRadius: 999, background: "var(--surface-2)", overflow: "hidden" }}>
                           <div style={{
                             height: "100%", width: `${dim.score}%`, borderRadius: 999,
                             background: cfg.grad,
@@ -210,10 +210,10 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
         {/* Forces */}
         <div style={{
-          borderRadius: 24,
+          borderRadius: 16,
           border: "1px solid rgba(52,211,153,0.15)",
-          background: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(6,46,30,0.3) 100%)",
-          padding: 28,
+          background: "var(--surface)",
+          padding: 20,
           position: "relative", overflow: "hidden",
         }}>
           <div style={{
@@ -230,10 +230,10 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
               <Zap size={18} style={{ color: "#34d399" }} />
             </div>
             <div>
-              <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 15, color: "#f8fafc" }}>
+              <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 15, color: "var(--text-1)" }}>
                 Vos Forces
               </h3>
-              <p style={{ fontSize: 11, color: "#475569", marginTop: 1 }}>3 points d'appui identifiés</p>
+              <p style={{ fontSize: 11, color: "var(--text-3)", marginTop: 1 }}>3 points d'appui identifiés</p>
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14, position: "relative" }}>
@@ -247,20 +247,20 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
                 }}>
                   {String(idx + 1).padStart(2, "0")}
                 </div>
-                <p style={{ fontSize: 13, color: "#cbd5e1", lineHeight: 1.6, flex: 1 }}>{str}</p>
+                <p style={{ fontSize: 13, color: "var(--text-2)", lineHeight: 1.6, flex: 1 }}>{str}</p>
               </div>
             )) : (
-              <p style={{ fontSize: 13, color: "#64748b" }}>Aucune force identifiée.</p>
+              <p style={{ fontSize: 13, color: "var(--text-3)" }}>Aucune force identifiée.</p>
             )}
           </div>
         </div>
 
         {/* Vigilances */}
         <div style={{
-          borderRadius: 24,
+          borderRadius: 16,
           border: "1px solid rgba(245,158,11,0.15)",
-          background: "linear-gradient(145deg, rgba(17,24,39,0.98) 0%, rgba(41,30,6,0.3) 100%)",
-          padding: 28,
+          background: "var(--surface)",
+          padding: 20,
           position: "relative", overflow: "hidden",
         }}>
           <div style={{
@@ -277,10 +277,10 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
               <ShieldCheck size={18} style={{ color: "#f59e0b" }} />
             </div>
             <div>
-              <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 15, color: "#f8fafc" }}>
+              <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 15, color: "var(--text-1)" }}>
                 Points de Vigilance
               </h3>
-              <p style={{ fontSize: 11, color: "#475569", marginTop: 1 }}>Zones à cultiver en priorité</p>
+              <p style={{ fontSize: 11, color: "var(--text-3)", marginTop: 1 }}>Zones à cultiver en priorité</p>
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14, position: "relative" }}>
@@ -294,10 +294,10 @@ export function DashboardBilanTab({ iqrh, DIMENSIONS_LABELS }: { iqrh: any, DIME
                 }}>
                   {String(idx + 1).padStart(2, "0")}
                 </div>
-                <p style={{ fontSize: 13, color: "#cbd5e1", lineHeight: 1.6, flex: 1 }}>{wpt}</p>
+                <p style={{ fontSize: 13, color: "var(--text-2)", lineHeight: 1.6, flex: 1 }}>{wpt}</p>
               </div>
             )) : (
-              <p style={{ fontSize: 13, color: "#64748b" }}>Aucun point de vigilance identifié.</p>
+              <p style={{ fontSize: 13, color: "var(--text-3)" }}>Aucun point de vigilance identifié.</p>
             )}
           </div>
         </div>

@@ -2,7 +2,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
-import { ArrowLeft, BarChart3, Target, CheckCircle2, Copy, QrCode, Link2, Zap, Crown, Calendar, Users, Settings } from "lucide-react";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
+import { BarChart3, Target, CheckCircle2, Copy, QrCode, Link2, Zap, Crown, Calendar, Users, Settings } from "lucide-react";
 import Link from "next/link";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
@@ -73,12 +74,12 @@ export default function PartnerCampaignDetailPage() {
     } finally { setSaving(false); }
   };
 
-  if (loading) return (<><Navbar /><main className="page-main"><div style={{ textAlign:"center", padding:"80px 0", color:"#64748b" }}>Chargement...</div></main></>);
+  if (loading) return (<><Navbar /><main className="page-main"><div style={{ textAlign:"center", padding:"80px 0", color:"var(--text-2)" }}>Chargement...</div></main></>);
   if (!campaign) return (<><Navbar /><main className="page-main"><div style={{ textAlign:"center", padding:"80px 0", color:"#f43f5e" }}>Campagne introuvable</div></main></>);
 
   const isPP = campaign.offer === "PREMIUM_PLUS";
   const globalScore = stats?.averages?.global ?? 0;
-  const scoreColor = globalScore >= 80 ? "#34d399" : globalScore >= 60 ? "#a78bfa" : globalScore >= 40 ? "#f59e0b" : "#f43f5e";
+  const scoreColor = globalScore >= 80 ? "#34d399" : globalScore >= 60 ? "var(--primary)" : globalScore >= 40 ? "#f59e0b" : "#f43f5e";
   const radarData = stats?.averages ? Object.entries(DIMENSION_LABELS).map(([k,label]) => ({ dimension: label, score: (stats.averages as any)[k] ?? 0, fullMark: 100 })) : [];
   const icrData = stats?.icrDistribution ? [
     { name:"Faible", value:stats.icrDistribution.faible, color:ICR_COLORS[0] },
@@ -98,26 +99,30 @@ export default function PartnerCampaignDetailPage() {
     <>
       <Navbar />
       <main className="page-main">
-        <div className="blob-violet" style={{ background: "rgba(16,185,129,0.1)" }} />
-        <div className="blob-cyan" style={{ background: "rgba(124,58,237,0.1)" }} />
         <div className="page-container-wide" style={{ position:"relative", zIndex:1 }}>
+
+          <Breadcrumb
+            homeHref="/dashboard/b2b2c"
+            items={[
+              { label: "Portail Mutuelle", href: "/dashboard/b2b2c" },
+              { label: "Campagnes", href: "/dashboard/b2b2c/campaigns" },
+              { label: campaign.title },
+            ]}
+          />
 
           {/* Header */}
           <div style={{ display:"flex", alignItems:"flex-start", gap:16, marginBottom:28 }}>
-            <Link href="/dashboard/b2b2c/campaigns" style={{ color:"#64748b", display:"flex", alignItems:"center", gap:4, textDecoration:"none", fontSize:13, flexShrink:0, marginTop:4 }}>
-              <ArrowLeft size={15} /> Campagnes
-            </Link>
             <div style={{ flex:1 }}>
               <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4, flexWrap:"wrap" }}>
-                <h1 style={{ fontFamily:"'Plus Jakarta Sans',Inter,sans-serif", fontWeight:800, fontSize:22, color:"#f8fafc", margin:0 }}>{campaign.title}</h1>
-                <span style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:700, background: isPP ? "rgba(245,158,11,0.15)" : "rgba(124,58,237,0.15)", color: isPP ? "#fbbf24" : "#a78bfa", border:"1px solid " + (isPP ? "rgba(245,158,11,0.3)" : "rgba(124,58,237,0.3)") }}>
+                <h1 style={{ fontFamily:"'Plus Jakarta Sans',Inter,sans-serif", fontWeight:800, fontSize:22, color:"var(--text-1)", margin:0 }}>{campaign.title}</h1>
+                <span style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:700, background: isPP ? "rgba(245,158,11,0.15)" : "rgba(124,58,237,0.15)", color: isPP ? "#fbbf24" : "var(--primary)", border:"1px solid " + (isPP ? "rgba(245,158,11,0.3)" : "rgba(124,58,237,0.3)") }}>
                   {isPP ? <Crown size={10} /> : <Zap size={10} />} {isPP ? "PREMIUM+" : "PREMIUM"}
                 </span>
                 <span style={{ padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:600, background:"rgba(52,211,153,0.12)", color:"#34d399" }}>
                   {STATUS_LABELS[campaign.status] || campaign.status}
                 </span>
               </div>
-              <p style={{ color:"#64748b", fontSize:13, margin:0 }}>
+              <p style={{ color:"var(--text-2)", fontSize:13, margin:0 }}>
                 <Calendar size={12} style={{ display:"inline", marginRight:4 }} />
                 {new Date(campaign.startDate).toLocaleDateString("fr-FR")} — {new Date(campaign.endDate).toLocaleDateString("fr-FR")}
                 {campaign.targetPopulation && <span style={{ marginLeft:12 }}><Users size={12} style={{ display:"inline", marginRight:4 }} />{campaign.targetPopulation} bénéficiaires</span>}
@@ -135,7 +140,7 @@ export default function PartnerCampaignDetailPage() {
             {TABS.map(({ id:tid, label, icon:Icon }) => {
               const isActive = activeTab === tid;
               return (
-                <button key={tid} onClick={() => setActiveTab(tid)} style={{ display:"flex", alignItems:"center", gap:7, padding:"8px 16px", borderRadius:10, fontWeight:600, fontSize:13, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s", whiteSpace:"nowrap", flexShrink:0, background: isActive ? "rgba(16,185,129,0.15)" : "transparent", border:"1px solid " + (isActive ? "rgba(16,185,129,0.35)" : "transparent"), color: isActive ? "#34d399" : "#94a3b8" }}>
+                <button key={tid} onClick={() => setActiveTab(tid)} style={{ display:"flex", alignItems:"center", gap:7, padding:"8px 16px", borderRadius:10, fontWeight:600, fontSize:13, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s", whiteSpace:"nowrap", flexShrink:0, background: isActive ? "rgba(16,185,129,0.15)" : "transparent", border:"1px solid " + (isActive ? "rgba(16,185,129,0.35)" : "transparent"), color: isActive ? "#34d399" : "var(--text-3)" }}>
                   <Icon size={14} /> {label}
                 </button>
               );
@@ -149,23 +154,23 @@ export default function PartnerCampaignDetailPage() {
                 <div className="card" style={{ textAlign:"center", padding:"48px 32px" }}>
                   <div style={{ fontSize:44, marginBottom:14 }}>🔒</div>
                   <h2 style={{ color:"#f59e0b", fontWeight:700, fontSize:18, marginBottom:8 }}>Anonymat protégé</h2>
-                  <p style={{ color:"#94a3b8", fontSize:13, maxWidth:440, margin:"0 auto" }}>{stats?.message || "Minimum 5 évaluations complètes requises."}</p>
+                  <p style={{ color:"var(--text-3)", fontSize:13, maxWidth:440, margin:"0 auto" }}>{stats?.message || "Minimum 5 évaluations complètes requises."}</p>
                 </div>
               ) : (
                 <>
                   <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))", gap:16 }}>
                     <div className="card" style={{ background:"linear-gradient(135deg,rgba(16,185,129,0.15),rgba(6,182,212,0.08))", border:"1px solid rgba(16,185,129,0.25)" }}>
-                      <p style={{ color:"#94a3b8", fontSize:11, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:8 }}>Score IQRH moyen</p>
-                      <p style={{ fontSize:44, fontWeight:800, color:scoreColor, lineHeight:1 }}>{globalScore}<span style={{ fontSize:16, color:"#475569" }}>/100</span></p>
-                      <p style={{ color:"#64748b", fontSize:12, marginTop:6 }}>{stats.respondentCount} répondants</p>
+                      <p style={{ color:"var(--text-3)", fontSize:11, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:8 }}>Score IQRH moyen</p>
+                      <p style={{ fontSize:44, fontWeight:800, color:scoreColor, lineHeight:1 }}>{globalScore}<span style={{ fontSize:16, color:"var(--text-2)" }}>/100</span></p>
+                      <p style={{ color:"var(--text-2)", fontSize:12, marginTop:6 }}>{stats.respondentCount} répondants</p>
                     </div>
                     {Object.entries(DIMENSION_LABELS).map(([k, label]) => {
                       const score = (stats.averages as any)?.[k] ?? 0;
-                      const c = score >= 70 ? "#34d399" : score >= 50 ? "#a78bfa" : "#f59e0b";
+                      const c = score >= 70 ? "#34d399" : score >= 50 ? "var(--primary)" : "#f59e0b";
                       return (
                         <div key={k} className="card">
-                          <p style={{ fontSize:11, color:"#64748b", marginBottom:6 }}>{label as string}</p>
-                          <p style={{ fontSize:24, fontWeight:700, color:c }}>{score}<span style={{ fontSize:11, color:"#475569" }}>/100</span></p>
+                          <p style={{ fontSize:11, color:"var(--text-2)", marginBottom:6 }}>{label as string}</p>
+                          <p style={{ fontSize:24, fontWeight:700, color:c }}>{score}<span style={{ fontSize:11, color:"var(--text-2)" }}>/100</span></p>
                           <div className="progress-bar" style={{ marginTop:8 }}><div className="progress-fill" style={{ width:score+"%", background:c }} /></div>
                         </div>
                       );
@@ -173,23 +178,23 @@ export default function PartnerCampaignDetailPage() {
                   </div>
                   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
                     <div className="card" style={{ minHeight:300 }}>
-                      <h3 style={{ fontSize:15, fontWeight:700, color:"#f8fafc", marginBottom:20 }}>Équilibre des Dimensions</h3>
+                      <h3 style={{ fontSize:15, fontWeight:700, color:"var(--text-1)", marginBottom:20 }}>Équilibre des Dimensions</h3>
                       <ResponsiveContainer width="100%" height={240}>
                         <RadarChart data={radarData}>
                           <PolarGrid stroke="rgba(255,255,255,0.1)" />
-                          <PolarAngleAxis dataKey="dimension" tick={{ fill:"#94a3b8", fontSize:11 }} />
+                          <PolarAngleAxis dataKey="dimension" tick={{ fill:"var(--text-3)", fontSize:11 }} />
                           <Radar name="IQRH" dataKey="score" stroke="#34d399" fill="#34d399" fillOpacity={0.3} />
                         </RadarChart>
                       </ResponsiveContainer>
                     </div>
                     <div className="card" style={{ minHeight:300 }}>
-                      <h3 style={{ fontSize:15, fontWeight:700, color:"#f8fafc", marginBottom:20 }}>Indice de Capital Relationnel (ICR)</h3>
+                      <h3 style={{ fontSize:15, fontWeight:700, color:"var(--text-1)", marginBottom:20 }}>Indice de Capital Relationnel (ICR)</h3>
                       <ResponsiveContainer width="100%" height={240}>
                         <PieChart>
                           <Pie data={icrData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={2}>
                             {icrData.map((d: any, i: number) => <Cell key={i} fill={d.color} />)}
                           </Pie>
-                          <Tooltip contentStyle={{ background:"#0f172a", border:"1px solid rgba(255,255,255,0.1)", borderRadius:8 }} itemStyle={{ color:"#f8fafc", fontWeight:600 }} />
+                          <Tooltip contentStyle={{ background:"var(--text-1)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:8 }} itemStyle={{ color:"var(--text-1)", fontWeight:600 }} />
                           <Legend verticalAlign="bottom" wrapperStyle={{ fontSize:12, paddingTop:20 }} />
                         </PieChart>
                       </ResponsiveContainer>
@@ -204,10 +209,10 @@ export default function PartnerCampaignDetailPage() {
           {activeTab === "plan" && (
             <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
               <div className="card" style={{ background:"linear-gradient(to right, rgba(16,185,129,0.1), transparent)" }}>
-                <h2 style={{ fontSize:16, fontWeight:700, color:"#f8fafc", marginBottom:8 }}>Recommandations Collectives</h2>
-                <p style={{ color:"#94a3b8", fontSize:14 }}>Actions suggérées en fonction des résultats agrégés de vos bénéficiaires pour améliorer la santé relationnelle globale.</p>
+                <h2 style={{ fontSize:16, fontWeight:700, color:"var(--text-1)", marginBottom:8 }}>Recommandations Collectives</h2>
+                <p style={{ color:"var(--text-3)", fontSize:14 }}>Actions suggérées en fonction des résultats agrégés de vos bénéficiaires pour améliorer la santé relationnelle globale.</p>
               </div>
-              {actions.length === 0 ? <p style={{ color:"#64748b", padding:"40px 0", textAlign:"center" }}>Aucune recommandation disponible pour le moment.</p> : (
+              {actions.length === 0 ? <p style={{ color:"var(--text-2)", padding:"40px 0", textAlign:"center" }}>Aucune recommandation disponible pour le moment.</p> : (
                 <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(320px, 1fr))", gap:16 }}>
                   {actions.map((act: any) => (
                     <div key={act.id} className="card">
@@ -216,8 +221,8 @@ export default function PartnerCampaignDetailPage() {
                           <Target size={20} />
                         </div>
                         <div>
-                          <h3 style={{ fontSize:15, fontWeight:700, color:"#f8fafc", marginBottom:4 }}>{act.title}</h3>
-                          <p style={{ fontSize:13, color:"#94a3b8", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{act.description}</p>
+                          <h3 style={{ fontSize:15, fontWeight:700, color:"var(--text-1)", marginBottom:4 }}>{act.title}</h3>
+                          <p style={{ fontSize:13, color:"var(--text-3)", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{act.description}</p>
                         </div>
                       </div>
                     </div>
@@ -231,18 +236,18 @@ export default function PartnerCampaignDetailPage() {
           {activeTab === "kit" && (
             <div style={{ display:"flex", justifyContent:"center" }}>
               <div className="card" style={{ maxWidth: 500, width: "100%" }}>
-                <h2 style={{ fontSize:16, fontWeight:700, color:"#f8fafc", marginBottom:16 }}>Lien et QR Code d'accès</h2>
-                <p style={{ fontSize:13, color:"#94a3b8", marginBottom:20 }}>Distribuez ce code ou ce lien à vos bénéficiaires pour qu'ils puissent rejoindre la campagne B2B2C.</p>
+                <h2 style={{ fontSize:16, fontWeight:700, color:"var(--text-1)", marginBottom:16 }}>Lien et QR Code d'accès</h2>
+                <p style={{ fontSize:13, color:"var(--text-3)", marginBottom:20 }}>Distribuez ce code ou ce lien à vos bénéficiaires pour qu'ils puissent rejoindre la campagne B2B2C.</p>
                 {inviteData ? (
                   <>
-                    <div style={{ background:"#f8fafc", borderRadius:14, padding:20, textAlign:"center", marginBottom:16 }}>
+                    <div style={{ background:"var(--text-1)", borderRadius:14, padding:20, textAlign:"center", marginBottom:16 }}>
                       <img src={inviteData.qrCode} alt="QR Code" style={{ width:180, height:180, borderRadius:8, margin:"0 auto" }} />
                       <p style={{ color:"#1a0533", fontSize:14, marginTop:12, fontWeight:700 }}>Code de campagne : {inviteData.codeAccess}</p>
                     </div>
-                    <div style={{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"12px 16px", display:"flex", alignItems:"center", gap:10, marginBottom:16 }}>
-                      <Link2 size={16} style={{ color:"#64748b", flexShrink:0 }} />
-                      <span style={{ color:"#e2e8f0", fontSize:13, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{inviteData.inviteUrl}</span>
-                      <button onClick={copyLink} style={{ background:"none", border:"none", cursor:"pointer", color: copied ? "#34d399" : "#94a3b8" }}>
+                    <div style={{ background:"rgba(255,255,255,0.04)", border:"1px solid var(--border)", borderRadius:10, padding:"12px 16px", display:"flex", alignItems:"center", gap:10, marginBottom:16 }}>
+                      <Link2 size={16} style={{ color:"var(--text-2)", flexShrink:0 }} />
+                      <span style={{ color:"var(--text-2)", fontSize:13, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{inviteData.inviteUrl}</span>
+                      <button onClick={copyLink} style={{ background:"none", border:"none", cursor:"pointer", color: copied ? "#34d399" : "var(--text-3)" }}>
                         {copied ? <CheckCircle2 size={16} /> : <Copy size={16} />}
                       </button>
                     </div>
@@ -263,7 +268,7 @@ export default function PartnerCampaignDetailPage() {
           {activeTab === "configuration" && (
             <div className="card">
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:24 }}>
-                <h2 style={{ fontSize:16, fontWeight:700, color:"#f8fafc" }}>Paramètres</h2>
+                <h2 style={{ fontSize:16, fontWeight:700, color:"var(--text-1)" }}>Paramètres</h2>
                 {!editMode
                   ? <button onClick={() => setEditMode(true)} className="btn btn-secondary btn-sm"><Settings size={13} /> Modifier</button>
                   : <div style={{ display:"flex", gap:8 }}>
@@ -273,17 +278,17 @@ export default function PartnerCampaignDetailPage() {
                 }
               </div>
               <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
-                <div><label style={{ display:"block", fontSize:12, color:"#94a3b8", fontWeight:600, marginBottom:6 }}>Nom</label>
-                  {editMode ? <input className="input-field" value={editForm.title} onChange={e => setEditForm((f: any) => ({ ...f, title:e.target.value }))} /> : <p style={{ color:"#f8fafc", fontSize:14 }}>{campaign.title}</p>}
+                <div><label style={{ display:"block", fontSize:12, color:"var(--text-3)", fontWeight:600, marginBottom:6 }}>Nom</label>
+                  {editMode ? <input className="input-field" value={editForm.title} onChange={e => setEditForm((f: any) => ({ ...f, title:e.target.value }))} /> : <p style={{ color:"var(--text-1)", fontSize:14 }}>{campaign.title}</p>}
                 </div>
-                <div><label style={{ display:"block", fontSize:12, color:"#94a3b8", fontWeight:600, marginBottom:6 }}>Description</label>
-                  {editMode ? <textarea className="input-field" style={{ minHeight:70, resize:"vertical" }} value={editForm.description} onChange={e => setEditForm((f: any) => ({ ...f, description:e.target.value }))} /> : <p style={{ color:"#94a3b8", fontSize:14 }}>{campaign.description || "—"}</p>}
+                <div><label style={{ display:"block", fontSize:12, color:"var(--text-3)", fontWeight:600, marginBottom:6 }}>Description</label>
+                  {editMode ? <textarea className="input-field" style={{ minHeight:70, resize:"vertical" }} value={editForm.description} onChange={e => setEditForm((f: any) => ({ ...f, description:e.target.value }))} /> : <p style={{ color:"var(--text-3)", fontSize:14 }}>{campaign.description || "—"}</p>}
                 </div>
                 <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
-                  <div><label style={{ display:"block", fontSize:12, color:"#94a3b8", fontWeight:600, marginBottom:6 }}>Date de fin</label>
-                    {editMode ? <input type="date" className="input-field" value={editForm.endDate} onChange={e => setEditForm((f: any) => ({ ...f, endDate:e.target.value }))} /> : <p style={{ color:"#f8fafc", fontSize:14 }}>{new Date(campaign.endDate).toLocaleDateString("fr-FR")}</p>}
+                  <div><label style={{ display:"block", fontSize:12, color:"var(--text-3)", fontWeight:600, marginBottom:6 }}>Date de fin</label>
+                    {editMode ? <input type="date" className="input-field" value={editForm.endDate} onChange={e => setEditForm((f: any) => ({ ...f, endDate:e.target.value }))} /> : <p style={{ color:"var(--text-1)", fontSize:14 }}>{new Date(campaign.endDate).toLocaleDateString("fr-FR")}</p>}
                   </div>
-                  <div><label style={{ display:"block", fontSize:12, color:"#94a3b8", fontWeight:600, marginBottom:6 }}>Statut</label>
+                  <div><label style={{ display:"block", fontSize:12, color:"var(--text-3)", fontWeight:600, marginBottom:6 }}>Statut</label>
                     {editMode ? (
                       <select className="input-field" value={editForm.status} onChange={e => setEditForm((f: any) => ({ ...f, status:e.target.value }))}>
                         {Object.entries(STATUS_LABELS).map(([k,v]) => <option key={k} value={k}>{v as string}</option>)}
@@ -295,15 +300,15 @@ export default function PartnerCampaignDetailPage() {
                 {isPP && (
                   <>
                     <hr style={{ border: 0, borderTop: "1px solid rgba(255,255,255,0.05)", margin: "8px 0" }} />
-                    <h3 style={{ fontSize:15, fontWeight:700, color:"#a78bfa" }}>Règles du Binôme Relationnel</h3>
+                    <h3 style={{ fontSize:15, fontWeight:700, color:"var(--primary)" }}>Règles du Binôme Relationnel</h3>
                     <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
                       <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: editMode ? "pointer" : "default" }}>
                         <input type="checkbox" checked={editForm.binomeEnabled} disabled={!editMode} onChange={e => setEditForm((f: any) => ({ ...f, binomeEnabled: e.target.checked }))} style={{ accentColor: "#7c3aed" }} />
-                        <span style={{ fontSize: 13, color: "#f8fafc" }}>Activer le module Binôme pour cette campagne</span>
+                        <span style={{ fontSize: 13, color: "var(--text-1)" }}>Activer le module Binôme pour cette campagne</span>
                       </label>
                       <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: editMode ? "pointer" : "default" }}>
                         <input type="checkbox" checked={editForm.requireSameDepartment} disabled={!editMode} onChange={e => setEditForm((f: any) => ({ ...f, requireSameDepartment: e.target.checked }))} style={{ accentColor: "#7c3aed" }} />
-                        <span style={{ fontSize: 13, color: "#f8fafc" }}>Restreindre le matching au même département</span>
+                        <span style={{ fontSize: 13, color: "var(--text-1)" }}>Restreindre le matching au même département</span>
                       </label>
                     </div>
                   </>

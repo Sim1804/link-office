@@ -41,27 +41,27 @@ export function DimensionsList({ dimensions, bestDimension, priorityDimension }:
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 {/* Code badge */}
                 <span style={{
-                  width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                  width: 28, height: 28, borderRadius: 999, flexShrink: 0,
                   background: "rgba(124,58,237,0.1)",
                   border: "1px solid rgba(124,58,237,0.15)",
                   display: "inline-flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 12, fontWeight: 700, color: "#a78bfa",
+                  fontSize: 12, fontWeight: 700, color: "var(--primary)",
                 }}>
                   {DIM_ICONS[dimension.code] || dimension.code}
                 </span>
                 {/* Name */}
-                <span style={{ fontSize: 13, color: "#f8fafc", fontWeight: 600 }}>{dimension.nom}</span>
+                <span style={{ fontSize: 13, color: "var(--text-1)", fontWeight: 600 }}>{dimension.nom}</span>
                 {/* Best/Priority badges */}
                 {isBest && (
                   <span style={{
-                    fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 6,
+                    fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 999,
                     background: "rgba(52,211,153,0.12)", color: "#34d399",
                     border: "1px solid rgba(52,211,153,0.2)",
                   }}>↑ Top</span>
                 )}
                 {isPriority && !isBest && (
                   <span style={{
-                    fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 6,
+                    fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 999,
                     background: "rgba(245,158,11,0.12)", color: "#f59e0b",
                     border: "1px solid rgba(245,158,11,0.2)",
                   }}>⚠ Priorité</span>
@@ -70,7 +70,7 @@ export function DimensionsList({ dimensions, bestDimension, priorityDimension }:
               {/* Score */}
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{
-                  fontSize: 10, fontWeight: 600, padding: "2px 8px", borderRadius: 6,
+                  fontSize: 10, fontWeight: 600, padding: "3px 10px", borderRadius: 999,
                   background: statusInfo.bg, color: statusInfo.color,
                   border: `1px solid ${statusInfo.border}`,
                 }}>
@@ -83,7 +83,7 @@ export function DimensionsList({ dimensions, bestDimension, priorityDimension }:
             </div>
 
             {/* Progress bar */}
-            <div style={{ height: 6, borderRadius: 999, background: "rgba(255,255,255,0.04)", overflow: "hidden", marginLeft: 36 }}>
+            <div style={{ height: 6, borderRadius: 999, background: "var(--surface-2)", overflow: "hidden", marginLeft: 36 }}>
               <div style={{
                 height: "100%", borderRadius: 999,
                 background: statusInfo.gradient,

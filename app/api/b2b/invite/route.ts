@@ -72,7 +72,7 @@ export async function GET(request: Request) {
     margin: 2,
     color: {
       dark: "#1a0533",
-      light: "#f8fafc",
+      light: "var(--text-1)",
     },
   });
 

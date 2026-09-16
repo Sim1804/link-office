@@ -19,26 +19,26 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
         <>
           {/* Header card */}
           <div style={{
-            borderRadius: 24,
-            background: "linear-gradient(135deg, rgba(124,58,237,0.12) 0%, rgba(6,182,212,0.06) 100%)",
-            border: "1px solid rgba(124,58,237,0.2)",
-            padding: "24px 28px",
+            borderRadius: 16,
+            background: "linear-gradient(135deg, var(--primary-glow) 0%, rgba(6,182,212,0.06) 100%)",
+            border: "1px solid var(--border-strong)",
+            padding: "20px",
             marginBottom: 28,
             display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
               <div style={{
                 width: 48, height: 48, borderRadius: 14,
-                background: "rgba(124,58,237,0.2)", border: "1px solid rgba(124,58,237,0.3)",
+                background: "var(--border-strong)", border: "1px solid rgba(124,58,237,0.3)",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <ListChecks size={24} style={{ color: "#c084fc" }} />
               </div>
               <div>
-                <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 18, color: "#f8fafc" }}>
+                <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 18, color: "var(--text-1)" }}>
                   {iqrh.prescription.title}
                 </h2>
-                <p style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>{iqrh.prescription.summary}</p>
+                <p style={{ fontSize: 13, color: "var(--text-3)", marginTop: 2 }}>{iqrh.prescription.summary}</p>
               </div>
             </div>
             <div style={{
@@ -57,16 +57,16 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
           {shownReco.length > 0 && (
             <div style={{ marginBottom: 28 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-                <div style={{ height: 1, flex: 1, background: "rgba(255,255,255,0.06)" }} />
+                <div style={{ height: 1, flex: 1, background: "var(--surface-2)" }} />
                 <span style={{
-                  fontSize: 11, fontWeight: 700, color: "#7c3aed",
+                  fontSize: 11, fontWeight: 700, color: "var(--primary)",
                   letterSpacing: "0.12em", textTransform: "uppercase",
                   background: "rgba(124,58,237,0.08)", padding: "4px 12px",
                   borderRadius: 999, border: "1px solid rgba(124,58,237,0.15)",
                 }}>
                   Recommandations
                 </span>
-                <div style={{ height: 1, flex: 1, background: "rgba(255,255,255,0.06)" }} />
+                <div style={{ height: 1, flex: 1, background: "var(--surface-2)" }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 14 }}>
                 {shownReco.map((item: any) => (
@@ -80,7 +80,7 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
           {shownChallenges.length > 0 && (
             <div style={{ marginBottom: hiddenCount > 0 ? 0 : 0 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-                <div style={{ height: 1, flex: 1, background: "rgba(255,255,255,0.06)" }} />
+                <div style={{ height: 1, flex: 1, background: "var(--surface-2)" }} />
                 <span style={{
                   fontSize: 11, fontWeight: 700, color: "#0891b2",
                   letterSpacing: "0.12em", textTransform: "uppercase",
@@ -89,7 +89,7 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
                 }}>
                   Micro-défis
                 </span>
-                <div style={{ height: 1, flex: 1, background: "rgba(255,255,255,0.06)" }} />
+                <div style={{ height: 1, flex: 1, background: "var(--surface-2)" }} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 14 }}>
                 {shownChallenges.map((item: any) => (
@@ -103,8 +103,8 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
           {!isPremium && hiddenCount > 0 && (
             <div style={{
               marginTop: 24,
-              borderRadius: 24,
-              border: "1px solid rgba(124,58,237,0.2)",
+              borderRadius: 16,
+              border: "1px solid var(--border-strong)",
               overflow: "hidden",
               position: "relative",
             }}>
@@ -114,8 +114,8 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
                   {[...Array(Math.min(hiddenCount, 3))].map((_, i) => (
                     <div key={i} style={{
                       height: 120, borderRadius: 16,
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.06)",
+                      background: "var(--surface-2)",
+                      border: "1px solid var(--border)",
                     }} />
                   ))}
                 </div>
@@ -133,16 +133,16 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
               }}>
                 <div style={{
                   width: 48, height: 48, margin: "0 auto 16px",
-                  borderRadius: 12, background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: 12, background: "rgba(18,61,70,0.05)",
+                  border: "1px solid var(--border)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
-                  <Lock size={20} color="#94a3b8" />
+                  <Lock size={20} color="var(--text-3)" />
                 </div>
-                <h4 style={{ fontFamily: "Inter, sans-serif", color: "#f8fafc", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+                <h4 style={{ fontFamily: "Inter, sans-serif", color: "var(--text-1)", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
                   {hiddenCount} contenu{hiddenCount > 1 ? "s" : ""} Premium restant{hiddenCount > 1 ? "s" : ""}
                 </h4>
-                <p style={{ color: "#64748b", fontSize: 14, marginBottom: 24, maxWidth: 420, margin: "0 auto 24px" }}>
+                <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 24, maxWidth: 420, margin: "0 auto 24px" }}>
                   Débloquez l'intégralité de votre ordonnance, cochez vos défis terminés et discutez avec IRIS.
                 </p>
                 <Link href="/premium" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
@@ -155,10 +155,10 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
         </>
       ) : (
         <div style={{
-          borderRadius: 24, border: "1px solid rgba(255,255,255,0.06)",
-          background: "rgba(17,24,39,0.98)", padding: "60px 40px", textAlign: "center",
+          borderRadius: 16, border: "1px solid var(--border)",
+          background: "var(--surface)", padding: "60px 40px", textAlign: "center",
         }}>
-          <p style={{ color: "#64748b" }}>Aucune ordonnance relationnelle disponible.</p>
+          <p style={{ color: "var(--text-3)" }}>Aucune ordonnance relationnelle disponible.</p>
         </div>
       )}
 

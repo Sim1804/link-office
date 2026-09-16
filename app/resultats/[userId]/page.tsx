@@ -86,7 +86,7 @@ export default function Results({ params }: { params: Promise<{ userId: string }
           </header>
 
           <div style={{ display: "grid", gap: 24, gridTemplateColumns: "1fr 1.25fr", marginBottom: 24 }}>
-            <div className="card" style={{ background: "linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(6,182,212,0.1) 100%)", borderColor: "rgba(124,58,237,0.2)" }}>
+            <div className="card" style={{ background: "var(--surface)", borderColor: "rgba(124,58,237,0.2)" }}>
               <p style={{ color: "var(--primary-light)", fontSize: 13, fontWeight: 600, letterSpacing: "0.05em", marginBottom: 12 }}>SCORE GLOBAL IQRH</p>
               <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 16 }}>
                 <span className="gradient-text" style={{ fontSize: 56, fontWeight: 800 }}>{Math.round(result.globalScore)}</span>
@@ -94,7 +94,7 @@ export default function Results({ params }: { params: Promise<{ userId: string }
               </div>
               <p style={{ color: "var(--text-1)", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{result.weatherTitleFull || result.weather}</p>
               <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>{isPremium ? (result.weatherTextPremium || result.weatherText) : result.weatherText}</p>
-              <div style={{ padding: 12, background: "rgba(255,255,255,0.03)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
+              <div style={{ padding: 12, background: "var(--surface)", borderRadius: 12, border: "1px solid rgba(18,61,70,0.05)" }}>
                 <p style={{ fontSize: 12, color: "var(--text-3)" }}>Indice d'équilibre relationnel</p>
                 <p style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)" }}>{Math.round(result.balanceIndex)} / 100</p>
               </div>
@@ -105,9 +105,9 @@ export default function Results({ params }: { params: Promise<{ userId: string }
               <div style={{ height: 320, width: "100%" }}>
                 <ResponsiveContainer>
                   <RadarChart data={radarData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
-                    <PolarGrid stroke="rgba(255,255,255,0.1)" />
+                    <PolarGrid stroke="var(--border)" />
                     <PolarAngleAxis dataKey="dimension" tick={{ fill: "var(--text-3)", fontSize: 11 }} />
-                    <Radar dataKey="score" stroke="#a78bfa" fill="#7c3aed" fillOpacity={0.3} />
+                    <Radar dataKey="score" stroke="var(--primary)" fill="#7c3aed" fillOpacity={0.3} />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
@@ -119,8 +119,8 @@ export default function Results({ params }: { params: Promise<{ userId: string }
               <div key={item.dimension} className="card" style={{ padding: 20 }}>
                 <p style={{ fontSize: 12, color: "var(--text-3)", marginBottom: 8 }}>{item.dimension}</p>
                 <p style={{ fontSize: 28, fontWeight: 700, color: "var(--text-1)", marginBottom: 12 }}>{Math.round(item.score)}</p>
-                <div style={{ height: 4, background: "rgba(255,255,255,0.05)", borderRadius: 4, overflow: "hidden" }}>
-                  <div style={{ height: "100%", background: "linear-gradient(90deg, #7c3aed, #06b6d4)", width: `${item.score}%` }} />
+                <div style={{ height: 4, background: "rgba(18,61,70,0.05)", borderRadius: 4, overflow: "hidden" }}>
+                  <div style={{ height: "100%", background: "var(--surface)", width: `${item.score}%` }} />
                 </div>
               </div>
             ))}
@@ -146,7 +146,7 @@ export default function Results({ params }: { params: Promise<{ userId: string }
                 <span className="badge badge-cyan" style={{ marginBottom: 12 }}>PROFIL SECONDAIRE</span>
                 <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 12 }}>{result.secondaryProfile}</h3>
                 
-                <div style={{ padding: 16, background: "rgba(255,255,255,0.02)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)", marginBottom: 16 }}>
+                <div style={{ padding: 16, background: "var(--surface)", borderRadius: 12, border: "1px solid rgba(18,61,70,0.05)", marginBottom: 16 }}>
                   <p style={{ fontSize: 13, color: "var(--text-3)", lineHeight: 1.6, fontStyle: "italic" }}>
                     {isPremium 
                       ? `Votre profil secondaire complète votre profil principal. Cette combinaison signifie que vous ne fonctionnez pas selon une seule logique relationnelle.`
@@ -198,7 +198,7 @@ export default function Results({ params }: { params: Promise<{ userId: string }
 
           {result.icr && (
             <div style={{ display: "grid", gap: 24, gridTemplateColumns: "1fr 1fr", marginBottom: 32 }}>
-              <div className="card" style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.1) 0%, rgba(124,58,237,0.15) 100%)", borderColor: "rgba(6,182,212,0.2)" }}>
+              <div className="card" style={{ background: "var(--surface)", borderColor: "rgba(6,182,212,0.2)" }}>
                 <span className="badge badge-cyan" style={{ marginBottom: 16 }}>COMPLEXITÉ RELATIONNELLE (ICR)</span>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 12 }}>
                   <span style={{ fontSize: 48, fontWeight: 800, color: "var(--text-1)" }}>{result.icr.score}</span>
@@ -229,7 +229,7 @@ export default function Results({ params }: { params: Promise<{ userId: string }
             
             <div style={{ display: "grid", gap: 16, gridTemplateColumns: "1fr 1fr" }}>
               {prescriptionItemsToDisplay.map((item) => (
-                <div key={item.id} style={{ padding: 20, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 16 }}>
+                <div key={item.id} style={{ padding: 20, background: "var(--surface)", border: "1px solid rgba(18,61,70,0.05)", borderRadius: 16 }}>
                   <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.05em", color: item.kind === "MICRO_CHALLENGE" ? "#f59e0b" : "#34d399", textTransform: "uppercase" }}>
                     {item.kind === "MICRO_CHALLENGE" ? "Micro-défi" : "Recommandation"}
                   </span>
@@ -303,7 +303,7 @@ function MiniList({ title, items }: { title: string; items: string[] }) {
 
 function Placeholder({ title, text }: { title: string; text: string }) {
   return (
-    <div style={{ border: "1px dashed rgba(255,255,255,0.15)", borderRadius: 24, padding: 32, background: "rgba(255,255,255,0.01)" }}>
+    <div style={{ border: "1px dashed var(--border-strong)", borderRadius: 24, padding: 32, background: "var(--surface)" }}>
       <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-2)", marginBottom: 8 }}>{title}</h2>
       <p style={{ fontSize: 13, color: "var(--text-3)", lineHeight: 1.5 }}>{text}</p>
     </div>
@@ -312,14 +312,14 @@ function Placeholder({ title, text }: { title: string; text: string }) {
 
 function PremiumLock({ title, text }: { title: string; text: string }) {
   return (
-    <div className="card" style={{ padding: 32, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", background: "radial-gradient(circle at center, rgba(17,24,39,0.3) 0%, rgba(11,15,25,0.6) 100%)" }}>
+    <div className="card" style={{ padding: 32, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", background: "var(--surface)" }}>
       <div style={{
-        width: 52, height: 52, borderRadius: 16,
-        background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+        width: 52, height: 52, borderRadius: 999,
+        background: "var(--surface)", border: "1px solid var(--border-strong)",
         display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16,
         boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
       }}>
-        <Lock size={22} color="#f8fafc" />
+        <Lock size={22} color="var(--text-1)" />
       </div>
       <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)", marginBottom: 8 }}>{title}</h2>
       <p style={{ fontSize: 13, color: "var(--text-3)", lineHeight: 1.5, maxWidth: 300 }}>{text}</p>

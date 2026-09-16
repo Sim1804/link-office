@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { ChevronRight, ChevronLeft, CheckCircle } from "lucide-react";
 import { getUserStatus, submitIQRHQuestionnaire } from "@/lib/api";
+import { Button } from "@/components/ui/Button";
 
 const CHOICES = [
   { value: 1, label: "Pas du tout d'accord" },
@@ -35,11 +36,11 @@ const DIMENSION_OBJECTIVES: Record<string, string> = {
 };
 
 const DIM_COLORS: Record<string, string> = {
-  SOCIAL: "rgba(124,58,237,1)",
-  AFFECTIVE: "rgba(6,182,212,1)",
-  SENTIMENTAL: "rgba(244,63,94,1)",
-  PROFESSIONAL: "rgba(245,158,11,1)",
-  SELF: "rgba(52,211,153,1)",
+  SOCIAL: "var(--primary)",
+  AFFECTIVE: "var(--cyan)",
+  SENTIMENTAL: "var(--rose)",
+  PROFESSIONAL: "var(--amber)",
+  SELF: "var(--emerald)",
 };
 
 const QUESTIONS_MOCK = [
@@ -107,7 +108,7 @@ export default function QuestionnairePage() {
   const currentDimension = question ? DIMENSIONS[question.dimension] : "";
   const questionsInDimension = questionsList.filter((q) => q.dimension === question?.dimension);
   const questionIndexInDimension = questionsInDimension.findIndex((q) => q.id === question?.id) + 1;
-  const dimColor = question ? (DIM_COLORS[question.dimension] ?? "#7c3aed") : "#7c3aed";
+  const dimColor = question ? (DIM_COLORS[question.dimension] ?? "var(--primary)") : "var(--primary)";
 
   const handleAnswer = (value: number) => {
     if (!question) return;
@@ -138,20 +139,20 @@ export default function QuestionnairePage() {
   // ── État soumis ──────────────────────────────────────────────────────────
   if (submitted) {
     return (
-      <div style={{ minHeight: "100vh", background: "#0b0f19", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center" }}>
           <CheckCircle style={{ width: 64, height: 64, color: "#34d399", margin: "0 auto 16px" }} />
-          <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 24, color: "#f8fafc", marginBottom: 8 }}>
+          <h2 style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 24, color: "var(--text-1)", marginBottom: 8 }}>
             Questionnaire de référence terminé !
           </h2>
-          <p style={{ color: "#64748b", fontSize: 14 }}>Redirection vers les modules adaptatifs…</p>
+          <p style={{ color: "var(--text-3)", fontSize: 14 }}>Redirection vers les modules adaptatifs…</p>
         </div>
       </div>
     );
   }
 
   if (loadingStatus || questionsList.length === 0) {
-    return <div style={{ minHeight: "100vh", background: "#0b0f19" }} />;
+    return <div style={{ minHeight: "100vh", background: "var(--bg)" }} />;
   }
 
   return (
@@ -159,7 +160,7 @@ export default function QuestionnairePage() {
       <Navbar />
       <main style={{
         minHeight: "100vh",
-        background: "#0b0f19",
+        background: "var(--bg)",
         paddingTop: 88,
         paddingBottom: 32,
         paddingLeft: 24,
@@ -171,7 +172,7 @@ export default function QuestionnairePage() {
         {/* Blob */}
         <div style={{
           position: "fixed", top: "-15%", right: "-8%", width: 600, height: 600,
-          background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)",
           pointerEvents: "none", zIndex: 0,
         }} />
 
@@ -184,7 +185,7 @@ export default function QuestionnairePage() {
           {/* ── Barre de progression ── */}
           <div style={{ marginBottom: 28 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-              <span style={{ fontSize: 13, color: "#64748b" }}>
+              <span style={{ fontSize: 13, color: "var(--text-3)" }}>
                 Question {current + 1} / {questionsList.length}
               </span>
               <span style={{
@@ -196,10 +197,10 @@ export default function QuestionnairePage() {
             </div>
 
             {/* Track */}
-            <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 999, overflow: "hidden" }}>
+            <div style={{ height: 6, background: "var(--border-strong)", borderRadius: 999, overflow: "hidden" }}>
               <div style={{
                 height: "100%", borderRadius: 999,
-                background: "linear-gradient(90deg, #7c3aed, #06b6d4)",
+                background: "var(--primary)",
                 width: `${progress}%`,
                 transition: "width 0.5s ease",
               }} />
@@ -210,7 +211,7 @@ export default function QuestionnairePage() {
               {Object.keys(DIMENSIONS).map((d) => (
                 <div key={d} title={DIMENSIONS[d]} style={{
                   width: 8, height: 8, borderRadius: "50%",
-                  background: question?.dimension === d ? DIM_COLORS[d] : "rgba(255,255,255,0.10)",
+                  background: question?.dimension === d ? DIM_COLORS[d] : "var(--border-strong)",
                   transition: "all 0.3s",
                   boxShadow: question?.dimension === d ? `0 0 8px ${DIM_COLORS[d]}` : "none",
                 }} />
@@ -226,20 +227,20 @@ export default function QuestionnairePage() {
             flexDirection: "column",
           }}>
             {/* Sous-titre dimension */}
-            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6 }}>
+            <p style={{ fontSize: 11, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6 }}>
               {currentDimension} — {questionIndexInDimension}/{questionsInDimension.length}
             </p>
 
             {/* Objectif de la dimension */}
-            <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 20, lineHeight: 1.5 }}>
+            <p style={{ fontSize: 13, color: "var(--text-2)", marginBottom: 20, lineHeight: 1.5 }}>
               <strong style={{ color: dimColor }}>Objectif : </strong>
               {question ? DIMENSION_OBJECTIVES[question.dimension] : ""}
             </p>
 
             {/* Question */}
             <h2 style={{
-              fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-              fontWeight: 600, fontSize: 20, color: "#f8fafc",
+              fontFamily: "var(--font-family-display)",
+              fontWeight: 600, fontSize: 20, color: "var(--text-1)",
               lineHeight: 1.55, marginBottom: 28, flex: 1,
             }}>
               {question?.text}
@@ -258,25 +259,25 @@ export default function QuestionnairePage() {
                       padding: "14px 18px", borderRadius: 16, textAlign: "left",
                       cursor: "pointer", fontFamily: "inherit",
                       transition: "all 0.18s",
-                      background: selected ? "rgba(124,58,237,0.18)" : "rgba(26,34,54,0.5)",
-                      border: selected ? "1.5px solid rgba(124,58,237,0.55)" : "1.5px solid rgba(255,255,255,0.08)",
-                      boxShadow: selected ? "0 0 16px rgba(124,58,237,0.2)" : "none",
+                      background: selected ? "var(--primary-glow)" : "var(--bg)",
+                      border: selected ? "1.5px solid var(--primary)" : "1.5px solid var(--border-strong)",
+                      boxShadow: selected ? "0 0 16px var(--primary-glow)" : "none",
                     }}
                   >
                     {/* Radio indicator */}
                     <div style={{
                       width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
-                      border: selected ? "2px solid #7c3aed" : "2px solid rgba(255,255,255,0.20)",
-                      background: selected ? "#7c3aed" : "transparent",
+                      border: selected ? "2px solid var(--primary)" : "2px solid var(--border-strong)",
+                      background: selected ? "var(--primary)" : "transparent",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       transition: "all 0.18s",
                     }}>
                       {selected && <div style={{ width: 8, height: 8, background: "white", borderRadius: "50%" }} />}
                     </div>
-                    <span style={{ fontSize: 14, fontWeight: 500, color: selected ? "#f8fafc" : "#94a3b8", flex: 1 }}>
+                    <span style={{ fontSize: 14, fontWeight: 500, color: selected ? "var(--text-1)" : "var(--text-2)", flex: 1 }}>
                       {choice.label}
                     </span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: selected ? "#a78bfa" : "#475569" }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: selected ? "var(--primary)" : "var(--text-2)" }}>
                       {choice.value}
                     </span>
                   </button>
@@ -286,53 +287,30 @@ export default function QuestionnairePage() {
 
             {/* Navigation */}
             <div style={{ display: "flex", gap: 12 }}>
-              <button
+              <Button
+                variant="secondary"
+                size="lg"
                 onClick={() => setCurrent((p) => Math.max(0, p - 1))}
                 disabled={current === 0}
-                style={{
-                  display: "flex", alignItems: "center", gap: 8,
-                  padding: "12px 20px", borderRadius: 12,
-                  background: "rgba(26,34,54,0.8)", border: "1px solid rgba(255,255,255,0.12)",
-                  color: current === 0 ? "#475569" : "#94a3b8",
-                  fontSize: 14, fontWeight: 500, fontFamily: "inherit",
-                  cursor: current === 0 ? "not-allowed" : "pointer",
-                  opacity: current === 0 ? 0.5 : 1,
-                  transition: "all 0.2s",
-                }}
               >
-                <ChevronLeft style={{ width: 16, height: 16 }} />
+                <ChevronLeft style={{ width: 16, height: 16, marginRight: 8 }} />
                 Précédent
-              </button>
+              </Button>
 
-              <button
+              <Button
+                variant="primary"
+                size="lg"
                 onClick={handleNext}
                 disabled={!isAnswered || submitting}
-                style={{
-                  flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  padding: "12px 20px", borderRadius: 12,
-                  background: isAnswered ? "#7c3aed" : "rgba(124,58,237,0.25)",
-                  border: "none",
-                  color: isAnswered ? "white" : "rgba(255,255,255,0.35)",
-                  fontSize: 14, fontWeight: 600, fontFamily: "inherit",
-                  cursor: isAnswered && !submitting ? "pointer" : "not-allowed",
-                  boxShadow: isAnswered ? "0 0 24px rgba(124,58,237,0.35)" : "none",
-                  transition: "all 0.2s",
-                }}
+                loading={submitting}
+                style={{ flex: 1 }}
               >
-                {submitting ? (
-                  <>
-                    <svg style={{ width: 16, height: 16, animation: "spin 0.7s linear infinite" }} viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.25)" strokeWidth="4" />
-                      <path fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" opacity="0.75" />
-                    </svg>
-                    Envoi…
-                  </>
-                ) : isLast ? (
+                {isLast ? (
                   "Soumettre le questionnaire"
                 ) : (
-                  <>Suivant <ChevronRight style={{ width: 16, height: 16 }} /></>
+                  <>Suivant <ChevronRight style={{ width: 16, height: 16, marginLeft: 8 }} /></>
                 )}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

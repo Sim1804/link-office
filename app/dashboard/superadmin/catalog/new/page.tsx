@@ -15,13 +15,13 @@ export default async function NewCatalogItemPage() {
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", paddingBottom: 40 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
-        <Link href="/dashboard/superadmin/catalog" style={{ color: "#94a3b8", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 13 }}>
+        <Link href="/dashboard/superadmin/catalog" style={{ color: "var(--text-2)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 13 }}>
           <ArrowLeft size={15} /> Retour au catalogue
         </Link>
       </div>
 
-      <h1 style={{ fontSize: 28, fontWeight: 800, color: "#f8fafc", marginBottom: 8 }}>Ajouter au catalogue</h1>
-      <p style={{ color: "#94a3b8", marginBottom: 32 }}>Créez de nouvelles recommandations, défis et partenaires pour l'IA.</p>
+      <h1 style={{ fontSize: 28, fontWeight: 800, color: "var(--text-1)", marginBottom: 8 }}>Ajouter au catalogue</h1>
+      <p style={{ color: "var(--text-2)", marginBottom: 32 }}>Créez de nouvelles recommandations, défis et partenaires pour l'IA.</p>
 
       <CatalogForm isEdit={false} />
     </div>

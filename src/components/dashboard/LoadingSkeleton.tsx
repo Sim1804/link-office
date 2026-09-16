@@ -30,7 +30,7 @@ export function DashboardSkeleton() {
           50% { opacity: 0.5; }
         }
         .skeleton-box {
-          background: rgba(255, 255, 255, 0.05);
+          background: rgba(18,61,70,0.05);
           border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 16px;
           position: relative;

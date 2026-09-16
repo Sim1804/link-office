@@ -48,9 +48,9 @@ export function B2b2cMemberRecommendations() {
 
   if (isLoading) {
     return (
-      <div style={{ background: "rgba(255,255,255,0.03)", padding: 24, borderRadius: 16, marginBottom: 32, display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
-        <RefreshCw size={18} style={{ animation: "spin 1s linear infinite", color: "#64748b" }} />
-        <span style={{ color: "#64748b" }}>Analyse de vos recommandations mutuelle...</span>
+      <div style={{ background: "var(--surface-2)", padding: 20, borderRadius: 16, marginBottom: 32, display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+        <RefreshCw size={18} style={{ animation: "spin 1s linear infinite", color: "var(--text-3)" }} />
+        <span style={{ color: "var(--text-3)" }}>Analyse de vos recommandations mutuelle...</span>
       </div>
     );
   }
@@ -68,10 +68,10 @@ export function B2b2cMemberRecommendations() {
           <Heart style={{ width: 22, height: 22, color: "#34d399" }} />
         </div>
         <div>
-          <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 20, color: "#f8fafc" }}>
+          <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 20, color: "var(--text-1)" }}>
             Ma Mutuelle & Prévention
           </h2>
-          <p style={{ color: "#64748b", fontSize: 13 }}>Services personnalisés recommandés par votre organisme</p>
+          <p style={{ color: "var(--text-3)", fontSize: 13 }}>Services personnalisés recommandés par votre organisme</p>
         </div>
       </div>
 
@@ -90,7 +90,7 @@ export function B2b2cMemberRecommendations() {
             key={index}
             className="card card-hover"
             // Bordure violette = priorité haute, cyan = priorité normale
-            style={{ borderLeft: `3px solid ${recommendation.priority === "haute" ? "#a78bfa" : "#06b6d4"}` }}
+            style={{ borderLeft: `3px solid ${recommendation.priority === "haute" ? "var(--primary)" : "#06b6d4"}` }}
           >
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
               {/* Icône de la recommandation */}
@@ -102,12 +102,12 @@ export function B2b2cMemberRecommendations() {
                 </span>
 
                 {/* Titre du service recommandé */}
-                <h3 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15, marginBottom: 6 }}>
+                <h3 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 15, marginBottom: 6 }}>
                   {recommendation.organizationService?.title ?? recommendation.service}
                 </h3>
 
                 {/* Déclencheur IQRH qui justifie cette recommandation */}
-                <p style={{ color: "#64748b", fontSize: 12, marginBottom: 12 }}>
+                <p style={{ color: "var(--text-3)", fontSize: 12, marginBottom: 12 }}>
                   <AlertCircle size={11} style={{ display: "inline", marginRight: 4 }} />
                   {recommendation.trigger}
                 </p>
@@ -118,7 +118,7 @@ export function B2b2cMemberRecommendations() {
                     href={recommendation.organizationService.linkUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-secondary btn-sm"
+                    className="btn btn-tertiary btn-sm"
                     style={{ textDecoration: "none" }}
                   >
                     En savoir plus <ExternalLink size={12} />

@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { DashboardSkeleton } from "@/components/dashboard/LoadingSkeleton";
+import { DashboardTabs } from "@/components/ui/DashboardTabs";
 import {
   Users, ShieldAlert, ShieldCheck, TrendingUp, TrendingDown, AlertTriangle,
   BarChart3, RefreshCw, Crown, Zap, Activity, HeartPulse, AlertCircle, LineChart
@@ -63,24 +65,25 @@ export default function B2B2CDashboard() {
       .finally(() => setLoading(false));
   }, [selectedCampaignId]);
 
-  const radarData    = buildRadarData(stats?.averages as Record<string, number> ?? {});
-  const icrData      = stats?.icrDistribution ? buildIcrData(stats.icrDistribution) : [];
-  const weatherData  = stats?.weatherDistribution ? buildWeatherData(stats.weatherDistribution) : [];
-  const globalScore  = stats?.averages?.global ?? 0;
-  const scoreColor   = scoreToColor(globalScore);
+  const radarData = buildRadarData(stats?.averages as Record<string, number> ?? {});
+  const icrData = stats?.icrDistribution ? buildIcrData(stats.icrDistribution) : [];
+  const weatherData = stats?.weatherDistribution ? buildWeatherData(stats.weatherDistribution) : [];
+  const globalScore = stats?.averages?.global ?? 0;
+  const scoreColor = scoreToColor(globalScore);
 
   const orientationsData = stats?.orientationsCount
     ? [
-        { name: "Soutien Psychologique", count: stats.orientationsCount.psychological, color: "#a78bfa" },
-        { name: "Lien Social & Isolement", count: stats.orientationsCount.social, color: "#38bdf8" },
-        { name: "RPS & Soutien Pro", count: stats.orientationsCount.professional, color: "#fbbf24" },
-      ]
+      { name: "Soutien Psychologique", count: stats.orientationsCount.psychological, color: "var(--primary)" },
+      { name: "Lien Social & Isolement", count: stats.orientationsCount.social, color: "var(--primary)" },
+      { name: "RPS & Soutien Pro", count: stats.orientationsCount.professional, color: "#fbbf24" },
+    ]
     : [];
 
   return (
     <>
       <Navbar />
       <main className="page-main">
+        <PartnerPortalsNavigation />
         <div className="blob-violet" />
         <div className="blob-cyan" />
 
@@ -88,34 +91,34 @@ export default function B2B2CDashboard() {
           {/* Header */}
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 32, flexWrap: "wrap" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <div style={{ width: 52, height: 52, background: "rgba(16,185,129,0.15)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 24px rgba(16,185,129,0.2)" }}>
-                <ShieldCheck style={{ width: 26, height: 26, color: "#34d399" }} />
+              <div style={{ width: 52, height: 52, background: "var(--primary)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <ShieldCheck style={{ width: 26, height: 26, color: "white" }} />
               </div>
               <div>
-                <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "#f8fafc", marginBottom: 4 }}>
+                <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "var(--text-1)", marginBottom: 4 }}>
                   Vue d'ensemble Partenaire (B2B2C)
                 </h1>
-                <p style={{ color: "#64748b", fontSize: 14 }}>
+                <p style={{ color: "var(--text-3)", fontSize: 14 }}>
                   Données agrégées • Anonymat garanti
                   {stats && <> • {stats.respondentCount} bénéficiaire(s)</>}
                 </p>
               </div>
             </div>
-            
+
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-              <Link href="/dashboard/b2b2c/campaigns" className="btn btn-secondary" style={{ padding: "8px 16px", fontSize: 13, textDecoration: "none" }}>
+              <Link href="/dashboard/b2b2c/campaigns" className="btn btn-tertiary" style={{ padding: "8px 16px", fontSize: 13, textDecoration: "none" }}>
                 Gérer mes campagnes
               </Link>
               <Link href="/dashboard/actions" className="btn btn-primary" style={{ padding: "8px 16px", fontSize: 13, textDecoration: "none" }}>
-                Recommandations (Plan)
+                Plan d'action
               </Link>
-              
+
               <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                 {stats?.campaignsList && stats.campaignsList.length > 0 && (
-                  <select 
-                    value={selectedCampaignId} 
+                  <select
+                    value={selectedCampaignId}
                     onChange={(e) => setSelectedCampaignId(e.target.value)}
-                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "#f8fafc", padding: "8px 12px", borderRadius: 8, fontSize: 13, outline: "none", height: 36 }}
+                    style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text-1)", padding: "8px 12px", borderRadius: 8, fontSize: 13, outline: "none", height: 36 }}
                   >
                     <option value="">Toutes les campagnes</option>
                     {stats.campaignsList.map(c => (
@@ -125,8 +128,7 @@ export default function B2B2CDashboard() {
                 )}
                 <button
                   onClick={() => { setLoading(true); const url = selectedCampaignId ? `/api/b2b/stats?campaignId=${selectedCampaignId}` : "/api/b2b/stats"; fetch(url).then(r => r.json()).then(setStats).finally(() => setLoading(false)); }}
-                  style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, color: "#94a3b8", fontSize: 13, cursor: "pointer", transition: "all 0.2s", height: 36 }}
-                  className="hover-bg-glass"
+                  className="btn btn-tertiary btn-sm"
                 >
                   <RefreshCw size={14} /> Actualiser
                 </button>
@@ -135,29 +137,14 @@ export default function B2B2CDashboard() {
           </div>
 
           {/* ── Tabs ── */}
-          <div style={{ display: "flex", gap: 4, marginBottom: 28, background: "rgba(17,24,39,0.5)", padding: 4, borderRadius: 12, width: "fit-content" }}>
-            {([
+          <DashboardTabs
+            tabs={[
               { key: "barometre", label: "Tableau de bord IQRH", icon: BarChart3 },
               { key: "risques", label: "Risques & Leviers", icon: TrendingDown },
-            ] as const).map(({ key, label, icon: Icon }) => (
-              <button
-                key={key}
-                onClick={() => setActiveTab(key)}
-                style={{
-                  display: "flex", alignItems: "center", gap: 6,
-                  padding: "8px 16px", borderRadius: 8, border: "none",
-                  fontSize: 13, fontWeight: 500, fontFamily: "inherit",
-                  cursor: "pointer", transition: "all 0.2s",
-                  background: activeTab === key ? "var(--primary)" : "transparent",
-                  color: activeTab === key ? "white" : "#94a3b8",
-                  boxShadow: activeTab === key ? "0 0 16px rgba(124,58,237,0.3)" : "none",
-                }}
-              >
-                <Icon size={14} />
-                {label}
-              </button>
-            ))}
-          </div>
+            ]}
+            activeTab={activeTab}
+            onTabChange={(key) => setActiveTab(key as any)}
+          />
 
           {loading ? (
             <DashboardSkeleton />
@@ -174,33 +161,33 @@ export default function B2B2CDashboard() {
 
               {stats?.activationFunnel && (
                 <div style={{ marginBottom: 24 }}>
-                  <h3 style={{ color: "#f8fafc", fontWeight: 600, marginBottom: 16, fontSize: 15, display: "flex", alignItems: "center", gap: 8 }}>
+                  <h3 style={{ color: "var(--text-1)", fontWeight: 600, marginBottom: 16, fontSize: 15, display: "flex", alignItems: "center", gap: 8 }}>
                     <Activity size={16} color="#3b82f6" /> Suivi d'Activation (Anonymat préservé)
                   </h3>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16 }}>
-                    <div className="card" style={{ background: "rgba(59,130,246,0.1)", borderColor: "rgba(59,130,246,0.2)" }}>
-                      <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 4 }}>Éligibles (Quota)</p>
-                      <p style={{ fontSize: 24, fontWeight: 700, color: "#93c5fd" }}>{stats.activationFunnel.eligible}</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+                    <div className="card" style={{ background: "var(--surface)", border: "1px solid var(--border)", borderColor: "var(--border)" }}>
+                      <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 4 }}>Éligibles (Quota)</p>
+                      <p style={{ fontSize: 24, fontWeight: 700, color: "var(--primary)" }}>{stats.activationFunnel.eligible}</p>
                     </div>
                     <div className="card">
-                      <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 4 }}>Inscrits (Comptes Créés)</p>
-                      <p style={{ fontSize: 24, fontWeight: 700, color: "#f8fafc" }}>{stats.activationFunnel.activated}</p>
-                      <div style={{ width: "100%", background: "rgba(255,255,255,0.1)", height: 4, borderRadius: 2, marginTop: 8 }}>
-                        <div style={{ width: `${stats.activationFunnel.eligible ? (stats.activationFunnel.activated / stats.activationFunnel.eligible) * 100 : 0}%`, background: "#3b82f6", height: "100%", borderRadius: 2 }} />
+                      <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 4 }}>Inscrits (Comptes Créés)</p>
+                      <p style={{ fontSize: 24, fontWeight: 700, color: "var(--text-1)" }}>{stats.activationFunnel.activated}</p>
+                      <div style={{ width: "100%", background: "var(--bg)", height: 4, borderRadius: 2, marginTop: 8 }}>
+                        <div style={{ width: `${stats.activationFunnel.eligible ? (stats.activationFunnel.activated / stats.activationFunnel.eligible) * 100 : 0}%`, background: "var(--primary)", height: "100%", borderRadius: 2 }} />
                       </div>
                     </div>
                     <div className="card">
-                      <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 4 }}>Questionnaires Commencés</p>
-                      <p style={{ fontSize: 24, fontWeight: 700, color: "#f8fafc" }}>{stats.activationFunnel.started}</p>
-                      <div style={{ width: "100%", background: "rgba(255,255,255,0.1)", height: 4, borderRadius: 2, marginTop: 8 }}>
-                        <div style={{ width: `${stats.activationFunnel.activated ? (stats.activationFunnel.started / stats.activationFunnel.activated) * 100 : 0}%`, background: "#8b5cf6", height: "100%", borderRadius: 2 }} />
+                      <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 4 }}>Questionnaires Commencés</p>
+                      <p style={{ fontSize: 24, fontWeight: 700, color: "var(--text-1)" }}>{stats.activationFunnel.started}</p>
+                      <div style={{ width: "100%", background: "var(--bg)", height: 4, borderRadius: 2, marginTop: 8 }}>
+                        <div style={{ width: `${stats.activationFunnel.activated ? (stats.activationFunnel.started / stats.activationFunnel.activated) * 100 : 0}%`, background: "var(--primary)", height: "100%", borderRadius: 2 }} />
                       </div>
                     </div>
                     <div className="card">
-                      <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 4 }}>Questionnaires Complétés</p>
-                      <p style={{ fontSize: 24, fontWeight: 700, color: "#f8fafc" }}>{stats.activationFunnel.completed}</p>
-                      <div style={{ width: "100%", background: "rgba(255,255,255,0.1)", height: 4, borderRadius: 2, marginTop: 8 }}>
-                        <div style={{ width: `${stats.activationFunnel.started ? (stats.activationFunnel.completed / stats.activationFunnel.started) * 100 : 0}%`, background: "#10b981", height: "100%", borderRadius: 2 }} />
+                      <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 4 }}>Questionnaires Complétés</p>
+                      <p style={{ fontSize: 24, fontWeight: 700, color: "var(--text-1)" }}>{stats.activationFunnel.completed}</p>
+                      <div style={{ width: "100%", background: "var(--bg)", height: 4, borderRadius: 2, marginTop: 8 }}>
+                        <div style={{ width: `${stats.activationFunnel.started ? (stats.activationFunnel.completed / stats.activationFunnel.started) * 100 : 0}%`, background: "var(--emerald)", height: "100%", borderRadius: 2 }} />
                       </div>
                     </div>
                   </div>
@@ -208,41 +195,41 @@ export default function B2B2CDashboard() {
               )}
 
               {stats?.anonymityBlocked ? (
-                <div style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: 16, padding: 32, textAlign: "center" }}>
+                <div style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: 16, padding: 20, textAlign: "center" }}>
                   <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
                   <h2 style={{ color: "#f59e0b", fontWeight: 700, fontSize: 20, marginBottom: 8 }}>Données non disponibles — Anonymat protégé</h2>
-                  <p style={{ color: "#94a3b8", maxWidth: 500, margin: "0 auto", lineHeight: 1.6 }}>{stats.message}</p>
+                  <p style={{ color: "var(--text-2)", maxWidth: 500, margin: "0 auto", lineHeight: 1.6 }}>{stats.message}</p>
                 </div>
               ) : stats?.averages ? (
                 <>
                   {activeTab === "barometre" && (
                     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                      
+
                       {/* Top KPIs */}
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
-                        <div className="card" style={{ display: "flex", alignItems: "center", gap: 20, background: "linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(124,58,237,0.05) 100%)", borderColor: "rgba(16,185,129,0.2)", position: "relative" }}>
+                        <div className="card" style={{ display: "flex", alignItems: "center", gap: 20, background: "linear-gradient(135deg, rgba(0,169,157,0.1) 0%, rgba(89,101,232,0.05) 100%)", border: "1px solid var(--border)", borderColor: "rgba(0,169,157,0.2)", position: "relative" }}>
                           <div style={{ position: "absolute", top: 12, right: 12 }}>
                             <span className="badge badge-emerald" style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 8px", fontSize: 10 }}>
                               <ShieldAlert size={10} /> Anonymat garanti
                             </span>
                           </div>
-                          <div style={{ background: "rgba(16,185,129,0.2)", padding: 12, borderRadius: 12 }}><Users size={24} color="#34d399" /></div>
+                          <div style={{ background: "rgba(0,169,157,0.2)", padding: 12, borderRadius: 12 }}><Users size={24} color="var(--primary)" /></div>
                           <div>
-                            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 4 }}>Bénéficiaires analysés</p>
-                            <p style={{ fontSize: 32, fontWeight: 800, color: "#f8fafc", lineHeight: 1 }}>{stats.respondentCount}</p>
+                            <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 4 }}>Bénéficiaires analysés</p>
+                            <p style={{ fontSize: 32, fontWeight: 800, color: "var(--text-1)", lineHeight: 1 }}>{stats.respondentCount}</p>
                           </div>
                         </div>
                         <div className="card" style={{ display: "flex", alignItems: "center", gap: 20 }}>
-                          <div style={{ background: "rgba(124,58,237,0.15)", padding: 12, borderRadius: 12 }}><HeartPulse size={24} color="#a78bfa" /></div>
+                          <div style={{ background: "rgba(89,101,232,0.15)", padding: 12, borderRadius: 12 }}><HeartPulse size={24} color="#5965E8" /></div>
                           <div>
-                            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 4 }}>Score IQRH Global</p>
-                            <p style={{ fontSize: 32, fontWeight: 800, color: scoreColor, lineHeight: 1 }}>{globalScore}<span style={{ fontSize: 16, color: "#475569" }}>/100</span></p>
+                            <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 4 }}>Score IQRH Global</p>
+                            <p style={{ fontSize: 32, fontWeight: 800, color: scoreColor, lineHeight: 1 }}>{globalScore}<span style={{ fontSize: 16, color: "var(--text-3)" }}>/100</span></p>
                           </div>
                         </div>
                         <div className="card" style={{ display: "flex", alignItems: "center", gap: 20 }}>
                           <div style={{ background: "rgba(244,63,94,0.15)", padding: 12, borderRadius: 12 }}><AlertCircle size={24} color="#f43f5e" /></div>
                           <div>
-                            <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 4 }}>Bénéficiaires à Risque Élevé</p>
+                            <p style={{ color: "var(--text-2)", fontSize: 13, marginBottom: 4 }}>Bénéficiaires à Risque Élevé</p>
                             <p style={{ fontSize: 32, fontWeight: 800, color: "#f43f5e", lineHeight: 1 }}>{(stats.icrDistribution?.eleve || 0) + (stats.icrDistribution?.critique || 0)}</p>
                           </div>
                         </div>
@@ -251,14 +238,14 @@ export default function B2B2CDashboard() {
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
                         {/* Radar */}
                         <div className="card">
-                          <h3 style={{ color: "#f8fafc", fontWeight: 600, marginBottom: 16, fontSize: 15, display: "flex", alignItems: "center", gap: 8 }}>
-                            <BarChart3 size={16} color="#34d399" /> Radar de Cohorte
+                          <h3 style={{ color: "var(--text-1)", fontWeight: 600, marginBottom: 16, fontSize: 15, display: "flex", alignItems: "center", gap: 8 }}>
+                            <BarChart3 size={16} color="var(--primary)" /> Radar de Cohorte
                           </h3>
                           <div style={{ height: 300 }}>
                             <ResponsiveContainer width="100%" height="100%">
                               <RadarChart data={radarData}>
-                                <PolarGrid stroke="rgba(255,255,255,0.06)" />
-                                <PolarAngleAxis dataKey="dimension" tick={{ fontSize: 11, fill: "#64748b" }} />
+                                <PolarGrid stroke="var(--border)" />
+                                <PolarAngleAxis dataKey="dimension" tick={{ fontSize: 11, fill: "var(--text-3)" }} />
                                 <Radar dataKey="score" stroke="#34d399" fill="#34d399" fillOpacity={0.25} />
                               </RadarChart>
                             </ResponsiveContainer>
@@ -267,16 +254,16 @@ export default function B2B2CDashboard() {
 
                         {/* Orientations Funnel */}
                         <div className="card">
-                          <h3 style={{ color: "#f8fafc", fontWeight: 600, marginBottom: 16, fontSize: 15, display: "flex", alignItems: "center", gap: 8 }}>
-                            <LineChart size={16} color="#06b6d4" /> Entonnoir de Prévention (Orientations)
+                          <h3 style={{ color: "var(--text-1)", fontWeight: 600, marginBottom: 16, fontSize: 15, display: "flex", alignItems: "center", gap: 8 }}>
+                            <LineChart size={16} color="var(--primary)" /> Entonnoir de Prévention (Orientations)
                           </h3>
-                          <p style={{ fontSize: 12, color: "#64748b", marginBottom: 20 }}>Besoins de prévention primaires détectés pour ré-orientation vers vos services de soins.</p>
+                          <p style={{ fontSize: 12, color: "var(--text-3)", marginBottom: 20 }}>Besoins de prévention primaires détectés pour ré-orientation vers vos services de soins.</p>
                           <div style={{ height: 260 }}>
                             <ResponsiveContainer width="100%" height="100%">
                               <BarChart data={orientationsData} layout="vertical">
                                 <XAxis type="number" hide />
-                                <YAxis type="category" dataKey="name" tick={{ fontSize: 12, fill: "#94a3b8" }} width={160} axisLine={false} tickLine={false} />
-                                <Tooltip cursor={{ fill: "rgba(255,255,255,0.02)" }} contentStyle={{ background: "#111827", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8 }} />
+                                <YAxis type="category" dataKey="name" tick={{ fontSize: 12, fill: "var(--text-2)" }} width={160} axisLine={false} tickLine={false} />
+                                <Tooltip cursor={{ fill: "var(--bg)" }} contentStyle={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8 }} />
                                 <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={24}>
                                   {orientationsData.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -291,7 +278,7 @@ export default function B2B2CDashboard() {
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
                         {/* ICR */}
                         <div className="card">
-                          <h3 style={{ color: "#f8fafc", fontWeight: 600, marginBottom: 16, fontSize: 15 }}>Charge Relationnelle (Indice ICR)</h3>
+                          <h3 style={{ color: "var(--text-1)", fontWeight: 600, marginBottom: 16, fontSize: 15 }}>Charge Relationnelle (Indice ICR)</h3>
                           {icrData.length > 0 ? (
                             <div style={{ height: 300 }}>
                               <ResponsiveContainer width="100%" height="100%">
@@ -299,24 +286,24 @@ export default function B2B2CDashboard() {
                                   <Pie data={icrData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} labelLine={false} label={({ name, percent }: any) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}>
                                     {icrData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                                   </Pie>
-                                  <Tooltip contentStyle={{ background: "#111827", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8 }} />
-                                  <Legend verticalAlign="bottom" height={36}/>
+                                  <Tooltip contentStyle={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                                  <Legend verticalAlign="bottom" height={36} />
                                 </PieChart>
                               </ResponsiveContainer>
                             </div>
-                          ) : <p style={{ color: "#475569", fontSize: 13 }}>Aucune donnée ICR.</p>}
+                          ) : <p style={{ color: "var(--text-3)", fontSize: 13 }}>Aucune donnée ICR.</p>}
                         </div>
 
                         {/* Météo */}
                         {weatherData.length > 0 ? (
                           <div className="card">
-                            <h3 style={{ color: "#f8fafc", fontWeight: 600, marginBottom: 16, fontSize: 15 }}>Distribution Météo Relationnelle</h3>
+                            <h3 style={{ color: "var(--text-1)", fontWeight: 600, marginBottom: 16, fontSize: 15 }}>Distribution Météo Relationnelle</h3>
                             <div style={{ height: 300 }}>
                               <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={weatherData} layout="vertical">
-                                  <XAxis type="number" tick={{ fontSize: 11, fill: "#64748b" }} />
-                                  <YAxis type="category" dataKey="label" tick={{ fontSize: 12, fill: "#94a3b8" }} width={140} />
-                                  <Tooltip contentStyle={{ background: "#111827", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8 }} />
+                                  <XAxis type="number" tick={{ fontSize: 11, fill: "var(--text-3)" }} />
+                                  <YAxis type="category" dataKey="label" tick={{ fontSize: 12, fill: "var(--text-2)" }} width={140} />
+                                  <Tooltip contentStyle={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8 }} />
                                   <Bar dataKey="count" fill="#34d399" radius={[0, 4, 4, 0]} />
                                 </BarChart>
                               </ResponsiveContainer>
@@ -324,8 +311,8 @@ export default function B2B2CDashboard() {
                           </div>
                         ) : (
                           <div className="card">
-                            <h3 style={{ color: "#f8fafc", fontWeight: 600, marginBottom: 16, fontSize: 15 }}>Distribution Météo Relationnelle</h3>
-                            <p style={{ color: "#475569", fontSize: 13 }}>Aucune donnée Météo.</p>
+                            <h3 style={{ color: "var(--text-1)", fontWeight: 600, marginBottom: 16, fontSize: 15 }}>Distribution Météo Relationnelle</h3>
+                            <p style={{ color: "var(--text-3)", fontSize: 13 }}>Aucune donnée Météo.</p>
                           </div>
                         )}
                       </div>
@@ -334,10 +321,10 @@ export default function B2B2CDashboard() {
 
                   {activeTab === "risques" && (
                     <>
-                      <div style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.2)", borderRadius: 12, padding: "16px 20px", marginBottom: 24, display: "flex", gap: 12, alignItems: "flex-start" }}>
-                        <AlertTriangle size={20} color="#34d399" style={{ flexShrink: 0, marginTop: 2 }} />
-                        <p style={{ color: "#cbd5e1", fontSize: 14, lineHeight: 1.6, margin: 0 }}>
-                          <strong style={{ color: "#f8fafc" }}>À quoi servent ces données ?</strong> Les facteurs de risque et de protection sont issus de l'Indice de Complexité Relationnelle (ICR). Ils vous permettent d'identifier les causes profondes du mal-être ou du bien-être des bénéficiaires, afin d'orienter précisément vos <strong>Plans de Prévention</strong> (ex: déploiement de cellules d'écoute, partenariats spécifiques).
+                      <div style={{ background: "rgba(0,169,157,0.1)", border: "1px solid rgba(0,169,157,0.2)", borderRadius: 12, padding: "16px 20px", marginBottom: 24, display: "flex", gap: 12, alignItems: "flex-start" }}>
+                        <AlertTriangle size={20} color="var(--primary)" style={{ flexShrink: 0, marginTop: 2 }} />
+                        <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.6, margin: 0 }}>
+                          <strong style={{ color: "var(--text-1)" }}>À quoi servent ces données ?</strong> Les facteurs de risque et de protection sont issus de l'Indice de Complexité Relationnelle (ICR). Ils vous permettent d'identifier les causes profondes du mal-être ou du bien-être des bénéficiaires, afin d'orienter précisément vos <strong>Plans de Prévention</strong> (ex: déploiement de cellules d'écoute, partenariats spécifiques).
                         </p>
                       </div>
 
@@ -345,13 +332,13 @@ export default function B2B2CDashboard() {
                         <div className="card">
                           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
                             <TrendingDown size={18} style={{ color: "#f43f5e" }} />
-                            <h3 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15 }}>Top Facteurs de Risque (Vulnérabilités)</h3>
+                            <h3 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 15 }}>Top Facteurs de Risque (Vulnérabilités)</h3>
                           </div>
                           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                             {(stats.topRiskFactors ?? []).slice(0, 8).map((f, i) => (
                               <div key={i}>
                                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                                  <span style={{ color: "#94a3b8", fontSize: 13 }}>{f.label}</span>
+                                  <span style={{ color: "var(--text-2)", fontSize: 13 }}>{f.label}</span>
                                   <span style={{ color: "#f43f5e", fontSize: 12, fontWeight: 600 }}>{f.pct}%</span>
                                 </div>
                                 <div className="progress-bar">
@@ -364,38 +351,38 @@ export default function B2B2CDashboard() {
 
                         <div className="card">
                           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-                            <TrendingUp size={18} style={{ color: "#34d399" }} />
-                            <h3 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15 }}>Top Facteurs Protecteurs (Forces)</h3>
+                            <TrendingUp size={18} style={{ color: "var(--primary)" }} />
+                            <h3 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 15 }}>Top Facteurs Protecteurs (Forces)</h3>
                           </div>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                          {(stats.topProtectiveFactors ?? []).slice(0, 8).map((f, i) => (
-                            <div key={i}>
-                              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                                <span style={{ color: "#94a3b8", fontSize: 13 }}>{f.label}</span>
-                                <span style={{ color: "#34d399", fontSize: 12, fontWeight: 600 }}>{f.pct}%</span>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                            {(stats.topProtectiveFactors ?? []).slice(0, 8).map((f, i) => (
+                              <div key={i}>
+                                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                                  <span style={{ color: "var(--text-2)", fontSize: 13 }}>{f.label}</span>
+                                  <span style={{ color: "var(--primary)", fontSize: 12, fontWeight: 600 }}>{f.pct}%</span>
+                                </div>
+                                <div className="progress-bar">
+                                  <div className="progress-fill" style={{ width: `${f.pct}%`, background: "#34d399" }} />
+                                </div>
                               </div>
-                              <div className="progress-bar">
-                                <div className="progress-fill" style={{ width: `${f.pct}%`, background: "#34d399" }} />
-                              </div>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="card" style={{ gridColumn: "span 2" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-                          <Users size={18} style={{ color: "#a78bfa" }} />
-                          <h3 style={{ color: "#f8fafc", fontWeight: 600, fontSize: 15 }}>Besoins Dominants des Bénéficiaires</h3>
+                        <div className="card" style={{ gridColumn: "span 2" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+                            <Users size={18} style={{ color: "var(--primary)" }} />
+                            <h3 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 15 }}>Besoins Dominants des Bénéficiaires</h3>
+                          </div>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                            {(stats.topDominantNeeds ?? []).map((n, i) => (
+                              <div key={i} style={{ background: "rgba(89,101,232,0.1)", border: "1px solid rgba(89,101,232,0.2)", borderRadius: 10, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
+                                <span style={{ color: "var(--primary)", fontSize: 13, fontWeight: 500 }}>{n.label}</span>
+                                <span className="badge badge-violet">{n.pct}%</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-                          {(stats.topDominantNeeds ?? []).map((n, i) => (
-                            <div key={i} style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)", borderRadius: 10, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
-                              <span style={{ color: "#a78bfa", fontSize: 13, fontWeight: 500 }}>{n.label}</span>
-                              <span className="badge badge-violet">{n.pct}%</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
                       </div>
                     </>
                   )}

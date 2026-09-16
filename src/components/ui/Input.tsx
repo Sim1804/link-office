@@ -74,11 +74,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={id}
             className={clsx(
-              "w-full bg-surface-2 border border-border rounded-xl px-4 py-3 text-text-primary placeholder-text-muted",
-              "focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-200",
-              "hover:border-border-strong",
-              icon && "pl-10",                               // Padding gauche si icône
-              error && "border-accent-rose focus:ring-accent-rose/50", // Bordure rouge si erreur
+              "input-field",
+              icon && "has-icon",
+              error && "is-error",
               className
             )}
             {...rest}

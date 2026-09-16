@@ -7,8 +7,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const GET_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "SUPER_ADMIN"];
-const POST_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "SUPER_ADMIN"];
+const GET_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
+const POST_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
 
 export async function GET() {
   try {
@@ -19,7 +19,20 @@ export async function GET() {
     }
 
     const user = await prisma.user.findUnique({ where: { id: session.user.id } });
-    if (!user?.organizationId) return NextResponse.json({ error: "Aucune organisation associee" }, { status: 400 });
+    if (!user) return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
+
+    if (user.role === "SUPER_ADMIN") {
+      const campaigns = await prisma.campaign.findMany({
+        orderBy: { startDate: "desc" },
+        include: {
+          _count: { select: { assessments: true, users: true, invites: true } },
+          snapshot: { select: { createdAt: true } },
+        },
+      });
+      return NextResponse.json({ campaigns });
+    }
+
+    if (!user.organizationId) return NextResponse.json({ error: "Aucune organisation associee" }, { status: 400 });
 
     const campaigns = await prisma.campaign.findMany({
       where: { organizationId: user.organizationId },
@@ -46,9 +59,23 @@ export async function POST(request: Request) {
     }
 
     const user = await prisma.user.findUnique({ where: { id: session.user.id } });
-    if (!user?.organizationId) return NextResponse.json({ error: "Aucune organisation associee" }, { status: 400 });
-
     const data = await request.json();
+    
+    // Si c'est un SUPER_ADMIN sans orga, ou qu'il veut créer pour une autre orga, on prend data.organizationId si fourni
+    let orgId = user?.organizationId || data.organizationId;
+    if (!orgId) {
+      if (user?.role === "SUPER_ADMIN") {
+        const defaultOrg = await prisma.organization.findFirst();
+        if (defaultOrg) {
+          orgId = defaultOrg.id;
+        } else {
+          return NextResponse.json({ error: "Aucune organisation disponible dans la base pour lier cette campagne." }, { status: 400 });
+        }
+      } else {
+        return NextResponse.json({ error: "Aucune organisation associee" }, { status: 400 });
+      }
+    }
+
     if (!data.title || !data.startDate || !data.endDate) {
       return NextResponse.json({ error: "Champs manquants: title, startDate, endDate" }, { status: 400 });
     }
@@ -67,7 +94,7 @@ export async function POST(request: Request) {
         targetPopulation: data.targetPopulation ? parseInt(data.targetPopulation) : null,
         offer,
         status: data.status ?? "DRAFT",
-        organizationId: user.organizationId,
+        organizationId: orgId,
         parentCampaignId: data.parentCampaignId ?? null,
         questionnaireConfig: { hiddenDemographics: [], allowedSituations: null },
       },

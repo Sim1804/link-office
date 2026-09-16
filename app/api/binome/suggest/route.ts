@@ -11,10 +11,9 @@ export async function GET() {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
-    // [BUG FIX] Bloquer MEMBER et CITIZEN — spec §11
     if (!BINOME_ALLOWED_ROLES.includes(session.user.role)) {
       return NextResponse.json(
-        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium+.", code: "ROLE_NOT_ALLOWED" },
+        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium/Premium+.", code: "ROLE_NOT_ALLOWED" },
         { status: 403 }
       );
     }
@@ -26,6 +25,7 @@ export async function GET() {
       select: {
         matchingOptIn: true,
         campaignId: true,
+        binomePreference: { select: { optIn: true } },
         assessments: {
           where: { status: "SUBMITTED" },
           orderBy: { submittedAt: "desc" },
@@ -35,25 +35,27 @@ export async function GET() {
       }
     });
 
-    if (!user || !user.matchingOptIn) {
+    // Accept either User.matchingOptIn or BinomePreference.optIn
+    const isOptedIn = user?.matchingOptIn || user?.binomePreference?.optIn;
+    if (!user || !isOptedIn) {
       return NextResponse.json({ error: "Opt-in requis" }, { status: 400 });
     }
 
-    // GUARD: Binome uniquement pour les campagnes PREMIUM+
+    // GUARD: Si l'utilisateur est dans une campagne, elle doit être PREMIUM+
     if (user.campaignId) {
       const campaign = await prisma.campaign.findUnique({
         where: { id: user.campaignId },
         select: { offer: true, status: true },
       });
-      if (!campaign || campaign.offer !== "PREMIUM_PLUS") {
+      if (!campaign || (campaign.offer !== "PREMIUM_PLUS" && campaign.offer !== "PREMIUM")) {
         return NextResponse.json({
-          error: "Le module Binome Relationnel est reserve aux campagnes PREMIUM+.",
+          error: "Le module Binôme Relationnel est réservé aux campagnes PREMIUM ou PREMIUM+.",
           code: "PREMIUM_PLUS_REQUIRED",
         }, { status: 403 });
       }
       if (campaign.status !== "ACTIVE") {
         return NextResponse.json({
-          error: "La campagne n est pas active.",
+          error: "La campagne n'est pas active.",
           code: "CAMPAIGN_INACTIVE",
         }, { status: 403 });
       }
@@ -61,27 +63,32 @@ export async function GET() {
 
     const userResult = user.assessments[0]?.result;
 
-    // Retrieve excluded users (already in pending or accepted pair with this user)
+    // Exclure les utilisateurs déjà en binôme ou suggestion active
     const existingPairs = await prisma.binome.findMany({
       where: {
-        OR: [
-          { userAId: userId },
-          { userBId: userId }
-        ],
+        OR: [{ userAId: userId }, { userBId: userId }],
         NOT: { status: "CLOSED" }
       }
     });
+    const existingSuggestions = await prisma.binomeSuggestion.findMany({
+      where: {
+        OR: [{ userAId: userId }, { userBId: userId }],
+        NOT: { status: "REJECTED" }
+      }
+    });
 
-    const excludedIds = existingPairs.flatMap(p => [p.userAId, p.userBId]);
-    excludedIds.push(userId); // Exclude self
+    const excludedIds = new Set<string>([userId]);
+    existingPairs.forEach(p => { excludedIds.add(p.userAId); excludedIds.add(p.userBId); });
+    existingSuggestions.forEach(s => { excludedIds.add(s.userAId); excludedIds.add(s.userBId); });
 
-    // Find candidates in the same campaign who opted in
+    // Candidats dans la même campagne (ou sans campagne si l'utilisateur n'en a pas)
     const candidates = await prisma.user.findMany({
       where: {
-        id: { notIn: excludedIds },
+        id: { notIn: Array.from(excludedIds) },
         matchingOptIn: true,
-        campaignId: user.campaignId,
         role: { in: BINOME_ALLOWED_ROLES as any },
+        // Si l'utilisateur est dans une campagne, restreindre aux membres de la même campagne
+        ...(user.campaignId ? { campaignId: user.campaignId } : {}),
       },
       include: {
         assessments: {
@@ -94,9 +101,8 @@ export async function GET() {
       take: 20
     });
 
-    // Simple matching algorithm simulating IRIS
+    // Algorithme de matching par complémentarité
     const suggestions = [];
-
     for (const candidate of candidates) {
       const cResult = candidate.assessments[0]?.result;
       if (!cResult) continue;
@@ -104,19 +110,19 @@ export async function GET() {
       let rationale = "IRIS a identifié une bonne complémentarité globale entre vos profils respectifs.";
 
       if (userResult) {
-        if (userResult.priorityDimension === cResult.priorityDimension) {
-          rationale = `Vous partagez un objectif commun de développement sur la dimension ${userResult.priorityDimension}.`;
-        } else if (userResult.weakDimension === cResult.bestDimension) {
-          rationale = `Ce partenaire excelle dans des domaines que vous cherchez à améliorer. Une excellente opportunité d'apprentissage mutuel !`;
-        } else if (Math.abs(userResult.globalScore - cResult.globalScore) < 10) {
-          rationale = "Vos scores globaux d'équilibre sont très proches, ce qui vous permettra d'évoluer à un rythme similaire.";
+        if (userResult.weakDimension === cResult.bestDimension) {
+          rationale = `Ce partenaire excelle là où vous progressez — une opportunité d'apprentissage mutuel sur la dimension ${cResult.bestDimension?.toLowerCase() ?? ""}.`;
+        } else if (userResult.priorityDimension === cResult.priorityDimension) {
+          rationale = `Vous partagez le même objectif de développement relationnel. Une progression commune est idéale.`;
+        } else if (Math.abs((userResult.globalScore ?? 0) - (cResult.globalScore ?? 0)) < 10) {
+          rationale = "Vos scores d'équilibre sont très proches — vous évoluerez à un rythme similaire.";
         }
       }
 
       suggestions.push({
         id: candidate.id,
         firstName: candidate.firstName,
-        rationale
+        rationale,
       });
 
       if (suggestions.length >= 3) break;

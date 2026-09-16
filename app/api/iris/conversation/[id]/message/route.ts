@@ -150,7 +150,6 @@ export async function POST(
       model: groq("openai/gpt-oss-20b"),
       system: systemPrompt,
       messages: chatMessages,
-      maxSteps: 2, // Allow the LLM to read the tool result and generate a final response
       toolChoice: "auto", // IRIS choisit librement d'utiliser ou non l'outil
       tools: {
         /**

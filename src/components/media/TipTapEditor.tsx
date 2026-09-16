@@ -16,8 +16,8 @@ const MenuBar = ({ editor }: { editor: any }) => {
 
   return (
     <div style={{ 
-      display: "flex", gap: 8, padding: "8px 12px", flexWrap: "wrap",
-      borderBottom: "1px solid rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.2)" 
+      padding: "8px", display: "flex", flexWrap: "wrap", gap: "8px", 
+      borderBottom: "1px solid var(--border)", background: "var(--surface-2)" 
     }}>
       <button
         type="button"
@@ -25,7 +25,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
         disabled={!editor.can().chain().focus().toggleBold().run()}
         style={{ 
           background: editor.isActive('bold') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('bold') ? "#c084fc" : "#94a3b8",
+          color: editor.isActive('bold') ? "#c084fc" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -37,21 +37,21 @@ const MenuBar = ({ editor }: { editor: any }) => {
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         style={{ 
           background: editor.isActive('italic') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('italic') ? "#c084fc" : "#94a3b8",
+          color: editor.isActive('italic') ? "#c084fc" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
         <Italic size={16} />
       </button>
 
-      <div style={{ width: 1, background: "rgba(255,255,255,0.1)", margin: "0 4px" }} />
+      <div style={{ width: 1, background: "var(--border)", margin: "0 4px" }} />
 
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         style={{ 
           background: editor.isActive('heading', { level: 2 }) ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('heading', { level: 2 }) ? "#c084fc" : "#94a3b8",
+          color: editor.isActive('heading', { level: 2 }) ? "#c084fc" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -62,21 +62,21 @@ const MenuBar = ({ editor }: { editor: any }) => {
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         style={{ 
           background: editor.isActive('heading', { level: 3 }) ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('heading', { level: 3 }) ? "#c084fc" : "#94a3b8",
+          color: editor.isActive('heading', { level: 3 }) ? "#c084fc" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
         <Heading3 size={16} />
       </button>
 
-      <div style={{ width: 1, background: "rgba(255,255,255,0.1)", margin: "0 4px" }} />
+      <div style={{ width: 1, background: "var(--border)", margin: "0 4px" }} />
 
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         style={{ 
           background: editor.isActive('bulletList') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('bulletList') ? "#c084fc" : "#94a3b8",
+          color: editor.isActive('bulletList') ? "#c084fc" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -87,7 +87,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         style={{ 
           background: editor.isActive('orderedList') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('orderedList') ? "#c084fc" : "#94a3b8",
+          color: editor.isActive('orderedList') ? "#c084fc" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -98,20 +98,20 @@ const MenuBar = ({ editor }: { editor: any }) => {
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         style={{ 
           background: editor.isActive('blockquote') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('blockquote') ? "#c084fc" : "#94a3b8",
+          color: editor.isActive('blockquote') ? "#c084fc" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
         <Quote size={16} />
       </button>
 
-      <div style={{ width: 1, background: "rgba(255,255,255,0.1)", margin: "0 4px", marginLeft: "auto" }} />
+      <div style={{ width: 1, background: "var(--border)", margin: "0 4px", marginLeft: "auto" }} />
 
       <button
         type="button"
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().chain().focus().undo().run()}
-        style={{ background: "transparent", color: "#64748b", border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center" }}
+        style={{ background: "transparent", color: "var(--text-2)", border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center" }}
       >
         <Undo size={16} />
       </button>
@@ -119,7 +119,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
         type="button"
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().chain().focus().redo().run()}
-        style={{ background: "transparent", color: "#64748b", border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center" }}
+        style={{ background: "transparent", color: "var(--text-2)", border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center" }}
       >
         <Redo size={16} />
       </button>
@@ -139,17 +139,17 @@ export function TipTapEditor({ content, onChange }: TipTapEditorProps) {
     editorProps: {
       attributes: {
         class: 'tiptap-editor-content',
-        style: 'padding: 16px; min-height: 200px; color: #f8fafc; font-size: 15px; outline: none; line-height: 1.6;'
+        style: 'padding: 16px; min-height: 200px; color: var(--text-1); font-size: 15px; outline: none; line-height: 1.6;'
       }
     }
   })
 
   return (
     <div style={{ 
-      border: "1px solid rgba(255,255,255,0.1)", 
+      border: "1px solid var(--border)", 
       borderRadius: 12, 
       overflow: "hidden",
-      background: "rgba(15,23,42,0.6)"
+      background: "var(--surface)"
     }}>
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />

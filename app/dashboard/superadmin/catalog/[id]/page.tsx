@@ -3,9 +3,7 @@ import { redirect } from "next/navigation";
 import { CatalogForm } from "@/components/admin/CatalogForm";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { ArrowLeft, Edit3 } from "lucide-react";
-
-import { Navbar } from "@/components/layout/Navbar";
+import { ArrowLeft } from "lucide-react";
 
 export const metadata = { title: "Éditer au catalogue — LinkOffice" };
 
@@ -31,7 +29,7 @@ export default async function EditCatalogItemPage(props: { params: Promise<{ id:
   return (
     <div style={{ maxWidth: 860, margin: "0 auto", paddingBottom: "40px" }}>
       <div style={{ marginBottom: 24 }}>
-        <Link href="/dashboard/superadmin/catalog" style={{ color: "#94a3b8", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 14 }}>
+        <Link href="/dashboard/superadmin/catalog" style={{ color: "var(--text-2)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 14 }}>
           <ArrowLeft size={16} /> Retour au catalogue
         </Link>
       </div>

@@ -13,67 +13,55 @@ export default function NotFound() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "#0b0f19",
+      background: "var(--bg)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       padding: "40px 24px",
       position: "relative",
       overflow: "hidden",
-      fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
     }}>
-      {/* Glow blobs */}
-      <div style={{ position: "absolute", top: "-15%", right: "-8%", width: 600, height: 600, background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "-15%", left: "-8%", width: 500, height: 500, background: "radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%)", pointerEvents: "none" }} />
+      {/* Glow blobs (subtle light) */}
+      <div style={{ position: "absolute", top: "-15%", right: "-8%", width: 600, height: 600, background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: "-15%", left: "-8%", width: 500, height: 500, background: "radial-gradient(circle, rgba(89,101,232,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
 
       <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 480 }}>
         {/* Logo */}
         <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: 40 }}>
-          <div style={{ width: 40, height: 40, background: "var(--primary, #7c3aed)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 24px rgba(124,58,237,0.4)" }}>
+          <div style={{ width: 40, height: 40, background: "var(--primary)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Brain size={20} color="white" />
           </div>
-          <span style={{ fontWeight: 700, fontSize: 20, color: "#f8fafc" }}>
-            Link<span style={{ background: "linear-gradient(135deg, #7c3aed, #06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Office</span>
+          <span style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 20, color: "var(--text-1)" }}>
+            Link<span style={{ color: "var(--primary)" }}>Office</span>
           </span>
         </Link>
 
         {/* 404 Number */}
         <div style={{
+          fontFamily: "var(--font-family-display)",
           fontSize: 120, fontWeight: 900, lineHeight: 1,
-          background: "linear-gradient(135deg, rgba(124,58,237,0.4) 0%, rgba(6,182,212,0.4) 100%)",
-          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          color: "var(--primary)",
           marginBottom: 24,
           letterSpacing: "-0.04em",
+          opacity: 0.1
         }}>
           404
         </div>
 
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: "#f8fafc", marginBottom: 12 }}>
+        <h1 style={{ fontFamily: "var(--font-family-display)", fontSize: 28, fontWeight: 800, color: "var(--text-1)", marginBottom: 12 }}>
           Page introuvable
         </h1>
-        <p style={{ fontSize: 15, color: "#64748b", lineHeight: 1.6, marginBottom: 36 }}>
+        <p style={{ fontSize: 16, color: "var(--text-2)", lineHeight: 1.6, marginBottom: 36 }}>
           La page que vous recherchez n&apos;existe pas ou a été déplacée.
           Vérifiez l&apos;URL ou retournez à l&apos;accueil.
         </p>
 
         {/* Actions */}
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/" style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "12px 24px", borderRadius: 12,
-            background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
-            color: "white", textDecoration: "none", fontWeight: 600, fontSize: 14,
-            boxShadow: "0 4px 20px rgba(124,58,237,0.3)",
-          }}>
+        <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+          <Link href="/" className="btn btn-primary btn-lg" style={{ textDecoration: "none" }}>
             <Home size={16} /> Retour à l&apos;accueil
           </Link>
-          <Link href="/dashboard" style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "12px 24px", borderRadius: 12,
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.10)",
-            color: "#94a3b8", textDecoration: "none", fontWeight: 600, fontSize: 14,
-          }}>
+          <Link href="/dashboard" className="btn btn-tertiary btn-lg" style={{ textDecoration: "none" }}>
             <Search size={16} /> Mon tableau de bord
           </Link>
         </div>

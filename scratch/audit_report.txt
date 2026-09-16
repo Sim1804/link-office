@@ -1,0 +1,38 @@
+[app\dashboard\superadmin\billing\page.tsx] Missing metadata export in server page/layout.
+[app\dashboard\superadmin\billing\page.tsx] Contains 63 inline styles, consider CSS classes.
+[app\dashboard\superadmin\catalog\modules\[id]\page.tsx] Contains 2 explicit 'any' types.
+[app\dashboard\superadmin\catalog\modules\[id]\page.tsx] Contains 32 inline styles, consider CSS classes.
+[app\dashboard\superadmin\catalog\new\page.tsx] Potentially unused import: BookPlus
+[app\dashboard\superadmin\catalog\page.tsx] Contains 1 explicit 'any' types.
+[app\dashboard\superadmin\catalog\page.tsx] Contains 59 inline styles, consider CSS classes.
+[app\dashboard\superadmin\catalog\page.tsx] Potentially unused import: ArrowLeft
+[app\dashboard\superadmin\catalog\[id]\page.tsx] Potentially unused import: Edit3
+[app\dashboard\superadmin\DashboardClient.tsx] Contains 2 explicit 'any' types.
+[app\dashboard\superadmin\DashboardClient.tsx] Contains 110 inline styles, consider CSS classes.
+[app\dashboard\superadmin\DashboardClient.tsx] Potentially unused import: PlusCircle
+[app\dashboard\superadmin\layout.tsx] Missing metadata export in server page/layout.
+[app\dashboard\superadmin\leads\page.tsx] Contains 1 explicit 'any' types.
+[app\dashboard\superadmin\leads\page.tsx] Contains 70 inline styles, consider CSS classes.
+[app\dashboard\superadmin\media\new\page.tsx] Contains 48 inline styles, consider CSS classes.
+[app\dashboard\superadmin\media\new\page.tsx] Potentially unused import: Image as ImageIcon
+[app\dashboard\superadmin\media\page.tsx] Contains 37 inline styles, consider CSS classes.
+[app\dashboard\superadmin\media\[id]\EditMediaForm.tsx] Contains 1 explicit 'any' types.
+[app\dashboard\superadmin\media\[id]\EditMediaForm.tsx] Contains 48 inline styles, consider CSS classes.
+[app\dashboard\superadmin\media\[id]\EditMediaForm.tsx] Potentially unused import: Image as ImageIcon
+[app\dashboard\superadmin\media\[id]\page.tsx] Missing metadata export in server page/layout.
+[app\dashboard\superadmin\organizations\new\page.tsx] Contains 1 explicit 'any' types.
+[app\dashboard\superadmin\organizations\new\page.tsx] Contains 40 inline styles, consider CSS classes.
+[app\dashboard\superadmin\organizations\page.tsx] Contains 37 inline styles, consider CSS classes.
+[app\dashboard\superadmin\organizations\page.tsx] Potentially unused import: ArrowLeft
+[app\dashboard\superadmin\organizations\[id]\page.tsx] Contains 4 explicit 'any' types.
+[app\dashboard\superadmin\organizations\[id]\page.tsx] Contains 42 inline styles, consider CSS classes.
+[app\dashboard\superadmin\organizations\[id]\page.tsx] Potentially unused import: AlertCircle
+[app\dashboard\superadmin\organizations\[id]\page.tsx] Potentially unused import: CheckCircle2
+[app\dashboard\superadmin\page.tsx] Missing metadata export in server page/layout.
+[app\dashboard\superadmin\users\page.tsx] Contains 1 explicit 'any' types.
+[app\dashboard\superadmin\users\page.tsx] Contains 66 inline styles, consider CSS classes.
+[src\components\superadmin\IrisDrawer.tsx] Contains 34 inline styles, consider CSS classes.
+[src\components\superadmin\IrisDrawer.tsx] Potentially unused import: MessageSquare
+[src\components\admin\CatalogForm.tsx] Contains 4 explicit 'any' types.
+[src\components\admin\CatalogForm.tsx] Contains 68 inline styles, consider CSS classes.
+[src\components\admin\CatalogImportButton.tsx] Contains 2 explicit 'any' types.

@@ -14,7 +14,7 @@ const formatText = (text: string) => {
       <span key={idx}>
         {parts.map((part, i) => {
           if (part.startsWith("**") && part.endsWith("**")) {
-            return <strong key={i} style={{ color: "#f8fafc", fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
+            return <strong key={i} style={{ color: "var(--text-1)", fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
           }
           return <span key={i}>{part}</span>;
         })}
@@ -165,9 +165,9 @@ export function IrisWidget() {
           style={{
             position: "fixed", bottom: 24, right: 24, zIndex: 9999,
             width: 56, height: 56, borderRadius: "50%",
-            background: "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)",
+            background: "linear-gradient(135deg, var(--action) 0%, var(--action) 100%)",
             color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 8px 32px rgba(124, 58, 237, 0.4)",
+            boxShadow: "0 8px 32px rgba(89, 101, 232, 0.3)",
             border: "none", cursor: "pointer", transition: "transform 0.2s",
           }}
         >
@@ -179,40 +179,40 @@ export function IrisWidget() {
       {isOpen && (
         <div style={{
         position: "fixed", top: 64, right: 0, bottom: 0, width: 400, zIndex: 40,
-        background: "rgba(11,15,25,0.95)", backdropFilter: "blur(20px)",
-        borderLeft: "1px solid rgba(124,58,237,0.2)",
+        background: "var(--bg)", backdropFilter: "blur(24px)",
+        borderLeft: "1px solid var(--border)",
         display: "flex", flexDirection: "column",
-        boxShadow: "-10px 0 40px rgba(0,0,0,0.5)",
+        boxShadow: "-10px 0 40px rgba(18,61,70,0.08)",
         transform: isOpen ? "translateX(0)" : "translateX(100%)",
         transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
           {/* HEADER */}
           <div style={{
-            padding: "24px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.08)",
+            padding: "24px 24px 20px", borderBottom: "1px solid var(--border)",
             display: "flex", flexDirection: "column", gap: 20,
-            background: "rgba(124, 58, 237, 0.05)",
+            background: "rgba(89, 101, 232, 0.03)",
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{
-                  width: 36, height: 36, background: "rgba(124, 58, 237, 0.2)", borderRadius: 12,
+                  width: 36, height: 36, background: "rgba(89, 101, 232, 0.1)", borderRadius: 12,
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
-                  <Brain size={20} color="#a855f7" />
+                  <Brain size={20} color="var(--action)" />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, color: "#f8fafc", margin: 0 }}>IRIS</h3>
-                  <p style={{ fontSize: 12, color: "#a78bfa", margin: 0 }}>Coach Relationnel IA</p>
+                  <h3 style={{ fontFamily: "var(--font-family-display)", fontSize: 16, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>IRIS</h3>
+                  <p style={{ fontSize: 12, color: "var(--action)", fontWeight: 600, margin: 0 }}>Coach Relationnel IA</p>
                 </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
                 style={{ 
-                  background: "transparent", border: "none", color: "#94a3b8", 
+                  background: "transparent", border: "none", color: "var(--text-3)", 
                   cursor: "pointer", padding: 8, display: "flex", borderRadius: 8,
                   transition: "background 0.2s"
                 }}
-                onMouseOver={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.05)"}
+                onMouseOver={(e) => e.currentTarget.style.background = "rgba(18,61,70,0.05)"}
                 onMouseOut={(e) => e.currentTarget.style.background = "transparent"}
               >
                 <X size={20} />
@@ -220,14 +220,15 @@ export function IrisWidget() {
             </div>
 
             {/* TABS */}
-            <div style={{ display: "flex", gap: 8, background: "rgba(0,0,0,0.2)", padding: 4, borderRadius: 12 }}>
+            <div style={{ display: "flex", gap: 4, background: "rgba(18,61,70,0.05)", padding: 4, borderRadius: 9999 }}>
               <button
                 onClick={() => handleTabSwitch("coach")}
                 style={{
-                  flex: 1, padding: "8px 0", borderRadius: 8, border: "none", cursor: "pointer",
-                  background: activeTab === "coach" ? "rgba(124,58,237,0.3)" : "transparent",
-                  color: activeTab === "coach" ? "#fff" : "#94a3b8",
-                  fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                  flex: 1, padding: "8px 0", borderRadius: 9999, border: "none", cursor: "pointer", transition: "all 0.2s",
+                  background: activeTab === "coach" ? "var(--surface)" : "transparent",
+                  color: activeTab === "coach" ? "var(--action)" : "var(--text-3)",
+                  boxShadow: activeTab === "coach" ? "0 2px 8px rgba(18,61,70,0.05)" : "none",
+                  fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
                 }}
               >
                 <MessageCircle size={14} /> Coach
@@ -235,10 +236,11 @@ export function IrisWidget() {
               <button
                 onClick={() => handleTabSwitch("explication")}
                 style={{
-                  flex: 1, padding: "8px 0", borderRadius: 8, border: "none", cursor: "pointer",
-                  background: activeTab === "explication" ? "rgba(124,58,237,0.3)" : "transparent",
-                  color: activeTab === "explication" ? "#fff" : "#94a3b8",
-                  fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                  flex: 1, padding: "8px 0", borderRadius: 9999, border: "none", cursor: "pointer", transition: "all 0.2s",
+                  background: activeTab === "explication" ? "var(--surface)" : "transparent",
+                  color: activeTab === "explication" ? "var(--action)" : "var(--text-3)",
+                  boxShadow: activeTab === "explication" ? "0 2px 8px rgba(18,61,70,0.05)" : "none",
+                  fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
                 }}
               >
                 <FileText size={14} /> Analyse
@@ -255,30 +257,23 @@ export function IrisWidget() {
                 {explicationLoading ? (
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, paddingTop: 40, opacity: 0.5 }}>
                     <div style={{ width: 24, height: 24, border: "2px solid #a855f7", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
-                    <span style={{ fontSize: 13, color: "#94a3b8" }}>Analyse en cours...</span>
+                    <span style={{ fontSize: 13, color: "var(--text-3)" }}>Analyse en cours...</span>
                   </div>
                 ) : explication ? (
                   <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    <div style={{ fontSize: 14, color: "#cbd5e1", lineHeight: 1.6 }}>
+                    <div style={{ fontSize: 14, color: "var(--text-1)", lineHeight: 1.6 }}>
                       {formatText(explication)}
                     </div>
                     <button 
                       onClick={() => loadExplication(true)} 
-                      style={{
-                        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                        width: "100%", padding: "10px 0", borderRadius: 12,
-                        background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
-                        color: "#94a3b8", fontSize: 13, fontWeight: 600, cursor: "pointer",
-                        transition: "all 0.2s"
-                      }}
-                      onMouseOver={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#f8fafc"; }}
-                      onMouseOut={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.color = "#94a3b8"; }}
+                      className="btn btn-tertiary btn-md"
+                      style={{ width: "100%" }}
                     >
                       <RefreshCw size={14} /> Actualiser l'analyse
                     </button>
                   </div>
                 ) : (
-                  <button onClick={() => loadExplication(false)} className="btn btn-primary" style={{ width: "100%" }}>
+                  <button onClick={() => loadExplication(false)} className="btn btn-action btn-md" style={{ width: "100%" }}>
                     Obtenir mon analyse IRIS
                   </button>
                 )}
@@ -295,27 +290,27 @@ export function IrisWidget() {
                     flexDirection: msg.sender === "user" ? "row-reverse" : "row"
                   }}>
                     <div style={{
-                      width: 28, height: 28, borderRadius: "50%", flexShrink: 0,
-                      background: msg.sender === "iris" ? "rgba(124,58,237,0.2)" : "rgba(255,255,255,0.1)",
+                      width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
+                      background: msg.sender === "iris" ? "linear-gradient(135deg, var(--action) 0%, var(--action) 100%)" : "var(--border)",
                       display: "flex", alignItems: "center", justifyContent: "center"
                     }}>
-                      {msg.sender === "iris" ? <Brain size={14} color="#a855f7" /> : <User size={14} color="#cbd5e1" />}
+                      {msg.sender === "iris" ? <Brain size={16} color="white" /> : <User size={16} color="var(--text-2)" />}
                     </div>
                     
                     <div style={{
-                      background: msg.sender === "user" ? "#7c3aed" : "rgba(30, 41, 59, 0.8)",
-                      border: msg.sender === "iris" ? "1px solid rgba(255,255,255,0.05)" : "none",
-                      padding: "10px 14px", borderRadius: 16,
-                      borderTopLeftRadius: msg.sender === "iris" ? 4 : 16,
-                      borderTopRightRadius: msg.sender === "user" ? 4 : 16,
-                      fontSize: 13, color: "#f8fafc", lineHeight: 1.5,
+                      background: msg.sender === "user" ? "var(--surface)" : "rgba(89, 101, 232, 0.08)",
+                      border: msg.sender === "user" ? "1px solid var(--border)" : "none",
+                      padding: "12px 16px", borderRadius: 18,
+                      borderTopLeftRadius: msg.sender === "iris" ? 4 : 18,
+                      borderTopRightRadius: msg.sender === "user" ? 4 : 18,
+                      fontSize: 14, color: "var(--text-1)", lineHeight: 1.6,
                       maxWidth: "85%",
                     }}>
                       {formatText(msg.text)}
                       
                       {msg.isPremiumCTA && (
                         <div style={{ marginTop: 12 }}>
-                          <button className="btn btn-primary" style={{ width: "100%", padding: "6px 0", fontSize: 12 }}>
+                          <button className="btn btn-primary" style={{ width: "100%", padding: "6px 0", fontSize: 12, borderRadius: 999 }}>
                             Découvrir Premium
                           </button>
                         </div>
@@ -326,13 +321,13 @@ export function IrisWidget() {
                 
                 {loading && (
                    <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                     <div style={{ width: 28, height: 28, background: "rgba(124,58,237,0.2)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Brain size={14} color="#a855f7" />
+                     <div style={{ width: 28, height: 28, background: "linear-gradient(135deg, var(--action) 0%, var(--action) 100%)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Brain size={14} color="white" />
                      </div>
-                     <div style={{ background: "rgba(30, 41, 59, 0.8)", padding: "12px 16px", borderRadius: 16, borderTopLeftRadius: 4, display: "flex", gap: 4 }}>
-                       <span style={{ width: 6, height: 6, background: "#a855f7", borderRadius: "50%", animation: "pulse 1.5s infinite" }} />
-                       <span style={{ width: 6, height: 6, background: "#a855f7", borderRadius: "50%", animation: "pulse 1.5s infinite 0.2s" }} />
-                       <span style={{ width: 6, height: 6, background: "#a855f7", borderRadius: "50%", animation: "pulse 1.5s infinite 0.4s" }} />
+                     <div style={{ background: "rgba(89, 101, 232, 0.08)", padding: "12px 16px", borderRadius: 16, borderTopLeftRadius: 4, display: "flex", gap: 4 }}>
+                       <span style={{ width: 6, height: 6, background: "var(--action)", borderRadius: "50%", animation: "pulse 1.5s infinite" }} />
+                       <span style={{ width: 6, height: 6, background: "var(--action)", borderRadius: "50%", animation: "pulse 1.5s infinite 0.2s" }} />
+                       <span style={{ width: 6, height: 6, background: "var(--action)", borderRadius: "50%", animation: "pulse 1.5s infinite 0.4s" }} />
                      </div>
                    </div>
                 )}
@@ -345,8 +340,8 @@ export function IrisWidget() {
           {/* INPUT AREA (Uniquement pour le Coach) */}
           {activeTab === "coach" && (
             <div style={{
-              padding: 16, borderTop: "1px solid rgba(255,255,255,0.08)",
-              background: "rgba(15, 23, 42, 0.95)",
+              padding: 16, borderTop: "1px solid var(--border)",
+              background: "var(--surface)",
             }}>
               <div style={{ display: "flex", gap: 8 }}>
                 <input
@@ -357,18 +352,20 @@ export function IrisWidget() {
                   placeholder="Écrivez à IRIS..."
                   disabled={loading}
                   style={{
-                    flex: 1, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: 20, padding: "10px 16px", color: "#f8fafc", fontSize: 13,
+                    flex: 1, background: "var(--bg)", border: "1px solid var(--border)",
+                    borderRadius: 9999, padding: "10px 16px", color: "var(--text-1)", fontSize: 13,
                     outline: "none",
                   }}
+                  onFocus={(e) => e.target.style.borderColor = "var(--action)"}
+                  onBlur={(e) => e.target.style.borderColor = "var(--border)"}
                 />
                 <button
                   onClick={handleSend}
                   disabled={!input.trim() || loading}
                   style={{
                     width: 40, height: 40, borderRadius: "50%", border: "none",
-                    background: input.trim() && !loading ? "#7c3aed" : "rgba(255,255,255,0.1)",
-                    color: input.trim() && !loading ? "#fff" : "#64748b",
+                    background: input.trim() && !loading ? "var(--action)" : "var(--border)",
+                    color: input.trim() && !loading ? "#fff" : "var(--text-3)",
                     display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
                     transition: "all 0.2s"
                   }}

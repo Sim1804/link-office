@@ -6,6 +6,7 @@ import { DashboardOrdonnanceTab } from "./DashboardOrdonnanceTab";
 import { DashboardAnalyseTab } from "./DashboardAnalyseTab";
 import { DashboardJournalTab } from "./DashboardJournalTab";
 import { DashboardRelationsTab } from "./DashboardRelationsTab";
+import { DashboardRessourcesTab } from "./DashboardRessourcesTab";
 import { LayoutDashboard, ListChecks, BrainCircuit, History, ChevronRight, Sparkles, Users, Book, Lock } from "lucide-react";
 import Link from "next/link";
 
@@ -45,11 +46,9 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
         scrollbarWidth: "none",
         msOverflowStyle: "none",
         padding: "4px",
-        background: "rgba(255,255,255,0.025)",
-        borderRadius: 18,
-        border: "1px solid rgba(255,255,255,0.06)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
+        background: "var(--surface)",
+        borderRadius: 999,
+        border: "1px solid var(--border-strong)",
       }}>
         {tabs.map((tab) => {
           const isActive = currentTab === tab.id;
@@ -63,24 +62,23 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
                 alignItems: "center",
                 gap: 8,
                 padding: "10px 18px",
-                borderRadius: 14,
+                borderRadius: 999,
                 flex: "1 1 auto",
                 justifyContent: "center",
-                background: isActive
-                  ? "linear-gradient(135deg, rgba(124,58,237,0.9) 0%, rgba(109,40,217,0.9) 100%)"
-                  : "transparent",
-                color: isActive ? "#fff" : "#64748b",
+                background: isActive ? "var(--primary)" : "transparent",
+                color: isActive ? "white" : "var(--text-2)",
                 border: "none",
                 fontWeight: isActive ? 600 : 500,
                 fontSize: 13,
                 cursor: "pointer",
                 transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
                 whiteSpace: "nowrap",
-                boxShadow: isActive ? "0 4px 16px rgba(124,58,237,0.4), inset 0 1px 0 rgba(255,255,255,0.1)" : "none",
-                letterSpacing: isActive ? "0.01em" : "0",
+                boxShadow: isActive ? "0 2px 8px rgba(0,169,157,0.2)" : "none",
               }}
+              onMouseOver={(e) => { if (!isActive) { e.currentTarget.style.background = "rgba(18,61,70,0.03)"; e.currentTarget.style.color = "var(--text-1)"; } }}
+              onMouseOut={(e) => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text-2)"; } }}
             >
-              <Icon size={15} style={{ flexShrink: 0 }} />
+              <Icon size={16} style={{ flexShrink: 0 }} />
               <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1 }}>
                 <span>{tab.shortLabel}</span>
               </span>
@@ -91,9 +89,9 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
 
       {/* ── Breadcrumb du contexte actif ── */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24, marginLeft: 2 }}>
-        <span style={{ color: "#334155", fontSize: 12, fontWeight: 500 }}>Dashboard</span>
-        <ChevronRight size={12} style={{ color: "#334155" }} />
-        <span style={{ color: "#a78bfa", fontSize: 12, fontWeight: 600 }}>{activeTabDef.label}</span>
+        <span style={{ color: "var(--text-1)", fontSize: 12, fontWeight: 500 }}>Dashboard</span>
+        <ChevronRight size={12} style={{ color: "var(--text-1)" }} />
+        <span style={{ color: "var(--primary)", fontSize: 12, fontWeight: 600 }}>{activeTabDef.label}</span>
       </div>
 
       {/* ── Contenu des onglets ── */}
@@ -102,7 +100,7 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
           <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
             <DashboardBilanTab iqrh={iqrh} DIMENSIONS_LABELS={DIMENSIONS_LABELS} />
             <div style={{ marginTop: "16px" }}>
-              <h3 style={{ fontSize: "20px", fontWeight: "700", color: "#f8fafc", marginBottom: "16px" }}>Analyse approfondie</h3>
+              <h3 style={{ fontSize: "20px", fontWeight: "700", color: "var(--text-1)", marginBottom: "16px" }}>Analyse approfondie</h3>
               <DashboardAnalyseTab iqrh={iqrh} profil={profil} icr={icr} isPremium={isPremium} />
             </div>
           </div>
@@ -114,9 +112,7 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
           <HistoriqueTab router={router} history={iqrh.history} isPremium={isPremium} />
         )}
         {currentTab === "ressources" && (
-          <div style={{ padding: 24, textAlign: "center", color: "#94a3b8" }}>
-            Bibliothèque de ressources et prescription (En construction)
-          </div>
+          <DashboardRessourcesTab iqrh={iqrh} isPremium={isPremium} DIMENSIONS_LABELS={DIMENSIONS_LABELS} />
         )}
         {currentTab === "relations" && (
           <DashboardRelationsTab isPremium={isPremium} />
@@ -138,7 +134,7 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
 
 const DIMENSION_CONFIG = [
   { key: "socialScore",        label: "Social",       color: "#38bdf8", short: "S" },
-  { key: "affectiveScore",     label: "Affectif",     color: "#a78bfa", short: "A" },
+  { key: "affectiveScore",     label: "Affectif",     color: "var(--primary)", short: "A" },
   { key: "sentimentalScore",   label: "Sentimental",  color: "#f472b6", short: "Se" },
   { key: "professionalScore",  label: "Pro.",          color: "#34d399", short: "P" },
   { key: "selfScore",          label: "Soi",           color: "#fb923c", short: "So" },
@@ -150,7 +146,7 @@ function ScoreBar({ value, color, previousValue }: { value: number; color: strin
     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
       <div style={{
         flex: 1, height: 5, borderRadius: 3,
-        background: "rgba(255,255,255,0.06)",
+        background: "var(--surface)",
         overflow: "hidden",
       }}>
         <div style={{
@@ -162,7 +158,7 @@ function ScoreBar({ value, color, previousValue }: { value: number; color: strin
           transition: "width 0.6s ease-out",
         }} />
       </div>
-      <span style={{ fontSize: 11, fontWeight: 700, color: "#f8fafc", minWidth: 24, textAlign: "right" }}>
+      <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-1)", minWidth: 24, textAlign: "right" }}>
         {Math.round(value)}
       </span>
       {diff !== null && diff !== 0 && (
@@ -187,33 +183,27 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "center",
           flexWrap: "wrap", gap: 16,
-          background: "linear-gradient(135deg, rgba(17,24,39,0.95) 0%, rgba(30,27,75,0.6) 100%)",
-          padding: "24px 28px", borderRadius: 20, border: "1px solid rgba(255,255,255,0.08)",
+          background: "linear-gradient(135deg, rgba(0,169,157,0.08) 0%, rgba(6,182,212,0.02) 100%)",
+          padding: "20px", borderRadius: 16, border: "1px solid var(--border)",
         }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
               <span style={{ fontSize: 18 }}>📋</span>
               <h3 style={{
                 fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-                color: "#f8fafc", fontSize: 20, fontWeight: 800, margin: 0,
+                color: "var(--text-1)", fontSize: 20, fontWeight: 800, margin: 0,
               }}>
                 Carnet de Santé Relationnelle
               </h3>
             </div>
-            <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>
+            <p style={{ color: "var(--text-3)", fontSize: 13, margin: 0 }}>
               {history?.length ?? 0} passation{(history?.length ?? 0) > 1 ? "s" : ""} enregistrée{(history?.length ?? 0) > 1 ? "s" : ""}
             </p>
           </div>
           <button
-            onClick={() => router.push("/consentement?retake=true")}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
-              color: "#fff", fontWeight: 600, padding: "11px 22px", borderRadius: 12,
-              border: "none", cursor: "pointer", fontSize: 13,
-              boxShadow: "0 4px 20px rgba(124,58,237,0.35)", transition: "all 0.2s",
-            }}
-          >
+              onClick={() => router.push("/consentement?retake=true")}
+              className="btn btn-primary btn-md"
+            >
             🔄 Nouveau test
           </button>
         </div>
@@ -222,25 +212,25 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
         {!isPremium && (
           <div style={{
             marginTop: 8,
-            borderRadius: 24,
-            border: "1px solid rgba(124,58,237,0.2)",
+            borderRadius: 16,
+            border: "1px solid var(--border-strong)",
             overflow: "hidden",
             position: "relative",
           }}>
             {/* Blurred preview content */}
             <div style={{ filter: "blur(6px)", opacity: 0.4, padding: "24px", pointerEvents: "none" }}>
-              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.08)", padding: 24, borderRadius: 20 }}>
+              <div style={{ background: "var(--surface)", border: "1px solid var(--border)", padding: 20, borderRadius: 16 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-                  <div style={{ width: 150, height: 20, background: "rgba(255,255,255,0.1)", borderRadius: 4 }} />
-                  <div style={{ width: 80, height: 20, background: "rgba(255,255,255,0.1)", borderRadius: 4 }} />
+                  <div style={{ width: 150, height: 20, background: "var(--surface)", borderRadius: 4 }} />
+                  <div style={{ width: 80, height: 20, background: "var(--surface)", borderRadius: 4 }} />
                 </div>
-                <div style={{ width: "100%", height: 120, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12 }} />
+                <div style={{ width: "100%", height: 120, background: "rgba(0,0,0,0.2)", border: "1px solid var(--border)", borderRadius: 12 }} />
               </div>
             </div>
             {/* Gradient overlay */}
             <div style={{
               position: "absolute", inset: 0,
-              background: "linear-gradient(to bottom, rgba(11,15,25,0) 0%, rgba(11,15,25,0.97) 50%)",
+              background: "linear-gradient(to bottom, rgba(244,241,232,0) 0%, rgba(244,241,232,0.97) 50%)",
             }} />
             {/* CTA */}
             <div style={{
@@ -250,21 +240,21 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
             }}>
               <div style={{
                 width: 48, height: 48, margin: "0 auto 16px",
-                borderRadius: 12, background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 12, background: "var(--surface)",
+                border: "1px solid var(--border)",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
-                <Lock size={20} color="#94a3b8" />
+                <Lock size={20} color="var(--text-2)" />
               </div>
-              <h4 style={{ fontFamily: "Inter, sans-serif", color: "#f8fafc", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+              <h4 style={{ fontFamily: "Inter, sans-serif", color: "var(--text-1)", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
                 Historique réservé aux abonnés Premium
               </h4>
-              <p style={{ color: "#64748b", fontSize: 14, marginBottom: 24, maxWidth: 420, margin: "0 auto 24px", lineHeight: 1.6 }}>
+              <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 24, maxWidth: 420, margin: "0 auto 24px", lineHeight: 1.6 }}>
                 Comparez vos passations dans le temps et visualisez l'évolution de chaque dimension relationnelle.
               </p>
               <Link href="/premium" style={{
                 display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 10,
-                background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "white", fontWeight: 600, textDecoration: "none"
+                background: "var(--primary)", color: "white", fontWeight: 600, textDecoration: "none"
               }}>
                 Débloquer l'historique →
               </Link>
@@ -293,13 +283,13 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
             return (
               <div key={item.id} style={{
                 background: isLatest
-                  ? "linear-gradient(135deg, rgba(124,58,237,0.08) 0%, rgba(17,24,39,0.7) 100%)"
-                  : "rgba(17,24,39,0.5)",
+                  ? "linear-gradient(135deg, rgba(0,169,157,0.08) 0%, var(--surface) 100%)"
+                  : "var(--surface)",
                 border: isLatest
-                  ? "1px solid rgba(124,58,237,0.2)"
-                  : "1px solid rgba(255,255,255,0.05)",
-                padding: "22px 24px",
-                borderRadius: 20,
+                  ? "1px solid rgba(0,169,157,0.2)"
+                  : "1px solid var(--border)",
+                padding: "20px",
+                borderRadius: 16,
                 position: "relative",
                 transition: "border-color 0.2s",
               }}>
@@ -307,11 +297,11 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
                 {isLatest && (
                   <div style={{
                     position: "absolute", top: -11, left: 20,
-                    background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
+                    background: "var(--primary)",
                     color: "white", fontSize: 10, fontWeight: 800,
                     padding: "3px 12px", borderRadius: 999,
                     textTransform: "uppercase", letterSpacing: "0.06em",
-                    boxShadow: "0 2px 12px rgba(124,58,237,0.4)",
+                    boxShadow: "0 2px 12px rgba(0,169,157,0.4)",
                   }}>
                     Passation actuelle
                   </div>
@@ -322,8 +312,8 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
                   {/* Icône météo */}
                   <div style={{
                     width: 54, height: 54, borderRadius: 14,
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.06)",
+                    background: "var(--surface)",
+                    border: "1px solid var(--border)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 26, flexShrink: 0,
                   }}>
@@ -332,21 +322,21 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
 
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>
-                      <h4 style={{ color: "#f8fafc", fontSize: 16, fontWeight: 700, margin: 0 }}>
+                      <h4 style={{ color: "var(--text-1)", fontSize: 16, fontWeight: 700, margin: 0 }}>
                         {item.weatherTitle}
                       </h4>
                       {item.assessment?.campaign && (
                         <span style={{
                           fontSize: 11, fontWeight: 600,
-                          background: "rgba(124,58,237,0.1)", color: "#a78bfa",
-                          border: "1px solid rgba(124,58,237,0.2)",
+                          background: "var(--primary-glow)", color: "var(--primary)",
+                          border: "1px solid var(--border-strong)",
                           padding: "2px 8px", borderRadius: 6,
                         }}>
                           {item.assessment.campaign.title}
                         </span>
                       )}
                     </div>
-                    <p style={{ color: "#64748b", fontSize: 12, margin: 0 }}>{date}</p>
+                    <p style={{ color: "var(--text-3)", fontSize: 12, margin: 0 }}>{date}</p>
                   </div>
 
                   {/* Score global */}
@@ -355,7 +345,7 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
                       <span style={{ fontSize: 28, fontWeight: 800, color: scoreColor, lineHeight: 1 }}>
                         {score}
                       </span>
-                      <span style={{ fontSize: 13, color: "#475569" }}>/100</span>
+                      <span style={{ fontSize: 13, color: "var(--text-2)" }}>/100</span>
                     </div>
                     {globalDiff !== null && globalDiff !== 0 && (
                       <div style={{
@@ -369,7 +359,7 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
                       </div>
                     )}
                     {globalDiff === null && (
-                      <p style={{ color: "#334155", fontSize: 11, margin: "4px 0 0", textAlign: "right" }}>
+                      <p style={{ color: "var(--text-1)", fontSize: 11, margin: "4px 0 0", textAlign: "right" }}>
                         1ère passation
                       </p>
                     )}
@@ -377,7 +367,7 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
                 </div>
 
                 {/* Séparateur */}
-                <div style={{ height: 1, background: "rgba(255,255,255,0.05)", marginBottom: 16 }} />
+                <div style={{ height: 1, background: "var(--surface)", marginBottom: 16 }} />
 
                 {/* Barres de dimensions */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 24px" }}>
@@ -387,7 +377,7 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
                     return (
                       <div key={dim.key}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                          <span style={{ fontSize: 11, color: "#64748b", fontWeight: 500 }}>
+                          <span style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 500 }}>
                             {dim.label}
                           </span>
                         </div>
@@ -400,12 +390,12 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
                 {/* Profil */}
                 {item.primaryProfile && (
                   <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 6 }}>
-                    <span style={{ fontSize: 11, color: "#475569" }}>Profil :</span>
+                    <span style={{ fontSize: 11, color: "var(--text-2)" }}>Profil :</span>
                     <span style={{
-                      fontSize: 12, fontWeight: 600, color: "#a78bfa",
-                      background: "rgba(167,139,250,0.08)",
+                      fontSize: 12, fontWeight: 600, color: "var(--primary)",
+                      background: "var(--primary-glow)",
                       border: "1px solid rgba(167,139,250,0.15)",
-                      padding: "2px 10px", borderRadius: 6,
+                      padding: "4px 12px", borderRadius: 999,
                     }}>
                       {item.primaryProfile}
                     </span>
@@ -418,12 +408,12 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
           {(!history || history.length === 0) && (
             <div style={{
               padding: "48px 32px", textAlign: "center",
-              background: "rgba(255,255,255,0.015)",
+              background: "var(--surface)",
               border: "1px dashed rgba(255,255,255,0.07)",
-              borderRadius: 20,
+              borderRadius: 16,
             }}>
               <div style={{ fontSize: 32, marginBottom: 12 }}>📋</div>
-              <p style={{ color: "#475569", fontSize: 14, margin: 0 }}>
+              <p style={{ color: "var(--text-2)", fontSize: 14, margin: 0 }}>
                 Aucune passation enregistrée pour le moment.
               </p>
             </div>

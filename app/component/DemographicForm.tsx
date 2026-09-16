@@ -56,23 +56,23 @@ const QUESTION_STYLE: React.CSSProperties = {
 };
 
 const QUESTION_TITLE_STYLE: React.CSSProperties = {
-  fontSize: 14, fontWeight: 700, color: "#e2e8f0", marginBottom: 4,
+  fontSize: 14, fontWeight: 700, color: "var(--text-1)", marginBottom: 4,
 };
 
 const RADIO_LABEL_STYLE: React.CSSProperties = {
   display: "flex", alignItems: "center", gap: 10,
-  fontSize: 14, color: "#94a3b8", cursor: "pointer",
+  fontSize: 14, color: "var(--text-2)", cursor: "pointer",
   padding: "10px 14px", borderRadius: 10,
-  border: "1px solid rgba(255,255,255,0.06)",
-  background: "rgba(255,255,255,0.02)",
+  border: "1px solid var(--border)",
+  background: "var(--surface)",
   transition: "all 0.15s",
 };
 
 const RADIO_LABEL_ACTIVE_STYLE: React.CSSProperties = {
   ...RADIO_LABEL_STYLE,
-  border: "1px solid rgba(124,58,237,0.4)",
-  background: "rgba(124,58,237,0.08)",
-  color: "#c4b5fd",
+  border: "1px solid var(--primary)",
+  background: "rgba(0,169,157,0.05)",
+  color: "var(--primary)",
 };
 
 /* ── Composant principal ────────────────────────────────────────── */
@@ -127,12 +127,12 @@ export default function DemographicForm({ value, onChange, onNext, isB2B = false
 
       <div>
         <h1 style={{
-          fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-          fontWeight: 800, fontSize: 26, color: "#f8fafc", marginBottom: 8,
+          fontFamily: "var(--font-family-display)",
+          fontWeight: 800, fontSize: 26, color: "var(--text-1)", marginBottom: 8,
         }}>
           Variables sociodémographiques
         </h1>
-        <p style={{ color: "#64748b", fontSize: 14, lineHeight: 1.6 }}>
+        <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.6 }}>
           Ces informations permettent de contextualiser vos résultats IQRH.
           Elles restent strictement confidentielles.
         </p>
@@ -147,7 +147,7 @@ export default function DemographicForm({ value, onChange, onNext, isB2B = false
               type="radio" name="gender"
               checked={data.gender === item}
               onChange={() => update("gender", item)}
-              style={{ accentColor: "#7c3aed", width: 16, height: 16, flexShrink: 0 }}
+              style={{ accentColor: "var(--primary)", width: 16, height: 16, flexShrink: 0 }}
             />
             {item}
           </label>
@@ -290,7 +290,7 @@ export default function DemographicForm({ value, onChange, onNext, isB2B = false
             padding: "14px 16px", borderRadius: 10,
             background: "rgba(124,58,237,0.05)", border: "1px solid rgba(124,58,237,0.15)",
           }}>
-            <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 4 }}>Précisez :</p>
+            <p style={{ fontSize: 13, color: "var(--text-2)", marginBottom: 4 }}>Précisez :</p>
             {["En union libre", "Pacsé(e)", "Marié(e)"].map(item => (
               <label key={item} style={data.relationshipDetail === item ? RADIO_LABEL_ACTIVE_STYLE : RADIO_LABEL_STYLE}>
                 <input

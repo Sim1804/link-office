@@ -88,8 +88,8 @@ export function AudioPlayer({ src, title, eclaireurName, coverImage }: AudioPlay
     <div style={{ 
       background: "linear-gradient(145deg, rgba(30,41,59,0.7) 0%, rgba(15,23,42,0.9) 100%)", 
       padding: 32, borderRadius: 32, 
-      border: "1px solid rgba(255,255,255,0.1)",
-      boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)",
+      border: "1px solid var(--border)",
+      boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 0 var(--border)",
       backdropFilter: "blur(20px)",
       display: "flex", flexDirection: "column", gap: 32,
       position: "relative", overflow: "hidden"
@@ -99,27 +99,27 @@ export function AudioPlayer({ src, title, eclaireurName, coverImage }: AudioPlay
       
       {/* Header / Info */}
       <div style={{ display: "flex", alignItems: "center", gap: 20, position: "relative", zIndex: 1 }}>
-        <div style={{ width: 80, height: 80, borderRadius: 20, overflow: "hidden", flexShrink: 0, border: "2px solid rgba(255,255,255,0.1)", boxShadow: "0 10px 25px rgba(0,0,0,0.4)" }}>
+        <div style={{ width: 80, height: 80, borderRadius: 20, overflow: "hidden", flexShrink: 0, border: "2px solid var(--border)", boxShadow: "0 10px 25px rgba(0,0,0,0.4)" }}>
           {coverImage ? (
             <img src={coverImage} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           ) : (
-            <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #7c3aed, #ec4899)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, var(--primary), #ec4899)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Play size={32} color="white" />
             </div>
           )}
         </div>
         <div style={{ flexGrow: 1, minWidth: 0 }}>
-          <div style={{ display: "inline-block", padding: "4px 10px", background: "rgba(255,255,255,0.1)", borderRadius: 999, fontSize: 11, fontWeight: 700, color: "#cbd5e1", letterSpacing: 1, textTransform: "uppercase", marginBottom: 8 }}>
+          <div style={{ display: "inline-block", padding: "4px 10px", background: "var(--border)", borderRadius: 999, fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: 1, textTransform: "uppercase", marginBottom: 8 }}>
             En écoute
           </div>
           <h4 style={{ color: "#ffffff", fontSize: 22, fontWeight: 800, margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", letterSpacing: "-0.01em" }}>
             {title}
           </h4>
           {eclaireurName && (
-            <div style={{ color: "#94a3b8", fontSize: 15, marginTop: 4, fontWeight: 500 }}>Avec {eclaireurName}</div>
+            <div style={{ color: "var(--text-2)", fontSize: 15, marginTop: 4, fontWeight: 500 }}>Avec {eclaireurName}</div>
           )}
         </div>
-        <a href={src} download style={{ color: "rgba(255,255,255,0.5)", transition: "all 0.3s ease", padding: 12, background: "rgba(255,255,255,0.05)", borderRadius: "50%" }} className="hover-btn-dl">
+        <a href={src} download style={{ color: "rgba(255,255,255,0.5)", transition: "all 0.3s ease", padding: 12, background: "rgba(18,61,70,0.05)", borderRadius: "50%" }} className="hover-btn-dl">
           <Download size={22} />
         </a>
       </div>
@@ -133,7 +133,7 @@ export function AudioPlayer({ src, title, eclaireurName, coverImage }: AudioPlay
           onClick={handleProgressClick}
           className="progress-container"
           style={{
-            height: 8, background: "rgba(255,255,255,0.08)", borderRadius: 4, cursor: "pointer", position: "relative", overflow: "visible"
+            height: 8, background: "var(--surface)", borderRadius: 4, cursor: "pointer", position: "relative", overflow: "visible"
           }}
         >
           <div style={{
@@ -142,11 +142,11 @@ export function AudioPlayer({ src, title, eclaireurName, coverImage }: AudioPlay
           }} />
           <div className="progress-thumb" style={{
             position: "absolute", top: "50%", left: `${progress}%`, transform: "translate(-50%, -50%)",
-            width: 16, height: 16, background: "#fff", borderRadius: "50%", boxShadow: "0 0 15px rgba(236,72,153,0.8)",
+            width: 16, height: 16, background: "var(--surface)", borderRadius: "50%", boxShadow: "0 0 15px rgba(236,72,153,0.8)",
             opacity: isPlaying ? 1 : 0, transition: "opacity 0.2s, transform 0.2s"
           }} />
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", color: "#94a3b8", fontSize: 13, marginTop: 12, fontWeight: 600, fontFamily: "monospace" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", color: "var(--text-2)", fontSize: 13, marginTop: 12, fontWeight: 600, fontFamily: "monospace" }}>
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>

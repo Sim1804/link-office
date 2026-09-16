@@ -33,9 +33,9 @@ export function IERGauge({ score, level }: IERGaugeProps) {
           style={{ width: "100%", height: "100%", transform: "rotate(-90deg)" }}
         >
           {/* Piste de fond */}
-          <circle cx="60" cy="60" r={RADIUS} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="10" />
+          <circle cx="60" cy="60" r={RADIUS} fill="none" stroke="var(--border)" strokeWidth="10" />
           {/* Second ring léger décoratif */}
-          <circle cx="60" cy="60" r={RADIUS - 12} fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth="2" />
+          <circle cx="60" cy="60" r={RADIUS - 12} fill="none" stroke="var(--border)" strokeWidth="2" />
           {/* Arc principal */}
           <circle
             cx="60" cy="60" r={RADIUS}
@@ -64,22 +64,22 @@ export function IERGauge({ score, level }: IERGaugeProps) {
           }}>
             {score}
           </span>
-          <span style={{ fontSize: 10, color: "#475569", fontWeight: 500, marginTop: 2 }}>/ 100</span>
+          <span style={{ fontSize: 10, color: "var(--text-3)", fontWeight: 500, marginTop: 2 }}>/ 100</span>
         </div>
       </div>
 
       {/* Label */}
       <div style={{ textAlign: "center", marginTop: 8 }}>
-        <p style={{ fontSize: 10, color: "#334155", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 4 }}>
+        <p style={{ fontSize: 10, color: "var(--text-1)", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 4 }}>
           Équilibre IER
         </p>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: 6,
-          background: `rgba(0,0,0,0.2)`, padding: "4px 12px", borderRadius: 999,
+          background: "var(--surface-2)", padding: "4px 12px", borderRadius: 999,
           border: `1px solid ${theme.color}20`,
         }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: theme.color, boxShadow: `0 0 6px ${theme.glow}` }} />
-          <span style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8" }}>{level}</span>
+          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-2)" }}>{level}</span>
         </div>
       </div>
     </div>

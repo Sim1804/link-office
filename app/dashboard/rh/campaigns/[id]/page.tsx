@@ -2,10 +2,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import {
   ArrowLeft, Users, BarChart3, Settings, Mail, RefreshCw, Target,
   Zap, Crown, CheckCircle2, Clock, Calendar, Copy, QrCode, Link2,
-  Plus, TrendingUp, TrendingDown
+  Plus, TrendingUp, TrendingDown, Download, Trash2
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -43,6 +44,7 @@ export default function CampaignDetailPage() {
   const [saving, setSaving] = useState(false);
   const [inviteData, setInviteData] = useState<any>(null);
   const [copied, setCopied] = useState(false);
+  const [isGeneratingActions, setIsGeneratingActions] = useState(false);
 
   const loadCampaign = useCallback(async () => {
     setLoading(true);
@@ -94,12 +96,33 @@ export default function CampaignDetailPage() {
     if (inviteData?.inviteUrl) { navigator.clipboard.writeText(inviteData.inviteUrl); setCopied(true); setTimeout(() => setCopied(false), 2500); }
   };
 
-  if (loading) return (<><Navbar /><main className="page-main"><div style={{ textAlign:"center", padding:"80px 0", color:"#64748b" }}>Chargement...</div></main></>);
+  const handleGenerateActions = async () => {
+    setIsGeneratingActions(true);
+    try {
+      const res = await fetch("/api/actions/suggest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ campaignId: id })
+      });
+      if (res.ok) {
+        // Refresh actions list
+        const actionsRes = await fetch("/api/actions?campaignId=" + id);
+        if (actionsRes.ok) {
+          const data = await actionsRes.json();
+          setActions(data);
+        }
+      }
+    } finally {
+      setIsGeneratingActions(false);
+    }
+  };
+
+  if (loading) return (<><Navbar /><main className="page-main"><div style={{ textAlign:"center", padding:"80px 0", color:"var(--text-2)" }}>Chargement...</div></main></>);
   if (!campaign) return (<><Navbar /><main className="page-main"><div style={{ textAlign:"center", padding:"80px 0", color:"#f43f5e" }}>Campagne introuvable</div></main></>);
 
   const isPP = campaign.offer === "PREMIUM_PLUS";
   const globalScore = stats?.averages?.global ?? 0;
-  const scoreColor = globalScore >= 80 ? "#34d399" : globalScore >= 60 ? "#a78bfa" : globalScore >= 40 ? "#f59e0b" : "#f43f5e";
+  const scoreColor = globalScore >= 80 ? "#34d399" : globalScore >= 60 ? "var(--primary)" : globalScore >= 40 ? "#f59e0b" : "#f43f5e";
   const radarData = stats?.averages ? Object.entries(DIMENSION_LABELS).map(([k,label]) => ({ dimension: label, score: (stats.averages as any)[k] ?? 0, fullMark: 100 })) : [];
   const icrData = stats?.icrDistribution ? [
     { name:"Faible", value:stats.icrDistribution.faible, color:ICR_COLORS[0] },
@@ -120,26 +143,30 @@ export default function CampaignDetailPage() {
     <>
       <Navbar />
       <main className="page-main">
-        <div className="blob-violet" />
-        <div className="blob-cyan" />
         <div className="page-container-wide" style={{ position:"relative", zIndex:1 }}>
+
+          <Breadcrumb
+            homeHref="/dashboard/rh"
+            items={[
+              { label: "Tableau de bord RH", href: "/dashboard/rh" },
+              { label: "Campagnes", href: "/dashboard/rh/campaigns" },
+              { label: campaign.title },
+            ]}
+          />
 
           {/* Header */}
           <div style={{ display:"flex", alignItems:"flex-start", gap:16, marginBottom:28 }}>
-            <Link href="/dashboard/rh/campaigns" style={{ color:"#64748b", display:"flex", alignItems:"center", gap:4, textDecoration:"none", fontSize:13, flexShrink:0, marginTop:4 }}>
-              <ArrowLeft size={15} /> Campagnes
-            </Link>
             <div style={{ flex:1 }}>
               <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4, flexWrap:"wrap" }}>
-                <h1 style={{ fontFamily:"'Plus Jakarta Sans',Inter,sans-serif", fontWeight:800, fontSize:22, color:"#f8fafc", margin:0 }}>{campaign.title}</h1>
-                <span style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:700, background: isPP ? "rgba(245,158,11,0.15)" : "rgba(124,58,237,0.15)", color: isPP ? "#fbbf24" : "#a78bfa", border:"1px solid " + (isPP ? "rgba(245,158,11,0.3)" : "rgba(124,58,237,0.3)") }}>
+                <h1 style={{ fontFamily:"'Plus Jakarta Sans',Inter,sans-serif", fontWeight:800, fontSize:22, color:"var(--text-1)", margin:0 }}>{campaign.title}</h1>
+                <span style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:700, background: isPP ? "rgba(245,158,11,0.15)" : "rgba(124,58,237,0.15)", color: isPP ? "#fbbf24" : "var(--primary)", border:"1px solid " + (isPP ? "rgba(245,158,11,0.3)" : "rgba(124,58,237,0.3)") }}>
                   {isPP ? <Crown size={10} /> : <Zap size={10} />} {isPP ? "PREMIUM+" : "PREMIUM"}
                 </span>
                 <span style={{ padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:600, background:"rgba(52,211,153,0.12)", color:"#34d399" }}>
                   {STATUS_LABELS[campaign.status] || campaign.status}
                 </span>
               </div>
-              <p style={{ color:"#64748b", fontSize:13, margin:0 }}>
+              <p style={{ color:"var(--text-2)", fontSize:13, margin:0 }}>
                 <Calendar size={12} style={{ display:"inline", marginRight:4 }} />
                 {new Date(campaign.startDate).toLocaleDateString("fr-FR")} — {new Date(campaign.endDate).toLocaleDateString("fr-FR")}
                 {campaign.targetPopulation && <span style={{ marginLeft:12 }}><Users size={12} style={{ display:"inline", marginRight:4 }} />{campaign.targetPopulation} beneficiaires</span>}
@@ -157,7 +184,7 @@ export default function CampaignDetailPage() {
             {TABS.map(({ id:tid, label, icon:Icon }) => {
               const isActive = activeTab === tid;
               return (
-                <button key={tid} onClick={() => setActiveTab(tid)} style={{ display:"flex", alignItems:"center", gap:7, padding:"8px 16px", borderRadius:10, fontWeight:600, fontSize:13, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s", whiteSpace:"nowrap", flexShrink:0, background: isActive ? "rgba(124,58,237,0.15)" : "transparent", border:"1px solid " + (isActive ? "rgba(124,58,237,0.35)" : "transparent"), color: isActive ? "#a78bfa" : "#94a3b8" }}>
+                <button key={tid} onClick={() => setActiveTab(tid)} style={{ display:"flex", alignItems:"center", gap:7, padding:"8px 16px", borderRadius:10, fontWeight:600, fontSize:13, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s", whiteSpace:"nowrap", flexShrink:0, background: isActive ? "rgba(124,58,237,0.15)" : "transparent", border:"1px solid " + (isActive ? "rgba(124,58,237,0.35)" : "transparent"), color: isActive ? "var(--primary)" : "var(--text-3)" }}>
                   <Icon size={14} /> {label}
                 </button>
               );
@@ -170,7 +197,7 @@ export default function CampaignDetailPage() {
               <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:16 }}>
                 {[
                   { label:"Invites",    value:participation?.invited    ?? 0, color:"#38bdf8", icon:Mail },
-                  { label:"Actives",    value:participation?.activated  ?? 0, color:"#a78bfa", icon:CheckCircle2 },
+                  { label:"Actives",    value:participation?.activated  ?? 0, color:"var(--primary)", icon:CheckCircle2 },
                   { label:"Commences",  value:participation?.started    ?? 0, color:"#f59e0b", icon:Clock },
                   { label:"Termines",   value:participation?.completed  ?? 0, color:"#34d399", icon:CheckCircle2 },
                 ].map(({ label, value, color, icon:Icon }) => (
@@ -179,16 +206,16 @@ export default function CampaignDetailPage() {
                       <Icon size={18} style={{ color }} />
                     </div>
                     <p style={{ fontSize:32, fontWeight:800, color, marginBottom:4 }}>{value}</p>
-                    <p style={{ fontSize:12, color:"#64748b", fontWeight:600 }}>{label}</p>
+                    <p style={{ fontSize:12, color:"var(--text-2)", fontWeight:600 }}>{label}</p>
                   </div>
                 ))}
               </div>
               {(participation?.invited ?? 0) > 0 && (
                 <div className="card">
-                  <h3 style={{ fontSize:15, fontWeight:700, color:"#f8fafc", marginBottom:20 }}>Funnel de participation</h3>
+                  <h3 style={{ fontSize:15, fontWeight:700, color:"var(--text-1)", marginBottom:20 }}>Funnel de participation</h3>
                   {[
                     { label:"Invites",   value:participation.invited,   color:"#38bdf8" },
-                    { label:"Actives",   value:participation.activated, color:"#a78bfa" },
+                    { label:"Actives",   value:participation.activated, color:"var(--primary)" },
                     { label:"Commences", value:participation.started,   color:"#f59e0b" },
                     { label:"Termines",  value:participation.completed, color:"#34d399" },
                   ].map(({ label, value, color }) => {
@@ -196,8 +223,8 @@ export default function CampaignDetailPage() {
                     return (
                       <div key={label} style={{ marginBottom:14 }}>
                         <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
-                          <span style={{ fontSize:13, color:"#94a3b8" }}>{label}</span>
-                          <span style={{ fontSize:13, fontWeight:700, color }}>{value} <span style={{ color:"#64748b", fontWeight:400 }}>({pct}%)</span></span>
+                          <span style={{ fontSize:13, color:"var(--text-3)" }}>{label}</span>
+                          <span style={{ fontSize:13, fontWeight:700, color }}>{value} <span style={{ color:"var(--text-2)", fontWeight:400 }}>({pct}%)</span></span>
                         </div>
                         <div className="progress-bar"><div className="progress-fill" style={{ width:pct+"%", background:color }} /></div>
                       </div>
@@ -212,7 +239,7 @@ export default function CampaignDetailPage() {
           {activeTab === "configuration" && (
             <div className="card">
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:24 }}>
-                <h2 style={{ fontSize:16, fontWeight:700, color:"#f8fafc" }}>Parametres</h2>
+                <h2 style={{ fontSize:16, fontWeight:700, color:"var(--text-1)" }}>Parametres</h2>
                 {!editMode
                   ? <button onClick={() => setEditMode(true)} className="btn btn-secondary btn-sm"><Settings size={13} /> Modifier</button>
                   : <div style={{ display:"flex", gap:8 }}>
@@ -222,17 +249,17 @@ export default function CampaignDetailPage() {
                 }
               </div>
               <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
-                <div><label style={{ display:"block", fontSize:12, color:"#94a3b8", fontWeight:600, marginBottom:6 }}>Nom</label>
-                  {editMode ? <input className="input-field" value={editForm.title} onChange={e => setEditForm((f: any) => ({ ...f, title:e.target.value }))} /> : <p style={{ color:"#f8fafc", fontSize:14 }}>{campaign.title}</p>}
+                <div><label style={{ display:"block", fontSize:12, color:"var(--text-3)", fontWeight:600, marginBottom:6 }}>Nom</label>
+                  {editMode ? <input className="input-field" value={editForm.title} onChange={e => setEditForm((f: any) => ({ ...f, title:e.target.value }))} /> : <p style={{ color:"var(--text-1)", fontSize:14 }}>{campaign.title}</p>}
                 </div>
-                <div><label style={{ display:"block", fontSize:12, color:"#94a3b8", fontWeight:600, marginBottom:6 }}>Description</label>
-                  {editMode ? <textarea className="input-field" style={{ minHeight:70, resize:"vertical" }} value={editForm.description} onChange={e => setEditForm((f: any) => ({ ...f, description:e.target.value }))} /> : <p style={{ color:"#94a3b8", fontSize:14 }}>{campaign.description || "—"}</p>}
+                <div><label style={{ display:"block", fontSize:12, color:"var(--text-3)", fontWeight:600, marginBottom:6 }}>Description</label>
+                  {editMode ? <textarea className="input-field" style={{ minHeight:70, resize:"vertical" }} value={editForm.description} onChange={e => setEditForm((f: any) => ({ ...f, description:e.target.value }))} /> : <p style={{ color:"var(--text-3)", fontSize:14 }}>{campaign.description || "—"}</p>}
                 </div>
                 <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
-                  <div><label style={{ display:"block", fontSize:12, color:"#94a3b8", fontWeight:600, marginBottom:6 }}>Date de fin</label>
-                    {editMode ? <input type="date" className="input-field" value={editForm.endDate} onChange={e => setEditForm((f: any) => ({ ...f, endDate:e.target.value }))} /> : <p style={{ color:"#f8fafc", fontSize:14 }}>{new Date(campaign.endDate).toLocaleDateString("fr-FR")}</p>}
+                  <div><label style={{ display:"block", fontSize:12, color:"var(--text-3)", fontWeight:600, marginBottom:6 }}>Date de fin</label>
+                    {editMode ? <input type="date" className="input-field" value={editForm.endDate} onChange={e => setEditForm((f: any) => ({ ...f, endDate:e.target.value }))} /> : <p style={{ color:"var(--text-1)", fontSize:14 }}>{new Date(campaign.endDate).toLocaleDateString("fr-FR")}</p>}
                   </div>
-                  <div><label style={{ display:"block", fontSize:12, color:"#94a3b8", fontWeight:600, marginBottom:6 }}>Statut</label>
+                  <div><label style={{ display:"block", fontSize:12, color:"var(--text-3)", fontWeight:600, marginBottom:6 }}>Statut</label>
                     {editMode ? (
                       <select className="input-field" value={editForm.status} onChange={e => setEditForm((f: any) => ({ ...f, status:e.target.value }))}>
                         {Object.entries(STATUS_LABELS).map(([k,v]) => <option key={k} value={k}>{v as string}</option>)}
@@ -242,8 +269,8 @@ export default function CampaignDetailPage() {
                 </div>
                 {campaign.parentCampaign && (
                   <div style={{ padding:"12px 16px", background:"rgba(124,58,237,0.08)", border:"1px solid rgba(124,58,237,0.2)", borderRadius:12 }}>
-                    <p style={{ fontSize:12, color:"#a78bfa", fontWeight:600, marginBottom:4 }}>Renouvellement de :</p>
-                    <Link href={"/dashboard/rh/campaigns/" + campaign.parentCampaign.id} style={{ color:"#f8fafc", fontSize:14, textDecoration:"none" }}>{campaign.parentCampaign.title} ({campaign.parentCampaign.offer})</Link>
+                    <p style={{ fontSize:12, color:"var(--primary)", fontWeight:600, marginBottom:4 }}>Renouvellement de :</p>
+                    <Link href={"/dashboard/rh/campaigns/" + campaign.parentCampaign.id} style={{ color:"var(--text-1)", fontSize:14, textDecoration:"none" }}>{campaign.parentCampaign.title} ({campaign.parentCampaign.offer})</Link>
                   </div>
                 )}
               </div>
@@ -254,8 +281,8 @@ export default function CampaignDetailPage() {
           {activeTab === "invitations" && (
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
               <div className="card">
-                <h2 style={{ fontSize:16, fontWeight:700, color:"#f8fafc", marginBottom:16 }}>Importer des beneficiaires</h2>
-                <p style={{ fontSize:13, color:"#64748b", marginBottom:14, lineHeight:1.6 }}>Emails separes par des virgules, point-virgules ou retours a la ligne.</p>
+                <h2 style={{ fontSize:16, fontWeight:700, color:"var(--text-1)", marginBottom:16 }}>Importer des beneficiaires</h2>
+                <p style={{ fontSize:13, color:"var(--text-2)", marginBottom:14, lineHeight:1.6 }}>Emails separes par des virgules, point-virgules ou retours a la ligne.</p>
                 <textarea value={emailsInput} onChange={e => setEmailsInput(e.target.value)} placeholder={"jean.dupont@ent.com\nmarie.martin@ent.com"} className="input-field" style={{ minHeight:120, resize:"vertical", marginBottom:14, fontFamily:"monospace", fontSize:12 }} />
                 {inviteResult && (
                   <div style={{ background:"rgba(52,211,153,0.08)", border:"1px solid rgba(52,211,153,0.2)", borderRadius:10, padding:"10px 14px", marginBottom:14, fontSize:13, color:"#34d399" }}>
@@ -267,17 +294,17 @@ export default function CampaignDetailPage() {
                 </button>
               </div>
               <div className="card">
-                <h2 style={{ fontSize:16, fontWeight:700, color:"#f8fafc", marginBottom:16 }}>Lien et QR Code</h2>
+                <h2 style={{ fontSize:16, fontWeight:700, color:"var(--text-1)", marginBottom:16 }}>Lien et QR Code</h2>
                 {inviteData ? (
                   <>
-                    <div style={{ background:"#f8fafc", borderRadius:14, padding:20, textAlign:"center", marginBottom:16 }}>
+                    <div style={{ background:"var(--text-1)", borderRadius:14, padding:20, textAlign:"center", marginBottom:16 }}>
                       <img src={inviteData.qrCode} alt="QR Code" style={{ width:160, height:160, borderRadius:8 }} />
                       <p style={{ color:"#1a0533", fontSize:12, marginTop:8, fontWeight:600 }}>Code : {inviteData.codeAccess}</p>
                     </div>
-                    <div style={{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 14px", display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
-                      <Link2 size={13} style={{ color:"#64748b", flexShrink:0 }} />
-                      <span style={{ color:"#94a3b8", fontSize:12, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{inviteData.inviteUrl}</span>
-                      <button onClick={copyLink} style={{ background:"none", border:"none", cursor:"pointer", color: copied ? "#34d399" : "#94a3b8" }}>
+                    <div style={{ background:"rgba(255,255,255,0.04)", border:"1px solid var(--border)", borderRadius:10, padding:"10px 14px", display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
+                      <Link2 size={13} style={{ color:"var(--text-2)", flexShrink:0 }} />
+                      <span style={{ color:"var(--text-3)", fontSize:12, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{inviteData.inviteUrl}</span>
+                      <button onClick={copyLink} style={{ background:"none", border:"none", cursor:"pointer", color: copied ? "#34d399" : "var(--text-3)" }}>
                         {copied ? <CheckCircle2 size={15} /> : <Copy size={15} />}
                       </button>
                     </div>
@@ -293,20 +320,20 @@ export default function CampaignDetailPage() {
               </div>
               {invites.length > 0 && (
                 <div className="card" style={{ gridColumn:"1 / -1" }}>
-                  <h2 style={{ fontSize:15, fontWeight:700, color:"#f8fafc", marginBottom:16 }}>Beneficiaires invites ({invites.length})</h2>
+                  <h2 style={{ fontSize:15, fontWeight:700, color:"var(--text-1)", marginBottom:16 }}>Beneficiaires invites ({invites.length})</h2>
                   <div style={{ overflowX:"auto" }}>
                     <table style={{ width:"100%", borderCollapse:"collapse", fontSize:13 }}>
                       <thead><tr style={{ borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
-                        {["Email","Statut","Invite le"].map(h => <th key={h} style={{ padding:"10px 14px", textAlign:"left", color:"#64748b", fontWeight:600, fontSize:11, textTransform:"uppercase" }}>{h}</th>)}
+                        {["Email","Statut","Invite le"].map(h => <th key={h} style={{ padding:"10px 14px", textAlign:"left", color:"var(--text-2)", fontWeight:600, fontSize:11, textTransform:"uppercase" }}>{h}</th>)}
                       </tr></thead>
                       <tbody>
                         {invites.map((inv: any) => {
-                          const sc: Record<string,string> = { INVITED:"#38bdf8", ACTIVATED:"#a78bfa", STARTED:"#f59e0b", COMPLETED:"#34d399" };
+                          const sc: Record<string,string> = { INVITED:"#38bdf8", ACTIVATED:"var(--primary)", STARTED:"#f59e0b", COMPLETED:"#34d399" };
                           return (
                             <tr key={inv.id} className="table-row-hover" style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
-                              <td style={{ padding:"10px 14px", color:"#cbd5e1" }}>{inv.email}</td>
-                              <td style={{ padding:"10px 14px" }}><span style={{ padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:600, background:(sc[inv.status]||"#94a3b8")+"18", color:sc[inv.status]||"#94a3b8" }}>{inv.status}</span></td>
-                              <td style={{ padding:"10px 14px", color:"#64748b" }}>{new Date(inv.invitedAt).toLocaleDateString("fr-FR")}</td>
+                              <td style={{ padding:"10px 14px", color:"var(--text-2)" }}>{inv.email}</td>
+                              <td style={{ padding:"10px 14px" }}><span style={{ padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:600, background:(sc[inv.status]||"var(--text-3)")+"18", color:sc[inv.status]||"var(--text-3)" }}>{inv.status}</span></td>
+                              <td style={{ padding:"10px 14px", color:"var(--text-2)" }}>{new Date(inv.invitedAt).toLocaleDateString("fr-FR")}</td>
                             </tr>
                           );
                         })}
@@ -325,23 +352,30 @@ export default function CampaignDetailPage() {
                 <div className="card" style={{ textAlign:"center", padding:"48px 32px" }}>
                   <div style={{ fontSize:44, marginBottom:14 }}>🔒</div>
                   <h2 style={{ color:"#f59e0b", fontWeight:700, fontSize:18, marginBottom:8 }}>Anonymat protege</h2>
-                  <p style={{ color:"#94a3b8", fontSize:13, maxWidth:440, margin:"0 auto" }}>{stats?.message || "Minimum 5 evaluations completes requises."}</p>
+                  <p style={{ color:"var(--text-3)", fontSize:13, maxWidth:440, margin:"0 auto" }}>{stats?.message || "Minimum 5 evaluations completes requises."}</p>
                 </div>
               ) : (
                 <>
+                  <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+                    <a href={`/api/campaigns/${id}/export`} download style={{ textDecoration: "none" }}>
+                      <button className="btn btn-secondary btn-sm">
+                        <Download size={14} /> Exporter les Résultats
+                      </button>
+                    </a>
+                  </div>
                   <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))", gap:16 }}>
                     <div className="card" style={{ background:"linear-gradient(135deg,rgba(124,58,237,0.15),rgba(6,182,212,0.08))", border:"1px solid rgba(124,58,237,0.25)" }}>
-                      <p style={{ color:"#94a3b8", fontSize:11, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:8 }}>Score IQRH moyen</p>
-                      <p style={{ fontSize:44, fontWeight:800, color:scoreColor, lineHeight:1 }}>{globalScore}<span style={{ fontSize:16, color:"#475569" }}>/100</span></p>
-                      <p style={{ color:"#64748b", fontSize:12, marginTop:6 }}>{stats.respondentCount} repondants</p>
+                      <p style={{ color:"var(--text-3)", fontSize:11, fontWeight:600, textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:8 }}>Score IQRH moyen</p>
+                      <p style={{ fontSize:44, fontWeight:800, color:scoreColor, lineHeight:1 }}>{globalScore}<span style={{ fontSize:16, color:"var(--text-2)" }}>/100</span></p>
+                      <p style={{ color:"var(--text-2)", fontSize:12, marginTop:6 }}>{stats.respondentCount} repondants</p>
                     </div>
                     {Object.entries(DIMENSION_LABELS).map(([k, label]) => {
                       const score = (stats.averages as any)?.[k] ?? 0;
-                      const c = score >= 70 ? "#34d399" : score >= 50 ? "#a78bfa" : "#f59e0b";
+                      const c = score >= 70 ? "#34d399" : score >= 50 ? "var(--primary)" : "#f59e0b";
                       return (
                         <div key={k} className="card">
-                          <p style={{ fontSize:11, color:"#64748b", marginBottom:6 }}>{label as string}</p>
-                          <p style={{ fontSize:24, fontWeight:700, color:c }}>{score}<span style={{ fontSize:11, color:"#475569" }}>/100</span></p>
+                          <p style={{ fontSize:11, color:"var(--text-2)", marginBottom:6 }}>{label as string}</p>
+                          <p style={{ fontSize:24, fontWeight:700, color:c }}>{score}<span style={{ fontSize:11, color:"var(--text-2)" }}>/100</span></p>
                           <div className="progress-bar" style={{ marginTop:8 }}><div className="progress-fill" style={{ width:score+"%", background:c }} /></div>
                         </div>
                       );
@@ -349,29 +383,29 @@ export default function CampaignDetailPage() {
                   </div>
                   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
                     <div className="card">
-                      <h3 style={{ fontSize:14, fontWeight:600, color:"#f8fafc", marginBottom:14 }}>Radar Relationnel</h3>
+                      <h3 style={{ fontSize:14, fontWeight:600, color:"var(--text-1)", marginBottom:14 }}>Radar Relationnel</h3>
                       <div style={{ height:240 }}>
                         <ResponsiveContainer width="100%" height="100%">
-                          <RadarChart data={radarData}><PolarGrid stroke="rgba(255,255,255,0.06)" /><PolarAngleAxis dataKey="dimension" tick={{ fontSize:10, fill:"#64748b" }} /><Radar dataKey="score" stroke="#7c3aed" fill="#7c3aed" fillOpacity={0.25} /></RadarChart>
+                          <RadarChart data={radarData}><PolarGrid stroke="rgba(255,255,255,0.06)" /><PolarAngleAxis dataKey="dimension" tick={{ fontSize:10, fill:"var(--text-2)" }} /><Radar dataKey="score" stroke="#7c3aed" fill="#7c3aed" fillOpacity={0.25} /></RadarChart>
                         </ResponsiveContainer>
                       </div>
                     </div>
                     {icrData.length > 0 && (
                       <div className="card">
-                        <h3 style={{ fontSize:14, fontWeight:600, color:"#f8fafc", marginBottom:14 }}>Repartition ICR</h3>
+                        <h3 style={{ fontSize:14, fontWeight:600, color:"var(--text-1)", marginBottom:14 }}>Repartition ICR</h3>
                         <div style={{ height:240 }}>
                           <ResponsiveContainer width="100%" height="100%">
-                            <PieChart><Pie data={icrData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label={({ name, percent }: any) => name + " " + Math.round((percent||0)*100) + "%"} labelLine={false}>{icrData.map((e: any, i: number) => <Cell key={i} fill={e.color} />)}</Pie><Tooltip contentStyle={{ background:"#111827", border:"1px solid rgba(255,255,255,0.08)", borderRadius:8 }} /><Legend /></PieChart>
+                            <PieChart><Pie data={icrData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label={({ name, percent }: any) => name + " " + Math.round((percent||0)*100) + "%"} labelLine={false}>{icrData.map((e: any, i: number) => <Cell key={i} fill={e.color} />)}</Pie><Tooltip contentStyle={{ background:"var(--surface)", border:"1px solid var(--border)", borderRadius:8 }} /><Legend /></PieChart>
                           </ResponsiveContainer>
                         </div>
                       </div>
                     )}
                     {stats.topRiskFactors?.length > 0 && (
                       <div className="card">
-                        <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}><TrendingDown size={15} style={{ color:"#f43f5e" }} /><h3 style={{ fontSize:14, fontWeight:600, color:"#f8fafc" }}>Facteurs de Risque</h3></div>
+                        <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}><TrendingDown size={15} style={{ color:"#f43f5e" }} /><h3 style={{ fontSize:14, fontWeight:600, color:"var(--text-1)" }}>Facteurs de Risque</h3></div>
                         {stats.topRiskFactors.slice(0,6).map((f: any, i: number) => (
                           <div key={i} style={{ marginBottom:10 }}>
-                            <div style={{ display:"flex", justifyContent:"space-between", marginBottom:4 }}><span style={{ color:"#94a3b8", fontSize:12 }}>{f.label}</span><span style={{ color:"#f43f5e", fontSize:11, fontWeight:600 }}>{f.pct}%</span></div>
+                            <div style={{ display:"flex", justifyContent:"space-between", marginBottom:4 }}><span style={{ color:"var(--text-3)", fontSize:12 }}>{f.label}</span><span style={{ color:"#f43f5e", fontSize:11, fontWeight:600 }}>{f.pct}%</span></div>
                             <div className="progress-bar"><div className="progress-fill" style={{ width:f.pct+"%", background:"#f43f5e" }} /></div>
                           </div>
                         ))}
@@ -379,10 +413,10 @@ export default function CampaignDetailPage() {
                     )}
                     {stats.topProtectiveFactors?.length > 0 && (
                       <div className="card">
-                        <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}><TrendingUp size={15} style={{ color:"#34d399" }} /><h3 style={{ fontSize:14, fontWeight:600, color:"#f8fafc" }}>Facteurs Protecteurs</h3></div>
+                        <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}><TrendingUp size={15} style={{ color:"#34d399" }} /><h3 style={{ fontSize:14, fontWeight:600, color:"var(--text-1)" }}>Facteurs Protecteurs</h3></div>
                         {stats.topProtectiveFactors.slice(0,6).map((f: any, i: number) => (
                           <div key={i} style={{ marginBottom:10 }}>
-                            <div style={{ display:"flex", justifyContent:"space-between", marginBottom:4 }}><span style={{ color:"#94a3b8", fontSize:12 }}>{f.label}</span><span style={{ color:"#34d399", fontSize:11, fontWeight:600 }}>{f.pct}%</span></div>
+                            <div style={{ display:"flex", justifyContent:"space-between", marginBottom:4 }}><span style={{ color:"var(--text-3)", fontSize:12 }}>{f.label}</span><span style={{ color:"#34d399", fontSize:11, fontWeight:600 }}>{f.pct}%</span></div>
                             <div className="progress-bar"><div className="progress-fill" style={{ width:f.pct+"%", background:"#34d399" }} /></div>
                           </div>
                         ))}
@@ -398,26 +432,43 @@ export default function CampaignDetailPage() {
           {activeTab === "plan" && (
             <div className="card">
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
-                <h2 style={{ fontSize:16, fontWeight:700, color:"#f8fafc" }}>Plan d action</h2>
-                <Link href="/dashboard/actions" className="btn btn-primary btn-sm" style={{ textDecoration:"none" }}><Plus size={13} /> Gerer le plan</Link>
+                <h2 style={{ fontSize:16, fontWeight:700, color:"var(--text-1)" }}>Recommandations & Plan d'Action</h2>
+                <div style={{ display: "flex", gap: 10 }}>
+                  {actions.length === 0 && (
+                    <button 
+                      onClick={handleGenerateActions} 
+                      disabled={isGeneratingActions}
+                      className="btn btn-tertiary btn-sm"
+                    >
+                      <Zap size={13} style={{ color: "#f59e0b" }} /> 
+                      {isGeneratingActions ? "Génération..." : "Suggérer des actions"}
+                    </button>
+                  )}
+                  <Link href={`/dashboard/actions?campaignId=${id}`} className="btn btn-primary btn-sm" style={{ textDecoration:"none" }}>
+                    <Plus size={13} /> Gerer le plan
+                  </Link>
+                </div>
               </div>
               {actions.length === 0 ? (
-                <div style={{ textAlign:"center", padding:"32px 0", color:"#475569" }}><Target size={28} style={{ marginBottom:10, opacity:0.3 }} /><p style={{ fontSize:13 }}>Aucune action. Cliquez sur "Gerer le plan" pour en creer.</p></div>
+                <div style={{ textAlign:"center", padding:"32px 0", color:"var(--text-2)" }}>
+                  <Target size={28} style={{ marginBottom:10, opacity:0.3 }} />
+                  <p style={{ fontSize:13 }}>Aucune action. Cliquez sur "Suggérer des actions" ou "Gérer le plan" pour en créer.</p>
+                </div>
               ) : (
                 <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
                   {actions.map((a: any) => {
-                    const sc: Record<string,string> = { PROPOSEE:"#94a3b8", VALIDEE:"#a78bfa", PLANIFIEE:"#f59e0b", EN_COURS:"#38bdf8", REALISEE:"#34d399" };
-                    const sl: Record<string,string> = { PROPOSEE:"Proposee", VALIDEE:"Validee", PLANIFIEE:"Planifiee", EN_COURS:"En cours", REALISEE:"Realisee" };
-                    const color = sc[a.status] || "#94a3b8";
+                    const sc: Record<string,string> = { PROPOSEE:"var(--text-3)", VALIDEE:"var(--primary)", PLANIFIEE:"#f59e0b", EN_COURS:"#38bdf8", REALISEE:"#34d399" };
+                    const sl: Record<string,string> = { PROPOSEE:"Recommandation", VALIDEE:"Validée", PLANIFIEE:"Planifiée", EN_COURS:"En cours", REALISEE:"Réalisée" };
+                    const color = sc[a.status] || "var(--text-3)";
                     return (
                       <div key={a.id} style={{ display:"flex", alignItems:"flex-start", gap:14, padding:"12px 16px", background:"rgba(255,255,255,0.025)", borderRadius:12, border:"1px solid rgba(255,255,255,0.06)" }}>
                         <div style={{ width:8, height:8, borderRadius:"50%", background:color, marginTop:6, flexShrink:0 }} />
                         <div style={{ flex:1 }}>
                           <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4 }}>
-                            <span style={{ fontSize:14, fontWeight:600, color:"#f8fafc" }}>{a.title}</span>
+                            <span style={{ fontSize:14, fontWeight:600, color:"var(--text-1)" }}>{a.title}</span>
                             <span style={{ padding:"1px 8px", borderRadius:999, fontSize:10, fontWeight:600, background:color+"18", color }}>{sl[a.status]}</span>
                           </div>
-                          {a.description && <p style={{ fontSize:12, color:"#64748b", margin:0 }}>{a.description}</p>}
+                          {a.description && <p style={{ fontSize:12, color:"var(--text-2)", margin:0 }}>{a.description}</p>}
                         </div>
                       </div>
                     );

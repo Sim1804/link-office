@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     // [BUG FIX] Bloquer MEMBER et CITIZEN — spec §11
     if (!BINOME_ALLOWED_ROLES.includes(session.user.role)) {
       return NextResponse.json(
-        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium+.", code: "ROLE_NOT_ALLOWED" },
+        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium/Premium+.", code: "ROLE_NOT_ALLOWED" },
         { status: 403 }
       );
     }
@@ -32,9 +32,9 @@ export async function POST(req: Request) {
         where: { id: currentUser.campaignId },
         select: { offer: true, status: true },
       });
-      if (!campaign || campaign.offer !== "PREMIUM_PLUS") {
+      if (!campaign || (campaign.offer !== "PREMIUM_PLUS" && campaign.offer !== "PREMIUM")) {
         return NextResponse.json({
-          error: "Le module Binome est reserve aux campagnes PREMIUM+.",
+          error: "Le module Binome est reserve aux campagnes PREMIUM ou PREMIUM+.",
           code: "PREMIUM_PLUS_REQUIRED",
         }, { status: 403 });
       }

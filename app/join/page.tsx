@@ -43,28 +43,28 @@ export default function JoinCampaignPage() {
   return (
     <>
       <Navbar />
-      <main style={{ minHeight: "100vh", background: "#0b0f19", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, position: "relative" }}>
+      <main style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, position: "relative" }}>
         {/* Blobs */}
-        <div style={{ position: "absolute", top: "-10%", left: "-10%", width: 500, height: 500, background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)", zIndex: 0, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: "-10%", left: "-10%", width: 500, height: 500, background: "radial-gradient(circle, rgba(0,169,157,0.15) 0%, transparent 70%)", zIndex: 0, pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%)", zIndex: 0, pointerEvents: "none" }} />
 
-        <div className="card" style={{ maxWidth: 460, width: "100%", padding: 40, position: "relative", zIndex: 1, background: "rgba(17,24,39,0.8)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 24, boxShadow: "0 20px 40px rgba(0,0,0,0.4)" }}>
+        <div className="card" style={{ maxWidth: 460, width: "100%", padding: 40, position: "relative", zIndex: 1, background: "var(--surface)", backdropFilter: "blur(20px)", border: "1px solid var(--surface)", borderRadius: 24, boxShadow: "0 20px 40px rgba(0,0,0,0.4)" }}>
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
-            <div style={{ width: 64, height: 64, background: "rgba(124,58,237,0.15)", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Key size={32} color="#a78bfa" />
+            <div style={{ width: 64, height: 64, background: "rgba(0,169,157,0.15)", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Key size={32} color="var(--primary)" />
             </div>
           </div>
           
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 24, color: "#f8fafc", textAlign: "center", marginBottom: 12 }}>
+          <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 24, color: "var(--text-1)", textAlign: "center", marginBottom: 12 }}>
             Rejoindre une campagne
           </h1>
-          <p style={{ color: "#94a3b8", textAlign: "center", fontSize: 14, marginBottom: 32, lineHeight: 1.5 }}>
+          <p style={{ color: "var(--text-2)", textAlign: "center", fontSize: 14, marginBottom: 32, lineHeight: 1.5 }}>
             Saisissez le code d'accès fourni par votre organisation (entreprise, collectivité, mutuelle) pour accéder à votre espace dédié.
           </p>
 
           <form onSubmit={handleJoin} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <div>
-              <label style={{ display: "block", fontSize: 13, color: "#cbd5e1", marginBottom: 8, fontWeight: 500 }}>Code d'accès</label>
+              <label style={{ display: "block", fontSize: 13, color: "var(--text-3)", marginBottom: 8, fontWeight: 500 }}>Code d'accès</label>
               <input
                 type="text"
                 value={code}
@@ -72,11 +72,11 @@ export default function JoinCampaignPage() {
                 placeholder="Ex: MAIRIE-LYON-2026"
                 style={{
                   width: "100%", padding: "14px 16px", borderRadius: 12, fontSize: 15, fontFamily: "inherit",
-                  background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)",
-                  color: "#f8fafc", outline: "none", transition: "all 0.2s"
+                  background: "var(--surface)", border: "1px solid var(--border)",
+                  color: "var(--text-1)", outline: "none", transition: "all 0.2s"
                 }}
-                onFocus={e => e.target.style.borderColor = "#a78bfa"}
-                onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}
+                onFocus={e => e.target.style.borderColor = "var(--primary)"}
+                onBlur={e => e.target.style.borderColor = "var(--border)"}
               />
             </div>
 
@@ -91,10 +91,10 @@ export default function JoinCampaignPage() {
               disabled={loading || !code.trim()}
               style={{
                 width: "100%", padding: "14px", borderRadius: 12, fontSize: 15, fontWeight: 600,
-                background: "linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%)", color: "white",
+                background: "linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%)", color: "white",
                 border: "none", cursor: (loading || !code.trim()) ? "not-allowed" : "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                boxShadow: "0 4px 14px rgba(124,58,237,0.3)", opacity: (loading || !code.trim()) ? 0.7 : 1,
+                boxShadow: "0 4px 14px rgba(0,169,157,0.3)", opacity: (loading || !code.trim()) ? 0.7 : 1,
                 transition: "all 0.2s"
               }}
             >
@@ -102,7 +102,7 @@ export default function JoinCampaignPage() {
             </button>
           </form>
 
-          <div style={{ marginTop: 24, textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, color: "#64748b", fontSize: 12 }}>
+          <div style={{ marginTop: 24, textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, color: "var(--text-3)", fontSize: 12 }}>
             <ShieldCheck size={14} /> Vos données restent strictement confidentielles et anonymisées.
           </div>
         </div>
