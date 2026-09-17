@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { getMobileUser } from "@/lib/mobile-auth";
 import { prisma } from "@/lib/prisma";
@@ -14,19 +15,26 @@ export async function POST(request: Request) {
     if (assessment.userId !== user.id) return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
 
     const question = await prisma.question.findUnique({ where: { id: data.questionId }, select: { id: true } });
-    if (!question) return NextResponse.json({ error: "Question introuvable" }, { status: 404 });
+    const adaptiveQuestion = question ? null : await prisma.adaptiveQuestion.findUnique({ where: { id: data.questionId }, select: { id: true } });
+    if (!question && !adaptiveQuestion) return NextResponse.json({ error: "Question introuvable" }, { status: 404 });
 
-    const answer = await prisma.questionnaireAnswer.upsert({
-      where: { assessmentId_questionId: { assessmentId: data.assessmentId, questionId: data.questionId } },
-      create: data,
-      update: { value: data.value },
-    });
+    const answer = question
+      ? await prisma.questionnaireAnswer.upsert({
+          where: { assessmentId_questionId: { assessmentId: data.assessmentId, questionId: data.questionId } },
+          create: data,
+          update: { value: data.value },
+        })
+      : await prisma.adaptiveAnswer.upsert({
+          where: { assessmentId_adaptiveQuestionId: { assessmentId: data.assessmentId, adaptiveQuestionId: data.questionId } },
+          create: { assessmentId: data.assessmentId, adaptiveQuestionId: data.questionId, value: data.value },
+          update: { value: data.value },
+        });
     return NextResponse.json({ answer });
   } catch (error) {
     console.error("MOBILE QUESTIONNAIRE SAVE ERROR:", error);
     return NextResponse.json(
-      { error: error instanceof z.ZodError ? "Réponse invalide." : "Impossible d'enregistrer votre réponse." },
-      { status: error instanceof z.ZodError ? 400 : 500 }
+      { error: error instanceof z.ZodError ? "Réponse invalide." : error instanceof Prisma.PrismaClientInitializationError ? "Le service de données est momentanément indisponible." : "Impossible d'enregistrer votre réponse." },
+      { status: error instanceof z.ZodError ? 400 : error instanceof Prisma.PrismaClientInitializationError ? 503 : 500 }
     );
   }
 }

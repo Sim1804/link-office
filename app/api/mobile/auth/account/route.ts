@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { getMobileUser } from "@/lib/mobile-auth";
 import { prisma } from "@/lib/prisma";
 
@@ -41,14 +42,14 @@ export async function DELETE(request: Request) {
       await tx.notification.deleteMany({ where: { userId: user.id } });
       await tx.userSubscription.deleteMany({ where: { userId: user.id } });
       await tx.user.delete({ where: { id: user.id } });
-    });
+    }, { maxWait: 10_000, timeout: 30_000 });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("MOBILE ACCOUNT DELETE ERROR:", error);
     return NextResponse.json(
-      { error: "La suppression du compte a échoué. Réessayez plus tard." },
-      { status: 500 }
+      { error: error instanceof Prisma.PrismaClientInitializationError ? "Le service de données est momentanément indisponible. Réessayez plus tard." : "La suppression du compte a échoué. Réessayez plus tard." },
+      { status: error instanceof Prisma.PrismaClientInitializationError ? 503 : 500 }
     );
   }
 }

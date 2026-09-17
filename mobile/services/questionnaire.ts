@@ -11,10 +11,12 @@ async function request<T>(path: string, token: string, options: RequestInit = {}
   return body as T;
 }
 
+export type AdaptiveQuestion = { id: string; text: string; moduleTitle: string };
+
 export async function startQuestionnaire(token: string, userId: string) {
   // `userId` is sent only for backward compatibility with the deployed API.
   // The current backend derives the effective user solely from the bearer token.
-  return request<{ id: string }>("/api/mobile/questionnaire/start", token, {
+  return request<{ id: string; adaptiveQuestions: AdaptiveQuestion[] }>("/api/mobile/questionnaire/start", token, {
     method: "POST",
     body: JSON.stringify({ userId }),
   });

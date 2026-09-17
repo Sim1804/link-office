@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { getMobileUser } from "@/lib/mobile-auth";
 import { ResultService } from "@/lib/iqrh/result-service";
@@ -16,8 +17,8 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("MOBILE QUESTIONNAIRE SUBMIT ERROR:", error);
     return NextResponse.json(
-      { error: error instanceof z.ZodError ? "Évaluation invalide." : "Impossible de finaliser votre évaluation." },
-      { status: error instanceof z.ZodError ? 400 : 500 }
+      { error: error instanceof z.ZodError ? "Évaluation invalide." : error instanceof Prisma.PrismaClientInitializationError ? "Le service de données est momentanément indisponible." : "Impossible de finaliser votre évaluation." },
+      { status: error instanceof z.ZodError ? 400 : error instanceof Prisma.PrismaClientInitializationError ? 503 : 500 }
     );
   }
 }
