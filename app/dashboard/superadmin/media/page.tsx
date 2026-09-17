@@ -60,10 +60,10 @@ export default async function AdminMediaIndex({ searchParams }: { searchParams: 
                   <div style={{ color: "var(--text-3)", fontSize: 12, marginTop: 4 }}>/{item.slug}</div>
                 </td>
                 <td style={{ padding: "16px 24px" }}>
-                  <span style={{ 
-                    display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 999, 
-                    background: item.mediaType === "PODCAST" ? "rgba(192,132,252,0.1)" : "rgba(56,189,248,0.1)", 
-                    color: item.mediaType === "PODCAST" ? "var(--violet)" : "var(--cyan)", fontSize: 12, fontWeight: 600 
+                  <span className="badge" style={{ 
+                    display: "inline-flex", alignItems: "center", gap: 6, padding: "2px 8px", borderRadius: 12, 
+                    background: item.mediaType === "PODCAST" ? "rgba(89,101,232,0.1)" : "rgba(14,165,233,0.1)", 
+                    color: item.mediaType === "PODCAST" ? "var(--indigo)" : "var(--cyan)", fontSize: 11, fontWeight: 700 
                   }}>
                     {item.mediaType === "PODCAST" ? <Headphones size={12} /> : <FileText size={12} />}
                     {item.mediaType.replace("_", " ")}

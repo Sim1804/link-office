@@ -72,7 +72,11 @@ const ROLE_RESTRICTED_ROUTES: Record<string, string[]> = {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   // Clé secrète JWT — doit correspondre à celle utilisée par NextAuth
-  const jwtSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "my-super-secret-auth-key-1234";
+  const jwtSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+  if (!jwtSecret) {
+    console.error("CRITICAL: AUTH_SECRET is not set in environment variables.");
+    return NextResponse.json({ error: "Configuration d'authentification critique manquante." }, { status: 500 });
+  }
 
   // ── Restriction IP pour /admin en production ─────────────────────────────
   // Les IPs autorisées sont configurées via la variable d'environnement ADMIN_ALLOWED_IPS

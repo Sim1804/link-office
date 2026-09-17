@@ -386,6 +386,8 @@ model BinomeSuggestion {
   campaign             Campaign? @relation(fields: [campaignId], references: [id])
 
   @@index([campaignId])
+  @@index([userAId, userBId])
+  @@index([status])
 }
 
 model Binome {
@@ -408,6 +410,7 @@ model Binome {
   gamification BinomeGamification?
 
   @@index([campaignId, status])
+  @@index([userAId, userBId])
 }
 
 model BinomeCheckin {

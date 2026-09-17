@@ -11,7 +11,7 @@ import bcrypt from "bcryptjs";
 import { rateLimit, getRetryAfterSeconds } from "@/lib/rate-limit";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "my-super-secret-auth-key-1234",
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   providers: [
     Credentials({
       name: "credentials",

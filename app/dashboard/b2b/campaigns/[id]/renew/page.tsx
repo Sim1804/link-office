@@ -59,7 +59,7 @@ export default function RenewCampaignPage() {
       const data = await r.json();
       if (!r.ok) throw new Error(data.error || "Erreur renouvellement");
       setSuccess(true);
-      setTimeout(() => router.push("/dashboard/rh/campaigns/" + data.campaign.id), 1500);
+      setTimeout(() => router.push("/dashboard/b2b/campaigns/" + data.campaign.id), 1500);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -82,7 +82,7 @@ export default function RenewCampaignPage() {
         <div style={{ maxWidth:700, margin:"0 auto", position:"relative", zIndex:1 }}>
 
           <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
-            <Link href={"/dashboard/rh/campaigns/" + id} style={{ color: "var(--text-3)", display:"flex", alignItems:"center", gap:4, textDecoration:"none", fontSize:13 }}>
+            <Link href={"/dashboard/b2b/campaigns/" + id} style={{ color: "var(--text-3)", display:"flex", alignItems:"center", gap:4, textDecoration:"none", fontSize:13 }}>
               <ArrowLeft size={15} /> Retour a la campagne
             </Link>
           </div>

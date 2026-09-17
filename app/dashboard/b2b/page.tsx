@@ -94,7 +94,7 @@ export default function B2BDashboard() {
               </div>
               <div>
                 <h1 style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 26, color: "var(--text-1)", marginBottom: 4 }}>
-                  Tableau de bord RH
+                  Tableau de bord B2B
                 </h1>
                 <p style={{ color: "var(--text-2)", fontSize: 14 }}>
                   Données agrégées • Anonymat garanti
@@ -104,7 +104,7 @@ export default function B2BDashboard() {
             </div>
 
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-              <Link href="/dashboard/rh/campaigns" className="btn btn-tertiary btn-sm">
+              <Link href="/dashboard/b2b/campaigns" className="btn btn-tertiary btn-sm">
                 Gérer mes campagnes
               </Link>
               <Link href="/dashboard/actions" className="btn btn-primary btn-sm">
@@ -183,7 +183,7 @@ export default function B2BDashboard() {
               <p style={{ color: "var(--text-3)", maxWidth: 500, margin: "0 auto 20px", lineHeight: 1.6 }}>
                 {stats.message}
               </p>
-              <Link href="/dashboard/rh/campaigns" className="btn btn-primary btn-md">
+              <Link href="/dashboard/b2b/campaigns" className="btn btn-primary btn-md">
                 Gérer mes campagnes
               </Link>
             </div>

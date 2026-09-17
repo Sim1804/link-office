@@ -9,7 +9,7 @@
  * | ---------------- | ------------------------------------------------------- |
  * | Non connecté     | Liens publics (Features, Méthode, Business, Témo...)    |
  * | EMPLOYEE/MEMBER  | Mon Évaluation, Ma Progression, IA IRIS                 |
- * | ADMIN_B2B        | Tableau de bord RH                                      |
+ * | ADMIN_B2B        | Tableau de bord B2B                                      |
  * | ADMIN_B2B2C      | Portail Mutuelle                                        |
  * | ADMIN_COLLECTIVITE | Observatoire Territoire                               |
  * | SUPER_ADMIN      | Console Admin + Démonstrations tous dashboards          |
@@ -31,55 +31,37 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import {
   Menu, X, Brain, LayoutDashboard, MessageCircle, User, LogOut,
-  ChevronDown, Shield, Building2, HeartPulse, Landmark, BookOpen, Users
+  ChevronDown, Shield, Building2, HeartPulse, Landmark, BookOpen, Users, BarChart3
 } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
-
-const publicLinks = [
-  { href: "/media", label: "MÉDIA" },
-  { href: "/#barometre", label: "BAROMÈTRE" },
-  { href: "/#iqrh", label: "IQRH" },
-  { href: "/#iris", label: "IRIS" },
-  { href: "/business", label: "PARTENAIRES" },
-];
 
 /** Union des rôles utilisateur reconnus par la Navbar */
 type RoleType = "EMPLOYEE" | "ADMIN_B2B" | "ADMIN_B2B2C" | "ADMIN_B2G" | "SUPER_ADMIN";
 
-/**
- * Configuration des badges de rôle affichés dans le dropdown profil.
- * Chaque rôle a une couleur et un libellé distinctif.
- */
 const ROLE_BADGES: Record<RoleType, { label: string; bg: string; color: string; border: string }> = {
   EMPLOYEE: { label: "Membre", bg: "rgba(18,61,70,0.05)", color: "var(--text-2)", border: "rgba(18,61,70,0.1)" },
-  ADMIN_B2B: { label: "RH Admin", bg: "rgba(89,101,232,0.1)", color: "#5965E8", border: "rgba(89,101,232,0.2)" },
-  ADMIN_B2B2C: { label: "Mutuelle Admin", bg: "rgba(0,169,157,0.1)", color: "#00A99D", border: "rgba(0,169,157,0.2)" },
-  ADMIN_B2G: { label: "Territoire Admin", bg: "rgba(77,189,178,0.1)", color: "#4DBDB2", border: "rgba(77,189,178,0.2)" },
-  SUPER_ADMIN: { label: "Super Admin", bg: "rgba(255,198,41,0.15)", color: "#FFC629", border: "rgba(255,198,41,0.3)" },
+  ADMIN_B2B: { label: "Administrateur B2B", bg: "rgba(89,101,232,0.1)", color: "#5965E8", border: "rgba(89,101,232,0.2)" },
+  ADMIN_B2B2C: { label: "Administrateur mutuelle", bg: "rgba(0,169,157,0.1)", color: "#00A99D", border: "rgba(0,169,157,0.2)" },
+  ADMIN_B2G: { label: "Administrateur territoire", bg: "rgba(77,189,178,0.1)", color: "#4DBDB2", border: "rgba(77,189,178,0.2)" },
+  SUPER_ADMIN: { label: "Super administrateur", bg: "rgba(255,198,41,0.15)", color: "#FFC629", border: "rgba(255,198,41,0.3)" },
 };
 
 /**
- * Barre de navigation principale de l'application.
- * Gère l'état du menu mobile (`open`) et du dropdown profil (`dropdownOpen`).
+ * Barre de navigation principale de l'application (Espace Connecté).
  */
 export function Navbar() {
-  /** Contrôle l'ouverture/fermeture du menu hamburger mobile */
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  /** Contrôle l'ouverture/fermeture du dropdown profil desktop */
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  /** Référence sur le conteneur du dropdown pour détecter les clics extérieurs */
   const profileDropdownRef = useRef<HTMLDivElement>(null);
 
   const currentPathname = usePathname();
   const { data: session, status } = useSession();
   const isLoading = status === "loading";
   
-  /** true si l'utilisateur est connecté (session NextAuth active) */
   const isAuthenticated = !!session;
   const userRole = (session?.user?.role as RoleType) ?? "EMPLOYEE";
   const roleBadge = ROLE_BADGES[userRole] || ROLE_BADGES.EMPLOYEE;
 
-  // Fermeture du dropdown profil lors d'un clic en dehors de son conteneur
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
@@ -90,41 +72,34 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  /**
-   * Retourne les liens de navigation adaptés au rôle de l'utilisateur.
-   * - Non connecté → liens publics (landing page)
-   * - Administrateurs → leurs dashboards spécifiques
-   * - Utilisateurs standard → dashboard personnel, progression, IRIS
-   */
   const getNavLinks = () => {
-    if (!isAuthenticated) return publicLinks;
+    if (!isAuthenticated) return [];
 
     if (userRole === "ADMIN_B2B") {
       return [
-        { href: "/dashboard/rh", label: "Tableau de bord RH", icon: Building2 },
-        { href: "/dashboard/rh/campaigns", label: "Campagnes", icon: Users },
+        { href: "/dashboard/b2b", label: "Tableau de bord B2B", icon: Building2 },
+        { href: "/dashboard/b2b/barometre", label: "Baromètre", icon: BarChart3 },
+        { href: "/dashboard/b2b/campaigns", label: "Campagnes", icon: Users },
       ];
     } else if (userRole === "ADMIN_B2B2C") {
-      return [{ href: "/dashboard/b2b2c", label: "Portail Mutuelle", icon: HeartPulse }];
+      return [{ href: "/dashboard/b2b2c", label: "Portail mutuelle", icon: HeartPulse }];
     } else if (userRole === "ADMIN_B2G") {
       return [{ href: "/dashboard/b2g", label: "Observatoire", icon: Landmark }];
     } else if (userRole === "SUPER_ADMIN") {
       return [
-        { href: "/dashboard/superadmin", label: "Console Admin", icon: Shield },
-        { href: "/dashboard/rh", label: "Portails Partenaires", icon: Building2 },
+        { href: "/dashboard/superadmin", label: "Console administrateur", icon: Shield },
+        { href: "/dashboard/b2b", label: "Portails partenaires", icon: Building2 },
       ];
     } else {
-      // Utilisateurs standard : EMPLOYEE, MEMBER, CITIZEN
       const subscription = (session?.user as any)?.subscription ?? "FREEMIUM";
       const isPremiumPlus = subscription === "PREMIUM_PLUS";
       const links = [
-        { href: "/dashboard", label: "Mon Evaluation", icon: LayoutDashboard },
-        { href: "/mon-profil", label: "Ma Progression", icon: User },
+        { href: "/dashboard", label: "Mon évaluation", icon: LayoutDashboard },
+        { href: "/mon-profil", label: "Ma progression", icon: User },
         { href: "/media", label: "Espace média", icon: BookOpen },
       ];
-      // Binome uniquement visible pour les abonnes PREMIUM+
       if (isPremiumPlus) {
-        links.push({ href: "/binome", label: "Binome", icon: Users });
+        links.push({ href: "/binome", label: "Binôme", icon: Users });
       }
       return links;
     }
@@ -132,6 +107,9 @@ export function Navbar() {
 
   const navLinks = getNavLinks();
 
+  if (!isAuthenticated && !isLoading) {
+    return null; // Do not render AppNavbar if not authenticated. PublicNavbar handles public routes.
+  }
 
   return (
     <header className="global-navbar" style={{
@@ -166,7 +144,7 @@ export function Navbar() {
         {/* Navigation Desktop — liens actifs surlignés selon la route courante */}
         <nav style={{ display: "flex", gap: 24, flex: 1, justifyContent: "center" }} className="hide-mobile">
           {navLinks.map(({ href, label }) => {
-            const isPortailLink = label === "Portails Partenaires" && (currentPathname.startsWith("/dashboard/rh") || currentPathname.startsWith("/dashboard/b2b2c") || currentPathname.startsWith("/dashboard/b2g"));
+            const isPortailLink = label === "Portails Partenaires" && (currentPathname.startsWith("/dashboard/b2b") || currentPathname.startsWith("/dashboard/b2b2c") || currentPathname.startsWith("/dashboard/b2g"));
             const isActivePage = isPortailLink || currentPathname === href || (href !== "/dashboard" && currentPathname.startsWith(href));
             return (
               <Link key={href} href={href} style={{
@@ -266,7 +244,7 @@ export function Navbar() {
                   {userRole === "SUPER_ADMIN" && (
                     <>
                       <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", padding: "8px 12px 4px", textTransform: "uppercase" }}>Sélecteur Démos</div>
-                      <Link href="/dashboard/rh" onClick={() => setIsProfileDropdownOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 12, color: "var(--primary)", textDecoration: "none" }}>
+                      <Link href="/dashboard/b2b" onClick={() => setIsProfileDropdownOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 12, color: "var(--primary)", textDecoration: "none" }}>
                         <Building2 size={14} /> Entreprises (B2B)
                       </Link>
                       <Link href="/dashboard/b2b2c" onClick={() => setIsProfileDropdownOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, fontSize: 12, color: "#34d399", textDecoration: "none" }}>

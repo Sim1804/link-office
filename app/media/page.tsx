@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Navbar } from "@/components/layout/Navbar";
+import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Footer } from "@/components/layout/Footer";
 import { MediaCard } from "@/components/media/MediaCard";
 import Link from "next/link";
@@ -15,11 +15,13 @@ export const metadata = {
 // Revalidation pour ISR (mise en cache statique mise à jour toutes les 60s)
 export const revalidate = 60;
 
-export default async function MediaIndexPage({ searchParams }: { searchParams: Promise<{ cat?: string, type?: string, q?: string }> }) {
+export default async function MediaIndexPage({ searchParams }: { searchParams: Promise<{ cat?: string, type?: string, q?: string, page?: string }> }) {
   const params = await searchParams;
   const categoryFilter = params.cat;
   const typeFilter = params.type;
   const searchFilter = params.q;
+  const currentPage = Math.max(1, parseInt(params.page || "1", 10));
+  const ITEMS_PER_PAGE = 12;
 
   // Build the where clause for Prisma
   const whereClause: any = { published: true };
@@ -41,22 +43,27 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
     ];
   }
 
-  const [mediaItems, categories] = await Promise.all([
+  const [mediaItems, totalItems, categories] = await Promise.all([
     prisma.mediaContent.findMany({
       where: whereClause,
       orderBy: { publishedAt: "desc" },
       include: {
         categories: true,
       },
-      take: 50,
+      skip: (currentPage - 1) * ITEMS_PER_PAGE,
+      take: ITEMS_PER_PAGE,
     }),
+    prisma.mediaContent.count({ where: whereClause }),
     prisma.mediaCategory.findMany({
       orderBy: { name: "asc" }
     })
   ]);
 
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
   return (
     <>
+      <PublicNavbar />
       <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 100, paddingBottom: 60 }}>
         <div className="container">
           {/* Header */}
@@ -77,7 +84,7 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
               borderTop: "3px solid #7c3aed"
             }}>
                 <div style={{ flex: "1 1 300px" }}>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 8px", borderRadius: 4, background: "rgba(18,61,70,0.05)", color: "var(--text-2)", fontSize: 13, fontWeight: 600, marginBottom: 16, border: "1px solid var(--border)" }}>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, background: "var(--surface-2)", color: "var(--text-2)", fontSize: 13, fontWeight: 600, marginBottom: 16, border: "1px solid var(--border)" }}>
                     <Headphones size={14} color="var(--primary)" /> Notre Podcast
                   </div>
                   <h2 style={{ fontSize: 32, fontWeight: 700, color: "var(--text-1)", marginBottom: 16 }}>La Voix des Éclaireurs</h2>
@@ -151,15 +158,57 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
 
           {/* Media Grid */}
           {mediaItems.length > 0 ? (
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", 
-              gap: 24,
-              animation: "fadeIn 0.8s ease-out"
-            }}>
-              {mediaItems.map(item => (
-                <MediaCard key={item.id} media={item} />
-              ))}
+            <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+              <div style={{ 
+                display: "grid", 
+                gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", 
+                gap: 24,
+                animation: "fadeIn 0.8s ease-out"
+              }}>
+                {mediaItems.map(item => (
+                  <MediaCard key={item.id} media={item} />
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 24px", background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
+                  <span style={{ color: "var(--text-3)", fontSize: 13, fontWeight: 500 }}>
+                    Affichage de {((currentPage - 1) * ITEMS_PER_PAGE) + 1} à {Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} sur {totalItems} contenus
+                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                      const page = i + 1;
+                      const isActive = page === currentPage;
+                      if (totalPages > 7 && page > 3 && page < totalPages - 1 && page !== currentPage) {
+                        if (page === 4 || page === totalPages - 2) return <span key={page} style={{ padding: "0 4px", color: "var(--text-3)" }}>…</span>;
+                        return null;
+                      }
+                      
+                      // Construire l'URL avec les filtres existants
+                      const params = new URLSearchParams();
+                      if (typeFilter) params.set("type", typeFilter);
+                      if (categoryFilter) params.set("cat", categoryFilter);
+                      if (searchFilter) params.set("q", searchFilter);
+                      params.set("page", page.toString());
+                      
+                      return (
+                        <Link key={page} href={`/media?${params.toString()}`} style={{ textDecoration: "none" }}>
+                          <button style={{ 
+                            width: 32, height: 32, borderRadius: "50%", 
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            background: isActive ? "var(--primary)" : "transparent", 
+                            border: isActive ? "none" : "1px solid var(--border)", 
+                            color: isActive ? "white" : "var(--text-2)", 
+                            fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.2s"
+                          }}>
+                            {page}
+                          </button>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div style={{ textAlign: "center", padding: "80px 20px", background: "var(--surface)", borderRadius: 24, border: "1px dashed var(--border-strong)" }}>

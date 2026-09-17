@@ -146,10 +146,10 @@ export default function CampaignDetailPage() {
         <div className="page-container-wide" style={{ position:"relative", zIndex:1 }}>
 
           <Breadcrumb
-            homeHref="/dashboard/rh"
+            homeHref="/dashboard/b2b"
             items={[
-              { label: "Tableau de bord RH", href: "/dashboard/rh" },
-              { label: "Campagnes", href: "/dashboard/rh/campaigns" },
+              { label: "Tableau de bord B2B", href: "/dashboard/b2b" },
+              { label: "Campagnes", href: "/dashboard/b2b/campaigns" },
               { label: campaign.title },
             ]}
           />
@@ -173,7 +173,7 @@ export default function CampaignDetailPage() {
               </p>
             </div>
             {["CLOSED","RENOUVELEE"].includes(campaign.status) && (
-              <Link href={"/dashboard/rh/campaigns/" + id + "/renew"} className="btn btn-amber btn-sm" style={{ textDecoration:"none", flexShrink:0 }}>
+              <Link href={"/dashboard/b2b/campaigns/" + id + "/renew"} className="btn btn-amber btn-sm" style={{ textDecoration:"none", flexShrink:0 }}>
                 <RefreshCw size={13} /> Renouveler
               </Link>
             )}
@@ -270,7 +270,7 @@ export default function CampaignDetailPage() {
                 {campaign.parentCampaign && (
                   <div style={{ padding:"12px 16px", background:"rgba(124,58,237,0.08)", border:"1px solid rgba(124,58,237,0.2)", borderRadius:12 }}>
                     <p style={{ fontSize:12, color:"var(--primary)", fontWeight:600, marginBottom:4 }}>Renouvellement de :</p>
-                    <Link href={"/dashboard/rh/campaigns/" + campaign.parentCampaign.id} style={{ color:"var(--text-1)", fontSize:14, textDecoration:"none" }}>{campaign.parentCampaign.title} ({campaign.parentCampaign.offer})</Link>
+                    <Link href={"/dashboard/b2b/campaigns/" + campaign.parentCampaign.id} style={{ color:"var(--text-1)", fontSize:14, textDecoration:"none" }}>{campaign.parentCampaign.title} ({campaign.parentCampaign.offer})</Link>
                   </div>
                 )}
               </div>

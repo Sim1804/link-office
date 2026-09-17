@@ -157,7 +157,6 @@ export async function POST(
          * IRIS l'appelle quand l'utilisateur indique avoir accompli un défi compatible.
          * Déclenche `GamificationService.completeChallenge()` en arrière-plan.
          */
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         complete_micro_challenge: tool({
           description:
             "Valider un micro-défi (MICRO_CHALLENGE) lorsque l'utilisateur indique l'avoir accompli.",
@@ -193,24 +192,24 @@ export async function POST(
             try {
               const partners = await prisma.libraryItem.findMany({
                 where: { library: "Partenaires" },
-                take: 3
+                take: 100
               });
               
               // On filtre basiquement en mémoire pour trouver les partenaires qui correspondent au besoin
               const matched = partners.filter(p => {
-                const data = p.data as any;
+                const data = p.data as Record<string, unknown>;
                 const searchString = `${p.title} ${p.category} ${data?.besoins_couverts} ${data?.description}`.toLowerCase();
                 return searchString.includes(need.toLowerCase());
               });
 
               return { 
                 success: true, 
-                partners: (matched.length > 0 ? matched : partners.slice(0, 2)).map(p => {
-                  const data = p.data as any;
+                partners: (matched.length > 0 ? matched.slice(0, 3) : partners.slice(0, 2)).map(p => {
+                  const data = p.data as Record<string, unknown>;
                   return { id: p.id, title: p.title, category: p.category, type: data?.type_partenaire, description: data?.description, territoire: data?.territoire };
                 }) 
               };
-            } catch (error: unknown) {
+            } catch (_error: unknown) {
               return { success: false, error: "Impossible de récupérer les partenaires." };
             }
           }
@@ -227,7 +226,7 @@ export async function POST(
             try {
               await MatchingService.setOptIn(userId, true);
               return { success: true, message: "Consentement enregistré avec succès." };
-            } catch (error: unknown) {
+            } catch (_error: unknown) {
               return { success: false, error: "Erreur lors de l'enregistrement du consentement." };
             }
           }
@@ -244,7 +243,7 @@ export async function POST(
             try {
               const result = await MatchingService.findAndInvitePartner(userId);
               return result;
-            } catch (error: unknown) {
+            } catch (_error: unknown) {
               return { success: false, error: "Erreur lors de la recherche de partenaire." };
             }
           }

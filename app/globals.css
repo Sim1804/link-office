@@ -68,27 +68,27 @@
   color-scheme: light;
 
   /* Fond & Surfaces */
-  --bg:           #F5F7F6;
-  --surface:      #FFFFFF;
-  --surface-2:    #EEF3F2;
-  --surface-3:    #E3EBE6;
+  --bg:           var(--color-background);
+  --surface:      var(--color-surface);
+  --surface-2:    var(--color-surface-2);
+  --surface-3:    var(--color-surface-3);
 
   /* Bordures */
-  --border:       rgba(18,61,70,0.1);
-  --border-strong:rgba(18,61,70,0.2);
+  --border:       var(--color-border);
+  --border-strong:var(--color-border-strong);
 
   /* Couleurs marque */
-  --primary:      #00A99D;
-  --primary-hover:#199E9A;
-  --primary-light:#4DBDB2;
+  --primary:      var(--color-primary);
+  --primary-hover:var(--color-primary-hover);
+  --primary-light:var(--color-primary-light);
 
   /* Accents */
-  --cyan:         #00A99D;
-  --amber:        #FFC629;
-  --energy:       #FFC629;
+  --cyan:         var(--color-accent-cyan);
+  --amber:        var(--color-accent-amber);
+  --energy:       var(--color-accent-amber);
   --rose:         #f43f5e;
-  --indigo:       #5965E8;
-  --action:       #5965E8;
+  --indigo:       var(--color-accent-rose);
+  --action:       var(--color-accent-rose);
 
   /* Sémantique */
   --success:      #34d399;

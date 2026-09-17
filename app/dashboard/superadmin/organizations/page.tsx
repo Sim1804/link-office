@@ -77,13 +77,13 @@ export default async function OrganizationsPage({ searchParams }: { searchParams
                     <div style={{ color: "var(--violet)", fontSize: 11, marginTop: 4, fontWeight: 700, letterSpacing: "0.05em" }}>{org.codeAccess}</div>
                   </td>
                   <td style={{ padding: "16px 24px" }}>
-                    <span style={{ 
+                    <span className="badge" style={{ 
                       padding: "2px 8px", 
-                      borderRadius: 6, 
+                      borderRadius: 12, 
                       fontSize: 11, 
                       fontWeight: 700, 
-                      background: org.type === "B2B2C" ? "rgba(245,158,11,0.15)" : org.type === "B2G" ? "rgba(56,189,248,0.15)" : "rgba(124,58,237,0.15)",
-                      color: org.type === "B2B2C" ? "#fcd34d" : org.type === "B2G" ? "#7dd3fc" : "var(--violet)",
+                      background: org.type === "B2B2C" ? "rgba(89,101,232,0.1)" : org.type === "B2G" ? "rgba(14,165,233,0.1)" : "rgba(0,169,157,0.1)",
+                      color: org.type === "B2B2C" ? "var(--indigo)" : org.type === "B2G" ? "var(--cyan)" : "var(--primary)",
                     }}>
                       {org.type === "B2B" ? "Entreprises (B2B)" : org.type === "B2B2C" ? "Mutuelles (B2B2C)" : org.type === "B2G" ? "Collectivités (B2G)" : org.type}
                     </span>

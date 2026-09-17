@@ -13,7 +13,7 @@ export function PartnerPortalsNavigation() {
   if (session?.user?.role !== "SUPER_ADMIN") return null;
 
   const tabs = [
-    { name: "Entreprises (B2B)", href: "/dashboard/rh", icon: Building2 },
+    { name: "Entreprises (B2B)", href: "/dashboard/b2b", icon: Building2 },
     { name: "Mutuelles (B2B2C)", href: "/dashboard/b2b2c", icon: HeartPulse },
     { name: "Collectivités (B2G)", href: "/dashboard/b2g", icon: Landmark },
   ];

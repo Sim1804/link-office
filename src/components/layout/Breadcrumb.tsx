@@ -6,8 +6,8 @@
  * Usage :
  * ```tsx
  * <Breadcrumb items={[
- *   { label: "Tableau de bord RH", href: "/dashboard/rh" },
- *   { label: "Campagnes", href: "/dashboard/rh/campaigns" },
+ *   { label: "Tableau de bord B2B", href: "/dashboard/b2b" },
+ *   { label: "Campagnes", href: "/dashboard/b2b/campaigns" },
  *   { label: "Campagne Lumina Retail" }, // dernier item = page courante, sans href
  * ]} />
  * ```

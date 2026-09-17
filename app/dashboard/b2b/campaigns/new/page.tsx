@@ -103,7 +103,7 @@ export default function NewCampaignPage() {
         }
       }
 
-      router.push(`/dashboard/rh/campaigns/${campaignId}`);
+      router.push(`/dashboard/b2b/campaigns/${campaignId}`);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -121,7 +121,7 @@ export default function NewCampaignPage() {
         <div style={{ maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1 }}>
 
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
-            <Link href="/dashboard/rh/campaigns" style={{ color: "var(--text-3)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 13 }}>
+            <Link href="/dashboard/b2b/campaigns" style={{ color: "var(--text-3)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 13 }}>
               <ArrowLeft size={15} /> Mes campagnes
             </Link>
           </div>

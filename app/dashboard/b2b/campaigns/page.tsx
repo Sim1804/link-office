@@ -56,7 +56,7 @@ export default function CampaignsListPage() {
     const completion = c._count.invites > 0 ? Math.round((c._count.assessments / c._count.invites) * 100) : 0;
 
     return (
-      <Link href={`/dashboard/rh/campaigns/${c.id}`} style={{ textDecoration: "none" }}>
+      <Link href={`/dashboard/b2b/campaigns/${c.id}`} style={{ textDecoration: "none" }}>
         <div className="card card-hover" style={{ cursor: "pointer", transition: "all 0.25s" }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -125,9 +125,9 @@ export default function CampaignsListPage() {
         <div className="page-container-wide" style={{ position: "relative", zIndex: 1 }}>
 
           <Breadcrumb
-            homeHref="/dashboard/rh"
+            homeHref="/dashboard/b2b"
             items={[
-              { label: "Tableau de bord RH", href: "/dashboard/rh" },
+              { label: "Tableau de bord B2B", href: "/dashboard/b2b" },
               { label: "Campagnes" },
             ]}
           />
@@ -143,10 +143,10 @@ export default function CampaignsListPage() {
               <p style={{ color: "var(--text-3)", fontSize: 14 }}>Suivez vos campagnes IQRH — RGPD garanti</p>
             </div>
             <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
-              <Link href="/dashboard/rh" className="btn btn-tertiary btn-sm">
-                Tableau de bord RH
+              <Link href="/dashboard/b2b" className="btn btn-tertiary btn-sm">
+                Tableau de bord B2B
               </Link>
-              <Link href="/dashboard/rh/campaigns/new" className="btn btn-primary btn-sm">
+              <Link href="/dashboard/b2b/campaigns/new" className="btn btn-primary btn-sm">
                 <Plus size={14} /> Nouvelle campagne
               </Link>
             </div>
@@ -161,7 +161,7 @@ export default function CampaignsListPage() {
               <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 28 }}>
                 Lancez votre première campagne IQRH pour évaluer le capital relationnel de vos équipes.
               </p>
-              <Link href="/dashboard/rh/campaigns/new" className="btn btn-primary btn-md">
+              <Link href="/dashboard/b2b/campaigns/new" className="btn btn-primary btn-md">
                 <Plus size={16} /> Créer une campagne
               </Link>
             </div>

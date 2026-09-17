@@ -15,7 +15,7 @@ import {
   AlertCircle, MapPin, HeartPulse, Sparkles,
 } from "lucide-react";
 import Link from "next/link";
-import { Navbar } from "@/components/layout/Navbar";
+import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Footer } from "@/components/layout/Footer";
 
 /* ── Types ──────────────────────────────────────────────────── */
@@ -140,7 +140,7 @@ export default function BusinessPage() {
 
   return (
     <>
-      <Navbar />
+      <PublicNavbar />
 
       <main style={{ position: "relative", zIndex: 1 }}>
 

@@ -173,16 +173,16 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         {error && (
-          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(244,63,94,0.08)", border: "1px solid rgba(244,63,94,0.2)", borderRadius: 12, padding: "12px 16px" }}>
-            <AlertCircle size={18} style={{ color: "#f43f5e", flexShrink: 0 }} />
-            <span style={{ color: "#f87171", fontSize: 13, fontWeight: 500 }}>{error}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "var(--error-bg)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 12, padding: "12px 16px" }}>
+            <AlertCircle size={18} style={{ color: "var(--error)", flexShrink: 0 }} />
+            <span style={{ color: "var(--error)", fontSize: 13, fontWeight: 500 }}>{error}</span>
           </div>
         )}
 
         {/* SECTION BASE */}
         <div className="card" style={{ padding: 32 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-            <BookPlus size={24} style={{ color: "#c084fc" }} />
+            <BookPlus size={24} style={{ color: "var(--primary)" }} />
             <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Informations Principales</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
@@ -239,7 +239,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }} className="animate-in fade-in slide-in-from-bottom-4">
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                <BookPlus size={24} style={{ color: "#a855f7" }} />
+                <BookPlus size={24} style={{ color: "var(--indigo)" }} />
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Texte prêt à afficher *</h2>
               </div>
               <textarea 
@@ -253,7 +253,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
 
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                <BookPlus size={24} style={{ color: "#a855f7" }} />
+                <BookPlus size={24} style={{ color: "var(--indigo)" }} />
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Critères de matching *</h2>
               </div>
               <textarea 
@@ -272,7 +272,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }} className="animate-in fade-in slide-in-from-bottom-4">
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                <BookPlus size={24} style={{ color: "#0ea5e9" }} />
+                <BookPlus size={24} style={{ color: "var(--cyan)" }} />
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Texte prêt à afficher *</h2>
               </div>
               <textarea 
@@ -286,7 +286,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
 
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                <BookPlus size={24} style={{ color: "#0ea5e9" }} />
+                <BookPlus size={24} style={{ color: "var(--cyan)" }} />
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Ciblage *</h2>
               </div>
               <textarea 
@@ -300,7 +300,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
 
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                <BookPlus size={24} style={{ color: "#0ea5e9" }} />
+                <BookPlus size={24} style={{ color: "var(--cyan)" }} />
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Progression *</h2>
               </div>
               <textarea 
@@ -319,7 +319,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }} className="animate-in fade-in slide-in-from-bottom-4">
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                <BookPlus size={24} style={{ color: "#f59e0b" }} />
+                <BookPlus size={24} style={{ color: "var(--amber)" }} />
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Contenus Textuels</h2>
               </div>
               <FormGroup label="Description du Partenaire *">
@@ -329,7 +329,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
 
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                <BookPlus size={24} style={{ color: "#f59e0b" }} />
+                <BookPlus size={24} style={{ color: "var(--amber)" }} />
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Critères de Matching</h2>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
@@ -344,7 +344,7 @@ export function CatalogForm({ initialData, isEdit }: CatalogFormProps) {
 
             <div className="card" style={{ padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                <BookPlus size={24} style={{ color: "#f59e0b" }} />
+                <BookPlus size={24} style={{ color: "var(--amber)" }} />
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Statut & Compatibilités</h2>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>

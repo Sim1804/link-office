@@ -37,7 +37,7 @@ export default async function DashboardPage() {
 
   // Redirection automatique des comptes administrateurs vers leur portail dédié
   const userRole = session.user.role;
-  if (userRole === "ADMIN_B2B") redirect("/dashboard/rh");
+  if (userRole === "ADMIN_B2B") redirect("/dashboard/b2b");
   if (userRole === "ADMIN_B2B2C") redirect("/dashboard/b2b2c");
   if (userRole === "ADMIN_B2G") redirect("/dashboard/b2g");
   if (userRole === "SUPER_ADMIN") redirect("/admin");

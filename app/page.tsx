@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Brain, ArrowRight, Star, CheckCircle2, ChevronRight, Building2, ClipboardList, BarChart3, Bot, Target, Sparkles, ShieldCheck, User, HeartPulse, Landmark } from "lucide-react";
-import { Navbar } from "@/components/layout/Navbar";
+import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Footer } from "@/components/layout/Footer";
 
 /**
@@ -46,7 +46,7 @@ const TESTIMONIALS = [
 export default function HomePage() {
   return (
     <>
-      <Navbar />
+      <PublicNavbar />
 
       {/* No global blobs */}
       <main style={{ position: "relative", zIndex: 1 }}>

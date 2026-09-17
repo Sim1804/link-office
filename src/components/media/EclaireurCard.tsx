@@ -29,7 +29,7 @@ export function EclaireurCard({ eclaireur }: EclaireurCardProps) {
         </div>
         
         <div>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 8px", borderRadius: 4, fontSize: 11, fontWeight: 700, marginBottom: 8, background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)", color: "var(--text-3)" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, fontSize: 11, fontWeight: 700, marginBottom: 8, background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--text-3)" }}>
             {isPro ? <Briefcase size={12} color="var(--text-2)" /> : <Star size={12} color="var(--text-2)" />}
             {isPro ? "Professionnel / Expert" : "Témoin"}
           </div>

@@ -136,10 +136,13 @@ export default async function BillingDashboardPage() {
                       <tr key={org.id} style={{ borderBottom: "1px solid var(--border)" }}>
                         <td style={{ padding: "12px 20px", color: "var(--text-1)", fontWeight: 600 }}>{org.name}</td>
                         <td style={{ padding: "12px 20px" }}>
-                          <span style={{ 
-                            padding: "4px 8px", borderRadius: 4, fontSize: 12, fontWeight: 600,
-                            background: org.type === "B2G" ? "rgba(16,185,129,0.1)" : org.type === "B2B2C" ? "rgba(168,85,247,0.1)" : "rgba(59,130,246,0.1)",
-                            color: org.type === "B2G" ? "#10b981" : org.type === "B2B2C" ? "#a855f7" : "#3b82f6"
+                          <span className="badge" style={{ 
+                            padding: "2px 8px", 
+                            borderRadius: 12, 
+                            fontSize: 11, 
+                            fontWeight: 700, 
+                            background: org.type === "B2B2C" ? "rgba(89,101,232,0.1)" : org.type === "B2G" ? "rgba(14,165,233,0.1)" : "rgba(0,169,157,0.1)",
+                            color: org.type === "B2B2C" ? "var(--indigo)" : org.type === "B2G" ? "var(--cyan)" : "var(--primary)",
                           }}>
                             {org.type === "B2B" ? "Entreprises (B2B)" : org.type === "B2B2C" ? "Mutuelles (B2B2C)" : org.type === "B2G" ? "Collectivités (B2G)" : org.type}
                           </span>

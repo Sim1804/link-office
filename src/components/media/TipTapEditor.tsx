@@ -24,8 +24,8 @@ const MenuBar = ({ editor }: { editor: any }) => {
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
         style={{ 
-          background: editor.isActive('bold') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('bold') ? "#c084fc" : "var(--text-3)",
+          background: editor.isActive('bold') ? "rgba(0,169,157,0.15)" : "transparent",
+          color: editor.isActive('bold') ? "var(--primary)" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -36,8 +36,8 @@ const MenuBar = ({ editor }: { editor: any }) => {
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         style={{ 
-          background: editor.isActive('italic') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('italic') ? "#c084fc" : "var(--text-3)",
+          background: editor.isActive('italic') ? "rgba(0,169,157,0.15)" : "transparent",
+          color: editor.isActive('italic') ? "var(--primary)" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -50,8 +50,8 @@ const MenuBar = ({ editor }: { editor: any }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         style={{ 
-          background: editor.isActive('heading', { level: 2 }) ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('heading', { level: 2 }) ? "#c084fc" : "var(--text-3)",
+          background: editor.isActive('heading', { level: 2 }) ? "rgba(0,169,157,0.15)" : "transparent",
+          color: editor.isActive('heading', { level: 2 }) ? "var(--primary)" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -61,8 +61,8 @@ const MenuBar = ({ editor }: { editor: any }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         style={{ 
-          background: editor.isActive('heading', { level: 3 }) ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('heading', { level: 3 }) ? "#c084fc" : "var(--text-3)",
+          background: editor.isActive('heading', { level: 3 }) ? "rgba(0,169,157,0.15)" : "transparent",
+          color: editor.isActive('heading', { level: 3 }) ? "var(--primary)" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -75,8 +75,8 @@ const MenuBar = ({ editor }: { editor: any }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         style={{ 
-          background: editor.isActive('bulletList') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('bulletList') ? "#c084fc" : "var(--text-3)",
+          background: editor.isActive('bulletList') ? "rgba(0,169,157,0.15)" : "transparent",
+          color: editor.isActive('bulletList') ? "var(--primary)" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -86,8 +86,8 @@ const MenuBar = ({ editor }: { editor: any }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         style={{ 
-          background: editor.isActive('orderedList') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('orderedList') ? "#c084fc" : "var(--text-3)",
+          background: editor.isActive('orderedList') ? "rgba(0,169,157,0.15)" : "transparent",
+          color: editor.isActive('orderedList') ? "var(--primary)" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -97,8 +97,8 @@ const MenuBar = ({ editor }: { editor: any }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         style={{ 
-          background: editor.isActive('blockquote') ? "rgba(124,58,237,0.3)" : "transparent",
-          color: editor.isActive('blockquote') ? "#c084fc" : "var(--text-3)",
+          background: editor.isActive('blockquote') ? "rgba(0,169,157,0.15)" : "transparent",
+          color: editor.isActive('blockquote') ? "var(--primary)" : "var(--text-3)",
           border: "none", borderRadius: 6, padding: 6, cursor: "pointer", display: "flex", alignItems: "center"
         }}
       >
@@ -154,12 +154,12 @@ export function TipTapEditor({ content, onChange }: TipTapEditorProps) {
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
       <style>{`
-        .tiptap-editor-content h2 { font-size: 24px; font-weight: 700; margin: 24px 0 16px; }
-        .tiptap-editor-content h3 { font-size: 20px; font-weight: 600; margin: 20px 0 12px; }
-        .tiptap-editor-content p { margin-bottom: 16px; }
-        .tiptap-editor-content ul { padding-left: 24px; margin-bottom: 16px; list-style-type: disc; }
-        .tiptap-editor-content ol { padding-left: 24px; margin-bottom: 16px; list-style-type: decimal; }
-        .tiptap-editor-content blockquote { border-left: 3px solid #c084fc; padding-left: 16px; margin: 16px 0; color: #cbd5e1; font-style: italic; background: rgba(192,132,252,0.05); padding: 12px 16px; border-radius: 0 8px 8px 0; }
+        .tiptap-editor-content h2 { font-size: 24px; font-weight: 700; margin: 24px 0 16px; color: var(--text-1); }
+        .tiptap-editor-content h3 { font-size: 20px; font-weight: 600; margin: 20px 0 12px; color: var(--text-1); }
+        .tiptap-editor-content p { margin-bottom: 16px; color: var(--text-2); }
+        .tiptap-editor-content ul { padding-left: 24px; margin-bottom: 16px; list-style-type: disc; color: var(--text-2); }
+        .tiptap-editor-content ol { padding-left: 24px; margin-bottom: 16px; list-style-type: decimal; color: var(--text-2); }
+        .tiptap-editor-content blockquote { border-left: 3px solid var(--primary); padding-left: 16px; margin: 16px 0; color: var(--text-2); font-style: italic; background: rgba(0, 169, 157, 0.05); padding: 12px 16px; border-radius: 0 8px 8px 0; }
         .tiptap-editor-content.ProseMirror-focused { border: none; outline: none; }
       `}</style>
     </div>

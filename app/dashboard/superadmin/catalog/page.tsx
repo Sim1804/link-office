@@ -55,9 +55,18 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
       const versionList = grouped[dim].map(q => q.version).filter(v => typeof v === 'number');
       const maxVersion = versionList.length > 0 ? Math.max(...versionList) : 1;
       
+      const dimensionLabels: Record<string, string> = {
+        SOCIAL: "Social & Relations",
+        AFFECTIVE: "Affectif",
+        SENTIMENTAL: "Sentimental",
+        PROFESSIONAL: "Professionnel",
+        SELF: "Rapport à Soi"
+      };
+
       return {
         id: `DIM_${dim}`,
         dimensionName: dim,
+        dimensionLabel: dimensionLabels[dim] || dim,
         isDimensionGroup: true,
         triggerSituation: "Universel",
         objective: dimensionObjectives[dim] || "Évaluer cette dimension",
@@ -103,7 +112,7 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 10 }}>
-            <BookOpen size={24} color="var(--violet)" />
+            <BookOpen size={24} color="var(--primary)" />
             Catalogue Central
           </h1>
           <p style={{ fontSize: 14, color: "var(--text-2)" }}>Gérez les recommandations, les micro-défis et la liste des partenaires.</p>
@@ -127,9 +136,9 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
               borderRadius: 16, 
               fontSize: 13, 
               fontWeight: 600,
-              background: filter === f ? "rgba(192,132,252,0.15)" : "var(--surface)",
-              color: filter === f ? "var(--violet)" : "var(--text-2)",
-              border: filter === f ? "1px solid rgba(192,132,252,0.3)" : "1px solid var(--surface)",
+              background: filter === f ? "rgba(0,169,157,0.1)" : "var(--surface)",
+              color: filter === f ? "var(--primary)" : "var(--text-2)",
+              border: filter === f ? "1px solid rgba(0,169,157,0.3)" : "1px solid var(--surface)",
               transition: "all 0.2s"
             }}>
               {f === "ALL" ? "Tout voir" : f}
@@ -167,28 +176,30 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
                   <tr key={item.id} className="table-row-hover" style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }}>
                     <td style={{ padding: "16px 24px" }}>
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
-                        <span style={{ fontSize: 10, fontFamily: "monospace", fontWeight: 600, padding: "2px 6px", background: "var(--surface)", color: "var(--text-3)", borderRadius: 4, border: "1px solid var(--border)" }}>
+                        <span className="badge" style={{ fontSize: 10, fontFamily: "monospace", fontWeight: 600, padding: "2px 8px", background: "var(--surface)", color: "var(--text-3)", borderRadius: 12, border: "1px solid var(--border)" }}>
                           {item.id}
                         </span>
                         {item.isDimensionGroup ? (
-                          <span style={{ 
-                            fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6, 
-                            background: item.dimensionName === "SOCIAL" ? "rgba(59,130,246,0.1)" :
-                                        item.dimensionName === "AFFECTIVE" ? "rgba(236,72,153,0.1)" :
-                                        item.dimensionName === "SENTIMENTAL" ? "rgba(168,85,247,0.1)" :
-                                        item.dimensionName === "PROFESSIONAL" ? "rgba(245,158,11,0.1)" :
-                                        "rgba(16,185,129,0.1)",
-                            color: item.dimensionName === "SOCIAL" ? "#3b82f6" :
-                                   item.dimensionName === "AFFECTIVE" ? "#ec4899" :
-                                   item.dimensionName === "SENTIMENTAL" ? "#a855f7" :
-                                   item.dimensionName === "PROFESSIONAL" ? "#f59e0b" :
-                                   "#10b981"
+                          <span className="badge" style={{ 
+                            fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 12, 
+                            background: item.dimensionName === "SOCIAL" ? "rgba(0,169,157,0.1)" :
+                                        item.dimensionName === "AFFECTIVE" ? "rgba(244,63,94,0.1)" :
+                                        item.dimensionName === "SENTIMENTAL" ? "rgba(89,101,232,0.1)" :
+                                        item.dimensionName === "PROFESSIONAL" ? "rgba(255,198,41,0.1)" :
+                                        item.dimensionName === "SELF" ? "rgba(14,165,233,0.1)" :
+                                        "rgba(52,211,153,0.1)",
+                            color: item.dimensionName === "SOCIAL" ? "var(--primary)" :
+                                   item.dimensionName === "AFFECTIVE" ? "var(--rose)" :
+                                   item.dimensionName === "SENTIMENTAL" ? "var(--indigo)" :
+                                   item.dimensionName === "PROFESSIONAL" ? "var(--amber)" :
+                                   item.dimensionName === "SELF" ? "var(--cyan)" :
+                                   "var(--success)"
                           }}>
-                            {item.dimensionName}
+                            {item.dimensionLabel}
                           </span>
                         ) : (
-                          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-1)" }}>
-                            {item.triggerSituation}
+                          <span className="badge" style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 12, background: "rgba(0,169,157,0.1)", color: "var(--primary)" }}>
+                            {item.triggerSituation || "Universel"}
                           </span>
                         )}
                       </div>
@@ -198,7 +209,7 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
                       {item.questions?.length || 0} questions (v{item.version})
                     </td>
                     <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", background: item.isActive ? "rgba(16,185,129,0.1)" : "rgba(244,63,94,0.1)", color: item.isActive ? "var(--emerald)" : "var(--rose)" }}>
+                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderRadius: 12, background: item.isActive ? "rgba(16,185,129,0.1)" : "rgba(244,63,94,0.1)", color: item.isActive ? "var(--emerald)" : "var(--rose)" }}>
                         {item.isActive ? "Actif" : "Inactif"}
                       </span>
                     </td>
@@ -220,13 +231,13 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
               <tr key={item.id} className="table-row-hover" style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }}>
                 <td style={{ padding: "16px 24px" }}>
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
-                    <span style={{ fontSize: 10, fontFamily: "monospace", fontWeight: 600, padding: "2px 6px", background: "var(--surface)", color: "var(--text-3)", borderRadius: 4, border: "1px solid var(--border)" }}>
+                    <span className="badge" style={{ fontSize: 10, fontFamily: "monospace", fontWeight: 600, padding: "2px 8px", background: "var(--surface)", color: "var(--text-3)", borderRadius: 12, border: "1px solid var(--border)" }}>
                       {item.id}
                     </span>
-                    <span style={{
-                      fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6,
-                      background: item.library === "Micro-défis" ? "rgba(56,189,248,0.15)" : item.library === "Partenaires" ? "rgba(249,115,22,0.15)" : "rgba(192,132,252,0.15)",
-                      color: item.library === "Micro-défis" ? "var(--cyan)" : item.library === "Partenaires" ? "#f97316" : "var(--violet)",
+                    <span className="badge" style={{
+                      fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 12,
+                      background: item.library === "Micro-défis" ? "rgba(0,169,157,0.1)" : item.library === "Partenaires" ? "rgba(255,198,41,0.15)" : "rgba(89,101,232,0.1)",
+                      color: item.library === "Micro-défis" ? "var(--cyan)" : item.library === "Partenaires" ? "var(--amber)" : "var(--indigo)",
                     }}>
                       {item.library}
                     </span>

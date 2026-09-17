@@ -7,7 +7,10 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const cronSecret = url.searchParams.get("secret");
     
-    // Dans un vrai projet: if (cronSecret !== process.env.CRON_SECRET) return 401
+    // Vérification de sécurité obligatoire
+    if (cronSecret !== process.env.CRON_SECRET) {
+      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+    }
     
     const now = new Date();
 

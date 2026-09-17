@@ -191,20 +191,20 @@ export default function SuperAdminUsersPage() {
                     <div style={{ color: "var(--text-2)", fontSize: 12, marginTop: 2 }}>{user.email}</div>
                   </td>
                   <td style={{ padding: "16px 24px" }}>
-                    <span style={{ 
-                      display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 999, fontSize: 11, fontWeight: 700, 
-                      background: user.role.startsWith("ADMIN") || user.role === "SUPER_ADMIN" ? "rgba(124,58,237,0.15)" : "rgba(100,116,139,0.15)",
-                      color: user.role.startsWith("ADMIN") || user.role === "SUPER_ADMIN" ? "#c084fc" : "var(--text-3)",
+                    <span className="badge" style={{ 
+                      display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 12, fontSize: 11, fontWeight: 700, 
+                      background: user.role.startsWith("ADMIN") || user.role === "SUPER_ADMIN" ? "rgba(89,101,232,0.1)" : "rgba(255,255,255,0.05)",
+                      color: user.role.startsWith("ADMIN") || user.role === "SUPER_ADMIN" ? "var(--indigo)" : "var(--text-2)",
                       marginBottom: 6,
                     }}>
                       {user.role === "SUPER_ADMIN" ? <ShieldAlert size={12} /> : null}
                       {ROLE_LABELS[user.role] || user.role}
                     </span>
                     <br />
-                    <span style={{ 
-                      display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 6, fontSize: 10, fontWeight: 700,
-                      background: user.subscription === "PREMIUM_PLUS" ? "rgba(245,158,11,0.15)" : user.subscription === "PREMIUM" ? "rgba(52,211,153,0.15)" : "rgba(255,255,255,0.05)",
-                      color: user.subscription === "PREMIUM_PLUS" ? "#fbbf24" : user.subscription === "PREMIUM" ? "#34d399" : "var(--text-2)"
+                    <span className="badge" style={{ 
+                      display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 12, fontSize: 10, fontWeight: 700,
+                      background: user.subscription === "PREMIUM_PLUS" ? "rgba(245,158,11,0.1)" : user.subscription === "PREMIUM" ? "rgba(0,169,157,0.1)" : "rgba(255,255,255,0.05)",
+                      color: user.subscription === "PREMIUM_PLUS" ? "var(--amber)" : user.subscription === "PREMIUM" ? "var(--primary)" : "var(--text-2)"
                     }}>
                       {user.subscription !== "FREEMIUM" && <Crown size={10} />}
                       {user.subscription}
