@@ -664,7 +664,7 @@ enum BinomeStatus {
 enum OrganizationType {
   B2B
   B2B2C
-  B2G
+  B2G @map("COLLECTIVITE")
 }
 
 enum UserRole {
@@ -673,7 +673,7 @@ enum UserRole {
   MEMBER
   ADMIN_B2B
   ADMIN_B2B2C
-  ADMIN_B2G
+  ADMIN_B2G @map("ADMIN_COLLECTIVITE")
   SUPER_ADMIN
 }
 
