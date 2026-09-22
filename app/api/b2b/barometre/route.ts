@@ -19,8 +19,19 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Accès interdit ou aucune organisation associée" }, { status: 403 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const ageRange = searchParams.get("ageRange");
+    const gender = searchParams.get("gender");
+    const occupation = searchParams.get("occupation");
+
+    // Construction dynamique du filtre démographique
+    const demographicFilter: any = {};
+    if (ageRange) demographicFilter.ageRange = ageRange;
+    if (gender) demographicFilter.gender = gender;
+    if (occupation) demographicFilter.occupation = occupation;
+
     // Récupérer tous les résultats IQRH des employés de cette organisation
-    // On passe par Assessment qui lie l'utilisateur au résultat
+    // On passe par Assessment qui lie l'utilisateur au résultat et au profil démographique
     const results = await prisma.iqrhResult.findMany({
       where: {
         assessment: {
@@ -28,7 +39,12 @@ export async function GET(req: Request) {
           user: {
             organizationId: user.organizationId,
             role: "EMPLOYEE"
-          }
+          },
+          ...(Object.keys(demographicFilter).length > 0 && {
+            demographic: {
+              is: demographicFilter
+            }
+          })
         }
       },
       select: {

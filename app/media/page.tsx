@@ -67,7 +67,7 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
       <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 100, paddingBottom: 60 }}>
         <div className="container">
           {/* Header */}
-          <div style={{ textAlign: "center", marginBottom: 48, animation: "fadeSlideUp 0.6s ease-out" }}>
+          <div style={{ textAlign: "center", marginBottom: 32, animation: "fadeSlideUp 0.6s ease-out" }}>
             <h1 style={{ fontSize: 48, fontWeight: 800, color: "var(--text-1)", marginBottom: 16, fontFamily: "var(--font-family-display)" }}>
               Média & Ressources
             </h1>
@@ -75,6 +75,35 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
               Décrypter, comprendre et s'inspirer. Découvrez nos clés d'action pour cultiver votre santé relationnelle au quotidien.
             </p>
           </div>
+
+          {/* Méthode & IA Context */}
+          {!typeFilter && !categoryFilter && !searchFilter && (
+            <div className="card" style={{ 
+              marginBottom: 48, padding: 32, borderRadius: 24,
+              background: "linear-gradient(135deg, var(--surface) 0%, rgba(124,58,237,0.03) 100%)",
+              border: "1px solid rgba(124,58,237,0.1)",
+              display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 32
+            }}>
+              <div>
+                <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--primary)" }} />
+                  La Méthode IQRH
+                </h3>
+                <p style={{ color: "var(--text-2)", fontSize: 15, lineHeight: 1.6 }}>
+                  Tous nos contenus sont adossés à l'<strong>Indice de Qualité Relationnelle Humaine</strong>. Nos experts analysent les données (anonymisées) de notre <Link href="/observatoire" style={{ color: "var(--primary)", fontWeight: 600, textDecoration: "none" }}>Observatoire</Link> pour vous proposer des ressources au plus près de vos réalités.
+                </p>
+              </div>
+              <div>
+                <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--violet)" }} />
+                  Guidé par Iris (IA)
+                </h3>
+                <p style={{ color: "var(--text-2)", fontSize: 15, lineHeight: 1.6 }}>
+                  L'intelligence artificielle Iris puise dans cette médiathèque pour générer vos <strong>prescriptions relationnelles</strong> personnalisées, liant directement l'évaluation scientifique à l'action.
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Podcast Highlight */}
           {!typeFilter && !categoryFilter && !searchFilter && (

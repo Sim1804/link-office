@@ -3,20 +3,30 @@
 import { useEffect, useState } from "react";
 import { BarChart3, ShieldAlert, Users, Target, Activity } from "lucide-react";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
+import { Select } from "@/components/ui/Select";
 
 export default function BarometrePage() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const [ageRange, setAgeRange] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+
   useEffect(() => {
-    fetch("/api/b2b/barometre")
+    setLoading(true);
+    const params = new URLSearchParams();
+    if (ageRange) params.append("ageRange", ageRange);
+    if (gender) params.append("gender", gender);
+
+    fetch(`/api/b2b/barometre?${params.toString()}`)
       .then(res => res.json())
       .then(res => {
         if (!res.success) {
           setError(res.message || "Erreur lors du chargement des données.");
         } else {
           setData(res);
+          setError(null);
         }
         setLoading(false);
       })
@@ -24,7 +34,7 @@ export default function BarometrePage() {
         setError("Erreur réseau.");
         setLoading(false);
       });
-  }, []);
+  }, [ageRange, gender]);
 
   const breadcrumbItems = [
     { label: "Tableau de bord B2B", href: "/dashboard/b2b" },
@@ -43,6 +53,37 @@ export default function BarometrePage() {
           <p style={{ color: "var(--text-2)", fontSize: 16 }}>
             Consultez la santé relationnelle globale de votre organisation.
           </p>
+        </div>
+        
+        {/* Filtres Démographiques */}
+        <div style={{ display: "flex", gap: 12 }}>
+          <Select 
+            value={ageRange}
+            onChange={setAgeRange}
+            placeholder="Tous les âges"
+            options={[
+              { value: "", label: "Tous les âges" },
+              { value: "18-25", label: "18-25 ans" },
+              { value: "26-35", label: "26-35 ans" },
+              { value: "36-45", label: "36-45 ans" },
+              { value: "46-55", label: "46-55 ans" },
+              { value: "56+", label: "56 ans et +" },
+            ]}
+            style={{ width: 180 }}
+          />
+          
+          <Select 
+            value={gender}
+            onChange={setGender}
+            placeholder="Tous les genres"
+            options={[
+              { value: "", label: "Tous les genres" },
+              { value: "Homme", label: "Homme" },
+              { value: "Femme", label: "Femme" },
+              { value: "Autre", label: "Autre" },
+            ]}
+            style={{ width: 180 }}
+          />
         </div>
       </div>
 

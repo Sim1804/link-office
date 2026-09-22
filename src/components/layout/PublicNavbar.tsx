@@ -8,6 +8,7 @@ import { Brain, Menu, X } from "lucide-react";
 const publicLinks = [
   { href: "/#iqrh", label: "La méthode" },
   { href: "/#iris", label: "IA coach" },
+  { href: "/observatoire", label: "Observatoire" },
   { href: "/media", label: "Média" },
   { href: "/business", label: "Pour les organisations" },
 ];

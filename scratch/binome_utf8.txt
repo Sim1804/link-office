@@ -1,0 +1,753 @@
+﻿LINK OFFICE
+GUIDE FONCTIONNEL COMPLET & CAHIER DE CONCEPTION
+LE BINÃ”ME RELATIONNEL
+RÃ©fÃ©rentiel de conception et dâ€™implÃ©mentation Ã  destination des Ã©tudiants
+Version maÃ®tre fusionnÃ©e â€” AoÃ»t 2026
+Comment lire ce guide
+Ce document suit volontairement la logique de conception de la fonctionnalitÃ© : dâ€™abord le rÃ´le du BinÃ´me Relationnel dans LINK OFFICE, ensuite les conditions dâ€™accÃ¨s, puis le parcours utilisateur complet, le dÃ©roulement des 30 jours, la sÃ©curitÃ©, la clÃ´ture et enfin les Ã©lÃ©ments techniques, administratifs et de pilotage.
+Principe directeur
+IRIS ne crÃ©e jamais automatiquement un binÃ´me. Elle analyse les compatibilitÃ©s et formule des suggestions. La mise en relation nâ€™existe quâ€™aprÃ¨s double consentement et dans le pÃ©rimÃ¨tre autorisÃ© par lâ€™offre ou la campagne.
+Structure du document
+PARTIE 1 â€” Comprendre la fonctionnalitÃ© et son positionnement
+PARTIE 2 â€” DÃ©terminer qui peut accÃ©der au BinÃ´me Relationnel
+PARTIE 3 â€” Construire le parcours utilisateur avant la mise en relation
+PARTIE 4 â€” Faire vivre le BinÃ´me Relationnel pendant 30 jours
+PARTIE 5 â€” GÃ©rer la sÃ©curitÃ©, les difficultÃ©s et la fin du cycle
+PARTIE 6 â€” Concevoir les Ã©crans, statuts et donnÃ©es
+PARTIE 7 â€” Administrer, mesurer et amÃ©liorer le dispositif
+PARTIE 8 â€” Cahier dâ€™implÃ©mentation pour les Ã©tudiants
+PRÃ‰AMBULE â€” Dâ€™oÃ¹ vient le BinÃ´me Relationnel ?
+LINK OFFICE part dâ€™un constat : mesurer sa santÃ© relationnelle ne suffit pas Ã  la faire Ã©voluer. Lâ€™IQRH aide lâ€™utilisateur Ã  comprendre ses forces, ses fragilitÃ©s et ses besoins. IRIS transforme cette lecture en recommandations, ressources, actions et micro-dÃ©fis. Mais entre Â« savoir quoi faire Â» et Â« le faire rÃ©ellement Â», il existe une Ã©tape dÃ©terminante : le passage Ã  lâ€™action et la rÃ©gularitÃ©.
+Le BinÃ´me Relationnel a Ã©tÃ© imaginÃ© pour introduire une dimension humaine complÃ©mentaire Ã  lâ€™accompagnement dâ€™IRIS. Pendant 30 jours, deux personnes deviennent des compagnons de progression relationnelle : elles sâ€™encouragent, partagent leurs avancÃ©es, se donnent des rendez-vous et soutiennent leurs engagements respectifs.
+IQRH mesure. IRIS Ã©claire. Le plan relationnel donne une direction. Le BinÃ´me aide Ã  passer Ã  lâ€™action. IRIS accompagne. LINK OFFICE mesure lâ€™Ã©volution.
+Le binÃ´me nâ€™est ni un coach, ni un thÃ©rapeute, ni un service de rencontre. Il est un soutien humain rÃ©ciproque, encadrÃ© par LINK OFFICE.
+PARTIE 1 â€” COMPRENDRE LA FONCTIONNALITÃ‰
+1. DÃ©finition et finalitÃ©
+Le BinÃ´me Relationnel est une fonctionnalitÃ© Premium + de LINK OFFICE permettant Ã  deux bÃ©nÃ©ficiaires de sâ€™accompagner mutuellement pendant un cycle de 30 jours. Son objectif est de soutenir le passage Ã  lâ€™action, la rÃ©gularitÃ© et la progression relationnelle grÃ¢ce Ã  une prÃ©sence humaine complÃ©mentaire Ã  IRIS.
+Le BinÃ´me Relationnel permet notamment de :
+partager certains objectifs relationnels ;
+sâ€™encourager et se soutenir ;
+rÃ©aliser des actions et micro-dÃ©fis ;
+effectuer des check-ins rÃ©guliers ;
+suivre sa progression ;
+recevoir des relances ou propositions dâ€™IRIS ;
+faire un bilan Ã  la fin du cycle.
+Il ne sâ€™agit ni dâ€™un rÃ©seau social, ni dâ€™un service de rencontre, ni dâ€™une relation thÃ©rapeutique, ni dâ€™un coaching entre utilisateurs. Le terme Ã  privilÃ©gier est Â« compagnon de progression relationnelle Â».
+2. Position du binÃ´me dans lâ€™Ã©cosystÃ¨me LINK OFFICE
+Brique
+Question Ã  laquelle elle rÃ©pond
+RÃ´le
+IQRH
+OÃ¹ en est ma santÃ© relationnelle ?
+Mesurer : score global, sous-scores, profil, forces et vigilances.
+Plan / ordonnance relationnelle
+Quâ€™est-ce que je peux faire maintenant ?
+Prioriser les objectifs, recommandations et micro-dÃ©fis.
+IRIS
+Comment avancer dans mon parcours ?
+Analyser, expliquer, suggÃ©rer, relancer et accompagner.
+BinÃ´me Relationnel
+Avec qui puis-je avancer pour ne pas rester seul face Ã  mes objectifs ?
+CrÃ©er un soutien humain rÃ©ciproque pendant un cycle.
+Partenaires / prescription relationnelle
+Vers qui puis-je Ãªtre orientÃ© si jâ€™ai besoin dâ€™une aide extÃ©rieure ?
+Proposer des acteurs, ressources ou dispositifs adaptÃ©s.
+3. RÃ´le dâ€™IRIS et rÃ´le du binÃ´me
+IRIS
+BINÃ”ME RELATIONNEL
+Analyse le profil et le contexte
+Apporte une prÃ©sence humaine
+DÃ©tecte les besoins et vigilances
+Ã‰coute et encourage
+Propose des actions
+Partage son expÃ©rience
+Analyse les compatibilitÃ©s
+Soutient le passage Ã  lâ€™action
+Formule des suggestions de binÃ´me
+Progresse avec lâ€™autre
+Relance et accompagne
+Nâ€™a aucun rÃ´le thÃ©rapeutique ou de coaching
+Mesure les effets du parcours
+Ne dÃ©cide pas Ã  la place de lâ€™autre
+IRIS suggÃ¨re. Lâ€™utilisateur choisit. Le binÃ´me expÃ©rimente. IRIS accompagne. LINK OFFICE mesure.
+4. Articulation avec le plan / ordonnance relationnelle
+Le plan relationnel doit rester distinct du BinÃ´me Relationnel. Il peut toutefois alimenter le cycle du binÃ´me en fournissant les objectifs, recommandations et micro-dÃ©fis sur lesquels lâ€™utilisateur souhaite Ãªtre soutenu.
+Niveau du plan
+Contenu
+RÃ¨gle
+1
+Objectif principal
+Un objectif prioritaire clairement identifiÃ©
+2
+Objectifs secondaires
+Maximum conseillÃ© : 2, paramÃ©trable
+3
+Recommandations
+SÃ©lection personnalisÃ©e
+4
+Partenaires
+Orientation si nÃ©cessaire
+5
+Micro-dÃ©fis
+Actions concrÃ¨tes adaptÃ©es au profil
+6
+RÃ©Ã©valuation
+Date ou fenÃªtre paramÃ©trable
+Le plan doit Ãªtre vivant dans lâ€™application : objectif actif, objectif de la semaine, prochaine action, derniÃ¨re action, progression et jours restants. Un PDF peut exister en export, mais il ne doit pas Ãªtre la seule forme du suivi.
+PARTIE 2 â€” DÃ‰TERMINER QUI PEUT ACCÃ‰DER AU BINÃ”ME
+5. Conditions dâ€™accÃ¨s selon les parcours
+Le BinÃ´me Relationnel est une fonctionnalitÃ© rÃ©servÃ©e au Premium +.
+Les utilisateurs Freemium et Premium peuvent dÃ©couvrir lâ€™intÃ©rÃªt du BinÃ´me Relationnel via des teasers personnalisÃ©s et une page de dÃ©couverte Premium +, mais aucune recherche de binÃ´me nâ€™est lancÃ©e tant que Premium + nâ€™est pas activÃ©.
+Parcours
+BinÃ´me possible ?
+RÃ¨gle
+B2C Premium +
+Oui
+Parmi les utilisateurs B2C Ã©ligibles ayant acceptÃ© la fonctionnalitÃ©.
+B2B Premium
+Non
+Fonction non disponible.
+B2B Premium +
+Oui
+Selon les rÃ¨gles dÃ©finies pour le dispositif de lâ€™entreprise.
+B2B2C Premium
+Non
+Fonction non disponible.
+B2B2C Premium +
+Oui
+Uniquement entre bÃ©nÃ©ficiaires dâ€™une mÃªme campagne.
+B2G
+Selon lâ€™offre / campagne
+Uniquement dans le pÃ©rimÃ¨tre autorisÃ©.
+RÃ¨gle de filtrage
+Le moteur applique toujours les filtres dans cet ordre : PÃ‰RIMÃˆTRE AUTORISÃ‰ â†’ Ã‰LIGIBILITÃ‰ â†’ COMPATIBILITÃ‰. La compatibilitÃ© ne peut jamais contourner les rÃ¨gles de campagne.
+6. CritÃ¨res individuels dâ€™Ã©ligibilitÃ©
+Une personne peut entrer dans le pool de recherche uniquement si toutes les conditions sont rÃ©unies :
+Premium + actif + bilan IQRH terminÃ© + opt-in + charte acceptÃ©e + disponible pour un nouveau cycle + bon pÃ©rimÃ¨tre/campagne + aucun binÃ´me actif = Ã‰LIGIBLE
+Une personne non Ã©ligible ne doit jamais apparaÃ®tre dans les suggestions dâ€™IRIS.
+7. Volontariat et double consentement
+Aucun utilisateur ne doit Ãªtre inscrit automatiquement. Lâ€™activation est volontaire, et la crÃ©ation du binÃ´me exige lâ€™accord des deux personnes.
+Le refus ou la mise en pause nâ€™a aucune consÃ©quence sur le reste du parcours LINK OFFICE.
+PARTIE 3 â€” PARCOURS UTILISATEUR AVANT LA MISE EN RELATION
+8. Ã‰tape 1 â€” DÃ©couverte et opt-in
+Et si vous nâ€™avanciez pas seul ? IRIS peut vous proposer un BinÃ´me Relationnel : une personne avec laquelle progresser, vous encourager et relever vos dÃ©fis relationnels pendant 30 jours.
+Actions proposÃ©es : Â« Je souhaite recevoir des suggestions de binÃ´mes Â» / Â« Pas maintenant Â».
+9. Ã‰tape 2 â€” Recueil des prÃ©fÃ©rences
+CrÃ©er un Ã©cran de prÃ©fÃ©rences permettant de recueillir :
+disponibilitÃ©s : matin, midi, aprÃ¨s-midi, soirÃ©e, week-end, flexible ;
+mode dâ€™Ã©change : messages LINK OFFICE, vocal si disponible, les deux ;
+frÃ©quence souhaitÃ©e : lÃ©gÃ¨re, rÃ©guliÃ¨re, soutenue ;
+tranche dâ€™Ã¢ge / gÃ©nÃ©ration : prÃ©fÃ©rence ou indiffÃ©rent ;
+genre : prÃ©fÃ©rence ou indiffÃ©rent ;
+proximitÃ© gÃ©ographique : souhaitÃ©e ou indiffÃ©rente ;
+attente principale : encouragement, dynamique sociale, passage Ã  lâ€™action, partage dâ€™expÃ©rience, confiance, routine relationnelle, autre.
+10. Ã‰tape 3 â€” Acceptation de la charte
+La charte est obligatoire avant toute suggestion. Elle doit couvrir au minimum :
+bienveillance et respect ;
+confidentialitÃ© ;
+absence de jugement ;
+libertÃ© de ne pas rÃ©pondre ;
+interdiction du harcÃ¨lement, des discriminations et du dÃ©marchage ;
+absence de vocation sentimentale ou sexuelle ;
+absence de relation thÃ©rapeutique ;
+droit de retrait ;
+droit de signalement ;
+respect des rÃ¨gles de sÃ©curitÃ© LINK OFFICE.
+11. Ã‰tape 4 â€” Constitution du pool de recherche
+AprÃ¨s lâ€™opt-in et la charte, le systÃ¨me vÃ©rifie lâ€™Ã©ligibilitÃ© et construit le pool dans lequel IRIS peut chercher des suggestions. En B2B2C, ce pool est strictement limitÃ© aux bÃ©nÃ©ficiaires de la mÃªme campagne.
+12. Ã‰tape 5 â€” Analyse des compatibilitÃ©s par IRIS
+IRIS ne crÃ©e jamais automatiquement un binÃ´me. Elle calcule un score interne de compatibilitÃ© afin de hiÃ©rarchiser les suggestions. La rÃ¨gle V1 ci-dessous constitue une hypothÃ¨se de conception : les pondÃ©rations et seuils restent entiÃ¨rement paramÃ©trables dans le back-office et devront Ãªtre ajustÃ©s Ã  partir des donnÃ©es dâ€™usage.
+CritÃ¨re
+Poids V1
+Logique de calcul / intention
+CompatibilitÃ© relationnelle IQRH
+30 %
+Comparer les 5 dimensions. Rechercher un Ã©quilibre entre proximitÃ© et complÃ©mentaritÃ© : assez de vÃ©cu commun pour se comprendre, mais aussi des forces diffÃ©rentes susceptibles dâ€™aider chacun Ã  progresser.
+Profils principal et secondaire
+20 %
+Comparer les profils IQRH principal et secondaire. Valoriser les associations cohÃ©rentes et Ã©viter les combinaisons susceptibles de crÃ©er une relation trop dÃ©sÃ©quilibrÃ©e.
+Objectifs et besoins relationnels
+20 %
+Comparer les objectifs dÃ©clarÃ©s et recommandations prioritaires : recrÃ©er du lien, Ã©largir son cercle, poser ses limites, demander de lâ€™aide, renouer, sortir davantage, etc. Des objectifs compatibles augmentent le score.
+DisponibilitÃ©s et rythme
+15 %
+Comparer crÃ©neaux et frÃ©quence souhaitÃ©e. MÃªme crÃ©neau et mÃªme rythme = score maximal. Une incompatibilitÃ© majeure peut devenir Ã©liminatoire.
+PrÃ©fÃ©rences utilisateur
+10 %
+Ã‚ge/gÃ©nÃ©ration, genre, mode de communication, proximitÃ© gÃ©ographique et autres prÃ©fÃ©rences. Une prÃ©fÃ©rence dÃ©clarÃ©e obligatoire devient un filtre, pas une pondÃ©ration.
+Contexte / situation
+5 %
+Valoriser certains Ã©lÃ©ments de contexte favorisant la comprÃ©hension mutuelle, sans dÃ©voiler dâ€™informations sensibles.
+TOTAL
+100 %
+Score interne utilisÃ© par IRIS pour prioriser les suggestions.
+Logiques de compatibilitÃ© Ã  prÃ©voir
+Logique
+Principe
+ComplÃ©mentaritÃ©
+Les forces de lâ€™un peuvent soutenir les fragilitÃ©s de lâ€™autre.
+ProximitÃ© de problÃ©matique
+Les deux traversent une situation comparable.
+Objectif commun
+Les deux souhaitent travailler une mÃªme dimension.
+Matching mixte
+ProximitÃ© suffisante pour se comprendre + complÃ©mentaritÃ© suffisante pour sâ€™apporter quelque chose.
+Seuils de suggestion V1
+Score
+InterprÃ©tation
+Action
+80â€“100
+CompatibilitÃ© forte
+Suggestion prioritaire
+70â€“79
+Bonne compatibilitÃ©
+Suggestion possible
+60â€“69
+CompatibilitÃ© moyenne
+Conserver comme solution secondaire
+< 60
+CompatibilitÃ© insuffisante
+Ne pas proposer
+Ces seuils ne sont pas prÃ©sentÃ©s comme des vÃ©ritÃ©s scientifiques. Ils servent Ã  classer les suggestions et doivent Ãªtre testÃ©s, mesurÃ©s et ajustÃ©s. Le score numÃ©rique reste en back-office afin dâ€™Ã©viter une perception de type Â« application de rencontre Â».
+Ce que voit lâ€™utilisateur
+IRIS pense que vos profils pourraient bien fonctionner ensemble. Vous poursuivez des objectifs compatibles, vos disponibilitÃ©s correspondent et certaines de vos ressources relationnelles sont complÃ©mentaires. Souhaitez-vous tenter lâ€™expÃ©rience pendant 30 jours ?
+13. Ã‰tape 6 â€” Suggestion par IRIS
+IRIS a identifiÃ© un binÃ´me qui pourrait vous correspondre. Vos profils prÃ©sentent plusieurs points de compatibilitÃ©. Souhaitez-vous dÃ©couvrir cette proposition ?
+Accepter la suggestion
+Refuser la suggestion
+Recevoir une autre suggestion
+Mettre ma recherche en pause
+14. Ã‰tape 7 â€” Informations visibles avant acceptation
+Avant la double acceptation, ne montrer que les informations nÃ©cessaires Ã  la dÃ©cision :
+prÃ©nom ou pseudonyme ;
+grandes caractÃ©ristiques relationnelles ;
+points communs ;
+complÃ©mentaritÃ©s identifiÃ©es par IRIS ;
+objectif principal partageable ;
+disponibilitÃ©s compatibles.
+Ne jamais afficher : rÃ©ponses dÃ©taillÃ©es au questionnaire, donnÃ©es sensibles, coordonnÃ©es ou conversations privÃ©es avec IRIS.
+15. Ã‰tape 8 â€” Double acceptation
+IRIS suggÃ¨re B Ã  A â†’ A accepte â†’ B reÃ§oit la proposition â†’ B accepte â†’ BINÃ”ME CRÃ‰Ã‰
+Si B refuse, aucun motif nâ€™est transmis Ã  A. IRIS peut relancer la recherche.
+16. Ã‰tape 9 â€” Absence de suggestion / file dâ€™attente
+Si aucune suggestion suffisamment pertinente nâ€™est disponible, lâ€™utilisateur passe en attente. Le systÃ¨me ne doit jamais assouplir les rÃ¨gles de campagne ou de sÃ©curitÃ© pour produire artificiellement un binÃ´me.
+IRIS nâ€™a pas encore identifiÃ© de binÃ´me suffisamment pertinent dans votre pÃ©rimÃ¨tre. Votre recherche reste active. En attendant, votre parcours continue avec IRIS.
+PARTIE 4 â€” FAIRE VIVRE LE BINÃ”ME PENDANT 30 JOURS
+17. Ã‰tape 10 â€” CrÃ©ation de lâ€™espace Â« Mon binÃ´me Â»
+AprÃ¨s double acceptation, le statut devient ACTIVE et un cycle de 30 jours est crÃ©Ã©.
+Lâ€™espace doit afficher au minimum :
+prÃ©nom/pseudonyme du binÃ´me ;
+Jour X / 30 ;
+objectif commun ;
+objectif personnel ;
+objectif du partenaire uniquement sâ€™il accepte de le partager ;
+prochain check-in ;
+actions / micro-dÃ©fis ;
+progression ;
+timeline partagÃ©e ;
+Ã©change autorisÃ© ;
+Demander conseil Ã  IRIS ;
+Signaler un problÃ¨me ;
+Quitter le binÃ´me.
+18. Ã‰tape 11 â€” Rencontre de dÃ©marrage
+IRIS guide le premier Ã©change avec quelques questions dâ€™amorce :
+Quâ€™aimerais-tu amÃ©liorer dans ta vie relationnelle pendant ces 30 jours ?
+Quâ€™est-ce qui pourrait tâ€™aider Ã  passer davantage Ã  lâ€™action ?
+Comment aimerais-tu que ton binÃ´me tâ€™encourage ?
+Les deux membres dÃ©finissent ensuite leur pacte de binÃ´me : frÃ©quence des Ã©changes, moment privilÃ©giÃ©, niveau de soutien attendu, limites personnelles et, si souhaitÃ©, un objectif commun.
+19. Programme des 30 jours
+Le cycle de 30 jours donne un cadre suffisamment long pour crÃ©er une dynamique, tout en restant limitÃ© dans le temps et rassurant. Il est structurÃ© en cinq sÃ©quences. Le partage dâ€™une vulnÃ©rabilitÃ© ou dâ€™informations intimes nâ€™est jamais obligatoire.
+PÃ©riode
+Pourquoi ?
+Quoi ?
+Quand / rythme
+J1â€“J7 â€” CrÃ©er le lien
+Installer une confiance minimale et un cadre commun.
+PrÃ©sentation, objectifs, pacte de binÃ´me, premier micro-dÃ©fi, premiers encouragements.
+Rencontre de dÃ©marrage J1/J2 + 2 check-ins rapides + 1 check-in approfondi.
+J8â€“J14 â€” Passer Ã  lâ€™action
+Transformer les recommandations en comportements concrets.
+1 Ã  2 micro-dÃ©fis personnalisÃ©s par personne. Le binÃ´me encourage et suit lâ€™avancement.
+2 check-ins rapides + 1 check-in approfondi.
+J15â€“J21 â€” Oser davantage
+Introduire une action lÃ©gÃ¨rement plus engageante lorsque la dynamique est installÃ©e.
+IRIS suggÃ¨re un dÃ©fi progression adaptÃ© au profil. Le binÃ´me soutient avant et aprÃ¨s.
+2 check-ins rapides + 1 check-in approfondi.
+J22â€“J28 â€” Ancrer
+Identifier ce qui fonctionne et Ã©viter que les changements restent ponctuels.
+Conserver les actions utiles, renforcer la rÃ©gularitÃ©, prÃ©parer lâ€™aprÃ¨s-cycle.
+2 check-ins rapides + 1 check-in approfondi.
+J29â€“J30 â€” Mesurer et dÃ©cider
+Donner du sens au cycle et choisir la suite.
+Bilan, feedback, mesure dâ€™Ã©volution prÃ©vue par le parcours, choix : continuer, nouveau binÃ´me ou arrÃªter.
+1 bilan final + dÃ©cision des deux membres.
+20. Check-ins
+20.1 Check-in rapide
+Ã‰lÃ©ment
+RÃ¨gle
+FrÃ©quence
+2 fois par semaine, jours paramÃ©trables
+DurÃ©e cible
+30 secondes Ã  1 minute
+Objectif
+Maintenir le lien et la dynamique sans crÃ©er une charge supplÃ©mentaire
+Question 1
+Comment te sens-tu relationnellement aujourdâ€™hui ? â€” 5 niveaux dâ€™humeur
+Question 2
+OÃ¹ en es-tu de ton action ? â€” RÃ©alisÃ©e / en cours / pas commencÃ©e / remplacÃ©e
+Question 3
+Un mot pour ton binÃ´me ? â€” Message court et facultatif
+20.2 Check-in approfondi
+Ã‰lÃ©ment
+RÃ¨gle
+FrÃ©quence
+1 fois par semaine
+DurÃ©e cible
+10 Ã  20 minutes
+Objectif
+Partager les progrÃ¨s, difficultÃ©s et prochain petit pas
+Support
+Dans LINK OFFICE ou vocal si cette fonctionnalitÃ© est disponible
+Guidage IRIS
+3 questions dâ€™amorce adaptÃ©es au moment du programme
+Quel a Ã©tÃ© ton moment relationnel le plus positif cette semaine ?
+Quâ€™est-ce qui a Ã©tÃ© le plus difficile ?
+Quelle action veux-tu tenter avant le prochain rendez-vous ?
+Lâ€™utilisateur peut aussi prÃ©ciser ce dont il a besoin : Ãªtre encouragÃ©, relancÃ©, Ã©coutÃ©, fÃ©licitÃ© ou ne rien demander de particulier.
+21. Timeline partagÃ©e
+La timeline prÃ©sente uniquement les Ã©lÃ©ments volontairement partageables : check-ins, encouragements, actions dÃ©clarÃ©es rÃ©alisÃ©es et jalons du cycle. Elle ne contient jamais automatiquement les rÃ©ponses dÃ©taillÃ©es IQRH, les conversations privÃ©es avec IRIS, les donnÃ©es sensibles ou les coordonnÃ©es personnelles.
+22. Notifications et relances
+DÃ©clencheur
+Exemple
+Check-in prÃ©vu
+Câ€™est le moment de votre check-in avec votre binÃ´me.
+InactivitÃ© lÃ©gÃ¨re
+Un petit message dâ€™encouragement Ã  votre binÃ´me ?
+Fin de semaine
+OÃ¹ en Ãªtes-vous de votre prochaine action relationnelle ?
+J30
+Votre cycle de 30 jours arrive Ã  son terme. Il est temps de faire le bilan.
+Nouvelle suggestion
+IRIS a identifiÃ© une nouvelle suggestion de binÃ´me.
+La frÃ©quence, les dÃ©lais et horaires doivent Ãªtre paramÃ©trables.
+23. Accompagnement dâ€™IRIS pendant le cycle
+IRIS intervient de faÃ§on lÃ©gÃ¨re lorsquâ€™elle dÃ©tecte une baisse dâ€™activitÃ©, une difficultÃ© dÃ©clarÃ©e, un manque de rÃ©ponse, une dÃ©motivation, une demande dâ€™aide ou un risque de rupture.
+Votre binÃ´me semble moins actif cette semaine. Souhaitez-vous lui envoyer un petit encouragement ?
+24. Score interne de santÃ© du binÃ´me
+CrÃ©er un binome_health_score interne pour aider IRIS et lâ€™Ã©quipe LINK OFFICE Ã  dÃ©tecter les difficultÃ©s. Ce score nâ€™est pas une note de performance affichÃ©e aux utilisateurs.
+rÃ©gularitÃ© des check-ins ;
+rÃ©ciprocitÃ© ;
+engagement ;
+actions rÃ©alisÃ©es ;
+feedback ;
+durÃ©e dâ€™inactivitÃ© ;
+satisfaction dÃ©clarÃ©e.
+25. Gamification : couche optionnelle et sobre
+La gamification rÃ©compense lâ€™engagement et la rÃ©gularitÃ©, jamais le niveau de santÃ© relationnelle ou la valeur personnelle de lâ€™utilisateur. Elle reste non compÃ©titive, dÃ©sactivable et paramÃ©trable.
+Action
+Points gagnÃ©s
+FrÃ©quence maximale
+Check-in rapide complÃ©tÃ©
++10
+2 fois/semaine
+Check-in approfondi complÃ©tÃ©
++30
+1 fois/semaine
+Message dâ€™encouragement
++5
+1 fois/jour
+Micro-dÃ©fi rÃ©alisÃ©
++25
+2 fois/semaine
+Retour dâ€™expÃ©rience aprÃ¨s un dÃ©fi
++15
+1 fois/semaine
+Les deux membres rÃ©alisent les check-ins attendus
++20 bonus binÃ´me
+1 fois/semaine
+Cycle de 30 jours terminÃ© ensemble
++100
+1 fois/cycle
+Bilan final complÃ©tÃ©
++30
+1 fois/cycle
+Ne pas attribuer de points Ã  lâ€™amÃ©lioration du score IQRH : lâ€™Ã©volution du score nâ€™est pas une performance Ã  rÃ©compenser.
+Badges proposÃ©s
+Badge
+Condition
+ðŸŒ± Premier pas
+Premier check-in rÃ©alisÃ©
+ðŸ¤ Le lien est crÃ©Ã©
+Premier check-in rÃ©alisÃ© par les deux membres
+ðŸ’¬ PrÃ©sents lâ€™un pour lâ€™autre
+Une semaine complÃ¨te dâ€™engagement mutuel
+ðŸŽ¯ On passe Ã  lâ€™action
+Les deux rÃ©alisent au moins un micro-dÃ©fi
+ðŸ’ª Courage partagÃ©
+Les deux rÃ©alisent leur dÃ©fi progression
+ðŸ”— Duo engagÃ©
+Trois semaines dâ€™engagement rÃ©gulier
+ðŸ† 30 jours ensemble
+Cycle terminÃ©
+âœ¨ Progression partagÃ©e
+Bilan final rÃ©alisÃ© par les deux
+Aucun classement public entre utilisateurs ou entre binÃ´mes.
+PARTIE 5 â€” SÃ‰CURITÃ‰, DIFFICULTÃ‰S ET FIN DU CYCLE
+26. SÃ©curitÃ© et anonymat progressif
+pas de nom de famille par dÃ©faut ;
+pas de coordonnÃ©es personnelles exposÃ©es automatiquement ;
+pas de localisation prÃ©cise ;
+signalement accessible Ã  tout moment ;
+droit de retrait immÃ©diat ;
+traÃ§abilitÃ© des incidents ;
+possibilitÃ© de suspension administrative ;
+rappel explicite : le BinÃ´me Relationnel nâ€™est pas un service de rencontre.
+Toute modÃ©ration automatisÃ©e Ã©ventuelle doit respecter la minimisation des donnÃ©es, les rÃ¨gles RGPD et une politique de confidentialitÃ© explicite.
+27. DÃ©tection des difficultÃ©s
+Niveau
+Situation
+RÃ©ponse
+1 â€” Ralentissement
+ActivitÃ© en baisse
+IRIS propose une relance douce.
+2 â€” DÃ©sengagement
+InactivitÃ© ou faible rÃ©ciprocitÃ©
+IRIS demande si lâ€™utilisateur souhaite continuer.
+3 â€” Rupture / incident
+Retrait, conflit ou signalement
+Pause, arrÃªt ou nouvelle suggestion selon le cas.
+28. Droit de retrait
+Lâ€™utilisateur peut quitter le binÃ´me Ã  tout moment sans justification auprÃ¨s de son partenaire. LINK OFFICE peut toutefois recueillir confidentiellement un motif codifiÃ© : disponibilitÃ©, incompatibilitÃ©, attentes diffÃ©rentes, absence dâ€™Ã©changes, comportement inappropriÃ©, autre.
+29. Signalement et gestion des incidents
+Statut
+DÃ©clencheur
+ConsÃ©quence
+warning
+DifficultÃ© lÃ©gÃ¨re
+Relance IRIS
+paused
+Pause demandÃ©e
+Interactions suspendues
+reported
+Signalement
+Alerte admin
+suspended
+Risque ou incident sÃ©rieux
+BinÃ´me suspendu
+withdrawn
+Retrait volontaire
+Fin du binÃ´me pour le membre
+closed
+Cycle clos
+Archivage et bilan
+Le membre non fautif ne doit pas Ãªtre pÃ©nalisÃ© : IRIS peut lui proposer de relancer une recherche.
+30. J30 â€” Bilan du BinÃ´me Relationnel
+Ã€ J30, le cycle passe automatiquement en phase de bilan.
+durÃ©e du binÃ´me ;
+nombre de check-ins ;
+actions rÃ©alisÃ©es ;
+rÃ©gularitÃ© ;
+objectifs travaillÃ©s ;
+Ã©volution individuelle ;
+perception de lâ€™expÃ©rience.
+Questions de feedback possibles :
+Mon binÃ´me mâ€™a aidÃ© Ã  passer Ã  lâ€™action.
+Je me suis senti soutenu.
+Les Ã©changes Ã©taient Ã©quilibrÃ©s.
+Je souhaiterais renouveler lâ€™expÃ©rience.
+Aucune donnÃ©e dÃ©taillÃ©e de lâ€™autre personne ne doit Ãªtre communiquÃ©e.
+31. AprÃ¨s les 30 jours
+Continuer ensemble si les deux le souhaitent et si lâ€™offre le permet ;
+Recevoir une nouvelle suggestion dâ€™IRIS ;
+ArrÃªter et poursuivre LINK OFFICE sans binÃ´me.
+Aucune reconduction automatique sans nouveau consentement.
+32. ClÃ´ture automatique et historisation
+Ã€ J30, le systÃ¨me doit :
+passer le cycle en phase de bilan ;
+dÃ©sactiver les relances du cycle terminÃ© ;
+inviter chaque membre Ã  faire son Ã©valuation ;
+proposer un nouveau bilan IQRH selon le parcours ;
+calculer les indicateurs du cycle ;
+archiver le cycle aprÃ¨s finalisation ;
+proposer continuer / nouveau binÃ´me / arrÃªter ;
+conserver lâ€™historique sans Ã©craser les cycles prÃ©cÃ©dents.
+33. Faire du BinÃ´me un levier de conversion vers Premium +
+Pour les utilisateurs Freemium ou Premium, la fonctionnalitÃ© doit Ãªtre visible de faÃ§on aspirationnelle. Lâ€™objectif nâ€™est pas de simplement afficher un cadenas, mais de montrer concrÃ¨tement ce que lâ€™expÃ©rience pourrait leur apporter.
+33.1 Bloc Â« Votre potentiel BinÃ´me Â»
+Vous nâ€™avez peut-Ãªtre pas besoin dâ€™avancer seul. Au regard de votre profil, IRIS pense quâ€™un BinÃ´me Relationnel pourrait vous aider Ã  passer plus facilement Ã  lâ€™action, maintenir vos engagements et bÃ©nÃ©ficier dâ€™un encouragement humain rÃ©gulier.
+CTA recommandÃ© : Â« DÃ©couvrir comment fonctionne mon futur binÃ´me Â».
+33.2 Page de dÃ©couverte Premium +
+Promesse
+Contenu prÃ©sentÃ©
+Une personne compatible
+IRIS recherche et suggÃ¨re ; lâ€™utilisateur garde toujours le choix.
+30 jours pour avancer ensemble
+Un programme progressif et limitÃ© dans le temps.
+2 check-ins rapides/semaine
+Maintenir la dynamique en moins dâ€™une minute.
+1 Ã©change approfondi/semaine
+Partager progrÃ¨s, difficultÃ©s et prochain petit pas.
+Micro-dÃ©fis personnalisÃ©s
+Chacun travaille son propre parcours.
+Encouragements et badges
+Valoriser lâ€™engagement partagÃ©.
+IRIS reste prÃ©sente
+Accompagnement et relances pendant tout le cycle.
+Cette expÃ©rience est incluse dans Premium +. Lâ€™utilisateur choisit toujours dâ€™accepter ou non la proposition et peut arrÃªter Ã  tout moment.
+CTA final : Â« Passer Ã  Premium + et activer mon BinÃ´me Relationnel Â».
+33.3 Upsell personnalisÃ© selon le profil
+Situation dÃ©tectÃ©e
+Exemple de message
+DifficultÃ© Ã  passer Ã  lâ€™action
+Vous savez peut-Ãªtre dÃ©jÃ  ce que vous pourriez faire. Le plus difficile est parfois de le faire rÃ©ellement. Un BinÃ´me Relationnel peut vous aider Ã  transformer vos intentions en petits engagements rÃ©guliers.
+Dimension sociale fragile
+RecrÃ©er du lien peut Ãªtre difficile lorsquâ€™on doit commencer seul. Votre BinÃ´me Relationnel vous permet de commencer avec une personne qui avance elle aussi dans son parcours.
+Profil dÃ©jÃ  bien entourÃ©
+Votre rÃ©seau relationnel est dÃ©jÃ  une force. Le BinÃ´me Relationnel peut vous aider Ã  aller plus loin sur une dimension que vous souhaitez dÃ©velopper.
+Besoin de rÃ©gularitÃ©
+Un petit rendez-vous rÃ©gulier peut parfois faire la diffÃ©rence entre une intention et une habitude. Le BinÃ´me vous aide Ã  maintenir votre dynamique pendant 30 jours.
+Le message doit Ãªtre gÃ©nÃ©rÃ© Ã  partir dâ€™Ã©lÃ©ments rÃ©ellement disponibles dans le profil, sans inventer de difficultÃ©.
+PARTIE 6 â€” CONCEPTION TECHNIQUE : Ã‰CRANS, STATUTS ET DONNÃ‰ES
+34. Ã‰crans Ã  crÃ©er
+Ã‰cran
+Contenu minimum
+DÃ©couverte
+PrÃ©sentation, bÃ©nÃ©fices, rÃ¨gles, bouton opt-in
+PrÃ©fÃ©rences
+DisponibilitÃ©s, rythme, communication, attentes, prÃ©fÃ©rences
+Charte
+RÃ¨gles + consentement
+Recherche
+Ã‰tat de la recherche + pause
+Suggestion IRIS
+Raisons de compatibilitÃ© + accepter/refuser
+Attente double consentement
+Statut sans rÃ©vÃ©ler dâ€™information inutile
+Mon binÃ´me
+Jour X/30, objectifs, check-ins, timeline, actions, IRIS
+Check-in rapide
+Humeur, action, encouragement
+Check-in approfondi
+Questions guidÃ©es
+Bilan J30
+ActivitÃ©, progression, feedback, suite
+Incident / signalement
+Motif, commentaire facultatif, urgence
+Admin
+Pools, suggestions, binÃ´mes, alertes, paramÃ¨tres, KPI
+35. Machine dâ€™Ã©tat
+NOT_ELIGIBLE â†’ ELIGIBLE â†’ OPT_IN â†’ SEARCHING â†’ SUGGESTION_AVAILABLE â†’ AWAITING_USER_A â†’ AWAITING_USER_B â†’ ACCEPTED â†’ ACTIVE â†’ PAUSED / INCIDENT / WITHDRAWN â†’ COMPLETED â†’ EVALUATION â†’ RENEW / NEW_MATCH / CLOSED
+Les Ã©crans et actions disponibles dÃ©pendent toujours du statut courant.
+36. ModÃ¨le de donnÃ©es minimum
+EntitÃ©
+Champs principaux
+BINOME_PREFERENCE
+user_id, opt_in, availability, communication_mode, preferred_frequency, age_preference, gender_preference, geographical_preference, expectations, consent_date, charter_version
+BINOME_SUGGESTION
+suggestion_id, user_a, user_b, campaign_id, compatibility_score, compatibility_reasons, iris_recommendation, suggestion_date, response_a, response_b
+BINOME
+binome_id, user_a, user_b, campaign_id, start_date, end_date, status, health_score
+BINOME_CHECKIN
+binome_id, user_id, date, mood, action_status, encouragement, checkin_type
+BINOME_FEEDBACK
+binome_id, user_id, satisfaction, usefulness, reciprocity, continuation_intent, issue_reason
+RELATIONAL_PLAN
+prescription_type, priority, status, start, end, progress, completion, active_goal, next_action
+BINOME_GAMIFICATION
+binome_id, user_id, points_individuels, points_binome, badges, dates_de_deblocage
+37. Event Log
+Chaque Ã©vÃ©nement important doit Ãªtre enregistrÃ© pour le suivi, le support, la mesure dâ€™impact et lâ€™amÃ©lioration future.
+Ã‰vÃ©nement
+DonnÃ©es minimales
+QUESTIONNAIRE_COMPLETED
+date, version, scores utiles
+PRESCRIPTION_GENERATED
+type, prioritÃ©, objectifs
+BINOME_OPT_IN
+date, contexte, campagne
+BINOME_SUGGESTED
+identifiants pseudonymisÃ©s, score interne, raisons
+SUGGESTION_ACCEPTED / REFUSED
+date, rÃ©ponse
+BINOME_CREATED
+date dÃ©but, campagne, statut
+CHECKIN_COMPLETED
+date, type, Ã©tat dÃ©clarÃ©
+CHALLENGE_STARTED / COMPLETED
+type, date, statut
+ENCOURAGEMENT_SENT
+date, type
+IRIS_INTERVENTION
+type de relance ou aide
+BINOME_PAUSED / REPORTED
+date, motif codifiÃ©
+BINOME_ENDED
+date, motif
+FINAL_EVALUATION
+satisfaction, utilitÃ©, intention de renouveler
+NEW_IQRH
+scores et variations
+BADGE_UNLOCKED
+badge, date, condition atteinte
+BINOME_RENEWED
+date, nouveau cycle, double consentement
+38. RÃ¨gles dâ€™accÃ¨s et permissions
+Acteur
+AccÃ¨s autorisÃ©
+Utilisateur
+Ses propres donnÃ©es, les Ã©lÃ©ments explicitement partagÃ©s par son binÃ´me, son historique.
+BinÃ´me
+Uniquement les informations prÃ©vues et consenties.
+IRIS
+DonnÃ©es nÃ©cessaires au fonctionnement selon les rÃ¨gles de traitement dÃ©finies.
+Admin LINK OFFICE
+DonnÃ©es nÃ©cessaires au support, Ã  la sÃ©curitÃ© et au pilotage selon habilitations.
+Entreprise / commanditaire
+Uniquement rÃ©sultats agrÃ©gÃ©s et anonymisÃ©s prÃ©vus au contrat.
+Autre campagne
+Aucun accÃ¨s et aucun matching croisÃ©.
+PARTIE 7 â€” ADMINISTRER, MESURER ET AMÃ‰LIORER
+39. Back-office de paramÃ©trage
+Ne pas coder en dur les rÃ¨gles susceptibles dâ€™Ã©voluer. Le back-office doit permettre de paramÃ©trer :
+durÃ©e dâ€™un cycle ;
+nombre maximum de suggestions simultanÃ©es ;
+seuil interne de suggestion ;
+pondÃ©rations des critÃ¨res ;
+critÃ¨res bloquants ;
+frÃ©quence des check-ins ;
+dÃ©lais dâ€™inactivitÃ© ;
+messages et notifications ;
+badges / points ;
+rÃ¨gles de renouvellement ;
+rÃ¨gles par campagne ;
+rÃ¨gles par type de client ;
+versions de charte ;
+motifs de signalement ;
+rÃ¨gles de conservation des donnÃ©es.
+40. Tableau de bord administrateur
+utilisateurs Ã©ligibles ;
+utilisateurs en recherche ;
+suggestions en attente ;
+binÃ´mes actifs et inactifs ;
+binÃ´mes signalÃ©s ;
+cycles terminÃ©s ;
+taux dâ€™acceptation, de refus et dâ€™abandon ;
+satisfaction moyenne ;
+progression IQRH moyenne ;
+alertes nÃ©cessitant une intervention humaine.
+Filtres : campagne, client, type de parcours et pÃ©riode.
+41. KPI de pilotage
+taux dâ€™opt-in ;
+taux de suggestions acceptÃ©es ;
+dÃ©lai moyen avant constitution dâ€™un binÃ´me ;
+taux de double acceptation ;
+taux de complÃ©tion Ã  J30 ;
+taux dâ€™abandon ;
+nombre moyen de check-ins ;
+taux de rÃ©alisation des micro-dÃ©fis ;
+satisfaction moyenne ;
+taux de renouvellement ;
+Ã©volution moyenne de lâ€™IQRH et des sous-scores ;
+taux dâ€™incidents / signalements ;
+efficacitÃ© comparÃ©e des diffÃ©rentes logiques de compatibilitÃ©.
+42. Data science et boucle dâ€™apprentissage
+Chaque action importante doit pouvoir Ãªtre reliÃ©e, sous une forme pseudonymisÃ©e ou anonymisÃ©e adaptÃ©e Ã  lâ€™usage, aux Ã©volutions observÃ©es. Ã€ terme, LINK OFFICE pourra Ã©tudier quels types de binÃ´mes, quels rythmes de check-ins et quels micro-dÃ©fis sont associÃ©s aux meilleures progressions.
+Les chiffres dâ€™impact ne doivent jamais Ãªtre inventÃ©s : ils seront calculÃ©s uniquement Ã  partir des donnÃ©es rÃ©ellement observÃ©es.
+PARTIE 8 â€” CAHIER Dâ€™IMPLÃ‰MENTATION POUR LES Ã‰TUDIANTS
+43. Process global Ã  implÃ©menter
+Phase
+EnchaÃ®nement fonctionnel
+1 â€” Diagnostic
+IQRH rÃ©alisÃ© â†’ RÃ©sultats et profil â†’ Plan dâ€™action / recommandations
+2 â€” AccÃ¨s
+VÃ©rification Premium + â†’ DÃ©couverte â†’ Opt-in â†’ PrÃ©fÃ©rences â†’ Charte
+3 â€” Ã‰ligibilitÃ©
+VÃ©rification Ã©ligibilitÃ© â†’ VÃ©rification pÃ©rimÃ¨tre / campagne
+4 â€” Suggestion
+Analyse IRIS â†’ Suggestion â†’ Acceptation A â†’ Acceptation B
+5 â€” CrÃ©ation
+CrÃ©ation du binÃ´me â†’ Rencontre de dÃ©marrage
+6 â€” Cycle 30 jours
+Programme â†’ Check-ins et actions â†’ Accompagnement IRIS â†’ Suivi de santÃ©
+7 â€” Fin de cycle
+J30 â†’ Bilan â†’ Choix de la suite
+8 â€” Historique
+ClÃ´ture / nouveau cycle â†’ Historisation
+44. Cas particuliers Ã  tester
+Cas
+Comportement attendu
+Aucun binÃ´me disponible
+File dâ€™attente + accompagnement IRIS maintenu.
+Refus dâ€™une suggestion
+Nouvelle recherche possible, sans pÃ©nalitÃ©.
+Un membre ne rÃ©pond plus
+Relances graduÃ©es puis proposition de clÃ´ture.
+Un membre quitte
+ClÃ´ture / pause du cycle et nouvelle suggestion possible pour lâ€™autre.
+Signalement
+Suspension selon gravitÃ© + traitement admin.
+Fin dâ€™abonnement Premium +
+Appliquer les rÃ¨gles commerciales sans supprimer lâ€™historique.
+Fin de campagne
+ClÃ´turer selon les rÃ¨gles de campagne ; aucun transfert automatique vers une autre campagne.
+Deux personnes veulent continuer
+Nouveau cycle uniquement aprÃ¨s double consentement.
+RÃ©Ã©valuation IQRH pendant le cycle
+Conserver les versions de scores et le point de dÃ©part.
+45. CritÃ¨res dâ€™acceptation
+1. Un utilisateur non Premium + ne peut pas entrer dans le processus de binÃ´me.
+2. Un utilisateur non opt-in nâ€™est jamais proposÃ©.
+3. Un utilisateur B2B2C ne peut jamais Ãªtre associÃ© Ã  un bÃ©nÃ©ficiaire dâ€™une autre campagne.
+4. IRIS peut produire une suggestion sans crÃ©er automatiquement le binÃ´me.
+5. Le binÃ´me nâ€™est crÃ©Ã© quâ€™aprÃ¨s deux acceptations.
+6. Un refus nâ€™expose aucun motif Ã  lâ€™autre utilisateur.
+7. Les donnÃ©es IQRH dÃ©taillÃ©es ne sont pas partagÃ©es au binÃ´me.
+8. Un utilisateur peut quitter et signaler Ã  tout moment.
+9. Le cycle passe automatiquement au bilan Ã  J30.
+10. Un cycle terminÃ© reste dans lâ€™historique.
+11. Les paramÃ¨tres de matching peuvent Ãªtre modifiÃ©s sans recoder lâ€™application.
+12. Chaque Ã©vÃ©nement clÃ© est enregistrÃ© dans lâ€™Event Log.
+13. Les dashboards commanditaires nâ€™exposent aucune donnÃ©e individuelle interdite.
+46. RÃ¨gles non nÃ©gociables
+1. IRIS suggÃ¨re : elle ne crÃ©e jamais automatiquement un binÃ´me.
+2. Le binÃ´me est rÃ©servÃ© au Premium +.
+3. Le double consentement est obligatoire.
+4. Le pÃ©rimÃ¨tre de campagne est vÃ©rifiÃ© avant la compatibilitÃ©.
+5. En B2B2C, le binÃ´me ne peut Ãªtre constituÃ© quâ€™entre bÃ©nÃ©ficiaires de la mÃªme campagne.
+6. Les donnÃ©es dÃ©taillÃ©es du questionnaire et les Ã©changes confidentiels avec IRIS ne sont jamais partagÃ©s.
+7. Lâ€™utilisateur peut quitter ou signaler Ã  tout moment.
+8. Le moteur de compatibilitÃ© est paramÃ©trable et Ã©volutif.
+9. Les donnÃ©es dâ€™usage sont historisÃ©es pour permettre lâ€™Ã©valuation future du dispositif.
+47. Arbitrages issus des versions de travail
+Ã‰lÃ©ment des anciens guides
+Arbitrage retenu
+Matching automatique
+RemplacÃ© par des suggestions IRIS + double consentement.
+BinÃ´me en Premium gÃ©nÃ©rique
+RÃ©servÃ© au Premium +.
+Matching universel
+RemplacÃ© par un matching dans le pÃ©rimÃ¨tre autorisÃ©.
+PondÃ©rations fixes
+TransformÃ©es en paramÃ¨tres administrables.
+Seuils fixes de compatibilitÃ©
+ConservÃ©s uniquement comme hypothÃ¨ses paramÃ©trables.
+Gamification forte
+ConservÃ©e en option, sobre et non compÃ©titive.
+Anonymat / sÃ©curitÃ© / signalement
+ConservÃ©s et renforcÃ©s.
+Programme 30 jours / check-ins / timeline
+ConservÃ©s comme cÅ“ur du cycle.
+Event Log / KPI / Data science
+ConservÃ©s comme briques stratÃ©giques.
+Ordonnance relationnelle
+ConservÃ©e mais sÃ©parÃ©e fonctionnellement du BinÃ´me Relationnel.
+48. Prompt fonctionnel consolidÃ©
+CrÃ©er un module Â« BinÃ´me Relationnel Â» LINK OFFICE rÃ©servÃ© aux bÃ©nÃ©ficiaires Premium +.
+Appliquer dâ€™abord les rÃ¨gles de parcours et de campagne. Lâ€™utilisateur fait un opt-in, renseigne ses prÃ©fÃ©rences et accepte une charte. IRIS analyse les compatibilitÃ©s dans le pool Ã©ligible et formule des suggestions. Aucun binÃ´me nâ€™est crÃ©Ã© automatiquement. La crÃ©ation exige le double consentement.
+CrÃ©er les entitÃ©s de prÃ©fÃ©rences, suggestions, binÃ´mes, check-ins, feedbacks, Ã©vÃ©nements et paramÃ¨tres. Le moteur de compatibilitÃ© doit Ãªtre paramÃ©trable. PrÃ©voir une file dâ€™attente si aucune suggestion pertinente nâ€™est disponible.
+AprÃ¨s double acceptation, crÃ©er un espace Â« Mon binÃ´me Â» et un cycle de 30 jours avec objectifs, actions, check-ins, timeline partagÃ©e, accompagnement IRIS, notifications, droit de retrait et signalement. Ne jamais partager automatiquement les rÃ©ponses dÃ©taillÃ©es IQRH, conversations privÃ©es avec IRIS, coordonnÃ©es ou donnÃ©es sensibles.
+CrÃ©er un health_score interne, une dÃ©tection graduÃ©e de lâ€™inactivitÃ©, un Event Log complet et un bilan automatique Ã  J30. Ã€ la fin : proposer continuer ensemble, recevoir une nouvelle suggestion ou arrÃªter ; aucune reconduction automatique.
+CrÃ©er un back-office permettant de paramÃ©trer critÃ¨res, pondÃ©rations, seuils, durÃ©e, notifications, check-ins, badges, rÃ¨gles de campagne et rÃ¨gles de clÃ´ture. CrÃ©er un dashboard admin avec pools, suggestions, binÃ´mes actifs/inactifs, incidents, taux dâ€™acceptation, complÃ©tion, satisfaction et Ã©volution agrÃ©gÃ©e. Les commanditaires B2B/B2B2C nâ€™accÃ¨dent quâ€™aux donnÃ©es agrÃ©gÃ©es et anonymisÃ©es prÃ©vues par leur offre.
+Conclusion
+IRIS suggÃ¨re. Lâ€™utilisateur choisit. Le binÃ´me expÃ©rimente. IRIS accompagne. LINK OFFICE mesure.
+La fonctionnalitÃ© doit rester humaine, volontaire, sÃ©curisÃ©e, mesurable et Ã©volutive. La V1 doit fonctionner avec des rÃ¨gles simples et paramÃ©trables, tout en prÃ©parant la collecte de donnÃ©es nÃ©cessaires Ã  lâ€™amÃ©lioration future du moteur de compatibilitÃ©.
