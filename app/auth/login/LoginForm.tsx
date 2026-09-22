@@ -15,6 +15,8 @@ export function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [show2FA, setShow2FA] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,11 +45,19 @@ export function LoginForm() {
       const result = await signIn("credentials", {
         email,
         password,
+        twoFactorCode: show2FA ? twoFactorCode : undefined,
         redirect: false,
       });
 
       if (result?.error) {
-        if (result.error.includes("RATE_LIMITED")) {
+        if (result.error.includes("2FA_REQUIRED")) {
+          setShow2FA(true);
+          setError(null);
+          setLoading(false);
+          return;
+        } else if (result.error.includes("2FA_INVALID")) {
+          setError("Code d'authentification invalide.");
+        } else if (result.error.includes("RATE_LIMITED")) {
           const seconds = parseInt(result.error.split(":")[1] || "60", 10);
           setError(`Trop de tentatives. Réessayez dans ${Math.ceil(seconds / 60)} minute(s).`);
         } else {
@@ -132,46 +142,78 @@ export function LoginForm() {
 
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-            {/* Email */}
-            <div>
-              <label htmlFor="email" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
-                Email
-              </label>
-              <div style={{ position: "relative" }}>
-                <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
-                  <Mail size={16} />
-                </span>
-                <input
-                  id="email" type="email" required
-                  placeholder="vous@exemple.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="input-field has-icon"
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                <label htmlFor="password" style={{ fontSize: 13, fontWeight: 500, color: "var(--text-2)" }}>
-                  Mot de passe
+            {/* Si 2FA est requis */}
+            {show2FA ? (
+              <div>
+                <label htmlFor="twoFactorCode" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
+                  Code d'authentification (2FA)
                 </label>
-                <a href="#" style={{ fontSize: 12, color: "var(--text-3)", textDecoration: "none" }}>Mot de passe oublié ?</a>
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
+                    <Lock size={16} />
+                  </span>
+                  <input
+                    id="twoFactorCode" type="text" required
+                    placeholder="123456"
+                    value={twoFactorCode}
+                    onChange={(e) => setTwoFactorCode(e.target.value)}
+                    className="input-field has-icon"
+                    maxLength={6}
+                    autoComplete="one-time-code"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setShow2FA(false); setTwoFactorCode(""); }}
+                  style={{ background: "none", border: "none", color: "var(--text-3)", fontSize: 13, marginTop: 12, cursor: "pointer", textDecoration: "underline" }}
+                >
+                  Retour
+                </button>
               </div>
-              <div style={{ position: "relative" }}>
-                <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
-                  <Lock size={16} />
-                </span>
-                <input
-                  id="password" type="password" required
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="input-field has-icon"
-                />
-              </div>
-            </div>
+            ) : (
+              <>
+                {/* Email */}
+                <div>
+                  <label htmlFor="email" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
+                    Email
+                  </label>
+                  <div style={{ position: "relative" }}>
+                    <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
+                      <Mail size={16} />
+                    </span>
+                    <input
+                      id="email" type="email" required
+                      placeholder="vous@exemple.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="input-field has-icon"
+                    />
+                  </div>
+                </div>
+
+                {/* Password */}
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                    <label htmlFor="password" style={{ fontSize: 13, fontWeight: 500, color: "var(--text-2)" }}>
+                      Mot de passe
+                    </label>
+                    <a href="#" style={{ fontSize: 12, color: "var(--text-3)", textDecoration: "none" }}>Mot de passe oublié ?</a>
+                  </div>
+                  <div style={{ position: "relative" }}>
+                    <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
+                      <Lock size={16} />
+                    </span>
+                    <input
+                      id="password" type="password" required
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="input-field has-icon"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
 
             <button
               type="submit"

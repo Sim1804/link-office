@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Plus, Edit2, Trash2, Eye, CheckCircle, XCircle, FileText, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
 
 export const metadata = {
   title: "Gestion des Médias | Admin LINK OFFICE",
@@ -95,9 +96,7 @@ export default async function AdminMediaIndex({ searchParams }: { searchParams: 
                         <Edit2 size={14} />
                       </Button>
                     </Link>
-                    <Button variant="danger" size="sm" style={{ padding: "6px" }} title="Supprimer">
-                      <Trash2 size={14} />
-                    </Button>
+                    <DeleteConfirmButton endpoint={`/api/admin/media/${item.id}`} title="Supprimer" />
                   </div>
                 </td>
               </tr>

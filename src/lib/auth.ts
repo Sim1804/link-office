@@ -9,6 +9,7 @@ import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { rateLimit, getRetryAfterSeconds } from "@/lib/rate-limit";
+import { authenticator } from "otplib";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
@@ -18,6 +19,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Mot de passe", type: "password" },
+        twoFactorCode: { label: "Code 2FA", type: "text" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
@@ -42,6 +44,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               organizationId: true,
               campaignId: true,
               mustChangePassword: true,
+              isTwoFactorEnabled: true,
+              twoFactorSecret: true,
+              emailVerified: true,
               organization: { select: { logoUrl: true } },
               campaign: { select: { logoUrl: true } },
             },
@@ -54,6 +59,25 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             user.password
           );
           if (!isValid) return null;
+
+          // Vérification de l'email
+          // if (!user.emailVerified) {
+          //   throw new Error("EMAIL_NOT_VERIFIED");
+          // }
+
+          // Vérification 2FA
+          if (user.isTwoFactorEnabled && user.twoFactorSecret) {
+            if (!credentials.twoFactorCode) {
+              throw new Error("2FA_REQUIRED");
+            }
+            const isValidToken = authenticator.verify({
+              token: credentials.twoFactorCode as string,
+              secret: user.twoFactorSecret,
+            });
+            if (!isValidToken) {
+              throw new Error("2FA_INVALID");
+            }
+          }
 
           return {
             id: user.id,

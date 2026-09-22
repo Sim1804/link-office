@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Plus, BookOpen, Edit2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { CatalogDeleteButton } from "@/components/admin/CatalogDeleteButton";
+import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
 import { Select } from "@/components/ui/Select";
 import { CatalogImportButton } from "@/components/admin/CatalogImportButton";
 
@@ -268,7 +268,7 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
                         <Edit2 size={14} />
                       </Button>
                     </Link>
-                    <CatalogDeleteButton itemId={item.id} />
+                    <DeleteConfirmButton endpoint={`/api/admin/catalog/${item.id}`} title={`Supprimer ${item.id}`} />
                   </div>
                 </td>
               </tr>

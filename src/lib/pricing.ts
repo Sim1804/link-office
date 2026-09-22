@@ -3,10 +3,29 @@ export const PRICING_PLANS = {
     id: "B2C_PREMIUM",
     name: "Premium (Particulier)",
     description: "Prescriptions illimitées + carnet de santé relationnelle + coach IRIS illimité + historique complet",
-    price: 999, // 9.99 EUR
     currency: "eur",
-    interval: "month",
-    stripePriceId: "price_b2c_premium"
+    monthly: {
+      price: 999,
+      stripePriceId: "price_b2c_premium_monthly"
+    },
+    annual: {
+      price: 9590,
+      stripePriceId: "price_b2c_premium_annual"
+    }
+  },
+  B2C_PREMIUM_PLUS: {
+    id: "B2C_PREMIUM_PLUS",
+    name: "Premium + (Particulier)",
+    description: "Tout Premium + accès exclusif au Binôme Relationnel",
+    currency: "eur",
+    monthly: {
+      price: 1499,
+      stripePriceId: "price_b2c_premium_plus_monthly"
+    },
+    annual: {
+      price: 14390,
+      stripePriceId: "price_b2c_premium_plus_annual"
+    }
   },
   B2B_ENTREPRISE: {
     id: "B2B_ENTREPRISE",

@@ -118,15 +118,74 @@ export function ActiveBinomeDashboard({ binome, currentUserId }: { binome: any, 
                 <CalendarDays size={16} style={{ color: "var(--primary)" }} />
                 Timeline partagée
               </h3>
-              <div style={{
-                background: "var(--bg)", border: "1px solid var(--border)",
-                borderRadius: 14, padding: "24px", textAlign: "center",
-              }}>
-                <Rocket size={22} style={{ color: "var(--text-3)", margin: "0 auto 10px" }} />
-                <p style={{ color: "var(--text-2)", fontSize: 13, margin: 0 }}>
-                  Les check-ins et encouragements apparaîtront ici.
-                </p>
-              </div>
+              
+              {binome.checkins && binome.checkins.length > 0 ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  {binome.checkins.map((checkin: any) => {
+                    const isCurrentUser = checkin.userId === currentUserId;
+                    const author = isCurrentUser ? "Vous" : partner.firstName;
+                    const checkinDate = format(new Date(checkin.date), "dd MMM à HH:mm", { locale: fr });
+                    
+                    return (
+                      <div key={checkin.id} style={{
+                        background: "var(--bg)", border: "1px solid var(--border)",
+                        borderRadius: 14, padding: "16px",
+                      }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-1)" }}>
+                            {author} a fait un check-in
+                          </span>
+                          <span style={{ fontSize: 11, color: "var(--text-3)" }}>
+                            {checkinDate}
+                          </span>
+                        </div>
+                        
+                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: checkin.encouragement ? 12 : 0 }}>
+                          {checkin.actionStatus && (
+                            <span style={{
+                              fontSize: 12, fontWeight: 600,
+                              background: "rgba(0,169,157,0.1)", color: "var(--primary)",
+                              padding: "2px 8px", borderRadius: 999, border: "1px solid rgba(0,169,157,0.2)"
+                            }}>
+                              Action : {checkin.actionStatus}
+                            </span>
+                          )}
+                          {checkin.checkinType === "RAPIDE" && (
+                            <span style={{
+                              fontSize: 12, fontWeight: 600,
+                              background: "rgba(148,163,184,0.1)", color: "var(--text-2)",
+                              padding: "2px 8px", borderRadius: 999,
+                            }}>
+                              Check-in rapide
+                            </span>
+                          )}
+                        </div>
+                        
+                        {checkin.encouragement && (
+                          <div style={{
+                            background: "var(--surface)", padding: "10px 14px",
+                            borderRadius: 10, fontSize: 13, color: "var(--text-2)",
+                            borderLeft: "3px solid var(--primary)",
+                            fontStyle: "italic"
+                          }}>
+                            "{checkin.encouragement}"
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div style={{
+                  background: "var(--bg)", border: "1px solid var(--border)",
+                  borderRadius: 14, padding: "24px", textAlign: "center",
+                }}>
+                  <Rocket size={22} style={{ color: "var(--text-3)", margin: "0 auto 10px" }} />
+                  <p style={{ color: "var(--text-2)", fontSize: 13, margin: 0 }}>
+                    Les check-ins et encouragements apparaîtront ici.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 

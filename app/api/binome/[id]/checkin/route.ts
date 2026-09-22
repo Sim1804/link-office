@@ -35,11 +35,44 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       }
     });
 
-    // Optionnel : Mettre à jour le statut du binôme ou le healthScore si besoin
+    // Mettre à jour l'activité du binôme
     await prisma.binome.update({
       where: { id: binomeId },
-      data: { updatedAt: new Date() } // Touch le binome pour montrer de l'activité
+      data: { updatedAt: new Date() }
     });
+
+    // ── GAMIFICATION ──
+    // Points : RAPIDE = 10, APPROFONDI = 30
+    const pointsToAdd = checkinType === "RAPIDE" ? 10 : 30;
+    const isUserA = binome.userAId === session.user.id;
+
+    // Chercher la ligne de gamification existante
+    const gamification = await prisma.binomeGamification.findUnique({
+      where: { binomeId }
+    });
+
+    if (gamification) {
+      await prisma.binomeGamification.update({
+        where: { id: gamification.id },
+        data: {
+          pointsUserA: isUserA ? { increment: pointsToAdd } : undefined,
+          pointsUserB: !isUserA ? { increment: pointsToAdd } : undefined,
+          pointsBinome: { increment: pointsToAdd }
+        }
+      });
+    } else {
+      // Créer la ligne si elle n'existe pas encore
+      await prisma.binomeGamification.create({
+        data: {
+          binomeId,
+          userAId: binome.userAId,
+          userBId: binome.userBId,
+          pointsUserA: isUserA ? pointsToAdd : 0,
+          pointsUserB: !isUserA ? pointsToAdd : 0,
+          pointsBinome: pointsToAdd
+        }
+      });
+    }
 
     return NextResponse.json({ success: true, checkin });
   } catch (error: any) {

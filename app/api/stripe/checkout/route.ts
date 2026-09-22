@@ -10,6 +10,10 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     
+    const body = await req.json().catch(() => ({}));
+    const requestedTier = body.tier === "PREMIUM_PLUS" ? "PREMIUM_PLUS" : "PREMIUM";
+    const billing = body.billing === "annual" ? "annual" : "monthly";
+
     // Si la clé secrète n'est pas définie (mode mock), on renvoie une URL simulée
     if (!process.env.STRIPE_SECRET_KEY) {
       console.warn("Stripe mock mode: redirecting directly to success page and updating DB");
@@ -17,16 +21,21 @@ export async function POST(req: Request) {
       const { prisma } = await import("@/lib/prisma");
       await prisma.user.update({
         where: { id: session.user.id },
-        data: { subscription: "PREMIUM" }
+        data: { subscription: requestedTier }
       });
 
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       const successUrl = `${appUrl}/premium/success?mock=true`;
-      return NextResponse.json({ url: `${appUrl}/mock-checkout?success_url=${encodeURIComponent(successUrl)}&amount=49,00` });
+      let amount = "9,99";
+      if (requestedTier === "PREMIUM") amount = billing === "annual" ? "95,90" : "9,99";
+      if (requestedTier === "PREMIUM_PLUS") amount = billing === "annual" ? "143,90" : "14,99";
+
+      return NextResponse.json({ url: `${appUrl}/mock-checkout?success_url=${encodeURIComponent(successUrl)}&amount=${amount}` });
     }
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const plan = PRICING_PLANS.B2C_PREMIUM;
+    const plan = requestedTier === "PREMIUM_PLUS" ? PRICING_PLANS.B2C_PREMIUM_PLUS : PRICING_PLANS.B2C_PREMIUM;
+    const planDetails = plan[billing];
 
     const stripeSession = await stripe.checkout.sessions.create({
       success_url: `${appUrl}/premium/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -43,9 +52,9 @@ export async function POST(req: Request) {
               name: plan.name,
               description: plan.description,
             },
-            unit_amount: plan.price!, // 999
+            unit_amount: planDetails.price,
             recurring: {
-              interval: "month"
+              interval: billing === "annual" ? "year" : "month"
             }
           },
           quantity: 1,
@@ -54,7 +63,8 @@ export async function POST(req: Request) {
       metadata: {
         userId: session.user.id,
         plan: plan.id,
-        tier: "PREMIUM",
+        tier: requestedTier,
+        billing,
       },
     });
 

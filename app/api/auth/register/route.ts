@@ -28,6 +28,8 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { rateLimit, getRetryAfterSeconds } from "@/lib/rate-limit";
+import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 /**
  * Schéma de validation des données d'inscription.
@@ -49,8 +51,12 @@ const registerSchema = z.object({
     .min(8, "Le mot de passe doit contenir au moins 8 caractères.")
     .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une majuscule.")
     .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre."),
+  confirmPassword: z.string(),
   /** Code d'accès organisationnel optionnel (rattache à une organisation et attribue un rôle) */
   codeAccess: z.string().optional(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Les mots de passe ne correspondent pas.",
+  path: ["confirmPassword"],
 });
 
 /**
@@ -123,6 +129,11 @@ export async function POST(request: Request) {
           data: { firstName: prenom, lastName: nom, email, password: hashedPassword, organizationId, role: userRole, ...campaignUpdate },
           select: { id: true, email: true, firstName: true, lastName: true, role: true, organizationId: true, subscription: true },
         });
+        
+        // ── Génération et envoi de l'email de vérification pour le B2B ──
+        const verificationToken = await generateVerificationToken(user.email);
+        await sendVerificationEmail(user.email, verificationToken.token);
+
         return NextResponse.json({ user_id: user.id, email: user.email, prenom: user.firstName, nom: user.lastName, role: user.role }, { status: 201 });
       }
 
@@ -161,6 +172,10 @@ export async function POST(request: Request) {
       },
     });
 
+    // ── Génération et envoi de l'email de vérification ──
+    const verificationToken = await generateVerificationToken(user.email);
+    await sendVerificationEmail(user.email, verificationToken.token);
+
     return NextResponse.json(
       {
         user_id: user.id,
@@ -175,7 +190,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("[AUTH_REGISTER_ERROR]:", error);
     return NextResponse.json(
-      { detail: "Erreur interne du serveur." },
+      { detail: error instanceof Error ? error.message : "Erreur interne du serveur.", stack: error instanceof Error ? error.stack : undefined },
       { status: 500 }
     );
   }

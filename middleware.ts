@@ -78,9 +78,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.json({ error: "Configuration d'authentification critique manquante." }, { status: 500 });
   }
 
-  // ── Restriction IP pour /admin en production ─────────────────────────────
+  // ── Restriction IP pour /dashboard/superadmin (et /admin) en production ──
   // Les IPs autorisées sont configurées via la variable d'environnement ADMIN_ALLOWED_IPS
-  if (pathname.startsWith("/admin") && process.env.NODE_ENV === "production") {
+  if ((pathname.startsWith("/admin") || pathname.startsWith("/dashboard/superadmin")) && process.env.NODE_ENV === "production") {
     const allowedIPs = (process.env.ADMIN_ALLOWED_IPS || "")
       .split(",")
       .map((ip) => ip.trim())

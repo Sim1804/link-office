@@ -18,7 +18,7 @@ export const metadata = {
 };
 
 // Rôles autorisés — cohérent avec les guards API
-const BINOME_ALLOWED_ROLES = ["EMPLOYEE", "SUPER_ADMIN"];
+const BINOME_ALLOWED_ROLES = ["CITIZEN", "MEMBER", "EMPLOYEE", "SUPER_ADMIN"];
 
 export default async function BinomePage() {
   const session = await auth();
@@ -41,12 +41,16 @@ export default async function BinomePage() {
   // Guard rôle — MEMBER et CITIZEN exclus
   const roleAllowed = BINOME_ALLOWED_ROLES.includes(user?.role ?? "");
 
-  const isPremium = user?.campaign
-    ? (user.campaign.offer === "PREMIUM_PLUS" || user.campaign.offer === "PREMIUM") && user.campaign.status === "ACTIVE"
-    : (user?.subscription === "PREMIUM_PLUS" || user?.subscription === "PREMIUM");
+  const isPremiumPlus = user?.campaign
+    ? user.campaign.offer === "PREMIUM_PLUS" && user.campaign.status === "ACTIVE"
+    : user?.subscription === "PREMIUM_PLUS";
 
-  // Écran de refus unifié (rôle non autorisé OU pas Premium)
-  if (!roleAllowed || !isPremium) {
+  const isPremium = user?.campaign
+    ? user.campaign.offer === "PREMIUM" && user.campaign.status === "ACTIVE"
+    : user?.subscription === "PREMIUM";
+
+  // Écran de refus unifié (rôle non autorisé OU pas Premium+)
+  if (!roleAllowed || !isPremiumPlus) {
     const isRoleIssue = !roleAllowed;
     return (
       <>
@@ -76,12 +80,12 @@ export default async function BinomePage() {
               fontSize: 26, fontWeight: 800, color: "var(--text-1)",
               marginBottom: 14, lineHeight: 1.2,
             }}>
-              {isRoleIssue ? "Fonctionnalité non disponible" : "Passez à Premium"}
+              {isRoleIssue ? "Fonctionnalité non disponible" : isPremium ? "Passez à Premium +" : "Découvrez Premium +"}
             </h1>
             <p style={{ color: "var(--text-2)", fontSize: 15, lineHeight: 1.7, marginBottom: 36 }}>
               {isRoleIssue
-                ? "Le programme Binôme Relationnel est réservé aux utilisateurs individuels (particuliers) disposant d'un abonnement Premium. Les comptes mutuelle et collectivité n'ont pas accès à cette fonctionnalité."
-                : "Le programme Binôme Relationnel vous permet de vous associer à un collègue de confiance pour partager vos défis et progresser ensemble sur vos dimensions relationnelles."}
+                ? "Le programme Binôme Relationnel est réservé aux bénéficiaires de la plateforme (Particuliers, Employés). Les comptes administrateurs spécifiques (B2B, B2G) n'y accèdent pas de cette manière."
+                : `Le programme Binôme Relationnel est une exclusivité Premium +. ${isPremium ? "Passez à l'offre supérieure" : "Rejoignez Premium +"} pour vous associer à un collègue de confiance, partager vos défis et progresser ensemble.`}
             </p>
 
             {!isRoleIssue && (
@@ -95,7 +99,7 @@ export default async function BinomePage() {
                 }}
               >
                 <Crown size={18} />
-                Découvrir Premium
+                {isPremium ? "Passer à Premium +" : "Découvrir Premium +"}
               </a>
             )}
           </div>
@@ -126,6 +130,7 @@ export default async function BinomePage() {
       include: {
         userA: { select: { id: true, firstName: true, lastName: true } },
         userB: { select: { id: true, firstName: true, lastName: true } },
+        checkins: { orderBy: { date: "desc" } },
       },
       orderBy: { updatedAt: "desc" },
     }),

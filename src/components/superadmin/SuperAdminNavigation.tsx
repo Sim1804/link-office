@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import {
   Building2, Inbox, Users, Newspaper,
-  LayoutDashboard, ListChecks, CreditCard
+  LayoutDashboard, ListChecks, CreditCard, Handshake, Shield
 } from "lucide-react";
 import { IrisDrawer } from "@/components/superadmin/IrisDrawer";
 
@@ -29,11 +29,13 @@ export function SuperAdminNavigation({ stats }: SuperAdminNavigationProps) {
   const tabs = [
     { name: "Dashboard 360", href: "/dashboard/superadmin", exact: true, icon: LayoutDashboard },
     { name: "Devis", href: "/dashboard/superadmin/leads", badge: stats.leadsUrgent > 0 ? stats.leadsUrgent.toString() : undefined, icon: Inbox },
-    { name: `Organisations (${stats.orgsTotal})`, href: "/dashboard/superadmin/organizations", icon: Building2 },
+    { name: "Organisations", href: "/dashboard/superadmin/organizations", icon: Building2 },
     { name: "Finances", href: "/dashboard/superadmin/billing", icon: CreditCard },
-    { name: `Médias (${stats.mediaTotal})`, href: "/dashboard/superadmin/media", icon: Newspaper },
+    { name: "Médias", href: "/dashboard/superadmin/media", icon: Newspaper },
     { name: "Utilisateurs", href: "/dashboard/superadmin/users", icon: Users },
+    { name: "Binômes", href: "/dashboard/superadmin/binome", icon: Handshake },
     { name: "Catalogues", href: "/dashboard/superadmin/catalog", icon: ListChecks },
+    { name: "Sécurité", href: "/dashboard/superadmin/security", icon: Shield },
   ];
 
   return (

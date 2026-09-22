@@ -10,13 +10,17 @@ export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ prenom: "", nom: "", email: "", password: "" });
+  const [form, setForm] = useState({ prenom: "", nom: "", email: "", password: "", confirmPassword: "" });
 
   const set = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [field]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (form.password !== form.confirmPassword) {
+      setError("Les mots de passe ne correspondent pas.");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -140,23 +144,46 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Mot de passe */}
-            <div>
-              <label htmlFor="password" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
-                Mot de passe
-              </label>
-              <div style={{ position: "relative" }}>
-                <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
-                  <Lock size={15} />
-                </span>
-                <input
-                  id="password" type="password" required
-                  placeholder="8 caractères minimum"
-                  value={form.password}
-                  onChange={set("password")}
-                  className="input-field has-icon"
-                  minLength={8}
-                />
+            {/* Mot de passe et Confirmation */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              {/* Mot de passe */}
+              <div>
+                <label htmlFor="password" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
+                  Mot de passe
+                </label>
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
+                    <Lock size={15} />
+                  </span>
+                  <input
+                    id="password" type="password" required
+                    placeholder="8 caractères minimum"
+                    value={form.password}
+                    onChange={set("password")}
+                    className="input-field has-icon"
+                    minLength={8}
+                  />
+                </div>
+              </div>
+
+              {/* Confirmation de mot de passe */}
+              <div>
+                <label htmlFor="confirmPassword" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
+                  Confirmer le mot de passe
+                </label>
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
+                    <Lock size={15} />
+                  </span>
+                  <input
+                    id="confirmPassword" type="password" required
+                    placeholder="Répétez le mot de passe"
+                    value={form.confirmPassword}
+                    onChange={set("confirmPassword")}
+                    className="input-field has-icon"
+                    minLength={8}
+                  />
+                </div>
               </div>
             </div>
 

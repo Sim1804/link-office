@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const BINOME_ALLOWED_ROLES = ["EMPLOYEE", "SUPER_ADMIN"];
+const BINOME_ALLOWED_ROLES = ["CITIZEN", "MEMBER", "EMPLOYEE", "SUPER_ADMIN"];
 
 export async function GET() {
   try {
@@ -13,7 +13,7 @@ export async function GET() {
 
     if (!BINOME_ALLOWED_ROLES.includes(session.user.role)) {
       return NextResponse.json(
-        { error: "Le Binôme Relationnel est réservé aux comptes individuels Premium/Premium+.", code: "ROLE_NOT_ALLOWED" },
+        { error: "Le Binôme Relationnel est réservé aux comptes Premium+.", code: "ROLE_NOT_ALLOWED" },
         { status: 403 }
       );
     }
@@ -47,9 +47,9 @@ export async function GET() {
         where: { id: user.campaignId },
         select: { offer: true, status: true },
       });
-      if (!campaign || (campaign.offer !== "PREMIUM_PLUS" && campaign.offer !== "PREMIUM")) {
+      if (!campaign || campaign.offer !== "PREMIUM_PLUS") {
         return NextResponse.json({
-          error: "Le module Binôme Relationnel est réservé aux campagnes PREMIUM ou PREMIUM+.",
+          error: "Le module Binôme Relationnel est réservé aux campagnes PREMIUM+.",
           code: "PREMIUM_PLUS_REQUIRED",
         }, { status: 403 });
       }
