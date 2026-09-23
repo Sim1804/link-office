@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Cloud, CloudRain, Sun, CloudSun, Zap, Check } from "lucide-react";
 
 const MOODS = [
-  { id: "TRES_BIEN", icon: Sun, label: "Très bien", color: "#f59e0b" },
-  { id: "PLUTOT_BIEN", icon: CloudSun, label: "Plutôt bien", color: "#10b981" },
-  { id: "MITIGE", icon: Cloud, label: "Mitigé(e)", color: "var(--text-2)" },
-  { id: "FRAGILE", icon: CloudRain, label: "Fragile", color: "#6366f1" },
-  { id: "EN_DIFFICULTE", icon: Zap, label: "En difficulté", color: "#ef4444" },
+  { id: "TRES_BIEN",     label: "Très bien",   color: "#10b981", borderColor: "rgba(16,185,129,0.35)",  bg: "rgba(16,185,129,0.08)"  },
+  { id: "PLUTOT_BIEN",   label: "Plutôt bien", color: "var(--primary)", borderColor: "rgba(0,169,157,0.35)", bg: "rgba(0,169,157,0.08)" },
+  { id: "MITIGE",        label: "Mitigé(e)",   color: "var(--text-2)", borderColor: "var(--border-strong)", bg: "var(--surface-2)"     },
+  { id: "FRAGILE",       label: "Fragile",      color: "#6366f1", borderColor: "rgba(99,102,241,0.35)",  bg: "rgba(99,102,241,0.08)"  },
+  { id: "EN_DIFFICULTE", label: "Difficile",   color: "#ef4444", borderColor: "rgba(239,68,68,0.35)",   bg: "rgba(239,68,68,0.08)"   },
 ];
 
 export function MeteoWidget() {
@@ -19,16 +18,13 @@ export function MeteoWidget() {
   const handleSubmit = async (moodId: string) => {
     setSelectedMood(moodId);
     setLoading(true);
-
     try {
       const res = await fetch("/api/carnet/meteo", {
         method: "POST",
         body: JSON.stringify({ weather: moodId }),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
-      if (res.ok) {
-        setSubmitted(true);
-      }
+      if (res.ok) setSubmitted(true);
     } catch (e) {
       console.error(e);
     } finally {
@@ -37,30 +33,32 @@ export function MeteoWidget() {
   };
 
   if (submitted) {
+    const mood = MOODS.find((m) => m.id === selectedMood);
     return (
       <div style={{
-        background: "rgba(0,169,157,0.05)", border: "1px solid rgba(0,169,157,0.2)",
-        padding: "16px 24px", borderRadius: 16, display: "flex", alignItems: "center", gap: 12,
-        color: "var(--primary)", fontSize: 14, fontWeight: 700, animation: "fadeSlideIn 0.3s ease-out"
+        display: "inline-flex", alignItems: "center", gap: 8,
+        padding: "6px 16px", borderRadius: 16,
+        background: "rgba(0,169,157,0.08)", border: "1px solid rgba(0,169,157,0.3)",
+        fontSize: 13, fontWeight: 600, color: "var(--primary)",
       }}>
-        <Check size={20} />
-        Météo du jour enregistrée ! Merci pour votre check-in.
+        ✓ {mood?.label}
       </div>
     );
   }
 
   return (
-    <div style={{
-      background: "var(--surface)", border: "1px solid var(--border)",
-      padding: "16px 24px", borderRadius: 16, marginBottom: 20,
-      display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16
-    }}>
-      <h3 style={{ color: "var(--text-1)", fontSize: 14, fontWeight: 700, margin: 0, display: "flex", alignItems: "center", gap: 10 }}>
-        Comment vous sentez-vous dans vos relations aujourd'hui ?
-      </h3>
-      <div style={{ display: "flex", gap: 8 }}>
-        {MOODS.map(mood => {
-          const Icon = mood.icon;
+    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+      <span style={{
+        fontSize: 12, fontWeight: 600, color: "var(--text-3)",
+        textTransform: "uppercase", letterSpacing: "0.06em",
+        whiteSpace: "nowrap",
+      }}>
+        Aujourd'hui
+      </span>
+
+      <div style={{ display: "flex", gap: 6, flexWrap: "nowrap", overflowX: "auto", scrollbarWidth: "none" }}>
+        {MOODS.map((mood) => {
+          const isSelected = selectedMood === mood.id;
           return (
             <button
               key={mood.id}
@@ -68,23 +66,32 @@ export function MeteoWidget() {
               disabled={loading}
               title={mood.label}
               style={{
-                width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
-                background: "var(--bg)", border: "1px solid var(--border)",
-                borderRadius: "50%", cursor: "pointer", transition: "all 0.2s",
-                opacity: loading && selectedMood !== mood.id ? 0.5 : 1
+                display: "inline-flex", alignItems: "center",
+                padding: "6px 16px", borderRadius: 16, fontFamily: "inherit",
+                border: isSelected ? `1px solid ${mood.borderColor}` : "1px solid var(--border)",
+                background: isSelected ? mood.bg : "var(--surface)",
+                color: isSelected ? mood.color : "var(--text-2)",
+                fontSize: 13, fontWeight: 600,
+                cursor: "pointer", transition: "all 0.2s",
+                whiteSpace: "nowrap",
+                opacity: loading && !isSelected ? 0.4 : 1,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--surface)";
-                e.currentTarget.style.borderColor = mood.color;
-                e.currentTarget.style.transform = "scale(1.05)";
+                if (!isSelected) {
+                  e.currentTarget.style.background = mood.bg;
+                  e.currentTarget.style.borderColor = mood.borderColor;
+                  e.currentTarget.style.color = mood.color;
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "var(--bg)";
-                e.currentTarget.style.borderColor = "var(--border)";
-                e.currentTarget.style.transform = "scale(1)";
+                if (!isSelected) {
+                  e.currentTarget.style.background = "var(--surface)";
+                  e.currentTarget.style.borderColor = "var(--border)";
+                  e.currentTarget.style.color = "var(--text-2)";
+                }
               }}
             >
-              <Icon size={18} color={mood.color} />
+              {mood.label}
             </button>
           );
         })}

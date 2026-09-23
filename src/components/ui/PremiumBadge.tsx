@@ -1,40 +1,47 @@
-import { Sparkles } from "lucide-react";
+/**
+ * @file PremiumBadge.tsx
+ * @description Badge d'abonnement compact — style pill uniforme sur toute l'app.
+ * Utilisé pour indiquer visuellement le niveau Premium ou Premium+ d'un utilisateur.
+ *
+ * Design : pill fine, fond turquoise très léger, ★ prefix, texte 11px bold.
+ */
+import React from "react";
 
 interface PremiumBadgeProps {
   className?: string;
   style?: React.CSSProperties;
-  label?: React.ReactNode;
+  /** "Premium" | "Premium+" — default: "Premium" */
+  label?: string;
 }
 
-export function PremiumBadge({ className = "", style = {}, label }: PremiumBadgeProps) {
+export function PremiumBadge({ className = "", style = {}, label = "Premium" }: PremiumBadgeProps) {
+  const isPremiumPlus = label.includes("+");
+
   return (
-    <div 
-      className={`premium-badge ${className}`}
+    <span
+      className={className}
       style={{
-        display: "inline-flex", 
-        alignItems: "center", 
-        gap: 8,
-        background: "linear-gradient(135deg, rgba(0,169,157,0.2) 0%, rgba(6,182,212,0.1) 100%)",
-        border: "1px solid rgba(0,169,157,0.3)",
-        padding: "6px 16px", 
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 4,
+        padding: "3px 10px",
         borderRadius: 999,
-        boxShadow: "0 2px 10px rgba(0,169,157,0.1)",
-        ...style
+        background: isPremiumPlus
+          ? "rgba(0,169,157,0.08)"
+          : "rgba(0,169,157,0.06)",
+        border: isPremiumPlus
+          ? "1px solid rgba(0,169,157,0.25)"
+          : "1px solid rgba(0,169,157,0.15)",
+        fontSize: 11,
+        fontWeight: 700,
+        color: "var(--primary)",
+        letterSpacing: "0.04em",
+        whiteSpace: "nowrap",
+        fontFamily: "inherit",
+        ...style,
       }}
     >
-      <Sparkles 
-        size={14} 
-        style={{ color: "var(--primary)" }} 
-      />
-      <span style={{ 
-        fontSize: 13, 
-        fontWeight: 700, 
-        color: "var(--primary)", 
-        textTransform: "uppercase", 
-        letterSpacing: "0.06em"
-      }}>
-        {label || "Premium"}
-      </span>
-    </div>
+      ★ {label}
+    </span>
   );
 }

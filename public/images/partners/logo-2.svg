@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" fill="none">
+  <rect width="300" height="100" fill="transparent"/>
+  <circle cx="60" cy="50" r="20" fill="currentColor" fill-opacity="0.3"/>
+  <circle cx="75" cy="50" r="20" fill="currentColor"/>
+  <text x="110" y="58" font-family="sans-serif" font-weight="800" font-size="26" fill="currentColor" letter-spacing="0">Synergy</text>
+</svg>

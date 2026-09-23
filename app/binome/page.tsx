@@ -74,7 +74,7 @@ export default async function BinomePage() {
               }
             </div>
 
-            <PremiumBadge style={{ marginBottom: 16 }} />
+            <PremiumBadge label="Premium+" style={{ marginBottom: 16 }} />
 
             <h1 style={{
               fontSize: 26, fontWeight: 800, color: "var(--text-1)",
@@ -150,7 +150,7 @@ export default async function BinomePage() {
           {/* ── Hero Header ── */}
           <div style={{ marginBottom: 40 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
-              <PremiumBadge />
+              <PremiumBadge label="Premium+" />
             </div>
 
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>

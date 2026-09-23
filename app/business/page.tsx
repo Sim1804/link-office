@@ -145,7 +145,13 @@ export default function BusinessPage() {
       <main style={{ position: "relative", zIndex: 1 }}>
 
         {/* ── HERO ─────────────────────────────────────────────── */}
-        <section style={{ paddingTop: 140, paddingBottom: 80 }}>
+        <section style={{ 
+          paddingTop: 140, paddingBottom: 80,
+          backgroundImage: "linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--bg) 90%), url('/images/hero-background.png')",
+          backgroundPosition: "center top",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+        }}>
           <div className="container" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
 
             <div className="anim-fade-up">
@@ -175,8 +181,8 @@ export default function BusinessPage() {
               <a href="#devis" className="btn btn-primary btn-lg">
                 Demander un devis <ArrowRight size={16} />
               </a>
-              <Link href="/auth/register" className="btn btn-tertiary btn-lg">
-                Découvrir l'offre B2C
+              <Link href="/" className="btn btn-tertiary btn-lg">
+                Voir l'offre individuelle <ArrowRight size={16} />
               </Link>
             </div>
 
@@ -405,29 +411,29 @@ export default function BusinessPage() {
                             type="text" required
                             value={orgName} onChange={e => setOrgName(e.target.value)}
                             placeholder="Ex : Mairie de Lyon, Harmonie Mutuelle..."
-                            className="input-field"
+                            className="input"
                           />
                         </div>
 
                         <div>
                           <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-2)", marginBottom: 6 }}>Nom du contact *</label>
-                          <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Jean Dupont" className="input-field" />
+                          <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Jean Dupont" className="input" />
                         </div>
 
                         <div>
                           <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-2)", marginBottom: 6 }}>Email professionnel *</label>
-                          <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="contact@organisation.com" className="input-field" />
+                          <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="contact@organisation.com" className="input" />
                         </div>
 
                         <div>
                           <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-2)", marginBottom: 6 }}>Téléphone (optionnel)</label>
-                          <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="01 23 45 67 89" className="input-field" />
+                          <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="01 23 45 67 89" className="input" />
                         </div>
 
                         {selectedPlan === "B2B_ENTREPRISE" && (
                           <div>
                             <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-2)", marginBottom: 6 }}>Taille de l'entreprise</label>
-                            <select value={companySize} onChange={e => setCompanySize(e.target.value)} className="input-field" style={{ cursor: "pointer" }}>
+                            <select value={companySize} onChange={e => setCompanySize(e.target.value)} className="input" style={{ cursor: "pointer" }}>
                               <option value="" disabled>Sélectionnez une taille</option>
                               <option value="1-50">1 à 50 employés</option>
                               <option value="51-250">51 à 250 employés</option>
@@ -439,14 +445,14 @@ export default function BusinessPage() {
                         {selectedPlan === "B2G" && (
                           <div>
                             <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-2)", marginBottom: 6 }}>Population concernée</label>
-                            <input type="text" value={populationSize} onChange={e => setPopulationSize(e.target.value)} placeholder="Ex : 50 000 habitants" className="input-field" />
+                            <input type="text" value={populationSize} onChange={e => setPopulationSize(e.target.value)} placeholder="Ex : 50 000 habitants" className="input" />
                           </div>
                         )}
 
                         {selectedPlan === "B2B2C_PARTENAIRE" && (
                           <div>
                             <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-2)", marginBottom: 6 }}>Bénéficiaires estimés</label>
-                            <input type="text" value={beneficiaries} onChange={e => setBeneficiaries(e.target.value)} placeholder="Ex : 500 personnes" className="input-field" />
+                            <input type="text" value={beneficiaries} onChange={e => setBeneficiaries(e.target.value)} placeholder="Ex : 500 personnes" className="input" />
                           </div>
                         )}
 
@@ -534,12 +540,12 @@ export default function BusinessPage() {
                 <a href="#devis" className="btn btn-primary btn-lg" style={{ textDecoration: "none" }}>
                   Demander un devis <ArrowRight size={16} />
                 </a>
-                <Link href="/auth/register" className="btn btn-tertiary btn-lg" style={{
+                <Link href="/" className="btn btn-tertiary btn-lg" style={{
                   textDecoration: "none",
                   border: "1px solid rgba(124,58,237,0.3)",
                   background: "rgba(124,58,237,0.05)",
                 }}>
-                  Essayer en tant que particulier
+                  Découvrir l'offre individuelle
                 </Link>
               </div>
             </div>

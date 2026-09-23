@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
+import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MediaCard } from "@/components/media/MediaCard";
 import Link from "next/link";
@@ -17,6 +19,8 @@ export const revalidate = 60;
 
 export default async function MediaIndexPage({ searchParams }: { searchParams: Promise<{ cat?: string, type?: string, q?: string, page?: string }> }) {
   const params = await searchParams;
+  const session = await auth();
+  const isAuthenticated = !!session?.user?.id;
   const categoryFilter = params.cat;
   const typeFilter = params.type;
   const searchFilter = params.q;
@@ -63,7 +67,7 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
 
   return (
     <>
-      <PublicNavbar />
+      {isAuthenticated ? <Navbar /> : <PublicNavbar />}
       <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 100, paddingBottom: 60 }}>
         <div className="container">
           {/* Header */}

@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/binome?secret=YOUR_CRON_SECRET",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/campaigns?secret=YOUR_CRON_SECRET",
+      "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/cron/close-campaigns?secret=YOUR_CRON_SECRET",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}

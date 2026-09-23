@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Brain, ArrowRight, Star, CheckCircle2, ChevronRight, Building2, ClipboardList, BarChart3, Bot, Target, Sparkles, ShieldCheck, User, HeartPulse, Landmark } from "lucide-react";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Footer } from "@/components/layout/Footer";
+import { ObservatoireSection } from "@/src/components/home/ObservatoireSection";
+import { PartenairesSection } from "@/src/components/home/PartenairesSection";
 
 /**
  * Données statistiques affichées dans la section STATS.
@@ -53,9 +55,12 @@ export default function HomePage() {
 
         {/* ── HERO ─────────────────────────────────── */}
         <section style={{ 
-          paddingTop: 180, 
+          paddingTop: 130, 
           paddingBottom: 120, 
-          background: "linear-gradient(135deg, var(--bg) 0%, rgba(0,169,157,0.05) 50%, rgba(89,101,232,0.05) 100%)",
+          backgroundImage: "linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--bg) 90%), url('/images/hero-background.png')",
+          backgroundPosition: "center top",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
           borderBottom: "1px solid var(--border)"
         }}>
           <div className="container" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
@@ -84,7 +89,7 @@ export default function HomePage() {
 
             <div className="anim-fade-up delay-3" style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center", marginBottom: 64 }}>
               <Link href="/auth/register" className="btn btn-primary btn-lg">
-                Découvrir l'univers LINK OFFICE <ArrowRight size={16} />
+                Faire mon test IQRH <ArrowRight size={16} />
               </Link>
             </div>
 
@@ -142,6 +147,12 @@ export default function HomePage() {
           </div>
           <style>{`@media(max-width:640px){.stats-grid{grid-template-columns:repeat(2,1fr)!important}}`}</style>
         </section>
+
+        {/* ── SECTION OBSERVATOIRE ──────────────────── */}
+        <ObservatoireSection />
+
+        {/* ── SECTION PARTENAIRES ───────────────────── */}
+        <PartenairesSection />
 
         {/* ── SECTION IQRH ──────────────────────────── */}
         <section id="iqrh" className="section">
@@ -305,7 +316,7 @@ export default function HomePage() {
                 Rejoignez des milliers de personnes qui ont transformé leurs relations grâce à l'IQRH.
               </p>
               <Link href="/auth/register" className="btn btn-primary btn-lg">
-                Faire le test IQRH <ArrowRight size={16} />
+                Faire mon test IQRH <ArrowRight size={16} />
               </Link>
             </div>
           </div>

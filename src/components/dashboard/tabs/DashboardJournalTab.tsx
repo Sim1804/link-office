@@ -115,7 +115,7 @@ export function DashboardJournalTab({ isPremium }: { isPremium: boolean }) {
           <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 24, maxWidth: 420, margin: "0 auto 24px", lineHeight: 1.6 }}>
             Prenez du recul et notez vos ressentis, petites victoires et réflexions dans votre espace sécurisé.
           </p>
-          <a href="/premium" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 999, background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "white", fontWeight: 600, textDecoration: "none" }}>
+          <a href="/premium" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
             Passer à Premium
           </a>
         </div>
@@ -140,7 +140,8 @@ export function DashboardJournalTab({ isPremium }: { isPremium: boolean }) {
           <button 
             onClick={handleSubmit}
             disabled={!newEntry.trim()}
-            style={{ display: "flex", alignItems: "center", gap: 8, background: newEntry.trim() ? "var(--primary)" : "var(--surface-2)", color: newEntry.trim() ? "var(--surface)" : "var(--text-3)", border: "1px solid var(--border)", padding: "10px 20px", borderRadius: 999, fontWeight: 600, cursor: newEntry.trim() ? "pointer" : "not-allowed", transition: "all 0.2s" }}
+            className={`btn btn-md ${newEntry.trim() ? "btn-primary" : "btn-secondary"}`}
+            style={{ display: "flex", alignItems: "center", gap: 8 }}
           >
             <Plus size={16} /> Enregistrer
           </button>

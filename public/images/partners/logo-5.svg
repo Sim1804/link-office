@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" fill="none">
+  <rect width="300" height="100" fill="transparent"/>
+  <path d="M40 50C40 33.4315 53.4315 20 70 20C86.5685 20 100 33.4315 100 50C100 66.5685 86.5685 80 70 80H40V50Z" fill="currentColor"/>
+  <circle cx="70" cy="50" r="15" fill="white"/>
+  <text x="115" y="60" font-family="sans-serif" font-weight="900" font-size="30" fill="currentColor" letter-spacing="-2">omni</text>
+</svg>

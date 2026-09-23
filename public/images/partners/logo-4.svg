@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" fill="none">
+  <rect width="300" height="100" fill="transparent"/>
+  <path d="M70 20L40 70H100L70 20Z" stroke="currentColor" stroke-width="6" fill="none"/>
+  <path d="M70 40L55 65H85L70 40Z" fill="currentColor"/>
+  <text x="115" y="60" font-family="sans-serif" font-weight="800" font-size="28" fill="currentColor">Vertex</text>
+</svg>

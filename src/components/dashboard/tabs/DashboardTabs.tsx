@@ -7,10 +7,11 @@ import { DashboardAnalyseTab } from "./DashboardAnalyseTab";
 import { DashboardJournalTab } from "./DashboardJournalTab";
 import { DashboardRelationsTab } from "./DashboardRelationsTab";
 import { DashboardRessourcesTab } from "./DashboardRessourcesTab";
+import { UpsellBanner } from "@/components/ui/UpsellBanner";
 import { LayoutDashboard, ListChecks, BrainCircuit, History, ChevronRight, Sparkles, Users, Book, Lock } from "lucide-react";
 import Link from "next/link";
 
-export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: any, isPremium: boolean, DIMENSIONS_LABELS: any }) {
+export function DashboardTabs({ data, isPremium, isPremiumPlus, DIMENSIONS_LABELS }: { data: any, isPremium: boolean, isPremiumPlus?: boolean, DIMENSIONS_LABELS: any }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -37,18 +38,16 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
 
   return (
     <div>
-      {/* ── Navigation Pills ── */}
+      {/* ── Navigation en pills — identique au design global de l'app ── */}
       <div style={{
         display: "flex",
-        gap: 6,
+        gap: 8,
         overflowX: "auto",
-        marginBottom: 32,
+        marginBottom: 28,
         scrollbarWidth: "none",
         msOverflowStyle: "none",
-        padding: "4px",
-        background: "var(--surface)",
-        borderRadius: 999,
-        border: "1px solid var(--border-strong)",
+        borderBottom: "1px solid var(--border)",
+        paddingBottom: 16,
       }}>
         {tabs.map((tab) => {
           const isActive = currentTab === tab.id;
@@ -60,38 +59,48 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 8,
-                padding: "10px 18px",
-                borderRadius: 999,
-                flex: "1 1 auto",
-                justifyContent: "center",
-                background: isActive ? "var(--primary)" : "transparent",
-                color: isActive ? "white" : "var(--text-2)",
-                border: "none",
-                fontWeight: isActive ? 600 : 500,
+                gap: 6,
+                padding: "6px 16px",
+                borderRadius: 16,
+                border: isActive
+                  ? "1px solid rgba(0,169,157,0.3)"
+                  : "1px solid var(--border)",
+                background: isActive ? "rgba(0,169,157,0.1)" : "var(--surface)",
+                color: isActive ? "var(--primary)" : "var(--text-2)",
+                fontWeight: 600,
                 fontSize: 13,
                 cursor: "pointer",
-                transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
+                transition: "all 0.2s",
                 whiteSpace: "nowrap",
-                boxShadow: isActive ? "0 2px 8px rgba(0,169,157,0.2)" : "none",
+                fontFamily: "inherit",
               }}
-              onMouseOver={(e) => { if (!isActive) { e.currentTarget.style.background = "rgba(18,61,70,0.03)"; e.currentTarget.style.color = "var(--text-1)"; } }}
-              onMouseOut={(e) => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text-2)"; } }}
+              onMouseOver={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.background = "var(--surface-2)";
+                  e.currentTarget.style.color = "var(--text-1)";
+                  e.currentTarget.style.borderColor = "var(--border-strong)";
+                }
+              }}
+              onMouseOut={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.background = "var(--surface)";
+                  e.currentTarget.style.color = "var(--text-2)";
+                  e.currentTarget.style.borderColor = "var(--border)";
+                }
+              }}
             >
-              <Icon size={16} style={{ flexShrink: 0 }} />
-              <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1 }}>
-                <span>{tab.shortLabel}</span>
-              </span>
+              <Icon size={14} style={{ flexShrink: 0, opacity: isActive ? 1 : 0.65 }} />
+              <span>{tab.shortLabel}</span>
             </button>
           );
         })}
       </div>
 
-      {/* ── Breadcrumb du contexte actif ── */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24, marginLeft: 2 }}>
-        <span style={{ color: "var(--text-1)", fontSize: 12, fontWeight: 500 }}>Dashboard</span>
-        <ChevronRight size={12} style={{ color: "var(--text-1)" }} />
-        <span style={{ color: "var(--primary)", fontSize: 12, fontWeight: 600 }}>{activeTabDef.label}</span>
+      {/* ── Fil d'Ariane contextuel ── */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 20 }}>
+        <span style={{ color: "var(--text-3)", fontSize: 12, fontWeight: 500 }}>Dashboard</span>
+        <ChevronRight size={11} style={{ color: "var(--text-3)" }} />
+        <span style={{ color: "var(--text-1)", fontSize: 12, fontWeight: 600 }}>{activeTabDef.label}</span>
       </div>
 
       {/* ── Contenu des onglets ── */}
@@ -115,7 +124,7 @@ export function DashboardTabs({ data, isPremium, DIMENSIONS_LABELS }: { data: an
           <DashboardRessourcesTab iqrh={iqrh} isPremium={isPremium} DIMENSIONS_LABELS={DIMENSIONS_LABELS} />
         )}
         {currentTab === "relations" && (
-          <DashboardRelationsTab isPremium={isPremium} />
+          <DashboardRelationsTab isPremium={isPremium} isPremiumPlus={isPremiumPlus} />
         )}
         {currentTab === "journal" && (
           <DashboardJournalTab isPremium={isPremium} />
@@ -208,57 +217,14 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
           </button>
         </div>
 
-        {/* Paywall */}
+        {/* Paywall — UpsellBanner unifié */}
         {!isPremium && (
-          <div style={{
-            marginTop: 8,
-            borderRadius: 16,
-            border: "1px solid var(--border-strong)",
-            overflow: "hidden",
-            position: "relative",
-          }}>
-            {/* Blurred preview content */}
-            <div style={{ filter: "blur(6px)", opacity: 0.4, padding: "24px", pointerEvents: "none" }}>
-              <div style={{ background: "var(--surface)", border: "1px solid var(--border)", padding: 20, borderRadius: 16 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-                  <div style={{ width: 150, height: 20, background: "var(--surface)", borderRadius: 4 }} />
-                  <div style={{ width: 80, height: 20, background: "var(--surface)", borderRadius: 4 }} />
-                </div>
-                <div style={{ width: "100%", height: 120, background: "rgba(0,0,0,0.2)", border: "1px solid var(--border)", borderRadius: 12 }} />
-              </div>
-            </div>
-            {/* Gradient overlay */}
-            <div style={{
-              position: "absolute", inset: 0,
-              background: "linear-gradient(to bottom, rgba(244,241,232,0) 0%, rgba(244,241,232,0.97) 50%)",
-            }} />
-            {/* CTA */}
-            <div style={{
-              position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 2,
-              padding: "40px 32px 32px",
-              textAlign: "center",
-            }}>
-              <div style={{
-                width: 48, height: 48, margin: "0 auto 16px",
-                borderRadius: 12, background: "var(--surface)",
-                border: "1px solid var(--border)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <Lock size={20} color="var(--text-2)" />
-              </div>
-              <h4 style={{ fontFamily: "Inter, sans-serif", color: "var(--text-1)", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
-                Historique réservé aux abonnés Premium
-              </h4>
-              <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 24, maxWidth: 420, margin: "0 auto 24px", lineHeight: 1.6 }}>
-                Comparez vos passations dans le temps et visualisez l'évolution de chaque dimension relationnelle.
-              </p>
-              <Link href="/premium" style={{
-                display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 10,
-                background: "var(--primary)", color: "white", fontWeight: 600, textDecoration: "none"
-              }}>
-                Débloquer l'historique →
-              </Link>
-            </div>
+          <div style={{ marginTop: 8 }}>
+            <UpsellBanner
+              variant="freemium"
+              featureName="Historique & Évolution"
+              description="Comparez vos passations dans le temps et visualisez l'évolution de chaque dimension relationnelle."
+            />
           </div>
         )}
 

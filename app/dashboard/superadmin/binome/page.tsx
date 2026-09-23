@@ -36,31 +36,45 @@ export default async function AdminBinomeIndex({ searchParams }: { searchParams:
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 12 }}>
-            <Handshake size={32} color="var(--primary)" />
+          <h1 style={{
+            fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
+            fontSize: 22, fontWeight: 800, color: "var(--text-1)",
+            letterSpacing: "-0.02em", marginBottom: 4,
+          }}>
             Gestion des Binômes
           </h1>
-          <p style={{ color: "var(--text-2)", marginTop: 8 }}>Supervisez l'activité et l'état de santé des paires relationnelles.</p>
+          <p style={{ color: "var(--text-2)", fontSize: 13 }}>Supervisez l'activité et l'état de santé des paires relationnelles.</p>
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 32 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 28 }}>
         {[
-          { label: "Actifs", value: activeCount, color: "var(--primary)", icon: Activity },
-          { label: "En évaluation", value: evalCount, color: "#f59e0b", icon: Clock },
-          { label: "Terminés", value: closedCount, color: "#10b981", icon: CheckCircle },
-          { label: "Total", value: totalItems, color: "var(--violet)", icon: Users },
+          { label: "Actifs",        value: activeCount, accentColor: "#00A99D", icon: Activity },
+          { label: "En évaluation", value: evalCount,  accentColor: "#f59e0b", icon: Clock },
+          { label: "Terminés",      value: closedCount, accentColor: "#10b981", icon: CheckCircle },
+          { label: "Total",          value: totalItems,  accentColor: "#6366f1", icon: Users },
         ].map(stat => (
-          <div key={stat.label} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 16, padding: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-              <div style={{ width: 40, height: 40, borderRadius: 12, background: `${stat.color}15`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <stat.icon size={20} color={stat.color} />
+          <div key={stat.label} style={{
+            background: "var(--surface)",
+            borderRadius: 14,
+            border: "1px solid var(--border)",
+            borderLeft: `4px solid ${stat.accentColor}`,
+            padding: "18px 20px",
+            display: "flex", flexDirection: "column", gap: 12,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                {stat.label}
+              </span>
+              <div style={{ width: 30, height: 30, borderRadius: 8, background: `${stat.accentColor}14`, display: "flex", alignItems: "center", justifyContent: "center", color: stat.accentColor }}>
+                <stat.icon size={15} />
               </div>
-              <span style={{ color: "var(--text-2)", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>{stat.label}</span>
             </div>
-            <div style={{ fontSize: 32, fontWeight: 800, color: "var(--text-1)", lineHeight: 1 }}>{stat.value}</div>
+            <div style={{ fontSize: 32, fontWeight: 900, color: "var(--text-1)", fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", letterSpacing: "-0.03em", lineHeight: 1 }}>
+              {stat.value}
+            </div>
           </div>
         ))}
       </div>

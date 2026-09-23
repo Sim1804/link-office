@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" fill="none">
+  <rect width="300" height="100" fill="transparent"/>
+  <path d="M40 30L60 70H80L60 30H40Z" fill="currentColor"/>
+  <path d="M85 30L65 70H45L65 30H85Z" fill="currentColor" fill-opacity="0.5"/>
+  <text x="100" y="60" font-family="sans-serif" font-weight="800" font-size="28" fill="currentColor" letter-spacing="1">NEXUS</text>
+  <text x="100" y="80" font-family="sans-serif" font-weight="600" font-size="12" fill="currentColor" opacity="0.6" letter-spacing="3">ASSURANCE</text>
+</svg>

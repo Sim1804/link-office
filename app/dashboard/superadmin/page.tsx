@@ -18,5 +18,15 @@ export default async function SuperAdminOverviewPage() {
     recentLeads
   };
 
-  return <DashboardClient stats={stats} />;
+  const regionsRaw = await prisma.demographicProfile.findMany({
+    select: { department: true },
+    distinct: ["department"],
+    where: { department: { not: null } },
+  });
+
+  const availableRegions = regionsRaw
+    .map((r) => r.department)
+    .filter(Boolean) as string[];
+
+  return <DashboardClient stats={stats} availableRegions={availableRegions} />;
 }
