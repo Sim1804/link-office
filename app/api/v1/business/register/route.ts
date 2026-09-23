@@ -97,7 +97,7 @@ export async function POST(req: Request) {
                   name: selectedPlan.name,
                   description: selectedPlan.description,
                 },
-                unit_amount: selectedPlan.price!,
+                unit_amount: (selectedPlan as any).monthly?.price || 0,
                 recurring: {
                   interval: "month",
                 },
@@ -121,7 +121,7 @@ export async function POST(req: Request) {
         });
 
         const successUrl = `${appUrl}/auth/login?registered=business&mock=true`;
-        checkoutUrl = `${appUrl}/mock-checkout?success_url=${encodeURIComponent(successUrl)}&amount=${selectedPlan.price || "0"}`;
+        checkoutUrl = `${appUrl}/mock-checkout?success_url=${encodeURIComponent(successUrl)}&amount=${(selectedPlan as any).monthly?.price || "0"}`;
       }
     } else {
         // Mode devis (custom) -> on redirige juste vers le login

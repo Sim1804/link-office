@@ -32,7 +32,7 @@ export async function GET(req: Request) {
       await prisma.binome.update({
         where: { id: binome.id },
         data: {
-          status: "EVALUATION",
+          status: "COMPLETED",
           updatedAt: new Date()
         }
       });

@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     const result = enable2FASchema.safeParse(body);
 
     if (!result.success) {
-      return NextResponse.json({ detail: result.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ detail: result.error.issues[0].message }, { status: 400 });
     }
 
     const { code } = result.data;
