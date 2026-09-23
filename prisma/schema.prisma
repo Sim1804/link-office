@@ -668,6 +668,7 @@ enum OrganizationType {
   B2B
   B2B2C
   B2G
+  COLLECTIVITE
 }
 
 enum UserRole {
