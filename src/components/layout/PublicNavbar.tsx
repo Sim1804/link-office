@@ -109,10 +109,6 @@ export function PublicNavbar() {
               </Link>
             );
           })}
-          <Link href="/premium" onClick={() => setIsMobileMenuOpen(false)}
-            style={{ padding: "10px 14px", borderRadius: 10, fontSize: 15, fontWeight: 700, color: "var(--primary)", background: "rgba(0,169,157,0.06)", textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
-            <Sparkles size={14} /> Premium
-          </Link>
           <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: 8 }}>
             <Link href="/auth/login"    onClick={() => setIsMobileMenuOpen(false)} className="btn btn-secondary btn-md" style={{ textDecoration: "none", textAlign: "center" }}>Connexion</Link>
             <Link href="/auth/register" onClick={() => setIsMobileMenuOpen(false)} className="btn btn-primary btn-md"   style={{ textDecoration: "none", textAlign: "center" }}>Commencer gratuitement</Link>
