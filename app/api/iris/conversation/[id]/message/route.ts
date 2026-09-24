@@ -163,7 +163,7 @@ export async function POST(
           parameters: z.object({
             challengeId: z
               .string()
-              .describe("L'identifiant (ID) du défi à valider."),
+              .describe("L'identifiant (ID Technique) du défi à valider, fourni dans le contexte (ex: cmufc...)."),
           }),
           // @ts-expect-error — zodSchema overload mismatch in ai@7.x; runtime is correct
           execute: async ({ challengeId }: { challengeId: string }) => {

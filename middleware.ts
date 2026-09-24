@@ -59,7 +59,7 @@ const PROTECTED_PATHS = [
 const ROLE_RESTRICTED_ROUTES: Record<string, string[]> = {
   "/dashboard/b2b": ["ADMIN_B2B", "SUPER_ADMIN"],
   "/dashboard/b2b2c": ["ADMIN_B2B2C", "SUPER_ADMIN"],
-  "/dashboard/collectivites": ["ADMIN_COLLECTIVITE", "SUPER_ADMIN"],
+  "/dashboard/b2g": ["ADMIN_COLLECTIVITE", "SUPER_ADMIN"],
   "/admin": ["SUPER_ADMIN"],
 };
 

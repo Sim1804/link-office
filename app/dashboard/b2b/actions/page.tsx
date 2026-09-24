@@ -141,9 +141,9 @@ export default function ActionsPage() {
         <PartnerPortalsNavigation />
         <div className="page-container-wide" style={{ position: "relative", zIndex: 1 }}>
           <Breadcrumb
-            homeHref="/dashboard/b2g"
+            homeHref="/dashboard/b2b"
             items={[
-              { label: "Observatoire", href: "/dashboard/b2g" },
+              { label: "Observatoire", href: "/dashboard/b2b" },
               { label: "Plan d'action" },
             ]}
           />
@@ -153,11 +153,11 @@ export default function ActionsPage() {
                 <Target size={32} color="var(--primary)" />
                 Recommandations & Plan d'Action
               </h1>
-              <p style={{ color: "var(--text-2)", marginTop: 8, fontSize: 16 }}>Transformez vos résultats territoriaux en initiatives concrètes et suivez leur avancement.</p>
+              <p style={{ color: "var(--text-2)", marginTop: 8, fontSize: 16 }}>Transformez vos résultats IQRH en initiatives concrètes et suivez leur avancement.</p>
             </div>
             
             <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-              <Link href="/dashboard/b2g" className="btn btn-tertiary btn-sm">
+              <Link href="/dashboard/b2b" className="btn btn-tertiary btn-sm">
                 Retour à l'Observatoire
               </Link>
               <Select 

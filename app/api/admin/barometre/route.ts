@@ -78,6 +78,7 @@ export async function GET(request: Request) {
 
     const regionsMap: Record<string, { count: number; sum: number }> = {};
     const timelineMap: Record<string, number> = {};
+    const profilsMap: Record<string, number> = {};
 
     for (const assessment of assessments) {
       const result = assessment.result!;
@@ -98,6 +99,11 @@ export async function GET(request: Request) {
       const dateKey = assessment.submittedAt!.toISOString().split("T")[0];
       if (!timelineMap[dateKey]) timelineMap[dateKey] = 0;
       timelineMap[dateKey] += 1;
+
+      // Profils
+      const profile = result.primaryProfile || "Non défini";
+      if (!profilsMap[profile]) profilsMap[profile] = 0;
+      profilsMap[profile] += 1;
     }
 
     const regions = Object.entries(regionsMap)
@@ -114,6 +120,16 @@ export async function GET(request: Request) {
       passages,
     }));
 
+    const COLORS = ["#10b981", "var(--primary)", "#f59e0b", "#ef4444", "#a855f7"];
+    const profils = Object.entries(profilsMap)
+      .map(([name, count], index) => ({
+        name,
+        count,
+        value: Math.round((count / totalPassages) * 100),
+        color: COLORS[index % COLORS.length]
+      }))
+      .sort((a, b) => b.value - a.value);
+
     return NextResponse.json({
       totalPassages,
       globalAverage: Math.round(globalSum / totalPassages),
@@ -126,6 +142,7 @@ export async function GET(request: Request) {
       },
       regions,
       timeline,
+      profils,
     });
   } catch (error) {
     console.error("Barometre API Error:", error);

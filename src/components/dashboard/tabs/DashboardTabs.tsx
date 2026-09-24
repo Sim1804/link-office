@@ -21,8 +21,8 @@ export function DashboardTabs({ data, isPremium, isPremiumPlus, DIMENSIONS_LABEL
   const tabs = [
     { id: "sante", label: "Santé & Bilans", shortLabel: "Santé", icon: LayoutDashboard, description: "Vue d'ensemble" },
     { id: "evolution", label: "Évolution & Historique", shortLabel: "Évolution", icon: History, description: "Trajectoire" },
-    { id: "plan", label: "Mon Plan & Actions", shortLabel: "Plan", icon: ListChecks, description: "Priorités" },
-    { id: "ressources", label: "Ressources & Prescription", shortLabel: "Ressources", icon: Sparkles, description: "Soutien" },
+    { id: "plan", label: "Mon Ordonnance & Défis", shortLabel: "Ordonnance", icon: ListChecks, description: "Priorités" },
+    { id: "ressources", label: "Ressources & Partenaires", shortLabel: "Ressources", icon: Sparkles, description: "Soutien" },
     { id: "relations", label: "Mes Relations & Binôme", shortLabel: "Relations", icon: Users, description: "Entourage" },
     { id: "journal", label: "Mon Journal", shortLabel: "Journal", icon: Book, description: "Notes" },
   ];

@@ -122,8 +122,6 @@ export default function PartnerCampaignsListPage() {
       <Navbar />
       <main className="page-main">
         <PartnerPortalsNavigation />
-        <div className="blob-violet" style={{ background: "rgba(16,185,129,0.1)" }} />
-        <div className="blob-cyan" style={{ background: "rgba(124,58,237,0.1)" }} />
         <div className="page-container-wide" style={{ position: "relative", zIndex: 1 }}>
 
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 36 }}>

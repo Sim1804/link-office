@@ -22,15 +22,8 @@ interface BarometreData {
   };
   regions: { name: string; count: number; average: number }[];
   timeline: { date: string; passages: number }[];
+  profils: { name: string; value: number; color: string; count: number }[];
 }
-
-const MOCK_PROFILS = [
-  { name: "Connecté", value: 38, color: "#10b981" },
-  { name: "Sélectif", value: 24, color: "var(--primary)" },
-  { name: "Solitaire", value: 18, color: "#f59e0b" },
-  { name: "Isolé", value: 12, color: "#ef4444" },
-  { name: "En transition", value: 8, color: "#a855f7" }
-];
 
 export function BarometreDashboard({ availableRegions }: { availableRegions: string[] }) {
   const [data, setData] = useState<BarometreData | null>(null);
@@ -265,8 +258,8 @@ export function BarometreDashboard({ availableRegions }: { availableRegions: str
                 <div style={{ width: "50%", height: 200 }}>
                   <ResponsiveContainer>
                     <PieChart>
-                      <Pie data={MOCK_PROFILS} innerRadius={50} outerRadius={80} paddingAngle={4} dataKey="value">
-                        {MOCK_PROFILS.map((entry, index) => (
+                      <Pie data={data.profils} innerRadius={50} outerRadius={80} paddingAngle={4} dataKey="value">
+                        {data.profils.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
@@ -275,7 +268,7 @@ export function BarometreDashboard({ availableRegions }: { availableRegions: str
                   </ResponsiveContainer>
                 </div>
                 <div style={{ width: "50%", display: "flex", flexDirection: "column", gap: 10 }}>
-                  {MOCK_PROFILS.map(p => (
+                  {data.profils.map(p => (
                     <div key={p.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <div style={{ width: 8, height: 8, borderRadius: "50%", background: p.color }} />

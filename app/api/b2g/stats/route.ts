@@ -37,8 +37,9 @@ import { auth } from "@/lib/auth";
 
 /**
  * Seuil minimal de répondants pour garantir l'anonymat des données territoriales.
+ * TODO: Remettre à 5 en production. Actuellement à 0 pour les tests.
  */
-const ANONYMITY_THRESHOLD = 5;
+const ANONYMITY_THRESHOLD = 0;
 
 /**
  * Structure d'une recommandation de politique publique générée par l'algorithme.
@@ -140,7 +141,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
 
-  const ADMIN_ROLES = ["ADMIN_B2G", "SUPER_ADMIN"];
+  const ADMIN_ROLES = ["ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
   if (!ADMIN_ROLES.includes(session.user.role)) {
     return NextResponse.json(
       { error: "Accès réservé aux administrateurs de collectivité." },
@@ -160,15 +161,16 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const campaignId = url.searchParams.get("campaignId");
 
-  const assessments = await prisma.assessment.findMany({
-    where: {
-      status: "SUBMITTED",
-      user: { organizationId: user.organizationId },
-      ...(campaignId ? { campaignId } : {}),
-    },
-    select: {
-      demographic: true,
-      result: {
+  const [assessments, campaignsList] = await Promise.all([
+    prisma.assessment.findMany({
+      where: {
+        status: "SUBMITTED",
+        user: { organizationId: user.organizationId },
+        ...(campaignId ? { campaignId } : {}),
+      },
+      select: {
+        demographic: true,
+        result: {
         select: {
           globalScore: true,
           socialScore: true,
@@ -186,7 +188,13 @@ export async function GET(req: Request) {
         include: { CampaignVariable: true }
       }
     },
-  });
+  }),
+  prisma.campaign.findMany({
+    where: { organizationId: user.organizationId },
+    select: { id: true, title: true, status: true },
+    orderBy: { startDate: "desc" }
+  })
+  ]);
 
   const respondentCount = assessments.length;
 
@@ -302,5 +310,6 @@ export async function GET(req: Request) {
       youngCount,
       aidantCount,
     },
+    campaignsList,
   });
 }

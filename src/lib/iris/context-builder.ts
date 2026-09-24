@@ -207,7 +207,7 @@ export async function buildIrisContext(userId: string): Promise<string> {
       const isCompatibleWithIrisValidation = itemMetadata?.compatible_iris === "Oui";
 
       const statusFr = prescriptionItem.status === "PROPOSED" ? "À réaliser" : prescriptionItem.status === "COMPLETED" ? "Déjà fait" : "Ignoré";
-      irisContext += `- [${prescriptionItem.kind}] Titre: ${prescriptionItem.libraryItem.title} | Statut pour l'utilisateur: ${statusFr}\n`;
+      irisContext += `- [${prescriptionItem.kind}] ID Technique: ${prescriptionItem.id} | Titre: ${prescriptionItem.libraryItem.title} | Statut pour l'utilisateur: ${statusFr}\n`;
       irisContext += `  Description affichée à l'utilisateur : ${prescriptionItem.rationale}\n`;
 
       // Injection des instructions cachées IQRH pour les recommandations

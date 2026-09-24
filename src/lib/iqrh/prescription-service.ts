@@ -110,18 +110,19 @@ function calculateScore(item: any, context: { situations: string[]; profileName:
   // 4. Règles de personnalisation par niveau de sous-score (0-39, 40-59, 60-79, 80-100)
   const itemType = text(item.data, "type_recommandation") || text(item.data, "type_action");
   if (itemType) {
-    if (context.dimensionScore <= 39 && contains(itemType, "sécurisation")) score += 5; // Priorité absolue
-    else if (context.dimensionScore >= 40 && context.dimensionScore <= 59 && contains(itemType, "reconstruction")) score += 4;
-    else if (context.dimensionScore >= 60 && context.dimensionScore <= 79 && contains(itemType, "consolidation")) score += 3;
+    if (context.dimensionScore < 40 && contains(itemType, "sécurisation")) score += 5; // Priorité absolue
+    else if (context.dimensionScore >= 40 && context.dimensionScore < 60 && contains(itemType, "reconstruction")) score += 4;
+    else if (context.dimensionScore >= 60 && context.dimensionScore < 80 && contains(itemType, "consolidation")) score += 3;
     else if (context.dimensionScore >= 80 && contains(itemType, "préservation")) score += 2;
   }
 
-  // 5. ICR (Complexité relationnelle)
+  // 5. ICR (Complexité relationnelle) - Les seuils standards sont 20 (faible), 40 (modérée), 60 (élevée), 80 (très élevée), >80 (critique)
   const icrCible = text(item.data, "icr_cible");
   if (icrCible) {
-    if (context.icrScore >= 80 && contains(icrCible, "critique")) score += 3;
-    else if (context.icrScore >= 60 && contains(icrCible, "élevé")) score += 2;
-    else if (context.icrScore < 60 && contains(icrCible, "faible")) score += 1;
+    if (context.icrScore > 80 && contains(icrCible, "critique")) score += 3;
+    else if (context.icrScore > 40 && context.icrScore <= 80 && contains(icrCible, "élevé")) score += 2;
+    else if (context.icrScore > 20 && context.icrScore <= 40 && contains(icrCible, "modéré")) score += 1.5;
+    else if (context.icrScore <= 20 && contains(icrCible, "faible")) score += 1;
   }
 
   // 6. Impact attendu (bonus)
@@ -251,9 +252,12 @@ export class PrescriptionService {
         const itemTargetDimensions = text(item.data, "dimensions_iqrh") || text(item.data, "dimensions_ciblees") || text(item.data, "dimension_ciblee");
         if (!matchesDimension(itemTargetDimensions, targetDimensionLabel)) return false;
 
-        // Uniquement lorsqu'un partenaire répond directement au besoin ou à la situation
+        // Uniquement lorsqu'un partenaire répond directement au besoin ou à la situation, ou s'il est générique
         const partnerNeeds = text(item.data, "besoins_cibles");
         const partnerSituations = text(item.data, "situations_ciblees") || text(item.data, "public_cible");
+
+        // Partenaire générique pour cette dimension
+        if (!partnerNeeds && !partnerSituations) return true;
 
         const matchesNeed = context.dominantNeeds.some(need => containsValue(partnerNeeds, need));
         const matchesSituation = context.situations.some(sit => containsValue(partnerSituations, sit));

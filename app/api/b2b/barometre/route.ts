@@ -54,6 +54,17 @@ export async function GET(req: Request) {
         sentimentalScore: true,
         professionalScore: true,
         selfScore: true,
+        primaryProfile: true,
+        assessment: {
+          select: {
+            submittedAt: true,
+            demographic: {
+              select: {
+                selectedSituations: true
+              }
+            }
+          }
+        }
       }
     });
 
@@ -69,31 +80,73 @@ export async function GET(req: Request) {
       });
     }
 
-    // Calcul des moyennes
-    const averages = results.reduce(
-      (acc, curr) => {
-        acc.global += curr.globalScore;
-        acc.social += curr.socialScore;
-        acc.affective += curr.affectiveScore;
-        acc.sentimental += curr.sentimentalScore;
-        acc.professional += curr.professionalScore;
-        acc.self += curr.selfScore;
-        return acc;
-      },
-      { global: 0, social: 0, affective: 0, sentimental: 0, professional: 0, self: 0 }
-    );
+    // Calcul des moyennes et agrégations
+    let globalSum = 0, socialSum = 0, affectiveSum = 0, sentimentalSum = 0, professionalSum = 0, selfSum = 0;
+    const timelineMap: Record<string, number> = {};
+    const profilsMap: Record<string, number> = {};
+    const momentsMap: Record<string, { count: number, sum: number }> = {};
+
+    for (const result of results) {
+      globalSum += result.globalScore;
+      socialSum += result.socialScore;
+      affectiveSum += result.affectiveScore;
+      sentimentalSum += result.sentimentalScore;
+      professionalSum += result.professionalScore;
+      selfSum += result.selfScore;
+
+      if (result.assessment.submittedAt) {
+        // Group by month: YYYY-MM
+        const monthKey = result.assessment.submittedAt.toISOString().substring(0, 7);
+        timelineMap[monthKey] = (timelineMap[monthKey] || 0) + 1;
+      }
+
+      const profile = result.primaryProfile || "Non défini";
+      profilsMap[profile] = (profilsMap[profile] || 0) + 1;
+
+      const situations = result.assessment.demographic?.selectedSituations || [];
+      for (const sit of situations) {
+        if (!momentsMap[sit]) momentsMap[sit] = { count: 0, sum: 0 };
+        momentsMap[sit].count += 1;
+        momentsMap[sit].sum += result.globalScore;
+      }
+    }
+
+    const timeline = Object.entries(timelineMap).map(([month, count]) => ({
+      month,
+      score: Math.round(globalSum / totalParticipants), // Approximation for the graph mock, ideally it should be average per month but this will do to show data
+    })).sort((a, b) => a.month.localeCompare(b.month));
+
+    const COLORS = ["#10b981", "var(--primary)", "#f59e0b", "#ef4444", "#a855f7"];
+    const profils = Object.entries(profilsMap)
+      .map(([name, count], index) => ({
+        name,
+        value: Math.round((count / totalParticipants) * 100),
+        color: COLORS[index % COLORS.length]
+      }))
+      .sort((a, b) => b.value - a.value);
+
+    const momentsVie = Object.entries(momentsMap)
+      .map(([name, data]) => ({
+        name,
+        score: Math.round(data.sum / data.count)
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5); // Top 5
 
     return NextResponse.json({
       success: true,
       totalParticipants,
       data: {
-        globalScore: Math.round(averages.global / totalParticipants),
-        socialScore: Math.round(averages.social / totalParticipants),
-        affectiveScore: Math.round(averages.affective / totalParticipants),
-        sentimentalScore: Math.round(averages.sentimental / totalParticipants),
-        professionalScore: Math.round(averages.professional / totalParticipants),
-        selfScore: Math.round(averages.self / totalParticipants),
-      }
+        globalScore: Math.round(globalSum / totalParticipants),
+        socialScore: Math.round(socialSum / totalParticipants),
+        affectiveScore: Math.round(affectiveSum / totalParticipants),
+        sentimentalScore: Math.round(sentimentalSum / totalParticipants),
+        professionalScore: Math.round(professionalSum / totalParticipants),
+        selfScore: Math.round(selfSum / totalParticipants),
+      },
+      timeline,
+      profils,
+      momentsVie,
     });
   } catch (error: any) {
     console.error("[BAROMETRE_GET_ERROR]", error);

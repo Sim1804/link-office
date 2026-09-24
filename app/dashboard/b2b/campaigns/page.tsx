@@ -127,7 +127,7 @@ export default function CampaignsListPage() {
           <Breadcrumb
             homeHref="/dashboard/b2b"
             items={[
-              { label: "Tableau de bord B2B", href: "/dashboard/b2b" },
+              { label: "Observatoire", href: "/dashboard/b2b" },
               { label: "Campagnes" },
             ]}
           />
@@ -144,7 +144,7 @@ export default function CampaignsListPage() {
             </div>
             <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
               <Link href="/dashboard/b2b" className="btn btn-tertiary btn-sm">
-                Tableau de bord B2B
+                Retour à l'Observatoire
               </Link>
               <Link href="/dashboard/b2b/campaigns/new" className="btn btn-primary btn-sm">
                 <Plus size={14} /> Nouvelle campagne

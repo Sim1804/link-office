@@ -132,9 +132,8 @@ async function seedOrganizations() {
           firstName: "Mock", lastName: `User ${mockUserCount}`,
           password: adminPasswordHash,
           role: "EMPLOYEE",
-          organizationId: campaign.organizationId,
-          campaignId: campaign.id,
-          has_completed_demographics: true,
+          organization: { connect: { id: campaign.organizationId } },
+          campaign: { connect: { id: campaign.id } },
         }
       });
 
@@ -143,9 +142,9 @@ async function seedOrganizations() {
 
       const assessment = await prisma.assessment.create({
         data: {
-          userId: user.id,
-          campaignId: campaign.id,
-          status: "COMPLETED",
+          user: { connect: { id: user.id } },
+          campaign: { connect: { id: campaign.id } },
+          status: "SUBMITTED",
           consentInformation: true,
           consentResearch: true,
           startedAt,
@@ -183,9 +182,104 @@ async function seedOrganizations() {
           primaryProfile: "Connecté", secondaryProfile: "Solidaire",
           profileSummary: "Profil simulé pour les statistiques.",
           createdAt: submittedAt,
+          icr: {
+            create: {
+              score: Math.floor(Math.random() * 100),
+              familyComplexity: 20,
+              professionalComplexity: 30,
+              lifeTransitions: 10,
+              relationalLoad: 40,
+              protectiveResources: 50,
+              level: "MODERE",
+              interpretation: "Interprétation simulée",
+              riskFactors: ["Charge de travail", "Isolement", "Conflit", "Manque de reconnaissance"].sort(() => 0.5 - Math.random()).slice(0, 2),
+              protectiveFactors: ["Soutien managérial", "Esprit d'équipe", "Flexibilité", "Autonomie"].sort(() => 0.5 - Math.random()).slice(0, 2),
+              dominantNeeds: ["Reconnaissance", "Appartenance", "Sens", "Sécurité", "Développement"].sort(() => 0.5 - Math.random()).slice(0, 2),
+              resources: [], vulnerabilities: [], barriers: [], levers: []
+            }
+          }
         }
       });
     }
+  }
+
+  // ── Mock Assessments for B2C ──────────────────────────────
+  console.log("👤 Seeding mock assessments for B2C (sans orga)...");
+  for (let i = 0; i < 10; i++) {
+    mockUserCount++;
+    const user = await prisma.user.create({
+      data: {
+        email: `mock.user.b2c.${mockUserCount}@linkoffice.fr`,
+        firstName: "MockB2C", lastName: `User ${mockUserCount}`,
+        password: adminPasswordHash,
+        role: "CITIZEN",
+      }
+    });
+
+    const startedAt = new Date(d.getTime() - Math.random() * 10 * 24 * 60 * 60 * 1000);
+    const submittedAt = new Date(startedAt.getTime() + 10 * 60 * 1000);
+
+    const assessment = await prisma.assessment.create({
+      data: {
+        user: { connect: { id: user.id } },
+        status: "SUBMITTED",
+        consentInformation: true,
+        consentResearch: true,
+        startedAt,
+        submittedAt,
+      }
+    });
+
+    await prisma.demographicProfile.create({
+      data: {
+        assessmentId: assessment.id,
+        gender: ["Homme", "Femme", "Autre"][Math.floor(Math.random() * 3)],
+        ageRange: ["18-25", "26-35", "36-45", "46-55", "56+"][Math.floor(Math.random() * 5)],
+        country: "France",
+        department: "75",
+        occupation: "Indépendant",
+        relationshipStatus: ["Célibataire", "En couple", "Marié(e)"][Math.floor(Math.random() * 3)],
+        children: Math.random() > 0.5,
+        livingSituation: "Logement indépendant",
+        selectedSituations: ["Parent", "Indépendant"].sort(() => 0.5 - Math.random()).slice(0, 1),
+      }
+    });
+
+    const globalScore = 40 + Math.random() * 50;
+    await prisma.iqrhResult.create({
+      data: {
+        assessmentId: assessment.id,
+        globalScore,
+        socialScore: 40 + Math.random() * 50,
+        affectiveScore: 40 + Math.random() * 50,
+        sentimentalScore: 40 + Math.random() * 50,
+        professionalScore: 40 + Math.random() * 50,
+        selfScore: 40 + Math.random() * 50,
+        weather: globalScore > 75 ? "TRES_BIEN" : globalScore > 55 ? "PLUTOT_BIEN" : "FRAGILE",
+        balanceIndex: Math.random() * 15,
+        priorityDimension: ["SOCIAL", "AFFECTIVE", "SENTIMENTAL", "PROFESSIONAL", "SELF"][Math.floor(Math.random() * 5)] as Dimension,
+        primaryProfile: ["Connecté", "Sélectif", "Solitaire", "Isolé", "En transition"][Math.floor(Math.random() * 5)],
+        secondaryProfile: "Solidaire",
+        profileSummary: "Profil simulé pour les statistiques B2C.",
+        createdAt: submittedAt,
+        icr: {
+          create: {
+            score: Math.floor(Math.random() * 100),
+            familyComplexity: 20,
+            professionalComplexity: 30,
+            lifeTransitions: 10,
+            relationalLoad: 40,
+            protectiveResources: 50,
+            level: "MODERE",
+            interpretation: "Interprétation simulée",
+            riskFactors: ["Charge de travail", "Isolement", "Conflit", "Manque de reconnaissance"].sort(() => 0.5 - Math.random()).slice(0, 2),
+            protectiveFactors: ["Soutien managérial", "Esprit d'équipe", "Flexibilité", "Autonomie"].sort(() => 0.5 - Math.random()).slice(0, 2),
+            dominantNeeds: ["Reconnaissance", "Appartenance", "Sens", "Sécurité", "Développement"].sort(() => 0.5 - Math.random()).slice(0, 2),
+            resources: [], vulnerabilities: [], barriers: [], levers: []
+          }
+        }
+      }
+    });
   }
 
   // ── Comptes admins de test ───────────────────────────────────────
@@ -283,6 +377,7 @@ async function main() {
   await prisma.adaptiveAnswer.deleteMany();
   await prisma.questionnaireAnswer.deleteMany();
   await prisma.demographicProfile.deleteMany();
+  await prisma.user.deleteMany({ where: { email: { startsWith: "mock.user" } } });
   await prisma.assessment.deleteMany();
   await prisma.question.deleteMany();
   await prisma.adaptiveModule.deleteMany();

@@ -36,13 +36,13 @@ import {
 import { NotificationBell } from "./NotificationBell";
 
 /** Union des rôles utilisateur reconnus par la Navbar */
-type RoleType = "EMPLOYEE" | "ADMIN_B2B" | "ADMIN_B2B2C" | "ADMIN_B2G" | "SUPER_ADMIN";
+type RoleType = "EMPLOYEE" | "ADMIN_B2B" | "ADMIN_B2B2C" | "ADMIN_COLLECTIVITE" | "SUPER_ADMIN";
 
 const ROLE_BADGES: Record<RoleType, { label: string; bg: string; color: string; border: string }> = {
   EMPLOYEE: { label: "Membre", bg: "rgba(18,61,70,0.05)", color: "var(--text-2)", border: "rgba(18,61,70,0.1)" },
   ADMIN_B2B: { label: "Administrateur B2B", bg: "rgba(89,101,232,0.1)", color: "#5965E8", border: "rgba(89,101,232,0.2)" },
   ADMIN_B2B2C: { label: "Administrateur mutuelle", bg: "rgba(0,169,157,0.1)", color: "#00A99D", border: "rgba(0,169,157,0.2)" },
-  ADMIN_B2G: { label: "Administrateur territoire", bg: "rgba(77,189,178,0.1)", color: "#4DBDB2", border: "rgba(77,189,178,0.2)" },
+  ADMIN_COLLECTIVITE: { label: "Administrateur territoire", bg: "rgba(77,189,178,0.1)", color: "#4DBDB2", border: "rgba(77,189,178,0.2)" },
   SUPER_ADMIN: { label: "Super administrateur", bg: "rgba(255,198,41,0.15)", color: "#FFC629", border: "rgba(255,198,41,0.3)" },
 };
 
@@ -77,14 +77,19 @@ export function Navbar() {
 
     if (userRole === "ADMIN_B2B") {
       return [
-        { href: "/dashboard/b2b", label: "Tableau de bord B2B", icon: Building2 },
-        { href: "/dashboard/b2b/barometre", label: "Baromètre", icon: BarChart3 },
+        { href: "/dashboard/b2b", label: "Observatoire", icon: Building2 },
         { href: "/dashboard/b2b/campaigns", label: "Campagnes", icon: Users },
       ];
     } else if (userRole === "ADMIN_B2B2C") {
-      return [{ href: "/dashboard/b2b2c", label: "Portail mutuelle", icon: HeartPulse }];
-    } else if (userRole === "ADMIN_B2G") {
-      return [{ href: "/dashboard/b2g", label: "Observatoire", icon: Landmark }];
+      return [
+        { href: "/dashboard/b2b2c", label: "Portail Mutuelle", icon: HeartPulse },
+        { href: "/dashboard/b2b2c/campaigns", label: "Campagnes", icon: Users },
+      ];
+    } else if (userRole === "ADMIN_COLLECTIVITE") {
+      return [
+        { href: "/dashboard/b2g", label: "Observatoire Territorial", icon: Landmark },
+        { href: "/dashboard/b2g/campaigns", label: "Campagnes", icon: Users },
+      ];
     } else if (userRole === "SUPER_ADMIN") {
       return [
         { href: "/dashboard/superadmin", label: "Console administrateur", icon: Shield },
@@ -145,7 +150,19 @@ export function Navbar() {
         <nav style={{ display: "flex", gap: 24, flex: 1, justifyContent: "center" }} className="hide-mobile">
           {navLinks.map(({ href, label }) => {
             const isPortailLink = label === "Portails Partenaires" && (currentPathname.startsWith("/dashboard/b2b") || currentPathname.startsWith("/dashboard/b2b2c") || currentPathname.startsWith("/dashboard/b2g"));
-            const isActivePage = isPortailLink || currentPathname === href || (href !== "/dashboard" && currentPathname.startsWith(href));
+            // Logique de surbrillance stricte pour éviter les conflits
+            let isActivePage = false;
+            if (isPortailLink) {
+              isActivePage = true;
+            } else if (href === "/dashboard/b2b" || href === "/dashboard/b2b2c" || href === "/dashboard/b2g") {
+              // Pour les racines des portails, on exige une correspondance exacte (ou avec un paramètre mais pas un sous-menu)
+              isActivePage = currentPathname === href;
+            } else if (href === "/dashboard") {
+              isActivePage = currentPathname === "/dashboard";
+            } else {
+              // Pour les autres pages (ex: /dashboard/b2b/campaigns), on peut faire un startsWith
+              isActivePage = currentPathname.startsWith(href);
+            }
             return (
               <Link key={href} href={href} style={{
                 padding: "8px 12px", fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", textTransform: isAuthenticated ? "none" : "uppercase",

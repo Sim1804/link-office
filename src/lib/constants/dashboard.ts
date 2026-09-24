@@ -26,6 +26,15 @@ export const WEATHER_ICONS: Record<string, string> = {
   "Tempête":      "⛈️",
 };
 
+/** Mappage des enums Météo bruts (Prisma) vers des libellés lisibles */
+export const WEATHER_LABELS_MAP: Record<string, string> = {
+  "TRES_BIEN": "Grand soleil",
+  "PLUTOT_BIEN": "Éclaircies",
+  "FRAGILE": "Ciel couvert",
+  "DIFFICILE": "Orage",
+  "CRITIQUE": "Tempête",
+};
+
 /**
  * Construit le tableau de données pour le PieChart ICR à partir
  * de la distribution renvoyée par l'API.
@@ -62,10 +71,13 @@ export function buildWeatherData(
   withIcon = true
 ) {
   return Object.entries(distribution)
-    .map(([label, count]) => ({
-      label: withIcon ? `${WEATHER_ICONS[label] ?? "🌡️"} ${label}` : label,
-      count,
-    }))
+    .map(([rawLabel, count]) => {
+      const cleanLabel = WEATHER_LABELS_MAP[rawLabel] || rawLabel;
+      return {
+        label: withIcon ? `${WEATHER_ICONS[cleanLabel] ?? "🌡️"} ${cleanLabel}` : cleanLabel,
+        count,
+      };
+    })
     .sort((a, b) => b.count - a.count);
 }
 
