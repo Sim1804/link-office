@@ -9,7 +9,7 @@
 
 import Link from "next/link";
 import { Lock, Sparkles, ArrowRight, Star } from "lucide-react";
-import { PremiumBadge } from "@/components/ui/PremiumBadge";
+import { SubscriptionBadge, SubscriptionTier } from "@/components/ui/SubscriptionBadge";
 
 interface UpsellBannerProps {
   /** "freemium" : l'utilisateur n'a pas d'abonnement → proposer Premium */
@@ -28,7 +28,7 @@ const VARIANTS = {
     icon: Lock,
     iconBg: "rgba(18,61,70,0.06)",
     iconColor: "var(--text-2)",
-    badge: null,
+    badge: null as SubscriptionTier | null,
     title: (f?: string) => f ? `${f} réservé aux abonnés Premium` : "Fonctionnalité Premium",
     description: "Passez à Premium pour débloquer l'accès complet à cette section.",
     cta: "Passer à Premium",
@@ -40,7 +40,7 @@ const VARIANTS = {
     icon: Sparkles,
     iconBg: "rgba(0,169,157,0.08)",
     iconColor: "var(--primary)",
-    badge: "PREMIUM+",
+    badge: "PREMIUM_PLUS" as SubscriptionTier,
     title: (f?: string) => f ? `${f} inclus dans Premium+` : "Fonctionnalité exclusive Premium+",
     description: "Vous êtes déjà Premium 🎉 — passez à Premium+ pour accéder au Binôme Relationnel, aux suggestions IRIS et à la gamification avancée.",
     cta: "Découvrir Premium+",
@@ -70,9 +70,8 @@ export function UpsellBanner({
       textAlign: "center",
       display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
     }}>
-      {/* Badge optionnel */}
       {v.badge && (
-        <PremiumBadge label={v.badge} />
+        <SubscriptionBadge tier={v.badge} size="md" />
       )}
 
       {/* Icône */}

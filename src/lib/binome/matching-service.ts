@@ -1,19 +1,29 @@
 import { prisma } from "@/lib/prisma";
-import * as fs from "fs";
-import * as path from "path";
 
-const CONFIG_PATH = path.join(process.cwd(), "config", "matching-settings.json");
-function getMatchingConfig() {
-  if (fs.existsSync(CONFIG_PATH)) {
-    try {
-      return JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"));
-    } catch { return null; }
+/** Configuration par défaut si aucun enregistrement SystemConfig n'existe en BDD. */
+const DEFAULT_MATCHING_CONFIG = {
+  minimumThreshold: 75,
+  synergyWeight: 60,
+  similarityWeight: 40,
+};
+
+/**
+ * Charge la configuration du matching depuis la BDD (SystemConfig).
+ * Utilise les valeurs par défaut si aucune configuration n'existe.
+ * Remplace l'ancienne approche fs.readFileSync (incompatible serverless).
+ */
+async function getMatchingConfig(): Promise<typeof DEFAULT_MATCHING_CONFIG> {
+  try {
+    const record = await prisma.systemConfig.findUnique({
+      where: { key: "matching-settings" },
+    });
+    if (record?.value && typeof record.value === "object") {
+      return { ...DEFAULT_MATCHING_CONFIG, ...(record.value as object) };
+    }
+  } catch {
+    // En cas d'erreur BDD, on utilise les valeurs par défaut
   }
-  return {
-    minimumThreshold: 75,
-    synergyWeight: 60,
-    similarityWeight: 40,
-  };
+  return DEFAULT_MATCHING_CONFIG;
 }
 
 export class MatchingService {
@@ -74,8 +84,8 @@ export class MatchingService {
       return { success: false, message: "Le module Binôme est réservé aux abonnements Premium." };
     }
 
-    // Récupération de la configuration globale SuperAdmin
-    const globalConfig = getMatchingConfig();
+    // Récupération de la configuration globale SuperAdmin depuis la BDD
+    const globalConfig = await getMatchingConfig();
 
     // 2. Find candidates
     // Exclude users with whom we already have a suggestion (PENDING, ACCEPTED) or active binome

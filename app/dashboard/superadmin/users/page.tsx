@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Users, Search, Crown, ShieldAlert, X, Save, Trash2, AlertTriangle, CheckCircle2, AlertCircle, Download } from "lucide-react";
+import { Users, Search, ShieldAlert, X, Save, Trash2, AlertTriangle, CheckCircle2, AlertCircle, Download } from "lucide-react";
 import { Select } from "@/components/ui/Select";
 import { Input } from "@/components/ui/Input";
+import { SubscriptionBadge, toSubscriptionTier } from "@/components/ui/SubscriptionBadge";
 
 const ROLE_LABELS: Record<string, string> = {
   CITIZEN: "Client B2C",
@@ -201,20 +202,20 @@ export default function SuperAdminUsersPage() {
                       {ROLE_LABELS[user.role] || user.role}
                     </span>
                     <br />
-                    <span className="badge" style={{ 
-                      display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 12, fontSize: 10, fontWeight: 700,
-                      background: user.subscription === "PREMIUM_PLUS" ? "rgba(245,158,11,0.1)" : user.subscription === "PREMIUM" ? "rgba(0,169,157,0.1)" : "rgba(255,255,255,0.05)",
-                      color: user.subscription === "PREMIUM_PLUS" ? "var(--amber)" : user.subscription === "PREMIUM" ? "var(--primary)" : "var(--text-2)"
-                    }}>
-                      {user.subscription !== "FREEMIUM" && <Crown size={10} />}
-                      {user.subscription}
-                    </span>
+                    <SubscriptionBadge
+                      tier={toSubscriptionTier(user.subscription)}
+                      size="sm"
+                    />
                   </td>
                   <td style={{ padding: "16px 24px" }}>
                     {user.organization ? (
                       <div style={{ color: "var(--text-1)", fontSize: 12 }}>🏢 {user.organization.name}</div>
-                    ) : (
+                    ) : user.role === "CITIZEN" ? (
                       <div style={{ color: "var(--text-2)", fontSize: 12, fontStyle: "italic" }}>Client Individuel (B2C)</div>
+                    ) : user.role === "SUPER_ADMIN" ? (
+                      <div style={{ color: "var(--indigo)", fontSize: 12, fontWeight: 600 }}>Plateforme</div>
+                    ) : (
+                      <div style={{ color: "var(--text-3)", fontSize: 12, fontStyle: "italic" }}>Non rattaché</div>
                     )}
                     {user.campaign && (
                       <div style={{ color: "var(--text-2)", fontSize: 11, marginTop: 4 }}>Campagne: {user.campaign.name}</div>

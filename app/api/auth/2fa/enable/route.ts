@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { authenticator } from "otplib";
+import { verify as totpVerify } from "otplib";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ detail: "Configuration 2FA introuvable." }, { status: 400 });
     }
 
-    const isValid = authenticator.verify({
+    const isValid = totpVerify({
       token: code,
       secret: user.twoFactorSecret,
     });

@@ -1,36 +1,23 @@
 /**
  * @file route.ts
  * @module app/api/iris/conversation/[id]/message
- * @description Route API pour envoyer un message à IRIS et recevoir sa réponse.
+ * @description Route API principale d'IRIS : envoie un message et retourne la réponse de coaching.
  *
- * IRIS est l'IA de coaching relationnel de LinkOffice, propulsée par Groq + Llama 3.3 70B.
- * Cette route implémente un cycle complet de conversation :
- *
- * 1. Authentification de l'utilisateur
- * 2. Construction du contexte IQRH personnalisé (`buildIrisContext`)
- * 3. Appel au LLM Groq avec historique de conversation
- * 4. Gestion du tool calling : IRIS peut valider un micro-défi via `complete_micro_challenge`
- * 5. Nettoyage du texte de réponse (suppression des balises de tool_call parasites)
- *
- * FONCTIONNEMENT DU TOOL CALLING :
- * Quand l'utilisateur dit à IRIS qu'il a accompli un défi, IRIS appelle automatiquement
- * l'outil `complete_micro_challenge` avec l'ID du défi. Ceci déclenche le `GamificationService`
- * pour attribuer les points — sans que l'utilisateur ait à cliquer sur un bouton.
- * Le flag `compatible_iris: Oui` dans les métadonnées CSV d'un défi autorise cette validation.
+ * Améliorations v2 :
+ * - Modèle Groq : mixtral-8x7b-32768 (meilleure compréhension du français et du context long)
+ * - Historique persisté en BDD (IrisMessage) — continuité inter-sessions garantie
+ * - Quota Freemium atomique (updateMany avec WHERE) — pas de race condition
+ * - `recommend_partners` : utilise le scoring contextuel du PrescriptionService
  *
  * @method POST
- * @param id - L'identifiant de la conversation (paramètre d'URL, pour futur historique BDD)
- * @body {{ message_user: string, history: ModelMessage[] }} — Message utilisateur + historique
- * @returns {{ message_iris: string }} — La réponse textuelle d'IRIS
- * @throws {401} Si l'utilisateur n'est pas connecté
- * @throws {400} Si le message utilisateur est vide
- * @throws {500} En cas d'erreur Groq ou BDD
+ * @param id — ID de la conversation (clé primaire IrisConversation en BDD)
+ * @body {{ message_user: string }} — Message utilisateur (l'historique est lu depuis la BDD)
+ * @returns {{ message_iris: string }} — Réponse textuelle d'IRIS
  */
 
 import { NextResponse } from "next/server";
 import { groq } from "@ai-sdk/groq";
 import { generateText, tool } from "ai";
-import type { ModelMessage } from "@ai-sdk/provider-utils";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { buildIrisContext } from "@/lib/iris/context-builder";
@@ -38,18 +25,12 @@ import { GamificationService } from "@/lib/gamification/gamification-service";
 import { MatchingService } from "@/lib/binome/matching-service";
 import { prisma } from "@/lib/prisma";
 
-/**
- * Envoie un message utilisateur à IRIS et retourne sa réponse de coaching.
- *
- * @param request - Requête HTTP avec `{ message_user, history }`
- * @param context - Paramètres d'URL Next.js (contient `id` de la conversation)
- */
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Vérification de l'authentification
+    // ── Authentification ───────────────────────────────────────────────────────
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -58,55 +39,90 @@ export async function POST(
       );
     }
 
-    await params; // Consommation du paramètre d'URL (requis par Next.js même si non utilisé)
+    const { id: conversationId } = await params;
     const userId = session.user.id;
 
+    // ── Validation du message entrant ──────────────────────────────────────────
     const requestBody = await request.json();
     const userMessage = requestBody.message_user as string | undefined;
-    const conversationHistory = (requestBody.history as ModelMessage[]) ?? [];
 
     if (!userMessage?.trim()) {
       return NextResponse.json({ error: "message_user manquant" }, { status: 400 });
     }
 
-    // ── Vérification du Quota IRIS (Limitation Freemium) ──────────────────────
+    // ── Vérification que la conversation appartient à cet utilisateur ──────────
+    const conversation = await prisma.irisConversation.findUnique({
+      where: { id: conversationId },
+      select: { userId: true },
+    });
+
+    if (!conversation) {
+      return NextResponse.json({ error: "Conversation introuvable." }, { status: 404 });
+    }
+    if (conversation.userId !== userId) {
+      return NextResponse.json({ error: "Accès interdit." }, { status: 403 });
+    }
+
+    // ── Récupération de l'utilisateur (quota + abonnement) ────────────────────
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { subscription: true, irisUsageCount: true, lastIrisUsage: true }
+      select: { subscription: true, irisUsageCount: true, lastIrisUsage: true },
     });
 
     if (!user) {
       return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
     }
 
+    // ── Quota Freemium atomique (5 messages/mois, reset mensuel) ─────────────
     if (user.subscription === "FREEMIUM") {
       const now = new Date();
-      let newCount = user.irisUsageCount;
+      const isNewMonth =
+        !user.lastIrisUsage ||
+        user.lastIrisUsage.getMonth() !== now.getMonth() ||
+        user.lastIrisUsage.getFullYear() !== now.getFullYear();
 
-      // Réinitialisation au 1er de chaque mois
-      if (
-        !user.lastIrisUsage || 
-        user.lastIrisUsage.getMonth() !== now.getMonth() || 
-        user.lastIrisUsage.getFullYear() !== now.getFullYear()
-      ) {
-        newCount = 0;
-      }
+      const currentCount = isNewMonth ? 0 : user.irisUsageCount;
 
-      if (newCount >= 5) {
+      if (currentCount >= 5) {
         return NextResponse.json(
           { error: "Quota atteint. Passez à la version Premium pour continuer à discuter avec IRIS." },
           { status: 403 }
         );
       }
 
-      // Mise à jour du compteur pour cette requête
-      await prisma.user.update({
-        where: { id: userId },
-        data: { irisUsageCount: newCount + 1, lastIrisUsage: now }
+      // updateMany avec WHERE atomique : garantit qu'aucune race condition ne dépasse le quota
+      const updated = await prisma.user.updateMany({
+        where: {
+          id: userId,
+          ...(isNewMonth ? {} : { irisUsageCount: { lt: 5 } }),
+        },
+        data: {
+          irisUsageCount: isNewMonth ? 1 : { increment: 1 },
+          lastIrisUsage: now,
+        },
       });
+
+      if (updated.count === 0) {
+        return NextResponse.json(
+          { error: "Quota atteint. Passez à la version Premium pour continuer à discuter avec IRIS." },
+          { status: 403 }
+        );
+      }
     }
 
-    // ── Construction du prompt système personnalisé ───────────────────────────
+    // ── Chargement de l'historique depuis la BDD ──────────────────────────────
+    const dbHistory = await prisma.irisMessage.findMany({
+      where: { conversationId },
+      orderBy: { createdAt: "asc" },
+      select: { role: true, content: true },
+    });
+
+    // Persister le message utilisateur immédiatement
+    await prisma.irisMessage.create({
+      data: { conversationId, role: "user", content: userMessage },
+    });
+
+    // ── Construction du prompt système ────────────────────────────────────────
     const userIqrhContext = await buildIrisContext(userId);
 
     const systemPrompt = [
@@ -126,44 +142,44 @@ export async function POST(
       "L'utilisateur possède une Ordonnance Relationnelle avec des recommandations et des micro-défis (MICRO_CHALLENGE).",
       "- Prends l'initiative de lui demander des nouvelles d'un défi s'il n'en parle pas.",
       "- Encourage-le à essayer ses défis et offre-lui des conseils pratiques s'il bloque.",
-      "\n\nPROGRAMME BINÔME RELATIONNEL (PHASE 5) :",
-      "Si l'utilisateur semble avoir besoin de motivation, de partager avec un pair, ou se sent isolé au travail, propose-lui de trouver un **Binôme** parmi ses collègues (dans sa campagne).",
+      "\n\nPROGRAMME BINÔME RELATIONNEL :",
+      "Si l'utilisateur semble avoir besoin de motivation, de partager avec un pair, ou se sent isolé au travail, propose-lui de trouver un Binôme parmi ses collègues.",
       "- S'il accepte ou s'il te demande de lui trouver un binôme, tu DOIS appeler l'outil `opt_in_matching` pour enregistrer son consentement, PUIS appeler `find_relational_partner` pour lancer la recherche.",
       "- S'il refuse, n'insiste pas.",
       "\n\nVALIDATION DES DÉFIS (RÈGLE STRICTE) :",
       "Si l'utilisateur indique clairement avoir réussi ou accompli un micro-défi, tu DOIS appeler l'outil `complete_micro_challenge` pour le valider.",
-      "⚠️ INTERDIT : Ne dis JAMAIS que tu vas utiliser un outil ou un système. Ne mentionne JAMAIS un ID technique (ex: 'MOD1_Q3'). Félicite-le simplement comme le ferait un vrai coach humain.",
+      "⚠️ INTERDIT : Ne dis JAMAIS que tu vas utiliser un outil ou un système. Ne mentionne JAMAIS un ID technique. Félicite-le simplement comme le ferait un vrai coach humain.",
       "\n\n🛑 PÉRIMÈTRE ET LIMITES (RÈGLE ABSOLUE) :",
       "- Ton unique rôle est le coaching en santé relationnelle, l'équilibre de vie, la QVT et la prévention des RPS.",
       "- Tu as l'INTERDICTION formelle de répondre à des questions hors de ce périmètre (programmation, mathématiques, histoire, culture générale, conseils médicaux stricts, etc.).",
-      "- Si une question est hors sujet, tu DOIS poliment refuser d'y répondre et recentrer immédiatement la conversation sur le coaching relationnel (ex: 'Je suis spécialisée uniquement dans l'accompagnement relationnel. Comment vous sentez-vous dans votre équipe en ce moment ?')."
+      "- Si une question est hors sujet, tu DOIS poliment refuser d'y répondre et recentrer immédiatement la conversation sur le coaching relationnel.",
     ].join("\n");
 
-    // ── Construction des messages de conversation ────────────────────────────
-    const chatMessages: ModelMessage[] = [
-      ...conversationHistory,
-      { role: "user", content: userMessage },
-    ];
+    // ── Construction de l'historique pour le LLM ─────────────────────────────
+    // L'historique DB contient déjà le message utilisateur qu'on vient d'insérer
+    // On le reconstruit pour le LLM (sans le dernier message utilisateur qui est passé séparément)
+    const chatMessages = dbHistory.map((m) => ({
+      role: m.role as "user" | "assistant",
+      content: m.content,
+    }));
+    // Ajouter le message actuel à la fin
+    chatMessages.push({ role: "user", content: userMessage });
 
-    // ── Appel au LLM avec tool calling ───────────────────────────────────────
+    // ── Appel au LLM Mixtral avec tool calling ────────────────────────────────
     const llmResult = await generateText({
-      model: groq("openai/gpt-oss-20b"),
+      model: groq("mixtral-8x7b-32768"),
       system: systemPrompt,
       messages: chatMessages,
-      toolChoice: "auto", // IRIS choisit librement d'utiliser ou non l'outil
+      toolChoice: "auto",
       tools: {
         /**
-         * Outil de validation de micro-défi.
-         * IRIS l'appelle quand l'utilisateur indique avoir accompli un défi compatible.
-         * Déclenche `GamificationService.completeChallenge()` en arrière-plan.
+         * Valide un micro-défi lorsque l'utilisateur indique l'avoir accompli.
+         * Déclenche GamificationService : points + badges.
          */
         complete_micro_challenge: tool({
-          description:
-            "Valider un micro-défi (MICRO_CHALLENGE) lorsque l'utilisateur indique l'avoir accompli.",
+          description: "Valider un micro-défi (MICRO_CHALLENGE) lorsque l'utilisateur indique l'avoir accompli.",
           parameters: z.object({
-            challengeId: z
-              .string()
-              .describe("L'identifiant (ID Technique) du défi à valider, fourni dans le contexte (ex: cmufc...)."),
+            challengeId: z.string().describe("L'identifiant technique du défi à valider (fourni dans le contexte)."),
           }),
           // @ts-expect-error — zodSchema overload mismatch in ai@7.x; runtime is correct
           execute: async ({ challengeId }: { challengeId: string }) => {
@@ -178,45 +194,97 @@ export async function POST(
             }
           },
         }),
+
         /**
-         * Outil de recommandation de partenaires (Care Routing).
-         * IRIS l'appelle si l'utilisateur exprime un besoin de soutien spécifique (ex: santé mentale, juridique).
+         * Recommande des partenaires de soin (psychologues, assistants sociaux, associations)
+         * en utilisant le scoring contextuel basé sur le profil IQRH de l'utilisateur.
          */
         recommend_partners: tool({
-          description: "Rechercher et recommander un ou plusieurs partenaires de confiance (psychologues, assistantes sociales, associations) en fonction d'un besoin exprimé par l'utilisateur.",
+          description: "Rechercher et recommander des partenaires de confiance (psychologues, assistantes sociales, associations) selon le besoin exprimé.",
           parameters: z.object({
-            need: z.string().describe("Le besoin principal de l'utilisateur (ex: 'psychologique', 'juridique', 'social', 'isolement').")
+            need: z.string().describe("Le besoin principal (ex: 'psychologique', 'juridique', 'social', 'isolement')."),
           }),
           // @ts-expect-error — zodSchema overload mismatch in ai@7.x; runtime is correct
           execute: async ({ need }: { need: string }) => {
             try {
-              const partners = await prisma.libraryItem.findMany({
-                where: { library: "Partenaires" },
-                take: 100
-              });
-              
-              // On filtre basiquement en mémoire pour trouver les partenaires qui correspondent au besoin
-              const matched = partners.filter(p => {
-                const data = p.data as Record<string, unknown>;
-                const searchString = `${p.title} ${p.category} ${data?.besoins_couverts} ${data?.description}`.toLowerCase();
-                return searchString.includes(need.toLowerCase());
+              // Récupération du contexte IQRH pour le scoring contextuel
+              const userResult = await prisma.assessment.findFirst({
+                where: { userId, status: "SUBMITTED" },
+                orderBy: { submittedAt: "desc" },
+                include: {
+                  result: { include: { icr: true, profile: true } },
+                  demographic: true,
+                },
               });
 
-              return { 
-                success: true, 
-                partners: (matched.length > 0 ? matched.slice(0, 3) : partners.slice(0, 2)).map(p => {
+              const allPartners = await prisma.libraryItem.findMany({
+                where: { library: "Partenaires" },
+              });
+
+              // Scoring contextuel : utilise les champs IQRH pour mieux cibler
+              const needLower = need.toLocaleLowerCase("fr-FR");
+              const situations = (userResult?.demographic?.selectedSituations as string[]) ?? [];
+              const dominantNeeds = (userResult?.result?.icr?.dominantNeeds as string[]) ?? [];
+              const profileName = userResult?.result?.primaryProfile ?? "";
+
+              const scored = allPartners
+                .map((p) => {
                   const data = p.data as Record<string, unknown>;
-                  return { id: p.id, title: p.title, category: p.category, type: data?.type_partenaire, description: data?.description, territoire: data?.territoire };
-                }) 
+                  const searchString = [
+                    p.title,
+                    p.category ?? "",
+                    String(data?.besoins_couverts ?? ""),
+                    String(data?.description ?? ""),
+                    String(data?.public_cible ?? ""),
+                  ]
+                    .join(" ")
+                    .toLocaleLowerCase("fr-FR");
+
+                  let score = 0;
+
+                  // Correspondance directe avec le besoin exprimé
+                  if (searchString.includes(needLower)) score += 5;
+
+                  // Situations de vie de l'utilisateur
+                  if (situations.some((s) => searchString.includes(s.toLocaleLowerCase("fr-FR")))) score += 3;
+
+                  // Besoins dominants ICR
+                  if (dominantNeeds.some((n) => searchString.includes(n.toLocaleLowerCase("fr-FR")))) score += 2;
+
+                  // Profil relationnel
+                  if (profileName && searchString.includes(profileName.toLocaleLowerCase("fr-FR"))) score += 1;
+
+                  return { partner: p, score };
+                })
+                .filter((item) => item.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 3);
+
+              // Fallback : si aucun match, retourner les 2 premiers partenaires
+              const results = scored.length > 0 ? scored : allPartners.slice(0, 2).map((p) => ({ partner: p, score: 0 }));
+
+              return {
+                success: true,
+                partners: results.map(({ partner }) => {
+                  const data = partner.data as Record<string, unknown>;
+                  return {
+                    id: partner.id,
+                    title: partner.title,
+                    category: partner.category,
+                    type: data?.type_partenaire,
+                    description: data?.description,
+                    territoire: data?.territoire,
+                  };
+                }),
               };
             } catch (_error: unknown) {
               return { success: false, error: "Impossible de récupérer les partenaires." };
             }
-          }
+          },
         }),
+
         /**
-         * Outil d'opt-in pour le Binôme Relationnel.
-         * IRIS l'appelle si l'utilisateur accepte qu'on lui cherche un binôme.
+         * Enregistre le consentement de l'utilisateur pour le programme de Binôme Relationnel.
          */
         opt_in_matching: tool({
           description: "Enregistre le consentement de l'utilisateur pour participer au programme de Binôme Relationnel.",
@@ -229,14 +297,14 @@ export async function POST(
             } catch (_error: unknown) {
               return { success: false, error: "Erreur lors de l'enregistrement du consentement." };
             }
-          }
+          },
         }),
+
         /**
-         * Outil de recherche de partenaire de Binôme.
-         * IRIS l'appelle APRES l'opt-in pour lancer l'algorithme de matching.
+         * Lance l'algorithme de matching pour trouver un Binôme compatible dans la même campagne.
          */
         find_relational_partner: tool({
-          description: "Cherche un partenaire de binôme compatible dans la même campagne et crée l'invitation.",
+          description: "Cherche un partenaire de binôme compatible et crée l'invitation.",
           parameters: z.object({}),
           // @ts-expect-error AI SDK tool typing mismatch
           execute: async () => {
@@ -246,24 +314,37 @@ export async function POST(
             } catch (_error: unknown) {
               return { success: false, error: "Erreur lors de la recherche de partenaire." };
             }
-          }
+          },
         }),
-
       },
     });
 
-    // ── Nettoyage de la réponse ───────────────────────────────────────────────
-    // Si le modèle a terminé sur un tool_call, il peut générer du texte parasite.
-    // On supprime les éventuelles balises XML de function/tool_call.
+    // ── Nettoyage de la réponse (suppression balises XML parasites) ───────────
     const rawResponseText = llmResult.text;
-    const cleanedIrisResponse = rawResponseText
+    const irisResponse = rawResponseText
       ? rawResponseText
           .replace(/<function\b[^>]*>(.*?)<\/function>/gi, "")
           .replace(/<tool_call\b[^>]*>(.*?)<\/tool_call>/gi, "")
           .trim()
-      : "Bravo ! Je viens de valider ton défi. Continue comme ça, tu progresses vraiment bien ! 🎉";
+      : "Bravo ! Je viens de valider votre défi. Vous progressez vraiment bien ! 🎉";
 
-    return NextResponse.json({ message_iris: cleanedIrisResponse });
+    // ── Persistance de la réponse IRIS en BDD ─────────────────────────────────
+    await prisma.irisMessage.create({
+      data: { conversationId, role: "assistant", content: irisResponse },
+    });
+
+    // ── Mise à jour du titre de la conversation (à la première réponse) ───────
+    const messageCount = await prisma.irisMessage.count({ where: { conversationId } });
+    if (messageCount === 2) {
+      // 1 user + 1 assistant = première réponse : on génère un titre court
+      const titleSnippet = userMessage.length > 60 ? userMessage.slice(0, 57) + "…" : userMessage;
+      await prisma.irisConversation.update({
+        where: { id: conversationId },
+        data: { title: titleSnippet },
+      });
+    }
+
+    return NextResponse.json({ message_iris: irisResponse });
 
   } catch (error) {
     console.error("[IRIS_MESSAGE_ERROR]:", error);

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { authenticator } from "otplib";
+import { generateSecret, generateURI } from "otplib";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     }
 
     // Génère un nouveau secret si l'utilisateur n'en a pas, sinon utilise l'existant
-    const secret = user.twoFactorSecret || authenticator.generateSecret();
+    const secret = user.twoFactorSecret || generateSecret();
 
     if (!user.twoFactorSecret) {
       await prisma.user.update({
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const otpauthUrl = authenticator.keyuri(user.email, "LinkOffice", secret);
+    const otpauthUrl = generateURI({ label: user.email, issuer: "LinkOffice", secret });
 
     return NextResponse.json({
       secret,

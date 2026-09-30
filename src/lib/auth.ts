@@ -9,7 +9,7 @@ import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { rateLimit, getRetryAfterSeconds } from "@/lib/rate-limit";
-import { authenticator } from "otplib";
+import { verify as totpVerify } from "otplib";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
@@ -31,8 +31,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           throw new Error(`RATE_LIMITED:${retry}`);
         }
 
+        let user: Awaited<ReturnType<typeof prisma.user.findUnique>> | null = null;
+
         try {
-          const user = await prisma.user.findUnique({
+          user = await prisma.user.findUnique({
             where: { email: credentials.email as string },
             select: {
               id: true,
@@ -41,6 +43,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               lastName: true,
               password: true,
               role: true,
+              subscription: true,
               organizationId: true,
               campaignId: true,
               mustChangePassword: true,
@@ -51,47 +54,46 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               campaign: { select: { logoUrl: true } },
             },
           });
-
-          if (!user || !user.password) return null;
-
-          const isValid = await bcrypt.compare(
-            credentials.password as string,
-            user.password
-          );
-          if (!isValid) return null;
-
-          // Vérification de l'email
-          // if (!user.emailVerified) {
-          //   throw new Error("EMAIL_NOT_VERIFIED");
-          // }
-
-          // Vérification 2FA
-          if (user.isTwoFactorEnabled && user.twoFactorSecret) {
-            if (!credentials.twoFactorCode) {
-              throw new Error("2FA_REQUIRED");
-            }
-            const isValidToken = authenticator.verify({
-              token: credentials.twoFactorCode as string,
-              secret: user.twoFactorSecret,
-            });
-            if (!isValidToken) {
-              throw new Error("2FA_INVALID");
-            }
-          }
-
-          return {
-            id: user.id,
-            email: user.email,
-            name: `${user.firstName} ${user.lastName}`,
-            role: user.role,
-            organizationId: user.organizationId,
-            logoUrl: user.campaign?.logoUrl || user.organization?.logoUrl || null,
-            mustChangePassword: user.mustChangePassword,
-          };
-        } catch (error) {
-          console.error("AUTH ERROR:", error);
+        } catch (dbError) {
+          console.error("[AUTH] Database error during login:", dbError);
           return null;
         }
+
+        if (!user || !user.password) return null;
+
+        const isValid = await bcrypt.compare(
+          credentials.password as string,
+          user.password
+        );
+        if (!isValid) return null;
+
+        // Vérification de l'email (décommenter pour activer)
+        // if (!user.emailVerified) throw new Error("EMAIL_NOT_VERIFIED");
+
+        // Vérification 2FA — les erreurs sont intentionnelles et doivent être propagées
+        if (user.isTwoFactorEnabled && user.twoFactorSecret) {
+          if (!credentials.twoFactorCode) {
+            throw new Error("2FA_REQUIRED");
+          }
+          const isValidToken = totpVerify({
+            token: credentials.twoFactorCode as string,
+            secret: user.twoFactorSecret,
+          });
+          if (!isValidToken) {
+            throw new Error("2FA_INVALID");
+          }
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: `${user.firstName} ${user.lastName}`,
+          role: user.role,
+          subscription: user.subscription ?? "FREEMIUM",
+          organizationId: user.organizationId,
+          logoUrl: user.campaign?.logoUrl || user.organization?.logoUrl || null,
+          mustChangePassword: user.mustChangePassword,
+        };
       },
     }),
   ],
@@ -100,6 +102,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (user) {
         token.userId = user.id;
         token.role = (user as { role: string }).role;
+        token.subscription = (user as any).subscription ?? "FREEMIUM";
         token.organizationId = (user as { organizationId: string | null }).organizationId ?? null;
         token.logoUrl = (user as any).logoUrl ?? null;
         token.mustChangePassword = (user as any).mustChangePassword;
@@ -109,6 +112,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       session.user.id = token.userId as string;
       session.user.role = token.role as string;
+      (session.user as any).subscription = (token.subscription as string) ?? "FREEMIUM";
       session.user.organizationId = (token.organizationId as string | null) ?? null;
       (session.user as any).logoUrl = (token.logoUrl as string | null) ?? null;
       (session.user as any).mustChangePassword = token.mustChangePassword as boolean;

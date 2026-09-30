@@ -90,7 +90,7 @@ function matchesDimension(rawDimensionString: string, targetDimension: string): 
   });
 }
 
-function calculateScore(item: any, context: { situations: string[]; profileName: string; secondaryProfileName?: string; dimensionScore: number; dominantNeeds: string[]; icrScore: number; }): number {
+function calculateScore(item: any, context: { situations: string[]; profileName: string; secondaryProfileName?: string; dimensionScore: number; dominantNeeds: string[]; icrScore: number; riskFactors: string[]; protectiveFactors: string[]; }): number {
   let score = 0;
   
   // 1. Situation de vie
@@ -103,7 +103,8 @@ function calculateScore(item: any, context: { situations: string[]; profileName:
   if (context.secondaryProfileName && containsProfile(text(item.data, "profils_cibles"), context.secondaryProfileName)) score += 1;
 
   // 3. Besoins dominants
-  if (context.dominantNeeds && context.dominantNeeds.some(need => containsValue(text(item.data, "besoins_cibles"), need))) {
+  const needs = text(item.data, "besoins_couverts") || text(item.data, "besoin_cible");
+  if (context.dominantNeeds && context.dominantNeeds.some(need => containsValue(needs, need))) {
     score += 2;
   }
 
@@ -116,7 +117,22 @@ function calculateScore(item: any, context: { situations: string[]; profileName:
     else if (context.dimensionScore >= 80 && contains(itemType, "préservation")) score += 2;
   }
 
-  // 5. ICR (Complexité relationnelle) - Les seuils standards sont 20 (faible), 40 (modérée), 60 (élevée), 80 (très élevée), >80 (critique)
+  // 5. ICR et Facteurs de risque
+  const riskFactorsCible = text(item.data, "facteurs_risque_cibles");
+  if (riskFactorsCible && context.riskFactors && context.riskFactors.length > 0) {
+    if (context.riskFactors.some(rf => containsValue(riskFactorsCible, rf))) {
+      score += 2;
+    }
+  }
+  
+  const protectiveFactorsCible = text(item.data, "facteurs_protecteurs_developpes");
+  if (protectiveFactorsCible && context.protectiveFactors && context.protectiveFactors.length > 0) {
+    if (context.protectiveFactors.some(pf => containsValue(protectiveFactorsCible, pf))) {
+      score += 1.5;
+    }
+  }
+
+  // Fallback si icr_cible existe dans le futur
   const icrCible = text(item.data, "icr_cible");
   if (icrCible) {
     if (context.icrScore > 80 && contains(icrCible, "critique")) score += 3;
@@ -192,6 +208,10 @@ export class PrescriptionService {
     const icrResult = await prisma.icrResult.findUnique({ where: { iqrhResultId: result.id } });
     const dominantNeedsRaw = icrResult?.dominantNeeds;
     const dominantNeeds = Array.isArray(dominantNeedsRaw) ? (dominantNeedsRaw as string[]) : [];
+    const riskFactorsRaw = icrResult?.riskFactors;
+    const riskFactors = Array.isArray(riskFactorsRaw) ? (riskFactorsRaw as string[]) : [];
+    const protectiveFactorsRaw = icrResult?.protectiveFactors;
+    const protectiveFactors = Array.isArray(protectiveFactorsRaw) ? (protectiveFactorsRaw as string[]) : [];
     const icrScore = icrResult?.score || 0;
     const profileResult = await prisma.profileResult.findUnique({ where: { iqrhResultId: result.id } });
     
@@ -201,7 +221,9 @@ export class PrescriptionService {
       secondaryProfileName: profileResult?.secondaryName || undefined,
       dimensionScore,
       dominantNeeds,
-      icrScore
+      icrScore,
+      riskFactors,
+      protectiveFactors
     };
 
     // 1. Récupération et tri des Recommandations
@@ -253,7 +275,7 @@ export class PrescriptionService {
         if (!matchesDimension(itemTargetDimensions, targetDimensionLabel)) return false;
 
         // Uniquement lorsqu'un partenaire répond directement au besoin ou à la situation, ou s'il est générique
-        const partnerNeeds = text(item.data, "besoins_cibles");
+        const partnerNeeds = text(item.data, "besoins_couverts") || text(item.data, "besoin_cible");
         const partnerSituations = text(item.data, "situations_ciblees") || text(item.data, "public_cible");
 
         // Partenaire générique pour cette dimension

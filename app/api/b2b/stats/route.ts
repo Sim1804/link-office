@@ -65,6 +65,7 @@ export async function GET(request: Request) {
     where: { id: session.user.id },
     select: {
       organizationId: true,
+      role: true,
       organization: { select: { subscription: { select: { status: true } } } },
     },
   });

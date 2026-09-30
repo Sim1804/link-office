@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/layout/Navbar";
 import { Users, UserPlus, Crown, Lock, Clock, Handshake, Sparkles } from "lucide-react";
-import { PremiumBadge } from "@/components/ui/PremiumBadge";
+import { SubscriptionBadge } from "@/components/ui/SubscriptionBadge";
 import { BinomeInviteForm } from "./BinomeInviteForm";
 import { BinomeRespondButtons } from "./BinomeRespondButtons";
 import { BinomeSettings } from "./BinomeSettings";
@@ -74,7 +74,7 @@ export default async function BinomePage() {
               }
             </div>
 
-            <PremiumBadge label="Premium+" style={{ marginBottom: 16 }} />
+            <SubscriptionBadge tier="PREMIUM_PLUS" size="md" style={{ marginBottom: 16 }} />
 
             <h1 style={{
               fontSize: 26, fontWeight: 800, color: "var(--text-1)",
@@ -150,7 +150,7 @@ export default async function BinomePage() {
           {/* ── Hero Header ── */}
           <div style={{ marginBottom: 40 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
-              <PremiumBadge label="Premium+" />
+              <SubscriptionBadge tier="PREMIUM_PLUS" size="sm" />
             </div>
 
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>

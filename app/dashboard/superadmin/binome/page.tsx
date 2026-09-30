@@ -32,7 +32,7 @@ export default async function AdminBinomeIndex({ searchParams }: { searchParams:
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
   const activeCount = stats.find(s => s.status === 'ACTIVE')?._count.status || 0;
   const closedCount = stats.find(s => s.status === 'CLOSED')?._count.status || 0;
-  const evalCount = stats.find(s => s.status === 'EVALUATION')?._count.status || 0;
+  const evalCount = stats.find(s => s.status === 'AWAITING_USER_B')?._count.status || 0;
 
   return (
     <>

@@ -12,6 +12,7 @@ import { DashboardTabs } from "@/src/components/dashboard/tabs/DashboardTabs";
 import { B2b2cMemberRecommendations } from "@/components/dashboard/B2b2cMemberRecommendations";
 import { Brain, Star, Clock, Lock, Sparkles, TrendingUp, Search, User, ArrowRight, FileQuestion, Activity } from "lucide-react";
 import Link from "next/link";
+import { SubscriptionBadge, toSubscriptionTier } from "@/components/ui/SubscriptionBadge";
 
 
 export const metadata = {
@@ -259,38 +260,24 @@ export default async function DashboardPage() {
               {/* Gamification + Premium — compact à droite */}
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
                 <GamificationSummary points={points} badges={badges} />
-                {isPremiumPlus ? (
-                  <span style={{
+                
+                <SubscriptionBadge tier={toSubscriptionTier(subscription)} size="sm" />
+                
+                {subscription === "PREMIUM" && (
+                  <Link href="/premium" style={{
                     display: "inline-flex", alignItems: "center", gap: 4,
-                    padding: "3px 10px", borderRadius: 999,
-                    background: "rgba(0,169,157,0.08)", border: "1px solid rgba(0,169,157,0.2)",
-                    fontSize: 11, fontWeight: 700, color: "var(--primary)", letterSpacing: "0.04em",
+                    padding: "3px 10px", borderRadius: 999, textDecoration: "none",
+                    background: "rgba(0,169,157,0.1)", border: "1px solid rgba(0,169,157,0.3)",
+                    fontSize: 11, fontWeight: 700, color: "var(--primary)",
+                    whiteSpace: "nowrap", transition: "background 0.15s",
                   }}>
-                    ★ Premium+
-                  </span>
-                ) : isPremium ? (
-                  <>
-                    <span style={{
-                      display: "inline-flex", alignItems: "center", gap: 4,
-                      padding: "3px 10px", borderRadius: 999,
-                      background: "rgba(0,169,157,0.06)", border: "1px solid rgba(0,169,157,0.15)",
-                      fontSize: 11, fontWeight: 700, color: "var(--primary)", letterSpacing: "0.04em",
-                    }}>
-                      ★ Premium
-                    </span>
-                    <Link href="/premium" style={{
-                      display: "inline-flex", alignItems: "center", gap: 4,
-                      padding: "3px 10px", borderRadius: 999, textDecoration: "none",
-                      background: "rgba(0,169,157,0.1)", border: "1px solid rgba(0,169,157,0.3)",
-                      fontSize: 11, fontWeight: 700, color: "var(--primary)",
-                      whiteSpace: "nowrap", transition: "background 0.15s",
-                    }}>
-                      Passer à Premium+ →
-                    </Link>
-                  </>
-                ) : (
+                    Passer à Premium+ →
+                  </Link>
+                )}
+                
+                {subscription === "FREEMIUM" && (
                   <Link href="/premium" className="btn btn-primary btn-sm" style={{ textDecoration: "none", fontSize: 11, padding: "4px 12px" }}>
-                    Premium →
+                    Devenir Premium →
                   </Link>
                 )}
               </div>

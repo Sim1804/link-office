@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { useSession } from "next-auth/react";
-import { PremiumBadge } from "@/components/ui/PremiumBadge";
+import { SubscriptionBadge } from "@/components/ui/SubscriptionBadge";
 import {
   Check, Sparkles, ArrowRight, ShieldCheck, Zap,
   LockOpen, AlertCircle, Star, Handshake, Brain
@@ -78,7 +78,7 @@ export default function PremiumPage() {
             }}>
               <Star size={28} color="var(--primary)" />
             </div>
-            <PremiumBadge label="Premium+" style={{ marginBottom: 20 }} />
+            <SubscriptionBadge tier="PREMIUM_PLUS" size="lg" style={{ marginBottom: 20 }} />
             <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 28, fontWeight: 800, color: "var(--text-1)", marginBottom: 12 }}>
               Vous bénéficiez déjà de Premium+
             </h1>
@@ -105,7 +105,7 @@ export default function PremiumPage() {
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             {isAlreadyPremium ? (
               <>
-                <PremiumBadge label="Premium" style={{ marginBottom: 20 }} />
+                <SubscriptionBadge tier="PREMIUM" size="lg" style={{ marginBottom: 20 }} />
                 <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 36, fontWeight: 800, color: "var(--text-1)", letterSpacing: "-0.02em", lineHeight: 1.2, marginBottom: 16 }}>
                   Débloquez le Binôme Relationnel
                 </h1>

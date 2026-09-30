@@ -338,10 +338,10 @@ async function seedOrganizations() {
       firstName: "Camille",
       lastName: "Demo",
       password: adminPasswordHash,
-      role: "EMPLOYEE",
+      role: "CITIZEN",
       subscription: "FREEMIUM",
     },
-    update: { password: adminPasswordHash, role: "EMPLOYEE", subscription: "FREEMIUM" },
+    update: { password: adminPasswordHash, role: "CITIZEN", subscription: "FREEMIUM" },
   });
 
   await prisma.user.upsert({

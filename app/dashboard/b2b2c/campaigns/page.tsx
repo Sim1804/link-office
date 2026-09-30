@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
-import { Zap, Crown, Calendar, Users, ChevronRight, CheckCircle2, Clock, Archive, RefreshCw, ShieldCheck } from "lucide-react";
+import { Calendar, Users, ChevronRight, CheckCircle2, Clock, Archive, RefreshCw, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
+import { SubscriptionBadge } from "@/components/ui/SubscriptionBadge";
 
 interface Campaign {
   id: string;
@@ -61,16 +62,7 @@ export default function PartnerCampaignsListPage() {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
                 <h3 style={{ fontSize: 15, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>{c.title}</h3>
-                <span style={{
-                  display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 10px",
-                  borderRadius: 999, fontSize: 11, fontWeight: 700,
-                  background: isPP ? "rgba(245,158,11,0.15)" : "rgba(124,58,237,0.15)",
-                  color: isPP ? "var(--amber)" : "var(--primary)",
-                  border: `1px solid ${isPP ? "rgba(245,158,11,0.3)" : "rgba(124,58,237,0.3)"}`,
-                }}>
-                  {isPP ? <Crown size={10} /> : <Zap size={10} />}
-                  {isPP ? "PREMIUM+" : "PREMIUM"}
-                </span>
+                <SubscriptionBadge tier={isPP ? "PREMIUM_PLUS" : "PREMIUM"} size="sm" />
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600, background: meta.bg, color: meta.color }}>
                   <Icon size={10} /> {meta.label}
                 </span>

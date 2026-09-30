@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import {
   ArrowLeft, Users, BarChart3, Settings, Mail, RefreshCw, Target,
-  Zap, Crown, CheckCircle2, Clock, Calendar, Copy, QrCode, Link2,
+  CheckCircle2, Clock, Calendar, Copy, QrCode, Link2,
   Plus, TrendingUp, TrendingDown, Download, Trash2
 } from "lucide-react";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import {
   PieChart, Pie, Cell, Tooltip, Legend
 } from "recharts";
 import { DashboardTabs } from "@/components/ui/DashboardTabs";
+import { SubscriptionBadge } from "@/components/ui/SubscriptionBadge";
 
 type Tab = "participation" | "configuration" | "invitations" | "dashboard";
 
@@ -104,12 +105,8 @@ export default function CampaignDetailPage() {
         body: JSON.stringify({ campaignId: id })
       });
       if (res.ok) {
-        // Refresh actions list
-        const actionsRes = await fetch("/api/actions?campaignId=" + id);
-        if (actionsRes.ok) {
-          const data = await actionsRes.json();
-          setActions(data);
-        }
+        // Recharger les données de la campagne après la génération
+        await loadCampaign();
       }
     } finally {
       setIsGeneratingActions(false);
@@ -156,9 +153,7 @@ export default function CampaignDetailPage() {
             <div style={{ flex:1 }}>
               <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4, flexWrap:"wrap" }}>
                 <h1 style={{ fontFamily:"'Plus Jakarta Sans',Inter,sans-serif", fontWeight:800, fontSize:22, color:"var(--text-1)", margin:0 }}>{campaign.title}</h1>
-                <span style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:700, background: isPP ? "rgba(245,158,11,0.15)" : "rgba(124,58,237,0.15)", color: isPP ? "#fbbf24" : "var(--primary)", border:"1px solid " + (isPP ? "rgba(245,158,11,0.3)" : "rgba(124,58,237,0.3)") }}>
-                  {isPP ? <Crown size={10} /> : <Zap size={10} />} {isPP ? "PREMIUM+" : "PREMIUM"}
-                </span>
+                <SubscriptionBadge tier={isPP ? "PREMIUM_PLUS" : "PREMIUM"} size="sm" />
                 <span style={{ padding:"2px 10px", borderRadius:999, fontSize:11, fontWeight:600, background:"rgba(52,211,153,0.12)", color:"#34d399" }}>
                   {STATUS_LABELS[campaign.status] || campaign.status}
                 </span>

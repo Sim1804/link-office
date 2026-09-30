@@ -1,0 +1,8 @@
+{
+  "name": "Remix LINK OFFICE - Laboratoire du Lien Humain",
+  "description": "Plateforme SaaS et Système de Design du Laboratoire du Lien Humain. Comprendre, Observer, Mesurer et Agir pour valoriser la qualité des relations humaines.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
