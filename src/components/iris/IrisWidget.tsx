@@ -3,8 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { Brain, Send, X, MessageCircle, Sparkles, User, FileText, RefreshCw } from "lucide-react";
+import { Send, X, MessageCircle, FileText, RefreshCw } from "lucide-react";
 import { startIrisConversation, sendIrisMessage, getIrisExplication } from "@/lib/api";
+import { IrisMark } from "@/components/brand/IrisLogo";
 
 const formatText = (text: string) => {
   if (!text) return null;
@@ -14,7 +15,7 @@ const formatText = (text: string) => {
       <span key={idx}>
         {parts.map((part, i) => {
           if (part.startsWith("**") && part.endsWith("**")) {
-            return <strong key={i} style={{ color: "var(--text-1)", fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
+            return <strong key={i} className="font-bold text-inherit">{part.slice(2, -2)}</strong>;
           }
           return <span key={i}>{part}</span>;
         })}
@@ -41,6 +42,22 @@ export function IrisWidget() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  // Effet pour basculer le contenu du tableau de bord vers la gauche
+  useEffect(() => {
+    const mainElements = document.querySelectorAll('main');
+    if (isOpen) {
+      mainElements.forEach(el => {
+        el.style.paddingRight = "400px";
+        el.style.transition = "padding-right 0.3s ease";
+      });
+    } else {
+      mainElements.forEach(el => el.style.paddingRight = "");
+    }
+    return () => {
+      mainElements.forEach(el => el.style.paddingRight = "");
+    };
+  }, [isOpen]);
   
   const [explicationLoading, setExplicationLoading] = useState(false);
   const [explication, setExplication] = useState<string | null>(null);
@@ -152,9 +169,8 @@ export function IrisWidget() {
     }
   };
 
-  // Les retours anticipés doivent être placés APRÈS tous les hooks (useEffect, useState)
   if (!session?.user?.id) return null;
-  if (isAuthPage || pathname === "/") return null;
+  if (!pathname?.startsWith("/dashboard")) return null;
 
   return (
     <>
@@ -162,173 +178,129 @@ export function IrisWidget() {
       {!isOpen && (
         <button
           onClick={toggleWidget}
-          style={{
-            position: "fixed", bottom: 24, right: 24, zIndex: 9999,
-            width: 56, height: 56, borderRadius: "50%",
-            background: "linear-gradient(135deg, var(--action) 0%, var(--action) 100%)",
-            color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 8px 32px rgba(89, 101, 232, 0.3)",
-            border: "none", cursor: "pointer", transition: "transform 0.2s",
-          }}
+          className="fixed bottom-6 right-6 z-[9999] w-14 h-14 rounded-full bg-[#5965E8] text-white flex items-center justify-center shadow-[0_8px_32px_rgba(89,101,232,0.3)] border-none cursor-pointer hover:scale-105 transition-transform"
         >
-          <Brain size={24} />
+          <IrisMark size={32} monochrome />
         </button>
       )}
 
       {/* FENÊTRE DU WIDGET (SIDEBAR) */}
       {isOpen && (
-        <div style={{
-        position: "fixed", top: 64, right: 0, bottom: 0, width: 400, zIndex: 40,
-        background: "var(--bg)", backdropFilter: "blur(24px)",
-        borderLeft: "1px solid var(--border)",
-        display: "flex", flexDirection: "column",
-        boxShadow: "-10px 0 40px rgba(18,61,70,0.08)",
-        transform: isOpen ? "translateX(0)" : "translateX(100%)",
-        transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-      }}>
+        <div 
+          className="fixed top-[76px] sm:top-[84px] right-0 bottom-0 w-[400px] max-w-full z-30 bg-white shadow-2xl flex flex-col border-l border-[#E3EBE6] transition-transform duration-300"
+          style={{ transform: isOpen ? "translateX(0)" : "translateX(100%)" }}
+        >
           {/* HEADER */}
-          <div style={{
-            padding: "24px 24px 20px", borderBottom: "1px solid var(--border)",
-            display: "flex", flexDirection: "column", gap: 20,
-            background: "rgba(89, 101, 232, 0.03)",
-          }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{
-                  width: 36, height: 36, background: "rgba(89, 101, 232, 0.1)", borderRadius: 12,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  <Brain size={20} color="var(--action)" />
-                </div>
-                <div>
-                  <h3 style={{ fontFamily: "var(--font-family-display)", fontSize: 16, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>IRIS</h3>
-                  <p style={{ fontSize: 12, color: "var(--action)", fontWeight: 600, margin: 0 }}>Coach Relationnel IA</p>
-                </div>
+          <div className="p-5 border-b border-[#E3EBE6] bg-gradient-to-r from-[#123D46] to-[#1E3048] text-white flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-1.5 bg-white/10 rounded-xl border border-white/20">
+                <IrisMark size={36} isAnimated={true} monochrome />
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                style={{ 
-                  background: "transparent", border: "none", color: "var(--text-3)", 
-                  cursor: "pointer", padding: 8, display: "flex", borderRadius: 8,
-                  transition: "background 0.2s"
-                }}
-                onMouseOver={(e) => e.currentTarget.style.background = "rgba(18,61,70,0.05)"}
-                onMouseOut={(e) => e.currentTarget.style.background = "transparent"}
-              >
-                <X size={20} />
-              </button>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-jakarta font-extrabold text-base text-white m-0">
+                    Coach IRIS
+                  </h3>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                </div>
+                <p className="text-[11px] text-[#E3EBE6]/80 font-inter m-0">
+                  Intelligence Relationnelle & Analyse
+                </p>
+              </div>
             </div>
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors text-sm font-bold border-none cursor-pointer"
+            >
+              ✕
+            </button>
+          </div>
 
-            {/* TABS */}
-            <div style={{ display: "flex", gap: 4, background: "rgba(18,61,70,0.05)", padding: 4, borderRadius: 9999 }}>
-              <button
-                onClick={() => handleTabSwitch("coach")}
-                style={{
-                  flex: 1, padding: "8px 0", borderRadius: 9999, border: "none", cursor: "pointer", transition: "all 0.2s",
-                  background: activeTab === "coach" ? "var(--surface)" : "transparent",
-                  color: activeTab === "coach" ? "var(--action)" : "var(--text-3)",
-                  boxShadow: activeTab === "coach" ? "0 2px 8px rgba(18,61,70,0.05)" : "none",
-                  fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-                }}
-              >
-                <MessageCircle size={14} /> Coach
-              </button>
-              <button
-                onClick={() => handleTabSwitch("explication")}
-                style={{
-                  flex: 1, padding: "8px 0", borderRadius: 9999, border: "none", cursor: "pointer", transition: "all 0.2s",
-                  background: activeTab === "explication" ? "var(--surface)" : "transparent",
-                  color: activeTab === "explication" ? "var(--action)" : "var(--text-3)",
-                  boxShadow: activeTab === "explication" ? "0 2px 8px rgba(18,61,70,0.05)" : "none",
-                  fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-                }}
-              >
-                <FileText size={14} /> Analyse
-              </button>
-            </div>
+          {/* TABS BAR (Replacing Camille summary bar) */}
+          <div className="bg-[#FAF9F5] border-b border-[#E3EBE6] px-5 py-2.5 flex items-center gap-2 text-xs">
+            <button
+              onClick={() => handleTabSwitch("coach")}
+              className={`flex-1 py-1.5 px-3 rounded-full font-semibold flex items-center justify-center gap-2 transition-colors ${activeTab === "coach" ? "bg-white text-[#123D46] shadow-xs border border-[#E3EBE6]" : "text-[#123D46]/60 hover:text-[#123D46]"}`}
+            >
+              <MessageCircle size={14} /> Coach
+            </button>
+            <button
+              onClick={() => handleTabSwitch("explication")}
+              className={`flex-1 py-1.5 px-3 rounded-full font-semibold flex items-center justify-center gap-2 transition-colors ${activeTab === "explication" ? "bg-white text-[#123D46] shadow-xs border border-[#E3EBE6]" : "text-[#123D46]/60 hover:text-[#123D46]"}`}
+            >
+              <FileText size={14} /> Analyse
+            </button>
           </div>
 
           {/* CONTENT AREA */}
-          <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column" }}>
+          <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-white">
             
-            {/* TONGLET: EXPLICATION */}
+            {/* ONGLET: EXPLICATION */}
             {activeTab === "explication" && (
-              <div style={{ padding: 24 }}>
+              <div className="flex flex-col h-full">
                 {explicationLoading ? (
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, paddingTop: 40, opacity: 0.5 }}>
-                    <div style={{ width: 24, height: 24, border: "2px solid #a855f7", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
-                    <span style={{ fontSize: 13, color: "var(--text-3)" }}>Analyse en cours...</span>
+                  <div className="flex flex-col items-center gap-3 pt-10 opacity-50">
+                    <div className="w-6 h-6 border-2 border-[#5965E8] border-t-transparent rounded-full animate-spin" />
+                    <span className="text-[13px] text-[#123D46]/60 font-inter">Analyse en cours...</span>
                   </div>
                 ) : explication ? (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    <div style={{ fontSize: 14, color: "var(--text-1)", lineHeight: 1.6 }}>
+                  <div className="flex flex-col gap-4">
+                    <div className="text-[13px] text-[#123D46] leading-relaxed font-inter bg-[#F4F1E8]/70 border border-[#E3EBE6] p-4 rounded-2xl">
                       {formatText(explication)}
                     </div>
                     <button 
                       onClick={() => loadExplication(true)} 
-                      className="btn btn-tertiary btn-md"
-                      style={{ width: "100%" }}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-white border border-[#E3EBE6] hover:bg-[#FAF9F5] text-[#123D46] font-jakarta font-semibold text-xs transition-colors"
                     >
                       <RefreshCw size={14} /> Actualiser l'analyse
                     </button>
                   </div>
                 ) : (
-                  <button onClick={() => loadExplication(false)} className="btn btn-action btn-md" style={{ width: "100%" }}>
+                  <button 
+                    onClick={() => loadExplication(false)} 
+                    className="w-full py-2.5 px-4 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-xs transition-colors shadow-xs"
+                  >
                     Obtenir mon analyse IRIS
                   </button>
                 )}
               </div>
             )}
 
-            {/* TONGLET: COACH (CHAT) */}
+            {/* ONGLET: COACH (CHAT) */}
             {activeTab === "coach" && (
-              <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
+              <div className="flex flex-col gap-4">
                 {messages.map((msg) => (
-                  <div key={msg.id} style={{
-                    display: "flex", gap: 12,
-                    alignItems: "flex-start",
-                    flexDirection: msg.sender === "user" ? "row-reverse" : "row"
-                  }}>
-                    <div style={{
-                      width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
-                      background: msg.sender === "iris" ? "linear-gradient(135deg, var(--action) 0%, var(--action) 100%)" : "var(--border)",
-                      display: "flex", alignItems: "center", justifyContent: "center"
-                    }}>
-                      {msg.sender === "iris" ? <Brain size={16} color="white" /> : <User size={16} color="var(--text-2)" />}
-                    </div>
-                    
-                    <div style={{
-                      background: msg.sender === "user" ? "var(--surface)" : "rgba(89, 101, 232, 0.08)",
-                      border: msg.sender === "user" ? "1px solid var(--border)" : "none",
-                      padding: "12px 16px", borderRadius: 18,
-                      borderTopLeftRadius: msg.sender === "iris" ? 4 : 18,
-                      borderTopRightRadius: msg.sender === "user" ? 4 : 18,
-                      fontSize: 14, color: "var(--text-1)", lineHeight: 1.6,
-                      maxWidth: "85%",
-                    }}>
+                  <div 
+                    key={msg.id} 
+                    className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}
+                  >
+                    <div
+                      className={`max-w-[85%] p-4 rounded-2xl text-xs sm:text-[13px] leading-relaxed font-inter ${
+                        msg.sender === "user"
+                          ? "bg-[#00A99D] text-white rounded-br-xs shadow-xs"
+                          : "bg-[#F4F1E8]/70 border border-[#E3EBE6] text-[#123D46] rounded-bl-xs"
+                      }`}
+                    >
                       {formatText(msg.text)}
                       
                       {msg.isPremiumCTA && (
-                        <div style={{ marginTop: 12 }}>
-                          <button className="btn btn-primary" style={{ width: "100%", padding: "6px 0", fontSize: 12, borderRadius: 999 }}>
+                        <div className="mt-3">
+                          <button className="w-full py-1.5 text-[11px] rounded-full bg-[#123D46] hover:bg-[#1E3048] text-white font-bold transition-colors">
                             Découvrir Premium
                           </button>
                         </div>
                       )}
                     </div>
+                    <span className="text-[10px] text-[#123D46]/40 mt-1 px-1">
+                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
                   </div>
                 ))}
                 
                 {loading && (
-                   <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                     <div style={{ width: 28, height: 28, background: "linear-gradient(135deg, var(--action) 0%, var(--action) 100%)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Brain size={14} color="white" />
-                     </div>
-                     <div style={{ background: "rgba(89, 101, 232, 0.08)", padding: "12px 16px", borderRadius: 16, borderTopLeftRadius: 4, display: "flex", gap: 4 }}>
-                       <span style={{ width: 6, height: 6, background: "var(--action)", borderRadius: "50%", animation: "pulse 1.5s infinite" }} />
-                       <span style={{ width: 6, height: 6, background: "var(--action)", borderRadius: "50%", animation: "pulse 1.5s infinite 0.2s" }} />
-                       <span style={{ width: 6, height: 6, background: "var(--action)", borderRadius: "50%", animation: "pulse 1.5s infinite 0.4s" }} />
-                     </div>
+                   <div className="flex items-center gap-2 text-xs text-[#00A99D] p-3 bg-[#F4F1E8]/50 rounded-xl w-fit">
+                     <span className="w-1.5 h-1.5 rounded-full bg-[#00A99D] animate-ping" />
+                     <span className="font-inter">IRIS réfléchit...</span>
                    </div>
                 )}
                 
@@ -339,55 +311,29 @@ export function IrisWidget() {
 
           {/* INPUT AREA (Uniquement pour le Coach) */}
           {activeTab === "coach" && (
-            <div style={{
-              padding: 16, borderTop: "1px solid var(--border)",
-              background: "var(--surface)",
-            }}>
-              <div style={{ display: "flex", gap: 8 }}>
+            <div className="p-4 border-t border-[#E3EBE6] bg-white">
+              <div className="flex items-center gap-2">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter") handleSend(); }}
-                  placeholder="Écrivez à IRIS..."
+                  placeholder="Posez une question sur vos dynamiques relationnelles..."
                   disabled={loading}
-                  style={{
-                    flex: 1, background: "var(--bg)", border: "1px solid var(--border)",
-                    borderRadius: 9999, padding: "10px 16px", color: "var(--text-1)", fontSize: 13,
-                    outline: "none",
-                  }}
-                  onFocus={(e) => e.target.style.borderColor = "var(--action)"}
-                  onBlur={(e) => e.target.style.borderColor = "var(--border)"}
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-[#E3EBE6] text-xs focus:outline-none focus:border-[#00A99D] text-[#123D46] bg-white disabled:opacity-50"
                 />
                 <button
                   onClick={handleSend}
                   disabled={!input.trim() || loading}
-                  style={{
-                    width: 40, height: 40, borderRadius: "50%", border: "none",
-                    background: input.trim() && !loading ? "var(--action)" : "var(--border)",
-                    color: input.trim() && !loading ? "#fff" : "var(--text-3)",
-                    display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-                    transition: "all 0.2s"
-                  }}
+                  className="px-4 py-2.5 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 h-auto"
                 >
-                  <Send size={16} style={{ marginLeft: input.trim() && !loading ? 2 : 0 }} />
+                  <Send size={14} /> Envoyer
                 </button>
               </div>
             </div>
           )}
         </div>
       )}
-      
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(100%); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 0.4; transform: scale(0.8); }
-          50% { opacity: 1; transform: scale(1.2); }
-        }
-      `}} />
     </>
   );
 }

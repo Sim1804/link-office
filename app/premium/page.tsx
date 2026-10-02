@@ -69,20 +69,16 @@ export default function PremiumPage() {
     return (
       <>
         <Navbar />
-        <main className="page-main">
-          <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center", paddingTop: 48 }}>
-            <div style={{
-              width: 64, height: 64, borderRadius: 18,
-              background: "rgba(0,169,157,0.1)", border: "1px solid rgba(0,169,157,0.2)",
-              display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px",
-            }}>
-              <Star size={28} color="var(--primary)" />
+        <main className="min-h-screen bg-[#F8F9FA] flex items-center justify-center pt-24 pb-16">
+          <div className="max-w-md mx-auto text-center animate-fade-in">
+            <div className="w-16 h-16 rounded-2xl bg-[#00A99D]/10 border border-[#00A99D]/20 flex items-center justify-center mx-auto mb-6">
+              <Star size={28} className="text-[#00A99D]" />
             </div>
-            <SubscriptionBadge tier="PREMIUM_PLUS" size="lg" style={{ marginBottom: 20 }} />
-            <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 28, fontWeight: 800, color: "var(--text-1)", marginBottom: 12 }}>
+            <SubscriptionBadge tier="PREMIUM_PLUS" size="lg" className="mb-5 inline-block" />
+            <h1 className="font-jakarta font-extrabold text-3xl text-[#123D46] mb-3">
               Vous bénéficiez déjà de Premium+
             </h1>
-            <p style={{ color: "var(--text-2)", fontSize: 15, lineHeight: 1.6 }}>
+            <p className="text-[#123D46]/70 text-sm leading-relaxed">
               Toutes les fonctionnalités sont débloquées. Accédez à votre espace depuis le tableau de bord.
             </p>
           </div>
@@ -95,83 +91,65 @@ export default function PremiumPage() {
   return (
     <>
       <Navbar />
-      <main className="page-main" style={{ position: "relative", overflow: "hidden" }}>
-        {/* Ambient glow */}
-        <div style={{ position: "absolute", top: -100, left: "30%", width: 500, height: 500, borderRadius: "50%", background: "rgba(0,169,157,0.04)", filter: "blur(80px)", pointerEvents: "none" }} />
+      <main className="min-h-screen bg-[#F8F9FA] relative overflow-hidden pt-20 pb-24">
+        {/* Removed ambient glow to match other pages */}
 
-        <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 20px 80px", position: "relative", zIndex: 10 }}>
+        <div className="max-w-[960px] mx-auto px-4 sm:px-6 relative z-10">
 
           {/* Header */}
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <div className="text-center max-w-2xl mx-auto space-y-3 mb-10 animate-fade-in">
             {isAlreadyPremium ? (
               <>
-                <SubscriptionBadge tier="PREMIUM" size="lg" style={{ marginBottom: 20 }} />
-                <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 36, fontWeight: 800, color: "var(--text-1)", letterSpacing: "-0.02em", lineHeight: 1.2, marginBottom: 16 }}>
+                <span className="text-xs uppercase font-bold text-[#00A99D] tracking-wider block">
+                  Link Office Premium
+                </span>
+                <h2 className="font-jakarta font-extrabold text-3xl sm:text-4xl text-[#123D46]">
                   Débloquez le Binôme Relationnel
-                </h1>
-                <p style={{ fontSize: 15, color: "var(--text-2)", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
+                </h2>
+                <p className="text-sm text-[#123D46]/70 font-inter">
                   Vous êtes déjà Premium 🎉 Passez à Premium+ pour accéder au Binôme, aux suggestions IRIS et à la gamification avancée.
                 </p>
               </>
             ) : (
               <>
-                <div style={{
-                  display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 14px",
-                  borderRadius: 999, background: "rgba(0,169,157,0.08)", border: "1px solid rgba(0,169,157,0.25)",
-                  fontSize: 12, fontWeight: 800, color: "var(--primary)", letterSpacing: "0.06em", marginBottom: 20,
-                }}>
-                  <Sparkles size={11} /> LINK OFFICE PREMIUM
-                </div>
-                <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 40, fontWeight: 800, color: "var(--text-1)", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 16 }}>
-                  Prenez le contrôle de votre{" "}
-                  <span style={{ background: "linear-gradient(135deg, var(--primary) 0%, #0ea5e9 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                    capital relationnel
-                  </span>
-                </h1>
-                <p style={{ fontSize: 15, color: "var(--text-2)", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
+                <span className="text-xs uppercase font-bold text-[#00A99D] tracking-wider block flex items-center justify-center gap-1.5">
+                  <Sparkles size={12} /> Link Office Premium
+                </span>
+                <h2 className="font-jakarta font-extrabold text-3xl sm:text-4xl text-[#123D46]">
+                  Prenez le contrôle de votre capital relationnel
+                </h2>
+                <p className="text-sm text-[#123D46]/70 font-inter">
                   Débloquez l'analyse approfondie de votre IQRH, votre ordonnance complète et, avec Premium+, votre Binôme Relationnel.
                 </p>
               </>
             )}
           </div>
 
-          {/* Billing Toggle */}
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 40 }}>
-            <div style={{
-              display: "inline-flex", background: "var(--surface)",
-              border: "1px solid var(--border)", borderRadius: 999, padding: 4,
-            }}>
-              {(["monthly", "annual"] as const).map(b => (
-                <button
-                  key={b}
-                  onClick={() => setBilling(b)}
-                  style={{
-                    padding: "8px 22px", borderRadius: 999, border: "none",
-                    background: billing === b ? (b === "annual" ? "var(--primary)" : "var(--bg)") : "transparent",
-                    color: billing === b ? (b === "annual" ? "white" : "var(--text-1)") : "var(--text-3)",
-                    fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.2s",
-                    display: "flex", alignItems: "center", gap: 8,
-                    boxShadow: billing === b && b === "annual" ? "0 2px 12px rgba(0,169,157,0.2)" : "none",
-                    fontFamily: "inherit",
-                  }}
-                >
-                  {b === "monthly" ? "Mensuel" : "Annuel"}
-                  {b === "annual" && (
-                    <span style={{
-                      background: billing === "annual" ? "white" : "var(--primary)",
-                      color: billing === "annual" ? "var(--primary)" : "white",
-                      padding: "2px 8px", borderRadius: 999, fontSize: 10, fontWeight: 800,
-                    }}>
-                      -20%
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
+          {/* Toggle monthly / annual */}
+          <div className="pt-2 flex items-center justify-center gap-3 mb-12 animate-fade-in" style={{ animationDelay: "100ms" }}>
+            <span className={`text-xs font-semibold ${billing === "monthly" ? 'text-[#123D46]' : 'text-[#123D46]/60'}`}>
+              Mensuel
+            </span>
+            <button
+              onClick={() => setBilling(billing === "annual" ? "monthly" : "annual")}
+              className="w-12 h-6 rounded-full bg-[#00A99D] p-1 flex items-center transition-colors"
+            >
+              <div
+                className={`w-4 h-4 rounded-full bg-white transition-transform ${
+                  billing === "annual" ? 'translate-x-6' : 'translate-x-0'
+                }`}
+              />
+            </button>
+            <span className={`text-xs font-semibold flex items-center gap-1.5 ${billing === "annual" ? 'text-[#00A99D]' : 'text-[#123D46]/60'}`}>
+              Annuel
+              <span className="px-2 py-0.5 rounded-full bg-[#FFC629]/20 text-[#123D46] text-[10px] font-bold">
+                -20%
+              </span>
+            </span>
           </div>
 
           {/* Pricing Cards */}
-          <div style={{ display: "grid", gridTemplateColumns: isAlreadyPremium ? "1fr" : "repeat(auto-fit, minmax(320px, 1fr))", gap: 20, maxWidth: isAlreadyPremium ? 480 : "100%", margin: "0 auto" }}>
+          <div className={`grid grid-cols-1 ${isAlreadyPremium ? 'max-w-[480px] mx-auto' : 'md:grid-cols-2 gap-6 max-w-4xl mx-auto'} animate-fade-in`} style={{ animationDelay: "200ms" }}>
 
             {/* Card Premium — cachée si déjà Premium */}
             {!isAlreadyPremium && (
@@ -189,7 +167,6 @@ export default function PremiumPage() {
                 loading={loading === "PREMIUM"}
                 disabled={loading !== false}
                 error={checkoutError}
-                accentColor="var(--text-2)"
               />
             )}
 
@@ -209,15 +186,14 @@ export default function PremiumPage() {
               disabled={loading !== false}
               error={checkoutError}
               recommended={!isAlreadyPremium}
-              accentColor="var(--primary)"
             />
           </div>
 
           {/* Trust strip */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 32, marginTop: 40, flexWrap: "wrap" }}>
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-12 animate-fade-in" style={{ animationDelay: "300ms" }}>
             {["Paiement sécurisé Stripe", "Sans engagement", "Résiliable à tout moment"].map(t => (
-              <span key={t} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--text-3)", fontWeight: 500 }}>
-                <Check size={12} color="var(--primary)" /> {t}
+              <span key={t} className="flex items-center gap-1.5 text-xs text-[#123D46]/60 font-medium">
+                <Check size={12} className="text-[#00A99D]" /> {t}
               </span>
             ))}
           </div>
@@ -246,73 +222,67 @@ interface PricingCardProps {
   disabled: boolean;
   error?: string | null;
   recommended?: boolean;
-  accentColor: string;
 }
 
 function PricingCard({
   title, subtitle, price, period, savings, features,
-  featureStyle, ctaLabel, ctaVariant, onCta, loading, disabled, error, recommended, accentColor,
+  featureStyle, ctaLabel, ctaVariant, onCta, loading, disabled, error, recommended,
 }: PricingCardProps) {
   return (
-    <div style={{
-      background: "var(--surface)", borderRadius: 18,
-      border: recommended ? `2px solid var(--primary)` : "1px solid var(--border)",
-      boxShadow: recommended ? "0 8px 32px rgba(0,169,157,0.12)" : "none",
-      padding: "32px 28px", position: "relative", overflow: "hidden",
-    }}>
+    <div className={`bg-white rounded-3xl p-6 sm:p-8 flex flex-col relative overflow-hidden transition-all ${
+      recommended 
+        ? "border-2 border-[#00A99D] shadow-lg shadow-[#00A99D]/5" 
+        : "border border-[#E3EBE6] shadow-sm"
+    }`}>
       {/* Top accent bar */}
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: 3,
-        background: recommended
-          ? "linear-gradient(90deg, var(--primary), #0ea5e9)"
-          : "var(--border)",
-      }} />
+      <div className={`absolute top-0 left-0 right-0 h-1.5 ${
+        recommended ? "bg-gradient-to-r from-[#00A99D] to-[#0ea5e9]" : "bg-[#E3EBE6]"
+      }`} />
 
       {recommended && (
-        <div style={{
-          position: "absolute", top: 16, right: 16,
-          background: "rgba(0,169,157,0.1)", color: "var(--primary)",
-          padding: "3px 12px", borderRadius: 999,
-          fontSize: 10, fontWeight: 800, letterSpacing: "0.06em",
-        }}>
-          RECOMMANDÉ
+        <div className="absolute top-4 right-4 bg-[#00A99D]/10 text-[#00A99D] px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase">
+          Recommandé
         </div>
       )}
 
-      <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 22, fontWeight: 800, color: "var(--text-1)", marginBottom: 6 }}>
-        {title}
-      </h2>
-      <p style={{ color: "var(--text-3)", fontSize: 13, marginBottom: 24 }}>{subtitle}</p>
+      <div className="mb-6 mt-2">
+        <h2 className="font-jakarta font-extrabold text-2xl text-[#123D46] mb-1">
+          {title}
+        </h2>
+        <p className="text-xs text-[#123D46]/70 leading-relaxed">
+          {subtitle}
+        </p>
+      </div>
 
       {/* Price */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: "flex", alignItems: "flex-end", gap: 6 }}>
-          <span style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 44, fontWeight: 900, lineHeight: 1, color: "var(--text-1)" }}>
+      <div className="mb-8">
+        <div className="flex items-baseline gap-1.5">
+          <span className="font-jakarta font-black text-4xl text-[#123D46] tracking-tight">
             {price}
           </span>
-          <span style={{ color: "var(--text-3)", fontSize: 14, paddingBottom: 6 }}>{period}</span>
+          <span className="text-xs text-[#123D46]/60 font-medium">
+            {period}
+          </span>
         </div>
         {savings && (
-          <span style={{ fontSize: 12, color: "var(--primary)", fontWeight: 600, marginTop: 4, display: "block" }}>
+          <span className="text-[11px] text-[#00A99D] font-bold block mt-1.5">
             {savings}
           </span>
         )}
       </div>
 
       {/* Features */}
-      <ul style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, padding: 0, listStyle: "none" }}>
+      <ul className="space-y-3.5 mb-8 flex-1">
         {features.map((feat, i) => (
-          <li key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "var(--text-2)" }}>
-            <div style={{
-              width: 20, height: 20, borderRadius: "50%", flexShrink: 0,
-              background: featureStyle === "gradient"
-                ? "linear-gradient(135deg, var(--primary), #0ea5e9)"
-                : "rgba(0,169,157,0.1)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <Check size={11} color={featureStyle === "gradient" ? "white" : "var(--primary)"} />
+          <li key={i} className="flex items-start gap-3 text-[13px] text-[#123D46]/80 leading-snug">
+            <div className={`w-5 h-5 rounded-full shrink-0 flex items-center justify-center mt-0.5 ${
+              featureStyle === "gradient"
+                ? "bg-gradient-to-br from-[#00A99D] to-[#0ea5e9] text-white"
+                : "bg-[#00A99D]/10 text-[#00A99D]"
+            }`}>
+              <Check size={11} strokeWidth={3} />
             </div>
-            {feat}
+            <span>{feat}</span>
           </li>
         ))}
       </ul>
@@ -321,31 +291,23 @@ function PricingCard({
       <button
         onClick={onCta}
         disabled={disabled}
-        className={`btn ${ctaVariant === "primary" ? "btn-primary" : "btn-secondary"}`}
-        style={{
-          width: "100%", padding: "14px",
-          display: "flex", justifyContent: "center", alignItems: "center", gap: 8,
-          fontSize: 15, fontWeight: 700,
-          opacity: disabled && !loading ? 0.6 : 1,
-          cursor: disabled ? "not-allowed" : "pointer",
-        }}
+        className={`w-full py-2.5 rounded-full font-jakarta font-bold text-xs transition-all text-center ${
+          ctaVariant === "primary" 
+            ? "bg-[#00A99D] hover:bg-[#199E9A] text-white shadow-xs" 
+            : "border border-[#00A99D] text-[#00A99D] hover:bg-[#00A99D]/10"
+        } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
       >
-        {loading ? "Redirection en cours..." : ctaLabel}
-        {!loading && <ArrowRight size={16} />}
+        {loading ? "Redirection..." : ctaLabel}
       </button>
 
       {error && (
-        <div style={{
-          display: "flex", alignItems: "flex-start", gap: 8,
-          padding: "10px 12px", borderRadius: 10, marginTop: 10,
-          background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.2)",
-        }}>
-          <AlertCircle size={13} style={{ color: "#f87171", flexShrink: 0, marginTop: 1 }} />
-          <p style={{ color: "#f87171", fontSize: 12, margin: 0 }}>{error}</p>
+        <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-100 rounded-xl mt-3">
+          <AlertCircle size={14} className="text-red-500 shrink-0 mt-0.5" />
+          <p className="text-[11px] text-red-600 font-medium leading-snug">{error}</p>
         </div>
       )}
 
-      <p style={{ textAlign: "center", fontSize: 11, color: "var(--text-3)", marginTop: 14 }}>
+      <p className="text-center text-[10px] text-[#123D46]/40 mt-4 font-medium uppercase tracking-wide">
         Paiement sécurisé par Stripe
       </p>
     </div>

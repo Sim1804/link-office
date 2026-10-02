@@ -34,55 +34,43 @@ export function Select({ options, value, onChange, placeholder, style, className
   }, []);
 
   return (
-    <div ref={containerRef} style={{ position: "relative", zIndex: isOpen ? 100 : 1, ...style }}>
+    <div ref={containerRef} className={`relative ${isOpen ? 'z-50' : 'z-10'}`} style={style}>
       <div 
-        className={className} 
-        style={{ 
-          display: "flex", alignItems: "center", justifyContent: "space-between", 
-          cursor: disabled ? "not-allowed" : "pointer", userSelect: "none",
-          background: disabled ? "var(--surface-2)" : "var(--surface)", 
-          borderColor: isOpen ? "var(--primary)" : "var(--border-strong)",
-          boxShadow: isOpen ? "0 0 0 4px var(--primary-glow)" : "0 1px 2px rgba(18,61,70,0.02)",
-          padding: "10px 16px", borderRadius: 12, 
-          color: selectedOption ? (disabled ? "var(--text-3)" : "var(--text-1)") : "var(--text-3)",
-          transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-          opacity: disabled ? 0.7 : 1
-        }}
+        className={`flex items-center justify-between px-4 py-2.5 rounded-xl border transition-all duration-200 select-none ${
+          disabled 
+            ? "bg-[#FAF9F5] border-[#E3EBE6] cursor-not-allowed opacity-70" 
+            : "bg-white border-[#E3EBE6] cursor-pointer hover:border-[#00A99D]/50"
+        } ${isOpen && !disabled ? "border-[#00A99D] shadow-[0_0_0_4px_rgba(0,169,157,0.1)]" : "shadow-sm"} ${className}`}
         onClick={() => { if (!disabled) setIsOpen(!isOpen); }}
-        onMouseOver={(e) => { if (!isOpen && !disabled) e.currentTarget.style.borderColor = "rgba(18,61,70,0.3)"; }}
-        onMouseOut={(e) => { if (!isOpen && !disabled) e.currentTarget.style.borderColor = "var(--border-strong)"; }}
       >
-        <span style={{ fontSize: 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <span className={`text-sm truncate ${selectedOption ? (disabled ? "text-[#123D46]/50" : "text-[#123D46]") : "text-[#123D46]/50"}`}>
           {selectedOption ? selectedOption.label : placeholder || "Sélectionner..."}
         </span>
-        <ChevronDown size={16} style={{ color: "var(--text-3)", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", flexShrink: 0, marginLeft: 8 }} />
+        <ChevronDown 
+          size={16} 
+          className={`shrink-0 ml-2 transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"} ${disabled ? "text-[#123D46]/40" : "text-[#123D46]/60"}`} 
+        />
       </div>
 
       {isOpen && (
-        <div style={{
-          position: "absolute", top: "calc(100% + 8px)", left: 0, right: 0, zIndex: 100,
-          background: "var(--surface)", border: "1px solid var(--border-strong)", borderRadius: 12,
-          boxShadow: "var(--shadow-card-hover)", padding: 6, maxHeight: 250, overflowY: "auto"
-        }}>
-          {options.map((option) => (
-            <div
-              key={option.value}
-              onClick={() => { onChange(option.value); setIsOpen(false); }}
-              style={{
-                padding: "10px 12px", borderRadius: 8, cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                background: value === option.value ? "rgba(18,61,70,0.04)" : "transparent",
-                color: value === option.value ? "var(--primary)" : "var(--text-1)",
-                fontWeight: value === option.value ? 600 : 500,
-                fontSize: 13, transition: "background 0.2s"
-              }}
-              onMouseOver={(e) => { if (value !== option.value) e.currentTarget.style.background = "rgba(18,61,70,0.02)"; }}
-              onMouseOut={(e) => { if (value !== option.value) e.currentTarget.style.background = "transparent"; }}
-            >
-              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{option.label}</span>
-              {value === option.value && <Check size={14} style={{ flexShrink: 0, marginLeft: 8 }} />}
-            </div>
-          ))}
+        <div className="absolute top-[calc(100%+8px)] left-0 right-0 z-50 bg-white border border-[#E3EBE6] rounded-xl shadow-lg p-1.5 max-h-[250px] overflow-y-auto">
+          {options.map((option) => {
+            const isSelected = value === option.value;
+            return (
+              <div
+                key={option.value}
+                onClick={() => { onChange(option.value); setIsOpen(false); }}
+                className={`flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer text-[13px] transition-colors ${
+                  isSelected 
+                    ? "bg-[#00A99D]/10 text-[#00A99D] font-bold" 
+                    : "text-[#123D46] font-medium hover:bg-[#FAF9F5]"
+                }`}
+              >
+                <span className="truncate">{option.label}</span>
+                {isSelected && <Check size={14} className="shrink-0 ml-2" />}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

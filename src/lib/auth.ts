@@ -31,7 +31,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           throw new Error(`RATE_LIMITED:${retry}`);
         }
 
-        let user: Awaited<ReturnType<typeof prisma.user.findUnique>> | null = null;
+        let user: any = null;
 
         try {
           user = await prisma.user.findUnique({

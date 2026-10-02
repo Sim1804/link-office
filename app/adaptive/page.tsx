@@ -133,20 +133,20 @@ export default function AdaptivePage() {
 
   if (submitted) {
     return (
-      <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ textAlign: "center" }}>
-          <CheckCircle style={{ width: 64, height: 64, color: "#34d399", margin: "0 auto 16px" }} />
-          <h2 style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 24, color: "var(--text-1)", marginBottom: 8 }}>
+      <div className="min-h-screen bg-[#FAF9F5] flex items-center justify-center">
+        <div className="text-center">
+          <CheckCircle className="w-16 h-16 text-[#34d399] mx-auto mb-4" />
+          <h2 className="font-jakarta font-bold text-2xl text-[#123D46] mb-2">
             Modules complétés !
           </h2>
-          <p style={{ color: "var(--text-3)", fontSize: 14 }}>Calcul de vos scores en cours…</p>
+          <p className="text-[#123D46]/70 text-sm">Calcul de vos scores en cours…</p>
         </div>
       </div>
     );
   }
 
   if (!modules || modules.length === 0) {
-    return <div style={{ minHeight: "100vh", background: "var(--bg)" }} />;
+    return <div className="min-h-screen bg-[#FAF9F5]" />;
   }
 
   const currentModule = modules[currentModuleIndex];
@@ -193,120 +193,89 @@ export default function AdaptivePage() {
   return (
     <>
       <Navbar />
-      <main style={{
-        minHeight: "100vh", background: "var(--bg)",
-        paddingTop: 88, paddingBottom: 32, paddingLeft: 24, paddingRight: 24,
-        position: "relative", display: "flex", flexDirection: "column",
-      }}>
+      <main className="min-h-screen bg-[#FAF9F5] pt-28 pb-12 px-6 relative flex flex-col">
         {/* Blob */}
-        <div style={{
-          position: "fixed", top: "-15%", right: "-8%", width: 600, height: 600,
-          background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)",
-          pointerEvents: "none", zIndex: 0,
-        }} />
+        <div className="fixed -top-[15%] -right-[8%] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(0,169,157,0.05)_0%,transparent_70%)] pointer-events-none z-0" />
 
-        <div style={{
-          maxWidth: 680, margin: "0 auto", width: "100%",
-          position: "relative", zIndex: 1,
-          display: "flex", flexDirection: "column", flex: 1,
-        }}>
+        <div className="max-w-[680px] w-full mx-auto relative z-10 flex flex-col flex-1">
 
           {/* ── Barre de progression ── */}
-          <div style={{ marginBottom: 28 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-              <span style={{ fontSize: 13, color: "var(--text-3)" }}>
+          <div className="mb-7">
+            <div className="flex justify-between items-center mb-2.5">
+              <span className="text-xs font-mono text-[#123D46]/50">
                 Module {currentModuleIndex + 1} / {modules.length}
               </span>
-              <span style={{
-                fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase",
-                color: dimColor,
-              }}>
+              <span className="text-xs font-jakarta font-semibold tracking-wider uppercase text-[#00A99D]">
                 {currentModule.title}
               </span>
             </div>
 
             {/* Track */}
-            <div style={{ height: 6, background: "var(--border-strong)", borderRadius: 999, overflow: "hidden" }}>
-              <div style={{
-                height: "100%", borderRadius: 999,
-                background: "var(--primary)",
-                width: `${progress}%`,
-                transition: "width 0.5s ease",
-              }} />
+            <div className="h-1.5 bg-[#E3EBE6] rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-[#00A99D] rounded-full transition-all duration-500 ease-out" 
+                style={{ width: `${progress}%` }} 
+              />
             </div>
 
             {/* Module dots */}
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, paddingLeft: 2, paddingRight: 2 }}>
+            <div className="flex justify-between mt-2 px-0.5">
               {modules.map((m, idx) => (
-                <div key={m.id || idx} title={m.title} style={{
-                  width: 8, height: 8, borderRadius: "50%",
-                  background: currentModuleIndex === idx ? dimColor : currentModuleIndex > idx ? `${dimColor}66` : "var(--border-strong)",
-                  transition: "all 0.3s",
-                  boxShadow: currentModuleIndex === idx ? `0 0 8px ${dimColor}` : "none",
-                }} />
+                <div key={m.id || idx} title={m.title} className={`w-2 h-2 rounded-full transition-all duration-300 ${currentModuleIndex === idx ? 'bg-[#00A99D] shadow-[0_0_8px_rgba(0,169,157,0.6)] scale-125' : currentModuleIndex > idx ? 'bg-[#00A99D]/40' : 'bg-[#E3EBE6]'}`} />
               ))}
             </div>
           </div>
 
           {/* ── Carte Question ── */}
-          <div className="card" style={{
-            padding: 32, flex: 1, display: "flex", flexDirection: "column",
-          }}>
+          <div className="bg-white rounded-3xl border border-[#E3EBE6] shadow-xs overflow-hidden p-6 sm:p-10 flex flex-col flex-1 animate-scale-in">
             {/* Sous-titre dimension */}
-            <p style={{ fontSize: 11, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
-              {currentModule.title} — {currentQuestionIndex + 1}/{currentModule.questions.length}
-            </p>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-jakarta font-semibold text-[#00A99D] uppercase tracking-wider">
+                {currentModule.title}
+              </span>
+              <span className="text-xs text-[#123D46]/50 font-mono">
+                {currentQuestionIndex + 1}/{currentModule.questions.length}
+              </span>
+            </div>
+
+            {/* Question */}
+            <h4 className="font-jakarta font-extrabold text-xl sm:text-2xl text-[#123D46] leading-snug mb-5">
+              {question?.text}
+            </h4>
 
             {/* Objectif du module */}
             {currentModule.objective && (
-              <p style={{ fontSize: 13, color: "var(--text-2)", marginBottom: 20, lineHeight: 1.5 }}>
-                <strong style={{ color: dimColor }}>Objectif : </strong>
-                {currentModule.objective}
-              </p>
+              <div className="p-3.5 mb-6 rounded-xl bg-[#FAF9F5] border-l-[3px] border-[#00A99D] text-xs text-[#123D46]/80 italic">
+                « {currentModule.objective} »
+              </div>
             )}
 
-            {/* Question */}
-            <h2 style={{
-              fontFamily: "var(--font-family-display)",
-              fontWeight: 600, fontSize: 20, color: "var(--text-1)",
-              lineHeight: 1.55, marginBottom: 28, flex: 1,
-            }}>
-              {question?.text}
-            </h2>
-
             {/* Choix */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
+            <div className="space-y-3 mb-8 flex-1">
               {CHOICES.map((choice) => {
                 const selected = answers[question?.id] === choice.value;
                 return (
                   <button
                     key={choice.value}
                     onClick={() => handleAnswer(choice.value)}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 14,
-                      padding: "14px 18px", borderRadius: 16, textAlign: "left",
-                      cursor: "pointer", fontFamily: "inherit",
-                      transition: "all 0.18s",
-                      background: selected ? "rgba(6,182,212,0.18)" : "var(--surface)",
-                      border: selected ? "1.5px solid var(--cyan)" : "1.5px solid var(--border-strong)",
-                      boxShadow: selected ? "0 0 16px rgba(6,182,212,0.2)" : "none",
-                    }}
+                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between group ${
+                      selected
+                        ? 'bg-[#00A99D]/8 border-[#00A99D] text-[#123D46] shadow-2xs'
+                        : 'bg-white border-[#E3EBE6] text-[#123D46]/85 hover:bg-[#FAF9F5] hover:border-[#00A99D]/40'
+                    }`}
                   >
-                    {/* Radio indicator */}
-                    <div style={{
-                      width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
-                      border: selected ? "2px solid #06b6d4" : "2px solid var(--border-strong)",
-                      background: selected ? "#06b6d4" : "transparent",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.18s",
-                    }}>
-                      {selected && <div style={{ width: 8, height: 8, background: "white", borderRadius: "50%" }} />}
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
+                          selected ? 'border-[#00A99D] bg-[#00A99D]' : 'border-[#123D46]/30 group-hover:border-[#00A99D]'
+                        }`}
+                      >
+                        {selected && <div className="w-2 h-2 rounded-full bg-white" />}
+                      </div>
+                      <span className="text-sm font-inter font-medium">{choice.label}</span>
                     </div>
-                    <span style={{ fontSize: 14, fontWeight: 500, color: selected ? "var(--text-1)" : "var(--text-2)", flex: 1 }}>
-                      {choice.label}
-                    </span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: selected ? "#22d3ee" : "var(--text-2)" }}>
-                      {choice.value}
+                    <span className="text-xs text-[#123D46]/50 font-mono ml-2 shrink-0">
+                      {choice.value} pts
                     </span>
                   </button>
                 );
@@ -314,49 +283,45 @@ export default function AdaptivePage() {
             </div>
 
             {/* Navigation */}
-            <div style={{ display: "flex", gap: 12 }}>
+            <div className="flex items-center justify-between pt-6 border-t border-[#E3EBE6] gap-3">
               <Button
-                variant="secondary"
-                size="lg"
+                variant="ghost"
+                size="md"
                 onClick={handlePrev}
                 disabled={isFirst}
+                className="flex items-center gap-1.5"
               >
-                <ChevronLeft style={{ width: 16, height: 16, marginRight: 8 }} />
-                Précédent
+                <ChevronLeft className="w-4 h-4" /> Précédent
               </Button>
 
               <Button
                 variant="primary"
-                size="lg"
+                size="md"
                 onClick={handleNext}
                 disabled={!isAnswered || submitting}
                 loading={submitting}
-                style={{ flex: 1 }}
+                className="flex items-center gap-2"
               >
                 {isLast ? (
                   "Soumettre"
                 ) : (
-                  <>Suivant <ChevronRight style={{ width: 16, height: 16, marginLeft: 8 }} /></>
+                  <>Suivant <ChevronRight className="w-4 h-4" /></>
                 )}
               </Button>
             </div>
           </div>
 
           {submitError && (
-            <div style={{
-              display: "flex", alignItems: "flex-start", gap: 10,
-              padding: "12px 16px", borderRadius: 12, marginTop: 16,
-              background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)",
-            }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0, color: "#f87171", marginTop: 1 }}>
-                <circle cx="12" cy="12" r="10" stroke="#f87171" strokeWidth="2"/>
-                <path d="M12 8v4m0 4h.01" stroke="#f87171" strokeWidth="2" strokeLinecap="round"/>
+            <div className="flex items-start gap-2.5 p-3 rounded-xl mt-4 bg-red-50 border border-red-200">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-red-400 mt-0.5">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M12 8v4m0 4h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
               <div>
-                <p style={{ color: "#f87171", fontSize: 13, margin: 0 }}>{submitError}</p>
+                <p className="text-red-400 text-[13px] m-0">{submitError}</p>
                 <button
                   onClick={() => submitAll(answers, false)}
-                  style={{ color: "#06b6d4", fontSize: 12, background: "none", border: "none", cursor: "pointer", padding: 0, marginTop: 6, fontFamily: "inherit", textDecoration: "underline" }}
+                  className="text-[#00A99D] text-[12px] bg-transparent border-none cursor-pointer p-0 mt-1.5 font-inherit underline"
                 >
                   Réessayer
                 </button>

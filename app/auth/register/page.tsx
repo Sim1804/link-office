@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { Brain, Mail, Lock, User, ArrowRight, AlertCircle } from "lucide-react";
+import { Logo } from "@/src/components/brand/Logo";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -29,11 +29,23 @@ export default function RegisterPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+      
+      const data = await res.json();
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.detail || "Erreur lors de l'inscription");
+        throw new Error(data.detail || data.error || "Erreur lors de l'inscription");
       }
-      await signIn("credentials", { email: form.email, password: form.password, redirect: false });
+      
+      // Auto-login after successful registration
+      const loginRes = await signIn("credentials", { 
+        email: form.email, 
+        password: form.password, 
+        redirect: false 
+      });
+      
+      if (loginRes?.error) {
+        throw new Error("Compte créé mais erreur de connexion automatique.");
+      }
+      
       router.push("/consentement");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur lors de l'inscription");
@@ -43,187 +55,130 @@ export default function RegisterPage() {
   };
 
   return (
-    <div style={{
-      minHeight: "100vh", background: "var(--bg)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      padding: "40px 20px", position: "relative", overflow: "hidden",
-    }}>
-      {/* Glow blobs */}
-      <div style={{ position: "absolute", top: "-10%", right: "-5%", width: 500, height: 500, background: "radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "-10%", left: "-5%", width: 400, height: 400, background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
-
-      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 460 }}>
-
-        {/* Logo + titre */}
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: 28 }}>
-            <div style={{ width: 44, height: 44, background: "var(--primary)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 24px rgba(124,58,237,0.4)" }}>
-              <Brain size={22} color="white" />
-            </div>
-            <span style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 22, color: "var(--text-1)" }}>
-              Link<span className="gradient-text">Office</span>
-            </span>
-          </Link>
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "var(--text-1)", marginBottom: 8 }}>
-            Créez votre compte
-          </h1>
-          <p style={{ color: "var(--text-2)", fontSize: 14 }}>
-            Commencez votre évaluation relationnelle gratuitement
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col items-center justify-center p-4">
+      {/* Container matching AuthModal frontend design */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-xl border border-[#E3EBE6] relative animate-fade-in">
+        <div className="text-center mb-6">
+          <div className="flex justify-center mb-4">
+            <Link href="/">
+              <Logo size="sm" variant="light" />
+            </Link>
+          </div>
+          <h3 className="font-jakarta font-extrabold text-xl text-[#123D46]">
+            Créer votre compte
+          </h3>
+          <p className="text-xs text-[#123D46]/70 mt-1.5 font-inter">
+            Rejoignez LinkOffice et évaluez la santé relationnelle de votre équipe.
           </p>
         </div>
 
-        {/* Formulaire */}
-        <div className="card" style={{ padding: 40, borderRadius: 24 }}>
+        {error && (
+          <div className="p-3 mb-4 bg-red-50 text-red-600 rounded-xl text-center text-xs font-semibold border border-red-100">
+            {error}
+          </div>
+        )}
 
-          {error && (
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              padding: "12px 16px", marginBottom: 24,
-              background: "rgba(244,63,94,0.1)", border: "1px solid rgba(244,63,94,0.25)",
-              borderRadius: 10, color: "var(--rose)", fontSize: 14,
-            }}>
-              <AlertCircle size={16} style={{ flexShrink: 0 }} />
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-            {/* Prénom + Nom côte à côte */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              {/* Prénom */}
+        <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3.5">
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="prenom" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
+                <label className="text-xs font-semibold text-[#123D46] block mb-1">
                   Prénom
                 </label>
-                <div style={{ position: "relative" }}>
-                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
-                    <User size={15} />
-                  </span>
-                  <input
-                    id="prenom" type="text" required
-                    placeholder="Marie"
-                    value={form.prenom}
-                    onChange={set("prenom")}
-                    className="input-field has-icon"
-                  />
-                </div>
+                <input
+                  type="text"
+                  required
+                  value={form.prenom}
+                  onChange={set("prenom")}
+                  placeholder="Camille"
+                  className="w-full px-4 py-2.5 rounded-xl border border-[#E3EBE6] text-xs focus:outline-none focus:border-[#00A99D] focus:ring-2 focus:ring-[#00A99D]/20 transition-all text-[#123D46]"
+                />
               </div>
-
-              {/* Nom */}
               <div>
-                <label htmlFor="nom" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
+                <label className="text-xs font-semibold text-[#123D46] block mb-1">
                   Nom
                 </label>
                 <input
-                  id="nom" type="text" required
-                  placeholder="Dupont"
+                  type="text"
+                  required
                   value={form.nom}
                   onChange={set("nom")}
-                  className="input-field"
+                  placeholder="Demo"
+                  className="w-full px-4 py-2.5 rounded-xl border border-[#E3EBE6] text-xs focus:outline-none focus:border-[#00A99D] focus:ring-2 focus:ring-[#00A99D]/20 transition-all text-[#123D46]"
                 />
               </div>
             </div>
 
-            {/* Email */}
             <div>
-              <label htmlFor="email" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
-                Email
+              <label className="text-xs font-semibold text-[#123D46] block mb-1">
+                Adresse email professionnelle
               </label>
-              <div style={{ position: "relative" }}>
-                <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
-                  <Mail size={15} />
-                </span>
-                <input
-                  id="email" type="email" required
-                  placeholder="vous@exemple.com"
-                  value={form.email}
-                  onChange={set("email")}
-                  className="input-field has-icon"
-                />
-              </div>
+              <input
+                type="email"
+                required
+                value={form.email}
+                onChange={set("email")}
+                placeholder="camille.demo@linkoffice.fr"
+                className="w-full px-4 py-2.5 rounded-xl border border-[#E3EBE6] text-xs focus:outline-none focus:border-[#00A99D] focus:ring-2 focus:ring-[#00A99D]/20 transition-all text-[#123D46]"
+              />
             </div>
 
-            {/* Mot de passe et Confirmation */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-              {/* Mot de passe */}
-              <div>
-                <label htmlFor="password" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
-                  Mot de passe
-                </label>
-                <div style={{ position: "relative" }}>
-                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
-                    <Lock size={15} />
-                  </span>
-                  <input
-                    id="password" type="password" required
-                    placeholder="8 caractères minimum"
-                    value={form.password}
-                    onChange={set("password")}
-                    className="input-field has-icon"
-                    minLength={8}
-                  />
-                </div>
-              </div>
-
-              {/* Confirmation de mot de passe */}
-              <div>
-                <label htmlFor="confirmPassword" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
-                  Confirmer le mot de passe
-                </label>
-                <div style={{ position: "relative" }}>
-                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
-                    <Lock size={15} />
-                  </span>
-                  <input
-                    id="confirmPassword" type="password" required
-                    placeholder="Répétez le mot de passe"
-                    value={form.confirmPassword}
-                    onChange={set("confirmPassword")}
-                    className="input-field has-icon"
-                    minLength={8}
-                  />
-                </div>
-              </div>
+            <div>
+              <label className="text-xs font-semibold text-[#123D46] block mb-1">
+                Mot de passe
+              </label>
+              <input
+                type="password"
+                required
+                minLength={8}
+                value={form.password}
+                onChange={set("password")}
+                placeholder="••••••••••••"
+                className="w-full px-4 py-2.5 rounded-xl border border-[#E3EBE6] text-xs focus:outline-none focus:border-[#00A99D] focus:ring-2 focus:ring-[#00A99D]/20 transition-all text-[#123D46]"
+              />
             </div>
 
-            {/* Submit */}
-            <button
-              type="submit"
-              className="btn btn-primary btn-lg"
-              disabled={loading}
-              style={{ width: "100%", marginTop: 8, position: "relative" }}
-            >
-              {loading ? (
-                <span style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}>
-                  <span style={{ width: 16, height: 16, border: "2px solid var(--text-3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
-                  Création du compte…
-                </span>
-              ) : (
-                <>Créer mon compte <ArrowRight size={16} /></>
-              )}
-            </button>
+            <div>
+              <label className="text-xs font-semibold text-[#123D46] block mb-1">
+                Confirmer le mot de passe
+              </label>
+              <input
+                type="password"
+                required
+                minLength={8}
+                value={form.confirmPassword}
+                onChange={set("confirmPassword")}
+                placeholder="••••••••••••"
+                className="w-full px-4 py-2.5 rounded-xl border border-[#E3EBE6] text-xs focus:outline-none focus:border-[#00A99D] focus:ring-2 focus:ring-[#00A99D]/20 transition-all text-[#123D46]"
+              />
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 rounded-full bg-[#123D46] hover:bg-[#1a4f5a] text-white font-jakarta font-bold text-xs transition-all shadow-md flex items-center justify-center disabled:opacity-70"
+              >
+                {loading ? (
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  'Créer mon compte'
+                )}
+              </button>
+            </div>
           </form>
 
-          {/* Légal */}
-          <p style={{ textAlign: "center", fontSize: 12, color: "var(--text-3)", marginTop: 20 }}>
-            En vous inscrivant, vous acceptez nos{" "}
-            <a href="#" style={{ color: "var(--primary-light)", textDecoration: "none" }}>conditions d'utilisation</a>
+          <p className="text-center text-[10px] text-[#123D46]/50 pt-2">
+            En vous inscrivant, vous acceptez nos conditions d'utilisation.
           </p>
 
-          {/* Lien login */}
-          <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid var(--border)", textAlign: "center" }}>
-            <p style={{ fontSize: 14, color: "var(--text-2)" }}>
-              Déjà un compte ?{" "}
-              <Link href="/auth/login" style={{ color: "var(--primary-light)", fontWeight: 500, textDecoration: "none" }}>
-                Se connecter
-              </Link>
-            </p>
+          <div className="text-center pt-2 border-t border-[#E3EBE6]">
+            <Link href="/auth/login" className="text-xs text-[#00A99D] hover:underline font-semibold font-inter">
+              Déjà un compte ? Se connecter
+            </Link>
           </div>
         </div>
       </div>
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

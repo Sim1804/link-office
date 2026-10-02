@@ -1,113 +1,176 @@
-/**
- * @file RadarChart.tsx
- * @module src/components/dashboard
- * @description Graphique Radar des 5 dimensions IQRH — design premium avec gradient fill et tooltip custom.
- */
+import React, { useState } from 'react';
 
-"use client";
-
-import {
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  Radar,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
-
-interface RadarData {
-  relations_sociales: number;
-  relations_affectives: number;
-  vie_sentimentale: number;
-  vie_professionnelle_engagement: number;
-  relation_a_soi_sens: number;
+interface RadarDimension {
+  key: string;
+  label: string;
+  score: number;
 }
 
-interface IQRHRadarChartProps {
-  data: RadarData;
-  priorityDimension?: string;
+interface RadarChartProps {
+  dimensions: RadarDimension[];
+  size?: number;
 }
 
-const DIMENSION_LABELS: Record<string, string> = {
-  relations_sociales: "Social",
-  relations_affectives: "Affectif",
-  vie_sentimentale: "Sentimental",
-  vie_professionnelle_engagement: "Professionnel",
-  relation_a_soi_sens: "Soi & Sens",
-};
+export const RadarChart: React.FC<RadarChartProps> = ({ dimensions, size = 320 }) => {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
-  if (active && payload && payload.length) {
+  if (!dimensions || !Array.isArray(dimensions) || dimensions.length === 0) {
     return (
-      <div style={{
-        background: "var(--surface)",
-        border: "1px solid rgba(124,58,237,0.3)",
-        borderRadius: 12, padding: "10px 14px",
-        backdropFilter: "blur(12px)",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-      }}>
-        <p style={{ color: "var(--primary)", fontSize: 12, fontWeight: 600, marginBottom: 2 }}>{payload[0].subject}</p>
-        <p style={{ color: "var(--text-1)", fontSize: 16, fontWeight: 800 }}>{payload[0].value}<span style={{ color: "var(--text-3)", fontSize: 12, fontWeight: 400 }}>/100</span></p>
+      <div className="flex items-center justify-center text-xs text-[#123D46]/50 italic" style={{ width: size, height: size }}>
+        Données insuffisantes
       </div>
     );
   }
-  return null;
-};
 
-const CustomAngleAxis = ({ x, y, payload, cx, cy }: any) => {
-  const score = payload?.value;
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill="var(--text-2)"
-        fontSize={11}
-        fontWeight={500}
-        fontFamily="'Plus Jakarta Sans', Inter, sans-serif"
-      >
-        {payload.value}
-      </text>
-    </g>
-  );
-};
+  const center = size / 2;
+  const radius = size * 0.38;
+  const total = dimensions.length;
 
-export function IQRHRadarChart({ data }: IQRHRadarChartProps) {
-  const chartData = Object.entries(data).map(([key, value]) => ({
-    subject: DIMENSION_LABELS[key] || key,
-    A: value,
-    fullMark: 100,
-  }));
+  // Compute vertices for 5 levels (20%, 40%, 60%, 80%, 100%)
+  const levels = [0.2, 0.4, 0.6, 0.8, 1.0];
+
+  const getCoordinates = (index: number, valPercent: number) => {
+    // Start at -90deg (top)
+    const angle = (Math.PI * 2 * index) / total - Math.PI / 2;
+    const x = center + radius * valPercent * Math.cos(angle);
+    const y = center + radius * valPercent * Math.sin(angle);
+    return { x, y };
+  };
+
+  // Polygon points for the actual user score
+  const scorePoints = dimensions.map((d, i) => {
+    const coords = getCoordinates(i, d.score / 100);
+    return `${coords.x},${coords.y}`;
+  }).join(' ');
 
   return (
-    <div style={{ width: "100%", height: 280 }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <RadarChart data={chartData} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
-          <defs>
-            <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.5} />
-              <stop offset="100%" stopColor="#06b6d4" stopOpacity={0.2} />
-            </linearGradient>
-          </defs>
-          <PolarGrid
-            stroke="rgba(18,61,70,0.05)"
-            strokeDasharray="2 4"
-          />
-          <PolarAngleAxis
-            dataKey="subject"
-            tick={{ fill: "var(--text-2)", fontSize: 11, fontWeight: 500, fontFamily: "'Plus Jakarta Sans', Inter, sans-serif" }}
-          />
-          <Radar
-            name="Score"
-            dataKey="A"
-            stroke="var(--primary)"
-            fill="url(#radarGrad)"
-            strokeWidth={2}
-            dot={{ fill: "var(--primary)", strokeWidth: 0, r: 4 }}
-          />
-          <Tooltip content={<CustomTooltip />} />
-        </RadarChart>
-      </ResponsiveContainer>
+    <div className="relative flex flex-col items-center justify-center select-none">
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="overflow-visible">
+        {/* Background concentric polygons */}
+        {levels.map((level, lvlIdx) => {
+          const points = dimensions.map((_, i) => {
+            const coords = getCoordinates(i, level);
+            return `${coords.x},${coords.y}`;
+          }).join(' ');
+
+          return (
+            <polygon
+              key={lvlIdx}
+              points={points}
+              fill="none"
+              stroke="#E3EBE6"
+              strokeWidth={lvlIdx === levels.length - 1 ? '1.5' : '1'}
+              strokeDasharray={lvlIdx === levels.length - 1 ? undefined : '3 3'}
+            />
+          );
+        })}
+
+        {/* Axis lines from center to each vertex */}
+        {dimensions.map((_, i) => {
+          const end = getCoordinates(i, 1.0);
+          return (
+            <line
+              key={i}
+              x1={center}
+              y1={center}
+              x2={end.x}
+              y2={end.y}
+              stroke="#E3EBE6"
+              strokeWidth="1.2"
+            />
+          );
+        })}
+
+        {/* Data polygon filled with subtle teal brand gradient */}
+        <polygon
+          points={scorePoints}
+          fill="url(#radarGradient)"
+          stroke="#00A99D"
+          strokeWidth="2.5"
+          className="transition-all duration-500 ease-out"
+        />
+
+        {/* Gradient definition */}
+        <defs>
+          <linearGradient id="radarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#00A99D" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#4DBDB2" stopOpacity="0.15" />
+          </linearGradient>
+        </defs>
+
+        {/* Data vertex circles */}
+        {dimensions.map((d, i) => {
+          const coords = getCoordinates(i, d.score / 100);
+          const isHovered = hoveredIdx === i;
+
+          return (
+            <g
+              key={i}
+              className="cursor-pointer"
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+            >
+              <circle
+                cx={coords.x}
+                cy={coords.y}
+                r={isHovered ? 6.5 : 4.5}
+                fill="#00A99D"
+                stroke="#FFFFFF"
+                strokeWidth="2"
+                className="transition-all duration-200"
+              />
+              {isHovered && (
+                <circle
+                  cx={coords.x}
+                  cy={coords.y}
+                  r="10"
+                  fill="#00A99D"
+                  opacity="0.25"
+                  className="animate-ping"
+                />
+              )}
+            </g>
+          );
+        })}
+
+        {/* Axis Labels outside */}
+        {dimensions.map((d, i) => {
+          const labelCoords = getCoordinates(i, 1.22);
+          const isHovered = hoveredIdx === i;
+
+          // Adjust text alignment based on angle
+          let textAnchor: 'middle' | 'start' | 'end' = 'middle';
+          if (labelCoords.x < center - 20) textAnchor = 'end';
+          else if (labelCoords.x > center + 20) textAnchor = 'start';
+
+          return (
+            <text
+              key={i}
+              x={labelCoords.x}
+              y={labelCoords.y}
+              textAnchor={textAnchor}
+              dominantBaseline="middle"
+              className={`text-[11px] font-jakarta font-semibold transition-colors duration-150 cursor-pointer ${
+                isHovered ? 'fill-[#00A99D] font-bold' : 'fill-[#123D46]/75'
+              }`}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+            >
+              {d.label}
+            </text>
+          );
+        })}
+      </svg>
+
+      {/* Floating tooltip when a vertex is hovered */}
+      {hoveredIdx !== null && (
+        <div className="absolute bottom-2 bg-[#123D46] text-white px-3 py-1.5 rounded-lg text-xs font-jakarta font-semibold shadow-md flex items-center gap-1.5 animate-fade-in pointer-events-none">
+          <span>{dimensions[hoveredIdx].label} :</span>
+          <span className="text-[#FFC629] font-mono font-bold tabular-nums">
+            {dimensions[hoveredIdx].score} / 100
+          </span>
+        </div>
+      )}
     </div>
   );
-}
+};

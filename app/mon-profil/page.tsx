@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/layout/Navbar";
 import { calculateLevel } from "@/lib/gamification";
-import { Trophy, Star, Target, CheckCircle, Zap, Shield } from "lucide-react";
 import Link from "next/link";
 import { SituationChangementButton } from "./SituationChangementButton";
 
@@ -53,129 +52,156 @@ export default async function MonProfilPage() {
     orderBy: { pointsRequired: "asc" },
   });
 
-  const stats = [
-    { icon: Zap, color: "#f59e0b", bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.2)", label: "Points totaux", value: totalPoints },
-    { icon: CheckCircle, color: "#34d399", bg: "rgba(52,211,153,0.1)", border: "rgba(52,211,153,0.2)", label: "Défis complétés", value: totalCompletedChallenges },
-    { icon: Target, color: "#06b6d4", bg: "rgba(6,182,212,0.1)", border: "rgba(6,182,212,0.2)", label: "Plans actifs", value: activePrescriptions },
-  ];
-
   return (
     <>
       <Navbar />
-      <main className="page-main">
-        <div className="page-container-wide">
-          {/* ── Hero Header ── */}
-          <div style={{ marginBottom: 36, display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                <span style={{ fontSize: 22 }}>🏆</span>
-                <p style={{ fontSize: 15, color: "var(--text-3)", fontWeight: 500 }}>Gamification & Défis</p>
-              </div>
-              <h1 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 34, color: "var(--text-1)", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-                Ma Progression
-              </h1>
-            </div>
-            <Link href="/dashboard" style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              background: "transparent", border: "none",
-              color: "var(--text-2)", fontSize: 14, fontWeight: 500,
-              padding: "8px 12px", borderRadius: 999, textDecoration: "none",
-              transition: "all 0.2s"
-            }}>
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 py-6 sm:py-10 animate-fade-in">
+        <div className="space-y-6">
+          
+          {/* Header & Back */}
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider flex items-center gap-1.5">
+              <span>🏆</span>
+              <span>Gamification & Défis</span>
+            </span>
+            <Link
+              href="/dashboard"
+              className="text-xs text-[#123D46]/70 hover:text-[#00A99D] font-jakarta font-bold transition-colors inline-block"
+            >
               ← Retour au dashboard
             </Link>
           </div>
 
-          {/* ── XP Hero Card ── */}
-          <div className="card" style={{
-            padding: "28px 32px", marginBottom: 24,
-            position: "relative", overflow: "hidden",
-            borderLeft: "3px solid #7c3aed"
-          }}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <h2 className="font-jakarta font-extrabold text-2xl sm:text-3xl text-[#123D46]">
+              Ma Progression
+            </h2>
+            <SituationChangementButton />
+          </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 24, position: "relative" }}>
-              <div style={{ width: 64, height: 64, borderRadius: 12, background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Star size={30} color="var(--text-2)" />
+          {/* Level Card */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E3EBE6] shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-[#FAF9F5] border border-[#E3EBE6] flex items-center justify-center text-2xl shrink-0">
+                  ⭐
+                </div>
+                <div>
+                  <h3 className="font-jakarta font-extrabold text-xl text-[#123D46]">
+                    Niveau {level}
+                  </h3>
+                  <p className="text-xs text-[#00A99D] font-medium mt-1">
+                    Encore {xpNeededForNextLevel - currentLevelXp} XP pour le Niveau {level + 1}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 26, color: "var(--text-1)", marginBottom: 4 }}>
-                  Niveau {level}
-                </h2>
-                <p style={{ color: "var(--text-3)", fontSize: 14 }}>
-                  Encore <strong style={{ color: "var(--primary)" }}>{xpNeededForNextLevel - currentLevelXp} XP</strong> pour le Niveau {level + 1}
-                </p>
-              </div>
-              <div style={{ marginLeft: "auto", textAlign: "right" }}>
-                <p style={{ fontSize: 11, color: "var(--text-2)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 4 }}>Points totaux</p>
-                <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 32, color: "var(--text-1)" }}>
+
+              <div className="text-left sm:text-right">
+                <span className="text-[10px] uppercase font-bold text-[#123D46]/50 block">
+                  Points Totaux
+                </span>
+                <span className="font-jakarta font-extrabold text-3xl text-[#123D46] font-mono tabular-nums">
                   {totalPoints}
                 </span>
               </div>
             </div>
 
-            <div style={{ position: "relative" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                <span style={{ fontSize: 12, color: "var(--text-2)", fontWeight: 600 }}>{currentLevelXp} XP</span>
-                <span style={{ fontSize: 12, color: "var(--text-2)", fontWeight: 600 }}>{xpNeededForNextLevel} XP</span>
+            {/* Progress Bar */}
+            <div className="space-y-2 pt-3">
+              <div className="w-full bg-[#E3EBE6] h-3 rounded-full overflow-hidden">
+                <div
+                  className="bg-[#00A99D] h-full rounded-full transition-all duration-700 ease-out"
+                  style={{ width: `${progressPercent}%` }}
+                />
               </div>
-              <div style={{ height: 8, borderRadius: 4, background: "var(--surface-2)", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${progressPercent}%`, background: "var(--primary)", borderRadius: 4, transition: "width 1s cubic-bezier(0.4,0,0.2,1)" }} />
-              </div>
-              <div style={{ textAlign: "center", marginTop: 8 }}>
-                <span style={{ fontSize: 12, color: "var(--text-2)" }}>{progressPercent.toFixed(0)}% vers le niveau suivant</span>
+              <div className="flex items-center justify-between text-[11px] text-[#123D46]/60 font-mono">
+                <span>{currentLevelXp} XP</span>
+                <span>{progressPercent.toFixed(0)}% vers le niveau suivant</span>
+                <span>{xpNeededForNextLevel} XP</span>
               </div>
             </div>
           </div>
 
-          {/* ── Stats ── */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 24 }}>
-            {stats.map(({ icon: Icon, color, bg, border, label, value }) => (
-              <div key={label} className="card" style={{ padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <Icon size={20} color="var(--text-2)" />
-                </div>
-                <div>
-                  <p style={{ fontSize: 12, color: "var(--text-2)", marginBottom: 4, fontWeight: 500 }}>{label}</p>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: 24, fontWeight: 700, color: "var(--text-1)" }}>{value}</div>
-                </div>
+          {/* Stat Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-2xl border border-[#E3EBE6] shadow-xs flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-xl shrink-0">
+                ⚡
               </div>
-            ))}
-          </div>
-
-          {/* ── Badges & Défis ── */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-            {/* Badges */}
-            <div className="card" style={{ padding: 24 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 6, background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Shield size={16} color="var(--text-2)" />
-                </div>
-                <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "var(--text-1)" }}>Badges obtenus</h3>
-                <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 600, color: "var(--text-2)", background: "rgba(18,61,70,0.05)", padding: "2px 8px", borderRadius: 4, border: "1px solid var(--border)" }}>
-                  {user.badges.length}
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#123D46]/60 tracking-wider block">
+                  Points Totaux
+                </span>
+                <span className="font-jakarta font-extrabold text-2xl text-[#123D46] font-mono">
+                  {totalPoints}
                 </span>
               </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-[#E3EBE6] shadow-xs flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                ✓
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#123D46]/60 tracking-wider block">
+                  Défis Complétés
+                </span>
+                <span className="font-jakarta font-extrabold text-2xl text-[#123D46] font-mono">
+                  {totalCompletedChallenges}
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-[#E3EBE6] shadow-xs flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-[#5965E8]/10 text-[#5965E8] flex items-center justify-center text-xl shrink-0">
+                🎯
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#123D46]/60 tracking-wider block">
+                  Plans Actifs
+                </span>
+                <span className="font-jakarta font-extrabold text-2xl text-[#123D46] font-mono">
+                  {activePrescriptions}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Badges & Recent Challenges */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Badges */}
+            <div className="bg-white rounded-3xl p-6 border border-[#E3EBE6] shadow-xs space-y-4">
+              <h4 className="font-jakarta font-bold text-base text-[#123D46] flex items-center gap-2">
+                <span>🛡️</span>
+                <span>Badges Obtenus ({user.badges.length})</span>
+              </h4>
+              
               {user.badges.length > 0 ? (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))", gap: 16 }}>
+                <div className="grid grid-cols-3 gap-3 pt-2">
                   {user.badges.map(ub => (
-                    <div key={ub.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center" }}>
-                      <div style={{ width: 56, height: 56, borderRadius: 8, background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>
-                        {ub.badge.icon}
-                      </div>
-                      <span style={{ fontSize: 11, color: "var(--text-2)", fontWeight: 500, lineHeight: 1.2 }}>{ub.badge.name}</span>
+                    <div key={ub.id} className="p-3 rounded-2xl bg-[#00A99D]/10 border border-[#00A99D]/30 text-center space-y-1">
+                      <span className="text-2xl">{ub.badge.icon}</span>
+                      <span className="text-[11px] font-bold text-[#00A99D] block leading-tight">{ub.badge.name}</span>
                     </div>
                   ))}
+                  {nextBadge && (
+                    <div className="p-3 rounded-2xl bg-[#FAF9F5] border border-dashed border-[#E3EBE6] text-center space-y-1 opacity-50 flex flex-col justify-center">
+                      <span className="text-xl">🔒</span>
+                      <span className="text-[10px] font-bold text-[#123D46] block">{nextBadge.name}</span>
+                      <span className="text-[9px] text-[#123D46]/60 block">{nextBadge.pointsRequired - user.points} pts requis</span>
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div style={{ textAlign: "center", padding: "32px 20px" }}>
-                  <div style={{ width: 52, height: 52, borderRadius: 14, background: "var(--surface)", border: "1px solid var(--surface)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
-                    <Trophy size={24} style={{ color: "var(--text-3)" }} />
+                <div className="text-center py-8">
+                  <div className="w-12 h-12 rounded-2xl bg-[#FAF9F5] flex items-center justify-center mx-auto mb-3 text-2xl border border-[#E3EBE6]">
+                    🏆
                   </div>
-                  <p style={{ color: "var(--text-3)", fontSize: 14, lineHeight: 1.6 }}>
+                  <p className="text-[#123D46]/70 text-xs leading-relaxed max-w-[80%] mx-auto">
                     Complétez des défis pour débloquer vos premiers badges !
                   </p>
                   {nextBadge && (
-                    <p style={{ color: "var(--primary)", fontSize: 13, marginTop: 8, fontWeight: 500 }}>
+                    <p className="text-[#00A99D] text-xs mt-3 font-semibold">
                       Plus que {nextBadge.pointsRequired - user.points} points pour le badge : {nextBadge.name}.
                     </p>
                   )}
@@ -184,39 +210,39 @@ export default async function MonProfilPage() {
             </div>
 
             {/* Historique défis */}
-            <div className="card" style={{ padding: 24 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 6, background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <CheckCircle size={16} color="var(--text-2)" />
-                </div>
-                <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "var(--text-1)" }}>Derniers défis réalisés</h3>
+            <div className="bg-white rounded-3xl p-6 border border-[#E3EBE6] shadow-xs flex flex-col justify-between">
+              <div>
+                <h4 className="font-jakarta font-bold text-base text-[#123D46] flex items-center gap-2">
+                  <span>📋</span>
+                  <span>Derniers défis réalisés</span>
+                </h4>
+                
+                {completedChallenges.length > 0 ? (
+                  <div className="mt-4 space-y-3">
+                    {completedChallenges.map(item => (
+                      <div key={item.id} className="p-4 rounded-2xl bg-[#FAF9F5] border border-[#E3EBE6] text-xs space-y-1 mt-3">
+                        <div className="flex items-center justify-between text-emerald-700 font-bold">
+                          <span>✓ {item.libraryItem.title}</span>
+                          <span className="font-mono text-[10px] opacity-70">Complété</span>
+                        </div>
+                        <p className="text-[#123D46]/70 text-[11px]">
+                          {item.rationale.length > 80 ? item.rationale.substring(0, 80) + '…' : item.rationale}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-[#123D46]/70 text-xs mb-4">Aucun défi terminé pour le moment.</p>
+                    <Link href="/dashboard" className="text-[#00A99D] text-xs font-bold hover:underline">
+                      Voir mon ordonnance →
+                    </Link>
+                  </div>
+                )}
               </div>
-              {completedChallenges.length > 0 ? (
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {completedChallenges.map(item => (
-                    <div key={item.id} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderLeft: "3px solid var(--border-strong)", borderRadius: 6, padding: "12px 16px", display: "flex", gap: 12, alignItems: "flex-start" }}>
-                      <div style={{ width: 24, height: 24, borderRadius: 4, background: "rgba(18,61,70,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <CheckCircle size={14} color="var(--text-2)" />
-                      </div>
-                      <div>
-                        <h4 style={{ color: "var(--text-1)", fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{item.libraryItem.title}</h4>
-                        <p style={{ color: "var(--text-3)", fontSize: 12, lineHeight: 1.5 }}>{item.rationale.substring(0, 70)}…</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div style={{ textAlign: "center", padding: "32px 20px" }}>
-                  <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 12 }}>Aucun défi terminé pour le moment.</p>
-                  <Link href="/dashboard" style={{ color: "var(--primary)", fontSize: 13, fontWeight: 600, textDecoration: "none" }}>
-                    Voir mon ordonnance →
-                  </Link>
-                </div>
-              )}
             </div>
           </div>
 
-          <SituationChangementButton />
         </div>
       </main>
     </>

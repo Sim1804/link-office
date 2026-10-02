@@ -1,137 +1,133 @@
-/**
- * @file Footer.tsx
- * @module src/components/layout
- * @description Pied de page de LinkOffice — présent sur toutes les pages publiques.
- *
- * Structure en grille 4 colonnes (responsive 2 colonnes sur tablette, 1 sur mobile) :
- * - **Colonne 1 (2fr)** : Logo + tagline de l'application
- * - **Colonne 2 (1fr)** : Liens Produit
- * - **Colonne 3 (1fr)** : Liens Ressources
- * - **Colonne 4 (1fr)** : Liens Légaux
- *
- * @see src/components/layout/Navbar.tsx — Barre de navigation complémentaire
- * @see app/politique-confidentialite/page.tsx — Page liée depuis ce footer
- * @see app/mentions-legales/page.tsx — Page liée depuis ce footer
- */
-
 "use client";
 
-import Link from "next/link";
-import { Brain, Sparkles } from "lucide-react";
+import React from 'react';
+import Link from 'next/link';
+import { Logo } from '../brand/Logo';
 
-/** Liens de la section Produit avec leurs routes */
-const PRODUCT_LINKS = [
-  { label: "Questionnaire IQRH", href: "/questionnaire" },
-  { label: "IA IRIS",            href: "/#iris" },
-  { label: "Tableau de bord",    href: "/dashboard" },
-  { label: "Mon profil",         href: "/mon-profil" },
-  { label: "Pour les organisations", href: "/business" },
-];
-
-/** Liens de la section Ressources */
-const RESOURCE_LINKS = [
-  { label: "Médias & Actualités", href: "/media" },
-  { label: "Baromètre National",  href: "/#observatoire" },
-  { label: "Nos offres Premium ★", href: "/premium", highlight: true },
-];
-
-/** Liens de la section Légal avec leurs routes */
-const LEGAL_LINKS = [
-  { label: "Politique de confidentialité", href: "/politique-confidentialite" },
-  { label: "Mentions légales",             href: "/mentions-legales" },
-  { label: "Contact",                      href: "mailto:contact@link-office.fr" },
-];
-
-/**
- * Pied de page de l'application LinkOffice.
- * Affiché sur toutes les pages publiques (landing, auth...).
- */
 export function Footer() {
   return (
-    <footer style={{ borderTop: "1px solid var(--border)", background: "var(--bg)", paddingTop: 56, paddingBottom: 40 }}>
-      <div className="container">
-        {/* Grille principale : Brand | Produit | Ressources | Légal */}
-        <div className="footer-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 48, marginBottom: 48 }}>
-
-          {/* Bloc Brand : Logo + Tagline */}
-          <div>
-            <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: 16 }}>
-              <div style={{ width: 32, height: 32, background: "var(--primary)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Brain size={16} color="white" />
-              </div>
-              <span style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 18, color: "var(--text-1)" }}>
-                Link<span className="gradient-text">Office</span>
-              </span>
+    <footer className="bg-white border-t border-[#E3EBE6] py-12 px-4 sm:px-8 mt-16">
+      <div className="max-w-[1440px] mx-auto space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-xs text-[#123D46]/75">
+          {/* Column 1: Brand & Mission */}
+          <div className="space-y-3 md:pr-4">
+            <Link href="/" className="inline-block no-underline">
+              <Logo size="md" showTagline={true} />
             </Link>
-            <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.7, maxWidth: 300 }}>
-              Évaluez votre qualité de vie relationnelle avec l&apos;IQRH.
-              Guidé par l&apos;IA IRIS, développez vos relations et votre équilibre.
+            <p className="text-xs text-[#123D46]/70 leading-relaxed font-inter">
+              Laboratoire du lien humain. Comprendre, observer, mesurer et agir pour valoriser la santé relationnelle des organisations et des collectifs de travail.
             </p>
+            <div className="text-[11px] text-[#00A99D] font-bold font-jakarta">
+              Comprendre · Observer · Mesurer · Agir
+            </div>
           </div>
 
-          {/* Bloc Produit */}
+          {/* Column 2: Navigation Accueil */}
           <div>
-            <h4 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 14, marginBottom: 16 }}>Produit</h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
-              {PRODUCT_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <Link href={href} className="footer-link">{label}</Link>
-                </li>
-              ))}
+            <span className="font-jakarta font-bold text-[#123D46] uppercase tracking-wider block mb-3">
+              Plateforme & Outils
+            </span>
+            <ul className="space-y-2.5 font-medium">
+              <li>
+                <Link href="/#methode" className="hover:text-[#00A99D] transition-colors block">
+                  La démarche scientifique en 4 temps
+                </Link>
+              </li>
+              <li>
+                <Link href="/#barometre" className="hover:text-[#00A99D] transition-colors flex items-center gap-1.5">
+                  <span>Baromètre national en direct</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                </Link>
+              </li>
+              <li>
+                <Link href="/#iqrh" className="hover:text-[#00A99D] transition-colors block">
+                  Évaluation de l'Indice IQRH
+                </Link>
+              </li>
+              <li>
+                <Link href="/#iris" className="hover:text-[#00A99D] transition-colors block">
+                  Coach IRIS (Intelligence Relationnelle)
+                </Link>
+              </li>
+              <li>
+                <Link href="/auth/login" className="text-[#00A99D] font-bold hover:underline transition-colors flex items-center gap-1">
+                  <span>Accéder à l'espace connecté</span>
+                  <span>→</span>
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Bloc Ressources */}
+          {/* Column 3: Entreprises & Tarifs */}
           <div>
-            <h4 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 14, marginBottom: 16 }}>Ressources</h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
-              {RESOURCE_LINKS.map(({ label, href, highlight }) => (
-                <li key={label}>
-                  <Link
-                    href={href}
-                    className="footer-link"
-                    style={highlight ? { color: "var(--primary)", fontWeight: 700 } : undefined}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
+            <span className="font-jakarta font-bold text-[#123D46] uppercase tracking-wider block mb-3">
+              Pour les Organisations
+            </span>
+            <ul className="space-y-2.5 font-medium">
+              <li>
+                <Link href="/#solutions" className="hover:text-[#00A99D] transition-colors block">
+                  Audit interne & Baromètre dédié
+                </Link>
+              </li>
+              <li>
+                <Link href="/#solutions" className="hover:text-[#00A99D] transition-colors block">
+                  Accompagnement des directions & DRH
+                </Link>
+              </li>
+              <li>
+                <Link href="/#tarifs" className="hover:text-[#00A99D] transition-colors block">
+                  Formules & Déploiement d'équipe
+                </Link>
+              </li>
+              <li>
+                <Link href="/#partenaires" className="hover:text-[#00A99D] transition-colors block">
+                  Partenaires scientifiques & institutionnels
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Bloc Légal */}
+          {/* Column 4: Déontologie & Contact */}
           <div>
-            <h4 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 14, marginBottom: 16 }}>Légal</h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
-              {LEGAL_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <Link href={href} className="footer-link">{label}</Link>
-                </li>
-              ))}
+            <span className="font-jakarta font-bold text-[#123D46] uppercase tracking-wider block mb-3">
+              Éthique & Contact
+            </span>
+            <ul className="space-y-2 text-[11px] text-[#123D46]/70">
+              <li className="font-medium text-[#123D46]">
+                contact@linkoffice.fr
+              </li>
+              <li>
+                Paris 8e · Siège de recherche sociologique
+              </li>
+              <li className="pt-1 text-[#00A99D] font-medium">
+                ✓ Anonymat strict garanti (Protocole RGPD)
+              </li>
+              <li className="text-[#123D46]/60">
+                ✓ Données hébergées en France
+              </li>
+              <li className="text-[#123D46]/60">
+                ✓ Aucun traçage individuel transmis à l'employeur
+              </li>
             </ul>
           </div>
         </div>
 
-        {/* Barre inférieure : Copyright + mention IA */}
-        <div style={{ paddingTop: 32, borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-          <p style={{ color: "var(--text-3)", fontSize: 13 }}>© 2026 LinkOffice. Tous droits réservés.</p>
-          <p style={{ color: "var(--text-3)", fontSize: 12 }}>Propulsé par l&apos;Intelligence Artificielle IRIS</p>
+        {/* Bottom Bar */}
+        <div className="pt-6 border-t border-[#E3EBE6] flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-[11px] text-[#123D46]/60">
+          <div>
+            © 2026 LINK OFFICE — Laboratoire du Lien Humain. Tous droits réservés.
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link href="/mentions-legales" className="hover:text-[#00A99D] transition-colors">Mentions légales</Link>
+            <span>·</span>
+            <Link href="/politique-confidentialite" className="hover:text-[#00A99D] transition-colors">Politique de confidentialité</Link>
+            <span>·</span>
+            <span>Charte déontologique</span>
+            <span>·</span>
+            <span>Accessibilité</span>
+          </div>
         </div>
       </div>
-
-      {/* Media query responsive */}
-      <style>{`
-        @media (max-width: 900px) {
-          .footer-grid {
-            grid-template-columns: 1fr 1fr !important;
-          }
-        }
-        @media (max-width: 540px) {
-          .footer-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </footer>
   );
 }

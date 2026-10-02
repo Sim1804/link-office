@@ -19,12 +19,12 @@ export function DashboardTabs({ data, isPremium, isPremiumPlus, DIMENSIONS_LABEL
   const currentTab = searchParams.get("tab") || "sante";
 
   const tabs = [
-    { id: "sante", label: "Santé & Bilans", shortLabel: "Santé", icon: LayoutDashboard, description: "Vue d'ensemble" },
-    { id: "evolution", label: "Évolution & Historique", shortLabel: "Évolution", icon: History, description: "Trajectoire" },
-    { id: "plan", label: "Mon Ordonnance & Défis", shortLabel: "Ordonnance", icon: ListChecks, description: "Priorités" },
-    { id: "ressources", label: "Ressources & Partenaires", shortLabel: "Ressources", icon: Sparkles, description: "Soutien" },
-    { id: "relations", label: "Mes Relations & Binôme", shortLabel: "Relations", icon: Users, description: "Entourage" },
-    { id: "journal", label: "Mon Journal", shortLabel: "Journal", icon: Book, description: "Notes" },
+    { id: "sante", label: "Santé & Bilans", shortLabel: "Santé", icon: "🩺", description: "Vue d'ensemble" },
+    { id: "evolution", label: "Évolution & Historique", shortLabel: "Évolution", icon: "⏱️", description: "Trajectoire" },
+    { id: "plan", label: "Mon Plan & Actions", shortLabel: "Plan", icon: "📋", description: "Priorités" },
+    { id: "ressources", label: "Ressources & Partenaires", shortLabel: "Ressources", icon: "✨", description: "Soutien" },
+    { id: "relations", label: "Mes Relations & Binôme", shortLabel: "Relations", icon: "👥", description: "Entourage" },
+    { id: "journal", label: "Mon Journal", shortLabel: "Journal", icon: "📖", description: "Notes" },
   ];
 
   const handleTabChange = (tabId: string) => {
@@ -38,58 +38,21 @@ export function DashboardTabs({ data, isPremium, isPremiumPlus, DIMENSIONS_LABEL
 
   return (
     <div>
-      {/* ── Navigation en pills — identique au design global de l'app ── */}
-      <div style={{
-        display: "flex",
-        gap: 8,
-        overflowX: "auto",
-        marginBottom: 28,
-        scrollbarWidth: "none",
-        msOverflowStyle: "none",
-        borderBottom: "1px solid var(--border)",
-        paddingBottom: 16,
-      }}>
+      {/* ── Navigation en pills ── */}
+      <div className="flex items-center gap-2 overflow-x-auto mb-6 pb-1 scrollbar-none">
         {tabs.map((tab) => {
           const isActive = currentTab === tab.id;
-          const Icon = tab.icon;
           return (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "6px 16px",
-                borderRadius: 16,
-                border: isActive
-                  ? "1px solid rgba(0,169,157,0.3)"
-                  : "1px solid var(--border)",
-                background: isActive ? "rgba(0,169,157,0.1)" : "var(--surface)",
-                color: isActive ? "var(--primary)" : "var(--text-2)",
-                fontWeight: 600,
-                fontSize: 13,
-                cursor: "pointer",
-                transition: "all 0.2s",
-                whiteSpace: "nowrap",
-                fontFamily: "inherit",
-              }}
-              onMouseOver={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = "var(--surface-2)";
-                  e.currentTarget.style.color = "var(--text-1)";
-                  e.currentTarget.style.borderColor = "var(--border-strong)";
-                }
-              }}
-              onMouseOut={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = "var(--surface)";
-                  e.currentTarget.style.color = "var(--text-2)";
-                  e.currentTarget.style.borderColor = "var(--border)";
-                }
-              }}
+              className={`px-4 py-2 rounded-2xl text-xs font-jakarta font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
+                isActive
+                  ? 'bg-[#00A99D] text-white shadow-xs'
+                  : 'bg-white text-[#123D46]/75 hover:bg-[#FAF9F5] border border-[#E3EBE6]'
+              }`}
             >
-              <Icon size={14} style={{ flexShrink: 0, opacity: isActive ? 1 : 0.65 }} />
+              <span>{tab.icon}</span>
               <span>{tab.shortLabel}</span>
             </button>
           );
@@ -97,19 +60,17 @@ export function DashboardTabs({ data, isPremium, isPremiumPlus, DIMENSIONS_LABEL
       </div>
 
       {/* ── Fil d'Ariane contextuel ── */}
-      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 20 }}>
-        <span style={{ color: "var(--text-3)", fontSize: 12, fontWeight: 500 }}>Dashboard</span>
-        <ChevronRight size={11} style={{ color: "var(--text-3)" }} />
-        <span style={{ color: "var(--text-1)", fontSize: 12, fontWeight: 600 }}>{activeTabDef.label}</span>
+      <div className="text-xs text-[#123D46]/50 font-medium mb-6">
+        Dashboard &gt; <strong className="text-[#123D46]">{activeTabDef.label}</strong>
       </div>
 
       {/* ── Contenu des onglets ── */}
       <div>
         {currentTab === "sante" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+          <div className="flex flex-col gap-8">
             <DashboardBilanTab iqrh={iqrh} DIMENSIONS_LABELS={DIMENSIONS_LABELS} />
-            <div style={{ marginTop: "16px" }}>
-              <h3 style={{ fontSize: "20px", fontWeight: "700", color: "var(--text-1)", marginBottom: "16px" }}>Analyse approfondie</h3>
+            <div className="mt-4">
+              <h3 className="font-jakarta font-extrabold text-xl text-[#123D46] mb-4">Analyse approfondie</h3>
               <DashboardAnalyseTab iqrh={iqrh} profil={profil} icr={icr} isPremium={isPremium} />
             </div>
           </div>
@@ -152,30 +113,18 @@ const DIMENSION_CONFIG = [
 function ScoreBar({ value, color, previousValue }: { value: number; color: string; previousValue?: number }) {
   const diff = previousValue !== undefined ? Math.round(value - previousValue) : null;
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-      <div style={{
-        flex: 1, height: 5, borderRadius: 3,
-        background: "var(--surface)",
-        overflow: "hidden",
-      }}>
-        <div style={{
-          width: `${Math.min(value, 100)}%`,
-          height: "100%",
-          background: color,
-          borderRadius: 3,
-          opacity: 0.85,
-          transition: "width 0.6s ease-out",
-        }} />
+    <div className="flex items-center gap-2">
+      <div className="flex-1 h-1.5 rounded-full bg-[#E3EBE6] overflow-hidden">
+        <div 
+          className="h-full rounded-full opacity-85 transition-all duration-700 ease-out"
+          style={{ width: `${Math.min(value, 100)}%`, backgroundColor: color }} 
+        />
       </div>
-      <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-1)", minWidth: 24, textAlign: "right" }}>
+      <span className="text-[11px] font-bold text-[#123D46] min-w-[24px] text-right font-mono">
         {Math.round(value)}
       </span>
       {diff !== null && diff !== 0 && (
-        <span style={{
-          fontSize: 10, fontWeight: 700,
-          color: diff > 0 ? "#10b981" : "#ef4444",
-          minWidth: 22, textAlign: "right",
-        }}>
+        <span className={`text-[10px] font-bold min-w-[22px] text-right ${diff > 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
           {diff > 0 ? "+" : ""}{diff}
         </span>
       )}
@@ -185,41 +134,34 @@ function ScoreBar({ value, color, previousValue }: { value: number; color: strin
 
 function HistoriqueTab({ router, history, isPremium }: { router: any, history: any[], isPremium: boolean }) {
   return (
-    <div style={{ animation: "fadeSlideIn 0.4s ease-out" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+    <div className="flex flex-col gap-6" style={{ animation: "fadeSlideIn 0.4s ease-out" }}>
 
         {/* Header */}
-        <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          flexWrap: "wrap", gap: 16,
-          background: "linear-gradient(135deg, rgba(0,169,157,0.08) 0%, rgba(6,182,212,0.02) 100%)",
-          padding: "20px", borderRadius: 16, border: "1px solid var(--border)",
-        }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-              <span style={{ fontSize: 18 }}>📋</span>
-              <h3 style={{
-                fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-                color: "var(--text-1)", fontSize: 20, fontWeight: 800, margin: 0,
-              }}>
+        <div className="bg-white rounded-3xl p-6 border border-[#E3EBE6] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">📋</span>
+              <h3 className="font-jakarta font-extrabold text-xl text-[#123D46]">
                 Carnet de Santé Relationnelle
               </h3>
             </div>
-            <p style={{ color: "var(--text-3)", fontSize: 13, margin: 0 }}>
+            <p className="text-xs text-[#123D46]/70">
               {history?.length ?? 0} passation{(history?.length ?? 0) > 1 ? "s" : ""} enregistrée{(history?.length ?? 0) > 1 ? "s" : ""}
             </p>
           </div>
+
           <button
-              onClick={() => router.push("/consentement?retake=true")}
-              className="btn btn-primary btn-md"
-            >
-            🔄 Nouveau test
+            onClick={() => router.push("/consentement?retake=true")}
+            className="px-5 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-2 self-start sm:self-auto"
+          >
+            <span>🔄</span>
+            <span>Nouveau test</span>
           </button>
         </div>
 
         {/* Paywall — UpsellBanner unifié */}
         {!isPremium && (
-          <div style={{ marginTop: 8 }}>
+          <div className="mt-2">
             <UpsellBanner
               variant="freemium"
               featureName="Historique & Évolution"
@@ -229,11 +171,7 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
         )}
 
         {/* Timeline */}
-        <div style={!isPremium ? {
-          filter: "blur(8px)", opacity: 0.3,
-          pointerEvents: "none", userSelect: "none",
-          display: "flex", flexDirection: "column", gap: 16,
-        } : { display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className={`flex flex-col gap-4 ${!isPremium ? 'blur-[8px] opacity-30 pointer-events-none select-none' : ''}`}>
 
           {history?.map((item: any, index: number) => {
             const date = new Date(item.assessment?.submittedAt || item.createdAt)
@@ -247,85 +185,56 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
             const scoreColor = score >= 70 ? "#10b981" : score >= 50 ? "#f59e0b" : "#ef4444";
 
             return (
-              <div key={item.id} style={{
-                background: isLatest
-                  ? "linear-gradient(135deg, rgba(0,169,157,0.08) 0%, var(--surface) 100%)"
-                  : "var(--surface)",
-                border: isLatest
-                  ? "1px solid rgba(0,169,157,0.2)"
-                  : "1px solid var(--border)",
-                padding: "20px",
-                borderRadius: 16,
-                position: "relative",
-                transition: "border-color 0.2s",
-              }}>
+              <div key={item.id} className={`p-5 rounded-3xl relative transition-all ${
+                isLatest
+                  ? 'bg-white border border-[#00A99D]/40 shadow-xs'
+                  : 'bg-white border border-[#E3EBE6] shadow-xs opacity-90'
+              }`}>
                 {/* Badge actuel */}
                 {isLatest && (
-                  <div style={{
-                    position: "absolute", top: -11, left: 20,
-                    background: "var(--primary)",
-                    color: "white", fontSize: 10, fontWeight: 800,
-                    padding: "3px 12px", borderRadius: 999,
-                    textTransform: "uppercase", letterSpacing: "0.06em",
-                    boxShadow: "0 2px 12px rgba(0,169,157,0.4)",
-                  }}>
+                  <div className="absolute -top-3 left-6 bg-[#00A99D] text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
                     Passation actuelle
                   </div>
                 )}
 
                 {/* Ligne supérieure : météo + score + date */}
-                <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 18 }}>
+                <div className="flex items-start gap-4 mb-4 mt-2">
                   {/* Icône météo */}
-                  <div style={{
-                    width: 54, height: 54, borderRadius: 14,
-                    background: "var(--surface)",
-                    border: "1px solid var(--border)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 26, flexShrink: 0,
-                  }}>
+                  <div className="w-14 h-14 rounded-2xl bg-[#FAF9F5] border border-[#E3EBE6] flex items-center justify-center text-3xl shrink-0">
                     {item.weatherIcon}
                   </div>
 
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>
-                      <h4 style={{ color: "var(--text-1)", fontSize: 16, fontWeight: 700, margin: 0 }}>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                      <h4 className="font-jakarta font-extrabold text-base text-[#123D46] m-0">
                         {item.weatherTitle}
                       </h4>
                       {item.assessment?.campaign && (
-                        <span style={{
-                          fontSize: 11, fontWeight: 600,
-                          background: "var(--primary-glow)", color: "var(--primary)",
-                          border: "1px solid var(--border-strong)",
-                          padding: "2px 8px", borderRadius: 6,
-                        }}>
+                        <span className="text-[11px] font-bold bg-[#00A99D]/10 text-[#00A99D] border border-[#00A99D]/20 px-2 py-0.5 rounded-lg">
                           {item.assessment.campaign.title}
                         </span>
                       )}
                     </div>
-                    <p style={{ color: "var(--text-3)", fontSize: 12, margin: 0 }}>{date}</p>
+                    <p className="text-xs text-[#123D46]/60 m-0">{date}</p>
                   </div>
 
                   {/* Score global */}
-                  <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div style={{ display: "flex", alignItems: "baseline", gap: 4, justifyContent: "flex-end" }}>
-                      <span style={{ fontSize: 28, fontWeight: 800, color: scoreColor, lineHeight: 1 }}>
+                  <div className="text-right shrink-0">
+                    <div className="flex items-baseline gap-1 justify-end">
+                      <span className="font-jakarta font-extrabold text-3xl leading-none" style={{ color: scoreColor }}>
                         {score}
                       </span>
-                      <span style={{ fontSize: 13, color: "var(--text-2)" }}>/100</span>
+                      <span className="text-sm font-bold text-[#123D46]/40 font-mono">/100</span>
                     </div>
                     {globalDiff !== null && globalDiff !== 0 && (
-                      <div style={{
-                        display: "inline-flex", alignItems: "center", gap: 3, marginTop: 4,
-                        fontSize: 12, fontWeight: 700,
-                        color: globalDiff > 0 ? "#10b981" : "#ef4444",
-                        background: globalDiff > 0 ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)",
-                        padding: "2px 8px", borderRadius: 6,
-                      }}>
+                      <div className={`inline-flex items-center gap-1 mt-1 text-xs font-bold px-2 py-0.5 rounded-lg ${
+                        globalDiff > 0 ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'
+                      }`}>
                         {globalDiff > 0 ? "▲" : "▼"} {Math.abs(globalDiff)} pts
                       </div>
                     )}
                     {globalDiff === null && (
-                      <p style={{ color: "var(--text-1)", fontSize: 11, margin: "4px 0 0", textAlign: "right" }}>
+                      <p className="text-[11px] font-bold text-[#123D46]/50 mt-1 text-right">
                         1ère passation
                       </p>
                     )}
@@ -333,17 +242,17 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
                 </div>
 
                 {/* Séparateur */}
-                <div style={{ height: 1, background: "var(--surface)", marginBottom: 16 }} />
+                <div className="h-px bg-[#E3EBE6] mb-4" />
 
                 {/* Barres de dimensions */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 24px" }}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
                   {DIMENSION_CONFIG.map(dim => {
                     const val = item[dim.key] ?? 0;
                     const prevVal = previousItem?.[dim.key];
                     return (
                       <div key={dim.key}>
-                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                          <span style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 500 }}>
+                        <div className="flex justify-between mb-1">
+                          <span className="text-[11px] text-[#123D46]/70 font-medium">
                             {dim.label}
                           </span>
                         </div>
@@ -355,14 +264,9 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
 
                 {/* Profil */}
                 {item.primaryProfile && (
-                  <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 6 }}>
-                    <span style={{ fontSize: 11, color: "var(--text-2)" }}>Profil :</span>
-                    <span style={{
-                      fontSize: 12, fontWeight: 600, color: "var(--primary)",
-                      background: "var(--primary-glow)",
-                      border: "1px solid rgba(167,139,250,0.15)",
-                      padding: "4px 12px", borderRadius: 999,
-                    }}>
+                  <div className="mt-4 flex items-center gap-2">
+                    <span className="text-[11px] text-[#123D46]/60">Profil :</span>
+                    <span className="text-xs font-semibold text-[#00A99D] bg-[#00A99D]/10 border border-[#00A99D]/20 px-3 py-1 rounded-full">
                       {item.primaryProfile}
                     </span>
                   </div>
@@ -372,20 +276,14 @@ function HistoriqueTab({ router, history, isPremium }: { router: any, history: a
           })}
 
           {(!history || history.length === 0) && (
-            <div style={{
-              padding: "48px 32px", textAlign: "center",
-              background: "var(--surface)",
-              border: "1px dashed rgba(255,255,255,0.07)",
-              borderRadius: 16,
-            }}>
-              <div style={{ fontSize: 32, marginBottom: 12 }}>📋</div>
-              <p style={{ color: "var(--text-2)", fontSize: 14, margin: 0 }}>
+            <div className="p-12 text-center bg-white border border-[#E3EBE6] rounded-3xl shadow-xs">
+              <div className="text-4xl mb-3">📋</div>
+              <p className="text-sm text-[#123D46]/70 m-0">
                 Aucune passation enregistrée pour le moment.
               </p>
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }

@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Brain, Mail, Lock, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Mail, Lock, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Logo } from "@/src/components/brand/Logo";
 
 export function LoginForm() {
   const router = useRouter();
@@ -85,71 +86,54 @@ export function LoginForm() {
   };
 
   return (
-    <div style={{
-      minHeight: "100vh", background: "var(--bg)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      padding: "40px 20px", position: "relative", overflow: "hidden"
-    }}>
-      {/* Glow blobs */}
-      <div style={{ position: "absolute", top: "-10%", right: "-5%", width: 500, height: 500, background: "radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "-10%", left: "-5%", width: 400, height: 400, background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
+    <div className="min-h-screen bg-[#FAF9F5] flex items-center justify-center p-5 relative overflow-hidden">
+      {/* Glow blobs for aesthetic background */}
+      <div className="absolute -top-[10%] -right-[5%] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(0,169,157,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute -bottom-[10%] -left-[5%] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(18,61,70,0.06)_0%,transparent_70%)] pointer-events-none" />
 
-      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 440 }}>
-
-        {/* Logo + title */}
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: 28 }}>
-            <div style={{ width: 44, height: 44, background: "var(--primary)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 24px rgba(124,58,237,0.4)" }}>
-              <Brain size={22} color="white" />
-            </div>
-            <span style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 22, color: "var(--text-1)" }}>
-              Link<span className="gradient-text">Office</span>
-            </span>
-          </Link>
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 26, color: "var(--text-1)", marginBottom: 8 }}>
-            Bon retour parmi nous
-          </h1>
-          <p style={{ color: "var(--text-2)", fontSize: 14 }}>
-            Connectez-vous pour accéder à votre tableau de bord
-          </p>
-        </div>
+      <div className="relative z-10 w-full max-w-md">
 
         {/* Form card */}
-        <div className="card" style={{ padding: 40, borderRadius: 24 }}>
+        <div className="bg-white rounded-[24px] p-8 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#E3EBE6]">
+          
+          {/* Logo + title inside card to match AuthModal */}
+          <div className="text-center mb-8">
+            <Link href="/" className="inline-flex items-center gap-2.5 no-underline mb-6">
+              <Logo size="md" />
+            </Link>
+            
+            <h1 className="font-jakarta font-extrabold text-[22px] text-[#123D46] mb-2 leading-tight">
+              Connexion à votre espace
+            </h1>
+            <p className="text-[13px] text-[#123D46]/70">
+              Accédez à vos tableaux de bord, au carnet de santé et à vos 5 dimensions.
+            </p>
+          </div>
+
           {registered === "business" && (
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              padding: "12px 16px", marginBottom: 24,
-              background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.25)",
-              borderRadius: 10, color: "#34d399", fontSize: 14
-            }}>
-              <CheckCircle2 size={16} style={{ flexShrink: 0 }} />
+            <div className="flex items-center gap-2.5 p-3.5 mb-6 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-600 text-[13px] font-medium">
+              <CheckCircle2 size={16} className="shrink-0" />
               Votre espace a été créé avec succès. Veuillez vous connecter.
             </div>
           )}
 
           {error && (
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              padding: "12px 16px", marginBottom: 24,
-              background: "rgba(244,63,94,0.1)", border: "1px solid rgba(244,63,94,0.25)",
-              borderRadius: 10, color: "var(--rose)", fontSize: 14
-            }}>
-              <AlertCircle size={16} style={{ flexShrink: 0 }} />
+            <div className="flex items-center gap-2.5 p-3.5 mb-6 bg-red-50 border border-red-200 rounded-xl text-red-600 text-[13px] font-medium animate-shake">
+              <AlertCircle size={16} className="shrink-0" />
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
             {/* Si 2FA est requis */}
             {show2FA ? (
-              <div>
-                <label htmlFor="twoFactorCode" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
+              <div className="animate-fade-in">
+                <label htmlFor="twoFactorCode" className="block text-[13px] font-semibold text-[#123D46] mb-1.5">
                   Code d'authentification (2FA)
                 </label>
-                <div style={{ position: "relative" }}>
-                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#123D46]/40">
                     <Lock size={16} />
                   </span>
                   <input
@@ -157,7 +141,7 @@ export function LoginForm() {
                     placeholder="123456"
                     value={twoFactorCode}
                     onChange={(e) => setTwoFactorCode(e.target.value)}
-                    className="input-field has-icon"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#E3EBE6] bg-white text-[13px] text-[#123D46] focus:outline-none focus:border-[#00A99D] focus:ring-2 focus:ring-[#00A99D]/20 transition-all font-medium"
                     maxLength={6}
                     autoComplete="one-time-code"
                   />
@@ -165,42 +149,44 @@ export function LoginForm() {
                 <button
                   type="button"
                   onClick={() => { setShow2FA(false); setTwoFactorCode(""); }}
-                  style={{ background: "none", border: "none", color: "var(--text-3)", fontSize: 13, marginTop: 12, cursor: "pointer", textDecoration: "underline" }}
+                  className="bg-transparent border-none text-[#00A99D] font-semibold text-[13px] mt-3 cursor-pointer hover:underline"
                 >
                   Retour
                 </button>
               </div>
             ) : (
-              <>
+              <div className="flex flex-col gap-4">
                 {/* Email */}
                 <div>
-                  <label htmlFor="email" style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 }}>
-                    Email
+                  <label htmlFor="email" className="block text-[13px] font-semibold text-[#123D46] mb-1.5">
+                    Adresse email professionnelle
                   </label>
-                  <div style={{ position: "relative" }}>
-                    <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
+                  <div className="relative">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#123D46]/40">
                       <Mail size={16} />
                     </span>
                     <input
                       id="email" type="email" required
-                      placeholder="vous@exemple.com"
+                      placeholder="prenom.nom@entreprise.fr"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="input-field has-icon"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#E3EBE6] bg-white text-[13px] text-[#123D46] focus:outline-none focus:border-[#00A99D] focus:ring-2 focus:ring-[#00A99D]/20 transition-all font-medium"
                     />
                   </div>
                 </div>
 
                 {/* Password */}
                 <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <label htmlFor="password" style={{ fontSize: 13, fontWeight: 500, color: "var(--text-2)" }}>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label htmlFor="password" className="text-[13px] font-semibold text-[#123D46]">
                       Mot de passe
                     </label>
-                    <a href="#" style={{ fontSize: 12, color: "var(--text-3)", textDecoration: "none" }}>Mot de passe oublié ?</a>
+                    <a href="#" className="text-[11px] font-semibold text-[#00A99D] hover:underline no-underline">
+                      Mot de passe oublié ?
+                    </a>
                   </div>
-                  <div style={{ position: "relative" }}>
-                    <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
+                  <div className="relative">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#123D46]/40">
                       <Lock size={16} />
                     </span>
                     <input
@@ -208,40 +194,36 @@ export function LoginForm() {
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="input-field has-icon"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#E3EBE6] bg-white text-[13px] text-[#123D46] focus:outline-none focus:border-[#00A99D] focus:ring-2 focus:ring-[#00A99D]/20 transition-all font-medium"
                     />
                   </div>
                 </div>
-              </>
+              </div>
             )}
 
             <button
               type="submit"
-              className="btn btn-primary btn-lg"
               disabled={loading}
-              style={{ width: "100%", marginTop: 8, position: "relative" }}
+              className="w-full py-2.5 rounded-full bg-[#123D46] hover:bg-[#1a4f5a] text-white font-jakarta font-bold text-xs transition-all shadow-md mt-2 flex items-center justify-center disabled:opacity-70"
             >
               {loading ? (
-                <span style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}>
-                  <span style={{ width: 16, height: 16, border: "2px solid var(--text-3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
-                  Connexion en cours…
-                </span>
+                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                <>Se connecter <ArrowRight size={16} /></>
+                <>Se connecter <ArrowRight size={16} className="ml-2" /></>
               )}
             </button>
           </form>
 
-          <p style={{ textAlign: "center", fontSize: 14, color: "var(--text-2)", marginTop: 24 }}>
-            Pas encore de compte ?{" "}
-            <Link href="/auth/register" style={{ color: "var(--primary-light)", textDecoration: "none", fontWeight: 500 }}>
-              Créer un compte gratuitement
-            </Link>
-          </p>
+          <div className="text-center mt-6 pt-5 border-t border-[#E3EBE6]">
+            <p className="text-[13px] text-[#123D46]/70">
+              Pas encore de compte ?{" "}
+              <Link href="/auth/register" className="text-[#00A99D] font-bold no-underline hover:underline">
+                Créer un compte
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

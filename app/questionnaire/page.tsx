@@ -139,146 +139,106 @@ export default function QuestionnairePage() {
   // ── État soumis ──────────────────────────────────────────────────────────
   if (submitted) {
     return (
-      <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ textAlign: "center" }}>
-          <CheckCircle style={{ width: 64, height: 64, color: "#34d399", margin: "0 auto 16px" }} />
-          <h2 style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 24, color: "var(--text-1)", marginBottom: 8 }}>
+      <div className="min-h-screen bg-[#FAF9F5] flex items-center justify-center">
+        <div className="text-center animate-scale-in">
+          <CheckCircle className="w-16 h-16 text-[#00A99D] mx-auto mb-4" />
+          <h2 className="font-jakarta font-extrabold text-2xl text-[#123D46] mb-2">
             Questionnaire de référence terminé !
           </h2>
-          <p style={{ color: "var(--text-3)", fontSize: 14 }}>Redirection vers les modules adaptatifs…</p>
+          <p className="text-sm text-[#123D46]/70">Redirection vers les modules adaptatifs…</p>
         </div>
       </div>
     );
   }
 
   if (loadingStatus || questionsList.length === 0) {
-    return <div style={{ minHeight: "100vh", background: "var(--bg)" }} />;
+    return <div className="min-h-screen bg-[#FAF9F5]" />;
   }
 
   return (
     <>
       <Navbar />
-      <main style={{
-        minHeight: "100vh",
-        background: "var(--bg)",
-        paddingTop: 88,
-        paddingBottom: 32,
-        paddingLeft: 24,
-        paddingRight: 24,
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-      }}>
+      <main className="min-h-screen bg-[#FAF9F5] pt-24 pb-12 px-5 relative flex flex-col">
         {/* Blob */}
-        <div style={{
-          position: "fixed", top: "-15%", right: "-8%", width: 600, height: 600,
-          background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)",
-          pointerEvents: "none", zIndex: 0,
-        }} />
+        <div className="fixed -top-[15%] -right-[8%] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(0,169,157,0.05)_0%,transparent_70%)] pointer-events-none z-0" />
 
-        <div style={{
-          maxWidth: 680, margin: "0 auto", width: "100%",
-          position: "relative", zIndex: 1,
-          display: "flex", flexDirection: "column", flex: 1,
-        }}>
+        <div className="w-full max-w-2xl mx-auto relative z-10 flex flex-col flex-1">
 
           {/* ── Barre de progression ── */}
-          <div style={{ marginBottom: 28 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-              <span style={{ fontSize: 13, color: "var(--text-3)" }}>
+          <div className="mb-7">
+            <div className="flex justify-between items-center mb-2.5">
+              <span className="text-xs font-mono text-[#123D46]/50">
                 Question {current + 1} / {questionsList.length}
               </span>
-              <span style={{
-                fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase",
-                color: dimColor,
-              }}>
+              <span className="text-xs font-jakarta font-semibold tracking-wider uppercase text-[#00A99D]">
                 {currentDimension}
               </span>
             </div>
 
             {/* Track */}
-            <div style={{ height: 6, background: "var(--border-strong)", borderRadius: 999, overflow: "hidden" }}>
-              <div style={{
-                height: "100%", borderRadius: 999,
-                background: "var(--primary)",
-                width: `${progress}%`,
-                transition: "width 0.5s ease",
-              }} />
+            <div className="h-1.5 bg-[#E3EBE6] rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-[#00A99D] rounded-full transition-all duration-500 ease-out" 
+                style={{ width: `${progress}%` }} 
+              />
             </div>
 
             {/* Dimension dots */}
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, paddingLeft: 2, paddingRight: 2 }}>
+            <div className="flex justify-between mt-2 px-0.5">
               {Object.keys(DIMENSIONS).map((d) => (
-                <div key={d} title={DIMENSIONS[d]} style={{
-                  width: 8, height: 8, borderRadius: "50%",
-                  background: question?.dimension === d ? DIM_COLORS[d] : "var(--border-strong)",
-                  transition: "all 0.3s",
-                  boxShadow: question?.dimension === d ? `0 0 8px ${DIM_COLORS[d]}` : "none",
-                }} />
+                <div key={d} title={DIMENSIONS[d]} className={`w-2 h-2 rounded-full transition-all duration-300 ${question?.dimension === d ? 'bg-[#00A99D] shadow-[0_0_8px_rgba(0,169,157,0.6)] scale-125' : 'bg-[#E3EBE6]'}`} />
               ))}
             </div>
           </div>
 
           {/* ── Carte Question ── */}
-          <div className="card" style={{
-            padding: 32,
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-          }}>
+          <div className="bg-white rounded-3xl border border-[#E3EBE6] shadow-xs overflow-hidden p-6 sm:p-10 flex flex-col flex-1 animate-scale-in">
             {/* Sous-titre dimension */}
-            <p style={{ fontSize: 11, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6 }}>
-              {currentDimension} — {questionIndexInDimension}/{questionsInDimension.length}
-            </p>
-
-            {/* Objectif de la dimension */}
-            <p style={{ fontSize: 13, color: "var(--text-2)", marginBottom: 20, lineHeight: 1.5 }}>
-              <strong style={{ color: dimColor }}>Objectif : </strong>
-              {question ? DIMENSION_OBJECTIVES[question.dimension] : ""}
-            </p>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-jakarta font-semibold text-[#00A99D] uppercase tracking-wider">
+                {currentDimension}
+              </span>
+              <span className="text-xs text-[#123D46]/50 font-mono">
+                {questionIndexInDimension}/{questionsInDimension.length}
+              </span>
+            </div>
 
             {/* Question */}
-            <h2 style={{
-              fontFamily: "var(--font-family-display)",
-              fontWeight: 600, fontSize: 20, color: "var(--text-1)",
-              lineHeight: 1.55, marginBottom: 28, flex: 1,
-            }}>
+            <h4 className="font-jakarta font-extrabold text-xl sm:text-2xl text-[#123D46] leading-snug mb-5">
               {question?.text}
-            </h2>
+            </h4>
+
+            {/* Objectif de la dimension */}
+            <div className="p-3.5 mb-6 rounded-xl bg-[#FAF9F5] border-l-[3px] border-[#00A99D] text-xs text-[#123D46]/80 italic">
+              « {question ? DIMENSION_OBJECTIVES[question.dimension] : ""} »
+            </div>
 
             {/* Choix */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
+            <div className="space-y-3 mb-8 flex-1">
               {CHOICES.map((choice) => {
                 const selected = answers[question?.id] === choice.value;
                 return (
                   <button
                     key={choice.value}
                     onClick={() => handleAnswer(choice.value)}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 14,
-                      padding: "14px 18px", borderRadius: 16, textAlign: "left",
-                      cursor: "pointer", fontFamily: "inherit",
-                      transition: "all 0.18s",
-                      background: selected ? "var(--primary-glow)" : "var(--bg)",
-                      border: selected ? "1.5px solid var(--primary)" : "1.5px solid var(--border-strong)",
-                      boxShadow: selected ? "0 0 16px var(--primary-glow)" : "none",
-                    }}
+                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between group ${
+                      selected
+                        ? 'bg-[#00A99D]/8 border-[#00A99D] text-[#123D46] shadow-2xs'
+                        : 'bg-white border-[#E3EBE6] text-[#123D46]/85 hover:bg-[#FAF9F5] hover:border-[#00A99D]/40'
+                    }`}
                   >
-                    {/* Radio indicator */}
-                    <div style={{
-                      width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
-                      border: selected ? "2px solid var(--primary)" : "2px solid var(--border-strong)",
-                      background: selected ? "var(--primary)" : "transparent",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.18s",
-                    }}>
-                      {selected && <div style={{ width: 8, height: 8, background: "white", borderRadius: "50%" }} />}
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
+                          selected ? 'border-[#00A99D] bg-[#00A99D]' : 'border-[#123D46]/30 group-hover:border-[#00A99D]'
+                        }`}
+                      >
+                        {selected && <div className="w-2 h-2 rounded-full bg-white" />}
+                      </div>
+                      <span className="text-sm font-inter font-medium">{choice.label}</span>
                     </div>
-                    <span style={{ fontSize: 14, fontWeight: 500, color: selected ? "var(--text-1)" : "var(--text-2)", flex: 1 }}>
-                      {choice.label}
-                    </span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: selected ? "var(--primary)" : "var(--text-2)" }}>
-                      {choice.value}
+                    <span className="text-xs text-[#123D46]/50 font-mono ml-2 shrink-0">
+                      {choice.value} pts
                     </span>
                   </button>
                 );
@@ -286,29 +246,29 @@ export default function QuestionnairePage() {
             </div>
 
             {/* Navigation */}
-            <div style={{ display: "flex", gap: 12 }}>
+            <div className="flex items-center justify-between pt-6 border-t border-[#E3EBE6] gap-3">
               <Button
-                variant="secondary"
-                size="lg"
+                variant="ghost"
+                size="md"
                 onClick={() => setCurrent((p) => Math.max(0, p - 1))}
                 disabled={current === 0}
+                className="flex items-center gap-1.5"
               >
-                <ChevronLeft style={{ width: 16, height: 16, marginRight: 8 }} />
-                Précédent
+                <ChevronLeft className="w-4 h-4" /> Précédent
               </Button>
 
               <Button
                 variant="primary"
-                size="lg"
+                size="md"
                 onClick={handleNext}
                 disabled={!isAnswered || submitting}
                 loading={submitting}
-                style={{ flex: 1 }}
+                className="flex items-center gap-2"
               >
                 {isLast ? (
                   "Soumettre le questionnaire"
                 ) : (
-                  <>Suivant <ChevronRight style={{ width: 16, height: 16, marginLeft: 8 }} /></>
+                  <>Suivant <ChevronRight className="w-4 h-4" /></>
                 )}
               </Button>
             </div>

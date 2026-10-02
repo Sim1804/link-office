@@ -74,31 +74,7 @@ const HABITATIONS = [
   "Autre"
 ];
 
-const S = {
-  page: { minHeight: "100vh", background: "var(--bg)", paddingTop: 88, paddingBottom: 64, position: "relative" as const, overflowY: "auto" as const },
-  blobTop: { display: "none" },
-  blobBot: { display: "none" },
-  container: { maxWidth: 680, margin: "0 auto", padding: "0 24px", position: "relative" as const, zIndex: 1 },
-  header: { display: "flex", alignItems: "center", gap: 16, marginBottom: 24 },
-  headerIcon: { width: 44, height: 44, background: "var(--primary-glow)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
-  title: { fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 26, color: "var(--text-1)", margin: 0 },
-  subtitle: { fontFamily: "var(--font-family-sans)", color: "var(--text-3)", fontSize: 14, marginTop: 4 },
-  card: { background: "var(--surface)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid var(--border)", borderRadius: 20, padding: 28, marginBottom: 16 },
-  sectionTitle: { fontFamily: "var(--font-family-display)", fontWeight: 600, fontSize: 15, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 10, marginBottom: 20 },
-  sectionBadge: { width: 26, height: 26, background: "var(--primary-glow)", color: "var(--primary)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0 },
-  label: { display: "block", fontSize: 13, fontWeight: 500, color: "var(--text-2)", marginBottom: 8 },
-  input: { width: "100%", background: "var(--surface)", border: "1px solid var(--border-strong)", borderRadius: 10, padding: "10px 14px", color: "var(--text-1)", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, transition: "border-color 0.2s" },
-  select: { width: "100%", background: "var(--surface)", border: "1px solid var(--border-strong)", borderRadius: 10, padding: "10px 14px", color: "var(--text-1)", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box" as const, cursor: "pointer", appearance: "auto" as const },
-  grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 },
-  fieldGroup: { display: "flex", flexDirection: "column" as const, gap: 16 },
-  tabButton: (active: boolean) => ({
-    padding: "10px 16px", fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-    background: active ? "var(--primary-glow)" : "transparent",
-    color: active ? "var(--primary)" : "var(--text-2)",
-    border: "none", borderBottom: active ? "2px solid var(--primary)" : "2px solid transparent",
-    display: "flex", alignItems: "center", gap: 8
-  })
-};
+// Removed old S object as we're migrating to Tailwind
 
 import { Suspense } from "react";
 
@@ -233,7 +209,7 @@ function ProfilContent() {
 
   const handleRadioChoice = (key: string, options: string[], current: string, setValue: (v: string) => void) => {
     return (
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+      <div className="flex flex-wrap gap-2.5">
         {options.map((opt) => {
           const selected = current === opt;
           return (
@@ -241,14 +217,11 @@ function ProfilContent() {
               key={opt}
               type="button"
               onClick={() => setValue(opt)}
-              style={{
-                flex: options.length <= 4 ? 1 : "auto", minWidth: options.length > 4 ? "auto" : 0,
-                padding: "8px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-                border: selected ? "1.5px solid var(--primary)" : "1.5px solid var(--border-strong)",
-                background: selected ? "var(--primary-glow)" : "var(--bg)",
-                color: selected ? "var(--primary)" : "var(--text-2)",
-                textAlign: "center"
-              }}
+              className={`flex-1 sm:flex-auto px-3.5 py-2.5 rounded-xl text-[13px] font-medium transition-all ${
+                selected
+                  ? "border-[1.5px] border-[#00A99D] bg-[#00A99D]/10 text-[#00A99D]"
+                  : "border-[1.5px] border-[#E3EBE6] bg-white text-[#123D46]/70 hover:bg-[#FAF9F5]"
+              }`}
             >
               {opt}
             </button>
@@ -322,19 +295,19 @@ function ProfilContent() {
 
   if (saved) {
     return (
-      <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ textAlign: "center" }}>
-          <CheckCircle style={{ width: 64, height: 64, color: "#34d399", margin: "0 auto 16px" }} />
-          <h2 style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 24, color: "var(--text-1)", marginBottom: 8 }}>
+      <div className="min-h-screen bg-[#FAF9F5] flex items-center justify-center">
+        <div className="text-center">
+          <CheckCircle className="w-16 h-16 text-[#34d399] mx-auto mb-4" />
+          <h2 className="font-jakarta font-bold text-2xl text-[#123D46] mb-2">
             Profil enregistré !
           </h2>
-          <p style={{ color: "var(--text-3)", fontSize: 14 }}>Redirection vers le questionnaire…</p>
+          <p className="text-[#123D46]/70 text-sm">Redirection vers le questionnaire…</p>
         </div>
       </div>
     );
   }
 
-  if (loadingStatus) return <div style={{ minHeight: "100vh", background: "var(--bg)" }} />;
+  if (loadingStatus) return <div className="min-h-screen bg-[#FAF9F5]" />;
 
   const isHidden = (field: string) => campaignConfig?.hiddenDemographics?.includes(field);
 
@@ -350,18 +323,17 @@ function ProfilContent() {
   return (
     <>
       <Navbar />
-      <main style={S.page}>
-        <div style={S.blobTop} />
-        <div style={S.blobBot} />
+      <main className="min-h-screen bg-[#FAF9F5] pt-28 pb-20 relative overflow-y-auto">
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-gradient-to-br from-[#00A99D]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-        <div style={S.container}>
-          <div style={S.header}>
-            <div style={S.headerIcon}>
-              {isOnboarding ? <User size={24} color="var(--primary)" /> : <Settings size={24} color="var(--primary)" />}
+        <div className="max-w-[680px] mx-auto px-6 relative z-10">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-12 h-12 bg-[#00A99D]/10 rounded-2xl flex items-center justify-center shrink-0">
+              {isOnboarding ? <User className="w-6 h-6 text-[#00A99D]" /> : <Settings className="w-6 h-6 text-[#00A99D]" />}
             </div>
             <div>
-              <h1 style={S.title}>{isOnboarding ? "Apprenons à vous connaître" : "Paramètres du compte"}</h1>
-              <p style={S.subtitle}>
+              <h1 className="font-jakarta font-bold text-2xl text-[#123D46] m-0">{isOnboarding ? "Apprenons à vous connaître" : "Paramètres du compte"}</h1>
+              <p className="font-sans text-[#123D46]/70 text-sm mt-1">
                 {isOnboarding
                   ? "Ces informations permettent de personnaliser votre accompagnement."
                   : "Gérez vos informations personnelles et vos préférences."}
@@ -370,58 +342,64 @@ function ProfilContent() {
           </div>
 
           {!isOnboarding && (
-            <div style={{ display: "flex", gap: 16, marginBottom: 24, borderBottom: "1px solid var(--border)" }}>
-              <button style={S.tabButton(activeTab === 'account')} onClick={() => setActiveTab('account')}>
-                <Shield size={16} /> Mon Compte
+            <div className="flex gap-4 mb-6 border-b border-[#E3EBE6]">
+              <button
+                className={`px-4 py-2.5 text-sm font-semibold flex items-center gap-2 transition-all border-b-2 ${activeTab === 'account' ? 'bg-[#00A99D]/10 text-[#00A99D] border-[#00A99D]' : 'text-[#123D46]/70 border-transparent hover:text-[#123D46]'}`}
+                onClick={() => setActiveTab('account')}
+              >
+                <Shield className="w-4 h-4" /> Mon Compte
               </button>
-              <button style={S.tabButton(activeTab === 'demographics')} onClick={() => setActiveTab('demographics')}>
-                <User size={16} /> Profil Démographique
+              <button
+                className={`px-4 py-2.5 text-sm font-semibold flex items-center gap-2 transition-all border-b-2 ${activeTab === 'demographics' ? 'bg-[#00A99D]/10 text-[#00A99D] border-[#00A99D]' : 'text-[#123D46]/70 border-transparent hover:text-[#123D46]'}`}
+                onClick={() => setActiveTab('demographics')}
+              >
+                <User className="w-4 h-4" /> Profil Démographique
               </button>
             </div>
           )}
 
           {activeTab === 'account' && !isOnboarding && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-              <div style={S.card}>
-                <div style={S.sectionTitle}><User size={18} style={{ color: "var(--primary)" }} /> Identité</div>
-                <div style={S.grid2}>
+            <div className="flex flex-col gap-5">
+              <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm">
+                <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><User className="w-[18px] h-[18px] text-[#00A99D]" /> Identité</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label style={S.label}>Nom complet</label>
-                    <div style={{ ...S.input, background: "var(--surface)", color: "var(--text-2)" }}>
+                    <label className="block text-[13px] font-medium text-[#123D46]/70 mb-2">Nom complet</label>
+                    <div className="w-full bg-white border border-[#E3EBE6] rounded-xl px-3.5 py-2.5 text-[#123D46]/70 text-sm">
                       {session?.user?.name || "Non défini"}
                     </div>
                   </div>
                   <div>
-                    <label style={S.label}>Adresse e-mail</label>
-                    <div style={{ ...S.input, background: "var(--surface)", color: "var(--text-2)", display: "flex", alignItems: "center", gap: 8 }}>
-                      <Mail size={14} />
+                    <label className="block text-[13px] font-medium text-[#123D46]/70 mb-2">Adresse e-mail</label>
+                    <div className="w-full bg-white border border-[#E3EBE6] rounded-xl px-3.5 py-2.5 text-[#123D46]/70 text-sm flex items-center gap-2">
+                      <Mail className="w-3.5 h-3.5" />
                       {session?.user?.email || "Non définie"}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div style={S.card}>
-                <div style={S.sectionTitle}><Building size={18} style={{ color: "#34d399" }} /> Organisation & Rôle</div>
-                <div style={S.grid2}>
+              <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm">
+                <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><Building className="w-[18px] h-[18px] text-[#34d399]" /> Organisation & Rôle</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label style={S.label}>Rôle système</label>
-                    <div style={{ ...S.input, background: "var(--surface)", color: "#34d399", fontWeight: 600 }}>
+                    <label className="block text-[13px] font-medium text-[#123D46]/70 mb-2">Rôle système</label>
+                    <div className="w-full bg-white border border-[#E3EBE6] rounded-xl px-3.5 py-2.5 text-[#34d399] font-semibold text-sm">
                       {session?.user?.role || "EMPLOYEE"}
                     </div>
                   </div>
                   <div>
-                    <label style={S.label}>ID Organisation (si rattaché)</label>
-                    <div style={{ ...S.input, background: "var(--surface)", color: "var(--text-2)" }}>
+                    <label className="block text-[13px] font-medium text-[#123D46]/70 mb-2">ID Organisation (si rattaché)</label>
+                    <div className="w-full bg-white border border-[#E3EBE6] rounded-xl px-3.5 py-2.5 text-[#123D46]/70 text-sm">
                       {session?.user?.organizationId || "Indépendant (B2C)"}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div style={S.card}>
-                <div style={S.sectionTitle}><Key size={18} style={{ color: "var(--amber)" }} /> Sécurité</div>
-                <p style={{ fontSize: 13, color: "var(--text-2)", marginBottom: 16 }}>
+              <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm">
+                <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><Key className="w-[18px] h-[18px] text-amber-500" /> Sécurité</div>
+                <p className="text-[13px] text-[#123D46]/70 mb-4">
                   Pour des raisons de sécurité, la modification du mot de passe requiert l'envoi d'un email de vérification.
                 </p>
                 <Button
@@ -433,32 +411,25 @@ function ProfilContent() {
               </div>
 
               {campaignOffer === "PREMIUM_PLUS" && (
-                <div style={S.card}>
-                  <div style={S.sectionTitle}>
-                    <div style={{ width: 26, height: 26, borderRadius: "50%", background: "rgba(236,72,153,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <User size={14} style={{ color: "#ec4899" }} />
+                <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm">
+                  <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5">
+                    <div className="w-6 h-6 rounded-full bg-pink-500/20 flex items-center justify-center">
+                      <User className="w-3.5 h-3.5 text-pink-500" />
                     </div>
                     Programme Binôme Relationnel
                   </div>
-                  <p style={{ fontSize: 13, color: "var(--text-2)", marginBottom: 16 }}>
+                  <p className="text-[13px] text-[#123D46]/70 mb-4">
                     Acceptez-vous d'être mis en relation avec un pair de votre organisation pour partager vos défis et progresser ensemble ?
                   </p>
 
-                  <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: updatingOptIn ? "wait" : "pointer" }}>
-                    <div style={{
-                      width: 44, height: 24, background: matchingOptIn ? "#ec4899" : "var(--border)",
-                      borderRadius: 999, position: "relative", transition: "background 0.3s"
-                    }}>
-                      <div style={{
-                        width: 18, height: 18, background: "white", borderRadius: "50%",
-                        position: "absolute", top: 3, left: matchingOptIn ? 23 : 3, transition: "left 0.3s"
-                      }} />
+                  <label className={`flex items-center gap-3 ${updatingOptIn ? "cursor-wait" : "cursor-pointer"}`}>
+                    <div className={`w-11 h-6 rounded-full relative transition-colors ${matchingOptIn ? "bg-pink-500" : "bg-[#E3EBE6]"}`}>
+                      <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${matchingOptIn ? "left-[22px]" : "left-1"}`} />
                     </div>
-                    <span style={{ color: "var(--text-1)", fontSize: 14, fontWeight: 500 }}>
+                    <span className="text-[#123D46] text-sm font-medium">
                       {matchingOptIn ? "Oui, j'autorise le matching." : "Non, je ne souhaite pas participer."}
                     </span>
 
-                    {/* Invisible checkbox to handle toggle logic easily */}
                     <input
                       type="checkbox"
                       checked={matchingOptIn}
@@ -479,7 +450,7 @@ function ProfilContent() {
                           setUpdatingOptIn(false);
                         }
                       }}
-                      style={{ display: "none" }}
+                      className="hidden"
                     />
                   </label>
                 </div>
@@ -488,32 +459,32 @@ function ProfilContent() {
           )}
 
           {activeTab === 'demographics' && (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               {!isHidden('sexe') && (
-                <div style={{ ...S.card, position: "relative", zIndex: 60 }}>
-                  <div style={S.sectionTitle}><span style={S.sectionBadge}>1</span>Votre genre</div>
-                  <div style={S.fieldGroup}>
+                <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm relative z-50">
+                  <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><span className="w-6 h-6 rounded-full bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-[11px] font-bold shrink-0">1</span>Votre genre</div>
+                  <div className="flex flex-col gap-4">
                     {handleRadioChoice("sexe", ["Homme", "Femme", "Non binaire", "Je préfère ne pas le dire"], form.sexe, v => setF("sexe", v))}
                   </div>
                 </div>
               )}
 
               {!isHidden('age_range') && (
-                <div style={{ ...S.card, position: "relative", zIndex: 55 }}>
-                  <div style={S.sectionTitle}><span style={S.sectionBadge}>2</span>Votre tranche d'âge</div>
-                  <div style={S.fieldGroup}>
+                <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm relative z-40">
+                  <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><span className="w-6 h-6 rounded-full bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-[11px] font-bold shrink-0">2</span>Votre tranche d'âge</div>
+                  <div className="flex flex-col gap-4">
                     {handleRadioChoice("age_range", AGE_RANGES, form.age_range, v => setF("age_range", v))}
                   </div>
                 </div>
               )}
 
               {!isHidden('pays') && !isHidden('departement') && (
-                <div style={{ ...S.card, position: "relative", zIndex: 50 }}>
-                  <div style={S.sectionTitle}><span style={S.sectionBadge}>3</span>Localisation</div>
-                  <div style={S.grid2}>
+                <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm relative z-30">
+                  <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><span className="w-6 h-6 rounded-full bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-[11px] font-bold shrink-0">3</span>Localisation</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {!isHidden('pays') && (
                       <div>
-                        <label style={S.label}>Pays de résidence</label>
+                        <label className="block text-[13px] font-medium text-[#123D46]/70 mb-2">Pays de résidence</label>
                         <Select 
                           value={form.pays} 
                           onChange={v => { setF("pays", v); if (v !== "France") setF("departement", ""); }} 
@@ -523,7 +494,7 @@ function ProfilContent() {
                     )}
                     {form.pays === "France" && !isHidden('departement') && (
                       <div>
-                        <label style={S.label}>Département</label>
+                        <label className="block text-[13px] font-medium text-[#123D46]/70 mb-2">Département</label>
                         <Select 
                           value={form.departement} 
                           onChange={v => setF("departement", v)}
@@ -539,18 +510,18 @@ function ProfilContent() {
               )}
 
               {!isHidden('situation_professionnelle') && (
-                <div style={{ ...S.card, position: "relative", zIndex: 40 }}>
-                  <div style={S.sectionTitle}><span style={S.sectionBadge}>4</span>Situation professionnelle</div>
-                  <div style={S.fieldGroup}>
+                <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm relative z-20">
+                  <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><span className="w-6 h-6 rounded-full bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-[11px] font-bold shrink-0">4</span>Situation professionnelle</div>
+                  <div className="flex flex-col gap-4">
                     {handleRadioChoice("situation_professionnelle", allowedOccupations, form.situation_professionnelle, v => { setF("situation_professionnelle", v); setF("taille_organisation", ""); })}
 
                     {form.situation_professionnelle === "Autre" && (
-                      <input type="text" placeholder="Précisez..." value={form.situation_professionnelle_autre} onChange={e => setF("situation_professionnelle_autre", e.target.value)} style={S.input} required />
+                      <input type="text" placeholder="Précisez..." value={form.situation_professionnelle_autre} onChange={e => setF("situation_professionnelle_autre", e.target.value)} className="w-full bg-white border border-[#E3EBE6] rounded-xl px-3.5 py-2.5 text-[#123D46] text-sm focus:border-[#00A99D] outline-none transition-colors" required />
                     )}
 
                     {requiresOrgSize && !isHidden('taille_organisation') && (
-                      <div style={{ marginTop: 12 }}>
-                        <div style={S.sectionTitle}><span style={S.sectionBadge}>5</span>Taille de votre organisation</div>
+                      <div className="mt-4 border-t border-[#E3EBE6] pt-5">
+                        <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-4"><span className="w-6 h-6 rounded-full bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-[11px] font-bold shrink-0">5</span>Taille de votre organisation</div>
                         <Select 
                           value={form.taille_organisation} 
                           onChange={v => setF("taille_organisation", v)}
@@ -566,22 +537,21 @@ function ProfilContent() {
               )}
 
               {!isHidden('situation_sentimentale') && (
-                <div style={{ ...S.card, position: "relative", zIndex: 30 }}>
-                  <div style={S.sectionTitle}><span style={S.sectionBadge}>6</span>Situation sentimentale</div>
-                  <div style={S.fieldGroup}>
-                    <div style={{ display: "flex", gap: 10 }}>
+                <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm relative z-10">
+                  <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><span className="w-6 h-6 rounded-full bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-[11px] font-bold shrink-0">6</span>Situation sentimentale</div>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex gap-2.5">
                       {["Célibataire", "En couple"].map(opt => {
                         const selected = form.situation_sentimentale_base === opt;
                         return (
                           <button
                             key={opt} type="button"
                             onClick={() => { setF("situation_sentimentale_base", opt); setF("situation_sentimentale_exclusif", ""); }}
-                            style={{
-                              flex: 1, padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-                              border: selected ? "1.5px solid var(--primary)" : "1.5px solid var(--border-strong)",
-                              background: selected ? "var(--primary-glow)" : "var(--bg)",
-                              color: selected ? "var(--primary)" : "var(--text-2)"
-                            }}
+                            className={`flex-1 px-3.5 py-2.5 rounded-xl text-[13px] font-medium transition-all ${
+                              selected
+                                ? "border-[1.5px] border-[#00A99D] bg-[#00A99D]/10 text-[#00A99D]"
+                                : "border-[1.5px] border-[#E3EBE6] bg-white text-[#123D46]/70 hover:bg-[#FAF9F5]"
+                            }`}
                           >
                             {opt}
                           </button>
@@ -589,19 +559,18 @@ function ProfilContent() {
                       })}
                     </div>
                     {form.situation_sentimentale_base === "En couple" && (
-                      <div style={{ display: "flex", gap: 10, paddingLeft: 20 }}>
+                      <div className="flex gap-2.5 pl-4 sm:pl-6 border-l-2 border-[#E3EBE6] ml-2 mt-1">
                         {["Marié(e)", "Pacsé(e)"].map(opt => {
                           const selected = form.situation_sentimentale_couple === opt;
                           return (
                             <button
                               key={opt} type="button"
                               onClick={() => setF("situation_sentimentale_couple", selected ? "" : opt)}
-                              style={{
-                                padding: "8px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-                                border: selected ? "1.5px solid var(--primary)" : "1.5px solid var(--border-strong)",
-                                background: selected ? "var(--primary-glow)" : "transparent",
-                                color: selected ? "#22d3ee" : "var(--text-2)"
-                              }}
+                              className={`flex-1 sm:flex-none px-4 py-2 rounded-xl text-[13px] font-medium transition-all ${
+                                selected
+                                  ? "border-[1.5px] border-[#00A99D] bg-[#00A99D]/10 text-[#00A99D]"
+                                  : "border-[1.5px] border-[#E3EBE6] bg-white text-[#123D46]/70 hover:bg-[#FAF9F5]"
+                              }`}
                             >
                               {opt}
                             </button>
@@ -610,19 +579,18 @@ function ProfilContent() {
                       </div>
                     )}
 
-                    <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+                    <div className="flex gap-2.5 mt-2.5">
                       {["Séparé(e) / Divorcé(e)", "Veuf(ve)"].map(opt => {
                         const selected = form.situation_sentimentale_exclusif === opt;
                         return (
                           <button
                             key={opt} type="button"
                             onClick={() => { setF("situation_sentimentale_exclusif", opt); setF("situation_sentimentale_base", ""); setF("situation_sentimentale_couple", ""); }}
-                            style={{
-                              flex: 1, padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-                              border: selected ? "1.5px solid var(--primary)" : "1.5px solid var(--border-strong)",
-                              background: selected ? "var(--primary-glow)" : "var(--bg)",
-                              color: selected ? "var(--primary)" : "var(--text-2)"
-                            }}
+                            className={`flex-1 px-3.5 py-2.5 rounded-xl text-[13px] font-medium transition-all ${
+                              selected
+                                ? "border-[1.5px] border-[#00A99D] bg-[#00A99D]/10 text-[#00A99D]"
+                                : "border-[1.5px] border-[#E3EBE6] bg-white text-[#123D46]/70 hover:bg-[#FAF9F5]"
+                            }`}
                           >
                             {opt}
                           </button>
@@ -634,14 +602,14 @@ function ProfilContent() {
               )}
 
               {!isHidden('enfants') && (
-                <div style={{ ...S.card, position: "relative", zIndex: 20 }}>
-                  <div style={S.sectionTitle}><span style={S.sectionBadge}>7</span>Avez-vous des enfants ?</div>
-                  <div style={S.fieldGroup}>
+                <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm relative z-0">
+                  <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><span className="w-6 h-6 rounded-full bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-[11px] font-bold shrink-0">7</span>Avez-vous des enfants ?</div>
+                  <div className="flex flex-col gap-4">
                     {handleRadioChoice("enfants", ["Oui", "Non"], form.enfants, v => setF("enfants", v))}
                     {form.enfants === "Oui" && (
                       <div>
-                        <label style={S.label}>Nombre d'enfants</label>
-                        <input type="number" min={1} max={20} value={form.nombre_enfants || ""} onChange={e => setF("nombre_enfants", parseInt(e.target.value) || 0)} style={S.input} required />
+                        <label className="block text-[13px] font-medium text-[#123D46]/70 mb-2">Nombre d'enfants</label>
+                        <input type="number" min={1} max={20} value={form.nombre_enfants || ""} onChange={e => setF("nombre_enfants", parseInt(e.target.value) || 0)} className="w-full bg-white border border-[#E3EBE6] rounded-xl px-3.5 py-2.5 text-[#123D46] text-sm focus:border-[#00A99D] outline-none transition-colors" required />
                       </div>
                     )}
                   </div>
@@ -649,42 +617,40 @@ function ProfilContent() {
               )}
 
               {!isHidden('habitation') && (
-                <div style={{ ...S.card, position: "relative", zIndex: 10 }}>
-                  <div style={S.sectionTitle}><span style={S.sectionBadge}>8</span>Vous vivez actuellement :</div>
-                  <div style={S.fieldGroup}>
+                <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm relative z-0">
+                  <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><span className="w-6 h-6 rounded-full bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-[11px] font-bold shrink-0">8</span>Vous vivez actuellement :</div>
+                  <div className="flex flex-col gap-4">
                     {handleRadioChoice("habitation", HABITATIONS, form.habitation, v => setF("habitation", v))}
                     {form.habitation === "Autre" && (
-                      <input type="text" placeholder="Précisez..." value={form.habitation_autre} onChange={e => setF("habitation_autre", e.target.value)} style={S.input} required />
+                      <input type="text" placeholder="Précisez..." value={form.habitation_autre} onChange={e => setF("habitation_autre", e.target.value)} className="w-full bg-white border border-[#E3EBE6] rounded-xl px-3.5 py-2.5 text-[#123D46] text-sm focus:border-[#00A99D] outline-none transition-colors" required />
                     )}
                   </div>
                 </div>
               )}
 
-              <div style={{ ...S.card, position: "relative", zIndex: 5 }}>
-                <div style={S.sectionTitle}>
-                  <span style={S.sectionBadge}>9</span>
+              <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm relative z-0">
+                <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-2">
+                  <span className="w-6 h-6 rounded-full bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-[11px] font-bold shrink-0">9</span>
                   Situations à fort impact relationnel
                 </div>
-                <div style={{ color: "var(--text-3)", fontSize: 13, marginBottom: 16, marginTop: -8, lineHeight: 1.5 }}>
-                  <strong style={{ color: "var(--text-1)", display: "block", marginBottom: 4 }}>Consigne</strong>
+                <div className="text-[#123D46]/70 text-[13px] mb-5 leading-relaxed bg-[#FAF9F5] p-4 rounded-xl border border-[#E3EBE6]">
+                  <strong className="text-[#123D46] block mb-1">Consigne</strong>
                   Parmi les situations suivantes, sélectionnez au maximum 4 situations qui ont aujourd'hui le plus d'impact sur votre qualité de vie relationnelle.<br />
                   Vous pouvez sélectionner de 0 à 4 réponses maximum.<br />
                   Les réponses sélectionnées déclencheront automatiquement les modules complémentaires du questionnaire.
                 </div>
 
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                <div className="flex flex-wrap gap-2.5">
                   {allowedSituations.map((sit) => {
                     const selected = form.situations_impactantes.includes(sit);
                     return (
                       <button
                         key={sit} type="button" onClick={() => toggleSituation(sit)}
-                        style={{
-                          padding: "8px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
-                          border: selected ? "1.5px solid var(--primary)" : "1.5px solid var(--border-strong)",
-                          background: selected ? "var(--primary-glow)" : "var(--bg)",
-                          color: selected ? "var(--primary)" : "var(--text-2)",
-                          textAlign: "center"
-                        }}
+                        className={`px-3.5 py-2.5 rounded-xl text-[13px] font-medium transition-all ${
+                          selected
+                            ? "border-[1.5px] border-[#00A99D] bg-[#00A99D]/10 text-[#00A99D]"
+                            : "border-[1.5px] border-[#E3EBE6] bg-white text-[#123D46]/70 hover:bg-[#FAF9F5]"
+                        }`}
                       >
                         {sit}
                       </button>
@@ -693,8 +659,8 @@ function ProfilContent() {
                 </div>
 
                 {form.situations_impactantes.length > 0 && (
-                  <div style={{ marginTop: 20 }}>
-                    <label style={S.label}>Situation la plus impactante</label>
+                  <div className="mt-6 border-t border-[#E3EBE6] pt-5">
+                    <label className="block text-[13px] font-medium text-[#123D46]/70 mb-2">Situation la plus impactante</label>
                     <Select 
                       value={form.situation_impact_principale} 
                       onChange={v => setF("situation_impact_principale", v)}
@@ -707,30 +673,26 @@ function ProfilContent() {
                 )}
               </div>
 
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                disabled={!canSubmit}
-                loading={saving}
-                style={{ width: "100%", marginTop: 8, marginBottom: 32 }}
-              >
-                {isOnboarding ? (
-                  <>Enregistrer et passer au questionnaire<ArrowRight style={{ width: 18, height: 18, marginLeft: 8 }} /></>
-                ) : (
-                  <>Mettre à jour mon profil démographique<CheckCircle style={{ width: 18, height: 18, marginLeft: 8 }} /></>
-                )}
-              </Button>
+              <div className="pt-4">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  disabled={!canSubmit}
+                  loading={saving}
+                  className="w-full"
+                >
+                  {isOnboarding ? (
+                    <span className="flex items-center">Enregistrer et passer au questionnaire<ArrowRight className="w-5 h-5 ml-2" /></span>
+                  ) : (
+                    <span className="flex items-center">Mettre à jour mon profil démographique<CheckCircle className="w-5 h-5 ml-2" /></span>
+                  )}
+                </Button>
+              </div>
             </form>
           )}
         </div>
       </main>
-
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        select option { background: var(--surface); color: var(--text-1); }
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { opacity: 1; }
-      `}</style>
     </>
   );
 }

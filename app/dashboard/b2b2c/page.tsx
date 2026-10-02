@@ -88,24 +88,25 @@ export default function B2B2CDashboard() {
   return (
     <>
       <Navbar />
-      <main className="page-main">
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 py-6 sm:py-10">
         <PartnerPortalsNavigation />
-        <div className="page-container-wide" style={{ position: "relative", zIndex: 1, paddingBottom: 64 }}>
+        
+        <div className="relative z-10 pb-16">
           
           {/* ── HEADER & FILTRES ── */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32, flexWrap: "wrap", gap: 16 }}>
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-8">
             <div>
-              <h1 style={{ fontSize: 32, fontWeight: 800, color: "var(--text-1)", marginBottom: 8, fontFamily: "var(--font-family-display)", display: "flex", alignItems: "center", gap: 12 }}>
-                <HeartPulse color="#00A99D" size={36} /> 
+              <h1 className="font-jakarta font-extrabold text-2xl sm:text-3xl text-[#123D46] mb-2 flex items-center gap-3">
+                <HeartPulse className="text-[#00A99D]" size={36} /> 
                 Portail Mutuelle (B2B2C)
               </h1>
-              <p style={{ color: "var(--text-2)", fontSize: 16, margin: 0 }}>
+              <p className="text-sm sm:text-base text-[#123D46]/70">
                 Analysez l'état de santé relationnelle des assurés et anticipez les risques (RPS, Isolement).
               </p>
             </div>
             
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 16 }}>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap", background: "var(--surface)", padding: 12, borderRadius: 16, border: "1px solid var(--border)" }}>
+            <div className="flex flex-col md:items-end gap-4">
+              <div className="flex flex-wrap items-center gap-3 bg-white p-3 rounded-2xl border border-[#E3EBE6] shadow-sm">
                 {stats?.campaignsList && stats.campaignsList.length > 0 && (
                   <Select 
                     value={selectedCampaignId}

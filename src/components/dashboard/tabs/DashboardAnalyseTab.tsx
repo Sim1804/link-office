@@ -1,8 +1,9 @@
 "use client";
 
-import { User, Lock, Brain, Sparkles, BarChart3, Activity } from "lucide-react";
+import { User, Lock, Sparkles, BarChart3, Activity } from "lucide-react";
 import Link from "next/link";
 import { DimensionsList } from "@/components/dashboard/DimensionsList";
+import { IrisMark } from "@/components/brand/IrisLogo";
 
 const SCORE_CONFIG = (score: number) => {
   if (score >= 80) return { grad: "linear-gradient(135deg, #34d399 0%, #059669 100%)", color: "#34d399", bg: "rgba(52,211,153,0.1)", border: "rgba(52,211,153,0.2)" };
@@ -16,105 +17,74 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
     <div style={{ animation: "fadeSlideIn 0.4s ease-out", display: "flex", flexDirection: "column", gap: 20 }}>
 
       {/* ── IRIS CTA Banner ── */}
-      <div className="card" style={{
-        borderTop: "3px solid var(--primary)",
-        padding: "20px 28px",
-        display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{
-            width: 48, height: 48, borderRadius: 12,
-            background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <Brain size={24} color="var(--text-3)" />
+      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-[#00A99D]/40 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="p-2.5 bg-[#FAF9F5] rounded-2xl border border-[#E3EBE6] flex items-center justify-center shrink-0">
+            <IrisMark size={40} isAnimated={true} />
           </div>
           <div>
-            <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "var(--text-1)" }}>
+            <h5 className="font-jakarta font-bold text-base text-[#123D46]">
               Parler à IRIS — Votre coach IA
-            </h3>
-            <p style={{ color: "var(--text-3)", fontSize: 13, marginTop: 2 }}>
-              Analyse personnalisée de vos résultats, guidée par l'intelligence artificielle.
+            </h5>
+            <p className="text-xs text-[#123D46]/70 mt-0.5">
+              Analyse personnalisée de vos résultats, guidée par l'intelligence relationnelle LinkOffice.
             </p>
           </div>
         </div>
-        <div style={{ position: "relative" }}>
-          <button 
-            onClick={() => window.dispatchEvent(new CustomEvent("open-iris", { detail: { tab: "coach" } }))} 
-            className="btn btn-primary btn-md"
-          >
-            Commencer avec IRIS
-          </button>
-        </div>
+        <button 
+          onClick={() => window.dispatchEvent(new CustomEvent("open-iris", { detail: { tab: "coach" } }))} 
+          className="px-5 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs shrink-0 self-start sm:self-auto"
+        >
+          Commencer avec IRIS
+        </button>
       </div>
 
       {/* ── Main 2-col grid ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* Profil relationnel */}
-        <div className="card" style={{ padding: 20, position: "relative", overflow: "hidden" }}>
+        <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#E3EBE6] shadow-xs relative overflow-hidden flex flex-col h-full">
 
           {/* Header */}
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{
-                width: 32, height: 32, borderRadius: 8,
-                background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <User size={16} color="var(--text-3)" />
+          <div className="flex items-start justify-between mb-5">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FAF9F5] border border-[#E3EBE6] flex items-center justify-center shrink-0">
+                <User size={20} className="text-[#123D46]/70" />
               </div>
-              <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 15, color: "var(--text-1)" }}>
+              <h3 className="font-jakarta font-extrabold text-base text-[#123D46]">
                 Profil Relationnel
               </h3>
             </div>
             {profil?.signature && (
-              <span style={{
-                fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 999,
-                background: "rgba(6,182,212,0.1)", color: "#06b6d4",
-                border: "1px solid rgba(6,182,212,0.2)",
-              }}>
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-100 text-xs font-bold">
                 ✨ {profil.signature}
               </span>
             )}
           </div>
 
           {profil && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
-              <span style={{
-                padding: "6px 14px", borderRadius: 999,
-                background: "rgba(124,58,237,0.15)", color: "#c084fc",
-                border: "1px solid rgba(124,58,237,0.25)", fontSize: 13, fontWeight: 600,
-              }}>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className="px-3.5 py-1.5 rounded-full bg-purple-50 text-purple-700 border border-purple-100 text-xs font-bold">
                 {profil.profile_primary}
               </span>
               {profil.profile_secondary && (
-                <span style={{
-                  padding: "5px 12px", borderRadius: 999,
-                  background: "rgba(18,61,70,0.05)", color: "var(--text-2)",
-                  border: "1px solid var(--border)", fontSize: 12, fontWeight: 500,
-                }}>
+                <span className="px-3 py-1.5 rounded-full bg-[#FAF9F5] text-[#123D46]/70 border border-[#E3EBE6] text-xs font-semibold">
                   {profil.profile_secondary}
                 </span>
               )}
             </div>
           )}
 
-          {/* Short description visible to everyone */}
-          <div style={{ marginBottom: 20 }}>
-            {/* Si Freemium, on n'affiche que les tags principaux/secondaires (déjà fait au-dessus) */}
-          </div>
-
-          <div style={!isPremium ? { filter: "blur(4px)", opacity: 0.4, userSelect: "none", pointerEvents: "none" } : {}}>
-            <p style={{ color: "var(--text-2)", fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>
+          <div className={`${!isPremium ? "blur-[4px] opacity-40 select-none pointer-events-none" : ""} flex-grow`}>
+            <p className="text-xs text-[#123D46]/75 leading-relaxed font-inter mb-5">
               {profil?.profile_description || "Description non disponible."}
             </p>
           </div>
 
-          {/* 5 sous-scores accessibles en Freemium */}
+          {/* 5 sous-scores */}
           {iqrh?.dimensions && (
-            <div style={{ borderTop: "1px solid rgba(18,61,70,0.05)", paddingTop: 16 }}>
-              <p style={{ fontSize: 11, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 12 }}>
+            <div className="pt-4 border-t border-[#E3EBE6] mt-auto">
+              <p className="text-[11px] font-bold text-[#123D46]/60 uppercase tracking-wider mb-3">
                 Détail des scores
               </p>
               <DimensionsList
@@ -126,25 +96,13 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
           )}
 
           {!isPremium && (
-            <div style={{
-              position: "absolute", inset: 0,
-              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-              background: "radial-gradient(circle at center, var(--surface) 0%, rgba(11,15,25,0.85) 100%)",
-              backdropFilter: "blur(6px)",
-              borderRadius: 16, zIndex: 10,
-              border: "1px solid rgba(18,61,70,0.05)"
-            }}>
-              <div style={{
-                width: 52, height: 52, borderRadius: 16,
-                background: "var(--surface-2)", border: "1px solid var(--border)",
-                display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16,
-                boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
-              }}>
-                <Lock size={22} color="var(--text-1)" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-white/90 to-[#FAF9F5]/95 backdrop-blur-sm z-10 p-6 text-center">
+              <div className="w-12 h-12 rounded-2xl bg-white shadow-xs border border-[#E3EBE6] flex items-center justify-center text-xl mb-3">
+                🔒
               </div>
-              <p style={{ color: "var(--text-1)", fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Détail du Profil</p>
-              <p style={{ color: "var(--text-3)", fontSize: 13, marginBottom: 20 }}>Accessible en version Premium</p>
-              <Link href="/premium" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
+              <p className="font-jakarta font-bold text-base text-[#123D46] mb-1">Détail du Profil</p>
+              <p className="text-xs text-[#123D46]/60 mb-5">Accessible en version Premium</p>
+              <Link href="/premium" className="px-6 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs">
                 Débloquer
               </Link>
             </div>
@@ -153,66 +111,42 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
 
         {/* ICR */}
         {icr && (
-          <div style={{
-            borderRadius: 16,
-            border: "1px solid rgba(245,158,11,0.15)",
-            background: "var(--surface)",
-            padding: 20,
-            position: "relative", overflow: "hidden",
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.2)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <Activity size={18} style={{ color: "#f59e0b" }} />
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#E3EBE6] shadow-xs relative overflow-hidden flex flex-col h-full">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                <Activity size={20} />
               </div>
               <div>
-                <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 15, color: "var(--text-1)" }}>
+                <h3 className="font-jakarta font-extrabold text-base text-[#123D46]">
                   ICR — Complexité de vie
                 </h3>
-                <p style={{ fontSize: 11, color: "var(--text-3)", marginTop: 1 }}>Indice de Charge Relationnelle</p>
+                <p className="text-[11px] text-[#123D46]/60 mt-0.5">Indice de Charge Relationnelle</p>
               </div>
             </div>
 
             {/* Score visuel */}
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 20 }}>
-              <div style={{
-                width: 72, height: 72, borderRadius: "50%",
-                background: "rgba(245,158,11,0.08)", border: "2px solid rgba(245,158,11,0.2)",
-                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                flexShrink: 0
-              }}>
-                <span style={{
-                  fontSize: 24, fontWeight: 800,
-                  background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
-                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                }}>
+            <div className="flex items-center gap-5 mb-6">
+              <div className="w-16 h-16 rounded-full border-4 border-amber-400 flex flex-col items-center justify-center shrink-0">
+                <span className="font-jakarta font-extrabold text-xl text-[#123D46] font-mono tabular-nums leading-none">
                   {icr.icr_score}
                 </span>
-                <span style={{ fontSize: 9, color: "var(--text-3)", fontWeight: 600 }}>/100</span>
+                <span className="text-[9px] text-[#123D46]/60">/ 100</span>
               </div>
-              <div style={{ flex: 1 }}>
-                <span style={{
-                  display: "inline-block", padding: "4px 12px", borderRadius: 999,
-                  background: "rgba(245,158,11,0.12)", color: "#f59e0b",
-                  border: "1px solid rgba(245,158,11,0.2)", fontSize: 12, fontWeight: 600,
-                  marginBottom: 6,
-                }}>
+              <div className="flex-1">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100 text-xs font-bold mb-2">
                   {icr.niveau_icr}
                 </span>
                 {icr.interpretation_icr && (
-                  <p style={{ fontSize: 12, color: "var(--text-3)", lineHeight: 1.5 }}>
+                  <p className="text-xs text-[#123D46]/75 leading-relaxed font-inter">
                     {icr.interpretation_icr}
                   </p>
                 )}
               </div>
             </div>
 
-            <div style={!isPremium ? { filter: "blur(4px)", opacity: 0.4, userSelect: "none", pointerEvents: "none" } : {}}>
+            <div className={`${!isPremium ? "blur-[4px] opacity-40 select-none pointer-events-none" : ""} flex-grow flex flex-col`}>
               {/* Composantes ICR */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
+              <div className="space-y-3 mb-5">
                 {[
                   { label: "Complexité familiale", val: icr.family_complexity, max: 20 },
                   { label: "Complexité professionnelle", val: icr.professional_complexity, max: 20 },
@@ -221,20 +155,18 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
                   { label: "Ressources protectrices", val: icr.protective_resources, max: 15, inverse: true },
                 ].map(({ label, val, max, inverse }) => {
                   const pct = Math.min(100, (val / max) * 100);
+                  const barColor = inverse
+                    ? "bg-emerald-500"
+                    : pct > 70 ? "bg-rose-500" : "bg-amber-500";
+
                   return (
                     <div key={label}>
-                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                        <span style={{ fontSize: 12, color: "var(--text-2)" }}>{label}</span>
-                        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-1)" }}>{val}<span style={{ color: "var(--text-3)", fontWeight: 400 }}>/{max}</span></span>
+                      <div className="flex justify-between items-center mb-1 text-[11px] font-jakarta">
+                        <span className="text-[#123D46]/70">{label}</span>
+                        <span className="font-mono font-bold text-[#123D46]">{val}<span className="text-[#123D46]/40 font-normal">/{max}</span></span>
                       </div>
-                      <div style={{ height: 5, borderRadius: 999, background: "rgba(18,61,70,0.05)" }}>
-                        <div style={{
-                          height: "100%", width: `${pct}%`, borderRadius: 999,
-                          background: inverse
-                            ? "linear-gradient(90deg, #34d399, #059669)"
-                            : pct > 70 ? "linear-gradient(90deg, #f87171, #ef4444)" : "linear-gradient(90deg, #fbbf24, #f59e0b)",
-                          transition: "width 0.8s ease-out",
-                        }} />
+                      <div className="w-full bg-[#E3EBE6] h-1.5 rounded-full overflow-hidden">
+                        <div className={`h-full rounded-full transition-all ${barColor}`} style={{ width: `${pct}%` }} />
                       </div>
                     </div>
                   );
@@ -243,17 +175,13 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
 
               {/* Dominant needs */}
               {icr.dominant_needs && icr.dominant_needs.length > 0 && (
-                <div style={{ borderTop: "1px solid rgba(18,61,70,0.05)", paddingTop: 16 }}>
-                  <p style={{ fontSize: 11, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 10 }}>
+                <div className="pt-4 border-t border-[#E3EBE6] mt-auto">
+                  <p className="text-[11px] font-bold text-[#123D46]/60 uppercase tracking-wider mb-3">
                     Besoins dominants
                   </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  <div className="flex flex-wrap gap-2">
                     {icr.dominant_needs.map((need: string) => (
-                      <span key={need} style={{
-                        fontSize: 12, padding: "5px 14px", borderRadius: 999,
-                        background: "var(--primary-glow)", color: "var(--primary)",
-                        border: "1px solid rgba(124,58,237,0.15)", fontWeight: 500,
-                      }}>
+                      <span key={need} className="px-3 py-1.5 rounded-full bg-[#00A99D]/10 text-[#00A99D] text-[11px] font-bold border border-[#00A99D]/20">
                         {need}
                       </span>
                     ))}
@@ -263,25 +191,13 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
             </div>
 
             {!isPremium && (
-              <div style={{
-                position: "absolute", inset: 0,
-                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                background: "radial-gradient(circle at center, var(--surface) 0%, rgba(11,15,25,0.85) 100%)",
-                backdropFilter: "blur(6px)",
-                borderRadius: 16, zIndex: 10,
-                border: "1px solid rgba(18,61,70,0.05)"
-              }}>
-                <div style={{
-                  width: 52, height: 52, borderRadius: 16,
-                  background: "var(--surface-2)", border: "1px solid var(--border)",
-                  display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16,
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
-                }}>
-                  <Lock size={22} color="var(--text-1)" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-white/90 to-[#FAF9F5]/95 backdrop-blur-sm z-10 p-6 text-center">
+                <div className="w-12 h-12 rounded-2xl bg-white shadow-xs border border-[#E3EBE6] flex items-center justify-center text-xl mb-3">
+                  🔒
                 </div>
-                <p style={{ color: "var(--text-1)", fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Détail ICR Premium</p>
-                <p style={{ color: "var(--text-3)", fontSize: 13, marginBottom: 20 }}>Décomposition complète réservée aux abonnés</p>
-                <Link href="/premium" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
+                <p className="font-jakarta font-bold text-base text-[#123D46] mb-1">Détail ICR Premium</p>
+                <p className="text-xs text-[#123D46]/60 mb-5">Décomposition complète réservée aux abonnés</p>
+                <Link href="/premium" className="px-6 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs">
                   Débloquer
                 </Link>
               </div>

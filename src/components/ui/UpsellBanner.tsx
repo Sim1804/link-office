@@ -60,39 +60,24 @@ export function UpsellBanner({
   const Icon = v.icon;
 
   return (
-    <div style={{
-      borderRadius: 16,
-      border: `1px solid ${v.borderColor}`,
-      background: variant === "premium"
-        ? "linear-gradient(135deg, rgba(0,169,157,0.04) 0%, rgba(6,182,212,0.02) 100%)"
-        : "var(--surface)",
-      padding: "32px 28px",
-      textAlign: "center",
-      display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
-    }}>
+    <div className={`rounded-3xl p-8 sm:p-10 border shadow-xs flex flex-col items-center justify-center text-center space-y-4 ${variant === "premium" ? "bg-gradient-to-b from-[#FAF9F5] to-[#F0FDF4] border-[#00A99D]/20" : "bg-white border-[#E3EBE6]"}`}>
       {v.badge && (
-        <SubscriptionBadge tier={v.badge} size="md" />
+        <div className="mb-2">
+          <SubscriptionBadge tier={v.badge} size="md" />
+        </div>
       )}
 
       {/* Icône */}
-      <div style={{
-        width: 52, height: 52, borderRadius: 14,
-        background: v.iconBg, border: "1px solid var(--border)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-      }}>
-        <Icon size={22} color={v.iconColor} />
+      <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center text-2xl ${variant === "premium" ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-[#FAF9F5] border-[#E3EBE6]"}`}>
+        {variant === "freemium" ? "🔒" : "✨"}
       </div>
 
       {/* Texte */}
-      <div style={{ maxWidth: 460 }}>
-        <h4 style={{
-          fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-          fontSize: 17, fontWeight: 700, color: "var(--text-1)",
-          marginBottom: 8,
-        }}>
+      <div className="max-w-[460px]">
+        <h4 className="font-jakarta font-extrabold text-lg sm:text-xl text-[#123D46] mb-2">
           {v.title(featureName)}
         </h4>
-        <p style={{ fontSize: 13, color: "var(--text-2)", lineHeight: 1.6, margin: 0 }}>
+        <p className="text-xs text-[#123D46]/70 leading-relaxed font-inter">
           {description || v.description}
         </p>
       </div>
@@ -100,16 +85,15 @@ export function UpsellBanner({
       {/* CTA */}
       <Link
         href={v.ctaHref}
-        className={v.ctaClass}
-        style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}
+        className="px-6 py-3 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-2"
       >
-        {v.cta}
+        <span>{v.cta}</span>
         <ArrowRight size={16} />
       </Link>
 
-      <p style={{ fontSize: 11, color: "var(--text-3)", margin: 0 }}>
+      <span className="text-[11px] text-[#123D46]/50">
         {variant === "freemium" ? "✓ Sans engagement · Résiliable à tout moment" : "✓ Mise à niveau instantanée · Différence pro-rata"}
-      </p>
+      </span>
     </div>
   );
 }

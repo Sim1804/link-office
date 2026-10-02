@@ -62,22 +62,22 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant = "primary", size = "md", loading, children, className, disabled, ...rest }, ref) => {
     /** Classes CSS communes à toutes les variantes */
-    const baseClasses = "btn";
+    const baseClasses = "inline-flex items-center justify-center font-jakarta font-bold transition-all disabled:opacity-60 disabled:cursor-not-allowed";
 
     /** Classes spécifiques à chaque variante */
     const variantClasses = {
-      primary: "btn-primary",
-      secondary: "btn-tertiary",
-      ghost: "btn-ghost",
-      danger: "btn-danger",
-      amber: "btn-amber",
+      primary: "bg-[#00A99D] hover:bg-[#199E9A] text-white shadow-xs",
+      secondary: "bg-[#123D46] hover:bg-[#0D2530] text-white shadow-md",
+      ghost: "bg-transparent text-[#123D46] hover:bg-[#FAF9F5]",
+      danger: "bg-red-600 hover:bg-red-700 text-white shadow-xs",
+      amber: "bg-[#FFC629] hover:bg-[#F26D35] text-white shadow-xs",
     };
 
     /** Classes de taille (padding + taille du texte) */
     const sizeClasses = {
-      sm: "btn-sm",
-      md: "btn-md",
-      lg: "btn-lg",
+      sm: "px-4 py-2 text-xs rounded-full",
+      md: "px-6 py-2.5 text-xs sm:text-sm rounded-full",
+      lg: "px-8 py-3.5 text-sm sm:text-base rounded-full",
     };
 
     return (

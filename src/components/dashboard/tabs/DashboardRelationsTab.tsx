@@ -34,16 +34,13 @@ export function DashboardRelationsTab({ isPremium, isPremiumPlus = false }: Dash
   // ── Freemium : aucun abonnement ────────────────────────────────────────
   if (!isPremium && !isPremiumPlus) {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div className="flex flex-col gap-4">
         {/* Aperçu relations — accessible en Premium */}
-        <div style={{
-          background: "var(--surface)", border: "1px solid var(--border)",
-          borderRadius: 16, padding: "20px 24px",
-        }}>
-          <h3 style={{ fontSize: 15, fontWeight: 700, color: "var(--text-1)", marginBottom: 4 }}>
+        <div className="bg-white border border-[#E3EBE6] rounded-3xl p-6 sm:p-8 shadow-xs">
+          <h3 className="text-[15px] font-bold text-[#123D46] mb-1">
             Mes Relations Ressources
           </h3>
-          <p style={{ fontSize: 13, color: "var(--text-3)", margin: 0 }}>
+          <p className="text-[13px] text-[#123D46]/70 m-0 leading-relaxed">
             Disponible dès l'abonnement Premium — cartographiez vos relations de soutien.
           </p>
         </div>
@@ -61,16 +58,13 @@ export function DashboardRelationsTab({ isPremium, isPremiumPlus = false }: Dash
   // ── Premium (sans Plus) : accès partiel, upsell Premium+ ────────────────
   if (isPremium && !isPremiumPlus) {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div className="flex flex-col gap-5">
         {/* Info : relations accessibles en Premium */}
-        <div style={{
-          background: "var(--surface)", border: "1px solid var(--border)",
-          borderRadius: 16, padding: "20px 24px",
-        }}>
-          <h3 style={{ fontSize: 15, fontWeight: 700, color: "var(--text-1)", marginBottom: 4 }}>
+        <div className="bg-white border border-[#E3EBE6] rounded-3xl p-6 sm:p-8 shadow-xs">
+          <h3 className="text-[15px] font-bold text-[#123D46] mb-1">
             Mes Relations Ressources
           </h3>
-          <p style={{ fontSize: 13, color: "var(--text-3)", margin: 0 }}>
+          <p className="text-[13px] text-[#123D46]/70 m-0 leading-relaxed">
             Cartographiez les personnes de soutien dans votre vie — disponible avec votre abonnement Premium.
           </p>
         </div>
@@ -87,29 +81,19 @@ export function DashboardRelationsTab({ isPremium, isPremiumPlus = false }: Dash
 
   // ── Premium+ : accès complet ──────────────────────────────────────────────
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28, animation: "fadeSlideIn 0.4s ease-out" }}>
+    <div className="flex flex-col gap-7 animate-fade-in">
 
       {/* Section Binôme */}
-      <div style={{
-        background: "linear-gradient(135deg, rgba(0,169,157,0.06) 0%, rgba(6,182,212,0.02) 100%)",
-        border: "1px solid rgba(0,169,157,0.2)",
-        padding: "20px 24px", borderRadius: 16,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        flexWrap: "wrap", gap: 16,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{
-            width: 44, height: 44, borderRadius: 12,
-            background: "rgba(0,169,157,0.1)", border: "1px solid rgba(0,169,157,0.2)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <Handshake size={20} color="var(--primary)" />
+      <div className="bg-white rounded-3xl p-6 border border-[#E3EBE6] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center text-xl shrink-0">
+            👥
           </div>
           <div>
-            <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 2 }}>
+            <h3 className="font-jakarta text-base font-extrabold text-[#123D46] mb-0.5">
               Mon Binôme Relationnel
             </h3>
-            <p style={{ fontSize: 13, color: "var(--text-2)", margin: 0 }}>
+            <p className="text-[13px] text-[#123D46]/70 m-0">
               {binomeStatus === "active"
                 ? "Votre binôme est actif — consultez vos check-ins."
                 : binomeStatus === "pending"
@@ -120,8 +104,7 @@ export function DashboardRelationsTab({ isPremium, isPremiumPlus = false }: Dash
         </div>
         <Link
           href="/binome"
-          className="btn btn-primary btn-md"
-          style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}
+          className="relative z-10 px-5 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-2"
         >
           {binomeStatus === "active" ? "Mon espace Binôme" : "Accéder au Binôme"}
           <ArrowRight size={15} />
@@ -130,64 +113,50 @@ export function DashboardRelationsTab({ isPremium, isPremiumPlus = false }: Dash
 
       {/* Cartographie de l'entourage */}
       <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Users size={18} color="var(--primary)" />
-            <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 15, fontWeight: 700, color: "var(--text-1)" }}>
+        <div className="flex justify-between items-center mb-5">
+          <div className="flex items-center gap-2">
+            <Users size={18} className="text-[#00A99D]" />
+            <h3 className="font-jakarta text-[15px] font-extrabold text-[#123D46]">
               Mes Relations Ressources
             </h3>
           </div>
           <button
-            className="btn btn-secondary btn-sm"
-            style={{ display: "flex", alignItems: "center", gap: 6 }}
+            className="px-4 py-2 rounded-full bg-white border border-[#E3EBE6] text-[#123D46] hover:bg-[#FAF9F5] text-[13px] font-bold transition-all flex items-center gap-1.5 shadow-xs"
           >
             <Plus size={14} /> Ajouter
           </button>
         </div>
 
         {loading ? (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {[1, 2, 3].map(i => (
-              <div key={i} className="skeleton" style={{ height: 100, borderRadius: 12 }} />
+              <div key={i} className="animate-pulse bg-[#E3EBE6]/50 h-[100px] rounded-2xl" />
             ))}
           </div>
         ) : relations.length === 0 ? (
-          <div style={{
-            padding: "36px 24px", textAlign: "center",
-            background: "var(--surface)", border: "1px dashed var(--border)",
-            borderRadius: 16,
-          }}>
-            <div style={{
-              width: 52, height: 52,
-              background: "rgba(0,169,157,0.08)", borderRadius: "50%",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 14px",
-            }}>
-              <UserCheck size={24} color="var(--primary)" />
+          <div className="py-10 px-6 text-center bg-white border border-[#E3EBE6] rounded-3xl shadow-xs">
+            <div className="w-14 h-14 bg-[#00A99D]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00A99D]/20">
+              <UserCheck size={24} className="text-[#00A99D]" />
             </div>
-            <h4 style={{ fontSize: 15, fontWeight: 700, color: "var(--text-1)", marginBottom: 6 }}>Aucune relation enregistrée</h4>
-            <p style={{ fontSize: 13, color: "var(--text-2)", maxWidth: 380, margin: "0 auto" }}>
+            <h4 className="text-[15px] font-bold text-[#123D46] mb-2">Aucune relation enregistrée</h4>
+            <p className="text-[13px] text-[#123D46]/70 max-w-sm mx-auto leading-relaxed">
               Identifiez les personnes sur lesquelles vous pouvez compter pour du soutien émotionnel ou pratique.
             </p>
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {relations.map(rel => (
-              <div key={rel.id} style={{
-                background: "var(--surface)", border: "1px solid var(--border)",
-                padding: "16px 20px", borderRadius: 14,
-                transition: "border-color 0.15s",
-              }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--primary)", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              <div key={rel.id} className="bg-white border border-[#E3EBE6] p-5 rounded-2xl transition-colors hover:border-[#00A99D]/30 shadow-xs">
+                <div className="text-[10px] font-bold text-[#00A99D] mb-1.5 uppercase tracking-wider bg-[#00A99D]/10 inline-block px-2.5 py-0.5 rounded-full border border-[#00A99D]/20">
                   {rel.category}
                 </div>
-                <div style={{ color: "var(--text-1)", fontSize: 16, fontWeight: 700, marginBottom: 10 }}>{rel.name}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                  <div style={{ fontSize: 12, color: "var(--text-3)" }}>
-                    <span style={{ fontWeight: 600, color: "var(--text-2)" }}>Fréquence : </span>{rel.frequency}
+                <div className="text-[#123D46] text-base font-bold mb-3">{rel.name}</div>
+                <div className="flex flex-col gap-1.5">
+                  <div className="text-[11px] text-[#123D46]/70">
+                    <span className="font-bold text-[#123D46]/80">Fréquence : </span>{rel.frequency}
                   </div>
-                  <div style={{ fontSize: 12, color: "var(--text-3)" }}>
-                    <span style={{ fontWeight: 600, color: "var(--text-2)" }}>Proximité : </span>{rel.proximity}
+                  <div className="text-[11px] text-[#123D46]/70">
+                    <span className="font-bold text-[#123D46]/80">Proximité : </span>{rel.proximity}
                   </div>
                 </div>
               </div>

@@ -7,7 +7,6 @@ import { MediaCard } from "@/components/media/MediaCard";
 import Link from "next/link";
 import { Search, Filter, Headphones, FileText, Play } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Select } from "@/components/ui/Select";
 
 export const metadata = {
   title: "Média & Ressources — LINK OFFICE",
@@ -68,41 +67,36 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
   return (
     <>
       {isAuthenticated ? <Navbar /> : <PublicNavbar />}
-      <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 100, paddingBottom: 60 }}>
-        <div className="container">
+      <main className="min-h-screen bg-[#FAF9F5] pt-28 pb-20 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto space-y-12">
           {/* Header */}
-          <div style={{ textAlign: "center", marginBottom: 32, animation: "fadeSlideUp 0.6s ease-out" }}>
-            <h1 style={{ fontSize: 48, fontWeight: 800, color: "var(--text-1)", marginBottom: 16, fontFamily: "var(--font-family-display)" }}>
+          <div className="text-center space-y-4 animate-fade-in">
+            <h1 className="font-jakarta font-extrabold text-4xl sm:text-5xl text-[#123D46] tracking-tight">
               Média & Ressources
             </h1>
-            <p style={{ color: "var(--text-2)", fontSize: 18, maxWidth: 600, margin: "0 auto", lineHeight: 1.6 }}>
+            <p className="text-[#123D46]/70 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
               Décrypter, comprendre et s'inspirer. Découvrez nos clés d'action pour cultiver votre santé relationnelle au quotidien.
             </p>
           </div>
 
           {/* Méthode & IA Context */}
           {!typeFilter && !categoryFilter && !searchFilter && (
-            <div className="card" style={{ 
-              marginBottom: 48, padding: 32, borderRadius: 24,
-              background: "linear-gradient(135deg, var(--surface) 0%, rgba(124,58,237,0.03) 100%)",
-              border: "1px solid rgba(124,58,237,0.1)",
-              display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 32
-            }}>
-              <div>
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--primary)" }} />
+            <div className="bg-gradient-to-br from-white to-[#5965E8]/5 border border-[#E3EBE6] rounded-3xl p-8 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 shadow-sm">
+              <div className="space-y-3">
+                <h3 className="font-jakarta font-bold text-lg text-[#123D46] flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#00A99D]" />
                   La Méthode IQRH
                 </h3>
-                <p style={{ color: "var(--text-2)", fontSize: 15, lineHeight: 1.6 }}>
-                  Tous nos contenus sont adossés à l'<strong>Indice de Qualité Relationnelle Humaine</strong>. Nos experts analysent les données (anonymisées) de notre <Link href="/observatoire" style={{ color: "var(--primary)", fontWeight: 600, textDecoration: "none" }}>Observatoire</Link> pour vous proposer des ressources au plus près de vos réalités.
+                <p className="text-[#123D46]/70 text-sm leading-relaxed">
+                  Tous nos contenus sont adossés à l'<strong>Indice de Qualité Relationnelle Humaine</strong>. Nos experts analysent les données (anonymisées) de notre <Link href="/observatoire" className="text-[#00A99D] font-bold hover:underline">Observatoire</Link> pour vous proposer des ressources au plus près de vos réalités.
                 </p>
               </div>
-              <div>
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--violet)" }} />
+              <div className="space-y-3">
+                <h3 className="font-jakarta font-bold text-lg text-[#123D46] flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#5965E8]" />
                   Guidé par Iris (IA)
                 </h3>
-                <p style={{ color: "var(--text-2)", fontSize: 15, lineHeight: 1.6 }}>
+                <p className="text-[#123D46]/70 text-sm leading-relaxed">
                   L'intelligence artificielle Iris puise dans cette médiathèque pour générer vos <strong>prescriptions relationnelles</strong> personnalisées, liant directement l'évaluation scientifique à l'action.
                 </p>
               </div>
@@ -111,52 +105,46 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
 
           {/* Podcast Highlight */}
           {!typeFilter && !categoryFilter && !searchFilter && (
-            <div className="card" style={{ 
-              marginBottom: 48, padding: 40,
-              display: "flex", gap: 40, alignItems: "center", flexWrap: "wrap",
-              borderTop: "3px solid #7c3aed"
-            }}>
-                <div style={{ flex: "1 1 300px" }}>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, background: "var(--surface-2)", color: "var(--text-2)", fontSize: 13, fontWeight: 600, marginBottom: 16, border: "1px solid var(--border)" }}>
-                    <Headphones size={14} color="var(--primary)" /> Notre Podcast
-                  </div>
-                  <h2 style={{ fontSize: 32, fontWeight: 700, color: "var(--text-1)", marginBottom: 16 }}>La Voix des Éclaireurs</h2>
-                  <p style={{ color: "var(--text-2)", fontSize: 16, lineHeight: 1.6, marginBottom: 24 }}>
-                    Des témoignages inspirants et des conseils d'experts pour vous accompagner dans vos défis relationnels. Vous n'êtes pas seul(e).
-                  </p>
-                  <Link href="/media?type=PODCAST" className="btn btn-primary" style={{ padding: "12px 24px", fontSize: 15 }}>
+            <div className="bg-white rounded-3xl p-8 sm:p-10 border-t-4 border-t-[#5965E8] border border-[#E3EBE6] shadow-sm flex flex-col md:flex-row gap-10 items-center">
+              <div className="flex-1 space-y-5">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF9F5] border border-[#E3EBE6] text-xs font-jakarta font-bold text-[#123D46]">
+                  <Headphones className="w-4 h-4 text-[#00A99D]" /> Notre Podcast
+                </div>
+                <h2 className="font-jakarta font-extrabold text-3xl text-[#123D46]">La Voix des Éclaireurs</h2>
+                <p className="text-[#123D46]/80 text-base leading-relaxed">
+                  Des témoignages inspirants et des conseils d'experts pour vous accompagner dans vos défis relationnels. Vous n'êtes pas seul(e).
+                </p>
+                <Link href="/media?type=PODCAST" className="inline-block">
+                  <Button variant="primary" size="lg">
                     Écouter les épisodes
-                  </Link>
-                </div>
-                <div style={{ flexShrink: 0, width: 240, height: 240, borderRadius: 12, background: "linear-gradient(135deg, rgba(89,101,232,0.1), rgba(0,169,157,0.1))", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Headphones size={48} color="var(--primary)" />
-                </div>
+                  </Button>
+                </Link>
+              </div>
+              <div className="shrink-0 w-48 h-48 sm:w-60 sm:h-60 rounded-2xl bg-gradient-to-br from-[#5965E8]/10 to-[#00A99D]/10 border border-[#E3EBE6] flex items-center justify-center">
+                <Headphones className="w-16 h-16 sm:w-20 sm:h-20 text-[#00A99D]" />
+              </div>
             </div>
           )}
 
           {/* Filters Bar */}
-          <div className="card" style={{ 
-            display: "flex", gap: 16, marginBottom: 40, flexWrap: "wrap", alignItems: "center",
-            padding: 20
-          }}>
-            <form action="/media" method="GET" style={{ display: "flex", gap: 16, flexGrow: 1, flexWrap: "wrap", alignItems: "center" }}>
+          <div className="bg-white border border-[#E3EBE6] rounded-3xl p-5 shadow-sm">
+            <form action="/media" method="GET" className="flex flex-col sm:flex-row gap-4 items-center">
               
               {/* Barre de recherche enrichie */}
-              <div style={{ position: "relative", flexGrow: 1, minWidth: 250 }}>
-                <div style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--text-3)" }}>
-                  <Search size={16} />
+              <div className="relative flex-grow w-full sm:w-auto">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#123D46]/40">
+                  <Search className="w-4 h-4" />
                 </div>
                 <input 
                   name="q" type="text" placeholder="Rechercher un article, un podcast..." 
                   defaultValue={searchFilter || ""}
-                  className="input-field"
-                  style={{ width: "100%", paddingLeft: 42 }}
+                  className="w-full bg-[#FAF9F5] border border-[#E3EBE6] text-[#123D46] rounded-full pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-[#00A99D] focus:ring-1 focus:ring-[#00A99D]/30 transition-all placeholder:text-[#123D46]/40"
                 />
               </div>
 
               {/* Sélecteurs stylisés */}
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <select name="type" defaultValue={typeFilter || ""} className="input-field" style={{ minWidth: 160 }}>
+              <div className="flex w-full sm:w-auto gap-3">
+                <select name="type" defaultValue={typeFilter || ""} className="bg-[#FAF9F5] border border-[#E3EBE6] text-[#123D46] text-sm rounded-full py-2.5 px-4 focus:outline-none focus:border-[#00A99D] focus:ring-1 focus:ring-[#00A99D]/30 transition-all">
                   <option value="">Tous les formats</option>
                   <option value="ARTICLE">Articles</option>
                   <option value="PODCAST">Podcasts</option>
@@ -164,7 +152,7 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
                   <option value="DOSSIER">Dossiers</option>
                 </select>
                 
-                <select name="cat" defaultValue={categoryFilter || ""} className="input-field" style={{ minWidth: 180 }}>
+                <select name="cat" defaultValue={categoryFilter || ""} className="bg-[#FAF9F5] border border-[#E3EBE6] text-[#123D46] text-sm rounded-full py-2.5 px-4 focus:outline-none focus:border-[#00A99D] focus:ring-1 focus:ring-[#00A99D]/30 transition-all">
                   <option value="">Toutes les catégories</option>
                   {categories.map(c => (
                     <option key={c.id} value={c.slug}>{c.name}</option>
@@ -173,14 +161,14 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
               </div>
 
               {/* Boutons */}
-              <div style={{ display: "flex", gap: 12 }}>
-                <Button type="submit" style={{ padding: "10px 20px" }}>
-                  <Filter size={16} style={{ marginRight: 6 }} /> Filtrer
+              <div className="flex gap-3 w-full sm:w-auto">
+                <Button type="submit" variant="secondary" className="flex-1 sm:flex-none">
+                  <Filter className="w-4 h-4 mr-2" /> Filtrer
                 </Button>
                 
                 {(searchFilter || categoryFilter || typeFilter) && (
-                  <Link href="/media" style={{ textDecoration: "none" }}>
-                    <Button variant="ghost" style={{ color: "var(--text-2)" }}>
+                  <Link href="/media" className="flex-1 sm:flex-none">
+                    <Button variant="ghost" className="w-full">
                       Réinitialiser
                     </Button>
                   </Link>
@@ -191,29 +179,24 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
 
           {/* Media Grid */}
           {mediaItems.length > 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-              <div style={{ 
-                display: "grid", 
-                gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", 
-                gap: 24,
-                animation: "fadeIn 0.8s ease-out"
-              }}>
+            <div className="space-y-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
                 {mediaItems.map(item => (
                   <MediaCard key={item.id} media={item} />
                 ))}
               </div>
 
               {totalPages > 1 && (
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 24px", background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
-                  <span style={{ color: "var(--text-3)", fontSize: 13, fontWeight: 500 }}>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-white rounded-2xl border border-[#E3EBE6] shadow-sm">
+                  <span className="text-[#123D46]/60 text-xs font-semibold">
                     Affichage de {((currentPage - 1) * ITEMS_PER_PAGE) + 1} à {Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} sur {totalItems} contenus
                   </span>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <div className="flex items-center gap-2">
                     {Array.from({ length: totalPages }).map((_, i) => {
                       const page = i + 1;
                       const isActive = page === currentPage;
                       if (totalPages > 7 && page > 3 && page < totalPages - 1 && page !== currentPage) {
-                        if (page === 4 || page === totalPages - 2) return <span key={page} style={{ padding: "0 4px", color: "var(--text-3)" }}>…</span>;
+                        if (page === 4 || page === totalPages - 2) return <span key={page} className="px-1 text-[#123D46]/40">…</span>;
                         return null;
                       }
                       
@@ -225,15 +208,12 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
                       params.set("page", page.toString());
                       
                       return (
-                        <Link key={page} href={`/media?${params.toString()}`} style={{ textDecoration: "none" }}>
-                          <button style={{ 
-                            width: 32, height: 32, borderRadius: "50%", 
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            background: isActive ? "var(--primary)" : "transparent", 
-                            border: isActive ? "none" : "1px solid var(--border)", 
-                            color: isActive ? "white" : "var(--text-2)", 
-                            fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.2s"
-                          }}>
+                        <Link key={page} href={`/media?${params.toString()}`}>
+                          <button className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                            isActive 
+                              ? "bg-[#00A99D] text-white shadow-xs" 
+                              : "bg-transparent border border-[#E3EBE6] text-[#123D46]/70 hover:bg-[#FAF9F5] hover:text-[#123D46]"
+                          }`}>
                             {page}
                           </button>
                         </Link>
@@ -244,14 +224,16 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
               )}
             </div>
           ) : (
-            <div style={{ textAlign: "center", padding: "80px 20px", background: "var(--surface)", borderRadius: 24, border: "1px dashed var(--border-strong)" }}>
-              <div style={{ width: 64, height: 64, borderRadius: 16, background: "rgba(18,61,70,0.05)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
-                <Filter size={32} style={{ color: "var(--text-3)" }} />
+            <div className="text-center py-20 bg-white rounded-3xl border border-[#E3EBE6] shadow-sm space-y-4">
+              <div className="w-16 h-16 rounded-2xl bg-[#FAF9F5] flex items-center justify-center mx-auto border border-[#E3EBE6]">
+                <Filter className="w-8 h-8 text-[#123D46]/40" />
               </div>
-              <h3 style={{ fontSize: 20, color: "var(--text-1)", marginBottom: 8, fontWeight: 700 }}>Aucun contenu trouvé</h3>
-              <p style={{ color: "var(--text-2)" }}>Essayez de modifier vos filtres ou votre recherche.</p>
-              <Link href="/media" className="btn btn-tertiary btn-sm" style={{ marginTop: 24 }}>
-                Voir tous les contenus
+              <h3 className="font-jakarta font-extrabold text-xl text-[#123D46]">Aucun contenu trouvé</h3>
+              <p className="text-[#123D46]/70 text-sm">Essayez de modifier vos filtres ou votre recherche.</p>
+              <Link href="/media" className="inline-block pt-4">
+                <Button variant="ghost">
+                  Voir tous les contenus
+                </Button>
               </Link>
             </div>
           )}

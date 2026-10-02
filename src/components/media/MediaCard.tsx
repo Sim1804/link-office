@@ -19,14 +19,27 @@ export function MediaCard({ media }: MediaCardProps) {
     switch (media.mediaType) {
       case "PODCAST":
       case "INTERVIEW":
-        return <Mic size={14} />;
+        return <Mic className="w-3.5 h-3.5" />;
       case "VIDEO":
-        return <Play size={14} />;
+        return <Play className="w-3.5 h-3.5" />;
       case "INFOGRAPHIE":
       case "PORTRAIT":
-        return <ImageIcon size={14} />;
+        return <ImageIcon className="w-3.5 h-3.5" />;
       default:
-        return <FileText size={14} />;
+        return <FileText className="w-3.5 h-3.5" />;
+    }
+  };
+
+  const getBadgeColorClass = () => {
+    switch (media.mediaType) {
+      case "PODCAST":
+      case "INTERVIEW":
+        return "text-[#5965E8]";
+      case "DOSSIER":
+      case "GUIDE":
+        return "text-[#B8870A]";
+      default:
+        return "text-[#00A99D]";
     }
   };
 
@@ -53,100 +66,57 @@ export function MediaCard({ media }: MediaCardProps) {
   const mainCategory = media.categories?.find(c => c.type === "SUJET" || c.type === "DIMENSION_IQRH") || media.categories?.[0];
 
   return (
-    <Link href={`/media/${media.slug}`} style={{ textDecoration: "none" }}>
-      <div
-        className="card card-hover"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          overflow: "hidden",
-          padding: 0, // override card padding to let cover image touch edges
-        }}
-      >
+    <Link href={`/media/${media.slug}`} className="group h-full flex flex-col">
+      <div className="bg-white rounded-3xl border border-[#E3EBE6] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full overflow-hidden group-hover:-translate-y-1">
         {/* Cover Image */}
         <div
-          style={{
-            height: 180,
-            background: media.coverImage ? `url(${media.coverImage}) center/cover` : "linear-gradient(135deg, rgba(0,169,157,0.1), rgba(89,101,232,0.1))",
-            position: "relative",
-          }}
+          className="h-44 relative w-full overflow-hidden"
         >
-          <div
-            style={{
-              position: "absolute",
-              top: 12,
-              left: 12,
-              background: "rgba(0,0,0,0.6)",
-              backdropFilter: "blur(4px)",
-              padding: "4px 12px",
-              borderRadius: 999,
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              color: "white",
-              fontSize: 12,
-              fontWeight: 600,
-            }}
-          >
-            {getIcon()}
-            {getMediaTypeLabel()}
+          {media.coverImage ? (
+            <div 
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" 
+              style={{ backgroundImage: `url(${media.coverImage})` }} 
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-[#00A99D]/10 to-[#5965E8]/10 transition-transform duration-500 group-hover:scale-105" />
+          )}
+          
+          <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold shadow-sm">
+            <span className={getBadgeColorClass()}>{getIcon()}</span>
+            <span className={`uppercase text-[10px] tracking-wider ${getBadgeColorClass()}`}>
+              {getMediaTypeLabel()}
+            </span>
           </div>
         </div>
 
         {/* Content */}
-        <div style={{ padding: 20, display: "flex", flexDirection: "column", flexGrow: 1 }}>
+        <div className="p-6 flex flex-col flex-grow">
           {mainCategory && (
-            <div style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--text-2)", fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
-              <Folder size={12} />
+            <div className="flex items-center gap-1.5 text-[#123D46]/50 text-xs font-semibold mb-3 uppercase tracking-wider">
+              <Folder className="w-3.5 h-3.5" />
               {mainCategory.name}
             </div>
           )}
 
-          <h3
-            style={{
-              fontSize: 18,
-              fontWeight: 700,
-              color: "var(--text-1)",
-              marginBottom: 8,
-              lineHeight: 1.4,
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            }}
-          >
+          <h3 className="font-jakarta font-bold text-lg text-[#123D46] mb-2 leading-tight line-clamp-2 group-hover:text-[#00A99D] transition-colors">
             {media.title}
           </h3>
 
-          <p
-            style={{
-              color: "var(--text-2)",
-              fontSize: 14,
-              lineHeight: 1.5,
-              marginBottom: 16,
-              display: "-webkit-box",
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              flexGrow: 1,
-            }}
-          >
+          <p className="text-[#123D46]/70 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
             {media.summary}
           </p>
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", paddingTop: 16, borderTop: "1px solid rgba(18,61,70,0.05)" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--text-3)", fontSize: 12 }}>
-              <Clock size={14} />
+          <div className="flex items-center justify-between pt-4 border-t border-[#E3EBE6]">
+            <span className="flex items-center gap-1.5 text-[#123D46]/50 text-xs font-medium">
+              <Clock className="w-3.5 h-3.5" />
               {media.duration ? `${media.duration} min` : "Lecture rapide"}
             </span>
-            <span style={{ color: "var(--text-2)", fontSize: 13, fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
-              Découvrir <ExternalLink size={14} color="var(--text-3)" />
+            <span className="text-[#00A99D] text-xs font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              Découvrir <ExternalLink className="w-3 h-3" />
             </span>
           </div>
         </div>
       </div>
-      {/* Removed custom inline style for hover as we use card-hover now */}
     </Link>
   );
 }

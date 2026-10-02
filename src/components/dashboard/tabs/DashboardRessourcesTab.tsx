@@ -3,6 +3,7 @@
 import { PrescriptionItemCard } from "@/components/dashboard/PrescriptionItemCard";
 import { Handshake, Lock, Sparkles, BookOpen, Headphones, ChevronRight, Bookmark } from "lucide-react";
 import Link from "next/link";
+import { SubscriptionBadge } from "@/components/ui/SubscriptionBadge";
 
 export function DashboardRessourcesTab({ iqrh, isPremium, DIMENSIONS_LABELS }: { iqrh: any, isPremium: boolean, DIMENSIONS_LABELS: any }) {
   const allItems = iqrh?.prescription?.items || [];
@@ -14,35 +15,24 @@ export function DashboardRessourcesTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
 
   // Articles mockés premium pour le design système (placeholders en attendant le CMS)
   const mockArticles = [
-    { id: 1, title: "Comprendre et alléger la charge mentale au quotidien", type: "ARTICLE", icon: BookOpen, color: "#0ea5e9", readTime: "5 min", premium: false },
-    { id: 2, title: "Poser des limites saines dans ses relations professionnelles", type: "PODCAST", icon: Headphones, color: "#8b5cf6", readTime: "12 min", premium: true },
-    { id: 3, title: "Sortir du triangle dramatique de Karpman", type: "GUIDE", icon: BookOpen, color: "#f59e0b", readTime: "15 min", premium: true },
+    { id: 1, title: "Comprendre et alléger la charge mentale au quotidien", type: "ARTICLE", emoji: "📖", textColor: "text-sky-600", readTime: "5 min", premium: false },
+    { id: 2, title: "Poser des limites saines dans ses relations professionnelles", type: "PODCAST", emoji: "🎧", textColor: "text-purple-600", readTime: "12 min", premium: true },
+    { id: 3, title: "Sortir du triangle dramatique de Karpman", type: "GUIDE", emoji: "🧭", textColor: "text-amber-600", readTime: "15 min", premium: true },
   ];
 
   return (
     <div style={{ animation: "fadeSlideIn 0.4s ease-out" }}>
       {/* Header card pour l'onglet Ressources */}
-      <div style={{
-        borderRadius: 16,
-        background: "linear-gradient(135deg, rgba(234,88,12,0.06) 0%, rgba(234,88,12,0.02) 100%)",
-        border: "1px solid rgba(234,88,12,0.15)",
-        padding: "20px",
-        marginBottom: 28,
-        display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{
-            width: 48, height: 48, borderRadius: 14,
-            background: "rgba(234,88,12,0.1)", border: "1px solid rgba(234,88,12,0.2)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <Sparkles size={24} style={{ color: "#ea580c" }} />
+      <div className="bg-white rounded-3xl p-6 border border-[#E3EBE6] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl shrink-0">
+            🤝
           </div>
           <div>
-            <h2 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 18, color: "var(--text-1)" }}>
+            <h3 className="font-jakarta font-extrabold text-lg text-[#123D46]">
               Soutien & Réseau de Partenaires
-            </h2>
-            <p style={{ fontSize: 13, color: "var(--text-3)", marginTop: 2 }}>
+            </h3>
+            <p className="text-xs text-[#123D46]/70 mt-0.5">
               Ressources et contacts qualifiés pour vous accompagner dans votre démarche.
             </p>
           </div>
@@ -51,22 +41,14 @@ export function DashboardRessourcesTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
 
       {/* Réseau de Partenaires Section */}
       {shownPartners.length > 0 && (
-        <div style={{ marginBottom: hiddenCount > 0 ? 0 : 32 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-            <div style={{ height: 1, flex: 1, background: "var(--surface-2)" }} />
-            <span style={{
-              fontSize: 11, fontWeight: 700, color: "#ea580c",
-              letterSpacing: "0.12em", textTransform: "uppercase",
-              background: "rgba(234,88,12,0.08)", padding: "4px 12px",
-              borderRadius: 999, border: "1px solid rgba(234,88,12,0.15)",
-              display: "flex", alignItems: "center", gap: 6
-            }}>
+        <div className={`mb-${hiddenCount > 0 ? '0' : '8'}`}>
+          <div className="text-center pt-2 mb-5">
+            <span className="px-4 py-1 rounded-full bg-orange-50 text-orange-600 font-jakarta font-bold text-xs uppercase tracking-wider border border-orange-100 inline-flex items-center gap-1.5">
               <Handshake size={14} /> Partenaires recommandés
             </span>
-            <div style={{ height: 1, flex: 1, background: "var(--surface-2)" }} />
           </div>
           
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 14 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {shownPartners.map((item: any) => (
               <PrescriptionItemCard key={item.id} item={item} />
             ))}
@@ -76,93 +58,69 @@ export function DashboardRessourcesTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
 
       {/* Premium Upsell Blur Gate pour les Partenaires */}
       {!isPremium && hiddenCount > 0 && (
-        <div style={{
-          marginTop: 16, marginBottom: 32,
-          borderRadius: 16,
-          border: "1px solid var(--border-strong)",
-          overflow: "hidden",
-          position: "relative",
-        }}>
-          <div style={{ filter: "blur(6px)", opacity: 0.4, padding: "20px 20px 0", pointerEvents: "none" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+        <div className="mt-4 mb-8 rounded-3xl border border-[#E3EBE6] overflow-hidden relative bg-white min-h-[340px]">
+          <div className="blur-[6px] opacity-40 pt-5 px-5 pointer-events-none">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[...Array(Math.min(hiddenCount, 3))].map((_, i) => (
-                <div key={i} style={{ height: 120, borderRadius: 16, background: "var(--surface-2)", border: "1px solid var(--border)" }} />
+                <div key={i} className="h-32 rounded-2xl bg-[#FAF9F5] border border-[#E3EBE6]" />
               ))}
             </div>
           </div>
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(11,15,25,0) 0%, rgba(11,15,25,0.97) 60%)" }} />
-          <div style={{ position: "relative", zIndex: 2, padding: "40px 32px 32px", textAlign: "center" }}>
-            <div style={{ width: 48, height: 48, margin: "0 auto 16px", borderRadius: 12, background: "rgba(18,61,70,0.05)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Lock size={20} color="var(--text-3)" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-white/95" />
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-8 text-center space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-[#FAF9F5] border border-[#E3EBE6] flex items-center justify-center text-2xl">
+              🔒
             </div>
-            <h4 style={{ fontFamily: "Inter, sans-serif", color: "var(--text-1)", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+            <h4 className="font-jakarta font-extrabold text-xl text-[#123D46]">
               {hiddenCount} partenaire{hiddenCount > 1 ? "s" : ""} Premium masqué{hiddenCount > 1 ? "s" : ""}
             </h4>
-            <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 24, maxWidth: 420, margin: "0 auto 24px" }}>
+            <p className="text-xs text-[#123D46]/70 max-w-md font-inter leading-relaxed">
               Débloquez l'accès complet à notre réseau de professionnels qualifiés et pertinents pour votre situation.
             </p>
-            <Link href="/premium" className="btn btn-primary btn-md" style={{ textDecoration: "none" }}>
-              <Sparkles size={16} /> Passer à Premium
+            <Link href="/premium" className="px-6 py-3 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-2">
+              <span>Passer à Premium</span>
+              <span>→</span>
             </Link>
+            <span className="text-[11px] text-[#123D46]/50">
+              ✓ Sans engagement · Résiliable à tout moment
+            </span>
           </div>
         </div>
       )}
 
       {/* Bibliothèque de contenus Section (Placeholders) */}
       <div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-          <div style={{ height: 1, flex: 1, background: "var(--surface-2)" }} />
-          <span style={{
-            fontSize: 11, fontWeight: 700, color: "var(--text-2)",
-            letterSpacing: "0.12em", textTransform: "uppercase",
-            background: "var(--surface)", padding: "4px 12px",
-            borderRadius: 999, border: "1px solid var(--border)",
-            display: "flex", alignItems: "center", gap: 6
-          }}>
-            <Bookmark size={14} /> Bibliothèque de contenus
+        <div className="text-center pt-2 mb-5 mt-4">
+          <span className="px-4 py-1 rounded-full bg-[#00A99D]/10 text-[#00A99D] font-jakarta font-bold text-xs uppercase tracking-wider">
+            📚 Bibliothèque de contenus
           </span>
-          <div style={{ height: 1, flex: 1, background: "var(--surface-2)" }} />
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {mockArticles.map((article) => (
-            <div key={article.id} style={{
-              background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 16,
-              padding: "20px", display: "flex", flexDirection: "column", justifyContent: "space-between",
-              transition: "transform 0.2s, box-shadow 0.2s", cursor: "pointer", position: "relative", overflow: "hidden"
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
-              (e.currentTarget as HTMLDivElement).style.boxShadow = "var(--shadow-card-hover)";
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
-              (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-            }}>
+            <div key={article.id} className="bg-white border border-[#E3EBE6] rounded-3xl p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-md cursor-pointer relative overflow-hidden group">
               
               {!isPremium && article.premium && (
-                 <div style={{ position: "absolute", top: 12, right: 12, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)", padding: "4px 8px", borderRadius: 8, display: "flex", alignItems: "center", gap: 4 }}>
-                   <Lock size={12} color="white" />
-                   <span style={{ color: "white", fontSize: 10, fontWeight: 700, textTransform: "uppercase" }}>Premium</span>
+                 <div className="absolute top-5 right-5 z-10">
+                   <SubscriptionBadge tier="PREMIUM" size="sm" className="shadow-sm bg-white/90 backdrop-blur-sm" />
                  </div>
               )}
 
               <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 8, background: `${article.color}15`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <article.icon size={16} color={article.color} />
-                  </div>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-2)" }}>{article.type}</span>
+                <div className="flex items-center justify-between mb-3">
+                  <span className={`text-[11px] font-bold uppercase tracking-wider ${article.textColor}`}>
+                    {article.emoji} {article.type}
+                  </span>
                 </div>
                 
-                <h4 style={{ fontSize: 15, fontWeight: 700, color: "var(--text-1)", lineHeight: 1.4, marginBottom: 8, filter: (!isPremium && article.premium) ? "blur(2px)" : "none" }}>
+                <h4 className={`font-jakarta text-base font-bold text-[#123D46] leading-snug mb-2 ${!isPremium && article.premium ? 'blur-[2px]' : ''}`}>
                   {article.title}
                 </h4>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 16 }}>
-                <span style={{ fontSize: 12, color: "var(--text-3)", fontWeight: 500 }}>Lecture : {article.readTime}</span>
-                <ChevronRight size={16} color="var(--text-3)" />
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[11px] font-medium text-[#123D46]/60">Lecture : {article.readTime}</span>
+                <ChevronRight size={16} className="text-[#123D46]/40 group-hover:text-[#00A99D] transition-colors" />
               </div>
             </div>
           ))}

@@ -145,37 +145,29 @@ export default async function DashboardPage() {
     return (
       <>
         <Navbar />
-        <main className="page-main">
-          <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center", paddingTop: 64 }}>
+        <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 flex flex-col items-center justify-center pt-16 sm:pt-24 pb-16">
+          <div className="w-full max-w-lg text-center bg-white border border-[#E3EBE6] rounded-3xl p-8 sm:p-12 shadow-sm">
             {/* Empty State Hero */}
-            <div style={{
-              width: 72, height: 72,
-              background: "linear-gradient(135deg, rgba(0,169,157,0.12) 0%, rgba(89,101,232,0.08) 100%)",
-              borderRadius: 20, border: "1px solid rgba(0,169,157,0.2)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 28px",
-            }}>
-              <Activity style={{ width: 32, height: 32, color: "var(--primary)" }} />
+            <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-[#00A99D]/10 to-indigo-50 border border-[#00A99D]/20 flex items-center justify-center mb-8 shadow-xs">
+              <Activity className="w-10 h-10 text-[#00A99D]" />
             </div>
-            <h1 style={{
-              fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-              fontWeight: 800, fontSize: 30, color: "var(--text-1)",
-              letterSpacing: "-0.02em", marginBottom: 12, lineHeight: 1.2,
-            }}>
+            <h1 className="font-jakarta font-extrabold text-2xl sm:text-3xl text-[#123D46] tracking-tight mb-4 leading-tight">
               Bonjour, {session.user.name?.split(" ")[0]} 👋
             </h1>
-            <p style={{ color: "var(--text-2)", fontSize: 15, marginBottom: 8, lineHeight: 1.6 }}>
+            <p className="text-[15px] text-[#123D46]/80 font-medium mb-2">
               Votre espace IQRH est prêt.
             </p>
-            <p style={{ color: "var(--text-3)", fontSize: 14, marginBottom: 36, lineHeight: 1.6 }}>
+            <p className="text-[14px] text-[#123D46]/60 mb-10 leading-relaxed max-w-md mx-auto">
               Passez votre première évaluation pour découvrir votre profil de santé relationnelle et obtenir vos recommandations personnalisées.
             </p>
-            <Link href="/consentement" className="btn btn-primary btn-lg" style={{ textDecoration: "none", display: "inline-flex", gap: 8 }}>
+            <Link href="/consentement" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-[15px] font-bold transition-all shadow-md w-full sm:w-auto">
               Commencer mon évaluation
-              <ArrowRight style={{ width: 18, height: 18 }} />
+              <ArrowRight className="w-5 h-5" />
             </Link>
-            <p style={{ color: "var(--text-3)", fontSize: 12, marginTop: 16 }}>
-              ✓ Anonyme · ✓ Sécurisé · ✓ ~15 minutes
+            <p className="text-xs font-medium text-[#123D46]/50 mt-6 flex items-center justify-center gap-3">
+              <span>✓ Anonyme</span>
+              <span>✓ Sécurisé</span>
+              <span>✓ ~15 minutes</span>
             </p>
           </div>
         </main>
@@ -201,27 +193,21 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <>
+    <div className="min-h-screen bg-[#F8F9FA] text-[#123D46] font-inter flex flex-col relative pb-16">
       <Navbar />
-      <main className="page-main">
-        <div className="page-container-wide">
-
-          {/* ── Hero Header ── */}
-          <div style={{
-            background: "var(--surface)",
-            border: "1px solid var(--border)",
-            borderRadius: 18,
-            padding: "20px 24px",
-            marginBottom: 24,
-          }}>
-
-            {/* Ligne 1 : Score + Greeting + Badge */}
-            <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
-
-              {/* Score Circle — réduit */}
-              <div style={{ position: "relative", flexShrink: 0 }}>
-                <svg width="64" height="64" style={{ transform: "rotate(-90deg)" }}>
-                  <circle cx="32" cy="32" r="27" fill="none" stroke="rgba(18,61,70,0.06)" strokeWidth="4" />
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 py-6 sm:py-10 animate-fade-in">
+        
+        {/* ── Hero Header ── */}
+        <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 sm:p-6 mb-6 shadow-sm">
+          
+          {/* Ligne 1 : Score + Greeting + Badge */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 mb-5">
+            
+            {/* Left: Overall Health Ring + Greeting */}
+            <div className="flex items-center gap-4">
+              <div className="relative shrink-0 w-16 h-16">
+                <svg width="64" height="64" className="-rotate-90">
+                  <circle cx="32" cy="32" r="27" fill="none" stroke="#F4F1E8" strokeWidth="4" />
                   <circle
                     cx="32" cy="32" r="27" fill="none"
                     stroke={scoreColor}
@@ -230,64 +216,50 @@ export default async function DashboardPage() {
                     strokeDasharray={`${(score / 100) * 169.6} 169.6`}
                   />
                 </svg>
-                <div style={{
-                  position: "absolute", inset: 0,
-                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                }}>
-                  <span style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: 16, color: scoreColor, lineHeight: 1 }}>{score}</span>
-                  <span style={{ fontSize: 8, color: "var(--text-3)", fontWeight: 600 }}>/100</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="font-jakarta font-extrabold text-base leading-none" style={{ color: scoreColor }}>{score}</span>
+                  <span className="text-[8px] font-bold text-[#123D46]/50">/100</span>
                 </div>
               </div>
 
-              {/* Greeting + Status */}
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: 12, color: "var(--text-3)", fontWeight: 500, marginBottom: 2 }}>
+              <div>
+                <div className="text-xs font-medium text-[#123D46]/60 mb-0.5">
                   Bonjour, {session.user.name?.split(" ")[0]} 👋
-                </p>
-                <h1 style={{
-                  fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-                  fontWeight: 800, fontSize: 18, color: "var(--text-1)",
-                  letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: 5,
-                }}>
-                  Votre espace IQRH
-                </h1>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "2px 8px", borderRadius: 999, background: `${scoreColor}12`, border: `1px solid ${scoreColor}30` }}>
-                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: scoreColor }} />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: scoreColor }}>{scoreLabel}</span>
                 </div>
-              </div>
-
-              {/* Gamification + Premium — compact à droite */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                <GamificationSummary points={points} badges={badges} />
-                
-                <SubscriptionBadge tier={toSubscriptionTier(subscription)} size="sm" />
-                
-                {subscription === "PREMIUM" && (
-                  <Link href="/premium" style={{
-                    display: "inline-flex", alignItems: "center", gap: 4,
-                    padding: "3px 10px", borderRadius: 999, textDecoration: "none",
-                    background: "rgba(0,169,157,0.1)", border: "1px solid rgba(0,169,157,0.3)",
-                    fontSize: 11, fontWeight: 700, color: "var(--primary)",
-                    whiteSpace: "nowrap", transition: "background 0.15s",
-                  }}>
-                    Passer à Premium+ →
-                  </Link>
-                )}
-                
-                {subscription === "FREEMIUM" && (
-                  <Link href="/premium" className="btn btn-primary btn-sm" style={{ textDecoration: "none", fontSize: 11, padding: "4px 12px" }}>
-                    Devenir Premium →
-                  </Link>
-                )}
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="font-jakarta font-extrabold text-lg text-[#123D46] tracking-tight leading-tight m-0">
+                    Votre espace IQRH
+                  </h1>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-jakarta font-semibold border" style={{ background: `${scoreColor}10`, borderColor: `${scoreColor}20`, color: scoreColor }}>
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: scoreColor }} />
+                    <span>{scoreLabel}</span>
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Séparateur */}
-            <div style={{ height: 1, background: "var(--border)", marginBottom: 14 }} />
+            {/* Gamification + Premium */}
+            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 shrink-0">
+              <GamificationSummary points={points} badges={badges} />
+              
+              <SubscriptionBadge tier={toSubscriptionTier(subscription)} size="sm" />
+              
+              {subscription === "PREMIUM" && (
+                <Link href="/premium" className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#00A99D]/10 border border-[#00A99D]/30 text-[11px] font-bold text-[#00A99D] hover:bg-[#00A99D]/20 transition-colors whitespace-nowrap">
+                  Passer à Premium+ →
+                </Link>
+              )}
+              
+              {subscription === "FREEMIUM" && (
+                <Link href="/premium" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#00A99D] text-white text-[11px] font-bold hover:bg-[#199E9A] transition-colors whitespace-nowrap shadow-sm">
+                  Devenir Premium →
+                </Link>
+              )}
+            </div>
+          </div>
 
-            {/* Ligne 2 : Météo du jour */}
-            <MeteoWidget />
+          {/* Ligne 2 : Météo du jour */}
+          <MeteoWidget />
 
           </div>
 
@@ -296,8 +268,7 @@ export default async function DashboardPage() {
           {/* ── Dashboard Tabs ── */}
           <DashboardTabs data={data} isPremium={isPremium} isPremiumPlus={isPremiumPlus} DIMENSIONS_LABELS={DIMENSIONS_LABELS} />
 
-        </div>
       </main>
-    </>
+    </div>
   );
 }

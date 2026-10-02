@@ -3,16 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Brain, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { Logo } from "../brand/Logo";
 
 const publicLinks = [
-  { href: "/#iqrh",         label: "La méthode" },
-  { href: "/#iris",         label: "Coach IRIS" },
-  { href: "/#observatoire", label: "Baromètre" },
-  { href: "/#partenaires",  label: "Partenaires" },
-  { href: "/media",         label: "Média" },
-  { href: "/business",      label: "Pour les organisations" },
-  { href: "/premium",       label: "Tarifs" },
+  { href: "/#methode",     label: "La méthode" },
+  { href: "/#barometre",   label: "Baromètre en direct", hasPing: true },
+  { href: "/#iqrh",        label: "IQRH" },
+  { href: "/#iris",        label: "Coach IRIS", isIris: true },
+  { href: "/business",     label: "Solutions" },
+  { href: "/media",        label: "Médias" },
+  { href: "/#partenaires", label: "Partenaires" },
+  { href: "/#tarifs",      label: "Tarifs" },
 ];
 
 export function PublicNavbar() {
@@ -20,106 +22,116 @@ export function PublicNavbar() {
   const pathname = usePathname();
 
   const isLinkActive = (href: string) => {
-    if (href.startsWith("/#")) return false; // Anchor links — need scroll spy to track accurately
+    if (href.startsWith("/#")) return false; // In a real app, use IntersectionObserver for hash links
+    if (href === "/" && pathname !== "/") return false;
     return pathname === href || pathname.startsWith(href + "/");
   };
 
   return (
-    <header className="global-navbar" style={{
-      position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-      background: "rgba(245, 247, 246, 0.88)",
-      backdropFilter: "blur(16px)",
-      WebkitBackdropFilter: "blur(16px)",
-      borderBottom: "1px solid var(--border)",
-    }}>
-      <div className="container" style={{ display: "flex", alignItems: "center", height: 64, gap: 16 }}>
-        {/* Logo */}
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
-          <div style={{ width: 34, height: 34, background: "var(--primary)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Brain size={18} color="white" />
-          </div>
-          <span style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 19, color: "var(--text-1)" }}>
-            Link<span className="gradient-text">Office</span>
-          </span>
-        </Link>
+    <>
+      <div className="fixed top-4 left-4 right-4 z-50 max-w-[1440px] mx-auto">
+        <header className="bg-white/95 backdrop-blur-md border border-[#E3EBE6] px-5 sm:px-8 py-3.5 flex items-center justify-between shadow-xs rounded-2xl">
+          
+          {/* Zone 1: Logo */}
+          <Link href="/" className="flex items-center shrink-0 pr-4 no-underline group">
+            <Logo size="md" />
+          </Link>
 
-        {/* Navigation Desktop */}
-        <nav style={{ display: "flex", gap: 28, flex: 1, justifyContent: "center" }} className="hide-mobile">
-          {publicLinks.map(({ href, label }) => {
-            const active = isLinkActive(href);
-            return (
+          {/* Zone 2: Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-1 text-[13px] font-jakarta font-semibold text-[#123D46]/80">
+            {publicLinks.map(({ href, label, hasPing, isIris }) => {
+              const active = isLinkActive(href);
+              
+              if (isIris) {
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 no-underline ${
+                      active ? 'text-[#5965E8] font-bold bg-[#5965E8]/10' : 'hover:text-[#5965E8] hover:bg-[#5965E8]/8'
+                    }`}
+                  >
+                    <span>{label}</span>
+                  </Link>
+                );
+              }
+
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 no-underline ${
+                    active ? 'text-[#00A99D] font-bold bg-[#00A99D]/10' : 'hover:text-[#00A99D] hover:bg-[#F4F1E8]/70'
+                  }`}
+                >
+                  <span>{label}</span>
+                  {hasPing && <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Zone 3: Actions */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Link
+              href="/auth/login"
+              className="hidden md:flex text-xs font-jakarta font-semibold text-[#123D46]/75 hover:text-[#123D46] px-3 py-1.5 rounded-full hover:bg-slate-100 transition-colors no-underline"
+            >
+              Connexion
+            </Link>
+            <Link
+              href="/auth/register"
+              className="px-4 sm:px-5 py-2 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold shadow-xs hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-2 group whitespace-nowrap no-underline"
+            >
+              <span>Faire mon test</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform hidden sm:block">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </Link>
+            
+            {/* Mobile Toggle */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-1.5 text-[#123D46]/70 hover:bg-slate-100 rounded-full transition-colors"
+            >
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </header>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-xl border border-[#E3EBE6] rounded-2xl p-4 shadow-lg flex flex-col gap-2">
+            {publicLinks.map(({ href, label, isIris }) => {
+              const active = isLinkActive(href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`px-4 py-2.5 rounded-xl font-jakarta font-bold text-sm no-underline ${
+                    active 
+                      ? (isIris ? 'bg-[#5965E8] text-white' : 'bg-[#00A99D] text-white')
+                      : 'text-[#123D46]/80 hover:bg-[#F4F1E8]'
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
+            <div className="mt-2 pt-4 border-t border-[#E3EBE6] flex flex-col gap-2">
               <Link
-                key={href}
-                href={href}
-                style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: active ? "var(--primary)" : "var(--text-1)",
-                  textDecoration: "none",
-                  transition: "color 0.2s ease",
-                  position: "relative",
-                  paddingBottom: 4,
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = "var(--primary)"}
-                onMouseOut={(e) => e.currentTarget.style.color = active ? "var(--primary)" : "var(--text-1)"}
+                href="/auth/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-4 py-2.5 rounded-xl font-jakarta font-bold text-sm text-center text-[#123D46] bg-[#FAF9F5] border border-[#E3EBE6] no-underline"
               >
-                {label}
-                {/* Active indicator — soulignement animé */}
-                {active && (
-                  <span style={{
-                    position: "absolute",
-                    bottom: -2,
-                    left: 0,
-                    right: 0,
-                    height: 2,
-                    borderRadius: 999,
-                    background: "var(--primary)",
-                  }} />
-                )}
+                Connexion
               </Link>
-            );
-          })}
-        </nav>
-
-        {/* CTA Desktop */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }} className="hide-mobile">
-          <Link href="/auth/login"    className="btn btn-ghost btn-sm"   style={{ textDecoration: "none" }}>Connexion</Link>
-          <Link href="/auth/register" className="btn btn-primary btn-sm" style={{ textDecoration: "none" }}>Commencer gratuitement</Link>
-        </div>
-
-        {/* Hamburger Mobile */}
-        <button
-          className="show-mobile"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          style={{ marginLeft: "auto", background: "none", border: "none", color: "var(--text-2)", cursor: "pointer", padding: 8 }}
-        >
-          {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
-      </div>
-
-      {/* Menu Mobile */}
-      {isMobileMenuOpen && (
-        <div style={{ borderTop: "1px solid var(--border)", padding: "16px 20px", display: "flex", flexDirection: "column", gap: 6, background: "rgba(245,247,246,0.97)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}>
-          {publicLinks.map(({ href, label }) => {
-            const active = isLinkActive(href);
-            return (
-              <Link key={href} href={href} onClick={() => setIsMobileMenuOpen(false)}
-                style={{ padding: "10px 14px", borderRadius: 10, fontSize: 15, fontWeight: 600, color: active ? "var(--primary)" : "var(--text-1)", background: active ? "rgba(0,169,157,0.06)" : "transparent", textDecoration: "none", display: "block" }}>
-                {label}
-              </Link>
-            );
-          })}
-          <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: 8 }}>
-            <Link href="/auth/login"    onClick={() => setIsMobileMenuOpen(false)} className="btn btn-secondary btn-md" style={{ textDecoration: "none", textAlign: "center" }}>Connexion</Link>
-            <Link href="/auth/register" onClick={() => setIsMobileMenuOpen(false)} className="btn btn-primary btn-md"   style={{ textDecoration: "none", textAlign: "center" }}>Commencer gratuitement</Link>
+            </div>
           </div>
-        </div>
-      )}
-
-      <style>{`
-        @media (max-width: 768px) { .hide-mobile { display: none !important; } }
-        @media (min-width: 769px) { .show-mobile { display: none !important; } }
-      `}</style>
-    </header>
+        )}
+      </div>
+    </>
   );
 }
