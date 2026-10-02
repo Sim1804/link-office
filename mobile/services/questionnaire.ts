@@ -12,6 +12,17 @@ async function request<T>(path: string, token: string, options: RequestInit = {}
 }
 
 export type AdaptiveQuestion = { id: string; text: string; moduleTitle: string };
+export type MobileResults = {
+  completedAt: string;
+  globalScore: number;
+  weather: string;
+  summary: string;
+  priorityDimension: string;
+  dimensions: Array<{ label: string; score: number; interpretation: string }>;
+  strengths: string[];
+  watchpoints: string[];
+  profile: { name: string; summary: string } | null;
+};
 
 export async function startQuestionnaire(token: string, userId: string) {
   // `userId` is sent only for backward compatibility with the deployed API.
@@ -26,4 +37,7 @@ export async function saveAnswer(token: string, assessmentId: string, questionId
 }
 export async function submitQuestionnaire(token: string, assessmentId: string) {
   return request<any>("/api/mobile/questionnaire/submit", token, { method: "POST", body: JSON.stringify({ assessmentId }) });
+}
+export async function getResults(token: string) {
+  return request<MobileResults>("/api/mobile/results", token);
 }
