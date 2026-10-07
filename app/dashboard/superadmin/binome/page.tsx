@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { Handshake, Activity, Clock, CheckCircle, Users } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Handshake, Activity, Clock, CheckCircle2, Users } from "lucide-react";
 
 export const metadata = {
   title: "Gestion des Binômes | Admin LINK OFFICE",
@@ -34,94 +33,103 @@ export default async function AdminBinomeIndex({ searchParams }: { searchParams:
   const closedCount = stats.find(s => s.status === 'CLOSED')?._count.status || 0;
   const evalCount = stats.find(s => s.status === 'AWAITING_USER_B')?._count.status || 0;
 
+  const kpiCards = [
+    { label: "Actifs",        value: activeCount, accentColor: "#00A99D", bgColor: "bg-[#00A99D]/10", textColor: "text-[#00A99D]", leftBorder: "border-l-4 border-[#00A99D]", icon: Activity },
+    { label: "En évaluation", value: evalCount,   accentColor: "#f59e0b", bgColor: "bg-amber-50",     textColor: "text-amber-500",  leftBorder: "border-l-4 border-amber-400", icon: Clock },
+    { label: "Terminés",      value: closedCount, accentColor: "#10b981", bgColor: "bg-emerald-50",   textColor: "text-emerald-500", leftBorder: "border-l-4 border-emerald-400", icon: CheckCircle2 },
+    { label: "Total",         value: totalItems,  accentColor: "#5965E8", bgColor: "bg-[#5965E8]/10", textColor: "text-[#5965E8]",  leftBorder: "border-l-4 border-[#5965E8]", icon: Users },
+  ];
+
   return (
-    <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-        <div>
-          <h1 style={{
-            fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-            fontSize: 22, fontWeight: 800, color: "var(--text-1)",
-            letterSpacing: "-0.02em", marginBottom: 4,
-          }}>
-            Gestion des Binômes
-          </h1>
-          <p style={{ color: "var(--text-2)", fontSize: 13 }}>Supervisez l'activité et l'état de santé des paires relationnelles.</p>
-        </div>
+    <div className="space-y-6 animate-fade-in">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight flex items-center gap-2.5">
+          <Handshake className="w-7 h-7 text-[#00A99D]" />
+          Gestion des Binômes
+        </h1>
+        <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
+          Supervisez l&apos;activité et l&apos;état de santé des paires relationnelles.
+        </p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 28 }}>
-        {[
-          { label: "Actifs",        value: activeCount, accentColor: "#00A99D", icon: Activity },
-          { label: "En évaluation", value: evalCount,  accentColor: "#f59e0b", icon: Clock },
-          { label: "Terminés",      value: closedCount, accentColor: "#10b981", icon: CheckCircle },
-          { label: "Total",          value: totalItems,  accentColor: "#6366f1", icon: Users },
-        ].map(stat => (
-          <div key={stat.label} style={{
-            background: "var(--surface)",
-            borderRadius: 14,
-            border: "1px solid var(--border)",
-            borderLeft: `4px solid ${stat.accentColor}`,
-            padding: "18px 20px",
-            display: "flex", flexDirection: "column", gap: 12,
-          }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {kpiCards.map(stat => (
+          <div
+            key={stat.label}
+            className={`bg-white rounded-2xl border border-[#E3EBE6] ${stat.leftBorder} p-5 shadow-xs hover:shadow-md transition-shadow`}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[11px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">
                 {stat.label}
               </span>
-              <div style={{ width: 30, height: 30, borderRadius: 8, background: `${stat.accentColor}14`, display: "flex", alignItems: "center", justifyContent: "center", color: stat.accentColor }}>
-                <stat.icon size={15} />
+              <div className={`w-8 h-8 rounded-xl ${stat.bgColor} ${stat.textColor} flex items-center justify-center`}>
+                <stat.icon className="w-4 h-4" />
               </div>
             </div>
-            <div style={{ fontSize: 32, fontWeight: 900, color: "var(--text-1)", fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", letterSpacing: "-0.03em", lineHeight: 1 }}>
+            <div className="text-3xl font-jakarta font-black text-[#123D46] font-mono tracking-tight leading-none">
               {stat.value}
             </div>
           </div>
         ))}
       </div>
 
-      <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-[#E3EBE6] overflow-hidden shadow-xs">
+        <table className="w-full text-left">
           <thead>
-            <tr style={{ background: "var(--bg)", borderBottom: "1px solid var(--border)" }}>
-              <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase" }}>Utilisateurs (Binôme)</th>
-              <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase" }}>Statut</th>
-              <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase" }}>Santé (Score)</th>
-              <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase" }}>Début</th>
+            <tr className="bg-[#F8F9FA] border-b border-[#E3EBE6]">
+              <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Utilisateurs (Binôme)</th>
+              <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Statut</th>
+              <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Santé (Score)</th>
+              <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Début</th>
             </tr>
           </thead>
           <tbody>
-            {binomes.map(item => (
-              <tr key={item.id} style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }} className="table-row-hover">
-                <td style={{ padding: "16px 24px" }}>
-                  <div style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 14 }}>{item.userA.firstName} & {item.userB.firstName}</div>
-                  <div style={{ color: "var(--text-3)", fontSize: 12, marginTop: 4 }}>{item.userA.email} / {item.userB.email}</div>
-                </td>
-                <td style={{ padding: "16px 24px" }}>
-                  <span style={{
-                    display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 12, fontSize: 12, fontWeight: 700,
-                    ...(item.status === 'ACTIVE' ? { background: "rgba(0,169,157,0.1)", color: "var(--primary)" } :
-                        item.status === 'CLOSED' ? { background: "rgba(16,185,129,0.1)", color: "#10b981" } :
-                        { background: "rgba(245,158,11,0.1)", color: "#f59e0b" })
-                  }}>
-                    {item.status}
-                  </span>
-                </td>
-                <td style={{ padding: "16px 24px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <div style={{ flex: 1, height: 6, background: "var(--bg)", borderRadius: 999, overflow: "hidden", minWidth: 60 }}>
-                      <div style={{ height: "100%", width: `${item.healthScore}%`, background: item.healthScore > 50 ? "var(--primary)" : "#ef4444", borderRadius: 999 }} />
+            {binomes.map(item => {
+              const statusStyle =
+                item.status === 'ACTIVE'
+                  ? "bg-[#00A99D]/10 text-[#00A99D]"
+                  : item.status === 'CLOSED'
+                  ? "bg-emerald-50 text-emerald-600"
+                  : "bg-amber-50 text-amber-500";
+              const statusLabel =
+                item.status === 'ACTIVE' ? 'Actif'
+                : item.status === 'CLOSED' ? 'Terminé'
+                : 'En évaluation';
+
+              return (
+                <tr key={item.id} className="border-b border-[#E3EBE6] hover:bg-[#FAF9F5]/50 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="font-semibold text-[#123D46] text-sm">{item.userA.firstName} & {item.userB.firstName}</div>
+                    <div className="text-[#123D46]/50 text-xs mt-0.5">{item.userA.email} / {item.userB.email}</div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-bold ${statusStyle}`}>
+                      {statusLabel}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1.5 bg-[#F8F9FA] rounded-full overflow-hidden min-w-[60px]">
+                        <div
+                          className={`h-full rounded-full ${item.healthScore > 50 ? "bg-[#00A99D]" : "bg-rose-500"}`}
+                          style={{ width: `${item.healthScore}%` }}
+                        />
+                      </div>
+                      <span className="text-[13px] font-bold text-[#123D46]/70 w-8 text-right">{item.healthScore.toFixed(0)}</span>
                     </div>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-2)" }}>{item.healthScore.toFixed(0)}</span>
-                  </div>
-                </td>
-                <td style={{ padding: "16px 24px", color: "var(--text-2)", fontSize: 13 }}>
-                  {new Date(item.startDate).toLocaleDateString('fr-FR')}
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="px-6 py-4 text-[#123D46]/70 text-[13px]">
+                    {new Date(item.startDate).toLocaleDateString('fr-FR')}
+                  </td>
+                </tr>
+              );
+            })}
             {binomes.length === 0 && (
               <tr>
-                <td colSpan={4} style={{ padding: "40px 24px", textAlign: "center", color: "var(--text-3)" }}>
+                <td colSpan={4} className="px-6 py-12 text-center text-[#123D46]/50 text-sm">
                   Aucun binôme actif.
                 </td>
               </tr>
@@ -129,32 +137,27 @@ export default async function AdminBinomeIndex({ searchParams }: { searchParams:
           </tbody>
         </table>
 
+        {/* Pagination */}
         {totalPages > 1 && (
-          <div style={{ padding: "16px 24px", background: "var(--surface)", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid var(--border)" }}>
-            <span style={{ color: "var(--text-3)", fontSize: 13, fontWeight: 500 }}>
-              Affichage de {((currentPage - 1) * ITEMS_PER_PAGE) + 1} à {Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} sur {totalItems} éléments
+          <div className="px-6 py-4 bg-white flex items-center justify-between border-t border-[#E3EBE6]">
+            <span className="text-[#123D46]/60 text-[13px] font-medium">
+              {((currentPage - 1) * ITEMS_PER_PAGE) + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} sur {totalItems} binômes
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div className="flex items-center gap-1.5">
               {Array.from({ length: totalPages }).map((_, i) => {
                 const page = i + 1;
                 const isActive = page === currentPage;
                 if (totalPages > 7 && page > 3 && page < totalPages - 1 && page !== currentPage) {
-                  if (page === 4 || page === totalPages - 2) return <span key={page} style={{ padding: "0 4px", color: "var(--text-3)" }}>…</span>;
+                  if (page === 4 || page === totalPages - 2) return <span key={page} className="px-1 text-[#123D46]/40">…</span>;
                   return null;
                 }
                 return (
-                  <Link key={page} href={`/dashboard/superadmin/binome?page=${page}`} style={{ textDecoration: "none" }}>
-                    <button style={{ 
-                      width: 32, height: 32, borderRadius: "50%", 
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      background: isActive ? "var(--primary)" : "transparent", 
-                      border: isActive ? "none" : "1px solid var(--border)", 
-                      color: isActive ? "white" : "var(--text-2)", 
-                      fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.2s"
-                    }}
-                    onMouseOver={(e) => { if (!isActive) e.currentTarget.style.background = "var(--bg)"; }}
-                    onMouseOut={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
-                    >
+                  <Link key={page} href={`/dashboard/superadmin/binome?page=${page}`} className="no-underline">
+                    <button className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-colors cursor-pointer ${
+                      isActive
+                        ? "bg-[#00A99D] text-white border-none"
+                        : "bg-transparent border border-[#E3EBE6] text-[#123D46]/70 hover:bg-[#F8F9FA]"
+                    }`}>
                       {page}
                     </button>
                   </Link>
@@ -164,6 +167,6 @@ export default async function AdminBinomeIndex({ searchParams }: { searchParams:
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

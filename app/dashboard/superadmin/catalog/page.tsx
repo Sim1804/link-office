@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Plus, BookOpen, Edit2, Eye } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
 import { Select } from "@/components/ui/Select";
 import { CatalogImportButton } from "@/components/admin/CatalogImportButton";
@@ -109,62 +108,62 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
+      <div className="flex justify-between items-end mb-8">
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 10 }}>
+          <h1 className="text-2xl font-bold text-[#123D46] flex items-center gap-2.5">
             <BookOpen size={24} color="var(--primary)" />
             Catalogue Central
           </h1>
-          <p style={{ fontSize: 14, color: "var(--text-2)" }}>Gérez les recommandations, les micro-défis et la liste des partenaires.</p>
+          <p className="text-[#123D46]/70 text-sm">Gérez les recommandations, les micro-défis et la liste des partenaires.</p>
         </div>
         
-        <div style={{ display: "flex", gap: 12 }}>
+        <div className="flex gap-3">
           <CatalogImportButton />
-          <Link href="/dashboard/superadmin/catalog/new" style={{ textDecoration: "none" }}>
-            <Button style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <Plus size={18} /> Ajouter un élément
-            </Button>
+          <Link href="/dashboard/superadmin/catalog/new" className="no-underline">
+            <button className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-xs sm:text-sm transition-colors shadow-xs">
+              <Plus className="w-4 h-4" />
+              <span>Ajouter un élément</span>
+            </button>
           </Link>
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 24, borderBottom: "1px solid var(--surface)", paddingBottom: 16, overflowX: "auto" }}>
-        {["ALL", "Recommandations", "Micro-défis", "Partenaires", "Questions IQRH", "Modules Adaptatifs"].map(f => (
-          <Link key={f} href={`/dashboard/superadmin/catalog?filter=${f}`} style={{ textDecoration: "none" }}>
-            <span style={{ 
-              padding: "6px 16px", 
-              borderRadius: 16, 
-              fontSize: 13, 
-              fontWeight: 600,
-              background: filter === f ? "rgba(0,169,157,0.1)" : "var(--surface)",
-              color: filter === f ? "var(--primary)" : "var(--text-2)",
-              border: filter === f ? "1px solid rgba(0,169,157,0.3)" : "1px solid var(--surface)",
-              transition: "all 0.2s"
-            }}>
-              {f === "ALL" ? "Tout voir" : f}
-            </span>
-          </Link>
-        ))}
+      <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-3 mb-6 border-b border-[#E3EBE6]">
+        {["ALL", "Recommandations", "Micro-défis", "Partenaires", "Questions IQRH", "Modules Adaptatifs"].map(f => {
+          const isActive = filter === f;
+          return (
+            <Link key={f} href={`/dashboard/superadmin/catalog?filter=${f}`} className="no-underline">
+              <span className={`px-3.5 py-1.5 rounded-full text-xs font-jakarta font-semibold transition-all whitespace-nowrap inline-flex items-center ${
+                isActive
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'bg-white border border-[#E3EBE6] text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70'
+              }`}>
+                {f === "ALL" ? "Tout voir" : f}
+              </span>
+            </Link>
+          );
+        })}
       </div>
 
-      <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+      <div className="bg-white rounded-2xl border border-[#E3EBE6] overflow-hidden shadow-xs">
+        <table className="w-full text-left text-xs">
           <thead>
-            <tr style={{ background: "var(--bg)", borderBottom: "1px solid var(--border)" }}>
+            <tr className="bg-[#F8F9FA] border-b border-[#E3EBE6] text-[#123D46]/60 font-jakarta font-bold uppercase tracking-wider text-[10px]">
               {isQuestionFilter || isModuleFilter ? (
                 <>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase" }}>ID & {isQuestionFilter ? "Dimension" : "Cible"}</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase" }}>Objectif</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase" }}>Questions / Version</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", textAlign: "right" }}>Statut</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", textAlign: "right" }}>Actions</th>
+                  <th className="px-6 py-4">ID & {isQuestionFilter ? "Dimension" : "Cible"}</th>
+                  <th className="px-6 py-4">Objectif</th>
+                  <th className="px-6 py-4">Questions / Version</th>
+                  <th className="px-6 py-4 text-center">Statut</th>
+                  <th className="px-6 py-4 text-center">Actions</th>
                 </>
               ) : (
                 <>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Titre & Type</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Thèmes</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Ciblage</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", textAlign: "right" }}>Actions</th>
+                  <th className="px-6 py-4">ID & Type</th>
+                  <th className="px-6 py-4">Titre</th>
+                  <th className="px-6 py-4">Catégorie</th>
+                  <th className="px-6 py-4">Ciblage & Détails</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
                 </>
               )}
             </tr>
@@ -173,52 +172,41 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
             {items.map((item) => {
               if (item.isDimensionGroup || isModuleFilter) {
                 return (
-                  <tr key={item.id} className="table-row-hover" style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }}>
-                    <td style={{ padding: "16px 24px" }}>
-                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
-                        <span className="badge" style={{ fontSize: 10, fontFamily: "monospace", fontWeight: 600, padding: "2px 8px", background: "var(--surface)", color: "var(--text-3)", borderRadius: 12, border: "1px solid var(--border)" }}>
+                  <tr key={item.id} className="table-row-hover" >
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col items-start gap-1.5">
+                        <span className="text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#F8F9FA] text-[#123D46]/50 rounded-full border border-[#E3EBE6]">
                           {item.id}
                         </span>
                         {item.isDimensionGroup ? (
-                          <span className="badge" style={{ 
-                            fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 12, 
-                            background: item.dimensionName === "SOCIAL" ? "rgba(0,169,157,0.1)" :
-                                        item.dimensionName === "AFFECTIVE" ? "rgba(244,63,94,0.1)" :
-                                        item.dimensionName === "SENTIMENTAL" ? "rgba(89,101,232,0.1)" :
-                                        item.dimensionName === "PROFESSIONAL" ? "rgba(255,198,41,0.1)" :
-                                        item.dimensionName === "SELF" ? "rgba(14,165,233,0.1)" :
-                                        "rgba(52,211,153,0.1)",
-                            color: item.dimensionName === "SOCIAL" ? "var(--primary)" :
-                                   item.dimensionName === "AFFECTIVE" ? "var(--rose)" :
-                                   item.dimensionName === "SENTIMENTAL" ? "var(--indigo)" :
-                                   item.dimensionName === "PROFESSIONAL" ? "var(--amber)" :
-                                   item.dimensionName === "SELF" ? "var(--cyan)" :
-                                   "var(--success)"
-                          }}>
+                          <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${item.dimensionName === "SOCIAL" ? "bg-teal-50 text-teal-600" : item.dimensionName === "AFFECTIVE" ? "bg-rose-50 text-rose-500" : item.dimensionName === "SENTIMENTAL" ? "bg-indigo-50 text-indigo-500" : item.dimensionName === "PROFESSIONAL" ? "bg-amber-50 text-amber-500" : item.dimensionName === "SELF" ? "bg-cyan-50 text-cyan-500" : "bg-emerald-50 text-emerald-500"}`}>
                             {item.dimensionLabel}
                           </span>
                         ) : (
-                          <span className="badge" style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 12, background: "rgba(0,169,157,0.1)", color: "var(--primary)" }}>
+                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-teal-50 text-teal-600">
                             {item.triggerSituation || "Universel"}
                           </span>
                         )}
                       </div>
                     </td>
-                    <td style={{ padding: "16px 24px", color: "var(--text-2)", fontSize: 13 }}>{item.objective}</td>
-                    <td style={{ padding: "16px 24px", color: "var(--text-2)", fontSize: 13 }}>
+                    <td className="px-6 py-4 text-[#123D46]/70 text-[13px]">{item.objective}</td>
+                    <td className="px-6 py-4 text-[#123D46]/70 text-[13px]">
                       {item.questions?.length || 0} questions (v{item.version})
                     </td>
-                    <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderRadius: 12, background: item.isActive ? "rgba(16,185,129,0.1)" : "rgba(244,63,94,0.1)", color: item.isActive ? "var(--emerald)" : "var(--rose)" }}>
+                    <td className="px-6 py-4 text-center">
+                      <span className={`text-[11px] px-2.5 py-1 rounded-full font-bold ${item.isActive ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-500"}`}>
                         {item.isActive ? "Actif" : "Inactif"}
                       </span>
                     </td>
-                    <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                      <div style={{ display: "flex", justifyContent: "flex-end", gap: 6 }}>
-                        <Link href={`/dashboard/superadmin/catalog/modules/${item.id}`} style={{ textDecoration: "none" }}>
-                          <Button variant="secondary" size="sm" style={{ padding: "6px" }} title="Voir les questions">
-                            <Eye size={14} />
-                          </Button>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex justify-center items-center">
+                        <Link href={`/dashboard/superadmin/catalog/modules/${item.id}`} className="no-underline inline-flex items-center justify-center">
+                          <button
+                            className="w-8 h-8 rounded-lg border border-[#E3EBE6] bg-white hover:border-[#00A99D] hover:bg-[#00A99D]/10 text-[#123D46] hover:text-[#00A99D] inline-flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
+                            title="Voir les questions du module"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
                         </Link>
                       </div>
                     </td>
@@ -228,45 +216,44 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
 
               const data = item.data as any || {};
               return (
-              <tr key={item.id} className="table-row-hover" style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }}>
-                <td style={{ padding: "16px 24px" }}>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
-                    <span className="badge" style={{ fontSize: 10, fontFamily: "monospace", fontWeight: 600, padding: "2px 8px", background: "var(--surface)", color: "var(--text-3)", borderRadius: 12, border: "1px solid var(--border)" }}>
+              <tr key={item.id} className="table-row-hover" >
+                <td className="px-6 py-4">
+                  <div className="flex flex-col items-start gap-1.5">
+                    <span className="text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#F8F9FA] text-[#123D46]/50 rounded-full border border-[#E3EBE6]">
                       {item.id}
                     </span>
-                    <span className="badge" style={{
-                      fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 12,
-                      background: item.library === "Micro-défis" ? "rgba(0,169,157,0.1)" : item.library === "Partenaires" ? "rgba(255,198,41,0.15)" : "rgba(89,101,232,0.1)",
-                      color: item.library === "Micro-défis" ? "var(--cyan)" : item.library === "Partenaires" ? "var(--amber)" : "var(--indigo)",
-                    }}>
+                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${item.library === "Micro-défis" ? "bg-cyan-50 text-cyan-500" : item.library === "Partenaires" ? "bg-amber-50 text-amber-500" : "bg-indigo-50 text-indigo-500"}`}>
                       {item.library}
                     </span>
                   </div>
                 </td>
-                <td style={{ padding: "16px 24px", color: "var(--text-1)", fontWeight: 500, fontSize: 13 }}>{item.title}</td>
-                <td style={{ padding: "16px 24px", color: "var(--text-2)", fontSize: 13 }}>{item.category || "—"}</td>
-                <td style={{ padding: "16px 24px" }}>
-                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                <td className="px-6 py-4 text-[#123D46] font-medium text-[13px]">{item.title}</td>
+                <td className="px-6 py-4 text-[#123D46]/70 text-[13px]">{item.category || "—"}</td>
+                <td className="px-6 py-4">
+                  <div className="flex gap-1.5 flex-wrap">
                     {item.library === "Recommandations" && data.impact_attendu_1_5 && (
-                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderColor: "rgba(16,185,129,0.3)", color: "var(--emerald)", background: "rgba(16,185,129,0.1)" }}>⭐ Impact {data.impact_attendu_1_5}</span>
+                      <span className="text-[11px] px-2 py-0.5 border border-emerald-300 text-emerald-600 bg-emerald-50 rounded-full">⭐ Impact {data.impact_attendu_1_5}</span>
                     )}
                     {item.library === "Micro-défis" && data.points && (
-                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderColor: "rgba(56,189,248,0.3)", color: "var(--cyan)", background: "rgba(56,189,248,0.1)" }}>💎 {data.points} pts</span>
+                      <span className="text-[11px] px-2 py-0.5 border border-cyan-300 text-cyan-500 bg-cyan-50 rounded-full">💎 {data.points} pts</span>
                     )}
                     {item.library === "Partenaires" && data.territoire && (
-                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderColor: "rgba(249,115,22,0.3)", color: "#f97316", background: "rgba(249,115,22,0.1)" }}>📍 {data.territoire}</span>
+                      <span className="text-[11px] px-2 py-0.5 border border-orange-300 text-orange-500 bg-orange-50 rounded-full">📍 {data.territoire}</span>
                     )}
                     {(data.difficulte) && (
-                      <span className="badge" style={{ fontSize: 11, padding: "2px 8px", borderColor: "var(--border-strong)", color: "var(--text-2)", background: "var(--surface)" }}>⏳ {data.difficulte}</span>
+                      <span className="text-[11px] px-2 py-0.5 border border-[#E3EBE6] text-[#123D46]/70 bg-[#F8F9FA] rounded-full">⏳ {data.difficulte}</span>
                     )}
                   </div>
                 </td>
-                <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 6 }}>
-                    <Link href={`/dashboard/superadmin/catalog/${item.id}`} style={{ textDecoration: "none" }}>
-                      <Button variant="secondary" size="sm" style={{ padding: "6px" }} title="Modifier">
-                        <Edit2 size={14} />
-                      </Button>
+                <td className="px-6 py-4 text-right">
+                  <div className="flex justify-end items-center gap-1.5">
+                    <Link href={`/dashboard/superadmin/catalog/${item.id}`} className="no-underline inline-flex items-center justify-center">
+                      <button
+                        className="w-8 h-8 rounded-lg bg-[#123D46]/5 hover:bg-[#00A99D]/15 hover:text-[#00A99D] text-[#123D46] inline-flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
+                        title="Modifier cet élément"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
                     </Link>
                     <DeleteConfirmButton endpoint={`/api/admin/catalog/${item.id}`} title={`Supprimer ${item.id}`} />
                   </div>
@@ -275,35 +262,28 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
             )})}
             {items.length === 0 && (
               <tr>
-                <td colSpan={6} style={{ padding: "40px 24px", textAlign: "center", color: "var(--text-3)" }}>Aucun élément trouvé.</td>
+                <td colSpan={6} className="px-6 py-10 text-center text-[#123D46]/50">Aucun élément trouvé.</td>
               </tr>
             )}
           </tbody>
         </table>
 
         {totalPages > 1 && (
-          <div style={{ padding: "16px 24px", background: "var(--surface)", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid var(--border)" }}>
-            <span style={{ color: "var(--text-3)", fontSize: 13, fontWeight: 500 }}>
+          <div className="px-6 py-4 bg-white flex items-center justify-between border-t border-[#E3EBE6]">
+            <span className="text-[#123D46]/60 text-[13px] font-medium">
               Affichage de {((currentPage - 1) * ITEMS_PER_PAGE) + 1} à {Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} sur {totalItems} éléments
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div className="flex items-center gap-1.5">
               {Array.from({ length: totalPages }).map((_, i) => {
                 const page = i + 1;
                 const isActive = page === currentPage;
                 if (totalPages > 7 && page > 3 && page < totalPages - 1 && page !== currentPage) {
-                  if (page === 4 || page === totalPages - 2) return <span key={page} style={{ padding: "0 4px", color: "var(--text-3)" }}>…</span>;
+                  if (page === 4 || page === totalPages - 2) return <span key={page} className="px-1 text-[#123D46]/50">…</span>;
                   return null;
                 }
                 return (
-                  <Link key={page} href={`/dashboard/superadmin/catalog?filter=${filter}&page=${page}`} style={{ textDecoration: "none" }}>
-                    <button style={{ 
-                      width: 32, height: 32, borderRadius: "50%", 
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      background: isActive ? "var(--primary)" : "transparent", 
-                      border: isActive ? "none" : "1px solid var(--border)", 
-                      color: isActive ? "white" : "var(--text-2)", 
-                      fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.2s"
-                    }}>
+                  <Link key={page} href={`/dashboard/superadmin/catalog?filter=${filter}&page=${page}`} className="no-underline">
+                    <button className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold cursor-pointer transition-colors ${isActive ? "bg-[#00A99D] text-white" : "bg-transparent border border-[#E3EBE6] text-[#123D46]/70 hover:bg-[#FAF9F5]"}`}>
                       {page}
                     </button>
                   </Link>

@@ -71,32 +71,32 @@ export default function NewOrganizationPage() {
   };
 
   return (
-    <div style={{ maxWidth: 700, margin: "0 auto", paddingBottom: 40 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
-        <Link href="/dashboard/superadmin/organizations" style={{ color: "var(--text-2)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 13 }}>
+    <div className="max-w-[700px] mx-auto pb-10">
+      <div className="flex items-center gap-3 mb-7">
+        <Link href="/dashboard/superadmin/organizations" className="text-[#123D46]/70 flex items-center gap-1 hover:text-[#123D46] transition-colors text-[13px] font-medium">
           <ArrowLeft size={15} /> Retour à la liste
         </Link>
       </div>
 
-      <h1 style={{ fontSize: 28, fontWeight: 800, color: "var(--text-1)", marginBottom: 8 }}>Ajouter un partenaire</h1>
-      <p style={{ color: "var(--text-2)", marginBottom: 32 }}>Créez une organisation et son administrateur principal en une seule étape.</p>
+      <h1 className="text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight mb-2">Ajouter un partenaire</h1>
+      <p className="text-[#123D46]/70 text-sm mb-8">Créez une organisation et son administrateur principal en une seule étape.</p>
 
       {error && (
-        <div style={{ padding: "16px", background: "rgba(244,63,94,0.1)", border: "1px solid rgba(244,63,94,0.3)", borderRadius: 12, color: "var(--rose)", marginBottom: 24, display: "flex", alignItems: "center", gap: 12 }}>
+        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 mb-6 flex items-center gap-3">
           <AlertTriangle size={20} />
-          <span style={{ fontSize: 14, fontWeight: 500 }}>{error}</span>
+          <span className="text-sm font-medium">{error}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {/* Section 1: Organisation */}
-        <div className="card" style={{ padding: 32 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-            <Building2 size={24} style={{ color: "var(--violet)" }} />
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Informations de l'Organisation</h2>
+        <div className="bg-white rounded-2xl border border-[#E3EBE6] p-8 shadow-xs">
+          <div className="flex items-center gap-3 mb-6">
+            <Building2 size={24} className="text-indigo-500" />
+            <h2 className="text-lg font-bold text-[#123D46] m-0">Informations de l'Organisation</h2>
           </div>
           
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div className="flex flex-col gap-5">
             <div>
               <Input 
                 label="Nom de l'entreprise ou collectivité *" 
@@ -108,9 +108,9 @@ export default function NewOrganizationPage() {
               />
             </div>
             
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label style={{ display: "block", fontSize: 13, color: "var(--text-2)", fontWeight: 600, marginBottom: 8 }}>Type de client *</label>
+                <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Type de client *</label>
                 <Select
                   value={form.type}
                   onChange={(val) => setForm({ ...form, type: val })}
@@ -119,7 +119,7 @@ export default function NewOrganizationPage() {
                     { value: "B2B2C", label: "Mutuelles (B2B2C)" },
                     { value: "B2G", label: "Collectivités (B2G)" }
                   ]}
-                  style={{ width: "100%" }}
+                  className="w-full"
                 />
               </div>
               <div>
@@ -131,13 +131,13 @@ export default function NewOrganizationPage() {
                   onChange={handleChange} 
                   placeholder="Ex: SOLIS2026" 
                 />
-                <p style={{ fontSize: 11, color: "var(--text-3)", marginTop: 6 }}>Sera utilisé par les bénéficiaires pour rejoindre.</p>
+                <p className="text-[11px] text-[#123D46]/50 mt-1.5">Sera utilisé par les bénéficiaires pour rejoindre.</p>
               </div>
             </div>
             
             <div>
-              <div style={{ display: "flex", alignItems: "flex-end", gap: 16 }}>
-                <div style={{ flex: 1 }}>
+              <div className="flex items-end gap-4">
+                <div className="flex-1">
                   <Input 
                     label="Logo de l'organisation (Optionnel)"
                     type="file" 
@@ -146,26 +146,26 @@ export default function NewOrganizationPage() {
                   />
                 </div>
                 {form.logoUrl && (
-                  <div style={{ width: 40, height: 40, borderRadius: 8, overflow: "hidden", background: "var(--surface)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--text-3)" }}>
+                  <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#F8F9FA] flex items-center justify-center border border-[#123D46]/20">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={form.logoUrl} alt="Logo preview" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+                    <img src={form.logoUrl} alt="Logo preview" className="max-w-full max-h-full object-contain" />
                   </div>
                 )}
               </div>
-              <p style={{ fontSize: 11, color: "var(--text-3)", marginTop: 6 }}>Le logo s'affichera sur la page de connexion des bénéficiaires.</p>
+              <p className="text-[11px] text-[#123D46]/50 mt-1.5">Le logo s'affichera sur la page de connexion des bénéficiaires.</p>
             </div>
           </div>
         </div>
 
         {/* Section 2: Administrateur */}
-        <div className="card" style={{ padding: 32 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-            <UserCircle size={24} style={{ color: "var(--cyan)" }} />
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Compte Administrateur Principal</h2>
+        <div className="bg-white rounded-2xl border border-[#E3EBE6] p-8 shadow-xs">
+          <div className="flex items-center gap-3 mb-6">
+            <UserCircle size={24} className="text-cyan-500" />
+            <h2 className="text-lg font-bold text-[#123D46] m-0">Compte Administrateur Principal</h2>
           </div>
           
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="flex flex-col gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Input required name="adminFirstName" value={form.adminFirstName} onChange={handleChange} placeholder="Prénom" label="Prénom *" />
               </div>
@@ -180,20 +180,20 @@ export default function NewOrganizationPage() {
 
             <div>
               <Input required type="text" name="adminPassword" value={form.adminPassword} onChange={handleChange} placeholder="Mot de passe provisoire" label="Mot de passe initial *" />
-              <p style={{ fontSize: 11, color: "var(--text-3)", marginTop: 6 }}>L'administrateur sera forcé de le changer à sa première connexion.</p>
+              <p className="text-[11px] text-[#123D46]/50 mt-1.5">L'administrateur sera forcé de le changer à sa première connexion.</p>
             </div>
           </div>
         </div>
 
         {/* Section 3: Détails du Contrat & Modalités */}
-        <div className="card" style={{ padding: 32 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-            <Building2 size={24} style={{ color: "var(--emerald)" }} />
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Détails du Contrat & Modalités (Optionnel)</h2>
+        <div className="bg-white rounded-2xl border border-[#E3EBE6] p-8 shadow-xs">
+          <div className="flex items-center gap-3 mb-6">
+            <Building2 size={24} className="text-emerald-500" />
+            <h2 className="text-lg font-bold text-[#123D46] m-0">Détails du Contrat & Modalités (Optionnel)</h2>
           </div>
           
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="flex flex-col gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Input name="contactName" value={(form as any).contactName || ""} onChange={handleChange} placeholder="Ex: Jean Dupont" label="Nom du contact partenaire" />
               </div>
@@ -202,7 +202,7 @@ export default function NewOrganizationPage() {
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Input name="contactPhone" value={(form as any).contactPhone || ""} onChange={handleChange} placeholder="06 12 34 56 78" label="Téléphone du contact" />
               </div>
@@ -211,7 +211,7 @@ export default function NewOrganizationPage() {
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Input name="startDate" type="date" value={(form as any).startDate || ""} onChange={handleChange} label="Date de début" />
               </div>
@@ -220,7 +220,7 @@ export default function NewOrganizationPage() {
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <Input name="targetPopulation" type="number" value={(form as any).targetPopulation || ""} onChange={handleChange} placeholder="Ex: 500" label="Population visée" />
               </div>
@@ -234,8 +234,8 @@ export default function NewOrganizationPage() {
           </div>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 16 }}>
-          <Link href="/dashboard/superadmin/organizations" style={{ textDecoration: "none" }}>
+        <div className="flex justify-end gap-3 mt-4">
+          <Link href="/dashboard/superadmin/organizations" className="no-underline">
             <Button variant="ghost">Annuler</Button>
           </Link>
           <Button type="submit" disabled={saving}>

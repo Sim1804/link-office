@@ -6,7 +6,8 @@
  */
 import { useEffect } from "react";
 import Link from "next/link";
-import { Brain, RefreshCw, Home, AlertTriangle } from "lucide-react";
+import { RefreshCw, Home, AlertTriangle } from "lucide-react";
+import { Logo } from "@/src/components/brand/Logo";
 
 export default function GlobalError({
   error,
@@ -21,62 +22,50 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "var(--bg)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "40px 24px",
-      position: "relative",
-      overflow: "hidden",
-    }}>
+    <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-6 relative overflow-hidden">
       {/* Glow blobs */}
-      <div style={{ position: "absolute", top: "-15%", right: "-8%", width: 600, height: 600, background: "radial-gradient(circle, rgba(225,29,72,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "-15%", left: "-8%", width: 500, height: 500, background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div className="absolute -top-[15%] -right-[8%] w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(225,29,72,0.05) 0%, transparent 70%)" }} />
+      <div className="absolute -bottom-[15%] -left-[8%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)" }} />
 
-      <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 480 }}>
+      <div className="relative z-10 text-center max-w-md w-full">
         {/* Logo */}
-        <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: 40 }}>
-          <div style={{ width: 40, height: 40, background: "var(--primary)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Brain size={20} color="white" />
-          </div>
-          <span style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 20, color: "var(--text-1)" }}>
-            Link<span style={{ color: "var(--primary)" }}>Office</span>
-          </span>
-        </Link>
-
-        {/* Icon */}
-        <div style={{
-          width: 80, height: 80, borderRadius: 24,
-          background: "rgba(225,29,72,0.05)",
-          border: "1px solid rgba(225,29,72,0.2)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          margin: "0 auto 24px",
-        }}>
-          <AlertTriangle size={36} color="#e11d48" />
+        <div className="flex justify-center mb-10">
+          <Link href="/" className="inline-block transition-opacity hover:opacity-80">
+            <Logo size="md" variant="light" showTagline={false} />
+          </Link>
         </div>
 
-        <h1 style={{ fontFamily: "var(--font-family-display)", fontSize: 28, fontWeight: 800, color: "var(--text-1)", marginBottom: 12 }}>
+        {/* Icon */}
+        <div className="w-20 h-20 rounded-3xl bg-rose-50 border border-rose-200/50 flex items-center justify-center mx-auto mb-6 shadow-sm">
+          <AlertTriangle size={36} className="text-rose-600" />
+        </div>
+
+        <h1 className="font-jakarta text-2xl sm:text-3xl font-extrabold text-[#123D46] mb-3">
           Une erreur est survenue
         </h1>
-        <p style={{ fontSize: 16, color: "var(--text-2)", lineHeight: 1.6, marginBottom: 36 }}>
+        <p className="text-[15px] text-[#123D46]/70 leading-relaxed mb-8">
           Nous rencontrons un problème technique. Votre progression est sauvegardée.
           Essayez de recharger la page ou retournez à l&apos;accueil.
         </p>
 
         {error.digest && (
-          <p style={{ fontSize: 12, color: "var(--text-3)", marginBottom: 24, fontFamily: "monospace" }}>
+          <p className="text-xs text-[#123D46]/50 mb-6 font-mono bg-black/5 inline-block px-3 py-1.5 rounded-lg">
             Référence : {error.digest}
           </p>
         )}
 
         {/* Actions */}
-        <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={reset} className="btn btn-primary btn-lg">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <button 
+            onClick={reset} 
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
+          >
             <RefreshCw size={16} /> Réessayer
           </button>
-          <Link href="/" className="btn btn-tertiary btn-lg" style={{ textDecoration: "none" }}>
+          <Link 
+            href="/" 
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-white border border-[#E3EBE6] text-[#123D46] hover:bg-[#F8F9FA] hover:border-[#00A99D]/30 font-jakarta font-bold text-sm transition-all flex items-center justify-center gap-2"
+          >
             <Home size={16} /> Retour à l&apos;accueil
           </Link>
         </div>

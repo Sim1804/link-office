@@ -57,12 +57,17 @@ export interface CatalogItem {
 export interface MediaItem {
   id: string;
   title: string;
-  type: 'Article' | 'Podcast' | 'Fiche Pratique' | 'Recherche';
+  type: 'Article' | 'Podcast' | 'Fiche Pratique' | 'Recherche' | 'Dossier';
   status: 'Publié' | 'Brouillon';
   date: string;
   reads: number;
   author: string;
   category: string;
+  slug?: string;
+  summary?: string;
+  durationMinutes?: number;
+  imageUrl?: string;
+  content?: string;
 }
 
 export interface BinomeRelation {

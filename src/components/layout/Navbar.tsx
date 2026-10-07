@@ -37,14 +37,17 @@ import { NotificationBell } from "./NotificationBell";
 import { Logo } from "../brand/Logo";
 
 /** Union des rôles utilisateur reconnus par la Navbar */
-type RoleType = "EMPLOYEE" | "ADMIN_B2B" | "ADMIN_B2B2C" | "ADMIN_COLLECTIVITE" | "SUPER_ADMIN";
+type RoleType = "EMPLOYEE" | "CITIZEN" | "MEMBER" | "ADMIN_B2B" | "ADMIN_B2B2C" | "ADMIN_B2G" | "ADMIN_COLLECTIVITE" | "SUPER_ADMIN";
 
-const ROLE_BADGES: Record<RoleType, { label: string; bg: string; color: string; border: string }> = {
-  EMPLOYEE: { label: "Membre", bg: "rgba(18,61,70,0.05)", color: "var(--text-2)", border: "rgba(18,61,70,0.1)" },
+const ROLE_BADGES: Record<string, { label: string; bg: string; color: string; border: string }> = {
+  EMPLOYEE: { label: "Membre", bg: "rgba(18,61,70,0.05)", color: "#123D46", border: "rgba(18,61,70,0.1)" },
+  MEMBER: { label: "Membre", bg: "rgba(18,61,70,0.05)", color: "#123D46", border: "rgba(18,61,70,0.1)" },
+  CITIZEN: { label: "Citoyen", bg: "rgba(77,189,178,0.1)", color: "#4DBDB2", border: "rgba(77,189,178,0.2)" },
   ADMIN_B2B: { label: "Administrateur B2B", bg: "rgba(89,101,232,0.1)", color: "#5965E8", border: "rgba(89,101,232,0.2)" },
-  ADMIN_B2B2C: { label: "Administrateur mutuelle", bg: "rgba(0,169,157,0.1)", color: "#00A99D", border: "rgba(0,169,157,0.2)" },
-  ADMIN_COLLECTIVITE: { label: "Administrateur territoire", bg: "rgba(77,189,178,0.1)", color: "#4DBDB2", border: "rgba(77,189,178,0.2)" },
-  SUPER_ADMIN: { label: "Super administrateur", bg: "rgba(255,198,41,0.15)", color: "#FFC629", border: "rgba(255,198,41,0.3)" },
+  ADMIN_B2B2C: { label: "Administrateur Mutuelle", bg: "rgba(0,169,157,0.1)", color: "#00A99D", border: "rgba(0,169,157,0.2)" },
+  ADMIN_B2G: { label: "Administrateur Territoire", bg: "rgba(77,189,178,0.1)", color: "#4DBDB2", border: "rgba(77,189,178,0.2)" },
+  ADMIN_COLLECTIVITE: { label: "Administrateur Territoire", bg: "rgba(77,189,178,0.1)", color: "#4DBDB2", border: "rgba(77,189,178,0.2)" },
+  SUPER_ADMIN: { label: "Super Administrateur", bg: "rgba(255,198,41,0.15)", color: "#B45309", border: "rgba(255,198,41,0.3)" },
 };
 
 /**
@@ -78,18 +81,15 @@ export function Navbar() {
 
     if (userRole === "ADMIN_B2B") {
       return [
-        { href: "/dashboard/b2b", label: "Observatoire", icon: Building2 },
-        { href: "/dashboard/b2b/campaigns", label: "Campagnes", icon: Users },
+        { href: "/dashboard/b2b", label: "Tableau de bord B2B", icon: Building2 }
       ];
     } else if (userRole === "ADMIN_B2B2C") {
       return [
-        { href: "/dashboard/b2b2c", label: "Portail Mutuelle", icon: HeartPulse },
-        { href: "/dashboard/b2b2c/campaigns", label: "Campagnes", icon: Users },
+        { href: "/dashboard/b2b2c", label: "Tableau de bord B2B2C", icon: HeartPulse }
       ];
-    } else if (userRole === "ADMIN_COLLECTIVITE") {
+    } else if (userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G") {
       return [
-        { href: "/dashboard/b2g", label: "Observatoire Territorial", icon: Landmark },
-        { href: "/dashboard/b2g/campaigns", label: "Campagnes", icon: Users },
+        { href: "/dashboard/b2g", label: "Tableau de bord B2G", icon: Landmark }
       ];
     } else if (userRole === "SUPER_ADMIN") {
       return [
@@ -138,17 +138,9 @@ export function Navbar() {
         {/* Navigation Desktop — liens actifs surlignés selon la route courante */}
         <nav className="hidden md:flex items-center gap-2 sm:gap-6 text-xs sm:text-sm font-jakarta font-semibold">
           {navLinks.map(({ href, label }) => {
-            const isPortailLink = label === "Portails Partenaires" && (currentPathname.startsWith("/dashboard/b2b") || currentPathname.startsWith("/dashboard/b2b2c") || currentPathname.startsWith("/dashboard/b2g"));
-            let isActivePage = false;
-            if (isPortailLink) {
-              isActivePage = true;
-            } else if (href === "/dashboard/b2b" || href === "/dashboard/b2b2c" || href === "/dashboard/b2g") {
-              isActivePage = currentPathname === href;
-            } else if (href === "/dashboard") {
-              isActivePage = currentPathname === "/dashboard";
-            } else {
-              isActivePage = currentPathname.startsWith(href);
-            }
+            const isActivePage = href === "/dashboard" 
+              ? currentPathname === "/dashboard" 
+              : currentPathname.startsWith(href);
             
             return (
               <Link key={href} href={href} 
@@ -222,25 +214,6 @@ export function Navbar() {
                     </div>
                   )}
 
-                  {/* Section Sélecteur de Démonstrations (Super Admin uniquement) */}
-                  {userRole === "SUPER_ADMIN" && (
-                    <div className="py-1">
-                      <div className="text-[10px] font-bold text-[#123D46]/50 px-4 py-1.5 uppercase">Sélecteur Démos</div>
-                      <Link href="/dashboard/b2b" onClick={() => setIsProfileDropdownOpen(false)} 
-                        className="flex items-center gap-2.5 px-4 py-2 hover:bg-[#FAF9F5] text-[#00A99D] font-medium transition-colors">
-                        <Building2 size={14} /> Entreprises (B2B)
-                      </Link>
-                      <Link href="/dashboard/b2b2c" onClick={() => setIsProfileDropdownOpen(false)} 
-                        className="flex items-center gap-2.5 px-4 py-2 hover:bg-[#FAF9F5] text-[#4DBDB2] font-medium transition-colors">
-                        <HeartPulse size={14} /> Mutuelles (B2B2C)
-                      </Link>
-                      <Link href="/dashboard/b2g" onClick={() => setIsProfileDropdownOpen(false)} 
-                        className="flex items-center gap-2.5 px-4 py-2 hover:bg-[#FAF9F5] text-[#00A99D] font-medium transition-colors">
-                        <Landmark size={14} /> Collectivités (B2G)
-                      </Link>
-                    </div>
-                  )}
-
                   <div className="border-t border-[#E3EBE6] my-1" />
                   <button
                     onClick={() => signOut({ callbackUrl: "/" })}
@@ -284,17 +257,9 @@ export function Navbar() {
           )}
 
           {navLinks.map(({ href, label }) => {
-            const isPortailLink = label === "Portails Partenaires" && (currentPathname.startsWith("/dashboard/b2b") || currentPathname.startsWith("/dashboard/b2b2c") || currentPathname.startsWith("/dashboard/b2g"));
-            let isActivePage = false;
-            if (isPortailLink) {
-              isActivePage = true;
-            } else if (href === "/dashboard/b2b" || href === "/dashboard/b2b2c" || href === "/dashboard/b2g") {
-              isActivePage = currentPathname === href;
-            } else if (href === "/dashboard") {
-              isActivePage = currentPathname === "/dashboard";
-            } else {
-              isActivePage = currentPathname.startsWith(href);
-            }
+            const isActivePage = href === "/dashboard" 
+              ? currentPathname === "/dashboard" 
+              : currentPathname.startsWith(href);
             return (
               <Link key={href} href={href} onClick={() => setIsMobileMenuOpen(false)}
                 className={`py-2 px-3 rounded-lg text-sm font-jakarta font-bold transition-colors ${

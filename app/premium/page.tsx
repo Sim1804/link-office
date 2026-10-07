@@ -43,7 +43,7 @@ export default function PremiumPage() {
 
   const [loading, setLoading] = useState<"PREMIUM" | "PREMIUM_PLUS" | false>(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const [billing, setBilling] = useState<"monthly" | "annual">("annual");
+  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
 
   const handleCheckout = async (tier: "PREMIUM" | "PREMIUM_PLUS") => {
     setCheckoutError(null);
@@ -158,7 +158,7 @@ export default function PremiumPage() {
                 subtitle="Accès complet à vos résultats détaillés."
                 price={billing === "annual" ? PRICES.PREMIUM.annual : PRICES.PREMIUM.monthly}
                 period={billing === "annual" ? "/an" : "/mois"}
-                savings={billing === "annual" ? `Soit ${PRICES.PREMIUM.annualMonthly} / mois` : undefined}
+                savings={billing === "annual" ? `Soit ${PRICES.PREMIUM.annualMonthly} / mois (-20%)` : undefined}
                 features={PREMIUM_FEATURES}
                 featureStyle="check"
                 ctaLabel={loading === "PREMIUM" ? "Redirection..." : "S'abonner à Premium"}
@@ -176,7 +176,7 @@ export default function PremiumPage() {
               subtitle={isAlreadyPremium ? "Mise à niveau depuis votre abonnement Premium." : "L'expérience relationnelle intégrale."}
               price={billing === "annual" ? PRICES.PREMIUM_PLUS.annual : PRICES.PREMIUM_PLUS.monthly}
               period={billing === "annual" ? "/an" : "/mois"}
-              savings={billing === "annual" ? `Soit ${PRICES.PREMIUM_PLUS.annualMonthly} / mois` : undefined}
+              savings={billing === "annual" ? `Soit ${PRICES.PREMIUM_PLUS.annualMonthly} / mois (-20%)` : undefined}
               features={PREMIUM_PLUS_FEATURES.map(f => f.label)}
               featureStyle="gradient"
               ctaLabel={loading === "PREMIUM_PLUS" ? "Redirection..." : (isAlreadyPremium ? "Passer à Premium+ →" : "Débloquer Premium +")}

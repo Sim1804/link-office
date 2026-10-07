@@ -353,7 +353,7 @@ export const SaaSPlatform: React.FC<{
       </section>
 
       {/* ==================== SECTION: TARIFS ==================== */}
-      <section id="tarifs" className="scroll-mt-28">
+      <section id="tarifs" className="scroll-mt-32 pt-6">
         <TarifsSection
           onSelectPlan={plan => {
             if (plan === 'gratuit') {
@@ -416,6 +416,11 @@ export const SaaSPlatform: React.FC<{
         onClose={() => setIsAuthOpen(false)}
         initialMode={authMode}
         onLoginSuccess={onLogin}
+        onSelectSpace={(space) => {
+          if (space === 'super_admin' && onOpenAdmin) onOpenAdmin();
+          else if (space === 'rh_admin' && onOpenRHAdmin) onOpenRHAdmin();
+          else if (onLogin) onLogin({ name: 'Camille Demo', email: 'camille.demo@linkoffice.fr' });
+        }}
       />
     </div>
   );

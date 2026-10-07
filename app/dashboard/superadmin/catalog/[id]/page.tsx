@@ -27,9 +27,9 @@ export default async function EditCatalogItemPage(props: { params: Promise<{ id:
   };
 
   return (
-    <div style={{ maxWidth: 860, margin: "0 auto", paddingBottom: "40px" }}>
-      <div style={{ marginBottom: 24 }}>
-        <Link href="/dashboard/superadmin/catalog" style={{ color: "var(--text-2)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 14 }}>
+    <div className="max-w-[860px] mx-auto pb-10">
+      <div className="mb-6">
+        <Link href="/dashboard/superadmin/catalog" className="text-[#123D46]/70 flex items-center gap-1 hover:text-[#123D46] transition-colors text-sm font-medium">
           <ArrowLeft size={16} /> Retour au catalogue
         </Link>
       </div>

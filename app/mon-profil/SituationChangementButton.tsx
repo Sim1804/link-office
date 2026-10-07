@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, AlertTriangle } from "lucide-react";
 
 export function SituationChangementButton() {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,50 +28,38 @@ export function SituationChangementButton() {
   };
 
   return (
-    <div style={{ marginTop: 24, padding: 24, borderRadius: 24, border: "1px solid rgba(251,191,36,0.4)", background: "linear-gradient(145deg, rgba(251,191,36,0.1), rgba(251,191,36,0.02))" }}>
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-        <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(251,191,36,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <RefreshCw size={22} style={{ color: "#fbbf24" }} />
+    <div className="bg-[#FAF9F5] border border-[#E3EBE6] rounded-3xl p-6 sm:p-7 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
+            <RefreshCw size={22} className={isLoading ? "animate-spin" : ""} />
+          </div>
+          <div className="space-y-1">
+            <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+              Ma situation a changé
+            </h3>
+            <p className="text-xs text-[#123D46]/75 leading-relaxed max-w-2xl">
+              Si vous avez changé de poste, de situation familiale ou de mode de vie, actualisez votre profil pour recalibrer vos indicateurs et recommandations personnalisées.
+            </p>
+          </div>
         </div>
-        <div>
-          <h3 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "var(--text-1)", marginBottom: 6 }}>
-            Ma situation a changé
-          </h3>
-          <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.5, marginBottom: 16 }}>
-            Si vous avez changé de poste, de situation familiale, ou de mode de vie, vous pouvez mettre à jour votre profil. 
-            Cela clôturera votre profil actuel et initialisera une nouvelle évaluation pour mieux vous accompagner.
-          </p>
-          <button 
-            onClick={handleRenew}
-            disabled={isLoading}
-            style={{
-              background: "rgba(251,191,36,0.15)",
-              color: "#fbbf24",
-              border: "1px solid rgba(251,191,36,0.3)",
-              padding: "10px 20px",
-              borderRadius: 999,
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: isLoading ? "not-allowed" : "pointer",
-              transition: "all 0.2s",
-              display: "flex",
-              alignItems: "center",
-              gap: 8
-            }}
-          >
-            {isLoading ? "Préparation..." : "Mettre à jour mon profil"}
-          </button>
-          {error && (
-            <div style={{
-              display: "flex", alignItems: "flex-start", gap: 8, marginTop: 12,
-              padding: "10px 14px", borderRadius: 10,
-              background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)",
-            }}>
-              <p style={{ color: "#f87171", fontSize: 13, margin: 0 }}>{error}</p>
-            </div>
-          )}
-        </div>
+
+        <button
+          onClick={handleRenew}
+          disabled={isLoading}
+          className="px-5 py-2.5 rounded-full bg-[#123D46] hover:bg-[#0D2530] text-white font-jakarta font-bold text-xs shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50 shrink-0 self-start sm:self-auto"
+        >
+          <RefreshCw size={14} className={isLoading ? "animate-spin" : ""} />
+          {isLoading ? "Préparation..." : "Mettre à jour mon profil"}
+        </button>
       </div>
+
+      {error && (
+        <div className="flex items-center gap-2 mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
+          <AlertTriangle size={14} className="shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
     </div>
   );
 }

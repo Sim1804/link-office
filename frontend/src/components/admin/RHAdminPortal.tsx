@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Logo } from '../brand/Logo';
+import { ToastContainer, ToastMessage } from '../common/Toast';
 import {
   Bell,
   ChevronDown,
@@ -23,7 +24,10 @@ import {
   HeartHandshake,
   LogOut,
   X,
-  Target
+  Target,
+  Download,
+  Mail,
+  PieChart
 } from 'lucide-react';
 
 interface RHAdminPortalProps {
@@ -37,11 +41,21 @@ export const RHAdminPortal: React.FC<RHAdminPortalProps> = ({
   onSwitchToEmployeeDemo,
   onSwitchToSuperAdmin
 }) => {
-  // Main Navigation Tabs: 'observatoire' | 'campagnes'
-  const [activeTab, setActiveTab] = useState<'observatoire' | 'campagnes'>('observatoire');
+  // Main Navigation Tabs: 'observatoire' | 'campagnes' | 'collectifs' | 'rapports'
+  const [activeTab, setActiveTab] = useState<'observatoire' | 'campagnes' | 'collectifs' | 'rapports'>('observatoire');
 
   // Sub-tabs in Observatoire (from screenshots 1, 2, 3)
   const [subTab, setSubTab] = useState<'generale' | 'tendances' | 'recommandations'>('generale');
+
+  // Toasts
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const addToast = (title: string, message: string, type: 'success' | 'info' | 'warning' = 'success') => {
+    const id = `toast-${Date.now()}-${Math.random()}`;
+    setToasts(prev => [...prev, { id, title, message, type }]);
+  };
+  const removeToast = (id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
 
   // Filter dropdown states
   const [selectedCampaign, setSelectedCampaign] = useState('Campagne QVT Acme 2026');
@@ -99,7 +113,7 @@ export const RHAdminPortal: React.FC<RHAdminPortalProps> = ({
     setCampaigns([newCamp, ...campaigns]);
     setShowNewCampaignModal(false);
     setNewCampaignTitle('');
-    alert('Nouvelle campagne lancée avec invitations anonymisées sécurisées !');
+    addToast('Campagne créée', 'Nouvelle campagne lancée avec invitations anonymisées sécurisées !', 'success');
   };
 
   return (
@@ -107,15 +121,30 @@ export const RHAdminPortal: React.FC<RHAdminPortalProps> = ({
       {/* ==================== 1. TOP NAVBAR SPÉCIFIQUE ADMIN B2B / B2B2C / B2G ==================== */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3 shadow-2xs">
         <div className="max-w-[1480px] mx-auto flex items-center justify-between">
-          {/* Zone 1: Logo LINK OFFICE */}
+          {/* Zone 1: Logo LINK OFFICE + Org Type indicator */}
           <div className="flex items-center gap-3">
             <div onClick={onReturnToPublic} className="cursor-pointer hover:opacity-90 transition-opacity">
               <Logo size="sm" showTagline={false} />
             </div>
+            <div className="hidden md:flex items-center gap-2 pl-3 border-l border-[#E3EBE6]">
+              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#00A99D]/10 text-[#00A99D] text-xs font-jakarta font-bold">
+                <Building2 className="w-3.5 h-3.5" />
+                <span>
+                  {partnerMode === 'b2b'
+                    ? 'Acme Corp (B2B)'
+                    : partnerMode === 'b2b2c'
+                    ? 'Mutuelle Solis (B2B2C)'
+                    : 'Ville de Testville (B2G)'}
+                </span>
+              </span>
+              <span className="text-[11px] text-[#123D46]/60 font-medium">
+                · Socle unifié Partenaires
+              </span>
+            </div>
           </div>
 
-          {/* Zone 2: Navigation Principale (Observatoire | Campagnes) */}
-          <nav className="flex items-center gap-8 sm:gap-12 font-jakarta text-sm font-semibold">
+          {/* Zone 2: Navigation Principale (Observatoire | Campagnes | Collaborateurs/Adhérents | Rapports) */}
+          <nav className="flex items-center gap-5 sm:gap-8 font-jakarta text-xs sm:text-sm font-semibold">
             <button
               onClick={() => setActiveTab('observatoire')}
               className={`relative py-2 transition-colors ${
@@ -146,10 +175,54 @@ export const RHAdminPortal: React.FC<RHAdminPortalProps> = ({
                 <span className="absolute bottom-0 left-0 w-full h-[2.5px] bg-[#00A99D] rounded-full" />
               )}
             </button>
+
+            <button
+              onClick={() => setActiveTab('collectifs')}
+              className={`relative py-2 transition-colors ${
+                activeTab === 'collectifs'
+                  ? 'text-[#00A99D] font-bold'
+                  : 'text-[#123D46]/65 hover:text-[#123D46]'
+              }`}
+            >
+              <span>
+                {partnerMode === 'b2b'
+                  ? 'Collaborateurs'
+                  : partnerMode === 'b2b2c'
+                  ? 'Adhérents'
+                  : 'Agents'}
+              </span>
+              {activeTab === 'collectifs' && (
+                <span className="absolute bottom-0 left-0 w-full h-[2.5px] bg-[#00A99D] rounded-full" />
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('rapports')}
+              className={`relative py-2 transition-colors ${
+                activeTab === 'rapports'
+                  ? 'text-[#00A99D] font-bold'
+                  : 'text-[#123D46]/65 hover:text-[#123D46]'
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <span>Rapports</span>
+                <span className="hidden sm:inline-block text-[10px] px-1.5 py-0.5 rounded-full bg-[#123D46]/5 text-[#123D46]/70">
+                  CSE
+                </span>
+              </div>
+              {activeTab === 'rapports' && (
+                <span className="absolute bottom-0 left-0 w-full h-[2.5px] bg-[#00A99D] rounded-full" />
+              )}
+            </button>
           </nav>
 
-          {/* Zone 3: Notifications & Badge Profil (B2B / B2B2C / B2G) */}
-          <div className="flex items-center gap-3">
+          {/* Zone 3: RGPD Badge, Notifications & Profile Badge */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* RGPD Safe Badge */}
+            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 text-[11px] font-medium" title="Garantie stricte de confidentialité RGPD">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>k-anonymat ≥ 5</span>
+            </div>
             {/* Notification Bell */}
             <div className="relative">
               <button
@@ -346,40 +419,40 @@ export const RHAdminPortal: React.FC<RHAdminPortalProps> = ({
             </div>
 
             {/* Sub-tabs row (Screenshot 1, 2, 3): Vue Générale | Tendances & Profils | Recommandations & Leviers */}
-            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
+            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none pb-1">
               <button
                 onClick={() => setSubTab('generale')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
                   subTab === 'generale'
-                    ? 'bg-[#00A99D]/15 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold'
-                    : 'bg-white border border-[#E3EBE6] text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/50'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
                 }`}
               >
-                <Activity className="w-3.5 h-3.5" />
+                <Activity className="w-4 h-4" />
                 <span>Vue Générale</span>
               </button>
 
               <button
                 onClick={() => setSubTab('tendances')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
                   subTab === 'tendances'
-                    ? 'bg-[#00A99D]/15 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold'
-                    : 'bg-white border border-[#E3EBE6] text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/50'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
                 }`}
               >
-                <TrendingUp className="w-3.5 h-3.5" />
+                <TrendingUp className="w-4 h-4" />
                 <span>Tendances & Profils</span>
               </button>
 
               <button
                 onClick={() => setSubTab('recommandations')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
                   subTab === 'recommandations'
-                    ? 'bg-[#00A99D]/15 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold'
-                    : 'bg-white border border-[#E3EBE6] text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/50'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
                 }`}
               >
-                <ShieldCheck className="w-3.5 h-3.5" />
+                <ShieldCheck className="w-4 h-4" />
                 <span>Recommandations & Leviers</span>
               </button>
             </div>
@@ -905,7 +978,7 @@ export const RHAdminPortal: React.FC<RHAdminPortalProps> = ({
 
                   <div className="pt-2">
                     <button
-                      onClick={() => alert("Valorisation d'équipe : fiche de rituel exportée !")}
+                      onClick={() => addToast('Export PDF', "Fiche de rituel d'équipe exportée en PDF !", 'success')}
                       className="w-full py-2.5 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-jakarta font-bold transition-colors text-center"
                     >
                       Renforcer ces atouts dans le plan d'action →
@@ -1045,7 +1118,7 @@ export const RHAdminPortal: React.FC<RHAdminPortalProps> = ({
                       Pôle ciblé : <span className="font-semibold text-[#123D46]">{camp.targetDepartment}</span>
                     </span>
                     <button
-                      onClick={() => alert("Relance anonyme envoyée par email aux personnes n'ayant pas encore complété.")}
+                      onClick={() => addToast('Relance envoyée', "Relance anonyme envoyée par email aux participants n'ayant pas encore complété.", 'info')}
                       className="text-xs font-jakarta font-bold text-[#00A99D] hover:underline flex items-center gap-1"
                     >
                       <RefreshCw className="w-3.5 h-3.5" />
@@ -1054,6 +1127,293 @@ export const RHAdminPortal: React.FC<RHAdminPortalProps> = ({
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 3: COLLECTIFS & PÔLES (Garantie de k-anonymat RGPD)                    */}
+        {/* ========================================================================= */}
+        {activeTab === 'collectifs' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight">
+                  {partnerMode === 'b2b'
+                    ? 'Collectifs & Directions (B2B)'
+                    : partnerMode === 'b2b2c'
+                    ? 'Groupes d’Adhérents & Filières (B2B2C)'
+                    : 'Pôles & Services Publics (B2G)'}
+                </h1>
+                <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
+                  Gestion des cohortes et vérification du seuil d’anonymat strict (k ≥ 5 répondants).
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => addToast('Nouvelle cohorte', 'Invitation d’un nouveau département ajoutée.', 'success')}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold shadow-xs transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>+ Ajouter un collectif</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Banner RGPD Explanatory Card */}
+            <div className="p-4 rounded-2xl bg-white border border-[#E3EBE6] shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200/60">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-jakarta font-bold text-sm text-[#123D46]">
+                    Bouclier de Confidentialité & Seuil k-anonymat (k = 5)
+                  </h4>
+                  <p className="text-xs text-[#123D46]/75 mt-0.5 max-w-3xl leading-relaxed">
+                    Afin de protéger la liberté d'expression des répondants, aucun score ni verbatims n'est calculé pour un pôle ou une tranche de population comptant moins de 5 évaluations finalisées.
+                  </p>
+                </div>
+              </div>
+              <div className="px-3.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-jakarta font-bold whitespace-nowrap border border-emerald-200">
+                100% Conforme CNIL & RGPD
+              </div>
+            </div>
+
+            {/* Cohorts / Departments Table */}
+            <div className="bg-white rounded-2xl border border-[#E3EBE6] shadow-xs overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[#FAF9F5] border-b border-[#E3EBE6] text-[#123D46]/60 font-jakarta font-bold uppercase tracking-wider text-[10px]">
+                    <tr>
+                      <th className="py-3.5 px-4 sm:px-6">Pôle / Collectif</th>
+                      <th className="py-3.5 px-4">Effectif ciblé</th>
+                      <th className="py-3.5 px-4">Réponses validées</th>
+                      <th className="py-3.5 px-4">Taux de participation</th>
+                      <th className="py-3.5 px-4">Statut k-anonymat</th>
+                      <th className="py-3.5 px-4">Indice IQRH Moyen</th>
+                      <th className="py-3.5 px-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#E3EBE6]">
+                    {[
+                      {
+                        name: 'Direction Générale & Stratégie',
+                        size: 8,
+                        responses: 7,
+                        rate: 87.5,
+                        kSafe: true,
+                        iqrh: 78.4,
+                        manager: 'Sophie Laurent'
+                      },
+                      {
+                        name: 'Pôle Opérations & Logistique',
+                        size: 24,
+                        responses: 19,
+                        rate: 79.2,
+                        kSafe: true,
+                        iqrh: 64.1,
+                        manager: 'Marc Levêque'
+                      },
+                      {
+                        name: 'Pôle Ingénierie & Produit',
+                        size: 16,
+                        responses: 14,
+                        rate: 87.5,
+                        kSafe: true,
+                        iqrh: 72.8,
+                        manager: 'Thomas V.'
+                      },
+                      {
+                        name: 'Service Relations Adhérents / Clients',
+                        size: 12,
+                        responses: 9,
+                        rate: 75.0,
+                        kSafe: true,
+                        iqrh: 69.5,
+                        manager: 'Claire M.'
+                      },
+                      {
+                        name: 'Antenne Territoriale Sud (Pilote)',
+                        size: 4,
+                        responses: 3,
+                        rate: 75.0,
+                        kSafe: false,
+                        iqrh: null,
+                        manager: 'Julien B.'
+                      }
+                    ].map((dept, idx) => (
+                      <tr key={idx} className="hover:bg-[#F8F9FA] transition-colors">
+                        <td className="py-3.5 px-4 sm:px-6">
+                          <div className="font-jakarta font-bold text-[#123D46]">{dept.name}</div>
+                          <div className="text-[11px] text-[#123D46]/60">Référent : {dept.manager}</div>
+                        </td>
+                        <td className="py-3.5 px-4 font-mono font-medium text-[#123D46]">{dept.size} pers.</td>
+                        <td className="py-3.5 px-4 font-mono font-bold text-[#00A99D]">{dept.responses}</td>
+                        <td className="py-3.5 px-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-16 h-2 rounded-full bg-[#E3EBE6] overflow-hidden">
+                              <div
+                                className="h-full bg-[#00A99D] rounded-full"
+                                style={{ width: `${dept.rate}%` }}
+                              />
+                            </div>
+                            <span className="font-mono text-[11px] text-[#123D46]">{dept.rate}%</span>
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          {dept.kSafe ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200/60">
+                              <CheckCircle2 className="w-3 h-3" />
+                              <span>k ≥ 5 Validé</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[11px] font-semibold border border-amber-200/60" title="Moins de 5 répondants : données masquées pour préserver l'anonymat">
+                              <AlertTriangle className="w-3 h-3" />
+                              <span>k &lt; 5 (Masqué)</span>
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3.5 px-4">
+                          {dept.iqrh !== null ? (
+                            <span className="font-mono font-extrabold text-sm text-[#123D46]">
+                              {dept.iqrh} <span className="text-[10px] text-[#123D46]/60">/100</span>
+                            </span>
+                          ) : (
+                            <span className="text-[11px] text-[#123D46]/40 italic">Seuil insuffisant</span>
+                          )}
+                        </td>
+                        <td className="py-3.5 px-4 text-right">
+                          <button
+                            onClick={() => addToast('Relance ciblée', `Relance anonyme envoyée pour : ${dept.name}`, 'info')}
+                            className="px-2.5 py-1 rounded-lg border border-[#E3EBE6] hover:border-[#00A99D] hover:text-[#00A99D] text-[11px] font-jakarta font-semibold transition-colors"
+                          >
+                            Relancer
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 4: RAPPORTS & RESTITUTIONS (Packs CSE, Bilans QVT & CODIR)             */}
+        {/* ========================================================================= */}
+        {activeTab === 'rapports' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight">
+                  Rapports & Restitutions Stratégiques
+                </h1>
+                <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
+                  Documents officiels, fiches pour les représentants du personnel (CSE) et synthèses d’aide à la décision.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => addToast('Export Global', 'Génération du rapport global en cours...', 'info')}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#123D46] hover:bg-[#0D2530] text-white text-xs font-jakarta font-bold shadow-xs transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Tout exporter (Pack ZIP)</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Report 1: Bilan Social & QVT */}
+              <div className="bg-white p-6 rounded-2xl border border-[#E3EBE6] shadow-xs flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+                      Bilan Annuel Qualité Relationnelle 2026
+                    </h3>
+                    <p className="text-xs text-[#123D46]/70 mt-1 leading-relaxed">
+                      Synthèse complète de l'indice IQRH, cartographie des 5 dimensions et évolution trimestrielle.
+                    </p>
+                  </div>
+                  <div className="text-[11px] text-[#123D46]/60 space-y-1 pt-1">
+                    <div>Format : PDF Haute Définition (18 pages)</div>
+                    <div>Dernière mise à jour : 02 Octobre 2026</div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => addToast('Téléchargement', 'Bilan Annuel QVT 2026 téléchargé.', 'success')}
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Télécharger le PDF</span>
+                </button>
+              </div>
+
+              {/* Report 2: Pack CSE & Dialogue Social */}
+              <div className="bg-white p-6 rounded-2xl border border-[#E3EBE6] shadow-xs flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#5965E8]/10 text-[#5965E8] flex items-center justify-center">
+                    <PieChart className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+                      Fiche Synthèse CSE & Dialogue Social
+                    </h3>
+                    <p className="text-xs text-[#123D46]/70 mt-1 leading-relaxed">
+                      Cadrage neutre et bienveillant des ressentis collectifs, prêt à être présenté en commission QVCT.
+                    </p>
+                  </div>
+                  <div className="text-[11px] text-[#123D46]/60 space-y-1 pt-1">
+                    <div>Format : Diaporama Présentation (PPTX & PDF)</div>
+                    <div>Conformité : Accord National Interprofessionnel</div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => addToast('Téléchargement', 'Fiche Synthèse CSE téléchargée.', 'success')}
+                  className="w-full py-2.5 px-4 rounded-xl border border-[#E3EBE6] hover:border-[#5965E8] text-[#123D46] hover:text-[#5965E8] font-jakarta font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Télécharger le Kit CSE</span>
+                </button>
+              </div>
+
+              {/* Report 3: Fiche d'Impact & Rituels IRIS */}
+              <div className="bg-white p-6 rounded-2xl border border-[#E3EBE6] shadow-xs flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#FFC629]/20 text-[#D97706] flex items-center justify-center">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+                      Matrice des Rituels & Plan d’Action
+                    </h3>
+                    <p className="text-xs text-[#123D46]/70 mt-1 leading-relaxed">
+                      Feuille de route opérationnelle pour les managers de proximité : les 3 rituels clés recommandés.
+                    </p>
+                  </div>
+                  <div className="text-[11px] text-[#123D46]/60 space-y-1 pt-1">
+                    <div>Format : Fiche Action Manager A4</div>
+                    <div>Statut : Plan validé à J+30</div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => addToast('Téléchargement', "Plan d'action managérial téléchargé.", 'success')}
+                  className="w-full py-2.5 px-4 rounded-xl border border-[#E3EBE6] hover:border-[#00A99D] text-[#123D46] hover:text-[#00A99D] font-jakarta font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Télécharger la Fiche</span>
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -1205,6 +1565,9 @@ export const RHAdminPortal: React.FC<RHAdminPortalProps> = ({
           </div>
         </div>
       )}
+
+      {/* Global In-App Toast Container */}
+      <ToastContainer toasts={toasts} onDismiss={removeToast} />
     </div>
   );
 };

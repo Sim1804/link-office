@@ -86,7 +86,7 @@ export const CoachIRIS: React.FC<{ onStartTest: () => void }> = ({ onStartTest }
             <button
               key={idx}
               onClick={() => setSelectedScenario(idx)}
-              className={`px-4 py-2 rounded-xl text-xs font-jakarta font-bold transition-all ${
+              className={`px-4 py-2 rounded-full text-xs font-jakarta font-bold transition-all ${
                 selectedScenario === idx
                   ? 'bg-[#5965E8] text-white shadow-xs'
                   : 'bg-[#F8F9FA] text-[#123D46]/70 hover:bg-[#F4F1E8]'

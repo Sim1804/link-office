@@ -1,11 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { Plus, Edit2, Trash2, Eye, CheckCircle, XCircle, FileText, Headphones } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Plus, Edit2, Eye, CheckCircle2, Clock, FileText, Headphones } from "lucide-react";
 import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
 
 export const metadata = {
-  title: "Gestion des Médias | Admin LINK OFFICE",
+  title: "Médiathèque (CMS) | Admin LINK OFFICE",
 };
 
 export default async function AdminMediaIndex({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
@@ -26,75 +25,86 @@ export default async function AdminMediaIndex({ searchParams }: { searchParams: 
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   return (
-    <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+    <div className="space-y-6 animate-fade-in">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 12 }}>
-            <FileText size={32} color="var(--violet)" />
+          <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight flex items-center gap-2.5">
+            <FileText className="w-7 h-7 text-[#5965E8]" />
             Médiathèque (CMS)
           </h1>
-          <p style={{ color: "var(--text-2)", marginTop: 8 }}>Gérez les articles, podcasts et autres contenus publics.</p>
+          <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
+            Gérez les articles, podcasts et autres contenus publics.
+          </p>
         </div>
-        <Link href="/dashboard/superadmin/media/new" style={{ textDecoration: "none" }}>
-          <Button style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <Plus size={16} /> Nouveau Contenu
-          </Button>
+        <Link href="/dashboard/superadmin/media/new" className="no-underline shrink-0">
+          <button className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm transition-colors shadow-xs cursor-pointer">
+            <Plus className="w-4 h-4" />
+            Nouveau Contenu
+          </button>
         </Link>
       </div>
 
-      <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-[#E3EBE6] overflow-hidden shadow-xs">
+        <table className="w-full text-left">
           <thead>
-            <tr style={{ background: "var(--bg)", borderBottom: "1px solid var(--border)" }}>
-              <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Titre</th>
-              <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Type</th>
-              <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Statut</th>
-              <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Date</th>
-              <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", textAlign: "right" }}>Actions</th>
+            <tr className="bg-[#F8F9FA] border-b border-[#E3EBE6]">
+              <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Titre</th>
+              <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Type</th>
+              <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Statut</th>
+              <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Date</th>
+              <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {mediaItems.map(item => (
-              <tr key={item.id} style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }} className="table-row-hover">
-                <td style={{ padding: "16px 24px" }}>
-                  <div style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 14 }}>{item.title}</div>
-                  <div style={{ color: "var(--text-3)", fontSize: 12, marginTop: 4 }}>/{item.slug}</div>
+              <tr key={item.id} className="border-b border-[#E3EBE6] hover:bg-[#FAF9F5]/50 transition-colors">
+                <td className="px-6 py-4">
+                  <div className="font-semibold text-[#123D46] text-sm">{item.title}</div>
+                  <div className="text-[#123D46]/50 text-[11px] mt-0.5 font-mono">/{item.slug}</div>
                 </td>
-                <td style={{ padding: "16px 24px" }}>
-                  <span className="badge" style={{ 
-                    display: "inline-flex", alignItems: "center", gap: 6, padding: "2px 8px", borderRadius: 12, 
-                    background: item.mediaType === "PODCAST" ? "rgba(89,101,232,0.1)" : "rgba(14,165,233,0.1)", 
-                    color: item.mediaType === "PODCAST" ? "var(--indigo)" : "var(--cyan)", fontSize: 11, fontWeight: 700 
-                  }}>
-                    {item.mediaType === "PODCAST" ? <Headphones size={12} /> : <FileText size={12} />}
+                <td className="px-6 py-4">
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold ${
+                    item.mediaType === "PODCAST"
+                      ? "bg-[#5965E8]/10 text-[#5965E8]"
+                      : "bg-sky-50 text-sky-600"
+                  }`}>
+                    {item.mediaType === "PODCAST" ? <Headphones className="w-3 h-3" /> : <FileText className="w-3 h-3" />}
                     {item.mediaType.replace("_", " ")}
                   </span>
                 </td>
-                <td style={{ padding: "16px 24px" }}>
+                <td className="px-6 py-4">
                   {item.published ? (
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--primary)", fontSize: 13, fontWeight: 600 }}>
-                      <CheckCircle size={14} /> Publié
+                    <span className="inline-flex items-center gap-1.5 text-[#00A99D] text-[13px] font-semibold">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Publié
                     </span>
                   ) : (
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#f59e0b", fontSize: 13, fontWeight: 600 }}>
-                      <XCircle size={14} /> Brouillon
+                    <span className="inline-flex items-center gap-1.5 text-amber-500 text-[13px] font-semibold">
+                      <Clock className="w-3.5 h-3.5" /> Brouillon
                     </span>
                   )}
                 </td>
-                <td style={{ padding: "16px 24px", color: "var(--text-2)", fontSize: 13 }}>
+                <td className="px-6 py-4 text-[#123D46]/70 text-[13px]">
                   {new Date(item.createdAt).toLocaleDateString('fr-FR')}
                 </td>
-                <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
-                    <Link href={`/media/${item.slug}`} target="_blank" style={{ textDecoration: "none" }}>
-                      <Button variant="secondary" size="sm" style={{ padding: "6px" }} title="Voir">
-                        <Eye size={14} />
-                      </Button>
+                <td className="px-6 py-4">
+                  <div className="flex items-center justify-end gap-1.5">
+                    <Link href={`/media/${item.slug}`} target="_blank" className="no-underline inline-flex items-center justify-center">
+                      <button
+                        className="w-8 h-8 rounded-lg border border-[#E3EBE6] bg-white hover:border-[#00A99D] hover:bg-[#00A99D]/10 text-[#123D46] hover:text-[#00A99D] inline-flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
+                        title="Voir l'article"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
                     </Link>
-                    <Link href={`/dashboard/superadmin/media/${item.id}`} style={{ textDecoration: "none" }}>
-                      <Button variant="secondary" size="sm" style={{ padding: "6px" }} title="Modifier">
-                        <Edit2 size={14} />
-                      </Button>
+                    <Link href={`/dashboard/superadmin/media/${item.id}`} className="no-underline inline-flex items-center justify-center">
+                      <button
+                        className="w-8 h-8 rounded-lg bg-[#123D46]/5 hover:bg-[#00A99D]/15 hover:text-[#00A99D] text-[#123D46] inline-flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
+                        title="Modifier ce média"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
                     </Link>
                     <DeleteConfirmButton endpoint={`/api/admin/media/${item.id}`} title="Supprimer" />
                   </div>
@@ -103,7 +113,7 @@ export default async function AdminMediaIndex({ searchParams }: { searchParams: 
             ))}
             {mediaItems.length === 0 && (
               <tr>
-                <td colSpan={5} style={{ padding: "40px 24px", textAlign: "center", color: "var(--text-3)" }}>
+                <td colSpan={5} className="px-6 py-12 text-center text-[#123D46]/50 text-sm">
                   Aucun contenu média pour le moment.
                 </td>
               </tr>
@@ -111,32 +121,27 @@ export default async function AdminMediaIndex({ searchParams }: { searchParams: 
           </tbody>
         </table>
 
+        {/* Pagination */}
         {totalPages > 1 && (
-          <div style={{ padding: "16px 24px", background: "var(--surface)", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid var(--border)" }}>
-            <span style={{ color: "var(--text-3)", fontSize: 13, fontWeight: 500 }}>
-              Affichage de {((currentPage - 1) * ITEMS_PER_PAGE) + 1} à {Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} sur {totalItems} éléments
+          <div className="px-6 py-4 bg-white flex items-center justify-between border-t border-[#E3EBE6]">
+            <span className="text-[#123D46]/60 text-[13px] font-medium">
+              {((currentPage - 1) * ITEMS_PER_PAGE) + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} sur {totalItems} éléments
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div className="flex items-center gap-1.5">
               {Array.from({ length: totalPages }).map((_, i) => {
                 const page = i + 1;
                 const isActive = page === currentPage;
                 if (totalPages > 7 && page > 3 && page < totalPages - 1 && page !== currentPage) {
-                  if (page === 4 || page === totalPages - 2) return <span key={page} style={{ padding: "0 4px", color: "var(--text-3)" }}>…</span>;
+                  if (page === 4 || page === totalPages - 2) return <span key={page} className="px-1 text-[#123D46]/40">…</span>;
                   return null;
                 }
                 return (
-                  <Link key={page} href={`/dashboard/superadmin/media?page=${page}`} style={{ textDecoration: "none" }}>
-                    <button style={{ 
-                      width: 32, height: 32, borderRadius: "50%", 
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      background: isActive ? "var(--primary)" : "transparent", 
-                      border: isActive ? "none" : "1px solid var(--border)", 
-                      color: isActive ? "white" : "var(--text-2)", 
-                      fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.2s"
-                    }}
-                    onMouseOver={(e) => { if (!isActive) e.currentTarget.style.background = "var(--bg)"; }}
-                    onMouseOut={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
-                    >
+                  <Link key={page} href={`/dashboard/superadmin/media?page=${page}`} className="no-underline">
+                    <button className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-colors cursor-pointer ${
+                      isActive
+                        ? "bg-[#00A99D] text-white border-none"
+                        : "bg-transparent border border-[#E3EBE6] text-[#123D46]/70 hover:bg-[#F8F9FA]"
+                    }`}>
                       {page}
                     </button>
                   </Link>
@@ -146,6 +151,6 @@ export default async function AdminMediaIndex({ searchParams }: { searchParams: 
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

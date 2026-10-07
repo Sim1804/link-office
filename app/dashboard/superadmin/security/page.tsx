@@ -16,9 +16,7 @@ export default function SecurityPage() {
     setError(null);
     try {
       const res = await fetch("/api/auth/2fa/generate", { method: "POST" });
-      if (!res.ok) {
-        throw new Error("Erreur lors de la génération du secret.");
-      }
+      if (!res.ok) throw new Error("Erreur lors de la génération du secret.");
       const data = await res.json();
       setQrData(data);
     } catch (err: any) {
@@ -51,119 +49,120 @@ export default function SecurityPage() {
   };
 
   return (
-    <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
-        <div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 12 }}>
-            <Shield size={32} color="var(--primary)" />
-            Sécurité & Accès
-          </h1>
-          <p style={{ color: "var(--text-2)", marginTop: 8 }}>
-            Gérez les paramètres de sécurité avancés et l'authentification à double facteur (2FA).
-          </p>
-        </div>
+    <div className="space-y-6 animate-fade-in">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight flex items-center gap-2.5">
+          <Shield className="w-7 h-7 text-[#00A99D]" />
+          Sécurité & Accès
+        </h1>
+        <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
+          Gérez les paramètres de sécurité avancés et l&apos;authentification à double facteur (2FA).
+        </p>
       </div>
 
-      <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", padding: 32, boxShadow: "0 4px 20px rgba(0,0,0,0.03)", maxWidth: 800 }}>
-        
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(0,169,157,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Key size={24} color="var(--primary)" />
+      {/* 2FA Card */}
+      <div className="bg-white rounded-2xl border border-[#E3EBE6] p-8 shadow-xs max-w-[800px]">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-12 h-12 rounded-xl bg-[#00A99D]/10 flex items-center justify-center">
+            <Key className="w-6 h-6 text-[#00A99D]" />
           </div>
           <div>
-            <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text-1)" }}>Authentification à double facteur (2FA)</h2>
-            <p style={{ color: "var(--text-3)", fontSize: 14, marginTop: 4 }}>
+            <h2 className="text-xl font-jakarta font-bold text-[#123D46]">Authentification à double facteur (2FA)</h2>
+            <p className="text-[#123D46]/60 text-sm mt-0.5">
               Ajoutez une couche de sécurité supplémentaire lors de la connexion.
             </p>
           </div>
         </div>
-        
+
         {success ? (
-          <div style={{ padding: "20px 24px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.2)", borderRadius: 12, display: "flex", alignItems: "flex-start", gap: 16 }}>
-            <CheckCircle2 size={24} color="#10b981" style={{ flexShrink: 0 }} />
+          <div className="px-6 py-5 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-4">
+            <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" />
             <div>
-              <p style={{ fontSize: 16, fontWeight: 600, color: "#10b981", marginBottom: 4 }}>2FA activé avec succès !</p>
-              <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.5 }}>
-                Votre compte est désormais protégé. À votre prochaine connexion, il vous sera demandé d'entrer le code généré par votre application d'authentification.
+              <p className="text-base font-semibold text-emerald-600 mb-1">2FA activé avec succès !</p>
+              <p className="text-sm text-emerald-700/80 leading-relaxed">
+                Votre compte est désormais protégé. À votre prochaine connexion, il vous sera demandé
+                d&apos;entrer le code généré par votre application d&apos;authentification.
               </p>
             </div>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <p style={{ fontSize: 15, color: "var(--text-2)", lineHeight: 1.6 }}>
-              L'authentification à double facteur nécessite une application d'authentification comme Google Authenticator, Authy ou Microsoft Authenticator sur votre appareil mobile.
+          <div className="flex flex-col gap-6">
+            <p className="text-[15px] text-[#123D46]/70 leading-relaxed">
+              L&apos;authentification à double facteur nécessite une application d&apos;authentification comme
+              Google Authenticator, Authy ou Microsoft Authenticator sur votre appareil mobile.
             </p>
 
             {error && (
-              <div style={{ padding: "12px 16px", background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 10, display: "flex", alignItems: "center", gap: 12, color: "#ef4444" }}>
-                <AlertCircle size={20} />
-                <span style={{ fontSize: 14, fontWeight: 500 }}>{error}</span>
+              <div className="px-4 py-3 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 text-rose-500 shrink-0" />
+                <span className="text-sm font-medium text-rose-500">{error}</span>
               </div>
             )}
 
             {!qrData ? (
               <div>
-                <button 
+                <button
                   onClick={generate2FA}
                   disabled={loading}
-                  className="btn btn-primary"
-                  style={{ padding: "12px 24px", fontSize: 15 }}
+                  className="px-6 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm transition-colors disabled:opacity-60 flex items-center gap-2 shadow-2xs cursor-pointer"
                 >
+                  <Key className="w-4 h-4" />
                   {loading ? "Génération..." : "Configurer le 2FA"}
                 </button>
               </div>
             ) : (
-              <div style={{ padding: 24, background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 12 }}>
-                
-                <div style={{ marginBottom: 32 }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)", marginBottom: 8 }}>1. Scannez ce QR Code</h3>
-                  <p style={{ fontSize: 14, color: "var(--text-2)", marginBottom: 16 }}>
-                    Ouvrez votre application d'authentification et scannez le QR code ci-dessous.
+              <div className="p-6 bg-[#F8F9FA] border border-[#E3EBE6] rounded-xl">
+                <div className="mb-8">
+                  <h3 className="text-base font-jakarta font-semibold text-[#123D46] mb-2">
+                    1. Scannez ce QR Code
+                  </h3>
+                  <p className="text-sm text-[#123D46]/70 mb-4">
+                    Ouvrez votre application d&apos;authentification et scannez le QR code ci-dessous.
                   </p>
-                  <div style={{ background: "white", padding: 16, borderRadius: 12, display: "inline-block", border: "1px solid #e2e8f0" }}>
+                  <div className="bg-white p-4 rounded-xl inline-block border border-[#E3EBE6]">
                     <QRCodeSVG value={qrData.otpauthUrl} size={160} />
                   </div>
-                  <div style={{ marginTop: 16, fontSize: 13, color: "var(--text-3)" }}>
-                    Ou saisissez manuellement cette clé secrète : 
-                    <code style={{ background: "var(--surface)", padding: "4px 8px", borderRadius: 6, color: "var(--text-1)", marginLeft: 8, fontWeight: 600, userSelect: "all" }}>
+                  <div className="mt-4 text-[13px] text-[#123D46]/50">
+                    Ou saisissez manuellement cette clé secrète :
+                    <code className="bg-[#FAF9F5] px-2 py-1 rounded-md text-[#123D46] ml-2 font-semibold select-all border border-[#E3EBE6]">
                       {qrData.secret}
                     </code>
                   </div>
                 </div>
 
-                <div style={{ height: 1, background: "var(--border)", margin: "24px 0" }} />
+                <div className="h-px bg-[#E3EBE6] my-6" />
 
                 <div>
-                  <h3 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)", marginBottom: 8 }}>2. Validez l'activation</h3>
-                  <p style={{ fontSize: 14, color: "var(--text-2)", marginBottom: 16 }}>
+                  <h3 className="text-base font-jakarta font-semibold text-[#123D46] mb-2">
+                    2. Validez l&apos;activation
+                  </h3>
+                  <p className="text-sm text-[#123D46]/70 mb-4">
                     Saisissez le code à 6 chiffres affiché sur votre application pour finaliser.
                   </p>
-                  
-                  <div style={{ display: "flex", gap: 12, maxWidth: 320 }}>
-                    <input 
+                  <div className="flex gap-3 max-w-[320px]">
+                    <input
                       type="text"
                       placeholder="Ex: 123456"
                       maxLength={6}
                       value={code}
                       onChange={e => setCode(e.target.value.replace(/\D/g, ''))}
-                      className="input-field"
-                      style={{ flex: 1, textAlign: "center", letterSpacing: "0.2em", fontSize: 16, fontWeight: 600 }}
+                      className="flex-1 text-center tracking-widest text-base font-semibold px-3 py-2.5 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
                     />
-                    <button 
+                    <button
                       onClick={enable2FA}
                       disabled={loading || code.length !== 6}
-                      className="btn btn-primary"
+                      className="px-6 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm transition-colors disabled:opacity-50 shadow-2xs cursor-pointer"
                     >
                       {loading ? "..." : "Activer"}
                     </button>
                   </div>
                 </div>
-
               </div>
             )}
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

@@ -110,8 +110,9 @@ export function PrescriptionItemCard({ item }: { item: any }) {
 
       {/* CTA Button — Partenaire */}
       {item.kind === "PARTNER" && (
-        <button className={`text-xs ${t.textClass} font-bold hover:underline text-left mt-2`}>
-          Consulter les fiches contacts →
+        <button className="mt-2 w-full px-4 py-2.5 rounded-full border border-[#E3EBE6] bg-[#FAF9F5] hover:border-[#B8870A] hover:text-[#B8870A] text-xs font-jakarta font-bold text-[#123D46] transition-all flex items-center justify-between cursor-pointer shadow-2xs">
+          <span>Consulter les fiches contacts</span>
+          <span>→</span>
         </button>
       )}
 
@@ -120,7 +121,7 @@ export function PrescriptionItemCard({ item }: { item: any }) {
         <button
           onClick={handleCompleteChallenge}
           disabled={isAlreadyCompleted || isValidating}
-          className={`mt-2 w-full py-2.5 rounded-xl transition-all text-xs font-jakarta font-bold text-center ${
+          className={`mt-2 w-full py-2.5 rounded-full transition-all text-xs font-jakarta font-bold text-center ${
             isAlreadyCompleted 
               ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 cursor-default'
               : 'border border-[#00A99D] text-[#00A99D] hover:bg-[#00A99D] hover:text-white cursor-pointer'

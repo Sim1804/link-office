@@ -6,38 +6,48 @@ export const AuthModal: React.FC<{
   onClose: () => void;
   initialMode?: 'login' | 'register';
   onLoginSuccess?: (user: { name: string; email: string }) => void;
-}> = ({ isOpen, onClose, initialMode = 'login', onLoginSuccess }) => {
+  onSelectSpace?: (space: 'employee' | 'rh_admin' | 'super_admin') => void;
+}> = ({ isOpen, onClose, initialMode = 'login', onLoginSuccess, onSelectSpace }) => {
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('Connexion réussie ! Chargement de votre espace...');
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSuccess(true);
+    setSuccessMsg('Connexion réussie ! Chargement de votre espace...');
     setTimeout(() => {
       setSuccess(false);
       onClose();
-      if (onLoginSuccess) {
-        onLoginSuccess({
-          name: 'Camille Demo',
-          email: email || 'camille.demo@linkoffice.fr'
-        });
+      if (email.toLowerCase().includes('admin') || email.toLowerCase().includes('super')) {
+        if (onSelectSpace) onSelectSpace('super_admin');
+      } else if (email.toLowerCase().includes('rh') || email.toLowerCase().includes('drh')) {
+        if (onSelectSpace) onSelectSpace('rh_admin');
+      } else {
+        if (onLoginSuccess) {
+          onLoginSuccess({
+            name: 'Camille Demo',
+            email: email || 'camille.demo@linkoffice.fr'
+          });
+        }
+        if (onSelectSpace) onSelectSpace('employee');
       }
-    }, 900);
+    }, 800);
   };
 
-  const handleQuickDemoLogin = () => {
+  const handleQuickLogin = (space: 'employee' | 'rh_admin' | 'super_admin', label: string) => {
     setSuccess(true);
+    setSuccessMsg(`Connexion réussie ! Accès à l'espace ${label}...`);
     setTimeout(() => {
       setSuccess(false);
       onClose();
-      if (onLoginSuccess) {
-        onLoginSuccess({
-          name: 'Camille Demo',
-          email: 'camille.demo@linkoffice.fr'
-        });
+      if (onSelectSpace) {
+        onSelectSpace(space);
+      } else if (onLoginSuccess) {
+        onLoginSuccess({ name: 'Camille Demo', email: 'camille.demo@linkoffice.fr' });
       }
     }, 600);
   };
@@ -60,38 +70,90 @@ export const AuthModal: React.FC<{
             {mode === 'login' ? 'Connexion à votre espace' : 'Créer votre compte'}
           </h3>
           <p className="text-xs text-[#123D46]/70 mt-1">
-            Accédez à vos tableaux de bord, au carnet de santé et à vos 5 dimensions.
+            Sélectionnez votre profil ou entrez vos identifiants professionnels.
           </p>
         </div>
 
         {success ? (
           <div className="p-4 bg-emerald-50 text-emerald-800 rounded-xl text-center text-xs font-semibold animate-pulse">
-            ✨ Connexion réussie ! Chargement de votre espace IQRH...
+            ✨ {successMsg}
           </div>
         ) : (
           <div className="space-y-4">
-            {/* Quick Demo Access Button */}
-            <div className="p-3.5 rounded-2xl bg-[#00A99D]/10 border border-[#00A99D]/30 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#00A99D] text-white font-jakarta font-bold text-xs flex items-center justify-center shrink-0">
-                  C
-                </div>
-                <div className="text-left">
-                  <div className="text-xs font-jakarta font-bold text-[#123D46]">
-                    Espace Démo (Camille)
-                  </div>
-                  <div className="text-[10px] text-[#00A99D] font-semibold">
-                    Score IQRH 83/100 · Données complètes
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={handleQuickDemoLogin}
-                className="px-3 py-1.5 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold shadow-xs whitespace-nowrap"
+            {/* 3 Quick Profiles Access */}
+            <div className="space-y-2">
+              <span className="text-[10px] font-jakarta font-bold uppercase tracking-wider text-[#123D46]/60 block mb-1">
+                Accès Immédiat par Rôle
+              </span>
+
+              {/* 1. Salarié */}
+              <div
+                onClick={() => handleQuickLogin('employee', 'Salarié')}
+                className="p-2.5 rounded-xl bg-[#FAF9F5] border border-[#E3EBE6] hover:border-[#00A99D] hover:bg-[#00A99D]/5 transition-all flex items-center justify-between cursor-pointer group"
               >
-                Ouvrir →
-              </button>
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-[#00A99D] text-white font-jakarta font-bold text-xs flex items-center justify-center">
+                    C
+                  </div>
+                  <div>
+                    <div className="text-xs font-jakarta font-bold text-[#123D46]">
+                      Espace Collaborateur (Salarié)
+                    </div>
+                    <div className="text-[10px] text-[#00A99D]">
+                      Camille Demo · Score 83/100 · IRIS Coach
+                    </div>
+                  </div>
+                </div>
+                <span className="text-xs text-[#00A99D] font-bold group-hover:translate-x-0.5 transition-transform">
+                  →
+                </span>
+              </div>
+
+              {/* 2. Admin B2B / B2B2C / B2G */}
+              <div
+                onClick={() => handleQuickLogin('rh_admin', 'Admin Partenaire (B2B / B2B2C / B2G)')}
+                className="p-2.5 rounded-xl bg-[#FAF9F5] border border-[#E3EBE6] hover:border-[#00A99D] hover:bg-[#00A99D]/5 transition-all flex items-center justify-between cursor-pointer group"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-[#5965E8] text-white font-jakarta font-bold text-xs flex items-center justify-center">
+                    R
+                  </div>
+                  <div>
+                    <div className="text-xs font-jakarta font-bold text-[#123D46]">
+                      Admin Partenaire (B2B / B2B2C / B2G)
+                    </div>
+                    <div className="text-[10px] text-[#5965E8]">
+                      Sophie Laurent (DRH) · Observatoire & Campagnes
+                    </div>
+                  </div>
+                </div>
+                <span className="text-xs text-[#5965E8] font-bold group-hover:translate-x-0.5 transition-transform">
+                  →
+                </span>
+              </div>
+
+              {/* 3. Super Admin */}
+              <div
+                onClick={() => handleQuickLogin('super_admin', 'Super Admin')}
+                className="p-2.5 rounded-xl bg-[#FAF9F5] border border-[#E3EBE6] hover:border-[#FFC629] hover:bg-[#FFC629]/5 transition-all flex items-center justify-between cursor-pointer group"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-[#123D46] text-[#FFC629] font-jakarta font-bold text-xs flex items-center justify-center">
+                    SA
+                  </div>
+                  <div>
+                    <div className="text-xs font-jakarta font-bold text-[#123D46]">
+                      Console Super Administrateur
+                    </div>
+                    <div className="text-[10px] text-[#123D46]/70">
+                      Gouvernance plateforme · 9 Modules & Audit
+                    </div>
+                  </div>
+                </div>
+                <span className="text-xs text-[#123D46] font-bold group-hover:translate-x-0.5 transition-transform">
+                  →
+                </span>
+              </div>
             </div>
 
             <div className="relative flex py-1 items-center">
@@ -132,7 +194,7 @@ export const AuthModal: React.FC<{
 
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-xl bg-[#123D46] hover:bg-[#1a4f5a] text-white font-jakarta font-bold text-xs transition-all shadow-md"
+                className="w-full py-2.5 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-xs transition-all shadow-xs"
               >
                 {mode === 'login' ? 'Se connecter' : 'Créer mon compte'}
               </button>

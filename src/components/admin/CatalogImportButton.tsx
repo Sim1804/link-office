@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import { Upload } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 
 export function CatalogImportButton() {
@@ -62,15 +61,15 @@ export function CatalogImportButton() {
         style={{ display: "none" }}
         onChange={handleFileChange}
       />
-      <Button 
-        variant="secondary"
+      <button 
+        type="button"
         onClick={() => fileInputRef.current?.click()} 
         disabled={isUploading}
-        style={{ display: "flex", alignItems: "center", gap: 6 }}
+        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#123D46] hover:bg-[#0D2530] text-white font-jakarta font-bold text-xs sm:text-sm transition-colors shadow-2xs cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        <Upload size={18} />
-        {isUploading ? "Importation..." : "Importer le catalogue (JSON)"}
-      </Button>
+        <Upload className="w-4 h-4" />
+        <span>{isUploading ? "Importation..." : "Importer le catalogue (JSON)"}</span>
+      </button>
     </>
   );
 }

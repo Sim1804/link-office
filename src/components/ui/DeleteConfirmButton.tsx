@@ -34,41 +34,35 @@ export function DeleteConfirmButton({ endpoint, title = "Supprimer", onSuccess }
 
   if (showConfirm) {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <span style={{ fontSize: 12, color: "var(--error)", fontWeight: 500 }}>Supprimer ?</span>
-        <Button
-          variant="danger"
-          size="sm"
+      <div className="inline-flex items-center gap-1.5 p-1 rounded-lg bg-rose-50 border border-rose-200 animate-fade-in">
+        <span className="text-[11px] text-rose-700 font-semibold px-1">Supprimer ?</span>
+        <button
           onClick={handleDelete}
           disabled={isDeleting}
           title="Confirmer la suppression"
-          style={{ padding: "4px 8px", height: "auto", fontSize: 12 }}
+          className="px-2.5 py-0.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1"
         >
-          {isDeleting ? <Loader2 size={12} className="animate-spin" style={{ marginRight: 4 }} /> : null}
+          {isDeleting && <Loader2 className="w-3 h-3 animate-spin" />}
           Oui
-        </Button>
-        <Button
-          variant="secondary"
-          size="sm"
+        </button>
+        <button
           onClick={() => setShowConfirm(false)}
           title="Annuler"
-          style={{ padding: "4px 8px", height: "auto", fontSize: 12 }}
+          className="px-2.5 py-0.5 rounded-full bg-white hover:bg-rose-100 text-[#123D46] text-[11px] font-semibold border border-rose-200 transition-colors cursor-pointer"
         >
           Non
-        </Button>
+        </button>
       </div>
     );
   }
 
   return (
-    <Button
-      variant="danger"
-      size="sm"
+    <button
       onClick={() => setShowConfirm(true)}
       title={title}
-      style={{ padding: "6px" }}
+      className="w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 inline-flex items-center justify-center transition-colors shadow-2xs cursor-pointer"
     >
-      <Trash2 size={14} />
-    </Button>
+      <Trash2 className="w-3.5 h-3.5" />
+    </button>
   );
 }

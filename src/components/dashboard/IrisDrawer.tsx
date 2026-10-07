@@ -81,7 +81,7 @@ export const IrisDrawer: React.FC<IrisDrawerProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed top-[76px] sm:top-[84px] inset-x-0 bottom-0 z-30 flex items-center justify-end bg-black/40 backdrop-blur-xs transition-opacity animate-fade-in">
+    <div className="fixed top-[63px] inset-x-0 bottom-0 z-30 flex items-center justify-end bg-black/40 backdrop-blur-xs transition-opacity animate-fade-in">
       <div className="w-full max-w-lg h-full bg-white shadow-2xl flex flex-col border-l border-[#E3EBE6] animate-slide-left">
         {/* Header */}
         <div className="p-5 border-b border-[#E3EBE6] bg-gradient-to-r from-[#123D46] to-[#1E3048] text-white flex items-center justify-between">
@@ -163,7 +163,7 @@ export const IrisDrawer: React.FC<IrisDrawerProps> = ({
               <button
                 key={idx}
                 onClick={() => handleSendMessage(prompt)}
-                className="text-[11px] bg-white border border-[#E3EBE6] hover:border-[#00A99D] hover:text-[#00A99D] text-[#123D46]/80 px-2.5 py-1 rounded-lg transition-colors text-left"
+                className="text-[11px] bg-white border border-[#E3EBE6] hover:border-[#00A99D] hover:text-[#00A99D] text-[#123D46]/80 px-3 py-1 rounded-full transition-colors text-left"
               >
                 {prompt}
               </button>
@@ -189,7 +189,7 @@ export const IrisDrawer: React.FC<IrisDrawerProps> = ({
             />
             <button
               type="submit"
-              className="px-4 py-2.5 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-colors shadow-xs"
+              className="px-5 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-colors shadow-xs cursor-pointer"
             >
               Envoyer
             </button>

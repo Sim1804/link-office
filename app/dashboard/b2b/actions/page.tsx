@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Navbar } from "@/components/layout/Navbar";
 import { Target, Plus, CheckCircle2, Circle, Clock, Trash2, Edit3, Save, X, Calendar, Download } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import Link from "next/link";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
@@ -135,11 +134,18 @@ export default function ActionsPage() {
   const getActionsByStatus = (status: string) => actions.filter(a => a.status === status);
 
   return (
-    <>
-      <Navbar />
-      <main className="page-main">
-        <PartnerPortalsNavigation />
-        <div className="page-container-wide" style={{ position: "relative", zIndex: 1 }}>
+    <div className="min-h-screen bg-[#F8F9FA] text-[#123D46] font-inter flex flex-col selection:bg-[#00A99D]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader
+        portalType="B2B"
+        themeColor="#00A99D"
+        adminTitle="RH Admin B2B"
+        adminSubtitle="Espace Entreprise"
+        tabs={[]}
+        activeTab=""
+        onTabChange={() => {}}
+      />
+      <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
+        <div className="relative z-10 animate-fade-in">
           <Breadcrumb
             homeHref="/dashboard/b2b"
             items={[
@@ -147,17 +153,17 @@ export default function ActionsPage() {
               { label: "Plan d'action" },
             ]}
           />
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32, flexWrap: "wrap", gap: 16 }}>
+          <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
             <div>
-              <h1 style={{ fontSize: 32, fontWeight: 800, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 10, fontFamily: "var(--font-family-display)" }}>
-                <Target size={32} color="var(--primary)" />
+              <h1 className="text-3xl font-extrabold text-[#123D46] flex items-center gap-3 font-jakarta tracking-tight">
+                <Target className="w-8 h-8 text-[#00A99D]" />
                 Recommandations & Plan d'Action
               </h1>
-              <p style={{ color: "var(--text-2)", marginTop: 8, fontSize: 16 }}>Transformez vos résultats IQRH en initiatives concrètes et suivez leur avancement.</p>
+              <p className="text-[#123D46]/70 mt-2 text-base">Transformez vos résultats IQRH en initiatives concrètes et suivez leur avancement.</p>
             </div>
             
-            <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-              <Link href="/dashboard/b2b" className="btn btn-tertiary btn-sm">
+            <div className="flex gap-3 items-center flex-wrap">
+              <Link href="/dashboard/b2b" className="px-4 py-2 rounded-xl border border-[#E3EBE6] text-[#123D46] font-semibold text-sm hover:bg-[#F4F1E8] transition-colors">
                 Retour à l'Observatoire
               </Link>
               <Select 
@@ -354,6 +360,6 @@ export default function ActionsPage() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

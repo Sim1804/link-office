@@ -4,7 +4,7 @@ import { useState, useEffect, use } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Building2, Calendar, Users, AlertCircle, CheckCircle2, ShieldCheck, Crown } from "lucide-react";
+import { ArrowLeft, Building2, Calendar, Users, ShieldCheck, Crown, Plus } from "lucide-react";
 
 interface Organization {
   id: string;
@@ -32,8 +32,6 @@ export default function OrganizationDetailPage(props: { params: Promise<{ id: st
   const [org, setOrg] = useState<Organization | null>(null);
   const [loading, setLoading] = useState(true);
 
-
-
   useEffect(() => {
     if (status === "authenticated" && session?.user?.role !== "SUPER_ADMIN") {
       router.push("/dashboard");
@@ -44,9 +42,7 @@ export default function OrganizationDetailPage(props: { params: Promise<{ id: st
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/organizations/${params.id}`);
-      if (res.ok) {
-        setOrg(await res.json());
-      }
+      if (res.ok) setOrg(await res.json());
     } catch (e) {
       console.error(e);
     } finally {
@@ -56,127 +52,149 @@ export default function OrganizationDetailPage(props: { params: Promise<{ id: st
 
   useEffect(() => { loadData(); }, [params.id]);
 
+  if (loading) return (
+    <div className="space-y-4 animate-pulse">
+      <div className="h-8 bg-[#F8F9FA] rounded-xl w-48" />
+      <div className="h-32 bg-[#F8F9FA] rounded-2xl" />
+      <div className="h-64 bg-[#F8F9FA] rounded-2xl" />
+    </div>
+  );
 
+  if (!org) return (
+    <div className="p-10 text-center text-rose-500 text-sm">Organisation introuvable.</div>
+  );
 
-  if (loading) return <div style={{ padding: 40, color: "var(--text-2)" }}>Chargement...</div>;
-  if (!org) return <div style={{ padding: 40, color: "var(--rose)" }}>Organisation introuvable.</div>;
+  const typeBadge =
+    org.type === "B2B2C" ? "bg-amber-50 text-amber-500 border border-amber-200"
+    : org.type === "B2G"  ? "bg-sky-50 text-sky-600 border border-sky-200"
+    : "bg-[#5965E8]/10 text-[#5965E8] border border-[#5965E8]/20";
+
+  const typeLabel =
+    org.type === "B2B" ? "Entreprises B2B"
+    : org.type === "B2B2C" ? "Mutuelles B2B2C"
+    : org.type === "B2G" ? "Collectivités B2G"
+    : org.type;
 
   return (
-    <>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-        <Link href="/dashboard/superadmin/organizations" style={{ color: "var(--text-2)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 13 }}>
-          <ArrowLeft size={15} /> Retour aux organisations
-        </Link>
-      </div>
+    <div className="space-y-6 animate-fade-in">
+      {/* Back link */}
+      <Link
+        href="/dashboard/superadmin/organizations"
+        className="inline-flex items-center gap-1.5 text-[#123D46]/60 no-underline text-sm hover:text-[#00A99D] transition-colors font-medium"
+      >
+        <ArrowLeft className="w-4 h-4" /> Retour aux organisations
+      </Link>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 12 }}>
-            <Building2 size={32} color={org.type === "B2B2C" ? "#fcd34d" : "var(--violet)"} />
+          <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight flex items-center gap-3">
+            <Building2 className="w-7 h-7 text-[#5965E8]" />
             {org.name}
           </h1>
-          <div style={{ display: "flex", gap: 12, marginTop: 12, alignItems: "center" }}>
-            <span style={{ 
-              padding: "4px 10px", borderRadius: 999, fontSize: 11, fontWeight: 700, 
-              background: org.type === "B2B2C" ? "rgba(245,158,11,0.15)" : org.type === "B2G" ? "rgba(56,189,248,0.15)" : "rgba(124,58,237,0.15)",
-              color: org.type === "B2B2C" ? "#fcd34d" : org.type === "B2G" ? "#7dd3fc" : "var(--violet)",
-            }}>
-              {org.type}
+          <div className="flex items-center gap-3 mt-3">
+            <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${typeBadge}`}>
+              {typeLabel}
             </span>
-            <code style={{ background: "var(--surface)", padding: "4px 8px", borderRadius: 6, fontSize: 12, color: "var(--primary)" }}>
-              Code: {org.codeAccess}
+            <code className="bg-white border border-[#E3EBE6] px-2.5 py-1 rounded-lg text-xs text-[#00A99D] font-mono shadow-xs">
+              {org.codeAccess}
             </code>
           </div>
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 1100 }}>
-        
-        {/* Ligne 1 : Contrat et Admins */}
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 24, alignItems: "start" }}>
-          
-          {/* Fiche Contrat */}
-          <div className="card" style={{ padding: 20, height: "100%" }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-              <ShieldCheck size={18} color="var(--emerald)" /> Informations et Contrat
+      <div className="flex flex-col gap-6 max-w-[1100px]">
+
+        {/* Row 1: Contract info + Admins */}
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 items-start">
+
+          {/* Contract card */}
+          <div className="p-6 bg-white rounded-2xl border border-[#E3EBE6] shadow-xs h-full">
+            <h2 className="text-base font-jakarta font-bold text-[#123D46] mb-5 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-500" /> Informations & Contrat
             </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, color: "var(--text-2)", fontSize: 13 }}>
-              <div><b style={{ color: "var(--text-2)", display: "block", marginBottom: 4 }}>Contact principal</b> {org.contactName || "—"}</div>
-              <div><b style={{ color: "var(--text-2)", display: "block", marginBottom: 4 }}>Email contact</b> {org.contactEmail || "—"}</div>
-              <div><b style={{ color: "var(--text-2)", display: "block", marginBottom: 4 }}>Type de contrat</b> {org.contractType || "—"}</div>
-              <div><b style={{ color: "var(--text-2)", display: "block", marginBottom: 4 }}>Territoire cible</b> {org.territory || "—"}</div>
-              <div><b style={{ color: "var(--text-2)", display: "block", marginBottom: 4 }}>Population visée</b> {org.targetPopulation || "—"}</div>
-              <div><b style={{ color: "var(--text-2)", display: "block", marginBottom: 4 }}>Quota (Accès Max)</b> {org.quota || "—"}</div>
-              <div><b style={{ color: "var(--text-2)", display: "block", marginBottom: 4 }}>Date de début</b> {org.startDate ? new Date(org.startDate).toLocaleDateString() : "—"}</div>
-              <div><b style={{ color: "var(--text-2)", display: "block", marginBottom: 4 }}>Date de fin</b> {org.endDate ? new Date(org.endDate).toLocaleDateString() : "—"}</div>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
+              {[
+                { label: "Contact principal", value: org.contactName },
+                { label: "Email contact", value: org.contactEmail },
+                { label: "Type de contrat", value: org.contractType },
+                { label: "Territoire cible", value: org.territory },
+                { label: "Population visée", value: org.targetPopulation },
+                { label: "Quota (Accès Max)", value: org.quota },
+                { label: "Date de début", value: org.startDate ? new Date(org.startDate).toLocaleDateString('fr-FR') : null },
+                { label: "Date de fin", value: org.endDate ? new Date(org.endDate).toLocaleDateString('fr-FR') : null },
+              ].map(({ label, value }) => (
+                <div key={label}>
+                  <div className="text-[11px] font-jakarta font-bold text-[#123D46]/50 uppercase tracking-wider mb-1">{label}</div>
+                  <div className="text-[#123D46] font-medium">{value || "—"}</div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Liste Administrateurs */}
-          <div className="card" style={{ padding: 20, height: "100%" }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-              <Users size={18} color="var(--cyan)" /> Administrateurs
+          {/* Admins card */}
+          <div className="p-6 bg-white rounded-2xl border border-[#E3EBE6] shadow-xs h-full">
+            <h2 className="text-base font-jakarta font-bold text-[#123D46] mb-4 flex items-center gap-2">
+              <Users className="w-4 h-4 text-sky-500" /> Administrateurs
             </h2>
             {org.users?.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div className="flex flex-col gap-2.5">
                 {org.users.map((u: any) => (
-                  <div key={u.id} style={{ padding: "12px 16px", background: "var(--surface)", borderRadius: 8, border: "1px solid var(--surface)" }}>
-                    <div style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 14 }}>{u.firstName} {u.lastName}</div>
-                    <div style={{ color: "var(--text-2)", fontSize: 12, marginTop: 2 }}>{u.email}</div>
+                  <div key={u.id} className="px-4 py-3 bg-[#FAF9F5] rounded-xl border border-[#E3EBE6]">
+                    <div className="text-[#123D46] font-semibold text-sm">{u.firstName} {u.lastName}</div>
+                    <div className="text-[#123D46]/60 text-xs mt-0.5">{u.email}</div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p style={{ color: "var(--text-3)", fontSize: 13 }}>Aucun administrateur trouvé.</p>
+              <p className="text-[#123D46]/50 text-sm">Aucun administrateur trouvé.</p>
             )}
           </div>
         </div>
 
-        {/* Ligne 2 : Campagnes */}
-        <div className="card" style={{ padding: 24 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 8 }}>
-              <Calendar size={18} color="var(--primary)" /> Campagnes
+        {/* Row 2: Campaigns */}
+        <div className="bg-white rounded-2xl border border-[#E3EBE6] p-6 shadow-xs">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-base font-jakarta font-bold text-[#123D46] flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[#00A99D]" /> Campagnes
             </h2>
-            <button 
+            <button
               onClick={() => {
                 const route = org.type === "B2B" ? "rh" : org.type.toLowerCase();
                 router.push(`/dashboard/${route}/campaigns/new?orgId=${org.id}`);
-              }} 
-              className="btn btn-primary btn-sm"
+              }}
+              className="flex items-center gap-1.5 px-5 py-2 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-xs transition-colors shadow-2xs cursor-pointer"
             >
-              + Nouvelle campagne
+              <Plus className="w-3.5 h-3.5" /> Nouvelle campagne
             </button>
           </div>
 
-          <>
-            {org.campaigns?.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {org.campaigns.map((c: any) => (
-                  <div key={c.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px", background: "var(--surface)", borderRadius: 12, border: "1px solid var(--surface)" }}>
-                    <div>
-                      <div style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 15 }}>{c.title}</div>
-                      <div style={{ color: "var(--text-2)", fontSize: 13, marginTop: 4 }}>
-                        Du {new Date(c.startDate).toLocaleDateString()} au {c.endDate ? new Date(c.endDate).toLocaleDateString() : "—"}
-                      </div>
-                    </div>
-                    <div style={{ padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 700, background: "rgba(245,158,11,0.1)", color: "var(--amber)", border: "1px solid rgba(245,158,11,0.2)" }}>
-                      <Crown size={14} style={{ display: "inline", marginRight: 6, marginBottom: -2 }} />
-                      {c.offer}
+          {org.campaigns?.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              {org.campaigns.map((c: any) => (
+                <div key={c.id} className="flex items-center justify-between p-4 bg-[#FAF9F5] rounded-xl border border-[#E3EBE6] hover:border-[#00A99D]/30 transition-colors">
+                  <div>
+                    <div className="text-[#123D46] font-semibold text-sm">{c.title}</div>
+                    <div className="text-[#123D46]/60 text-xs mt-0.5">
+                      Du {new Date(c.startDate).toLocaleDateString('fr-FR')} au {c.endDate ? new Date(c.endDate).toLocaleDateString('fr-FR') : "—"}
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ textAlign: "center", padding: 40, border: "1px dashed var(--border-strong)", borderRadius: 12 }}>
-                <Calendar size={32} color="var(--text-2)" style={{ marginBottom: 12 }} />
-                <h3 style={{ color: "var(--text-2)", fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Aucune campagne</h3>
-                <p style={{ color: "var(--text-3)", fontSize: 13 }}>Cette organisation n'a pas encore de campagne configurée.</p>
-              </div>
-            )}
-          </>
+                  <div className="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-50 text-amber-500 border border-amber-200 flex items-center gap-1.5">
+                    <Crown className="w-3 h-3" />
+                    {c.offer}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center p-10 border border-dashed border-[#123D46]/15 rounded-xl">
+              <Calendar className="w-8 h-8 text-[#123D46]/20 mx-auto mb-3" />
+              <h3 className="text-[#123D46]/60 text-sm font-semibold mb-1">Aucune campagne</h3>
+              <p className="text-[#123D46]/40 text-xs">Cette organisation n&apos;a pas encore de campagne configurée.</p>
+            </div>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }

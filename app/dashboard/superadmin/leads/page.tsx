@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Inbox, CheckCircle2, ArrowRight } from "lucide-react";
+import { Inbox, CheckCircle2, ArrowRight, AlertCircle, X, Users, Building2, Calendar } from "lucide-react";
 import { Select } from "@/components/ui/Select";
 
 interface Lead {
@@ -69,7 +69,6 @@ export default function LeadsPage() {
       setConvertResult(data);
       loadData();
     } catch (err: any) {
-      // Remplacement du alert() natif par une notification inline
       setConvertError(err.message || "Une erreur inattendue est survenue.");
     } finally {
       setConvertLoading(false);
@@ -85,273 +84,267 @@ export default function LeadsPage() {
   const totalPages = Math.ceil(currentLeads.length / ITEMS_PER_PAGE);
   const paginatedLeads = currentLeads.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
+  const planLabel = (type: string) => {
+    if (type === "B2B_PREMIUM") return "Entreprises (B2B)";
+    if (type === "B2B2C_PARTENAIRE") return "Mutuelles (B2B2C)";
+    if (type === "B2G") return "Collectivités (B2G)";
+    return type;
+  };
+  const planBadge = (type: string) => {
+    if (type === "B2B2C_PARTENAIRE") return "bg-amber-50 text-amber-500";
+    if (type === "B2G") return "bg-sky-50 text-sky-600";
+    return "bg-[#5965E8]/10 text-[#5965E8]";
+  };
+
   return (
-    <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+    <div className="space-y-6 animate-fade-in">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 12 }}>
-            <Inbox size={32} color="#34d399" />
+          <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight flex items-center gap-2.5">
+            <Inbox className="w-7 h-7 text-[#00A99D]" />
             Demandes de Devis (Leads)
           </h1>
-          <p style={{ color: "var(--text-3)", marginTop: 8 }}>Gérez les prospects et convertissez-les en clients avec génération automatique de compte.</p>
+          <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
+            Gérez les prospects et convertissez-les en clients avec génération automatique de compte.
+          </p>
         </div>
-        {/* Compteur de leads en attente */}
         {pendingLeads.length > 0 && (
-          <span style={{
-            background: "rgba(245,158,11,0.1)", color: "#d97706",
-            border: "1px solid rgba(251,191,36,0.25)",
-            padding: "6px 14px", borderRadius: 999, fontSize: 13, fontWeight: 700,
-          }}>
+          <span className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200 text-[13px] font-bold">
             {pendingLeads.length} en attente
           </span>
         )}
       </div>
 
-      {/* Tabs Pending / Convertis */}
-      <div style={{ display: "flex", gap: 4, marginBottom: 24, background: "var(--surface-2)", padding: 4, borderRadius: 9999, border: "1px solid var(--border)", width: "fit-content" }}>
-        {([
-          { key: "pending",   label: `En attente (${pendingLeads.length})` },
-          { key: "converted", label: `Convertis (${convertedLeads.length})` },
-        ] as const).map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => { setActiveTab(key); setCurrentPage(1); }}
-            style={{
-              padding: "8px 16px", borderRadius: 9999,
-              fontSize: 13, fontWeight: activeTab === key ? 600 : 500, fontFamily: "inherit",
-              cursor: "pointer", transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-              background: activeTab === key ? "var(--surface)" : "transparent",
-              color: activeTab === key ? "var(--text-1)" : "var(--text-2)",
-              boxShadow: activeTab === key ? "var(--shadow-card)" : "none",
-              border: activeTab === key ? "1px solid var(--border)" : "1px solid transparent",
-            }}
-          >
-            {label}
-          </button>
-        ))}
+      {/* Tabs */}
+      <div className="inline-flex p-1 bg-white border border-[#E3EBE6] rounded-full shadow-2xs">
+        <button
+          onClick={() => { setActiveTab('pending'); setCurrentPage(1); }}
+          className={`px-4 py-1.5 rounded-full text-xs font-jakarta font-bold transition-colors ${
+            activeTab === 'pending'
+              ? 'bg-[#00A99D]/15 text-[#00A99D]'
+              : 'text-[#123D46]/70 hover:text-[#123D46]'
+          }`}
+        >
+          En attente ({pendingLeads.length})
+        </button>
+        <button
+          onClick={() => { setActiveTab('converted'); setCurrentPage(1); }}
+          className={`px-4 py-1.5 rounded-full text-xs font-jakarta font-bold transition-colors ${
+            activeTab === 'converted'
+              ? 'bg-[#00A99D]/15 text-[#00A99D]'
+              : 'text-[#123D46]/70 hover:text-[#123D46]'
+          }`}
+        >
+          Convertis ({convertedLeads.length})
+        </button>
       </div>
 
+      {/* Conversion Panel */}
       {convertingLead && (
-        <div style={{
-          background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.25)",
-          borderRadius: 16, padding: 20, marginBottom: 24
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+        <div className="bg-amber-50/60 border border-amber-200 rounded-2xl p-5">
+          <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)" }}>Convertir : {convertingLead.organization}</h3>
-              <p style={{ color: "var(--text-3)", fontSize: 13, marginTop: 4 }}>
-                Cela va créer l&apos;organisation, le compte <b style={{ color: "var(--text-2)" }}>{convertingLead.email}</b> et la première campagne.
+              <h3 className="text-base font-jakarta font-bold text-[#123D46]">
+                Convertir : {convertingLead.organization}
+              </h3>
+              <p className="text-[#123D46]/60 text-[13px] mt-1">
+                Cela va créer l&apos;organisation, le compte{' '}
+                <strong className="text-[#123D46]/80">{convertingLead.email}</strong>{' '}
+                et la première campagne.
               </p>
             </div>
-            <button onClick={() => { setConvertingLead(null); setConvertResult(null); setConvertError(null); }} className="btn btn-ghost btn-sm">
-              Fermer
+            <button
+              onClick={() => { setConvertingLead(null); setConvertResult(null); setConvertError(null); }}
+              className="p-1.5 rounded-lg text-[#123D46]/50 hover:text-[#123D46] hover:bg-amber-100 transition-colors"
+            >
+              <X className="w-4 h-4" />
             </button>
           </div>
 
           {convertError && (
-            <div style={{
-              display: "flex", alignItems: "flex-start", gap: 10,
-              padding: "12px 16px", borderRadius: 10, marginBottom: 8,
-              background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)",
-            }}>
-              <ArrowRight size={14} style={{ color: "#f87171", flexShrink: 0, marginTop: 2 }} />
-              <p style={{ color: "#f87171", fontSize: 13, margin: 0 }}>{convertError}</p>
+            <div className="flex items-start gap-2.5 px-4 py-3 rounded-xl mb-4 bg-rose-50 border border-rose-200">
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+              <p className="text-rose-500 text-[13px]">{convertError}</p>
             </div>
           )}
 
           {!convertResult ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div className="flex flex-col gap-4">
               {convertingLead.planType === "B2B2C_PARTENAIRE" && (
                 <div>
-                  <label style={{ display: "block", fontSize: 13, color: "#d97706", fontWeight: 600, marginBottom: 8 }}>
+                  <label className="block text-[13px] text-amber-600 font-semibold mb-2">
                     Offre de la Campagne *
                   </label>
-                  <Select 
-                    value={campaignOffer} 
+                  <Select
+                    value={campaignOffer}
                     onChange={(val) => setCampaignOffer(val as any)}
                     options={[
                       { value: "PREMIUM", label: "PREMIUM - Parcours Premium classique" },
                       { value: "PREMIUM_PLUS", label: "PREMIUM+ - Inclut Module Binôme Relationnel" }
                     ]}
-                    style={{ width: 350 }} 
+                    className="w-[350px]"
                   />
                 </div>
               )}
-              <button onClick={handleConvertLead} disabled={convertLoading} className="btn btn-primary btn-md" style={{ alignSelf: "flex-start" }}>
-                {convertLoading ? "Conversion en cours..." : <>Valider et Créer le Client <ArrowRight size={14} /></>}
+              <button
+                onClick={handleConvertLead}
+                disabled={convertLoading}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm transition-colors disabled:opacity-60 self-start"
+              >
+                {convertLoading
+                  ? "Conversion en cours..."
+                  : <><span>Valider et Créer le Client</span><ArrowRight className="w-4 h-4" /></>
+                }
               </button>
             </div>
           ) : (
-            <div style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.2)", borderRadius: 12, padding: 20 }}>
-              <h4 style={{ color: "#059669", fontWeight: 700, fontSize: 15, marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                <CheckCircle2 size={16} /> Conversion Réussie !
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+              <h4 className="text-emerald-600 font-jakarta font-bold text-[15px] mb-3 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4" /> Conversion Réussie !
               </h4>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, fontSize: 13, color: "var(--text-2)" }}>
-                <div><b style={{ color: "var(--text-3)" }}>Organisation :</b> {convertResult.organization}</div>
-                <div><b style={{ color: "var(--text-3)" }}>Admin :</b> {convertResult.adminEmail}</div>
-                <div><b style={{ color: "var(--text-3)" }}>Mot de passe :</b> <code style={{ background: "var(--surface)", border: "1px solid var(--border)", padding: "2px 6px", borderRadius: 4, color: "var(--primary)" }}>{convertResult.tempPassword}</code></div>
-                <div><b style={{ color: "var(--text-3)" }}>Code :</b> <code style={{ background: "var(--surface)", border: "1px solid var(--border)", padding: "2px 6px", borderRadius: 4, color: "var(--primary)" }}>{convertResult.codeAccess}</code></div>
+              <div className="grid grid-cols-2 gap-2.5 text-[13px] text-[#123D46]/80">
+                <div><span className="text-[#123D46]/60 font-semibold">Organisation :</span> {convertResult.organization}</div>
+                <div><span className="text-[#123D46]/60 font-semibold">Admin :</span> {convertResult.adminEmail}</div>
+                <div>
+                  <span className="text-[#123D46]/60 font-semibold">Mot de passe :</span>{' '}
+                  <code className="bg-white border border-[#E3EBE6] px-1.5 py-0.5 rounded text-[#00A99D] font-mono">
+                    {convertResult.tempPassword}
+                  </code>
+                </div>
+                <div>
+                  <span className="text-[#123D46]/60 font-semibold">Code :</span>{' '}
+                  <code className="bg-white border border-[#E3EBE6] px-1.5 py-0.5 rounded text-[#00A99D] font-mono">
+                    {convertResult.codeAccess}
+                  </code>
+                </div>
               </div>
             </div>
           )}
         </div>
       )}
 
-      <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", overflow: "hidden" }}>
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-[#E3EBE6] overflow-hidden shadow-xs">
         {loading ? (
-          <div style={{ padding: "40px", textAlign: "center", color: "var(--text-2)" }}>Chargement...</div>
-        ) : pendingLeads.length === 0 ? (
-          <div style={{ padding: "40px", textAlign: "center", color: "var(--text-2)" }}>Aucune demande de devis en attente.</div>
-        ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-            <thead>
-              <tr style={{ background: "var(--bg)", borderBottom: "1px solid var(--border)" }}>
-                <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Organisation</th>
-                <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Contact</th>
-                <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Offre souhaitée</th>
-                <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 13, textTransform: "uppercase", textAlign: "right" }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedLeads.map(lead => (
-                <tr key={lead.id} style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }}>
-                  <td style={{ padding: "16px 24px" }}>
-                    <div style={{ fontWeight: 600, color: "var(--text-1)", fontSize: 15 }}>{lead.organization}</div>
-                    <div style={{ color: "var(--text-2)", fontSize: 12, marginTop: 4 }}>Date : {new Date(lead.createdAt).toLocaleDateString("fr-FR")}</div>
-                  </td>
-                  <td style={{ padding: "16px 24px" }}>
-                    <div style={{ color: "var(--text-2)", fontSize: 14 }}>{lead.contactName}</div>
-                    <div style={{ color: "var(--text-3)", fontSize: 13, marginTop: 2 }}>{lead.email}</div>
-                    {lead.phone && <div style={{ color: "var(--text-3)", fontSize: 13 }}>{lead.phone}</div>}
-                  </td>
-                  <td style={{ padding: "16px 24px" }}>
-                    <span style={{ 
-                      padding: "4px 10px", 
-                      borderRadius: 999, 
-                      fontSize: 11, 
-                      fontWeight: 700, 
-                      background: lead.planType === "B2B2C_PARTENAIRE" ? "rgba(245,158,11,0.15)" : lead.planType === "B2G" ? "rgba(56,189,248,0.15)" : "rgba(124,58,237,0.15)",
-                      color: lead.planType === "B2B2C_PARTENAIRE" ? "#fcd34d" : lead.planType === "B2G" ? "#7dd3fc" : "#c084fc",
-                    }}>
-                      {lead.planType === "B2B_PREMIUM" ? "Entreprises (B2B)" : lead.planType === "B2B2C_PARTENAIRE" ? "Mutuelles (B2B2C)" : lead.planType === "B2G" ? "Collectivités (B2G)" : lead.planType}
-                    </span>
-                    <div style={{ color: "var(--text-3)", fontSize: 12, marginTop: 6 }}>
-                      {lead.companySize && <span>Taille : {lead.companySize}</span>}
-                      {lead.beneficiaries && <span>Bénéficiaires : {lead.beneficiaries}</span>}
-                    </div>
-                  </td>
-                  <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                    <button onClick={() => { setConvertingLead(lead); setConvertResult(null); }} className="btn btn-primary btn-sm">
-                      Convertir <ArrowRight size={14} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-          {totalPages > 1 && (
-            <div style={{ padding: "16px 24px", borderTop: "1px solid var(--border)", display: "flex", justifyContent: "center", alignItems: "center", gap: 8, background: "var(--surface)" }}>
-              {Array.from({ length: totalPages }).map((_, i) => {
-                const page = i + 1;
-                const isActive = page === currentPage;
-                return (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    style={{
-                      width: 32, height: 32, borderRadius: "50%",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 13, fontWeight: isActive ? 700 : 500,
-                      color: isActive ? "white" : "var(--text-2)",
-                      background: isActive ? "var(--primary)" : "transparent",
-                      border: isActive ? "none" : "1px solid var(--border)",
-                      cursor: "pointer",
-                      transition: "all 0.2s"
-                    }}
-                    onMouseOver={(e) => { if (!isActive) e.currentTarget.style.background = "var(--bg)"; }}
-                    onMouseOut={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
-                  >
-                    {page}
-                  </button>
-                );
-              })}
+          <div className="p-10 text-center text-[#123D46]/70 text-sm">Chargement...</div>
+        ) : activeTab === "pending" ? (
+          pendingLeads.length === 0 ? (
+            <div className="p-12 text-center">
+              <Inbox className="w-10 h-10 text-[#123D46]/20 mx-auto mb-3" />
+              <p className="text-[#123D46]/50 text-sm">Aucune demande de devis en attente.</p>
             </div>
-          )}
-
-      </div>
-
-      {/* Onglet Convertis */}
-      {activeTab === "converted" && (
-        <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", overflow: "hidden" }}>
-          {loading ? (
-            <div style={{ padding: "40px", textAlign: "center", color: "var(--text-2)" }}>Chargement...</div>
-          ) : convertedLeads.length === 0 ? (
-            <div style={{ padding: "40px", textAlign: "center", color: "var(--text-2)" }}>Aucun lead converti pour le moment.</div>
           ) : (
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+            <table className="w-full text-left">
               <thead>
-                <tr style={{ background: "var(--bg)", borderBottom: "1px solid var(--border)" }}>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Organisation</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Contact</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 13, textTransform: "uppercase" }}>Offre</th>
-                  <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 13, textTransform: "uppercase", textAlign: "center" }}>Converti le</th>
+                <tr className="bg-[#F8F9FA] border-b border-[#E3EBE6]">
+                  <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Organisation</th>
+                  <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Contact</th>
+                  <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Offre souhaitée</th>
+                  <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedLeads.map(lead => (
-                  <tr key={lead.id} style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }}>
-                    <td style={{ padding: "16px 24px" }}>
-                      <div style={{ fontWeight: 600, color: "var(--text-1)", fontSize: 15 }}>{lead.organization}</div>
+                  <tr key={lead.id} className="border-b border-[#E3EBE6] hover:bg-[#FAF9F5]/50 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="font-semibold text-[#123D46] text-sm">{lead.organization}</div>
+                      <div className="text-[#123D46]/60 text-xs mt-0.5 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {new Date(lead.createdAt).toLocaleDateString("fr-FR")}
+                      </div>
                     </td>
-                    <td style={{ padding: "16px 24px" }}>
-                      <div style={{ color: "var(--text-2)", fontSize: 14 }}>{lead.contactName}</div>
-                      <div style={{ color: "var(--text-3)", fontSize: 12 }}>{lead.email}</div>
+                    <td className="px-6 py-4">
+                      <div className="text-[#123D46] text-sm font-medium">{lead.contactName}</div>
+                      <div className="text-[#123D46]/60 text-xs mt-0.5">{lead.email}</div>
+                      {lead.phone && <div className="text-[#123D46]/60 text-xs">{lead.phone}</div>}
                     </td>
-                    <td style={{ padding: "16px 24px" }}>
-                      <span style={{ padding: "4px 10px", borderRadius: 999, fontSize: 11, fontWeight: 700, background: "rgba(16,185,129,0.12)", color: "#059669" }}>
-                        {lead.planType}
+                    <td className="px-6 py-4">
+                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${planBadge(lead.planType)}`}>
+                        {planLabel(lead.planType)}
+                      </span>
+                      <div className="text-[#123D46]/60 text-xs mt-1.5 flex flex-col gap-0.5">
+                        {lead.companySize && <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {lead.companySize}</span>}
+                        {lead.beneficiaries && <span>Bénéficiaires : {lead.beneficiaries}</span>}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        onClick={() => { setConvertingLead(lead); setConvertResult(null); setConvertError(null); }}
+                        className="flex items-center gap-1.5 px-5 py-2 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-xs transition-colors ml-auto"
+                      >
+                        Convertir <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
+        ) : (
+          convertedLeads.length === 0 ? (
+            <div className="p-12 text-center">
+              <CheckCircle2 className="w-10 h-10 text-[#123D46]/20 mx-auto mb-3" />
+              <p className="text-[#123D46]/50 text-sm">Aucun lead converti pour le moment.</p>
+            </div>
+          ) : (
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-[#F8F9FA] border-b border-[#E3EBE6]">
+                  <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Organisation</th>
+                  <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Contact</th>
+                  <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Offre</th>
+                  <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider text-center">Converti le</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedLeads.map(lead => (
+                  <tr key={lead.id} className="border-b border-[#E3EBE6] hover:bg-[#FAF9F5]/50 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="font-semibold text-[#123D46] text-sm">{lead.organization}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-[#123D46] text-sm font-medium">{lead.contactName}</div>
+                      <div className="text-[#123D46]/60 text-xs">{lead.email}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600">
+                        {planLabel(lead.planType)}
                       </span>
                     </td>
-                    <td style={{ padding: "16px 24px", textAlign: "center", color: "var(--text-2)", fontSize: 13 }}>
+                    <td className="px-6 py-4 text-center text-[#123D46]/70 text-[13px]">
                       {new Date(lead.createdAt).toLocaleDateString("fr-FR")}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          )}
-          {totalPages > 1 && (
-            <div style={{ padding: "16px 24px", borderTop: "1px solid var(--border)", display: "flex", justifyContent: "center", alignItems: "center", gap: 8, background: "var(--surface)" }}>
-              {Array.from({ length: totalPages }).map((_, i) => {
-                const page = i + 1;
-                const isActive = page === currentPage;
-                return (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    style={{
-                      width: 32, height: 32, borderRadius: "50%",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 13, fontWeight: isActive ? 700 : 500,
-                      color: isActive ? "white" : "var(--text-2)",
-                      background: isActive ? "var(--primary)" : "transparent",
-                      border: isActive ? "none" : "1px solid var(--border)",
-                      cursor: "pointer",
-                      transition: "all 0.2s"
-                    }}
-                    onMouseOver={(e) => { if (!isActive) e.currentTarget.style.background = "var(--bg)"; }}
-                    onMouseOut={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
-                  >
-                    {page}
-                  </button>
-                );
-              })}
-            </div>
-          )}
+          )
+        )}
 
-        </div>
-      )}
-    </>
+        {/* Pagination */}
+        {!loading && totalPages > 1 && (
+          <div className="px-6 py-4 border-t border-[#E3EBE6] flex justify-center items-center gap-1.5">
+            {Array.from({ length: totalPages }).map((_, i) => {
+              const page = i + 1;
+              const isActive = page === currentPage;
+              return (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-colors cursor-pointer ${
+                    isActive
+                      ? "bg-[#00A99D] text-white"
+                      : "bg-transparent border border-[#E3EBE6] text-[#123D46]/70 hover:bg-[#F8F9FA]"
+                  }`}
+                >
+                  {page}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

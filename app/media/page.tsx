@@ -67,7 +67,7 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
   return (
     <>
       {isAuthenticated ? <Navbar /> : <PublicNavbar />}
-      <main className="min-h-screen bg-[#FAF9F5] pt-28 pb-20 px-4 sm:px-6">
+      <main className="min-h-screen bg-[#FAF9F5] pt-8 pb-20 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto space-y-12">
           {/* Header */}
           <div className="text-center space-y-4 animate-fade-in">

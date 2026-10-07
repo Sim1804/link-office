@@ -223,7 +223,7 @@ export const OrganisationsSection: React.FC<{ onContact: () => void }> = ({ onCo
             </div>
             <button
               onClick={onContact}
-              className="w-full py-2.5 px-4 rounded-xl bg-[#123D46] hover:bg-[#1a4f5a] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-4 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center justify-center gap-2"
             >
               <span>Échanger avec un conseiller</span>
               <span>→</span>

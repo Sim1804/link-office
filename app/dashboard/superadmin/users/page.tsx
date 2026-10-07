@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { Users, Search, ShieldAlert, X, Save, Trash2, AlertTriangle, CheckCircle2, AlertCircle, Download } from "lucide-react";
 import { Select } from "@/components/ui/Select";
-import { Input } from "@/components/ui/Input";
 import { SubscriptionBadge, toSubscriptionTier } from "@/components/ui/SubscriptionBadge";
 
 const ROLE_LABELS: Record<string, string> = {
@@ -27,6 +26,8 @@ export default function SuperAdminUsersPage() {
   const [editForm, setEditForm] = useState({ subscription: "", role: "" });
   const [isSaving, setIsSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   const loadUsers = () => {
     setLoading(true);
@@ -51,10 +52,16 @@ export default function SuperAdminUsersPage() {
     setSelectedUser(user);
     setEditForm({ subscription: user.subscription, role: user.role });
     setConfirmDelete(false);
+    setSaveError(null);
+    setSaveSuccess(false);
   };
 
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [saveSuccess, setSaveSuccess] = useState(false);
+  const closeDrawer = () => {
+    setSelectedUser(null);
+    setSaveError(null);
+    setSaveSuccess(false);
+    setConfirmDelete(false);
+  };
 
   const handleSave = async () => {
     if (!selectedUser) return;
@@ -87,15 +94,13 @@ export default function SuperAdminUsersPage() {
     setIsSaving(true);
     setSaveError(null);
     try {
-      const res = await fetch(`/api/superadmin/users/${selectedUser.id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(`/api/superadmin/users/${selectedUser.id}`, { method: "DELETE" });
       if (res.ok) {
+        closeDrawer();
         loadUsers();
-        setSelectedUser(null);
       } else {
         const data = await res.json().catch(() => ({}));
-        setSaveError(data.error || "Impossible de supprimer ce compte.");
+        setSaveError(data.error || "Erreur lors de la suppression.");
         setConfirmDelete(false);
       }
     } catch {
@@ -113,8 +118,6 @@ export default function SuperAdminUsersPage() {
       user.firstName?.toLowerCase().includes(searchLower) ||
       user.lastName?.toLowerCase().includes(searchLower);
 
-    // B2C = utilisateurs individuels sans organisation (CITIZEN, EMPLOYEE, MEMBER)
-    // Note: INDIVIDUAL n'existe pas dans l'enum Prisma UserRole
     if (filterRole === "B2C") {
       return matchSearch && ["CITIZEN", "EMPLOYEE", "MEMBER"].includes(user.role) && !user.organizationId;
     }
@@ -124,108 +127,114 @@ export default function SuperAdminUsersPage() {
     return matchSearch;
   });
 
+  const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
+  const paginatedUsers = filteredUsers.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 10 }}>
-            <Users size={24} color="#34d399" />
-            CRM Utilisateurs (B2C & Admins)
+          <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight flex items-center gap-2.5">
+            <Users className="w-7 h-7 text-[#00A99D]" />
+            CRM Utilisateurs
           </h1>
-          <p style={{ color: "var(--text-2)", marginTop: 8 }}>Gérez les utilisateurs individuels, abonnements et modérateurs.</p>
+          <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
+            Gérez les utilisateurs individuels, abonnements et modérateurs.
+          </p>
         </div>
-        <a href="/api/admin/users/export" download style={{ textDecoration: "none" }}>
-          <button className="btn btn-primary btn-md">
-            <Download size={18} />
-            Exporter (CSV)
+        <a href="/api/admin/users/export" download className="no-underline shrink-0">
+          <button className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#123D46] hover:bg-[#0D2530] text-white font-jakarta font-bold text-sm transition-colors shadow-2xs cursor-pointer">
+            <Download className="w-4 h-4" />
+            Exporter CSV
           </button>
         </a>
       </div>
 
-      <div style={{ display: "flex", gap: 16, marginBottom: 24 }}>
-        <div style={{ flex: 1 }}>
-          <Input 
-            icon={<Search size={18} />}
-            type="text" 
-            placeholder="Rechercher par nom, email..." 
+      {/* Filters Bar */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#123D46]/40" />
+          <input
+            type="text"
+            placeholder="Rechercher par nom, email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ width: "100%", maxWidth: 400 }}
+            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none text-sm text-[#123D46] placeholder:text-[#123D46]/40 bg-white"
           />
         </div>
-        <Select 
-          value={filterRole} 
-          onChange={(val) => setFilterRole(val)} 
+        <Select
+          value={filterRole}
+          onChange={(val) => { setFilterRole(val); setCurrentPage(1); }}
           options={[
             { value: "ALL", label: "Tous les utilisateurs" },
             { value: "B2C", label: "Particuliers (B2C)" },
-            { value: "ADMINS", label: "Administrateurs (Orgas & Super)" }
+            { value: "ADMINS", label: "Administrateurs" }
           ]}
-          style={{ width: 220 }}
+          className="w-[220px] text-sm font-jakarta"
         />
       </div>
 
-      <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
+      {/* Users Table */}
+      <div className="bg-white rounded-2xl border border-[#E3EBE6] overflow-hidden shadow-xs">
         {loading ? (
-          <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 12, animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}>
-            <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`}</style>
+          <div className="p-5 flex flex-col gap-3">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} style={{ height: 64, background: "var(--surface)", borderRadius: 12 }} />
+              <div key={i} className="h-16 bg-[#F8F9FA] rounded-xl animate-pulse" />
             ))}
           </div>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+          <table className="w-full text-left">
             <thead>
-              <tr style={{ background: "var(--bg)", borderBottom: "1px solid var(--border)" }}>
-                <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Utilisateur</th>
-                <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Rôle & Abonnement</th>
-                <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Rattachement</th>
-                <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", textAlign: "center" }}>Passations</th>
-                <th style={{ padding: "16px 24px", color: "var(--text-3)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", textAlign: "right" }}>Actions</th>
+              <tr className="bg-[#F8F9FA] border-b border-[#E3EBE6]">
+                <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Utilisateur</th>
+                <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Rôle & Abonnement</th>
+                <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider">Rattachement</th>
+                <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider text-center">Passations</th>
+                <th className="px-6 py-4 text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((user) => (
-                <tr key={user.id} style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }} className="table-row-hover">
-                  <td style={{ padding: "16px 24px" }}>
-                    <div style={{ fontWeight: 600, color: "var(--text-1)", fontSize: 14 }}>{user.firstName} {user.lastName}</div>
-                    <div style={{ color: "var(--text-2)", fontSize: 12, marginTop: 2 }}>{user.email}</div>
+              {paginatedUsers.map((user) => (
+                <tr key={user.id} className="border-b border-[#E3EBE6] hover:bg-[#FAF9F5]/50 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="font-semibold text-[#123D46] text-sm">{user.firstName} {user.lastName}</div>
+                    <div className="text-[#123D46]/60 text-xs mt-0.5">{user.email}</div>
                   </td>
-                  <td style={{ padding: "16px 24px" }}>
-                    <span className="badge" style={{ 
-                      display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 12, fontSize: 11, fontWeight: 700, 
-                      background: user.role.startsWith("ADMIN") || user.role === "SUPER_ADMIN" ? "rgba(89,101,232,0.1)" : "rgba(255,255,255,0.05)",
-                      color: user.role.startsWith("ADMIN") || user.role === "SUPER_ADMIN" ? "var(--indigo)" : "var(--text-2)",
-                      marginBottom: 6,
-                    }}>
-                      {user.role === "SUPER_ADMIN" ? <ShieldAlert size={12} /> : null}
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold mb-1.5 ${
+                      user.role.startsWith("ADMIN") || user.role === "SUPER_ADMIN"
+                        ? "bg-[#5965E8]/10 text-[#5965E8]"
+                        : "bg-[#F8F9FA] text-[#123D46]/70"
+                    }`}>
+                      {user.role === "SUPER_ADMIN" && <ShieldAlert className="w-3 h-3" />}
                       {ROLE_LABELS[user.role] || user.role}
                     </span>
                     <br />
-                    <SubscriptionBadge
-                      tier={toSubscriptionTier(user.subscription)}
-                      size="sm"
-                    />
+                    <SubscriptionBadge tier={toSubscriptionTier(user.subscription)} size="sm" />
                   </td>
-                  <td style={{ padding: "16px 24px" }}>
+                  <td className="px-6 py-4">
                     {user.organization ? (
-                      <div style={{ color: "var(--text-1)", fontSize: 12 }}>🏢 {user.organization.name}</div>
+                      <div className="text-[#123D46] text-xs font-medium">🏢 {user.organization.name}</div>
                     ) : user.role === "CITIZEN" ? (
-                      <div style={{ color: "var(--text-2)", fontSize: 12, fontStyle: "italic" }}>Client Individuel (B2C)</div>
+                      <div className="text-[#123D46]/50 text-xs italic">Client Individuel (B2C)</div>
                     ) : user.role === "SUPER_ADMIN" ? (
-                      <div style={{ color: "var(--indigo)", fontSize: 12, fontWeight: 600 }}>Plateforme</div>
+                      <div className="text-[#5965E8] text-xs font-semibold">Plateforme</div>
                     ) : (
-                      <div style={{ color: "var(--text-3)", fontSize: 12, fontStyle: "italic" }}>Non rattaché</div>
+                      <div className="text-[#123D46]/40 text-xs italic">Non rattaché</div>
                     )}
                     {user.campaign && (
-                      <div style={{ color: "var(--text-2)", fontSize: 11, marginTop: 4 }}>Campagne: {user.campaign.name}</div>
+                      <div className="text-[#123D46]/50 text-[11px] mt-1">Campagne: {user.campaign.name}</div>
                     )}
                   </td>
-                  <td style={{ padding: "16px 24px", textAlign: "center" }}>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-1)" }}>{user._count?.results || user._count?.assessments || 0}</div>
+                  <td className="px-6 py-4 text-center">
+                    <div className="text-sm font-semibold text-[#123D46]">{user._count?.results || user._count?.assessments || 0}</div>
                   </td>
-                  <td style={{ padding: "16px 24px", textAlign: "right" }}>
-                    <button onClick={() => handleManageClick(user)} className="btn btn-tertiary btn-sm" style={{ padding: "6px 12px" }}>
+                  <td className="px-6 py-4 text-right">
+                    <button
+                      onClick={() => handleManageClick(user)}
+                      className="px-4 py-1.5 rounded-full border border-[#E3EBE6] bg-white hover:border-[#00A99D] hover:bg-[#00A99D]/10 text-[#123D46] hover:text-[#00A99D] text-xs font-jakarta font-bold transition-all shadow-2xs cursor-pointer"
+                    >
                       Gérer
                     </button>
                   </td>
@@ -233,7 +242,7 @@ export default function SuperAdminUsersPage() {
               ))}
               {filteredUsers.length === 0 && (
                 <tr>
-                  <td colSpan={5} style={{ padding: "40px 24px", textAlign: "center", color: "var(--text-3)" }}>
+                  <td colSpan={5} className="px-6 py-12 text-center text-[#123D46]/50 text-sm">
                     Aucun utilisateur trouvé.
                   </td>
                 </tr>
@@ -242,31 +251,29 @@ export default function SuperAdminUsersPage() {
           </table>
         )}
 
-        {!loading && Math.ceil(filteredUsers.length / ITEMS_PER_PAGE) > 1 && (
-          <div style={{ padding: "16px 24px", background: "var(--surface)", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid var(--border)" }}>
-            <span style={{ color: "var(--text-3)", fontSize: 13, fontWeight: 500 }}>
-              Affichage de {((currentPage - 1) * ITEMS_PER_PAGE) + 1} à {Math.min(currentPage * ITEMS_PER_PAGE, filteredUsers.length)} sur {filteredUsers.length} éléments
+        {/* Pagination */}
+        {!loading && totalPages > 1 && (
+          <div className="px-6 py-4 bg-white flex items-center justify-between border-t border-[#E3EBE6]">
+            <span className="text-[#123D46]/60 text-[13px] font-medium">
+              {((currentPage - 1) * ITEMS_PER_PAGE) + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, filteredUsers.length)} sur {filteredUsers.length} utilisateurs
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              {Array.from({ length: Math.ceil(filteredUsers.length / ITEMS_PER_PAGE) }).map((_, i) => {
+            <div className="flex items-center gap-1.5">
+              {Array.from({ length: totalPages }).map((_, i) => {
                 const page = i + 1;
                 const isActive = page === currentPage;
-                const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
                 if (totalPages > 7 && page > 3 && page < totalPages - 1 && page !== currentPage) {
-                  if (page === 4 || page === totalPages - 2) return <span key={page} style={{ padding: "0 4px", color: "var(--text-3)" }}>…</span>;
+                  if (page === 4 || page === totalPages - 2) return <span key={page} className="px-1 text-[#123D46]/40">…</span>;
                   return null;
                 }
                 return (
-                  <button key={page} onClick={() => setCurrentPage(page)} style={{ 
-                    width: 32, height: 32, borderRadius: "50%", 
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    background: isActive ? "var(--primary)" : "transparent", 
-                    border: isActive ? "none" : "1px solid var(--border)", 
-                    color: isActive ? "white" : "var(--text-2)", 
-                    fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.2s"
-                  }}
-                  onMouseOver={(e) => { if (!isActive) e.currentTarget.style.background = "var(--bg)"; }}
-                  onMouseOut={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-colors cursor-pointer ${
+                      isActive
+                        ? "bg-[#00A99D] text-white border-none"
+                        : "bg-transparent border border-[#E3EBE6] text-[#123D46]/70 hover:bg-[#F8F9FA]"
+                    }`}
                   >
                     {page}
                   </button>
@@ -277,72 +284,55 @@ export default function SuperAdminUsersPage() {
         )}
       </div>
 
+      {/* Side Drawer — User Management */}
       {selectedUser && (
         <>
-          {/* Overlay léger au lieu du noir profond */}
-          <div 
-            onClick={() => {
-              setSelectedUser(null);
-              setSaveError(null);
-              setSaveSuccess(false);
-              setConfirmDelete(false);
-            }}
-            style={{
-              position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-              background: "rgba(18,61,70,0.3)", backdropFilter: "blur(2px)",
-              zIndex: 90, animation: "fadeIn 0.2s ease-out"
-            }} 
+          {/* Overlay */}
+          <div
+            onClick={closeDrawer}
+            className="fixed inset-0 bg-[#123D46]/30 backdrop-blur-[2px] z-40 animate-fade-in"
           />
 
-          {/* Panneau latéral (Drawer) */}
-          <div style={{
-            position: "fixed", top: 0, right: 0, bottom: 0,
-            width: "100%", maxWidth: 480,
-            background: "var(--surface)", borderLeft: "1px solid var(--border)",
-            zIndex: 100, padding: "32px", overflowY: "auto",
-            boxShadow: "-8px 0 32px rgba(18,61,70,0.1)",
-            animation: "fadeIn 0.3s ease-out",
-            display: "flex", flexDirection: "column"
-          }}>
+          {/* Drawer Panel */}
+          <div className="fixed top-0 right-0 bottom-0 w-full max-w-[480px] bg-white border-l border-[#E3EBE6] z-50 p-8 overflow-y-auto shadow-2xl flex flex-col animate-fade-in">
             <button
-              onClick={() => {
-                setSelectedUser(null);
-                setSaveError(null);
-                setSaveSuccess(false);
-                setConfirmDelete(false);
-              }}
-              style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", color: "var(--text-2)", cursor: "pointer" }}
+              onClick={closeDrawer}
+              className="absolute top-5 right-5 p-1.5 rounded-lg text-[#123D46]/50 hover:text-[#123D46] hover:bg-[#F4F1E8] transition-colors"
             >
-              <X size={20} />
+              <X className="w-5 h-5" />
             </button>
 
-            <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text-1)", marginBottom: 8, display: "flex", alignItems: "center", gap: 10 }}>
-              <Users size={20} style={{ color: "#38bdf8" }} />
-              Profil Utilisateur
-            </h2>
-            <p style={{ color: "var(--text-2)", fontSize: 14, marginBottom: 24 }}>
-              {selectedUser.firstName} {selectedUser.lastName} ({selectedUser.email})
-            </p>
+            <div className="mb-6">
+              <h2 className="text-xl font-jakarta font-bold text-[#123D46] flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center">
+                  <Users className="w-4 h-4" />
+                </div>
+                Profil Utilisateur
+              </h2>
+              <p className="text-[#123D46]/70 text-sm mt-1.5">
+                {selectedUser.firstName} {selectedUser.lastName} · <span className="font-mono">{selectedUser.email}</span>
+              </p>
+            </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <div className="flex flex-col gap-5 flex-1">
               <div>
-                <label style={{ display: "block", fontSize: 13, color: "var(--text-2)", fontWeight: 600, marginBottom: 8 }}>Niveau d'Abonnement</label>
-                <Select 
-                  value={editForm.subscription} 
+                <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Niveau d'Abonnement</label>
+                <Select
+                  value={editForm.subscription}
                   onChange={(val) => setEditForm(prev => ({ ...prev, subscription: val }))}
                   options={[
                     { value: "FREEMIUM", label: "Freemium (Gratuit)" },
                     { value: "PREMIUM", label: "Premium" },
                     { value: "PREMIUM_PLUS", label: "Premium+ (Accès Binôme)" }
                   ]}
-                  style={{ width: "100%" }}
+                  className="w-full"
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: 13, color: "var(--text-2)", fontWeight: 600, marginBottom: 8 }}>Rôle Système</label>
-                <Select 
-                  value={editForm.role} 
+                <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Rôle Système</label>
+                <Select
+                  value={editForm.role}
                   onChange={(val) => setEditForm(prev => ({ ...prev, role: val }))}
                   disabled={selectedUser.role === "SUPER_ADMIN"}
                   options={[
@@ -354,62 +344,66 @@ export default function SuperAdminUsersPage() {
                     { value: "ADMIN_B2G", label: "Admin Collectivités (ADMIN_B2G)" },
                     { value: "SUPER_ADMIN", label: "Super Admin (SUPER_ADMIN)" }
                   ]}
-                  style={{ width: "100%" }}
+                  className="w-full"
                 />
               </div>
 
-              <div style={{ height: 1, background: "rgba(255,255,255,0.05)", margin: "8px 0" }} />
+              <div className="h-px bg-[#E3EBE6]" />
 
-              {/* Feedback inline succès / erreur */}
+              {/* Feedback banners */}
               {saveSuccess && (
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 8, padding: "10px 14px",
-                  borderRadius: 10, background: "rgba(16,185,129,0.08)",
-                  border: "1px solid rgba(16,185,129,0.2)",
-                }}>
-                  <CheckCircle2 size={14} style={{ color: "#34d399", flexShrink: 0 }} />
-                  <span style={{ fontSize: 13, color: "#34d399" }}>Modifications enregistrées avec succès.</span>
+                <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span className="text-[13px] text-emerald-600 font-medium">Modifications enregistrées avec succès.</span>
                 </div>
               )}
               {saveError && (
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 8, padding: "10px 14px",
-                  borderRadius: 10, background: "rgba(239,68,68,0.08)",
-                  border: "1px solid rgba(239,68,68,0.2)",
-                }}>
-                  <AlertCircle size={14} style={{ color: "#f87171", flexShrink: 0 }} />
-                  <span style={{ fontSize: 13, color: "#f87171" }}>{saveError}</span>
+                <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-rose-50 border border-rose-200">
+                  <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
+                  <span className="text-[13px] text-rose-600 font-medium">{saveError}</span>
                 </div>
               )}
 
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <button onClick={() => setConfirmDelete(true)} className="btn btn-sm" style={{ background: "transparent", color: "#ef4444", border: "1px solid rgba(239,68,68,0.2)", display: confirmDelete ? "none" : "flex" }}>
-                  <Trash2 size={16} style={{ marginRight: 6 }} />
-                  Supprimer le compte
-                </button>
-
-                <button onClick={handleSave} disabled={isSaving} className="btn btn-primary btn-md" style={{ marginLeft: confirmDelete ? "auto" : 0 }}>
-                  {isSaving ? "Enregistrement..." : <><Save size={16} /> Enregistrer</>}
+              <div className="flex items-center justify-between gap-3">
+                {!confirmDelete && (
+                  <button
+                    onClick={() => setConfirmDelete(true)}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-rose-200 text-rose-500 text-xs font-jakarta font-semibold hover:bg-rose-50 transition-colors"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Supprimer
+                  </button>
+                )}
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className={`flex items-center gap-2 px-5 py-2 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm transition-colors disabled:opacity-60 ${confirmDelete ? "ml-auto" : ""}`}
+                >
+                  {isSaving ? "Enregistrement..." : <><Save className="w-4 h-4" /> Enregistrer</>}
                 </button>
               </div>
 
               {confirmDelete && (
-                <div style={{
-                  marginTop: 8, padding: 16, borderRadius: 12,
-                  background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)",
-                  animation: "fadeIn 0.2s ease-out"
-                }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, color: "#fca5a5", fontWeight: 600, marginBottom: 8 }}>
-                    <AlertTriangle size={18} /> Êtes-vous absolument sûr ?
+                <div className="mt-2 p-4 rounded-xl bg-rose-50 border border-rose-200">
+                  <div className="flex items-center gap-2 text-rose-600 font-semibold text-sm mb-2">
+                    <AlertTriangle className="w-4 h-4" /> Êtes-vous absolument sûr ?
                   </div>
-                  <p style={{ fontSize: 13, color: "#fca5a5", opacity: 0.9, marginBottom: 16, lineHeight: 1.5 }}>
+                  <p className="text-[13px] text-rose-500/90 mb-4 leading-relaxed">
                     Cette action est <strong>irréversible</strong>. Toutes les données associées (profil, résultats IQRH, historique) seront définitivement effacées.
                   </p>
-                  <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
-                    <button onClick={() => setConfirmDelete(false)} disabled={isSaving} className="btn btn-tertiary btn-sm" style={{ background: "rgba(255,255,255,0.05)", color: "white", border: "none" }}>
+                  <div className="flex gap-2.5 justify-end">
+                    <button
+                      onClick={() => setConfirmDelete(false)}
+                      disabled={isSaving}
+                      className="px-4 py-1.5 rounded-full border border-[#E3EBE6] text-[#123D46] text-xs font-jakarta font-semibold hover:bg-[#F4F1E8] transition-colors"
+                    >
                       Annuler
                     </button>
-                    <button onClick={handleDelete} disabled={isSaving} className="btn btn-danger btn-sm">
+                    <button
+                      onClick={handleDelete}
+                      disabled={isSaving}
+                      className="px-5 py-1.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-jakarta font-bold text-xs transition-colors disabled:opacity-60"
+                    >
                       {isSaving ? "Suppression..." : "Oui, supprimer définitivement"}
                     </button>
                   </div>

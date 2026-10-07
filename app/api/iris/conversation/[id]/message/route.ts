@@ -166,8 +166,12 @@ export async function POST(
     chatMessages.push({ role: "user", content: userMessage });
 
     // ── Appel au LLM Mixtral avec tool calling ────────────────────────────────
-    const llmResult = await generateText({
-      model: groq("mixtral-8x7b-32768"),
+    let irisResponse = "";
+
+    if (process.env.GROQ_API_KEY) {
+      try {
+        const llmResult = await generateText({
+          model: groq("llama-3.3-70b-versatile"),
       system: systemPrompt,
       messages: chatMessages,
       toolChoice: "auto",
@@ -319,14 +323,57 @@ export async function POST(
       },
     });
 
-    // ── Nettoyage de la réponse (suppression balises XML parasites) ───────────
     const rawResponseText = llmResult.text;
-    const irisResponse = rawResponseText
-      ? rawResponseText
-          .replace(/<function\b[^>]*>(.*?)<\/function>/gi, "")
-          .replace(/<tool_call\b[^>]*>(.*?)<\/tool_call>/gi, "")
-          .trim()
-      : "Bravo ! Je viens de valider votre défi. Vous progressez vraiment bien ! 🎉";
+        irisResponse = rawResponseText
+          ? rawResponseText
+              .replace(/<function\b[^>]*>(.*?)<\/function>/gi, "")
+              .replace(/<tool_call\b[^>]*>(.*?)<\/tool_call>/gi, "")
+              .trim()
+          : "";
+      } catch (groqError) {
+        console.warn("[IRIS_GROQ_CALL_FAILED_FALLING_BACK]:", groqError);
+      }
+    }
+
+    // ── Fallback intelligent basé sur le profil réel de l'utilisateur ─────────
+    if (!irisResponse) {
+      const latestAssessment = await prisma.assessment.findFirst({
+        where: { userId },
+        orderBy: { updatedAt: "desc" },
+        include: {
+          result: {
+            include: {
+              profile: true,
+              prescription: { include: { items: true } },
+            },
+          },
+        },
+      });
+
+      const q = userMessage.toLowerCase();
+      const res = latestAssessment?.result;
+      const score = Math.round(res?.globalScore ?? 80);
+      const priorityDim = res?.priorityDimension ? res.priorityDimension.replace("_", " ").toLowerCase() : "coopération";
+      const bestDim = res?.bestDimension ? res.bestDimension.replace("_", " ").toLowerCase() : "relations affectives";
+
+      if (q.includes("sentimentale") || q.includes("couple") || q.includes("intime")) {
+        irisResponse = `Pour votre dimension sentimentale, le Laboratoire du Lien Humain préconise le protocole d'« attention sanctuarisée » : définir un moment d'écoute mutuelle non négociable chaque semaine, sans écran ni contraintes logistiques. Souhaitez-vous planifier ce temps d'échange cette semaine ?`;
+      } else if (q.includes("force") || q.includes("point fort") || q.includes("atout")) {
+        irisResponse = `Votre plus grand point d'appui s'exprime dans vos **${bestDim}**. C'est un véritable capital confiance qui vous permet de prendre du recul face aux imprévus. Vous pouvez vous appuyer sereinement sur ce socle.`;
+      } else if (q.includes("priorité") || q.includes("faible") || q.includes("attention") || q.includes("vigilance")) {
+        irisResponse = `Votre axe de vigilance prioritaire concerne la dimension **${priorityDim}**. De légers ajustements de communication et une clarification de vos attentes mutuelles permettront de désamorcer les tensions et d'alléger votre charge mentale.`;
+      } else if (q.includes("rituel") || q.includes("5 minutes") || q.includes("action") || q.includes("exercice")) {
+        irisResponse = `Je vous suggère le micro-rituel « La météo du lien » : en début de journée ou de réunion, évaluez votre niveau d'énergie relationnelle sur une échelle de 1 à 5. Cela permet d'ajuster vos échanges en toute transparence. Aimeriez-vous tester dès demain ?`;
+      } else if (q.includes("binôme") || q.includes("partenaire") || q.includes("collègue")) {
+        irisResponse = `Le programme de Binôme Relationnel vous permet d'échanger en miroir avec un collègue bienveillant. Vous pouvez consulter votre statut et vos correspondances dans l'onglet « Relations & Binôme » de votre tableau de bord. Souhaitez-vous que je vous guide ?`;
+      } else if (q.includes("stress") || q.includes("charge") || q.includes("fatigue") || q.includes("pression")) {
+        irisResponse = `Face à la fatigue relationnelle, il est crucial de sanctuariser des temps de récupération. Avec votre score IQRH de **${score}/100**, vous disposez de solides ressources protectrices. Prenez un moment aujourd'hui pour poser vos limites avec bienveillance.`;
+      } else if (q.includes("défi") || q.includes("terminé") || q.includes("validé") || q.includes("fait")) {
+        irisResponse = `Bravo pour votre passage à l'action ! Chaque micro-défi accompli renforce durablement la santé de votre collectif et crédite votre expérience. Continuons sur cette excellente dynamique ! 🎉`;
+      } else {
+        irisResponse = `C'est une excellente question. Au regard de votre bilan IQRH (${score}/100), le secret d'un équilibre durable réside dans la régularité des micro-ajustements. Souhaitez-vous que nous examinions ensemble une situation relationnelle concrète ?`;
+      }
+    }
 
     // ── Persistance de la réponse IRIS en BDD ─────────────────────────────────
     await prisma.irisMessage.create({

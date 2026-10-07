@@ -45,7 +45,7 @@ export function MeteoWidget() {
               key={mood.id}
               onClick={() => handleSubmit(mood.id)}
               disabled={loading || submitted}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-jakarta font-semibold transition-all ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-jakarta font-semibold transition-all ${
                 isSelected
                   ? 'bg-[#00A99D] text-white shadow-xs'
                   : 'bg-[#FAF9F5] text-[#123D46]/75 hover:bg-[#F4F1E8] border border-[#E3EBE6]'

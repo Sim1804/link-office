@@ -2,7 +2,8 @@
  * app/not-found.tsx — Page 404 personnalisée LinkOffice
  */
 import Link from "next/link";
-import { Brain, Home, Search } from "lucide-react";
+import { Home, Search, AlertCircle } from "lucide-react";
+import { Logo } from "@/src/components/brand/Logo";
 
 export const metadata = {
   title: "Page introuvable — LinkOffice",
@@ -11,57 +12,50 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "var(--bg)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "40px 24px",
-      position: "relative",
-      overflow: "hidden",
-    }}>
+    <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-6 relative overflow-hidden">
       {/* Glow blobs (subtle light) */}
-      <div style={{ position: "absolute", top: "-15%", right: "-8%", width: 600, height: 600, background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "-15%", left: "-8%", width: 500, height: 500, background: "radial-gradient(circle, rgba(89,101,232,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div className="absolute -top-[15%] -right-[8%] w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)" }} />
+      <div className="absolute -bottom-[15%] -left-[8%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(89,101,232,0.05) 0%, transparent 70%)" }} />
 
-      <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 480 }}>
+      <div className="relative z-10 text-center max-w-md w-full">
         {/* Logo */}
-        <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: 40 }}>
-          <div style={{ width: 40, height: 40, background: "var(--primary)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Brain size={20} color="white" />
-          </div>
-          <span style={{ fontFamily: "var(--font-family-display)", fontWeight: 700, fontSize: 20, color: "var(--text-1)" }}>
-            Link<span style={{ color: "var(--primary)" }}>Office</span>
-          </span>
-        </Link>
-
-        {/* 404 Number */}
-        <div style={{
-          fontFamily: "var(--font-family-display)",
-          fontSize: 120, fontWeight: 900, lineHeight: 1,
-          color: "var(--primary)",
-          marginBottom: 24,
-          letterSpacing: "-0.04em",
-          opacity: 0.1
-        }}>
-          404
+        <div className="flex justify-center mb-10">
+          <Link href="/" className="inline-block transition-opacity hover:opacity-80">
+            <Logo size="md" variant="light" showTagline={false} />
+          </Link>
         </div>
 
-        <h1 style={{ fontFamily: "var(--font-family-display)", fontSize: 28, fontWeight: 800, color: "var(--text-1)", marginBottom: 12 }}>
+        {/* 404 Number */}
+        <div className="relative mb-8">
+          <div className="font-jakarta text-[140px] font-black leading-none text-[#00A99D] tracking-tighter opacity-10 select-none">
+            404
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center">
+             <div className="w-20 h-20 rounded-3xl bg-white border border-[#E3EBE6] shadow-lg flex items-center justify-center text-[#00A99D]">
+                <AlertCircle size={36} strokeWidth={2.5} />
+             </div>
+          </div>
+        </div>
+
+        <h1 className="font-jakarta text-3xl sm:text-4xl font-extrabold text-[#123D46] mb-4">
           Page introuvable
         </h1>
-        <p style={{ fontSize: 16, color: "var(--text-2)", lineHeight: 1.6, marginBottom: 36 }}>
-          La page que vous recherchez n&apos;existe pas ou a été déplacée.
-          Vérifiez l&apos;URL ou retournez à l&apos;accueil.
+        <p className="text-base text-[#123D46]/70 leading-relaxed mb-10 max-w-[320px] mx-auto">
+          La page que vous recherchez n&apos;existe pas, a été déplacée ou nécessite des droits d&apos;accès différents.
         </p>
 
         {/* Actions */}
-        <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/" className="btn btn-primary btn-lg" style={{ textDecoration: "none" }}>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <Link 
+            href="/" 
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 no-underline"
+          >
             <Home size={16} /> Retour à l&apos;accueil
           </Link>
-          <Link href="/dashboard" className="btn btn-tertiary btn-lg" style={{ textDecoration: "none" }}>
+          <Link 
+            href="/dashboard" 
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-white border border-[#E3EBE6] text-[#123D46] hover:bg-[#F8F9FA] hover:border-[#00A99D]/30 font-jakarta font-bold text-sm transition-all flex items-center justify-center gap-2 no-underline"
+          >
             <Search size={16} /> Mon tableau de bord
           </Link>
         </div>

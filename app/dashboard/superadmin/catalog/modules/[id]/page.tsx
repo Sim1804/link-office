@@ -2,8 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { ArrowLeft, Target, LayoutList } from "lucide-react";
-import { Navbar } from "@/components/layout/Navbar";
+import { ArrowLeft, Target, LayoutList, CheckCircle2, XCircle } from "lucide-react";
 
 export const metadata = { title: "Détail du Module Adaptatif — LinkOffice" };
 
@@ -56,80 +55,102 @@ export default async function ModuleDetailPage(props: { params: Promise<{ id: st
   }
 
   return (
-    <>
-      <div style={{ maxWidth: 860, margin: "0 auto", paddingBottom: "40px" }}>
-        <div style={{ marginBottom: 24 }}>
-          <Link href="/dashboard/superadmin/catalog" style={{ color: "var(--text-2)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 14, fontWeight: 500 }}>
-            <ArrowLeft size={16} /> Retour au catalogue
-          </Link>
-        </div>
+    <div className="space-y-6 animate-fade-in max-w-[860px]">
+      {/* Back link */}
+      <Link
+        href="/dashboard/superadmin/catalog"
+        className="inline-flex items-center gap-1.5 text-[#123D46]/60 no-underline text-sm hover:text-[#00A99D] transition-colors font-medium"
+      >
+        <ArrowLeft className="w-4 h-4" /> Retour au catalogue
+      </Link>
 
-        <div style={{ background: "var(--surface)", borderRadius: 16, padding: 32, border: "1px solid var(--border)", marginBottom: 24, boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-            <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(14,165,233,0.1)", color: "var(--sky)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Target size={24} />
-            </div>
-            <div>
-              <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>{detailItem.title}</h1>
-              <div style={{ fontSize: 13, color: "var(--text-3)", fontFamily: "monospace", marginTop: 4 }}>ID: {detailItem.id}</div>
-            </div>
+      {/* Module header card */}
+      <div className="bg-white rounded-2xl border border-[#E3EBE6] p-8 shadow-xs">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="w-12 h-12 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center shrink-0">
+            <Target className="w-6 h-6" />
           </div>
-          
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginTop: 24 }}>
-            <div style={{ padding: 16, background: "var(--bg)", borderRadius: 12, border: "1px solid var(--border)" }}>
-              <div style={{ fontSize: 12, color: "var(--text-3)", fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>Cible / Déclencheur</div>
-              <div style={{ fontSize: 14, color: "var(--text-1)", fontWeight: 500 }}>{detailItem.triggerSituation}</div>
-            </div>
-            <div style={{ padding: 16, background: "var(--bg)", borderRadius: 12, border: "1px solid var(--border)" }}>
-              <div style={{ fontSize: 12, color: "var(--text-3)", fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>Objectif</div>
-              <div style={{ fontSize: 14, color: "var(--text-1)", fontWeight: 500 }}>{detailItem.objective}</div>
-            </div>
-            <div style={{ padding: 16, background: "var(--bg)", borderRadius: 12, border: "1px solid var(--border)" }}>
-              <div style={{ fontSize: 12, color: "var(--text-3)", fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>Informations</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span className="badge" style={{ fontSize: 12, padding: "2px 8px", background: "var(--surface)", color: "var(--text-2)", border: "1px solid var(--border)" }}>v{detailItem.version}</span>
-                <span className="badge" style={{ fontSize: 12, padding: "2px 8px", background: detailItem.isActive ? "rgba(16,185,129,0.1)" : "rgba(244,63,94,0.1)", color: detailItem.isActive ? "var(--emerald)" : "var(--rose)" }}>
-                  {detailItem.isActive ? "Actif" : "Inactif"}
-                </span>
-              </div>
-            </div>
+          <div>
+            <h1 className="text-2xl font-jakarta font-bold text-[#123D46] tracking-tight">{detailItem.title}</h1>
+            <div className="text-[11px] text-[#123D46]/50 font-mono mt-1">ID: {detailItem.id}</div>
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-          <LayoutList size={20} color="var(--violet)" />
-          <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Questions du module ({detailItem.questions.length})</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-4 bg-[#F8F9FA] rounded-xl border border-[#E3EBE6]">
+            <div className="text-[11px] font-jakarta font-bold text-[#123D46]/50 uppercase tracking-wider mb-1.5">Cible / Déclencheur</div>
+            <div className="text-sm text-[#123D46] font-medium">{detailItem.triggerSituation}</div>
+          </div>
+          <div className="p-4 bg-[#F8F9FA] rounded-xl border border-[#E3EBE6]">
+            <div className="text-[11px] font-jakarta font-bold text-[#123D46]/50 uppercase tracking-wider mb-1.5">Objectif</div>
+            <div className="text-sm text-[#123D46] font-medium leading-relaxed">{detailItem.objective}</div>
+          </div>
+          <div className="p-4 bg-[#F8F9FA] rounded-xl border border-[#E3EBE6]">
+            <div className="text-[11px] font-jakarta font-bold text-[#123D46]/50 uppercase tracking-wider mb-2">Informations</div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-white border border-[#E3EBE6] text-[#123D46]/70 font-mono">
+                v{detailItem.version}
+              </span>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-bold flex items-center gap-1 ${
+                detailItem.isActive
+                  ? "bg-emerald-50 text-emerald-600"
+                  : "bg-rose-50 text-rose-500"
+              }`}>
+                {detailItem.isActive
+                  ? <><CheckCircle2 className="w-3 h-3" /> Actif</>
+                  : <><XCircle className="w-3 h-3" /> Inactif</>
+                }
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Questions list */}
+      <div>
+        <div className="flex items-center gap-2.5 mb-4">
+          <LayoutList className="w-5 h-5 text-[#5965E8]" />
+          <h2 className="text-xl font-jakarta font-bold text-[#123D46]">
+            Questions du module ({detailItem.questions.length})
+          </h2>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div className="flex flex-col gap-3">
           {detailItem.questions.map((q: any, index: number) => (
-            <div key={q.id} style={{ padding: 20, background: "var(--surface)", borderRadius: 12, border: "1px solid var(--border)", display: "flex", gap: 16, alignItems: "flex-start", boxShadow: "0 2px 8px rgba(0,0,0,0.02)" }}>
-              <div style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--bg)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 600, color: "var(--text-2)", flexShrink: 0 }}>
+            <div
+              key={q.id}
+              className="p-5 bg-white rounded-xl border border-[#E3EBE6] shadow-xs flex gap-4 items-start hover:border-[#00A99D]/30 transition-colors"
+            >
+              <div className="w-8 h-8 rounded-full bg-[#F8F9FA] border border-[#E3EBE6] flex items-center justify-center text-[13px] font-bold text-[#123D46]/70 shrink-0">
                 {index + 1}
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 500, color: "var(--text-1)", marginBottom: 8, lineHeight: 1.5 }}>
+              <div className="flex-1">
+                <div className="text-sm text-[#123D46] font-medium leading-relaxed mb-2">
                   {q.text}
                 </div>
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                  <span style={{ fontSize: 11, fontFamily: "monospace", color: "var(--text-3)", background: "var(--bg)", padding: "2px 6px", borderRadius: 4, border: "1px solid var(--border)" }}>
+                <div className="flex gap-2 items-center flex-wrap">
+                  <span className="text-[11px] font-mono text-[#123D46]/50 bg-[#F8F9FA] px-1.5 py-0.5 rounded-md border border-[#E3EBE6]">
                     {q.id}
                   </span>
-                  <span className="badge" style={{ fontSize: 10, padding: "2px 6px", background: "var(--bg)", color: "var(--text-2)", border: "1px solid var(--border)" }}>v{q.version}</span>
+                  <span className="text-[10px] px-1.5 py-0.5 bg-[#F8F9FA] text-[#123D46]/70 border border-[#E3EBE6] rounded-full">
+                    v{q.version}
+                  </span>
                   {!q.isActive && (
-                    <span className="badge" style={{ fontSize: 10, padding: "2px 6px", background: "rgba(244,63,94,0.1)", color: "var(--rose)" }}>Inactif</span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-rose-50 text-rose-500 rounded-full">
+                      Inactif
+                    </span>
                   )}
                 </div>
               </div>
             </div>
           ))}
           {detailItem.questions.length === 0 && (
-            <div style={{ padding: 40, textAlign: "center", color: "var(--text-3)", background: "var(--surface)", borderRadius: 12, border: "1px solid var(--border)" }}>
+            <div className="p-10 text-center text-[#123D46]/50 text-sm bg-white rounded-xl border border-[#E3EBE6]">
               Ce module ne contient aucune question.
             </div>
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }

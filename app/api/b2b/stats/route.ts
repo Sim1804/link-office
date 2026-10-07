@@ -66,22 +66,53 @@ export async function GET(request: Request) {
     select: {
       organizationId: true,
       role: true,
-      organization: { select: { subscription: { select: { status: true } } } },
+      organization: { select: { id: true, name: true, type: true, subscription: { select: { status: true } } } },
     },
   });
-
-  if (!adminUser?.organizationId) {
-    return NextResponse.json(
-      { error: "Aucune organisation associée." },
-      { status: 404 }
-    );
-  }
 
   // Filtre optionnel par campagne et démographie
   const { searchParams } = new URL(request.url);
   const campaignId = searchParams.get("campaignId");
   const ageRange = searchParams.get("ageRange");
   const gender = searchParams.get("gender");
+
+  let targetOrgId = adminUser?.organizationId;
+  let targetOrg = adminUser?.organization;
+
+  // Si une campagne spécifique est demandée, récupérer son organisation
+  if (campaignId) {
+    const campaignData = await prisma.campaign.findUnique({
+      where: { id: campaignId },
+      select: {
+        id: true,
+        organizationId: true,
+        organization: { select: { id: true, name: true, type: true, subscription: { select: { status: true } } } }
+      }
+    });
+    if (campaignData) {
+      targetOrgId = campaignData.organizationId;
+      targetOrg = campaignData.organization;
+    }
+  }
+
+  // Si Super Admin sans organisation directe, cibler l'organisation B2B par défaut
+  if (!targetOrgId && adminUser?.role === "SUPER_ADMIN") {
+    const defaultB2bOrg = await prisma.organization.findFirst({
+      where: { type: "B2B" },
+      select: { id: true, name: true, type: true, subscription: { select: { status: true } } }
+    });
+    if (defaultB2bOrg) {
+      targetOrgId = defaultB2bOrg.id;
+      targetOrg = defaultB2bOrg;
+    }
+  }
+
+  if (!targetOrgId && !campaignId) {
+    return NextResponse.json(
+      { error: "Aucune organisation associée." },
+      { status: 404 }
+    );
+  }
 
   const demographicFilter: any = {};
   if (ageRange) demographicFilter.ageRange = ageRange;
@@ -93,7 +124,7 @@ export async function GET(request: Request) {
       where: {
         status: "SUBMITTED",
         campaignId: campaignId || undefined,
-        user: { organizationId: adminUser.organizationId },
+        ...(campaignId ? {} : (targetOrgId ? { user: { organizationId: targetOrgId } } : {})),
         ...(Object.keys(demographicFilter).length > 0 && {
           demographic: { is: demographicFilter }
         })
@@ -128,11 +159,11 @@ export async function GET(request: Request) {
         }
       },
     }),
-    prisma.user.count({
-      where: { organizationId: adminUser.organizationId },
-    }),
+    targetOrgId
+      ? prisma.user.count({ where: { organizationId: targetOrgId } })
+      : 0,
     prisma.campaign.findMany({
-      where: { organizationId: adminUser.organizationId },
+      where: targetOrgId ? { organizationId: targetOrgId } : undefined,
       select: { id: true, title: true, status: true, snapshot: true },
       orderBy: { startDate: "desc" }
     })
@@ -140,7 +171,7 @@ export async function GET(request: Request) {
 
   const respondentCount = submittedAssessments.length;
 
-  const subscriptionStatus = adminUser.organization?.subscription?.status || "INCOMPLETE";
+  const subscriptionStatus = targetOrg?.subscription?.status || "ACTIVE";
 
 
   // ── Règle d'or de l'anonymat ────────────────────────────────────
@@ -286,7 +317,7 @@ export async function GET(request: Request) {
     where: { library: "Recommandations" }
   });
 
-  const isB2B2C = adminUser.role === "ADMIN_B2B2C";
+  const isB2B2C = adminUser?.role === "ADMIN_B2B2C";
   
   // Filter and parse recommendations
   let recommendations = libraryRecs

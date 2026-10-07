@@ -1,9 +1,9 @@
+
 "use client";
 
 import { Building2, Handshake, Users, ChevronRight, Activity, BookOpen, LayoutDashboard, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { DashboardTabs } from "@/components/ui/DashboardTabs";
 import { BarometreDashboard } from "@/components/superadmin/barometre/BarometreDashboard";
 
 interface DashboardClientProps {
@@ -25,7 +25,7 @@ const KPI_CARDS = [
   {
     key: "orgs",
     label: "Organisations",
-    accentColor: "#00A99D",
+    accentColor: "emerald",
     icon: Building2,
     badge: "+12% T1",
     badgeColor: "#00A99D",
@@ -33,7 +33,7 @@ const KPI_CARDS = [
   {
     key: "leads",
     label: "Devis Entrants",
-    accentColor: "#f59e0b",
+    accentColor: "amber",
     icon: Handshake,
     badge: null,
     badgeColor: "#f59e0b",
@@ -41,7 +41,7 @@ const KPI_CARDS = [
   {
     key: "users",
     label: "Comptes Rattachés",
-    accentColor: "#6366f1",
+    accentColor: "indigo",
     icon: Users,
     badge: null,
     badgeColor: "#6366f1",
@@ -49,7 +49,7 @@ const KPI_CARDS = [
   {
     key: "media",
     label: "Médias Actifs",
-    accentColor: "#10b981",
+    accentColor: "emerald",
     icon: BookOpen,
     badge: null,
     badgeColor: "#10b981",
@@ -79,135 +79,179 @@ export function DashboardClient({ stats, availableRegions }: DashboardClientProp
   };
 
   return (
-    <>
-      {/* Page Title */}
-      <div style={{ marginBottom: 20 }}>
-        <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontSize: 22, fontWeight: 800, color: "var(--text-1)", letterSpacing: "-0.02em", marginBottom: 4 }}>
-          Gouvernance & Laboratoire du Lien Humain
-        </h1>
-        <p style={{ fontSize: 13, color: "var(--text-2)", lineHeight: 1.5 }}>
-          Pilotage unifié · Modélisation IQRH · Pipeline commercial · Co-pilotage IRIS
-        </p>
+    <div className="space-y-8 animate-fade-in">
+      {/* Header Title Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight">
+            Gouvernance & Laboratoire du Lien Humain
+          </h1>
+          <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1 font-inter">
+            Pilotage unifié · Modélisation IQRH · Pipeline commercial · Co-pilotage IRIS
+          </p>
+        </div>
+
+        {/* Sub-tabs Dashboard 360 */}
+        <div className="inline-flex p-1 bg-white border border-[#E3EBE6] rounded-full self-start sm:self-auto shadow-2xs">
+          <button
+            onClick={() => setMainTab('general')}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-jakarta font-semibold transition-colors ${
+              mainTab === 'general'
+                ? 'bg-[#00A99D]/15 text-[#00A99D]'
+                : 'text-[#123D46]/70 hover:text-[#123D46]'
+            }`}
+          >
+            <LayoutDashboard className="w-3.5 h-3.5" />
+            <span>Vue Générale</span>
+          </button>
+          <button
+            onClick={() => setMainTab('barometre')}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-jakarta font-semibold transition-colors ${
+              mainTab === 'barometre'
+                ? 'bg-[#00A99D]/15 text-[#00A99D]'
+                : 'text-[#123D46]/70 hover:text-[#123D46]'
+            }`}
+          >
+            <Activity className="w-3.5 h-3.5" />
+            <span>Baromètre National</span>
+          </button>
+        </div>
       </div>
 
-      {/* Tab Navigation */}
-      <DashboardTabs
-        tabs={[
-          { key: "general", label: "Vue Générale", icon: LayoutDashboard },
-          { key: "barometre", label: "Baromètre National", icon: Activity },
-        ]}
-        activeTab={mainTab}
-        onTabChange={setMainTab}
-      />
-
       {mainTab === "general" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-          {/* KPI Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
-            {KPI_CARDS.map((card) => {
-              const { value, sub } = kpiValues[card.key];
-              const Icon = card.icon;
-              const isLeadsUrgent = card.key === "leads" && stats.leadsUrgent > 0;
-
-              return (
-                <div key={card.key} style={{
-                  background: "var(--surface)",
-                  borderRadius: 14,
-                  border: "1px solid var(--border)",
-                  borderLeft: `4px solid ${card.accentColor}`,
-                  padding: "18px 20px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 12,
-                  transition: "box-shadow 0.2s",
-                }}
-                  onMouseEnter={e => e.currentTarget.style.boxShadow = "0 4px 16px rgba(18,61,70,0.08)"}
-                  onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}
-                >
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                      {card.label}
-                    </span>
-                    <div style={{ width: 30, height: 30, borderRadius: 8, background: `${card.accentColor}14`, display: "flex", alignItems: "center", justifyContent: "center", color: card.accentColor }}>
-                      <Icon size={15} />
-                    </div>
-                  </div>
-
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                    <span style={{ fontSize: 32, fontWeight: 900, color: isLeadsUrgent ? card.accentColor : "var(--text-1)", fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", letterSpacing: "-0.03em", lineHeight: 1 }}>
-                      {value}
-                    </span>
-                    {card.badge && (
-                      <span style={{ fontSize: 11, fontWeight: 700, color: card.accentColor }}>{card.badge}</span>
-                    )}
-                  </div>
-
-                  {sub && (
-                    <p style={{ fontSize: 11, color: isLeadsUrgent ? "#f59e0b" : "var(--text-3)", lineHeight: 1.4, margin: 0 }}>
-                      {sub}
-                    </p>
-                  )}
-
-                  {/* Breakdown for orgs */}
-                  {card.key === "orgs" && stats.orgsTotal > 0 && (
-                    <div style={{ height: 3, borderRadius: 99, background: "var(--surface-2)", overflow: "hidden" }}>
-                      <div style={{ width: `${(stats.orgsB2B / stats.orgsTotal) * 100}%`, height: "100%", background: card.accentColor, borderRadius: 99 }} />
-                    </div>
-                  )}
+        <div className="space-y-6">
+          {/* 4 Stat KPI Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Card 1: Organisations (Teal #00A99D) */}
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 relative overflow-hidden shadow-xs hover:shadow-md transition-shadow">
+              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#00A99D] rounded-r" />
+              <div className="flex items-start justify-between">
+                <span className="text-[11px] font-jakarta font-bold text-[#123D46]/75 uppercase tracking-wider">
+                  ORGANISATIONS
+                </span>
+                <div className="w-8 h-8 rounded-xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center">
+                  <Building2 className="w-4 h-4" />
                 </div>
-              );
-            })}
+              </div>
+              <div className="mt-3 flex items-baseline gap-2">
+                <span className="text-3xl font-jakarta font-black text-[#123D46] font-mono">
+                  {kpiValues.orgs.value}
+                </span>
+                <span className="text-[11px] font-jakarta font-bold text-[#00A99D] bg-[#00A99D]/10 px-1.5 py-0.5 rounded">
+                  +12% T1
+                </span>
+              </div>
+              <p className="text-xs text-[#123D46]/60 mt-2">
+                {kpiValues.orgs.sub}
+              </p>
+            </div>
+
+            {/* Card 2: Devis Entrants (Gold #FFC629) */}
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 relative overflow-hidden shadow-xs hover:shadow-md transition-shadow">
+              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#FFC629] rounded-r" />
+              <div className="flex items-start justify-between">
+                <span className="text-[11px] font-jakarta font-bold text-[#123D46]/75 uppercase tracking-wider">
+                  DEVIS ENTRANTS
+                </span>
+                <div className="w-8 h-8 rounded-xl bg-[#FFC629]/15 text-[#123D46] flex items-center justify-center">
+                  <Handshake className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="mt-3 flex items-baseline gap-2">
+                <span className="text-3xl font-jakarta font-black text-[#123D46] font-mono">
+                  {kpiValues.leads.value}
+                </span>
+                <span className="text-[11px] font-jakarta font-medium text-[#123D46]/60">
+                  en attente
+                </span>
+              </div>
+              <p className="text-xs text-[#123D46]/60 mt-2">
+                {kpiValues.leads.sub}
+              </p>
+            </div>
+
+            {/* Card 3: Comptes Rattachés (Action Violet #5965E8) */}
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 relative overflow-hidden shadow-xs hover:shadow-md transition-shadow">
+              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#5965E8] rounded-r" />
+              <div className="flex items-start justify-between">
+                <span className="text-[11px] font-jakarta font-bold text-[#123D46]/75 uppercase tracking-wider">
+                  COMPTES RATTACHÉS
+                </span>
+                <div className="w-8 h-8 rounded-xl bg-[#5965E8]/10 text-[#5965E8] flex items-center justify-center">
+                  <Users className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="mt-3 flex items-baseline gap-2">
+                <span className="text-3xl font-jakarta font-black text-[#123D46] font-mono">
+                  {kpiValues.users.value}
+                </span>
+              </div>
+              <p className="text-xs text-[#123D46]/60 mt-2">
+                {kpiValues.users.sub}
+              </p>
+            </div>
+
+            {/* Card 4: Médias Actifs (Teal #199E9A) */}
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 relative overflow-hidden shadow-xs hover:shadow-md transition-shadow">
+              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#199E9A] rounded-r" />
+              <div className="flex items-start justify-between">
+                <span className="text-[11px] font-jakarta font-bold text-[#123D46]/75 uppercase tracking-wider">
+                  MÉDIAS ACTIFS
+                </span>
+                <div className="w-8 h-8 rounded-xl bg-[#199E9A]/10 text-[#199E9A] flex items-center justify-center">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="mt-3 flex items-baseline gap-2">
+                <span className="text-3xl font-jakarta font-black text-[#123D46] font-mono">
+                  {kpiValues.media.value}
+                </span>
+                <span className="text-[11px] font-jakarta font-medium text-[#123D46]/60">
+                  en ligne
+                </span>
+              </div>
+              <p className="text-xs text-[#123D46]/60 mt-2">
+                {kpiValues.media.sub}
+              </p>
+            </div>
           </div>
 
           {/* Pipeline Entrant */}
-          <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 24px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(245,158,11,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "#f59e0b" }}>
-                  <Handshake size={16} />
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 shadow-xs">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center">
+                  <Handshake className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Pipeline Entrant</h3>
-                  <p style={{ fontSize: 11, color: "var(--text-3)", margin: 0 }}>Nouvelles demandes à traiter</p>
+                  <h3 className="text-sm font-bold text-[#123D46]">Pipeline Entrant</h3>
+                  <p className="text-[11px] text-[#123D46]/70">Nouvelles demandes à traiter</p>
                 </div>
               </div>
-              <Link href="/dashboard/superadmin/leads">
-                <button className="btn btn-secondary btn-sm" style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12 }}>
-                  Voir tout <ChevronRight size={12} />
-                </button>
+              <Link href="/dashboard/superadmin/leads" className="text-xs font-semibold text-[#00A99D] hover:underline flex items-center gap-1">
+                Voir tout <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12 }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {stats.recentLeads && stats.recentLeads.length > 0 ? (
                 stats.recentLeads.map((lead: any) => (
-                  <div key={lead.id} style={{
-                    background: "var(--bg)", border: "1px solid var(--border)",
-                    borderRadius: 10, padding: "14px 16px",
-                    display: "flex", flexDirection: "column", gap: 8,
-                    transition: "border-color 0.15s",
-                  }}
-                    onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(0,169,157,0.3)")}
-                    onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border)")}
-                  >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text-1)" }}>{lead.organization}</div>
-                      <span className="badge badge-violet" style={{ fontSize: 10 }}>{lead.planType}</span>
+                  <div key={lead.id} className="bg-[#F8F9FA] border border-[#E3EBE6] rounded-xl p-4 flex flex-col gap-2 hover:border-[#00A99D]/30 transition-colors">
+                    <div className="flex justify-between items-start">
+                      <div className="text-sm font-bold text-[#123D46]">{lead.organization}</div>
+                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#5965E8]/10 text-[#5965E8] uppercase">{lead.planType}</span>
                     </div>
-                    <div style={{ fontSize: 12, color: "var(--text-2)", display: "flex", alignItems: "center", gap: 4 }}>
-                      <Users size={11} />
+                    <div className="text-xs text-[#123D46]/70 flex items-center gap-1">
+                      <Users className="w-3.5 h-3.5" />
                       {lead.companySize || lead.populationSize || lead.beneficiaries || "N/A"} personnes
                     </div>
-                    <Link href="/dashboard/superadmin/leads" style={{ marginTop: 4 }}>
-                      <button className="btn btn-primary" style={{ width: "100%", padding: "7px", fontSize: 12 }}>
-                        Inspecter & Convertir
-                      </button>
+                    <Link href="/dashboard/superadmin/leads" className="mt-2 block w-full text-center py-2 rounded-full bg-white border border-[#E3EBE6] text-xs font-bold text-[#123D46] hover:bg-[#00A99D] hover:text-white hover:border-[#00A99D] transition-colors">
+                      Inspecter & Convertir
                     </Link>
                   </div>
                 ))
               ) : (
-                <div style={{ padding: "24px", textAlign: "center", color: "var(--text-3)", fontSize: 13, gridColumn: "1/-1", border: "1px dashed var(--border)", borderRadius: 10 }}>
+                <div className="col-span-full py-8 text-center text-[#123D46]/50 text-xs border border-dashed border-[#E3EBE6] rounded-xl">
                   Aucun lead entrant en attente.
                 </div>
               )}
@@ -219,6 +263,6 @@ export function DashboardClient({ stats, availableRegions }: DashboardClientProp
       {mainTab === "barometre" && (
         <BarometreDashboard availableRegions={availableRegions} />
       )}
-    </>
+    </div>
   );
 }

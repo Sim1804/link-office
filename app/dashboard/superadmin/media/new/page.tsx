@@ -6,7 +6,6 @@ import { ArrowLeft, Save, Loader2, Image as ImageIcon, Headphones } from "lucide
 import Link from "next/link";
 import { TipTapEditor } from "@/components/media/TipTapEditor";
 import { createMediaContent } from "@/app/actions/media";
-import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 
@@ -56,34 +55,34 @@ export default function NewMediaPage() {
   };
 
   return (
-    <div style={{ paddingBottom: 60 }}>
-      <Link href="/dashboard/superadmin/media" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--text-2)", textDecoration: "none", marginBottom: 24, fontSize: 14 }}>
+    <div className="pb-16">
+      <Link href="/dashboard/superadmin/media" className="inline-flex items-center gap-2 text-[#123D46]/70 no-underline mb-6 text-sm hover:text-[#123D46] transition-colors font-medium">
         <ArrowLeft size={16} /> Retour à la médiathèque
       </Link>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+      <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 12 }}>
+          <h1 className="text-3xl font-jakarta font-extrabold text-[#123D46] flex items-center gap-3 tracking-tight">
             Créer un contenu
           </h1>
-          <p style={{ color: "var(--text-2)", marginTop: 8 }}>Ajoutez un nouvel article, podcast ou dossier dans le CMS.</p>
+          <p className="text-[#123D46]/70 mt-2 text-sm">Ajoutez un nouvel article, podcast ou dossier dans le CMS.</p>
         </div>
       </div>
 
       {error && (
-        <div style={{ padding: 16, background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 12, color: "#ef4444", marginBottom: 24 }}>
+        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-500 mb-6">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", gap: 32, alignItems: "flex-start", flexWrap: "wrap" }}>
+      <form onSubmit={handleSubmit} className="flex gap-8 items-start flex-wrap">
         
         {/* Main Column */}
-        <div style={{ flex: "1 1 600px", display: "flex", flexDirection: "column", gap: 24 }}>
-          <div className="card" style={{ padding: 32 }}>
-            <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 24 }}>Informations Générales</h3>
+        <div className="flex-1 min-w-[600px] flex flex-col gap-6">
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl p-8 shadow-xs">
+            <h3 className="text-lg font-bold text-[#123D46] mb-6">Informations Générales</h3>
             
-            <div style={{ marginBottom: 20 }}>
+            <div className="mb-5">
               <Input
                 label="Titre du contenu *"
                 type="text"
@@ -91,26 +90,32 @@ export default function NewMediaPage() {
                 onChange={handleTitleChange}
                 required
                 placeholder="Ex: La solitude des dirigeants"
-                style={{ width: "100%" }}
+                className="w-full"
               />
             </div>
 
-            <div style={{ marginBottom: 20 }}>
-              <label style={{ display: "block", fontSize: 13, color: "var(--text-2)", fontWeight: 600, marginBottom: 8 }}>Slug (URL) *</label>
-              <div style={{ display: "flex", alignItems: "center", background: "var(--surface)", borderRadius: 6, border: "1px solid var(--border-strong)", paddingLeft: 12 }}>
-                <span style={{ color: "var(--text-3)", fontSize: 14 }}>/media/</span>
-                <input type="text" value={form.slug} onChange={e => setForm({...form, slug: e.target.value})} style={{ background: "transparent", border: "none", color: "var(--text-1)", padding: "8px 12px 8px 4px", flexGrow: 1, outline: "none", fontSize: 14 }} required />
+            <div className="mb-5">
+              <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Slug (URL) *</label>
+              <div className="flex items-center bg-[#F8F9FA] rounded-xl border border-[#E3EBE6] pl-3 focus-within:ring-2 focus-within:ring-[#00A99D]/20 overflow-hidden">
+                <span className="text-[#123D46]/50 text-sm">/media/</span>
+                <input type="text" value={form.slug} onChange={e => setForm({...form, slug: e.target.value})} className="bg-transparent border-none text-[#123D46] py-2.5 pr-3 pl-1 grow outline-none text-sm" required />
               </div>
             </div>
 
-            <div style={{ marginBottom: 20 }}>
-              <label style={{ display: "block", fontSize: 13, color: "var(--text-2)", fontWeight: 600, marginBottom: 8 }}>Résumé court</label>
-              <textarea value={form.summary} onChange={e => setForm({...form, summary: e.target.value})} className="input-field" rows={3} placeholder="Sera affiché sur les cartes et pour le SEO..." style={{ width: "100%", resize: "vertical" }} />
+            <div className="mb-5">
+              <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Résumé court</label>
+              <textarea
+                value={form.summary}
+                onChange={e => setForm({...form, summary: e.target.value})}
+                className="w-full px-3 py-2.5 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none text-sm text-[#123D46] resize-y"
+                rows={3}
+                placeholder="Sera affiché sur les cartes et pour le SEO..."
+              />
             </div>
           </div>
 
-          <div className="card" style={{ padding: 32 }}>
-            <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 24 }}>Contenu (WYSIWYG)</h3>
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl p-8 shadow-xs">
+            <h3 className="text-lg font-bold text-[#123D46] mb-6">Contenu (WYSIWYG)</h3>
             <TipTapEditor 
               content={form.content} 
               onChange={(html) => setForm({...form, content: html})}
@@ -118,38 +123,44 @@ export default function NewMediaPage() {
           </div>
 
           {form.mediaType === "PODCAST" && (
-            <div className="card" style={{ padding: 32 }}>
-              <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 24, display: "flex", alignItems: "center", gap: 8 }}>
-                <Headphones size={20} style={{ color: "var(--primary)" }} /> Podcast "La Voix des Éclaireurs"
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-8 shadow-xs">
+              <h3 className="text-lg font-bold text-[#123D46] mb-6 flex items-center gap-2">
+                <Headphones size={20} className="text-[#00A99D]" /> Podcast "La Voix des Éclaireurs"
               </h3>
               
-              <div style={{ marginBottom: 20 }}>
+              <div className="mb-5">
                 <Input
                   label="URL du fichier Audio (mp3)"
                   type="url"
                   value={form.audioUrl}
                   onChange={e => setForm({...form, audioUrl: e.target.value})}
                   placeholder="https://..."
-                  style={{ width: "100%" }}
+                  className="w-full"
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: 13, color: "var(--text-2)", fontWeight: 600, marginBottom: 8 }}>Transcription (Texte brut)</label>
-                <textarea value={form.transcript} onChange={e => setForm({...form, transcript: e.target.value})} className="input-field" rows={8} placeholder="Collez la transcription ici..." style={{ width: "100%", resize: "vertical" }} />
+                <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Transcription (Texte brut)</label>
+                <textarea
+                  value={form.transcript}
+                  onChange={e => setForm({...form, transcript: e.target.value})}
+                  className="w-full px-3 py-2.5 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none text-sm text-[#123D46] resize-y"
+                  rows={8}
+                  placeholder="Collez la transcription ici..."
+                />
               </div>
             </div>
           )}
         </div>
 
         {/* Sidebar Column */}
-        <div style={{ flex: "1 1 300px", maxWidth: 400, display: "flex", flexDirection: "column", gap: 24, position: "sticky", top: 100 }}>
+        <div className="flex-1 min-w-[300px] max-w-[400px] flex flex-col gap-6 sticky top-24">
           
-          <div className="card" style={{ padding: 32 }}>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 20 }}>Publication</h3>
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl p-8 shadow-xs">
+            <h3 className="text-base font-bold text-[#123D46] mb-5">Publication</h3>
             
-            <div style={{ marginBottom: 20 }}>
-              <label style={{ display: "block", fontSize: 13, color: "var(--text-2)", fontWeight: 600, marginBottom: 8 }}>Type de contenu</label>
+            <div className="mb-5">
+              <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Type de contenu</label>
               <Select
                 value={form.mediaType}
                 onChange={(val) => setForm({...form, mediaType: val})}
@@ -163,43 +174,47 @@ export default function NewMediaPage() {
                   { value: "GUIDE", label: "Guide" },
                   { value: "ANALYSE", label: "Analyse" }
                 ]}
-                style={{ width: "100%" }}
+                className="w-full"
               />
             </div>
 
-            <div style={{ marginBottom: 24 }}>
+            <div className="mb-6">
               <Input
                 label="Durée estimée (minutes)"
                 type="number"
                 value={form.duration}
                 onChange={e => setForm({...form, duration: e.target.value})}
                 placeholder="Ex: 15"
-                style={{ width: "100%" }}
+                className="w-full"
               />
             </div>
 
-            <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer", marginBottom: 24, padding: 12, background: "var(--surface)", borderRadius: 6, border: "1px solid var(--surface)" }}>
-              <input type="checkbox" checked={form.published} onChange={e => setForm({...form, published: e.target.checked})} style={{ width: 16, height: 16, accentColor: "var(--primary)" }} />
-              <span style={{ color: "var(--text-1)", fontWeight: 500, fontSize: 14 }}>Publier immédiatement</span>
+            <label className="flex items-center gap-3 cursor-pointer mb-6 p-3 bg-[#F8F9FA] rounded-xl border border-[#E3EBE6] hover:bg-[#FAF9F5] transition-colors">
+              <input type="checkbox" checked={form.published} onChange={e => setForm({...form, published: e.target.checked})} className="w-4 h-4 accent-[#00A99D]" />
+              <span className="text-[#123D46] font-medium text-sm">Publier immédiatement</span>
             </label>
 
-            <Button type="submit" disabled={loading} style={{ width: "100%", justifyContent: "center" }}>
-              {loading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm transition-colors shadow-2xs cursor-pointer disabled:opacity-60"
+            >
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {form.published ? "Publier le contenu" : "Enregistrer le brouillon"}
-            </Button>
+            </button>
           </div>
 
-          <div className="card" style={{ padding: 32 }}>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 20 }}>Visuels</h3>
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl p-8 shadow-xs">
+            <h3 className="text-base font-bold text-[#123D46] mb-5">Visuels</h3>
             
             <div>
-              <label style={{ display: "block", fontSize: 13, color: "var(--text-2)", fontWeight: 600, marginBottom: 8 }}>Image de couverture (URL)</label>
-              <div style={{ display: "flex", alignItems: "center", background: "var(--surface)", borderRadius: 6, border: "1px solid var(--border-strong)", paddingLeft: 12 }}>
-                <ImageIcon size={16} style={{ color: "var(--text-3)" }} />
-                <input type="url" value={form.coverImage} onChange={e => setForm({...form, coverImage: e.target.value})} style={{ background: "transparent", border: "none", color: "var(--text-1)", padding: "8px 12px", flexGrow: 1, outline: "none", fontSize: 14 }} placeholder="https://..." />
+              <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Image de couverture (URL)</label>
+              <div className="flex items-center bg-[#F8F9FA] rounded-xl border border-[#E3EBE6] pl-3 focus-within:ring-2 focus-within:ring-[#00A99D]/20 overflow-hidden">
+                <ImageIcon size={16} className="text-[#123D46]/50" />
+                <input type="url" value={form.coverImage} onChange={e => setForm({...form, coverImage: e.target.value})} className="bg-transparent border-none text-[#123D46] py-2.5 px-3 grow outline-none text-sm" placeholder="https://..." />
               </div>
               {form.coverImage && (
-                <div style={{ marginTop: 12, height: 160, borderRadius: 6, background: `url(${form.coverImage}) center/cover`, border: "1px solid var(--border-strong)" }} />
+                <div className="mt-3 h-40 rounded-xl border border-[#E3EBE6]" style={{ background: `url(${form.coverImage}) center/cover` }} />
               )}
             </div>
           </div>

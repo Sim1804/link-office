@@ -43,7 +43,7 @@ export function Select({ options, value, onChange, placeholder, style, className
         } ${isOpen && !disabled ? "border-[#00A99D] shadow-[0_0_0_4px_rgba(0,169,157,0.1)]" : "shadow-sm"} ${className}`}
         onClick={() => { if (!disabled) setIsOpen(!isOpen); }}
       >
-        <span className={`text-sm truncate ${selectedOption ? (disabled ? "text-[#123D46]/50" : "text-[#123D46]") : "text-[#123D46]/50"}`}>
+        <span className={`truncate ${selectedOption ? (disabled ? "text-[#123D46]/50" : "text-[#123D46]") : "text-[#123D46]/50"}`}>
           {selectedOption ? selectedOption.label : placeholder || "Sélectionner..."}
         </span>
         <ChevronDown 

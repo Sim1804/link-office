@@ -39,8 +39,8 @@ export default async function DashboardPage() {
   const userRole = session.user.role;
   if (userRole === "ADMIN_B2B") redirect("/dashboard/b2b");
   if (userRole === "ADMIN_B2B2C") redirect("/dashboard/b2b2c");
-  if (userRole === "ADMIN_COLLECTIVITE") redirect("/dashboard/b2g");
-  if (userRole === "SUPER_ADMIN") redirect("/admin");
+  if (userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G") redirect("/dashboard/b2g");
+  if (userRole === "SUPER_ADMIN") redirect("/dashboard/superadmin");
 
   const [dbUser, result, history] = await Promise.all([
     prisma.user.findUnique({

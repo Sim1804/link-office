@@ -263,10 +263,10 @@ export const HeroModern: React.FC<HeroModernProps> = ({ onStartTest, onExploreMe
               </div>
 
               {/* View Mode Switcher */}
-              <div className="flex bg-[#F4F1E8] p-0.5 rounded-lg text-[10px] font-jakarta font-bold">
+              <div className="flex bg-[#F4F1E8] p-0.5 rounded-full text-[10px] font-jakarta font-bold">
                 <button
                   onClick={() => setActiveViewMode('equipe')}
-                  className={`px-2.5 py-1 rounded-md transition-colors ${
+                  className={`px-3 py-1 rounded-full transition-colors ${
                     activeViewMode === 'equipe' ? 'bg-white text-[#123D46] shadow-2xs' : 'text-[#123D46]/60 hover:text-[#123D46]'
                   }`}
                 >
@@ -274,7 +274,7 @@ export const HeroModern: React.FC<HeroModernProps> = ({ onStartTest, onExploreMe
                 </button>
                 <button
                   onClick={() => setActiveViewMode('diagnostic')}
-                  className={`px-2.5 py-1 rounded-md transition-colors ${
+                  className={`px-3 py-1 rounded-full transition-colors ${
                     activeViewMode === 'diagnostic' ? 'bg-white text-[#123D46] shadow-2xs' : 'text-[#123D46]/60 hover:text-[#123D46]'
                   }`}
                 >
@@ -282,7 +282,7 @@ export const HeroModern: React.FC<HeroModernProps> = ({ onStartTest, onExploreMe
                 </button>
                 <button
                   onClick={() => setActiveViewMode('iris')}
-                  className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 ${
+                  className={`px-3 py-1 rounded-full transition-colors flex items-center gap-1 ${
                     activeViewMode === 'iris' ? 'bg-white text-[#5965E8] shadow-2xs' : 'text-[#123D46]/60 hover:text-[#5965E8]'
                   }`}
                 >
@@ -409,7 +409,7 @@ export const HeroModern: React.FC<HeroModernProps> = ({ onStartTest, onExploreMe
             {/* Quick interactive test launcher inside the widget */}
             <Link
               href="/auth/register"
-              className="w-full py-2.5 rounded-xl bg-white hover:bg-[#00A99D] hover:text-white text-[#123D46] text-xs font-jakarta font-bold border border-[#E3EBE6] hover:border-[#00A99D] transition-all flex items-center justify-center gap-2 group shadow-2xs no-underline"
+              className="w-full py-2.5 rounded-full bg-white hover:bg-[#00A99D] hover:text-white text-[#123D46] text-xs font-jakarta font-bold border border-[#E3EBE6] hover:border-[#00A99D] transition-all flex items-center justify-center gap-2 group shadow-2xs no-underline"
             >
               <span>Évaluer mon équipe avec l’IQRH</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform">

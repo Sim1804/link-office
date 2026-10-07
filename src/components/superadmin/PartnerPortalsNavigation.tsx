@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Building2, HeartPulse, Landmark } from "lucide-react";
+import { Building2, HeartPulse, Landmark, ArrowRight } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 export function PartnerPortalsNavigation() {
@@ -19,29 +19,40 @@ export function PartnerPortalsNavigation() {
   ];
 
   return (
-    <div className="page-container-wide">
-      {/* Navigation Tabs Bar */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: 6, background: "var(--surface)", borderRadius: 999, border: "1px solid var(--border-strong)", marginBottom: 32, overflowX: "auto" }}>
-        {tabs.map((tab) => {
-          const isActive = pathname === tab.href || pathname.startsWith(tab.href + '/');
-          return (
-            <Link key={tab.href} href={tab.href} style={{ textDecoration: "none", flexShrink: 0 }}>
-              <span style={{
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "10px 20px", fontSize: 14, fontWeight: isActive ? 600 : 500,
-                color: isActive ? "white" : "var(--text-2)",
-                background: isActive ? "var(--primary)" : "transparent",
-                borderRadius: 999,
-                transition: "all 0.2s ease",
-                cursor: "pointer",
-                boxShadow: isActive ? "var(--shadow-glow-cyan)" : "none",
-              }}>
-                <tab.icon size={18} />
-                {tab.name}
-              </span>
-            </Link>
-          );
-        })}
+    <div className="max-w-[1480px] w-full mx-auto px-4 sm:px-8 mt-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-2 bg-white border border-[#E3EBE6] rounded-2xl shadow-2xs">
+        <div className="flex items-center gap-2 px-3 py-1">
+          <span className="w-2 h-2 rounded-full bg-[#FFC629] animate-pulse" />
+          <span className="text-xs font-jakarta font-bold text-[#123D46]">Vue Super Admin</span>
+          <span className="text-[11px] text-[#123D46]/60 hidden sm:inline">— Inspection des portails partenaires :</span>
+        </div>
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+          {tabs.map((tab) => {
+            const isActive = pathname === tab.href || pathname.startsWith(tab.href + '/');
+            return (
+              <Link
+                key={tab.href}
+                href={tab.href}
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-jakarta transition-all whitespace-nowrap ${
+                  isActive
+                    ? 'bg-[#123D46] text-white font-bold shadow-xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8] font-medium'
+                }`}
+              >
+                <tab.icon className="w-3.5 h-3.5" />
+                <span>{tab.name}</span>
+              </Link>
+            );
+          })}
+          <div className="h-4 w-px bg-[#E3EBE6] mx-1 hidden sm:block" />
+          <Link
+            href="/dashboard/superadmin"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-jakarta font-bold text-[#00A99D] hover:bg-[#00A99D]/10 transition-colors whitespace-nowrap"
+          >
+            <span>Retour Console</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -28,13 +28,6 @@ export async function GET(request: Request) {
     select: { organizationId: true },
   });
 
-  if (!user?.organizationId) {
-    return NextResponse.json(
-      { error: "Aucune organisation associée à votre compte." },
-      { status: 404 }
-    );
-  }
-
   let inviteCode = "";
   let organizationName = "";
 
@@ -45,12 +38,23 @@ export async function GET(request: Request) {
       include: { organization: true },
     });
 
-    if (!campaign || campaign.organizationId !== user.organizationId) {
-      return NextResponse.json({ error: "Campagne introuvable ou non autorisée." }, { status: 404 });
+    if (!campaign) {
+      return NextResponse.json({ error: "Campagne introuvable." }, { status: 404 });
     }
+
+    if (campaign.organizationId !== user?.organizationId && session.user.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ error: "Accès non autorisé à cette campagne." }, { status: 403 });
+    }
+
     inviteCode = campaign.id;
-    organizationName = campaign.organization.name;
+    organizationName = campaign.organization?.name || "Organisation";
   } else {
+    if (!user?.organizationId) {
+      return NextResponse.json(
+        { error: "Aucune organisation associée à votre compte." },
+        { status: 404 }
+      );
+    }
     // Cas fallback : B2B générique lié à l'organisation globale
     const org = await prisma.organization.findUnique({
       where: { id: user.organizationId },
@@ -66,13 +70,13 @@ export async function GET(request: Request) {
   const baseUrl = process.env.NEXTAUTH_URL ?? "https://link-office.fr";
   const inviteUrl = `${baseUrl}/join/${inviteCode}`;
 
-  // Générer le QR code en Data URL (PNG base64) pour affichage direct
+  // Générer le QR code en Data URL (PNG base64) avec couleurs hex valides
   const qrCodeDataUrl = await QRCode.toDataURL(inviteUrl, {
     width: 300,
     margin: 2,
     color: {
-      dark: "#1a0533",
-      light: "var(--text-1)",
+      dark: "#123D46",
+      light: "#FFFFFF",
     },
   });
 

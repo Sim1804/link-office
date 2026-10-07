@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LINK OFFICE · Laboratoire du lien humain</title>
+<meta content="LINK OFFICE, laboratoire du lien humain : comprendre, observer, mesurer et agir pour la santé relationnelle grâce au média, au Baromètre, à l’IQRH et aux partenaires." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --paper:#F4F1E8; --paper-2:#E3EBE6; --card:#F4F1E8;
+    --ink:#123D46; --ink-soft:#365D63; --ink-faint:#6D8888;
+    --coral:#00A99D; --coral-deep:#199E9A;
+    --sage:#199E9A; --sage-soft:#4DBDB2;
+    --amber:#FFC629; --violet:#5965E8; --blue:#123D46; --rose:#4DBDB2;
+    --line:rgba(18,61,70,.18); --line-soft:rgba(18,61,70,.10);
+    --shadow:0 1px 2px rgba(18,61,70,.05),0 12px 32px rgba(18,61,70,.08);
+    --shadow-lg:0 2px 6px rgba(18,61,70,.08),0 28px 60px rgba(18,61,70,.15);
+    --r:22px; --r-sm:14px;
+    --serif:"Plus Jakarta Sans",-apple-system,sans-serif;
+    --sans:"Inter",-apple-system,sans-serif;
+    --mono:"Inter",-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background-color:var(--paper);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  ::selection{background:var(--coral);color:#fff}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.05;letter-spacing:-.01em}
+  a{color:inherit;text-decoration:none}
+  button{font-family:var(--sans)}
+  :focus-visible{outline:2.5px solid var(--coral);outline-offset:2px;border-radius:4px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  .mono{font-family:var(--mono)}
+  .sec-title{font-size:clamp(30px,4vw,46px);max-width:800px;font-weight:600}
+  .sec-title em{font-style:italic;color:var(--coral)}
+  .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:8px;background:var(--ink);color:#fff;padding:8px 14px;border-radius:8px;z-index:400}
+  .progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--coral),var(--amber));z-index:400;pointer-events:none;transition:width .1s linear}
+  .announce{background:var(--ink);color:#E3EBE6;font-size:13px;letter-spacing:.02em;text-align:center;padding:9px 16px;font-weight:500;cursor:pointer;transition:.2s}
+  .announce:hover{background:#241f37}
+  .announce b{color:var(--amber)} .announce .go{color:var(--coral);font-weight:700;margin-left:6px}
+  nav{position:sticky;top:0;z-index:80;background:rgba(244,238,227,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;gap:30px;height:70px}
+  .logo{display:flex;align-items:center;gap:11px;font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:-.02em;cursor:pointer;background:none;border:none}
+  .logo .knot{width:30px;height:18px;flex:none}
+  .nav-links{display:flex;gap:24px;margin-left:6px;font-size:14.5px;font-weight:500;color:var(--ink-soft)}
+  .nav-links a{position:relative;padding:4px 0;transition:color .2s;cursor:pointer}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:2px;background:var(--coral);transition:width .25s}
+  .nav-links a:hover{color:var(--ink)} .nav-links a:hover::after,.nav-links a.active::after{width:100%}
+  .nav-links a.active{color:var(--ink);font-weight:600}
+  .nav-cta{margin-left:auto;display:flex;align-items:center;gap:12px}
+  .menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:600;font-size:14.5px;padding:11px 20px;border-radius:100px;border:none;cursor:pointer;transition:.2s;white-space:nowrap}
+  .btn-primary{background:var(--coral);color:#fff;box-shadow:0 6px 18px rgba(240,87,61,.32)}
+  .btn-primary:hover{background:var(--coral-deep);transform:translateY(-1px)}
+  .btn-ghost{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+  .btn-ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn-sm{padding:8px 15px;font-size:13.5px}
+  @media(max-width:960px){
+    .nav-links{display:none;position:absolute;top:70px;left:0;right:0;flex-direction:column;gap:0;background:var(--paper);border-bottom:1px solid var(--line);padding:10px 28px 18px}
+    .nav-links.open{display:flex} .nav-links a{padding:12px 0;border-bottom:1px solid var(--line-soft)}
+    .menu-btn{display:block} .nav-cta .btn span.lbl{display:none}
+  }
+  section{padding:92px 0;position:relative}
+  .alt{background:var(--paper-2)}
+  .tag{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--coral-deep);font-weight:700;margin-bottom:18px}
+  .tag .dot-pair{width:24px;height:8px}
+  .lead{font-size:18px;color:var(--ink-soft);max-width:660px;margin-top:18px;line-height:1.6}
+  .hero{padding:66px 0 78px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:center}
+  .hero h1{font-size:clamp(40px,6vw,76px);font-weight:600}
+  .hero h1 em{font-style:italic;color:var(--coral);font-weight:500}
+  .hero .kicker{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);font-weight:700;margin-bottom:22px}
+  .hero p.sub{font-size:19px;color:var(--ink-soft);margin:24px 0 32px;max-width:480px;line-height:1.6}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+  .trust{display:flex;gap:26px;margin-top:30px;flex-wrap:wrap}
+  .trust .ti{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink)}
+  .trust .tl{font-size:12px;color:var(--ink-faint);line-height:1.3}
+  .scorecard{background:var(--violet);color:#F4F1E8;border-radius:var(--r);padding:28px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+  .scorecard::before{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(240,87,61,.4),transparent 70%)}
+  .sc-top{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;letter-spacing:.06em;color:#E3EBE6;font-family:var(--mono)}
+  .live{display:inline-flex;align-items:center;gap:7px}
+  .live i{width:8px;height:8px;border-radius:50%;background:#4DBDB2;animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(86,210,154,.5)}70%{box-shadow:0 0 0 9px rgba(86,210,154,0)}100%{box-shadow:0 0 0 0 rgba(86,210,154,0)}}
+  .sc-score{font-family:var(--serif);font-size:74px;font-weight:600;line-height:1;margin:14px 0 2px}
+  .sc-score small{font-size:24px;color:#E3EBE6}
+  .sc-label{color:#E3EBE6;font-size:14px}
+  .sc-bar{height:7px;border-radius:6px;background:rgba(255,255,255,.13);margin:20px 0 8px;overflow:hidden}
+  .sc-bar span{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--coral),var(--amber));width:0;transition:width 1.6s cubic-bezier(.2,.7,.2,1)}
+  .sc-foot{display:flex;justify-content:space-between;font-size:12.5px;color:#E3EBE6;font-family:var(--mono)}
+  .ep-mini{display:flex;align-items:center;gap:13px;margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);cursor:pointer;width:100%;background:none;border-left:none;border-right:none;border-bottom:none;text-align:left}
+  .ep-mini .play{width:42px;height:42px;border-radius:50%;background:var(--coral);display:grid;place-items:center;flex:none;transition:.2s}
+  .ep-mini:hover .play{transform:scale(1.07)}
+  .ep-mini .meta{font-size:11px;color:#E3EBE6;font-family:var(--mono);letter-spacing:.05em}
+  .ep-mini .title{font-size:14px;font-weight:600;color:#F4F1E8;margin-top:2px;line-height:1.3}
+  .shock{margin-top:18px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--coral);border-radius:14px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start}
+  .shock .big{font-family:var(--serif);font-size:34px;font-weight:700;color:var(--coral-deep);line-height:1}
+  .shock .txt{font-size:13.5px;color:var(--ink-soft);line-height:1.45} .shock .txt b{color:var(--ink)}
+  @media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:36px}}
+  .arch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px}
+  .brick{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:22px;transition:.22s;position:relative;overflow:hidden;cursor:pointer;text-align:left}
+  .brick:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:#d6c9b2}
+  .brick .top{display:flex;justify-content:space-between;align-items:center}
+  .brick .cat{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);background:#e4efe9;padding:3px 9px;border-radius:6px;font-weight:700}
+  .brick .num{font-family:var(--mono);font-size:12px;color:var(--ink-faint)}
+  .brick .icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;margin:14px 0 12px;background:var(--paper-2);font-size:19px}
+  .brick h4{font-size:18.5px;margin-bottom:6px}
+  .brick p{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+  .brick .url{font-family:var(--mono);font-size:11.5px;color:var(--coral-deep);margin-top:13px;display:inline-flex;align-items:center;gap:6px}
+  @media(max-width:960px){.arch-grid{grid-template-columns:1fr}}
+  @media(min-width:961px) and (max-width:1100px){.arch-grid{grid-template-columns:repeat(2,1fr)}}
+  .flowstrip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:42px;padding:22px 24px;background:var(--card);border:1px dashed var(--line);border-radius:var(--r-sm)}
+  .flowstrip .step{font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:100px;background:var(--paper-2)}
+  .flowstrip .step.hot{background:var(--coral);color:#fff}
+  .flowstrip .arrow{color:var(--ink-faint)} .flowstrip .note{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);margin-left:auto}
+  .filters{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:40px;margin-bottom:8px}
+  .filter-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .filter-group .fl-lab{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);margin-right:2px}
+  .chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);padding:7px 14px;border-radius:100px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.18s}
+  .chip:hover{border-color:var(--ink)}
+  .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .search{margin-left:auto;display:flex;align-items:center;gap:9px;background:var(--card);border:1.5px solid var(--line);border-radius:100px;padding:8px 16px;min-width:210px}
+  .search input{border:none;background:none;outline:none;font-size:14px;font-family:var(--sans);width:100%;color:var(--ink)}
+  .count-line{font-family:var(--mono);font-size:12px;color:var(--ink-faint);margin:16px 0 20px}
+  .dir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:960px){.dir-grid{grid-template-columns:1fr}.search{margin-left:0;width:100%}}
+  @media(min-width:961px) and (max-width:1100px){.dir-grid{grid-template-columns:repeat(2,1fr)}}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:22px;transition:.22s;display:flex;flex-direction:column;position:relative;cursor:pointer}
+  .pcard:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#d6c9b2}
+  .pcard .ph{display:flex;align-items:center;gap:12px;padding-right:30px}
+  .pcard .plogo{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:22px;color:#fff;flex:none}
+  .pcard .pname{font-family:var(--serif);font-size:18px;font-weight:700;line-height:1.1}
+  .pcard .pbase{font-size:12.5px;color:var(--ink-faint)}
+  .pcard .pbody{font-size:13.5px;color:var(--ink-soft);margin:14px 0;line-height:1.5;flex:1}
+  .savebtn{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;font-size:18px;line-height:1;opacity:.5;transition:.18s;z-index:2;color:var(--coral)}
+  .savebtn:hover{opacity:1;transform:scale(1.15)} .savebtn.on{opacity:1}
+  .ltag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px}
+  .lt-score{color:var(--sage);background:#e4efe9}
+  .pmeta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .pmeta .m{font-family:var(--mono);font-size:11px;color:var(--ink-faint);background:var(--paper-2);padding:3px 9px;border-radius:6px}
+  .pcard .pcta{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .link-btn{background:none;border:none;color:var(--coral-deep);font-weight:700;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:0}
+  .link-btn:hover{gap:9px}
+  .empty{grid-column:1/-1;text-align:center;padding:50px;color:var(--ink-faint);font-size:15px}
+  .iqrh-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-top:46px}
+  .dims-list{display:grid;gap:12px}
+  .dimrow{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;transition:.18s}
+  .dimrow:hover{border-color:#d6c9b2;transform:translateX(4px)}
+  .dimrow .dnum{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:17px;flex:none}
+  .dimrow b{font-size:15.5px} .dimrow small{display:block;font-size:13px;color:var(--ink-faint)}
+  .iqrh-cta{background:var(--violet);color:#F4F1E8;border-radius:var(--r);padding:34px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+  .iqrh-cta::after{content:"";position:absolute;right:-50px;bottom:-50px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(232,169,59,.4),transparent 70%)}
+  .iqrh-cta h3{color:#fff;font-size:26px;position:relative} .iqrh-cta p{color:#E3EBE6;font-size:15px;margin:12px 0 22px;position:relative;line-height:1.6}
+  .iqrh-cta .feat{display:flex;gap:18px;margin-bottom:22px;position:relative;flex-wrap:wrap;font-size:13px;color:#E3EBE6}
+  @media(max-width:960px){.iqrh-grid{grid-template-columns:1fr;gap:30px}}
+  .esp-locked{background:var(--card);border:1.5px dashed var(--line);border-radius:var(--r);padding:54px 34px;text-align:center;margin-top:46px}
+  .esp-locked .lk{font-size:36px;margin-bottom:12px}
+  .esp-locked h3{font-size:24px;margin-bottom:8px} .esp-locked p{color:var(--ink-soft);max-width:440px;margin:0 auto 22px;font-size:15px}
+  .esp-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:46px}
+  .esp-grid .span2{grid-column:1/-1}
+  .esp-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow)}
+  .esp-card h3{font-size:19px} .esp-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px}
+  .esp-profile{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+  .esp-arch{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-deep);font-weight:700}
+  .esp-name{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.05;margin:4px 0 8px}
+  .esp-desc{font-size:14px;color:var(--ink-soft);line-height:1.5;max-width:360px}
+  .journal-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line-soft);font-size:14px;color:var(--ink-soft)}
+  .journal-item:last-child{border-bottom:none}
+  .journal-item .jd{font-family:var(--mono);font-size:11px;color:var(--ink-faint);flex:none;width:64px}
+  .journal-item .jx{margin-left:auto;background:none;border:none;color:var(--ink-faint);cursor:pointer;font-size:15px}
+  .journal-item .jx:hover{color:var(--coral)}
+  .j-add{display:flex;gap:8px;margin-top:14px}
+  .j-add input{flex:1;border:1.5px solid var(--line);background:var(--paper);border-radius:100px;padding:9px 15px;font-size:13.5px;font-family:var(--sans);outline:none;color:var(--ink)}
+  .j-add input:focus{border-color:var(--coral)}
+  .defi{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-soft);cursor:pointer}
+  .defi:last-child{border-bottom:none}
+  .defi .ck{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex:none;display:grid;place-items:center;transition:.15s;margin-top:1px;color:#fff;font-size:13px}
+  .defi.done .ck{background:var(--sage);border-color:var(--sage)}
+  .defi .dt{font-size:14px;color:var(--ink-soft)} .defi.done .dt{text-decoration:line-through;color:var(--ink-faint)}
+  .saved-chip{display:inline-flex;align-items:center;gap:9px;background:var(--paper-2);border:1px solid var(--line);border-radius:100px;padding:7px 12px 7px 7px;font-size:13.5px;font-weight:600;margin:0 8px 8px 0;cursor:pointer;transition:.18s}
+  .saved-chip:hover{border-color:var(--ink)} .saved-chip .se{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:13px}
+  @media(max-width:960px){.esp-grid{grid-template-columns:1fr}}
+  .media-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;margin-top:46px}
+  .articles{display:grid;gap:16px}
+  .article-card{display:flex;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:20px;cursor:pointer;transition:.2s;align-items:center}
+  .article-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#d6c9b2}
+  .article-card .acov{width:84px;height:84px;border-radius:12px;flex:none;display:grid;place-items:center;font-size:34px;color:#fff}
+  .article-card .acat{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-deep);font-weight:700}
+  .article-card h4{font-size:18px;margin:5px 0 6px;line-height:1.15}
+  .article-card p{font-size:13px;color:var(--ink-soft);line-height:1.45}
+  .article-card .ameta{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-top:8px}
+  .pod-panel{background:var(--violet);color:#F4F1E8;border-radius:var(--r);padding:26px;box-shadow:var(--shadow)}
+  .pod-panel h3{color:#fff;font-size:20px;margin-bottom:4px}
+  .pod-panel .ps{font-size:13px;color:#E3EBE6;margin-bottom:18px}
+  .pod-item{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.1);cursor:pointer}
+  .pod-item:last-child{border-bottom:none}
+  .pod-item .pplay{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);display:grid;place-items:center;flex:none;transition:.18s}
+  .pod-item:hover .pplay{background:var(--coral)}
+  .pod-item .pt{font-size:14px;font-weight:600;color:#F4F1E8;line-height:1.25} .pod-item .pm{font-family:var(--mono);font-size:11px;color:#9089a8;margin-top:2px}
+  @media(max-width:960px){.media-grid{grid-template-columns:1fr}}
+  .comm-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:24px;margin-top:46px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow)}
+  .panel-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px}
+  .panel-h h3{font-size:21px}
+  .pill{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--sage);background:#e4efe9;padding:4px 10px;border-radius:100px;font-weight:700;white-space:nowrap}
+  .feed-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line-soft)}
+  .feed-item:last-child{border-bottom:none;padding-bottom:0}
+  .ava{width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;color:#fff;font-size:15px}
+  .feed-meta{font-size:12.5px;color:var(--ink-faint)} .feed-meta b{color:var(--ink);font-weight:600;font-size:14px}
+  .feed-body{font-size:14px;color:var(--ink-soft);margin-top:3px;line-height:1.5}
+  .badge-up{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--sage);background:#e4efe9;padding:2px 8px;border-radius:6px;margin-top:7px}
+  .feed-react{display:flex;gap:16px;margin-top:9px;font-size:12.5px;color:var(--ink-faint)}
+  .feed-react button{background:none;border:none;color:inherit;font:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:0;transition:.15s}
+  .feed-react button:hover{color:var(--ink)} .feed-react button.liked{color:var(--coral);font-weight:700}
+  .composer{display:flex;gap:10px;margin-bottom:6px}
+  .composer input{flex:1;border:1.5px solid var(--line);background:var(--paper);border-radius:100px;padding:10px 16px;font-size:13.5px;font-family:var(--sans);outline:none;color:var(--ink)}
+  .composer input:focus{border-color:var(--coral)}
+  .groups{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+  .grp{display:flex;align-items:center;gap:9px;background:var(--paper-2);border:1px solid var(--line);border-radius:100px;padding:8px 14px 8px 9px;font-size:13.5px;font-weight:600;transition:.2s;cursor:pointer}
+  .grp:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)} .grp:hover .grp-n{color:#E3EBE6}
+  .grp .emoji{font-size:16px} .grp-n{font-family:var(--mono);font-size:11px;color:var(--ink-faint);font-weight:400}
+  .ritual{display:flex;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line-soft)}
+  .ritual:last-child{border-bottom:none;padding-bottom:0}
+  .ritual .day{width:54px;flex:none;text-align:center;font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--ink-faint)}
+  .ritual .day b{display:block;font-family:var(--serif);font-size:20px;color:var(--ink);font-weight:700}
+  .ritual .r-body{flex:1;font-size:13px;color:var(--ink-soft)} .ritual .r-body b{font-size:14.5px}
+  .ritual .r-body small{display:block;color:var(--ink-faint);font-size:12px;margin-top:1px}
+  .join{border:1.5px solid var(--sage);color:var(--sage);background:none;border-radius:100px;padding:6px 13px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.18s}
+  .join:hover{background:var(--sage);color:#fff} .join.on{background:var(--sage);color:#fff}
+  .mini-stack{display:grid;gap:24px}
+  .binome{background:var(--violet);color:#F4F1E8;border-radius:var(--r);padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .binome::after{content:"";position:absolute;left:-40px;bottom:-50px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(47,122,102,.5),transparent 70%)}
+  .binome h3{color:#fff;font-size:20px;position:relative}
+  .binome p{font-size:14px;color:#E3EBE6;margin:8px 0 18px;position:relative;line-height:1.5}
+  .match{display:flex;align-items:center;position:relative;margin-bottom:18px}
+  .match .ava{z-index:1;border:3px solid var(--violet)}
+  .match .link-line{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--sage-soft) 0 6px,transparent 6px 12px);margin:0 -6px}
+  .match .wk{margin-left:16px;font-size:12.5px;color:#E3EBE6;font-family:var(--mono)}
+  .btn-white{background:#fff;color:var(--coral-deep);font-weight:700} .btn-white:hover{background:#fff;transform:translateY(-1px)}
+  .forum{margin-top:24px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;box-shadow:var(--shadow)}
+  .forum-row{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--line-soft);cursor:pointer;transition:.15s}
+  .forum-row:hover{padding-left:6px}
+  .forum-row:last-child{border-bottom:none;padding-bottom:0} .forum-row:first-of-type{padding-top:8px}
+  .q{font-size:14.5px;font-weight:600;flex:1} .q small{display:block;font-size:12px;color:var(--ink-faint);font-weight:400;margin-top:2px}
+  .partner-tag{font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--sage);background:#e4efe9;padding:3px 8px;border-radius:6px;white-space:nowrap}
+  @media(max-width:960px){.comm-grid{grid-template-columns:1fr}}
+  .ev-list{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:46px}
+  .ev-item{display:flex;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:22px;align-items:center}
+  .ev-date{width:74px;flex:none;text-align:center;background:var(--paper-2);border-radius:12px;padding:12px 6px}
+  .ev-date b{display:block;font-family:var(--serif);font-size:26px;font-weight:700;line-height:1;color:var(--coral-deep)}
+  .ev-date small{font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--ink-faint)}
+  .ev-body{flex:1} .ev-body h4{font-size:18px} .ev-body .el{font-size:13px;color:var(--ink-soft);margin:3px 0 4px} .ev-body .ep{font-family:var(--mono);font-size:11.5px;color:var(--sage)}
+  @media(max-width:760px){.ev-list{grid-template-columns:1fr}}
+  .dash{background:var(--ink);color:#EDE6F2} .dash .tag{color:var(--amber)} .dash h2{color:#fff} .dash .lead{color:#E3EBE6}
+  .dash-head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:18px}
+  .dash-head .updated{font-family:var(--mono);font-size:12px;color:#6D8888;display:flex;align-items:center;gap:9px}
+  .dcard{background:#221C38;border:1px solid #123D46;border-radius:var(--r);padding:24px}
+  .dcard .dh{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#9089a8;margin-bottom:6px}
+  .drow1{display:grid;grid-template-columns:1.1fr 1fr 1.3fr;gap:20px;margin-top:42px}
+  .gauge-wrap{display:flex;align-items:center;gap:22px}
+  .gauge{position:relative;width:130px;height:130px;flex:none}
+  .gauge .val{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+  .gauge .val b{font-family:var(--serif);font-size:38px;font-weight:700;color:#fff;line-height:1}
+  .gauge .val small{font-family:var(--mono);font-size:10px;color:#6D8888}
+  .gtrend{font-size:13px;color:#E3EBE6;line-height:1.5} .gtrend .up{color:#4DBDB2;font-weight:700;font-family:var(--mono);font-size:13px}
+  .counter b{font-family:var(--serif);font-size:46px;font-weight:700;color:#fff;line-height:1}
+  .counter .c-sub{font-size:13px;color:#9089a8;margin-top:8px} .counter .c-sub em{color:var(--amber);font-style:normal;font-family:var(--mono);font-size:12px}
+  .ctr-mini{height:5px;border-radius:5px;background:#123D46;margin-top:14px;overflow:hidden}
+  .ctr-mini span{display:block;height:100%;background:linear-gradient(90deg,var(--sage-soft),#4DBDB2);width:0;transition:width 1.8s ease}
+  .dshock{background:linear-gradient(135deg,#2c2348,#3a2c5e);border:1px solid #443a64}
+  .dshock .dh{color:var(--amber)}
+  .dshock .ds-big{font-family:var(--serif);font-size:30px;font-weight:700;color:#fff;line-height:1.15;margin:6px 0} .dshock .ds-big em{color:var(--coral);font-style:italic}
+  .dshock p{font-size:13px;color:#E3EBE6}
+  .drow2{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;margin-top:20px}
+  .maplab{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px;flex-wrap:wrap}
+  .mapfilter{display:flex;gap:6px;flex-wrap:wrap}
+  .mfc{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;border:1px solid #443a64;background:none;color:#E3EBE6;border-radius:100px;padding:4px 10px;cursor:pointer;transition:.16s}
+  .mfc:hover{border-color:var(--amber)} .mfc.active{background:var(--amber);color:#191527;border-color:var(--amber);font-weight:700}
+  .hexmap{width:100%;height:auto;display:block}
+  .hex{stroke:#221C38;stroke-width:1.4;transition:fill .4s,filter .15s;cursor:pointer} .hex:hover{filter:brightness(1.18)}
+  .hex.sel{stroke:#fff;stroke-width:2.4}
+  .legend{display:flex;align-items:center;gap:8px;margin-top:14px;font-family:var(--mono);font-size:11px;color:#6D8888}
+  .legend .scale{height:9px;flex:1;border-radius:5px;background:linear-gradient(90deg,#00A99D,#FFC629,#4DBDB2)}
+  .mapsel{font-family:var(--mono);font-size:12px;color:#E3EBE6;margin-top:6px;min-height:16px} .mapsel b{color:#fff}
+  .maptip{position:fixed;pointer-events:none;background:#0f0c1a;border:1px solid #443a64;border-radius:10px;padding:8px 12px;font-size:12.5px;color:#fff;opacity:0;transform:translateY(4px);transition:opacity .12s;z-index:120;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .maptip b{font-family:var(--serif)} .maptip .ms{font-family:var(--mono);font-size:11px;color:#9089a8;display:block}
+  .dim{display:flex;align-items:center;gap:15px;padding:15px 0;border-bottom:1px solid #123D46}
+  .dim:last-child{border-bottom:none;padding-bottom:0} .dim:first-of-type{padding-top:4px}
+  .ring{width:52px;height:52px;flex:none}
+  .dim .dn{font-size:15px;font-weight:600;color:#fff} .dim .dd{font-size:12.5px;color:#9089a8}
+  .dim .dpct{margin-left:auto;font-family:var(--serif);font-size:24px;font-weight:700;color:var(--coral)}
+  .rank{font-family:var(--mono);font-size:11px;color:#6D8888;width:18px}
+  .drow3{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;margin-top:20px}
+  .arch-row{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:13px;cursor:pointer;border-radius:8px;padding:3px 6px;transition:.15s}
+  .arch-row:hover{background:#2a2244}
+  .arch-row .an{width:155px;flex:none;color:#D8D2E6;font-weight:500}
+  .arch-row .track{flex:1;height:22px;background:#123D46;border-radius:7px;overflow:hidden}
+  .arch-row .track span{display:block;height:100%;border-radius:7px;width:0;transition:width 1.3s cubic-bezier(.2,.7,.2,1)}
+  .arch-row .ap{font-family:var(--mono);font-size:12px;color:#E3EBE6;width:40px;text-align:right}
+  .linechart{width:100%;height:auto} .lc-path{fill:none;stroke:var(--amber);stroke-width:2.5;stroke-linecap:round}
+  .lc-area{opacity:0;transition:opacity 1.6s ease .4s} .lc-dot{fill:#fff;stroke:var(--amber);stroke-width:2}
+  .lc-grid{stroke:#123D46;stroke-width:1} .lc-lab{font-family:var(--mono);font-size:9px;fill:#7b748f}
+  .dl-btn{background:none;border:1.5px solid #443a64;color:#E3EBE6;border-radius:100px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:7px}
+  .dl-btn:hover{border-color:var(--amber);color:var(--amber)}
+  @media(max-width:960px){.drow1,.drow2,.drow3{grid-template-columns:1fr}}
+  footer{background:var(--violet);color:#E3EBE6;padding:60px 0 40px}
+  footer .f-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:36px;align-items:flex-start}
+  footer .logo{color:#fff} footer p{font-size:13.5px;max-width:320px;margin-top:14px;line-height:1.6}
+  .f-news{margin-top:18px;display:flex;gap:8px;max-width:340px}
+  .f-news input{flex:1;border:1.5px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);border-radius:100px;padding:10px 16px;color:#fff;font-size:13.5px;font-family:var(--sans);outline:none}
+  .f-news input::placeholder{color:#6D8888} .f-news input:focus{border-color:var(--coral)}
+  footer .f-cols{display:flex;gap:54px;flex-wrap:wrap}
+  footer h5{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6D8888;margin-bottom:14px}
+  footer ul{list-style:none;font-size:13.5px;display:grid;gap:9px}
+  footer ul a{color:#E3EBE6;transition:.2s;cursor:pointer} footer ul a:hover{color:var(--coral)}
+  footer .f-bot{margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:#6D8888;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--mono)}
+  .rv{opacity:1;transform:none;transition:opacity .7s ease, transform .7s ease}
+  .rv.in{opacity:1;transform:none}
+  .overlay{position:fixed;inset:0;background:rgba(20,16,32,.62);backdrop-filter:blur(4px);z-index:200;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 20px}
+  .overlay.show{display:flex}
+  .modal{background:var(--paper);border-radius:24px;max-width:640px;width:100%;box-shadow:var(--shadow-lg);position:relative;animation:pop .3s ease;margin:auto}
+  @keyframes pop{from{transform:scale(.94) translateY(10px);opacity:0}to{transform:none;opacity:1}}
+  .modal-x{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:var(--paper-2);cursor:pointer;font-size:18px;color:var(--ink-soft);z-index:2;transition:.2s}
+  .modal-x:hover{background:var(--ink);color:#fff}
+  .modal-pad{padding:36px}
+  .iq-prog{height:6px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin-bottom:24px}
+  .iq-prog span{display:block;height:100%;background:var(--coral);border-radius:6px;transition:width .35s ease;width:0}
+  .iq-step-lab{font-family:var(--mono);font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+  .iq-q{font-family:var(--serif);font-size:25px;font-weight:600;line-height:1.2;margin-bottom:22px}
+  .iq-opts{display:grid;gap:11px}
+  .iq-opt{text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:15px 18px;font-size:15px;font-weight:500;cursor:pointer;transition:.16s;color:var(--ink);display:flex;align-items:center;gap:12px}
+  .iq-opt:hover{border-color:var(--coral);transform:translateX(3px)}
+  .iq-opt .ix{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none}
+  .iq-opt:hover .ix{border-color:var(--coral)}
+  .iq-back{background:none;border:none;color:var(--ink-faint);font-size:13.5px;cursor:pointer;margin-top:18px;font-weight:600}
+  .iq-back:hover{color:var(--ink)}
+  .iq-intro h2{font-size:30px;margin-bottom:12px} .iq-intro p{color:var(--ink-soft);font-size:15.5px;line-height:1.6;margin-bottom:8px}
+  .iq-feat{display:flex;gap:18px;margin:22px 0 26px;flex-wrap:wrap}
+  .iq-feat div{font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:8px}
+  .res-top{display:flex;align-items:center;gap:24px;margin-bottom:8px;flex-wrap:wrap}
+  .res-arch{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-deep);font-weight:700}
+  .res-name{font-family:var(--serif);font-size:30px;font-weight:700;line-height:1.1;margin:4px 0 8px}
+  .res-desc{font-size:14.5px;color:var(--ink-soft);line-height:1.55}
+  .res-mid{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;margin:24px 0}
+  .res-dims{display:grid;gap:10px}
+  .res-dim{display:flex;align-items:center;gap:12px;font-size:13px}
+  .res-dim .rd-n{width:104px;flex:none;color:var(--ink-soft);font-weight:600}
+  .res-dim .rd-t{flex:1;height:14px;background:var(--paper-2);border-radius:6px;overflow:hidden}
+  .res-dim .rd-t span{display:block;height:100%;border-radius:6px}
+  .res-dim .rd-v{font-family:var(--mono);font-size:12px;width:30px;text-align:right;color:var(--ink-faint)}
+  .res-reco h4{font-family:var(--mono);font-size:12.5px;color:var(--ink-faint);margin:6px 0 12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .reco-card{display:flex;align-items:center;gap:13px;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:13px 15px;margin-bottom:10px;cursor:pointer;transition:.16s}
+  .reco-card:hover{border-color:var(--coral);transform:translateX(3px)}
+  .reco-card .rl{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:19px;flex:none}
+  .reco-card .rn{font-weight:700;font-size:14.5px} .reco-card .rb{font-size:12px;color:var(--ink-faint)}
+  .res-actions{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+  @media(max-width:560px){.res-mid{grid-template-columns:1fr;justify-items:center}}
+  .pm-hero{display:flex;align-items:center;gap:16px;margin-bottom:18px;padding-right:30px}
+  .pm-logo{width:60px;height:60px;border-radius:15px;display:grid;place-items:center;color:#fff;font-size:28px;flex:none}
+  .pm-name{font-family:var(--serif);font-size:26px;font-weight:700;line-height:1.05}
+  .pm-base{font-size:13.5px;color:var(--ink-faint)}
+  .pm-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .pm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+  .pm-stat{background:var(--paper-2);border-radius:12px;padding:12px;text-align:center}
+  .pm-stat b{font-family:var(--serif);font-size:22px;display:block;line-height:1} .pm-stat small{font-size:11px;color:var(--ink-faint)}
+  .pm-sec{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);margin:18px 0 8px;font-weight:700}
+  .pm-txt{font-size:14px;color:var(--ink-soft);line-height:1.55}
+  .pm-quote{background:var(--card);border-left:3px solid var(--sage);border-radius:0 12px 12px 0;padding:14px 16px;font-size:14px;color:var(--ink-soft);font-style:italic;margin-top:8px}
+  .pm-who{display:flex;gap:8px;flex-wrap:wrap}
+  .pm-who span{font-size:12.5px;background:#e4efe9;color:var(--sage);padding:4px 11px;border-radius:100px;font-weight:600}
+  .pm-actions{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+  .read-cat{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-deep);font-weight:700}
+  .read-title{font-family:var(--serif);font-size:30px;font-weight:700;line-height:1.1;margin:6px 0 8px}
+  .read-meta{font-family:var(--mono);font-size:12px;color:var(--ink-faint);margin-bottom:18px}
+  .read-body p{font-size:15px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px}
+  .read-body p:first-of-type::first-letter{font-family:var(--serif);font-size:50px;float:left;line-height:.8;padding:4px 10px 0 0;color:var(--coral)}
+  .toasts{position:fixed;bottom:24px;right:24px;z-index:300;display:flex;flex-direction:column;gap:10px;max-width:330px}
+  .toast{background:var(--ink);color:#F4F1E8;padding:14px 18px;border-radius:14px;font-size:13.5px;box-shadow:var(--shadow-lg);display:flex;gap:11px;align-items:flex-start;animation:slidein .3s ease;line-height:1.4}
+  .toast .ti{color:var(--sage-soft);font-size:16px;flex:none;margin-top:1px}
+  @keyframes slidein{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+  .toast.out{animation:slideout .3s ease forwards}
+  @keyframes slideout{to{transform:translateX(40px);opacity:0}}
+  .player{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#F4F1E8;z-index:190;transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.7,.2,1);box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+  .player.show{transform:none}
+  .player-in{max-width:1180px;margin:0 auto;padding:12px 28px;display:flex;align-items:center;gap:16px}
+  .player .pp{width:44px;height:44px;border-radius:50%;background:var(--coral);border:none;cursor:pointer;display:grid;place-items:center;flex:none;color:#fff}
+  .player .pinfo{min-width:0} .player .pep{font-family:var(--mono);font-size:10.5px;color:#9089a8;letter-spacing:.05em}
+  .player .ptit{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .player .ptrack{flex:1;height:5px;background:#123D46;border-radius:5px;overflow:hidden;cursor:pointer}
+  .player .ptrack span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--amber))}
+  .player .ptime{font-family:var(--mono);font-size:12px;color:#9089a8;flex:none}
+  .player .pclose{background:none;border:none;color:#9089a8;cursor:pointer;font-size:18px;flex:none}
+  .player .pclose:hover{color:#fff}
+  @media(max-width:640px){.player .ptime{display:none}.player-in{padding:10px 16px;gap:10px}}
+  .iris-launch{position:fixed;left:24px;bottom:24px;z-index:185;display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border:none;border-radius:100px;padding:11px 18px 11px 12px;cursor:pointer;box-shadow:var(--shadow-lg);transition:.2s;font-weight:600;font-size:14px}
+  .iris-launch:hover{transform:translateY(-2px)}
+  .iris-launch .ib{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--amber));display:grid;place-items:center;font-size:15px}
+  body.player-open .iris-launch{bottom:96px}
+  .iris-panel{position:fixed;left:24px;bottom:24px;width:360px;max-width:calc(100vw - 32px);height:520px;max-height:calc(100vh - 48px);background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-lg);z-index:186;display:none;flex-direction:column;overflow:hidden}
+  .iris-panel.show{display:flex;animation:pop .25s ease}
+  body.player-open .iris-panel{bottom:96px}
+  .iris-head{background:var(--ink);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px}
+  .iris-head .ib{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--amber));display:grid;place-items:center;font-size:17px;flex:none}
+  .iris-head .it b{font-size:15px;display:block} .iris-head .it small{font-size:11.5px;color:#E3EBE6}
+  .iris-head .ix{margin-left:auto;background:none;border:none;color:#E3EBE6;cursor:pointer;font-size:20px}
+  .iris-head .ix:hover{color:#fff}
+  .iris-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+  .imsg{max-width:84%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.45}
+  .imsg.bot{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start;color:var(--ink-soft)}
+  .imsg.user{background:var(--ink);color:#F4F1E8;border-bottom-right-radius:4px;align-self:flex-end}
+  .imsg b{color:var(--ink);font-weight:700} .imsg.user b{color:#fff}
+  .iris-quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 10px}
+  .iqk{font-size:12.5px;border:1.5px solid var(--line);background:var(--card);border-radius:100px;padding:6px 12px;cursor:pointer;color:var(--ink-soft);font-weight:600;transition:.16s}
+  .iqk:hover{border-color:var(--coral);color:var(--coral-deep)}
+  .iris-input{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+  .iris-input input{flex:1;border:1.5px solid var(--line);background:var(--card);border-radius:100px;padding:10px 15px;font-size:13.5px;font-family:var(--sans);outline:none;color:var(--ink)}
+  .iris-input input:focus{border-color:var(--coral)}
+  .iris-input button{background:var(--coral);border:none;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;flex:none;display:grid;place-items:center}
+  @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.05ms!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+  @media(max-width:560px){.toasts{left:16px;right:16px;max-width:none} .modal-pad{padding:26px 22px} .iris-launch span.ilt{display:none}}
+
+/* === LINK OFFICE · VERSION SANTE RELATIONNELLE / COMA === */
+.health-kicker{display:inline-flex;align-items:center;gap:9px;padding:8px 12px;border-radius:999px;background:#fff;border:1px solid rgba(25,21,39,.12);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#5f5870;box-shadow:0 8px 30px rgba(32,25,55,.06)}
+.hero-health{max-width:780px;font-size:18px;line-height:1.72;color:#5f5870;margin:22px 0 4px}.hero-health strong{color:#191527}.hero-health em{color:var(--coral-deep);font-style:normal;font-weight:700}
+.coma-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:22px;max-width:640px}.coma-mini div{background:#fff;border:1px solid rgba(25,21,39,.1);border-radius:14px;padding:10px 11px;box-shadow:0 8px 28px rgba(24,19,42,.05)}.coma-mini b{font-family:var(--display);font-size:23px;margin-right:4px;color:#00A99D}.coma-mini span{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.coma-intro{text-align:center;max-width:820px;margin:0 auto 34px}.coma-intro .sec-title{max-width:none}.coma-path{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;position:relative}.coma-card{position:relative;text-align:left;border:0;border-radius:26px;padding:26px;min-height:310px;background:#fff;box-shadow:0 18px 55px rgba(25,21,39,.09);cursor:pointer;overflow:hidden;transition:.25s}.coma-card:hover{transform:translateY(-6px);box-shadow:0 25px 70px rgba(25,21,39,.14)}.coma-letter{font-family:var(--display);font-size:88px;line-height:.85;color:rgba(240,87,61,.14);position:absolute;right:16px;top:18px}.coma-card .verb{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#8a8398}.coma-card h3{font-family:var(--display);font-size:29px;margin:42px 0 10px}.coma-card p{font-size:14px;line-height:1.6;color:#6f687d}.coma-card .go{position:absolute;left:26px;bottom:24px;font-weight:800;color:var(--coral-deep)}.coma-card.o{background:#211b39;color:#fff}.coma-card.o p,.coma-card.o .verb{color:#bbb4cb}.coma-card.o .coma-letter{color:rgba(255,255,255,.08)}.coma-card.m{background:linear-gradient(145deg,#00A99D,#D93D25);color:#fff}.coma-card.m p,.coma-card.m .verb{color:#ffe2dc}.coma-card.m .coma-letter{color:rgba(255,255,255,.12)}.coma-card.m .go,.coma-card.o .go{color:#fff}.coma-card.a{background:#eaf4ef}.coma-card.a .coma-letter{color:rgba(47,122,102,.13)}
+.section-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--coral-deep);font-weight:800;margin-bottom:10px}.media-manifesto{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;margin:28px 0 34px}.media-lead-card{background:#191527;border-radius:28px;padding:34px;color:#fff;min-height:280px;position:relative;overflow:hidden}.media-lead-card:after{content:'ÉCLAIRER';position:absolute;right:-4px;bottom:-18px;font-family:var(--display);font-size:90px;color:rgba(255,255,255,.05)}.media-lead-card h3{font-family:var(--display);font-size:38px;margin:10px 0 14px;max-width:620px}.media-lead-card p{color:#d6d1df;line-height:1.7;max-width:620px}.media-side-card{border-radius:28px;padding:30px;background:#f6ddd6}.media-side-card .big-quote{font-family:var(--display);font-size:31px;line-height:1.08;margin:28px 0 16px}.media-side-card p{color:#6f687d;line-height:1.6}
+.podcast-brand{display:flex;gap:14px;align-items:center;margin-bottom:18px}.podcast-mark{width:52px;height:52px;border-radius:50%;background:#00A99D;display:grid;place-items:center;color:white;font-size:22px;box-shadow:0 10px 28px rgba(240,87,61,.28)}.podcast-brand h3{margin:0!important}.podcast-brand small{display:block;color:#8a8398;margin-top:4px}.eclaireur-note{margin:14px 0 18px;padding:14px 16px;border-radius:14px;background:#fff7f4;border-left:4px solid #00A99D;font-size:13px;line-height:1.55;color:#5f5870}.eclaireur-note b{color:#191527}
+.partner-principle{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0 28px}.partner-level{border:1px solid rgba(25,21,39,.1);border-radius:18px;padding:20px;background:#fff}.partner-level.premium{background:#191527;color:#fff}.partner-level h4{font-family:var(--display);font-size:23px;margin:0 0 8px}.partner-level p{font-size:13px;line-height:1.55;color:#756e82}.partner-level.premium p{color:#cfc9d9}.premium-badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:#fff0ec;color:#199E9A;font-size:10px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px}.premium-badge.dark{background:#00A99D;color:#fff}
+.reveal-line{height:2px;background:linear-gradient(90deg,#2b2347,#00A99D,#FFC629,#199E9A);margin:0;opacity:.75}
+@media(max-width:900px){.coma-path{grid-template-columns:1fr 1fr}.media-manifesto{grid-template-columns:1fr}.coma-mini{grid-template-columns:1fr 1fr}.partner-principle{grid-template-columns:1fr}}
+@media(max-width:560px){.coma-path{grid-template-columns:1fr}.coma-card{min-height:250px}.coma-mini{grid-template-columns:1fr 1fr}.hero-health{font-size:16px}}
+
+
+/* V3 · refinements requested */
+.nav-links a{font-size:12px;white-space:nowrap}
+.hero{padding-top:92px}
+.hero h1{max-width:650px}
+.health-kicker{margin-bottom:18px}
+.shock{display:none}
+.coma-vertical{display:flex;flex-direction:column;gap:7px}
+.coma-v-row{display:grid;grid-template-columns:48px 1fr;align-items:center;gap:12px}
+.coma-v-letter{font-family:var(--serif);font-style:italic;font-weight:800;font-size:36px;line-height:1;color:var(--coral)}
+.coma-v-verb{text-transform:uppercase;letter-spacing:.12em;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink)}
+.coma-v-text{padding-top:10px;border-top:1px solid rgba(25,21,39,.12);font-size:13px;line-height:1.55;color:var(--ink-soft)}
+.partner-legend{display:flex;gap:18px;align-items:center;margin:10px 0 20px;font-size:12px;color:var(--ink-soft);font-family:var(--mono)}
+.level-symbol{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;margin-right:5px;font-size:15px}
+.level-symbol.standard{border:1px solid #b8b1c5;color:#7f778d;background:#fff}
+.level-symbol.plus{background:#fff0eb;color:var(--coral);border:1px solid #f3c1b4}
+.ph{position:relative}
+.partner-level-mark{margin-left:auto;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;font-weight:800;flex:0 0 auto}
+.partner-level-mark.standard{border:1px solid #c9c3d2;color:#81798f;background:#fff}
+.partner-level-mark.plus{color:var(--coral);background:#fff0eb;border:1px solid #f3c1b4}
+.map-explainer{margin:12px 0 2px;padding:10px 12px;border-radius:10px;background:#292242;color:#cfc9de;font-size:12px;line-height:1.5}
+#barometre .legend span{max-width:145px}
+.f-cols{grid-template-columns:repeat(4,minmax(120px,1fr))}
+#ecosysteme .coma-path{margin-top:28px}
+@media(max-width:1000px){
+  .nav-links a{font-size:11px}
+  .f-cols{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:720px){
+  .coma-v-row{grid-template-columns:42px 1fr}
+  .coma-v-letter{font-size:32px}
+  .partner-legend{flex-wrap:wrap}
+  .f-cols{grid-template-columns:1fr 1fr}
+}
+
+
+/* V4 · Hero COMA selon le format de référence */
+.hero-grid{grid-template-columns:1.05fr .95fr;gap:44px}
+.hero-intro{display:flex;flex-direction:column;justify-content:center}
+.hero-intro .health-kicker{
+  align-self:flex-start;
+  margin-bottom:24px;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  padding:0;
+  color:#70687e;
+  letter-spacing:.1em;
+}
+.coma-hero{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  width:100%;
+}
+.coma-hero-item{
+  appearance:none;
+  border:1px solid rgba(25,21,39,.09);
+  background:#fff;
+  min-height:94px;
+  border-radius:16px;
+  padding:14px 12px 12px;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:0 9px 24px rgba(36,27,54,.08);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.coma-hero-item:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 28px rgba(36,27,54,.12);
+  border-color:rgba(240,87,61,.28);
+}
+.coma-hero-item span{
+  display:inline-block;
+  font-family:var(--sans);
+  font-size:28px;
+  line-height:1;
+  font-weight:700;
+  color:var(--coral);
+  margin-right:5px;
+}
+.coma-hero-item b{
+  font-family:var(--sans);
+  font-size:11px;
+  line-height:1.1;
+  letter-spacing:.02em;
+  color:var(--ink);
+}
+.coma-hero-item small{
+  display:block;
+  margin-top:11px;
+  font-family:var(--mono);
+  font-size:10px;
+  color:#8a8398;
+  line-height:1.25;
+}
+.coma-hero-caption{
+  font-family:var(--serif);
+  font-size:20px;
+  font-style:italic;
+  color:var(--ink-soft);
+  margin:20px 0 26px;
+  line-height:1.45;
+}
+#dimsList .dimrow>div:last-child{
+  display:flex;
+  align-items:center;
+  min-height:38px;
+}
+#dimsList .dimrow small{display:none!important}
+.partner-legend{display:none!important}
+footer .f-top>div:first-child p{
+  max-width:510px;
+  line-height:1.62;
+}
+footer .f-top>div:first-child p strong{
+  color:#fff;
+  font-weight:650;
+}
+@media(max-width:1100px){
+  .coma-hero{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:960px){
+  .hero-grid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .coma-hero{grid-template-columns:1fr 1fr;gap:8px}
+  .coma-hero-item{min-height:86px;padding:12px 10px}
+  .coma-hero-item span{font-size:25px}
+  .coma-hero-item b{font-size:10px}
+  .coma-hero-caption{font-size:18px}
+}
+
+
+/* V5 · Charte graphique LINK OFFICE 2026 */
+body{
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(circle at 88% 7%, rgba(255,198,41,.14), transparent 10%),
+    radial-gradient(circle at 80% 12%, rgba(0,169,157,.08), transparent 20%);
+}
+h1,h2,h3,h4,.sec-title{font-family:"Plus Jakarta Sans",sans-serif}
+.health-kicker,.tag,.mono,.dh,.updated,.fl-lab{font-family:"Inter",sans-serif}
+.site-main-title{
+  font-family:"Plus Jakarta Sans",sans-serif;
+  font-size:clamp(34px,5vw,64px);
+  max-width:760px;
+  margin:0 0 24px;
+  color:var(--ink);
+  line-height:1.06;
+  letter-spacing:-.035em;
+  font-weight:700;
+}
+.site-main-title span{
+  color:var(--coral);
+  font-weight:600;
+}
+.brand-logo{
+  width:auto!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.brand-logo img{
+  display:block;
+  width:154px;
+  height:auto;
+  object-fit:contain;
+}
+nav{
+  background:rgba(244,241,232,.92);
+  border-bottom:1px solid rgba(18,61,70,.13);
+}
+.nav-links{
+  align-items:stretch;
+  gap:9px;
+}
+.nav-links a{
+  min-width:104px;
+  padding:8px 11px 7px;
+  border-radius:11px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  line-height:1.1;
+}
+.nav-links a strong{
+  font-family:"Plus Jakarta Sans",sans-serif;
+  font-size:10.5px;
+  letter-spacing:.035em;
+  color:var(--ink);
+}
+.nav-links a small{
+  font-family:"Inter",sans-serif;
+  margin-top:5px;
+  font-size:10.5px;
+  color:var(--coral-deep);
+  font-weight:600;
+}
+.nav-links a::after{background:var(--coral)}
+.nav-links a:hover{background:rgba(227,235,230,.65)}
+.btn-primary{
+  background:var(--coral);
+  color:#F4F1E8;
+  box-shadow:0 8px 20px rgba(0,169,157,.22)
+}
+.btn-primary:hover{background:var(--coral-deep)}
+.btn-ghost{border-color:var(--ink);color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--paper)}
+.hero{
+  background:
+    linear-gradient(115deg,rgba(244,241,232,.98) 0%,rgba(244,241,232,.9) 58%,rgba(227,235,230,.74) 100%);
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  right:-40px;
+  top:40px;
+  width:44%;
+  height:72%;
+  opacity:.22;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 15% 28%,#00A99D 0 3px,transparent 4px),
+    radial-gradient(circle at 38% 47%,#5965E8 0 3px,transparent 4px),
+    radial-gradient(circle at 61% 28%,#4DBDB2 0 3px,transparent 4px),
+    radial-gradient(circle at 78% 58%,#123D46 0 3px,transparent 4px),
+    radial-gradient(circle at 92% 32%,#FFC629 0 4px,transparent 5px);
+  border-radius:50%;
+}
+.coma-hero-item{
+  background:var(--paper);
+  border-color:rgba(18,61,70,.10);
+}
+.coma-hero-item:nth-child(1) span{color:#00A99D}
+.coma-hero-item:nth-child(2) span{color:#4DBDB2}
+.coma-hero-item:nth-child(3) span{color:#FFC629}
+.coma-hero-item:nth-child(4) span{color:#5965E8}
+.coma-hero-item small{color:var(--ink-soft)}
+.coma-hero-caption{font-style:normal;color:var(--ink-soft);font-family:"Inter",sans-serif}
+.scorecard{
+  background:#123D46;
+  color:#F4F1E8;
+}
+.scorecard::before{
+  background:radial-gradient(circle,rgba(255,198,41,.28),transparent 70%);
+}
+.sc-top,.sc-label,.ep-mini .meta{color:#E3EBE6}
+.sc-kpis{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:17px 0 3px;
+}
+.sc-kpis div{
+  padding:10px 9px;
+  border:1px solid rgba(227,235,230,.17);
+  border-radius:11px;
+  background:rgba(227,235,230,.07);
+}
+.sc-kpis b{
+  display:block;
+  color:#FFC629;
+  font-family:"Plus Jakarta Sans",sans-serif;
+  font-size:18px;
+  line-height:1.1;
+}
+.sc-kpis span{
+  display:block;
+  color:#E3EBE6;
+  font-size:9.5px;
+  line-height:1.25;
+  margin-top:4px;
+}
+.scorecard .sc-bar span{
+  background:linear-gradient(90deg,#00A99D,#4DBDB2,#FFC629)
+}
+.dash{background:#123D46}
+.dash .sec-title,.dash .dh,.dash .dn{color:#F4F1E8}
+.dash .lead,.dash .dd,.dash .updated{color:#E3EBE6}
+.dcard{
+  border-color:rgba(227,235,230,.15)!important;
+}
+.observer-snapshot{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin:30px 0 22px;
+}
+.observer-kpi{
+  border-radius:16px;
+  padding:18px 18px 16px;
+  border:1px solid rgba(227,235,230,.16);
+  background:rgba(227,235,230,.07);
+}
+.observer-kpi span{
+  display:block;
+  color:#E3EBE6;
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+}
+.observer-kpi strong{
+  display:block;
+  font-family:"Plus Jakarta Sans",sans-serif;
+  font-size:31px;
+  color:#FFC629;
+  line-height:1.05;
+  margin:9px 0 6px;
+}
+.observer-kpi strong small{font-size:14px;color:#E3EBE6}
+.observer-kpi em{
+  display:block;
+  font-style:normal;
+  font-size:10.5px;
+  color:#4DBDB2;
+}
+.alt{background:#E3EBE6}
+.iqrh-cta{background:#5965E8!important}
+#annuaire{background:#F4F1E8}
+.binome-card{
+  display:grid;
+  grid-template-columns:72px 1fr;
+  gap:18px;
+  align-items:center;
+  margin:28px 0 30px;
+  padding:20px 22px;
+  border:1px solid rgba(18,61,70,.14);
+  border-radius:18px;
+  background:#E3EBE6;
+}
+.binome-icon{
+  position:relative;
+  height:58px;
+  width:66px;
+}
+.binome-icon span{
+  position:absolute;
+  top:7px;
+  width:24px;
+  height:24px;
+  border:3px solid #00A99D;
+  border-radius:50%;
+  background:#F4F1E8;
+}
+.binome-icon span:first-child{left:5px}
+.binome-icon span:nth-child(2){right:5px;border-color:#5965E8}
+.binome-icon i{
+  position:absolute;
+  left:23px;
+  top:33px;
+  width:23px;
+  height:2px;
+  background:#FFC629;
+  transform:rotate(-8deg);
+}
+.binome-eyebrow{
+  color:#00A99D;
+  text-transform:uppercase;
+  font-size:10px;
+  letter-spacing:.1em;
+  font-weight:700;
+}
+.binome-card h3{
+  color:#123D46;
+  font-size:22px;
+  margin:2px 0 5px;
+}
+.binome-card p{
+  color:#365D63;
+  font-size:13.5px;
+  max-width:760px;
+}
+footer{background:#123D46;color:#E3EBE6}
+footer .logo{color:#F4F1E8}
+footer h5,footer .f-bot{color:#4DBDB2}
+footer ul a,footer p{color:#E3EBE6}
+footer ul a:hover{color:#FFC629}
+footer .brand-logo img{
+  background:#F4F1E8;
+  border-radius:7px;
+  padding:5px 8px;
+}
+@media(max-width:1000px){
+  .observer-snapshot{grid-template-columns:1fr 1fr}
+}
+@media(max-width:960px){
+  .nav-links a{min-width:0;border-radius:0}
+  .nav-links a strong{font-size:12px}
+  .nav-links a small{font-size:11px}
+  .hero::after{opacity:.10;width:70%}
+}
+@media(max-width:620px){
+  .observer-snapshot{grid-template-columns:1fr 1fr}
+  .sc-kpis{grid-template-columns:1fr}
+  .binome-card{grid-template-columns:1fr}
+}
+
+
+/* V6 · application renforcée de la charte LINK OFFICE 2026 */
+body{
+  background:#F4F1E8!important;
+  color:#123D46!important;
+  font-family:"Inter",sans-serif!important;
+}
+h1,h2,h3,h4,h5,.sec-title,.site-main-title{
+  font-family:"Plus Jakarta Sans",sans-serif!important;
+}
+.site-main-title{
+  font-size:clamp(31px,4.8vw,58px)!important;
+  color:#123D46!important;
+  letter-spacing:-.035em!important;
+  max-width:880px!important;
+  margin-bottom:14px!important;
+}
+.coma-hero-caption{
+  color:#199E9A!important;
+  font-size:18px!important;
+  font-style:normal!important;
+  margin:0 0 22px!important;
+}
+.coma-hero{margin-top:0!important}
+.coma-hero-item{
+  background:#F4F1E8!important;
+  border:1px solid rgba(18,61,70,.13)!important;
+}
+.coma-hero-item b{color:#123D46!important}
+.coma-hero-item small{color:#365D63!important}
+
+nav{
+  background:rgba(244,241,232,.96)!important;
+  border-color:rgba(18,61,70,.12)!important;
+}
+.brand-logo img{
+  width:165px!important;
+  height:auto!important;
+  background:transparent!important;
+  padding:0!important;
+  border-radius:0!important;
+}
+.nav-links a strong{color:#123D46!important}
+.nav-links a small{color:#00A99D!important}
+
+.hero{
+  background:
+    radial-gradient(circle at 83% 22%,rgba(255,198,41,.18),transparent 12%),
+    radial-gradient(circle at 75% 22%,rgba(77,189,178,.10),transparent 25%),
+    linear-gradient(115deg,#F4F1E8 0%,#F4F1E8 64%,#E3EBE6 100%)!important;
+}
+
+.btn-primary{background:#00A99D!important;color:#F4F1E8!important}
+.btn-primary:hover{background:#199E9A!important}
+.btn-ghost{border-color:#123D46!important;color:#123D46!important}
+
+.scorecard,
+.dash{
+  background:#123D46!important;
+}
+.scorecard{
+  border:1px solid rgba(227,235,230,.15)!important;
+}
+.sc-top,.sc-label{color:#E3EBE6!important}
+.sc-score{color:#F4F1E8!important}
+.sc-score small{color:#4DBDB2!important}
+.ep-mini{
+  background:rgba(227,235,230,.08)!important;
+  border-color:rgba(227,235,230,.14)!important;
+}
+.ep-mini .meta{color:#4DBDB2!important}
+.ep-mini .title{color:#F4F1E8!important}
+
+#barometre .dcard{
+  background:#174B55!important;
+  border:1px solid rgba(227,235,230,.16)!important;
+  color:#F4F1E8!important;
+  box-shadow:none!important;
+}
+#barometre .dh,
+#barometre .dn,
+#barometre .cnum,
+#barometre .gnum{
+  color:#F4F1E8!important;
+}
+#barometre .dd,
+#barometre .c-sub,
+#barometre .gtrend,
+#barometre .mapsel{
+  color:#E3EBE6!important;
+}
+#barometre .dpct,
+#barometre .dshock em{
+  color:#FFC629!important;
+}
+#barometre .dshock{
+  background:#5965E8!important;
+}
+#barometre .map-explainer{
+  background:rgba(227,235,230,.08)!important;
+  color:#E3EBE6!important;
+}
+#barometre .mfc{
+  color:#E3EBE6!important;
+  border-color:rgba(227,235,230,.20)!important;
+}
+#barometre .mfc.active{
+  background:#FFC629!important;
+  color:#123D46!important;
+}
+#barometre .legend{display:none!important}
+#barometre .ring circle:first-child{stroke:rgba(227,235,230,.16)!important}
+#barometre .dl-btn{
+  color:#E3EBE6!important;
+  border-color:rgba(227,235,230,.24)!important;
+  background:transparent!important;
+}
+#barometre .dl-btn:hover{background:rgba(227,235,230,.08)!important}
+
+.observer-kpi{
+  background:#174B55!important;
+  border-color:rgba(227,235,230,.16)!important;
+}
+.observer-kpi strong{color:#FFC629!important}
+.observer-kpi em{color:#4DBDB2!important}
+
+.arch-static-row{
+  display:grid;
+  grid-template-columns:150px 1fr 38px;
+  gap:10px;
+  align-items:center;
+  margin:10px 0;
+}
+.arch-static-name{
+  color:#E3EBE6;
+  font-size:10px;
+  line-height:1.15;
+}
+.arch-static-track{
+  height:8px;
+  background:rgba(227,235,230,.12);
+  border-radius:99px;
+  overflow:hidden;
+}
+.arch-static-track i{
+  display:block;
+  height:100%;
+  border-radius:99px;
+}
+.arch-static-val{
+  color:#F4F1E8;
+  text-align:right;
+  font-size:10px;
+}
+
+.alt{background:#E3EBE6!important}
+.iqrh-cta{background:#5965E8!important;color:#F4F1E8!important}
+.iqrh-cta h3,.iqrh-cta p{color:#F4F1E8!important}
+.iqrh-cta .feat span{
+  background:rgba(244,241,232,.12)!important;
+  color:#F4F1E8!important;
+}
+.btn-white{background:#F4F1E8!important;color:#123D46!important}
+.dimrow{
+  background:#F4F1E8!important;
+  border-color:rgba(18,61,70,.12)!important;
+}
+.dimrow b{color:#123D46!important}
+
+#annuaire{background:#F4F1E8!important}
+.binome-card{
+  background:#E3EBE6!important;
+  border-color:rgba(18,61,70,.12)!important;
+}
+.binome-card h3{color:#123D46!important}
+.binome-eyebrow{color:#00A99D!important}
+.chip.active{
+  background:#00A99D!important;
+  color:#F4F1E8!important;
+  border-color:#00A99D!important;
+}
+.partner-card,.pcard,.dir-card{
+  border-color:rgba(18,61,70,.12)!important;
+}
+.partner-level-mark.plus{
+  color:#5965E8!important;
+  background:rgba(89,101,232,.08)!important;
+  border-color:rgba(89,101,232,.22)!important;
+}
+
+footer{background:#123D46!important}
+footer .brand-logo img{
+  width:160px!important;
+  background:#F4F1E8!important;
+  padding:5px 8px!important;
+  border-radius:8px!important;
+}
+footer h5{color:#4DBDB2!important}
+footer p,footer a{color:#E3EBE6!important}
+footer a:hover{color:#FFC629!important}
+
+.tag{
+  color:#00A99D!important;
+  background:rgba(0,169,157,.08)!important;
+}
+.sec-title em{color:#00A99D!important}
+.maplab{gap:12px}
+.hexmap{min-height:300px}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#ecosysteme">Aller au contenu</a>
+<div class="progress" id="progress"></div>
+<nav>
+<div class="wrap nav-in">
+<button aria-label="LINK OFFICE" class="logo brand-logo" data-scroll="top"><img alt="LINK OFFICE" src="data:image/png;base64,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"/></button>
+<div class="nav-links" id="navlinks">
+<a data-scroll="lien"><strong>COMPRENDRE</strong><small>Média</small></a>
+<a data-scroll="barometre"><strong>OBSERVER</strong><small>Baromètre</small></a>
+<a data-scroll="bilan"><strong>MESURER</strong><small>IQRH</small></a>
+<a data-scroll="annuaire"><strong>AGIR</strong><small>Partenaires</small></a>
+</div>
+<div class="nav-cta">
+<button class="btn btn-primary" id="navBilan">Mesurer ma santé relationnelle
+        <svg aria-hidden="true" fill="none" height="14" viewbox="0 0 24 24" width="14"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"></path></svg>
+</button>
+<button aria-label="Menu" class="menu-btn" id="menuBtn"><svg fill="none" height="26" viewbox="0 0 24 24" width="26"><path d="M4 7h16M4 12h16M4 17h16" stroke="#191527" stroke-linecap="round" stroke-width="2"></path></svg></button>
+</div>
+</div>
+</nav>
+<a id="top"></a>
+<section class="hero">
+<div class="wrap"><div class="hero-grid">
+<div class="rv in hero-intro">
+
+
+<h1 class="site-main-title">LINK OFFICE · LABORATOIRE DU LIEN HUMAIN</h1><p class="coma-hero-caption">Quatre façons complémentaires d’aborder la santé relationnelle.</p><div aria-label="Parcours COMA" class="coma-hero">
+<button class="coma-hero-item" data-scroll="lien"><span>C</span><b>COMPRENDRE</b><small>Média</small></button>
+<button class="coma-hero-item" data-scroll="barometre"><span>O</span><b>OBSERVER</b><small>Baromètre</small></button>
+<button class="coma-hero-item" data-scroll="bilan"><span>M</span><b>MESURER</b><small>IQRH</small></button>
+<button class="coma-hero-item" data-scroll="annuaire"><span>A</span><b>AGIR</b><small>Partenaires</small></button>
+</div>
+
+<div class="hero-actions"><button class="btn btn-primary" data-scroll="lien">Découvrir LINK OFFICE</button><button class="btn btn-ghost" data-scroll="bilan">Mesurer mon IQRH</button></div>
+</div>
+<div class="rv in">
+<div class="scorecard">
+<div class="sc-top"><span class="live"><i></i> OBSERVATOIRE</span><span>SANTÉ RELATIONNELLE</span></div>
+<div class="sc-score" data-count="58">58<small>/100</small></div>
+<div class="sc-label">Score IQRH moyen national</div>
+<div class="sc-bar"><span data-w="58" style="width:58%"></span></div>
+<button class="ep-mini" id="epPlay">
+<span class="play"><svg aria-hidden="true" fill="#fff" height="14" viewbox="0 0 24 24" width="14"><path d="M8 5v14l11-7z"></path></svg></span>
+<span><span class="meta">LA VOIX DES ÉCLAIREURS · PODCAST</span><span class="title">Un vécu. Une expertise. Une piste pour agir.</span></span>
+</button>
+</div>
+</div>
+</div></div>
+</section>
+<div class="reveal-line"></div>
+<section class="alt" id="ecosysteme">
+<div class="wrap">
+<div class="coma-intro rv">
+<div class="tag">Le parcours COMA</div>
+<h2 class="sec-title">De la prise de conscience <em>à l’action.</em></h2>
+<p class="lead">LINK OFFICE propose quatre façons complémentaires d’aborder la santé relationnelle. Le site ne parle pas seulement de solitude et d'isolement : il aide à comprendre ce qui se joue derrière ces phénomènes, à observer les tendances, à mesurer sa propre situation et à trouver des réponses pour y remédier.</p>
+</div>
+<div class="coma-path">
+<button class="coma-card c rv" data-scroll="lien"><span class="coma-letter">C</span><span class="verb">Comprendre</span><h3>Le Média</h3><p>Décrypter la santé relationnelle à travers des articles, dossiers, témoignages et notre podcast La Voix des Éclaireurs.</p><span class="go">Explorer →</span></button>
+<button class="coma-card o rv" data-scroll="barometre"><span class="coma-letter">O</span><span class="verb">Observer</span><h3>Le Baromètre</h3><p>Faire émerger les tendances, les fragilités et les signaux faibles à partir de données agrégées et anonymisées.</p><span class="go">Observer →</span></button>
+<button class="coma-card m rv" data-scroll="bilan"><span class="coma-letter">M</span><span class="verb">Mesurer</span><h3>L’IQRH</h3><p>Évaluer sa santé relationnelle sur plusieurs dimensions et obtenir une lecture personnalisée de sa situation.</p><span class="go">Mesurer →</span></button>
+<button class="coma-card a rv" data-scroll="annuaire"><span class="coma-letter">A</span><span class="verb">Agir</span><h3>Les Partenaires</h3><p>Identifier les acteurs, services et ressources adaptés à son besoin, à son territoire et à son budget.</p><span class="go">Trouver une solution →</span></button>
+</div>
+</div>
+</section><section class="alt" id="lien">
+<div class="wrap">
+<div class="rv"><div class="tag">C · COMPRENDRE</div>
+<h2 class="sec-title">Le média de la <em>santé relationnelle.</em></h2>
+<p class="lead">Mettre des mots sur ce que l’on vit, rendre visibles des réalités souvent silencieuses et donner des clés pour mieux comprendre la santé relationnelle.</p></div>
+<div class="media-manifesto rv">
+<div class="media-lead-card"><div class="section-eyebrow">Notre ligne éditoriale</div><h3>Comprendre ce qui fragilise, nourrit ou transforme nos relations.</h3><p>Vie professionnelle, couple, famille, amitié, études, parentalité, aidance, expatriation, retraite, transitions de vie… LINK OFFICE croise vécus, expertises et données pour éclairer la santé relationnelle à tous les âges de la vie.</p></div>
+<div class="media-side-card"><div class="section-eyebrow">Le fil rouge</div><div class="big-quote">« La solitude est parfois le symptôme visible d’une santé relationnelle qui s’est fragilisée en silence. »</div><p>Notre rôle : la rendre visible, la comprendre et ouvrir des pistes d’action.</p></div>
+</div>
+<div class="media-grid"><div class="articles rv" id="articles"></div><div class="pod-panel rv">
+<div class="podcast-brand"><div class="podcast-mark">◖</div><div><h3>La Voix des Éclaireurs</h3><small>Notre podcast · témoignages &amp; interventions de professionnels</small></div></div>
+<div class="eclaireur-note"><b>Des personnes qui l’ont vécu. Des professionnels qui peuvent éclairer et aider.</b><br/>Chaque épisode doit permettre à l’auditeur de se reconnaître dans une situation, de mieux la comprendre et/ou de découvrir une piste concrète pour agir.</div>
+<div id="podlist"></div></div></div>
+</div>
+</section><section class="dash" id="barometre">
+<div class="wrap">
+<div class="rv"><div class="tag">O · OBSERVER</div>
+<div class="dash-head"><div><h2 class="sec-title">La santé relationnelle, <em>rendue visible par les données.</em></h2><p class="lead">Le Baromètre LINK OFFICE donne à voir l’état et l’évolution de la santé relationnelle. Il met en perspective le score IQRH moyen, les dimensions les plus fragilisées, les profils concernés et leur évolution dans le temps afin de faire émerger les tendances à suivre.</p></div><div class="updated"><span class="live"><i></i></span> Mis à jour il y a 4 min · auto-quotidien</div></div></div>
+<div aria-label="Chiffres clés du Baromètre" class="observer-snapshot rv">
+<div class="observer-kpi"><span>IQRH moyen</span><strong>58<small>/100</small></strong><em>+2 pts sur 12 mois</em></div>
+<div class="observer-kpi"><span>Bilans analysés</span><strong>52 380</strong><em>toutes populations</em></div>
+<div class="observer-kpi"><span>Relations affectives</span><strong>64%</strong><em>sous le seuil de 50/100</em></div>
+<div class="observer-kpi"><span>Orientations</span><strong>18 940</strong><em>vers une ressource ou solution</em></div>
+</div>
+<div class="drow1">
+<div class="dcard rv"><div class="dh">Score IQRH moyen national</div><div class="gauge-wrap"><div class="gauge"><svg aria-hidden="true" height="130" viewbox="0 0 120 120" width="130"><circle cx="60" cy="60" fill="none" r="50" stroke="#123D46" stroke-width="11"></circle><circle cx="60" cy="60" fill="none" id="gaugeArc" r="50" stroke="url(#gg)" stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round" stroke-width="11" style="stroke-dashoffset:132" transform="rotate(-90 60 60)"></circle><defs><lineargradient id="gg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#00A99D"></stop><stop offset="1" stop-color="#4DBDB2"></stop></lineargradient></defs></svg><div class="val"><div><b class="gnum" data-count="58">58</b><small>/ 100</small></div></div></div><div class="gtrend"><span class="up">▲ +2 pts</span> sur 12 mois.<br/>Calculé sur 5 dimensions : social, affectif, conjugal, professionnel, existentiel.</div></div></div>
+<div class="dcard rv counter"><div class="dh">Bilans IQRH réalisés</div><b class="cnum" data-count="52380">52 380</b><div class="dh" style="margin-top:22px">Orientations vers solutions</div><b class="cnum" data-count="18940" id="orientCount" style="font-size:34px">18 940</b><div class="c-sub">vers <em>60 solutions</em> certifiées</div></div>
+<div class="dcard dshock rv"><div class="dh">⚡ Donnée choc de la semaine</div><div class="ds-big">Cette semaine, <em>68%</em> des répondants étudiants ont un score affectif inférieur à 50.</div><p>Générée automatiquement depuis les bilans IQRH.</p><button class="dl-btn" id="shareShock" style="margin-top:14px">⤴ Partager la donnée</button></div>
+</div>
+<div class="drow2">
+<div class="dcard rv"><div class="maplab"><div class="dh" style="margin:0">Lecture territoriale de la santé relationnelle</div><div class="mapfilter" id="mapFilter"><button class="mfc active" data-dim="global">Global</button><button class="mfc" data-dim="social">Social</button><button class="mfc" data-dim="affectif">Affectif</button><button class="mfc" data-dim="professionnel">Pro</button></div></div><div class="map-explainer">Chaque alvéole représente un département ; sa couleur traduit le score IQRH moyen observé sur ce territoire.</div><svg aria-label="Carte de France du score relationnel" class="hexmap" id="hexmap" viewbox="0 0 340 320"><polygon data-score="61" fill="#4DBDB2" opacity="0.95" points="143.7,27.0 143.7,37.0 135.0,42.0 126.3,37.0 126.3,27.0 135.0,22.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="54" fill="#5965E8" opacity="0.95" points="163.7,27.0 163.7,37.0 155.0,42.0 146.3,37.0 146.3,27.0 155.0,22.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="66" fill="#199E9A" opacity="0.95" points="183.7,27.0 183.7,37.0 175.0,42.0 166.3,37.0 166.3,27.0 175.0,22.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="58" fill="#4DBDB2" opacity="0.95" points="203.7,27.0 203.7,37.0 195.0,42.0 186.3,37.0 186.3,27.0 195.0,22.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="49" fill="#FFC629" opacity="0.95" points="133.7,44.4 133.7,54.4 125.0,59.4 116.3,54.4 116.3,44.4 125.0,39.4" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="63" fill="#199E9A" opacity="0.95" points="153.7,44.4 153.7,54.4 145.0,59.4 136.3,54.4 136.3,44.4 145.0,39.4" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="57" fill="#5965E8" opacity="0.95" points="173.7,44.4 173.7,54.4 165.0,59.4 156.3,54.4 156.3,44.4 165.0,39.4" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="68" fill="#00A99D" opacity="0.95" points="193.7,44.4 193.7,54.4 185.0,59.4 176.3,54.4 176.3,44.4 185.0,39.4" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="52" fill="#5965E8" opacity="0.95" points="213.7,44.4 213.7,54.4 205.0,59.4 196.3,54.4 196.3,44.4 205.0,39.4" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="60" fill="#4DBDB2" opacity="0.95" points="233.7,44.4 233.7,54.4 225.0,59.4 216.3,54.4 216.3,44.4 225.0,39.4" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="55" fill="#5965E8" opacity="0.95" points="103.7,61.8 103.7,71.8 95.0,76.8 86.3,71.8 86.3,61.8 95.0,56.8" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="64" fill="#199E9A" opacity="0.95" points="123.7,61.8 123.7,71.8 115.0,76.8 106.3,71.8 106.3,61.8 115.0,56.8" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="47" fill="#FFC629" opacity="0.95" points="143.7,61.8 143.7,71.8 135.0,76.8 126.3,71.8 126.3,61.8 135.0,56.8" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="69" fill="#00A99D" opacity="0.95" points="163.7,61.8 163.7,71.8 155.0,76.8 146.3,71.8 146.3,61.8 155.0,56.8" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="59" fill="#4DBDB2" opacity="0.95" points="183.7,61.8 183.7,71.8 175.0,76.8 166.3,71.8 166.3,61.8 175.0,56.8" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="62" fill="#4DBDB2" opacity="0.95" points="203.7,61.8 203.7,71.8 195.0,76.8 186.3,71.8 186.3,61.8 195.0,56.8" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="53" fill="#5965E8" opacity="0.95" points="223.7,61.8 223.7,71.8 215.0,76.8 206.3,71.8 206.3,61.8 215.0,56.8" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="65" fill="#199E9A" opacity="0.95" points="243.7,61.8 243.7,71.8 235.0,76.8 226.3,71.8 226.3,61.8 235.0,56.8" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="56" fill="#5965E8" opacity="0.95" points="93.7,79.2 93.7,89.2 85.0,94.2 76.3,89.2 76.3,79.2 85.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="50" fill="#FFC629" opacity="0.95" points="113.7,79.2 113.7,89.2 105.0,94.2 96.3,89.2 96.3,79.2 105.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="67" fill="#00A99D" opacity="0.95" points="133.7,79.2 133.7,89.2 125.0,94.2 116.3,89.2 116.3,79.2 125.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="61" fill="#4DBDB2" opacity="0.95" points="153.7,79.2 153.7,89.2 145.0,94.2 136.3,89.2 136.3,79.2 145.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="48" fill="#FFC629" opacity="0.95" points="173.7,79.2 173.7,89.2 165.0,94.2 156.3,89.2 156.3,79.2 165.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="58" fill="#4DBDB2" opacity="0.95" points="193.7,79.2 193.7,89.2 185.0,94.2 176.3,89.2 176.3,79.2 185.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="64" fill="#199E9A" opacity="0.95" points="213.7,79.2 213.7,89.2 205.0,94.2 196.3,89.2 196.3,79.2 205.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="55" fill="#5965E8" opacity="0.95" points="233.7,79.2 233.7,89.2 225.0,94.2 216.3,89.2 216.3,79.2 225.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="70" fill="#00A99D" opacity="0.95" points="253.7,79.2 253.7,89.2 245.0,94.2 236.3,89.2 236.3,79.2 245.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="52" fill="#5965E8" opacity="0.95" points="273.7,79.2 273.7,89.2 265.0,94.2 256.3,89.2 256.3,79.2 265.0,74.2" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="63" fill="#199E9A" opacity="0.95" points="83.7,96.6 83.7,106.6 75.0,111.6 66.3,106.6 66.3,96.6 75.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="57" fill="#5965E8" opacity="0.95" points="103.7,96.6 103.7,106.6 95.0,111.6 86.3,106.6 86.3,96.6 95.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="46" fill="#FFC629" opacity="0.95" points="123.7,96.6 123.7,106.6 115.0,111.6 106.3,106.6 106.3,96.6 115.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="66" fill="#199E9A" opacity="0.95" points="143.7,96.6 143.7,106.6 135.0,111.6 126.3,106.6 126.3,96.6 135.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="60" fill="#4DBDB2" opacity="0.95" points="163.7,96.6 163.7,106.6 155.0,111.6 146.3,106.6 146.3,96.6 155.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="54" fill="#5965E8" opacity="0.95" points="183.7,96.6 183.7,106.6 175.0,111.6 166.3,106.6 166.3,96.6 175.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="68" fill="#00A99D" opacity="0.95" points="203.7,96.6 203.7,106.6 195.0,111.6 186.3,106.6 186.3,96.6 195.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="51" fill="#FFC629" opacity="0.95" points="223.7,96.6 223.7,106.6 215.0,111.6 206.3,106.6 206.3,96.6 215.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="62" fill="#4DBDB2" opacity="0.95" points="243.7,96.6 243.7,106.6 235.0,111.6 226.3,106.6 226.3,96.6 235.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="59" fill="#4DBDB2" opacity="0.95" points="263.7,96.6 263.7,106.6 255.0,111.6 246.3,106.6 246.3,96.6 255.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="65" fill="#199E9A" opacity="0.95" points="283.7,96.6 283.7,106.6 275.0,111.6 266.3,106.6 266.3,96.6 275.0,91.6" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="49" fill="#FFC629" opacity="0.95" points="73.7,114.0 73.7,124.0 65.0,129.0 56.3,124.0 56.3,114.0 65.0,109.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="56" fill="#5965E8" opacity="0.95" points="93.7,114.0 93.7,124.0 85.0,129.0 76.3,124.0 76.3,114.0 85.0,109.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="67" fill="#00A99D" opacity="0.95" points="113.7,114.0 113.7,124.0 105.0,129.0 96.3,124.0 96.3,114.0 105.0,109.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="53" fill="#5965E8" opacity="0.95" points="133.7,114.0 133.7,124.0 125.0,129.0 116.3,124.0 116.3,114.0 125.0,109.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="61" fill="#4DBDB2" opacity="0.95" points="153.7,114.0 153.7,124.0 145.0,129.0 136.3,124.0 136.3,114.0 145.0,109.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="58" fill="#4DBDB2" opacity="0.95" points="173.7,114.0 173.7,124.0 165.0,129.0 156.3,124.0 156.3,114.0 165.0,109.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="64" fill="#199E9A" opacity="0.95" points="193.7,114.0 193.7,124.0 185.0,129.0 176.3,124.0 176.3,114.0 185.0,109.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="50" fill="#FFC629" opacity="0.95" points="213.7,114.0 213.7,124.0 205.0,129.0 196.3,124.0 196.3,114.0 205.0,109.0" stroke="#F4F1E8" stroke-width="1.8"></polygon><polygon data-score="69" fill="#00A99D" opacity="0.95" points="233.7,114.0 233.7,124.0 225.0,129.0 216.3,124.0 216.3,114.0 225.0,109.0" stroke="#F4F1E8" stroke-width="1.8"></polygon></svg><div class="legend"><span>Santé relationnelle fragilisée</span><div class="scale"></div><span>Santé relationnelle préservée</span></div><div class="mapsel" id="mapsel">Exemple de lecture : Alpes-Maritimes · IQRH moyen 63/100 · +3 points sur 12 mois.</div></div>
+<div class="dcard rv"><div class="dh">Top 3 des dimensions les plus fragiles · ce mois</div>
+<div class="dim"><span class="rank">#1</span><svg class="ring" viewbox="0 0 40 40"><circle cx="20" cy="20" fill="none" r="16" stroke="#123D46" stroke-width="5"></circle><circle class="ringfill" cx="20" cy="20" data-pct="64" fill="none" r="16" stroke="#00A99D" stroke-dasharray="100" stroke-linecap="round" stroke-width="5" transform="rotate(-90 20 20)"></circle></svg><div><div class="dn">Relations affectives</div><div class="dd">proximité, confiance, soutien</div></div><div class="dpct">64%</div></div>
+<div class="dim"><span class="rank">#2</span><svg class="ring" viewbox="0 0 40 40"><circle cx="20" cy="20" fill="none" r="16" stroke="#123D46" stroke-width="5"></circle><circle class="ringfill" cx="20" cy="20" data-pct="57" fill="none" r="16" stroke="#FFC629" stroke-dasharray="100" stroke-linecap="round" stroke-width="5" transform="rotate(-90 20 20)"></circle></svg><div><div class="dn">Relation à soi et au sens</div><div class="dd">estime, alignement, projection</div></div><div class="dpct" style="color:var(--amber)">57%</div></div>
+<div class="dim"><span class="rank">#3</span><svg class="ring" viewbox="0 0 40 40"><circle cx="20" cy="20" fill="none" r="16" stroke="#123D46" stroke-width="5"></circle><circle class="ringfill" cx="20" cy="20" data-pct="49" fill="none" r="16" stroke="#4DBDB2" stroke-dasharray="100" stroke-linecap="round" stroke-width="5" transform="rotate(-90 20 20)"></circle></svg><div><div class="dn">Vie sentimentale</div><div class="dd">couple, intimité, réciprocité</div></div><div class="dpct" style="color:var(--sage-soft)">49%</div></div>
+<div style="margin-top:18px;font-size:12.5px;color:#6D8888;line-height:1.5">% de répondants sous le seuil de 50/100 sur la dimension ce mois-ci.</div></div>
+</div>
+<div class="drow3">
+<div class="dcard rv"><div class="maplab"><div class="dh" style="margin:0">Répartition des 15 archétypes relationnels</div></div><div id="archbars"><div class="arch-static-row"><span class="arch-static-name">Le Connecté Solitaire</span><div class="arch-static-track"><i style="width:72.0%;background:#00A99D"></i></div><b class="arch-static-val">16%</b></div><div class="arch-static-row"><span class="arch-static-name">L’Isolé Invisible</span><div class="arch-static-track"><i style="width:58.5%;background:#FFC629"></i></div><b class="arch-static-val">13%</b></div><div class="arch-static-row"><span class="arch-static-name">Le Senior Délié</span><div class="arch-static-track"><i style="width:49.5%;background:#4DBDB2"></i></div><b class="arch-static-val">11%</b></div><div class="arch-static-row"><span class="arch-static-name">L’Entrepreneur Isolé</span><div class="arch-static-track"><i style="width:45.0%;background:#5965E8"></i></div><b class="arch-static-val">10%</b></div><div class="arch-static-row"><span class="arch-static-name">Le Jeune en Décrochage</span><div class="arch-static-track"><i style="width:40.5%;background:#199E9A"></i></div><b class="arch-static-val">9%</b></div><div class="arch-static-row"><span class="arch-static-name">Le Parent Solo Saturé</span><div class="arch-static-track"><i style="width:36.0%;background:#00A99D"></i></div><b class="arch-static-val">8%</b></div><div class="arch-static-row"><span class="arch-static-name">Le Cœur en Attente</span><div class="arch-static-track"><i style="width:31.5%;background:#FFC629"></i></div><b class="arch-static-val">7%</b></div><div class="arch-static-row"><span class="arch-static-name">Le Chercheur de Sens</span><div class="arch-static-track"><i style="width:27.0%;background:#4DBDB2"></i></div><b class="arch-static-val">6%</b></div></div><div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><span style="font-size:12px;color:#6D8888;font-family:var(--mono)">top 8 affichés · cliquez pour le détail</span><button class="dl-btn" id="csvBtn">⬇ Télécharger les données (CSV)</button></div></div>
+<div class="dcard rv"><div class="dh">Évolution du score IQRH moyen · 12 mois</div><svg aria-hidden="true" class="linechart" id="linechart" viewbox="0 0 520 200"><line stroke="rgba(227,235,230,.16)" stroke-width="1" x1="24" x2="500" y1="35" y2="35"></line><line stroke="rgba(227,235,230,.16)" stroke-width="1" x1="24" x2="500" y1="75" y2="75"></line><line stroke="rgba(227,235,230,.16)" stroke-width="1" x1="24" x2="500" y1="115" y2="115"></line><line stroke="rgba(227,235,230,.16)" stroke-width="1" x1="24" x2="500" y1="155" y2="155"></line><polyline fill="none" points="28.0,128.0 70.2,123.8 112.4,119.6 154.5,123.8 196.7,115.4 238.9,119.6 281.1,111.2 323.3,102.8 365.5,107.0 407.6,115.4 449.8,107.0 492.0,98.6" stroke="#FFC629" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline><circle cx="28.0" cy="128.0" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="70.2" cy="123.8" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="112.4" cy="119.6" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="154.5" cy="123.8" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="196.7" cy="115.4" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="238.9" cy="119.6" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="281.1" cy="111.2" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="323.3" cy="102.8" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="365.5" cy="107.0" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="407.6" cy="115.4" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="449.8" cy="107.0" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle><circle cx="492.0" cy="98.6" fill="#00A99D" r="4" stroke="#F4F1E8" stroke-width="2"></circle></svg></div>
+</div>
+</div>
+</section><section class="alt" id="bilan">
+<div class="wrap">
+<div class="rv"><div class="tag">M · MESURER</div>
+<h2 class="sec-title">Mesurer sa <em>santé relationnelle.</em></h2>
+<p class="lead">L’IQRH · Indice de Qualité des Relations Humaines · mesure cinq dimensions complémentaires de la santé relationnelle. Il fournit une photographie de la situation à un instant donné, met en évidence les points d’appui et les zones de fragilité, puis aide à identifier les actions ou ressources les plus adaptées.</p></div>
+<div class="iqrh-grid">
+<div class="dims-list rv" id="dimsList"></div>
+<div class="iqrh-cta rv"><h3>Votre mesure IQRH</h3><p>Une photographie personnelle de votre santé relationnelle pour repérer ce qui vous soutient, ce qui vous fragilise et les leviers sur lesquels agir.</p><div class="feat"><span>⏱️ 5 minutes</span><span>🔒 Anonyme</span><span>⚡ Résultat immédiat</span></div><button class="btn btn-white" id="bilanCta">Commencer mon bilan →</button></div>
+</div>
+</div>
+</section><section id="annuaire">
+<div class="wrap">
+<div class="rv"><div class="tag">A · AGIR</div>
+<h2 class="sec-title">Trouver <em>la bonne réponse au bon moment.</em></h2>
+<p class="lead">Besoin de rencontrer, d’être écouté, accompagné, soutenu ou de recréer des relations de qualité ? LINK OFFICE facilite le passage à l’action en orientant vers des acteurs et des solutions adaptés à la situation, au coût et, à terme, au territoire, au public ou au format recherché.</p></div>
+<div class="binome-card rv">
+<div aria-hidden="true" class="binome-icon">
+<span></span><span></span><i></i>
+</div>
+<div>
+<div class="binome-eyebrow">Une autre façon d’agir</div>
+<h3>Le Binôme relationnel</h3>
+<p>Selon le parcours ou l’offre choisie, LINK OFFICE peut aussi proposer un binôme relationnel : une mise en relation suggérée par IRIS avec une personne compatible pour avancer à deux, s’encourager et recréer du lien.</p>
+</div>
+</div>
+<div class="filters rv">
+<div class="filter-group" id="filterBesoin"><span class="fl-lab">Besoin</span><button class="chip active" data-besoin="all">Tout</button><button class="chip" data-besoin="social">Relations sociales</button><button class="chip" data-besoin="affectif">Relations affectives</button><button class="chip" data-besoin="conjugal">Vie sentimentale</button><button class="chip" data-besoin="professionnel">Vie professionnelle et engagement</button><button class="chip" data-besoin="existentiel">Relation à soi et au sens</button></div>
+<div class="filter-group" id="filterCout"><span class="fl-lab">Coût</span><button class="chip active" data-cout="all">Tout</button><button class="chip" data-cout="gratuit">Gratuit</button><button class="chip" data-cout="payant">Payant</button></div>
+<div class="search"><svg aria-hidden="true" fill="none" height="16" viewbox="0 0 24 24" width="16"><circle cx="11" cy="11" r="7" stroke="#6D8888" stroke-width="2"></circle><path d="m20 20-3-3" stroke="#6D8888" stroke-linecap="round" stroke-width="2"></path></svg><input aria-label="Rechercher une solution" id="searchInput" placeholder="Rechercher une solution…"/></div>
+</div>
+<div class="count-line" id="countLine"></div>
+<div class="dir-grid rv" id="dirGrid"></div>
+</div>
+</section>
+<footer>
+<div class="wrap"><div class="f-top">
+<div>
+<button aria-label="LINK OFFICE" class="logo brand-logo" data-scroll="top"><img alt="LINK OFFICE" src="data:image/png;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCABIALMDASIAAhEBAxEB/8QAHAAAAgEFAQAAAAAAAAAAAAAAAAEHAgMFBggE/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQF/9oADAMBAAIQAxAAAAHqYDNC3TZeI0krUYGNA0DQMAAAAEMEwEMFi8nbmncor1i3W7ZR6LdZDcy839IdMqK5Vg54Jw5z6K5B37OwIp8GEXfM1pULWSvOOGzXLomHPQAWalVZj4pmG/8AR8i5d6gXi9NVSq565r6JinEd+c683z5pmLJHP/QOmrF+O6Q0jeNa1GachLGEyR3IONVAc9gwWlbrTvzjsvPe7VZpNf2i1d7Z0rP2sxzupbBf9JqeY9Xql1/P+X1mmbfh8xZo284rKlY1jQANANBTQQwAAQAABRAMAABMBAH/xAAtEAAABgECBQMCBwAAAAAAAAABAgMEBQYAERIHEBMgIRQxQBUiFhcmJzI2N//aAAgBAQABBQL5JlAKO4+fXZX8Y66/DM83PCkAgYYPHvnVAFMjbM+c37kaLkRsOQHEZc1mDKxYncnZL5MuoKvwMmZzXmlnk7XPdgjtAhPt9h15E+0ADzkN/q/JewPycSvfIerlshOH1rPKtqMX9acVB0qTaaVtqMREt4Rj2KfxPu2PuqLOooSSUl5yzPrIS6l10yIOVPit6pHAHcDgn7v6+OGPmTv0EtFPeGT/AOqWHin/AFItHRlqZRbkaWDsUDcQo7i6dQc13YYupQHcGTPDOPmpP8n4vIqOJERzqitHc9pkDV29fXUTKqSvU9nWnVhgkLHGxccSKYTFJZSsoUNpew0uoWbzTmxmSuJLBO8kXcU6M+j7C9Xa4x3elsTxdo1jup6WbenYs9cMq6fyZBHZMvnBJcgCUvYJQHNDEzq51M2mPhUyEHHUM0eKkKCZVW6ax8WbJuOTlqk7Tx7DNH6qaZUiPIls+WIUCF+V/8QAJREAAQMDAwMFAAAAAAAAAAAAAQACEQMQEgQgIRMwMSJBUWGR/9oACAEDAQE/AbAz2gQJkbGrW6NmrwzJEGeE8kEQsphF0OQHzcqpp+pUbUnwnDKwkJ08IjkLH1SEWyUJ971qb344OiD+/V2gjzuHf//EACIRAAICAgICAgMAAAAAAAAAAAECABEDEhAxIUEgMAQiI//aAAgBAgEBPwHhlK9/UQfXweJfmpjAIO0C0GuKmyRiD18MH5hwYMmHUHaI2h64OjdmKQLimlIgyfpRgfVaEfU+RypA75ysjH+a1CRUvxUvxU9QkeoSKH3/AP/EAD4QAAIBAgMEBQgHCAMAAAAAAAECAwARBBIhBRATMRQiQVFxBiAjYXOBkbEzQEJSocHRFSUyNENicsLD4fD/2gAIAQEABj8C+s27e4VonxNDZ/QP3dkvx8p7ud+Xq+qdFUENa5furTdftGu4Rk9Y8t2O2W7r0OJLquXX7Pb79/G62TPfiX0y927EYDaLJwGlMcThbZTfS+7bWDndTDhXtGAtra1JisIwWYOouResJjcW6hmhEkjnQUYtkMMPsuH6XEMly3hfzSa15nnWu+3dWbt3bU/wPyTfHs0Yg9CK/RZR9y+7yiQaYuHEZoW9d20p9nY267RwvVOfmw/WvKX2n+1Te0T51snycgl6FhQgWZ2OshFR4XCpkiT8fX5vvFHJbN2Xqbh2EmQ5fGpDKsyxWOfi31O4R4YziLOohVB6Nl/9etee7ahYgdQ8/BK+lT41caioj/b/AMR3eUPt/wA2qPyj2WMs8R9Oq9vr/I1tvF5cnGs+Xu1qb2ifOtmz4FRBtGOISK66ZzzsaOztoei2pBoQ2nEt+fmkDnQNX+yOW7Tl37r7p8bLiMQkkxuQhFuXhX83i/iv6VBg4izRwrlBbnX7WbE4lcRmDWV7Dw3Y2WGSRzinztn7PD40yOoZWFiD21ipsK0np/sMdF8KfBzu6RsQbpz0qDCRktHCgQFudRbQEkuExaf1ICBegCcx7/N6BwPRff8ANnwYiI4dzm3Y0RYvoi4ZxGqhAcxyhrtfs17Kw+IYZWkS5ArBJC8icWbKxiQM1spPb4VHnd5Gt/FKoDfAVBwGdGknSMmNQzWJ7L0pkklkbvmUK34UkkRsxniT3FwD892LgixPREw2UWCAlyRe5v2f90uYhmtqRWHw0Us8aNC8h4EasbgqO3xoAnMe8+bqL1p1h3GtVYe6tFY+6utoO4USFAJ7hu4ksXXIsxDEZh67c6CqLKNABUTut2jOZfUbW3JxFzZGDr4jcElXOoYNb1g3G4STR+ktlzKxW47jalRRlVRYAUksqtxEBUMjlTb3eFBRyGn1v//EACcQAQACAQMEAgICAwAAAAAAAAEAESExQVEQYXGBIJGhsUDB0fDx/9oACAEBAAE/If5NkN+YxTY9X6uI8sAmc/a0QHlx/DFh3GYErgrldWXU2jJoiH+c0cm+6aRHpRyBrybujEgdH0V/6YrpSnSSswU1HS5kXKdiMIXMu8A+rGaXOGVvVgPFr2ItK6H/ALo7Ht4gYz8DU0C5T5Jd4OBZ2eZR6UT/AEJZYHDsdGdbBOLDi3fVV694lJRL9xwuzR+IxeLcDtW9mj6d4ojy/bo/HIo9gLo+sG7rBrm9rdO6/Hb2Q/MqoKnZuc3UXwx+ZmdikGxV6syNoqbqTALvZzlekaPs6H7dZVD/AJmGaiaJKHd8NCoFbxhTspBo0x4r0e44FWS5NqML5k/tdZck5vR28S9+wTYamuG575r4LsxjzDB0S4EXn7DzLPE5Xi3l5Rk0laNzocWlMqBi+yEyndRX2O9TTwk4UBTF1RzvMCiVgvbKVroCEoMGsDqM04eIkBsML33iBk7hZXuM1LsCA5i5vG8s0WxyR1ADK3+KUu+bruX9XiA6LXiVgVjQ6YEGL6004216Efywib1GqaOeBJgaRfbtFLLtpdgJqIL7WyhZ3ACaaZBAGmFzNILyZuAIWBRsv+nlMiYOKhM/caopsyhcAFGhexLvxzMJdXGX4iGQASy9/iC0Www1/vmT3NGQ4y/UbGR4w/c3TvevuYS+LQvR+x8CSXFPMGgWgoCCwu15FvpemLGSNtJ6AjA1wk9IdEaouXd0FnZgAxAqANCVvNNyRTIxY+pa5RS237+Vfxf/2gAMAwEAAgADAAAAEP8AX37e4IILKLKCm2cJq/QLiIK48IEnPQNm/wDzuXnATR6B7f3/AHnHggwwnggov//EACARAQACAQQDAQEAAAAAAAAAAAEAESEQMUFRMGFx0fD/2gAIAQMBAT8QlwbV4qpdjGap79/J6m0LjUfsDFJC1Wnf9cAIbEc/kx0YLVuouyE+zrwxRhqEF9EDKERY4iwbEFV2qEFauDcXA0N8tr70uBZ3AbzARuA3crMBvMCLfn//xAAhEQEAAgICAQUBAAAAAAAAAAABABEhUTFBwRAwYXGBsf/aAAgBAgEBPxCUyg2L9pNKrOuTU+Z1GuoQStEY+iPvDEpg4PMzx05fio5RoPXqAHE5eT68aYKLaMVChjUas4qCly1/YCubqOCZG4k28nraUuVqVuF2jRZd29v7qMARCKRFaRShGB4RAHPv/wD/xAAkEAEAAgICAgMBAAMBAAAAAAABABEhMUFREGFxgZGhscHw4f/aAAgBAQABPxAKZ3LxG4hGNb8OfHMJuafOjxjxUdTPrxcDIQsJo7o0e3EFEvhQPFCoWdNjQ4t2PxMQPssJ9Tib8c+L4vwEZUutzcdzXhle5UxCMzc6vb7cX3VRNlMotO1cr7YIaa9zVpoKWtbPyyBDsqwSrgR6Zv419/UU4QUKIIOKC2d7ydSpo9y07Az3fP8AD/MywC3mLlXvLBDAqzTXCxUQqLg+lMC8A3CHeNFPATUF6vyOb0Bl6IWd+axmgQAqrBfAGAK2svcz5ZPOX1CBrdWeXT0aPQSgNb4v/UyARlXuWGgNDrkfg19QTwymmej7l3uY3yUL1CoJ04kWX9ePw6jFW3mZFURqnYukL4RcZssoe4ezm3flyWqmE9M6BV2EkwtNYwrpDC/Q0oCiREDP3yWVf8Qy+OJcI3FqTsSP8YnbKok6rQWpQltNxfjZvCowMhal+y5s4vuZrSa4uZxWHoXUrtbwJgCLZChhq5eHEoovBC1qzEqr/q9wsp2uxPTE05Ig0oRNcM9oy+tHgw2pUcoeFHcFZLsxbmlq5WS7h5wnXuB2y5lGLTqcR2QLVX82KR8TnzvMtfpk/tReGsFKaSZilY4/zA4/epQK0JQ7ltPwP+4ABovjSZP6QxmCYAmcQ9Sc7A5Lo7WDLtfcyYRhRuUAv4CLV4eQWhW6ENEcyxWUQKYVMNLAGW70QGhFhVAcIiiMWsLFfaAUMMloIYaSVoKQV9RjWniPQoAv4CWkJLLE4mirxZhsCi0jBgusqAGfRONRupuc5l/yjIoy7qhr9UZxCgAGg1AmwF7csEAAMAGCXj1E6NiKEQacsMtnUu74jX+N70CW9QjptwhOONKUZs5U5HpI6lR4GnzwGtXHtZXhEgwAQoDWc3FcUwyoiVTVkDQbpiWAGNYxkj2VQxWtPKS+LuNhCPzPhLKVxCbTC4AizwWuyoqC2grXbDoNzcYAFdXMHXyALWUAAu8ARxMvzDwegDIXZ1MaVuKReuXw/sBZPdv92P7KR/7B1I6M+0KPeH4frDZEDAGhTdTCQFCyed0QCtxcpTmCPxRCKADQEbGd5LkCnOPnuXWIac7Ily8bwzMUIXCBism2+s4l44JlyZo5bs7XYZe2U8oMGoDgACoOclCMbeSabyJYSGj1BRatX25hmbmZTDc2hN6JqVMyoZPG4zmbJUxOZzEDwY+ZTP/Z"/></button>
+<p>Recevez les nouveaux articles, les épisodes de <strong>La Voix des Éclaireurs</strong>, les enseignements du Baromètre et nos ressources pour mieux comprendre et prendre soin de votre santé relationnelle.</p>
+<div class="f-news"><input aria-label="Email newsletter" id="newsInput" placeholder="Votre email" type="email"/><button class="btn btn-primary btn-sm" id="newsBtn">S’inscrire</button></div>
+</div>
+<div class="f-cols"><div><h5>Comprendre</h5><ul><li><a data-scroll="lien">Média</a></li><li><a data-scroll="lien">La Voix des Éclaireurs</a></li></ul></div><div><h5>Observer</h5><ul><li><a data-scroll="barometre">Baromètre</a></li></ul></div><div><h5>Mesurer</h5><ul><li><a data-scroll="bilan">IQRH</a></li></ul></div><div><h5>Agir</h5><ul><li><a data-scroll="annuaire">Partenaires</a></li></ul></div></div>
+</div><div class="f-bot"><span>LINK OFFICE · Laboratoire du lien humain</span><span>© 2026 · Prototype</span></div></div>
+</footer>
+<button class="iris-launch" id="irisLaunch"><span class="ib">✦</span><span class="ilt">Coach IRIS</span></button>
+<div aria-label="Coach IRIS" class="iris-panel" id="irisPanel" role="dialog">
+<div class="iris-head"><span class="ib">✦</span><div class="it"><b>IRIS</b><small>votre coach relationnel</small></div><button aria-label="Fermer" class="ix" id="irisClose">×</button></div>
+<div class="iris-msgs" id="irisMsgs"></div>
+<div class="iris-quick" id="irisQuick"></div>
+<div class="iris-input"><input aria-label="Message à IRIS" id="irisInput" placeholder="Écrivez à IRIS…"/><button aria-label="Envoyer" id="irisSend"><svg fill="none" height="16" viewbox="0 0 24 24" width="16"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"></path></svg></button></div>
+</div>
+<div class="player" id="player"><div class="player-in">
+<button aria-label="Lecture / pause" class="pp" id="playerBtn"><svg fill="#fff" height="15" id="playerIcon" viewbox="0 0 24 24" width="15"><path d="M7 5h4v14H7zM13 5h4v14h-4z"></path></svg></button>
+<div class="pinfo"><div class="pep" id="playerEp">LA VOIX DES ÉCLAIREURS</div><div class="ptit" id="playerTit">·</div></div>
+<div class="ptrack" id="playerTrack"><span id="playerProg"></span></div>
+<div class="ptime" id="playerTime">0:00</div>
+<button aria-label="Fermer le lecteur" class="pclose" id="playerClose">×</button>
+</div></div>
+<div class="maptip" id="maptip"></div>
+<div class="overlay" id="overlay"><div aria-modal="true" class="modal" role="dialog"><button aria-label="Fermer" class="modal-x" id="modalX">×</button><div class="modal-pad" id="modalBody"></div></div></div>
+<div aria-live="polite" class="toasts" id="toasts"></div>
+<script>
+"use strict";
+const $=(s,e=document)=>e.querySelector(s);
+const $$=(s,e=document)=>[...e.querySelectorAll(s)];
+const state={ bilanDone:false, score:null, archetype:null, dims:{}, saved:new Set(), journal:[], defis:[], history:[] };
+
+function toast(msg,icon){icon=icon||"✓";const box=$("#toasts");const t=document.createElement('div');t.className='toast';t.innerHTML='<span class="ti">'+icon+'</span><span>'+msg+'</span>';box.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300);},3600);}
+
+const overlay=$("#overlay"), modalBody=$("#modalBody");
+function openModal(html){modalBody.innerHTML=html;overlay.classList.add('show');document.body.style.overflow='hidden';overlay.scrollTop=0;}
+function closeModal(){overlay.classList.remove('show');document.body.style.overflow='';}
+$("#modalX").onclick=closeModal;
+overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();$("#irisPanel").classList.remove('show');}});
+
+function scrollToId(id){const el=id==='top'?document.body:document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+$$("[data-scroll]").forEach(el=>el.addEventListener('click',()=>{scrollToId(el.dataset.scroll);$("#navlinks").classList.remove('open');}));
+$("#menuBtn").onclick=()=>$("#navlinks").classList.toggle('open');
+window.addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-window.innerHeight;$("#progress").style.width=(h>0?(window.scrollY/h*100):0)+'%';},{passive:true});
+const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const id=e.target.id;$$(".nav-links a").forEach(a=>a.classList.toggle('active',a.dataset.scroll===id));}}),{rootMargin:"-45% 0px -50% 0px"});
+["lien","barometre","bilan","annuaire"].forEach(id=>{const el=document.getElementById(id);if(el)spy.observe(el);});
+
+const C={coral:"#00A99D",sage:"#199E9A",amber:"#FFC629",violet:"#5965E8",teal:"#4DBDB2",rose:"#4DBDB2",green:"#199E9A",blue:"#123D46",plum:"#5965E8"};
+const PARTNERS={
+  timeleft:{name:"Tablée",base:"Dîners entre inconnus",tags:["affectif","social"],cout:"payant",score:84,annee:2020,benef:"+2M",villes:"200 villes",emoji:"🍽️",color:C.coral,histoire:"Né d’un constat simple : on peut vivre entouré et se sentir profondément seul. Tablée réunit chaque semaine six inconnus autour d’un dîner, sans algorithme ni pression.",pourqui:["L’Isolé Invisible","Le Cœur en Attente"],temo:"« J’ai failli annuler trois fois. Aujourd’hui, mon meilleur ami vient de ce dîner. »"},
+  petitescantines:{name:"Les Petites Cantines",base:"Cuisiner ensemble, à prix libre",tags:["affectif","social","existentiel"],cout:"gratuit",score:91,annee:2016,benef:"50k repas",villes:"15 villes",emoji:"🥘",color:C.amber,histoire:"Des cantines de quartier où l’on cuisine et mange ensemble, à prix libre. Le repas devient prétexte à recréer du lien entre voisins de tous horizons.",pourqui:["L’Isolé Invisible","Le Senior Délié"],temo:"« Je viens pour la soupe, je reste pour les gens. »"},
+  mamieboom:{name:"Mamie Boom",base:"Étudiants & seniors reliés",tags:["social","affectif"],cout:"gratuit",score:88,annee:2018,benef:"8 000 binômes",villes:"National",emoji:"🌷",color:C.rose,histoire:"Mamie Boom met en relation des étudiants et des seniors isolés pour des visites régulières. L’intergénérationnel comme remède à la solitude des deux côtés.",pourqui:["Le Senior Délié","Le Jeune en Décrochage"],temo:"« Trois mois que je n’avais pas ri comme ça », raconte Suzanne, 71 ans."},
+  rebonds:{name:"60 000 Rebonds",base:"Rebondir après une faillite",tags:["professionnel","existentiel"],cout:"gratuit",score:86,annee:2012,benef:"6 000 accompagnés",villes:"50 antennes",emoji:"🔁",color:C.green,histoire:"Chaque jour, des dirigeants perdent leur entreprise · et souvent leur cercle. 60 000 Rebonds accompagne gratuitement ce rebond, par le mentorat et le collectif.",pourqui:["L’Épuisé Relationnel","L’Entrepreneur Isolé"],temo:"« On m’a tendu la main quand tout le monde avait disparu. »"},
+  sklclub:{name:"SKL Club",base:"Le club anti-solitude des dirigeants",tags:["professionnel"],cout:"payant",score:79,annee:2021,benef:"1 200 membres",villes:"Paris · Lyon",emoji:"🧭",color:C.violet,histoire:"Fondé après un burnout, SKL Club crée des cercles confidentiels de dirigeants pour briser l’isolement du sommet. Parler vrai, entre pairs.",pourqui:["L’Entrepreneur Isolé","L’Épuisé Relationnel"],temo:"« Le seul endroit où je peux dire que je ne vais pas bien. »"},
+  dynabuy:{name:"Dynabuy",base:"Le réseau pro de proximité",tags:["professionnel","social"],cout:"payant",score:74,annee:2009,benef:"375 000 entreprises",villes:"140 agences",emoji:"🤝",color:C.blue,histoire:"Dynabuy transforme le réseau professionnel local en lien humain réel, par des rencontres régulières entre entrepreneurs d’un même territoire.",pourqui:["L’Entrepreneur Isolé"],temo:"« Mes clients sont devenus mes amis. »"},
+  cettefamille:{name:"CetteFamille",base:"La colocation senior",tags:["social"],cout:"payant",score:80,annee:2017,benef:"100 maisons",villes:"National",emoji:"🏡",color:C.teal,histoire:"Une alternative humaine et chaleureuse à l’EHPAD : des maisons partagées où quelques seniors vivent ensemble, accompagnés au quotidien.",pourqui:["Le Senior Délié"],temo:"« Je me suis refait une famille à 78 ans. »"},
+  mainsdargent:{name:"Mains d’Argent",base:"Compagnons d’emplettes",tags:["affectif","social"],cout:"payant",score:82,annee:2019,benef:"4 000 sorties",villes:"Île-de-France",emoji:"🛒",color:C.sage,histoire:"Des accompagnateurs dédiés aux seniors pour les courses, une balade, un café. Derrière l’aide pratique, c’est surtout du temps et de l’attention.",pourqui:["Le Senior Délié"],temo:"« Ce n’est pas les courses qui comptent, c’est la conversation. »"},
+  voisins:{name:"Voisins Solidaires",base:"Le lien de proximité",tags:["social"],cout:"gratuit",score:85,annee:2009,benef:"30M touchés",villes:"National",emoji:"🏘️",color:C.amber,histoire:"À l’origine de la Fête des Voisins, le mouvement outille les habitants pour recréer de l’entraide d’immeuble et de quartier, toute l’année.",pourqui:["Le Parent Solo Saturé","Le Déraciné"],temo:"« Je connais enfin les gens de mon palier. »"},
+  colette:{name:"Colette",base:"Cohabitation intergénérationnelle",tags:["social","affectif"],cout:"payant",score:83,annee:2019,benef:"5 000 binômes",villes:"National",emoji:"🔑",color:C.rose,histoire:"Colette loge des étudiants chez des seniors disposant d’une chambre libre. Un toit abordable d’un côté, une présence rassurante de l’autre.",pourqui:["Le Senior Délié","Le Jeune en Décrochage"],temo:"« On s’attendait à cohabiter, on a fini par s’adopter. »"},
+  nightline:{name:"Nightline",base:"L’écoute nocturne étudiante",tags:["affectif","existentiel"],cout:"gratuit",score:90,annee:2017,benef:"50k appels/an",villes:"National",emoji:"🌙",color:C.violet,histoire:"Une ligne d’écoute nocturne, par et pour les étudiants. Un espace anonyme et sans jugement quand la nuit rend la solitude plus lourde.",pourqui:["Le Jeune en Décrochage","Le Chercheur de Sens"],temo:"« Entendre une voix à 2h du matin a tout changé. »"},
+  lovexpat:{name:"Lovexpat",base:"La communauté des expatriés",tags:["social"],cout:"payant",score:76,annee:2018,benef:"120k membres",villes:"Monde",emoji:"✈️",color:C.blue,histoire:"Partir loin, c’est aussi tout recommencer côté lien. Lovexpat connecte les expatriés et les nouveaux arrivants pour se reconstruire un cercle.",pourqui:["Le Déraciné"],temo:"« Arriver dans une ville sans connaître personne : ils étaient là. »"},
+  parentcool:{name:"Parent Cool",base:"Le soutien aux familles solo",tags:["conjugal","professionnel","social"],cout:"payant",score:78,annee:2020,benef:"40k parents",villes:"National",emoji:"👶",color:C.teal,histoire:"Élever seul·e, c’est porter beaucoup en silence. Parent Cool relie les parents solos pour s’entraider, souffler et se sentir moins seuls.",pourqui:["Le Parent Solo Saturé"],temo:"« Enfin des gens qui comprennent ma fatigue sans que j’explique. »"},
+  laruche:{name:"La Ruche",base:"Entreprendre avec du sens",tags:["existentiel","professionnel"],cout:"payant",score:81,annee:2008,benef:"10 000 porteurs",villes:"40 lieux",emoji:"🐝",color:C.green,histoire:"Des lieux où entreprendre autrement, autour de projets à impact. On y trouve un collectif quand on cherche du sens autant que des clients.",pourqui:["Le Chercheur de Sens","L’Entrepreneur Isolé"],temo:"« J’ai trouvé une tribu qui partage mes valeurs. »"},
+  knockk:{name:"Knockk",base:"Sorties entre voisins",tags:["social","affectif"],cout:"payant",score:77,annee:2021,benef:"60k membres",villes:"20 villes",emoji:"🚪",color:C.coral,histoire:"Knockk propose des sorties spontanées entre voisins : un verre, une rando, un ciné. Le lien de proximité, version simple et sans engagement.",pourqui:["Le Déraciné","Le Connecté Solitaire"],temo:"« Un message le matin, une nouvelle bande d’amis le soir. »"},
+  eatwith:{name:"Eatwith",base:"Tables d’hôtes entre particuliers",tags:["affectif","conjugal","social"],cout:"payant",score:75,annee:2014,benef:"1M convives",villes:"130 pays",emoji:"🍷",color:C.plum,histoire:"Des hôtes ouvrent leur table à des convives de passage. Un repas devient une rencontre, à deux ou en groupe, partout dans le monde.",pourqui:["Le Couple Déconnecté","Le Cœur en Attente"],temo:"« On a retrouvé le plaisir de sortir à deux, autrement. »"},
+  initiative:{name:"Initiative France",base:"Le réseau d’entraide entrepreneuriale",tags:["professionnel","existentiel"],cout:"gratuit",score:87,annee:1985,benef:"18 000 prêts/an",villes:"200 antennes",emoji:"🚀",color:C.sage,histoire:"Au-delà du financement, Initiative France entoure les créateurs d’entreprise d’un parrain et d’un collectif. Entreprendre sans être seul.",pourqui:["L’Entrepreneur Isolé","Le Chercheur de Sens"],temo:"« Mon parrain a cru en moi avant la banque. »"},
+  ogenie:{name:"Ôgénie",base:"Le réseau social des seniors",tags:["social","existentiel"],cout:"payant",score:79,annee:2019,benef:"35k seniors",villes:"National",emoji:"🌻",color:C.amber,histoire:"Ôgénie propose ateliers, sorties et entraide pour rompre l’isolement des seniors, en ligne et près de chez soi.",pourqui:["Le Senior Délié","Le Chercheur de Sens"],temo:"« J’ai repris goût aux sorties du mardi. »"}
+};
+const COUT_LABEL={gratuit:"Gratuit",payant:"Payant"};
+
+const BRICKS=[];
+(function(){const g=$("#archGrid");if(g){BRICKS.forEach(b=>{});}})();
+
+function handleAction(act){
+  switch(act){
+    case 'top': scrollToId('top'); break;
+    case 'annuaire': scrollToId('annuaire'); break;
+    case 'iqrh': startIQRH(); break;
+    case 'partner': openPartner('petitescantines'); break;
+    case 'lien': scrollToId('lien'); break;
+    case 'espace': scrollToId('espace'); if(!state.bilanDone) toast('Faites votre bilan pour débloquer votre espace.','🔓'); break;
+    case 'lovesun': scrollToId('annuaire'); break;
+    case 'iris': irisPanel.classList.add('show'); if(!irisMsgs.children.length){irisSay('Bonjour 👋 Je suis <b>IRIS</b>, votre coach relationnel. Faites votre bilan pour des conseils sur mesure, ou posez-moi une question.');} break;
+    case 'news': scrollToId('top'); setTimeout(()=>{const i=$("#newsInput");if(i)i.focus();},500); toast('Inscrivez-vous à la newsletter en bas de page.','✉️'); break;
+    default: toast('Module en préparation.','•');
+  }
+}
+$$("[data-action]").forEach(el=>el.addEventListener('click',()=>handleAction(el.dataset.action)));
+
+let fBesoin='all', fCout='all', fSearch='';
+function renderDir(){
+  const grid=$("#dirGrid");grid.innerHTML='';
+  const list=Object.entries(PARTNERS).filter(([id,p])=>{
+    if(fBesoin!=='all' && !p.tags.includes(fBesoin)) return false;
+    if(fCout!=='all' && p.cout!==fCout) return false;
+    if(fSearch && !p.name.toLowerCase().includes(fSearch) && !p.base.toLowerCase().includes(fSearch)) return false;
+    return true;});
+  $("#countLine").textContent=list.length+' solution'+(list.length>1?'s':'')+' '+(fBesoin==='all'?'':'· besoin '+fBesoin+' ')+(fCout==='all'?'':'· '+COUT_LABEL[fCout]);
+  if(!list.length){grid.innerHTML='<div class="empty">Aucune solution ne correspond à ces filtres.<br>Essayez d’élargir votre recherche.</div>';return;}
+  list.forEach(([id,p])=>{
+    const el=document.createElement('div');el.className='pcard';const saved=state.saved.has(id);
+    const enriched=['timeleft','petitescantines','rebonds','sklclub','dynabuy'].includes(id);
+    const levelMark=enriched?'✦':'○';
+    const levelTitle=enriched?'Contenu +':'Informations clés';
+    el.innerHTML='<button class="savebtn'+(saved?' on':'')+'" data-save="'+id+'" aria-label="Enregistrer">'+(saved?'♥':'♡')+'</button><div class="ph"><div class="plogo" style="background:'+p.color+'">'+p.emoji+'</div><div><div class="pname">'+p.name+'</div><div class="pbase">'+p.base+'</div></div><span class="partner-level-mark '+(enriched?'plus':'standard')+'" title="'+levelTitle+'" aria-label="'+levelTitle+'">'+levelMark+'</span></div><div class="pbody">'+p.histoire.split('. ')[0]+'.</div><div class="pmeta"><span class="ltag lt-score">◆ Link Score '+p.score+'</span><span class="m">'+COUT_LABEL[p.cout]+'</span><span class="m">'+p.villes+'</span></div><div class="pcta"><button class="link-btn">Découvrir la fiche →</button><span class="m" style="font-family:var(--mono);font-size:11px;color:#6D8888">'+p.benef+'</span></div>';
+    el.querySelector('.link-btn').onclick=e=>{e.stopPropagation();openPartner(id);};
+    el.querySelector('.savebtn').onclick=e=>{e.stopPropagation();toggleSave(id);};
+    el.onclick=e=>{if(!e.target.closest('.link-btn')&&!e.target.closest('.savebtn'))openPartner(id);};
+    grid.appendChild(el);});
+}
+$$("#filterBesoin .chip").forEach(c=>c.onclick=()=>{$$("#filterBesoin .chip").forEach(x=>x.classList.remove('active'));c.classList.add('active');fBesoin=c.dataset.besoin;renderDir();});
+$$("#filterCout .chip").forEach(c=>c.onclick=()=>{$$("#filterCout .chip").forEach(x=>x.classList.remove('active'));c.classList.add('active');fCout=c.dataset.cout;renderDir();});
+$("#searchInput").addEventListener('input',e=>{fSearch=e.target.value.toLowerCase().trim();renderDir();});
+function toggleSave(id){if(state.saved.has(id)){state.saved.delete(id);toast(PARTNERS[id].name+' retiré de vos solutions.','♡');}else{state.saved.add(id);toast(PARTNERS[id].name+' enregistré dans Mon espace.','♥');}renderDir();renderEspace();}
+renderDir();
+
+function openPartner(id){
+  const p=PARTNERS[id];const saved=state.saved.has(id);const who=p.pourqui.map(w=>'<span>'+w+'</span>').join('');
+  openModal('<div class="pm-hero"><div class="pm-logo" style="background:'+p.color+'">'+p.emoji+'</div><div><div class="pm-name">'+p.name+'</div><div class="pm-base">'+p.base+'</div></div></div><div class="pm-badges"><span class="ltag lt-score">✓ Certifié Link Office</span><span class="ltag lt-score">◆ Link Score '+p.score+'/100</span><span class="ltag" style="color:var(--coral-deep);background:#fbeae5">'+COUT_LABEL[p.cout]+'</span></div><div class="pm-stats"><div class="pm-stat"><b>'+p.benef+'</b><small>bénéficiaires</small></div><div class="pm-stat"><b>'+p.villes.replace(/ /g,"&nbsp;")+'</b><small>couverture</small></div><div class="pm-stat"><b>'+p.annee+'</b><small>création</small></div><div class="pm-stat"><b>'+p.score+'</b><small>Link Score</small></div></div><div class="pm-sec">Leur histoire</div><div class="pm-txt">'+p.histoire+'</div><div class="pm-sec">Pour quels profils IQRH ?</div><div class="pm-who">'+who+'</div><div class="pm-sec">Témoignage</div><div class="pm-quote">'+p.temo+'</div><div class="pm-sec">Informations pratiques</div><div class="pm-txt">Besoin couvert : '+p.tags.join(', ')+' · Coût : '+COUT_LABEL[p.cout]+' · Zone : '+p.villes+'.</div><div class="pm-actions"><button class="btn btn-primary" id="pmJoin">S’inscrire via Link Office</button><button class="btn btn-ghost" id="pmSave">'+(saved?'♥ Enregistré':'♡ Enregistrer')+'</button><button class="btn btn-ghost" id="pmSite">Découvrir le site</button></div>');
+  $("#pmJoin").onclick=()=>{closeModal();bumpOrient();toast('Vous êtes orienté·e vers '+p.name+'. Un email de suivi à J+30 mesurera votre progrès.','✓');};
+  $("#pmSave").onclick=()=>{toggleSave(id);$("#pmSave").textContent=state.saved.has(id)?'♥ Enregistré':'♡ Enregistrer';};
+  $("#pmSite").onclick=()=>toast('Ouverture de la fiche '+p.name+' (lien tracké).','↗');
+}
+function bumpOrient(){const el=$("#orientCount");if(!el)return;let v=parseInt(el.dataset.live||el.dataset.count,10)+1;el.dataset.live=v;el.firstChild.nodeValue=v.toLocaleString('fr-FR');}
+
+const DIMS=[
+  {key:"social",label:"Relations sociales",icon:"👥",desc:"réseau · sorties · participation",color:C.coral,q:"Dans votre vie quotidienne, dans quelle mesure disposez-vous d’occasions régulières de voir et de rencontrer d’autres personnes ?",opts:[["Très peu",20],["Plutôt peu",45],["Assez régulièrement",70],["Très régulièrement",90]]},
+  {key:"affectif",label:"Relations affectives",icon:"💛",desc:"proximité · confiance · soutien",color:C.amber,q:"Disposez-vous de personnes avec lesquelles vous pouvez partager ce que vous ressentez et compter en cas de besoin ?",opts:[["Pas actuellement",15],["De façon limitée",45],["Oui, avec quelques personnes",70],["Oui, de façon solide",90]]},
+  {key:"conjugal",label:"Vie sentimentale",icon:"💞",desc:"couple · intimité · réciprocité",color:C.rose,q:"Comment évaluez-vous aujourd’hui la qualité de votre vie sentimentale et de vos relations intimes ?",opts:[["Très insatisfaisante",25],["Fragile ou distante",48],["Plutôt satisfaisante",70],["Très nourrissante",90]]},
+  {key:"professionnel",label:"Vie professionnelle et engagement",icon:"💼",desc:"collectif · reconnaissance · coopération",color:C.blue,q:"Dans votre vie professionnelle ou vos engagements, vous sentez-vous intégré·e, reconnu·e et soutenu·e ?",opts:[["Très peu",20],["Partiellement",45],["Plutôt oui",70],["Tout à fait",90]]},
+  {key:"existentiel",label:"Relation à soi et au sens",icon:"✨",desc:"estime · alignement · projection",color:C.sage,q:"Dans quelle mesure vous sentez-vous en accord avec vous-même et relié·e à ce qui donne du sens à votre vie ?",opts:[["Très peu",20],["Par moments",45],["Assez souvent",70],["Profondément",90]]}
+];
+(function(){const box=$("#dimsList");DIMS.forEach((d,i)=>{const el=document.createElement('div');el.className='dimrow';el.innerHTML='<div class="dnum" style="background:'+d.color+'">'+d.icon+'</div><div><b>'+d.label+'</b></div>';box.appendChild(el);});})();
+const ARCHES=[
+  {id:"isole-invisible",name:"L’Isolé Invisible",weak:["affectif","existentiel"],reco:["timeleft","petitescantines","laruche"],desc:"Vous traversez les journées sans que personne ne mesure votre solitude. Le lien existe en surface, mais l’attache profonde manque."},
+  {id:"connecte-solitaire",name:"Le Connecté Solitaire",weak:["affectif"],reco:["petitescantines","timeleft","knockk"],desc:"Entouré, sollicité, jamais vraiment rejoint. Beaucoup de contacts, peu de confidents. La quantité ne comble pas le besoin de profondeur."},
+  {id:"deracine",name:"Le Déraciné",weak:["social"],reco:["lovexpat","knockk","timeleft"],desc:"Un déménagement, une expatriation, un nouveau départ : votre cercle est resté ailleurs. Tout est à reconstruire, et c’est épuisant."},
+  {id:"epuise",name:"L’Épuisé Relationnel",weak:["professionnel","affectif"],reco:["rebonds","sklclub","dynabuy"],desc:"Une épreuve professionnelle a fait le vide autour de vous. L’énergie pour entretenir le lien s’est tarie en même temps que la confiance."},
+  {id:"entrepreneur",name:"L’Entrepreneur Isolé",weak:["professionnel"],reco:["dynabuy","sklclub","initiative"],desc:"Vous portez tout, et c’est solitaire au sommet. Difficile de dire que ça ne va pas quand on doit incarner la réussite."},
+  {id:"parent-solo",name:"Le Parent Solo Saturé",weak:["conjugal","professionnel"],reco:["parentcool","voisins","petitescantines"],desc:"Vous tenez la maison à bout de bras, sans relais. Le temps pour soi et pour les autres s’est évaporé entre le travail et les enfants."},
+  {id:"coeur-attente",name:"Le Cœur en Attente",weak:["affectif","conjugal"],reco:["timeleft","eatwith","knockk"],desc:"Vous aspirez à une rencontre et à des liens qui comptent. L’attente se fait longue, et le quotidien manque de chaleur partagée."},
+  {id:"couple-deconnecte",name:"Le Couple Déconnecté",weak:["conjugal"],reco:["eatwith","timeleft","voisins"],desc:"À deux mais chacun de son côté. La routine a creusé une distance silencieuse là où il y avait de la complicité."},
+  {id:"chercheur-sens",name:"Le Chercheur de Sens",weak:["existentiel"],reco:["laruche","initiative","nightline"],desc:"Vos relations vont, mais il manque le sentiment d’appartenir à plus grand que soi. Vous cherchez une cause, une tribu, un sens partagé."},
+  {id:"senior-delie",name:"Le Senior Délié",weak:["social","affectif"],reco:["mamieboom","colette","ogenie"],desc:"Les cercles d’avant se sont clairsemés. Les occasions de rencontre se raréfient, et le quotidien devient plus silencieux qu’avant."}
+];
+let iqAnswers={}, iqStep=0;
+const BILAN_URL="https://app.base44.com/apps/69bc1a488f3dfe77a5c12c75";
+function startIQRH(){window.open(BILAN_URL,"_blank","noopener");}
+$("#navBilan").onclick=()=>{ if(state.bilanDone){scrollToId('espace');} else startIQRH(); };
+$("#heroBilan").onclick=startIQRH; $("#bilanCta").onclick=startIQRH;
+function renderIntro(){modalBody.innerHTML='<div class="iq-intro"><div class="res-arch">Bilan IQRH · gratuit</div><h2>Mesurez la qualité de vos relations.</h2><p>Cinq questions, cinq dimensions de la santé relationnelle. À la fin, votre score, votre profil relationnel et des pistes adaptées à votre situation.</p><div class="iq-feat"><div>⏱️ 5 minutes</div><div>🔒 Anonyme</div><div>⚡ Résultat immédiat</div></div><button class="btn btn-primary" id="iqStart">Commencer le bilan →</button></div>';$("#iqStart").onclick=()=>{iqStep=0;renderQuestion();};}
+function renderQuestion(){const d=DIMS[iqStep];const pct=(iqStep/DIMS.length)*100;modalBody.innerHTML='<div class="iq-prog"><span style="width:'+pct+'%"></span></div><div class="iq-step-lab">Dimension '+(iqStep+1)+' / '+DIMS.length+' · '+d.label+'</div><div class="iq-q">'+d.q+'</div><div class="iq-opts" id="iqOpts"></div>'+(iqStep>0?'<button class="iq-back" id="iqBack">← Précédent</button>':'');const box=$("#iqOpts");d.opts.forEach(([lab,val])=>{const b=document.createElement('button');b.className='iq-opt';b.innerHTML='<span class="ix"></span>'+lab;b.onclick=()=>{iqAnswers[d.key]=val;if(iqStep<DIMS.length-1){iqStep++;renderQuestion();}else{renderResult();}};box.appendChild(b);});if(iqStep>0)$("#iqBack").onclick=()=>{iqStep--;renderQuestion();};}
+function computeArch(ans){let best=null,bs=-1;ARCHES.forEach(a=>{let s=0;a.weak.forEach(k=>{s+=(100-(ans[k]||50));});s/=a.weak.length;if(a.weak.length>1&&a.weak.every(k=>(ans[k]||50)<55))s+=12;if(s>bs){bs=s;best=a;}});return best;}
+function radarSVG(vals,size,stroke){
+  const cx=size/2,cy=size/2,R=size/2-20,n=DIMS.length;
+  const pt=(i,r)=>{const ang=-Math.PI/2+i*2*Math.PI/n;return [cx+r*Math.cos(ang),cy+r*Math.sin(ang)];};
+  let g='';
+  [0.25,0.5,0.75,1].forEach(rr=>{let p='';for(let i=0;i<n;i++){const a=pt(i,R*rr);p+=(i?'L':'M')+a[0].toFixed(1)+' '+a[1].toFixed(1)+' ';}g+='<path d="'+p+'Z" fill="none" stroke="#E3EBE6" stroke-width="1"/>';});
+  for(let i=0;i<n;i++){const a=pt(i,R);g+='<line x1="'+cx+'" y1="'+cy+'" x2="'+a[0].toFixed(1)+'" y2="'+a[1].toFixed(1)+'" stroke="#E3EBE6" stroke-width="1"/>';}
+  let dp='';for(let i=0;i<n;i++){const v=Math.max(8,vals[i]);const a=pt(i,R*v/100);dp+=(i?'L':'M')+a[0].toFixed(1)+' '+a[1].toFixed(1)+' ';}
+  g+='<path d="'+dp+'Z" fill="'+stroke+'33" stroke="'+stroke+'" stroke-width="2.5" stroke-linejoin="round"/>';
+  for(let i=0;i<n;i++){const v=Math.max(8,vals[i]);const a=pt(i,R*v/100);g+='<circle cx="'+a[0].toFixed(1)+'" cy="'+a[1].toFixed(1)+'" r="3.5" fill="#fff" stroke="'+stroke+'" stroke-width="2"/>';}
+  for(let i=0;i<n;i++){const a=pt(i,R+13);g+='<text x="'+a[0].toFixed(1)+'" y="'+a[1].toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" font-family="Space Mono,monospace" font-size="9" fill="#6D8888">'+DIMS[i].label+'</text>';}
+  return '<svg viewBox="0 0 '+size+' '+size+'" width="'+size+'" height="'+size+'">'+g+'</svg>';
+}
+function renderResult(){
+  const vals=DIMS.map(d=>iqAnswers[d.key]||50);
+  const score=Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+  const arch=computeArch(iqAnswers);
+  const col=score<45?'#00A99D':score<60?'#FFC629':'#199E9A';
+  const dimRows=DIMS.map(d=>{const v=iqAnswers[d.key];const c=v<45?'#00A99D':v<65?'#FFC629':'#4DBDB2';return '<div class="res-dim"><span class="rd-n">'+d.label+'</span><div class="rd-t"><span style="width:'+v+'%;background:'+c+'"></span></div><span class="rd-v">'+v+'</span></div>';}).join('');
+  const reco=arch.reco.map(id=>{const p=PARTNERS[id];return '<div class="reco-card" data-pid="'+id+'"><div class="rl" style="background:'+p.color+'">'+p.emoji+'</div><div style="flex:1"><div class="rn">'+p.name+'</div><div class="rb">'+p.base+' · '+COUT_LABEL[p.cout]+'</div></div><span class="ltag lt-score">◆ '+p.score+'</span></div>';}).join('');
+  modalBody.innerHTML='<div class="iq-prog"><span style="width:100%"></span></div><div class="res-top"><div class="gauge"><svg viewBox="0 0 120 120" width="110" height="110"><circle cx="60" cy="60" r="50" fill="none" stroke="#E3EBE6" stroke-width="11"/><circle id="resArc" cx="60" cy="60" r="50" fill="none" stroke="'+col+'" stroke-width="11" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="314" stroke-dashoffset="314" style="transition:stroke-dashoffset 1.1s cubic-bezier(.2,.7,.2,1)"/></svg><div class="val"><div><b style="color:var(--ink)">'+score+'</b><small>/ 100</small></div></div></div><div><div class="res-arch">Votre archétype relationnel</div><div class="res-name">'+arch.name+'</div></div></div><div class="res-desc">'+arch.desc+'</div><div class="res-mid"><div>'+radarSVG(vals,180,col)+'</div><div class="res-dims">'+dimRows+'</div></div><div class="res-reco"><h4>Vos 3 solutions recommandées</h4>'+reco+'</div><div class="res-actions"><button class="btn btn-primary" id="resEspace">Voir mon espace personnel</button><button class="btn btn-ghost" id="resAgain">Refaire le bilan</button></div>';
+  setTimeout(()=>{const a=$("#resArc");if(a)a.style.strokeDashoffset=314-(314*score/100);},120);
+  $$("#modalBody .reco-card").forEach(c=>c.onclick=()=>openPartner(c.dataset.pid));
+  $("#resAgain").onclick=startIQRH;
+  $("#resEspace").onclick=()=>{closeModal();scrollToId('espace');};
+  const firstTime=!state.bilanDone;
+  state.bilanDone=true;state.score=score;state.archetype=arch;state.dims={};DIMS.forEach((d,i)=>state.dims[d.key]=vals[i]);
+  arch.reco.forEach(id=>state.saved.add(id));
+  state.history.push({n:'Bilan '+(state.history.length+1),score:score});
+  if(firstTime){state.defis=[{t:"Envoyer un message à quelqu’un que vous n’avez pas contacté depuis 3 mois",done:false},{t:"Proposer un café ou un déjeuner à une personne cette semaine",done:false},{t:"Participer à un rituel collectif (cercle du lundi, café du jeudi)",done:false},{t:"Dire bonjour à un voisin que vous croisez sans jamais lui parler",done:false}];}
+  const nb=$("#navBilan");nb.innerHTML='Mon espace <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  renderDir();renderEspace();
+  irisSay("Bravo, votre bilan est fait ! Vous êtes <b>"+arch.name+"</b> avec un score de <b>"+score+"/100</b>. Je vous ai préparé 4 micro-défis dans Mon espace. On commence par lequel ?",true);
+}
+function evoChart(hist){
+  if(hist.length<1) return '';
+  const W=300,H=92,pad=22;const xs=i=>hist.length>1?pad+(i/(hist.length-1))*(W-pad-10):W/2;const ys=v=>H-14-((v)/100)*(H-26);
+  let d='',dots='';hist.forEach((p,i)=>{d+=(i?'L':'M')+xs(i).toFixed(1)+' '+ys(p.score).toFixed(1)+' ';dots+='<circle cx="'+xs(i).toFixed(1)+'" cy="'+ys(p.score).toFixed(1)+'" r="4" fill="#fff" stroke="#00A99D" stroke-width="2"/><text x="'+xs(i).toFixed(1)+'" y="'+(ys(p.score)-9).toFixed(1)+'" text-anchor="middle" font-family="Space Mono,monospace" font-size="10" fill="#4A4458">'+p.score+'</text>';});
+  const line=hist.length>1?'<path d="'+d+'" fill="none" stroke="#00A99D" stroke-width="2.5" stroke-linecap="round"/>':'';
+  let labs='';hist.forEach((p,i)=>{labs+='<text x="'+xs(i).toFixed(1)+'" y="'+(H-2)+'" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#6D8888">'+p.n+'</text>';});
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:340px">'+line+dots+labs+'</svg>';
+}
+function renderEspace(){
+  const box=$("#espaceBody");if(!box)return;
+  if(!state.bilanDone){box.innerHTML='<div class="esp-locked rv in"><div class="lk">🔒</div><h3>Votre espace est verrouillé</h3><p>Réalisez votre bilan IQRH pour débloquer votre profil relationnel, votre journal, vos micro-défis et vos solutions sur mesure.</p><button class="btn btn-primary" id="espLockCta">Faire mon bilan · 5 min</button></div>';$("#espLockCta").onclick=startIQRH;return;}
+  const vals=DIMS.map(d=>state.dims[d.key]);const col=state.score<45?'#00A99D':state.score<60?'#FFC629':'#199E9A';
+  const savedList=[...state.saved].map(id=>{const p=PARTNERS[id];return '<button class="saved-chip" data-pid="'+id+'"><span class="se" style="background:'+p.color+'">'+p.emoji+'</span>'+p.name+'</button>';}).join('')||'<span style="color:var(--ink-faint);font-size:14px">Aucune solution enregistrée pour l’instant.</span>';
+  const journalList=state.journal.length?state.journal.map((j,i)=>'<div class="journal-item"><span class="jd">'+j.d+'</span><span>'+j.t+'</span><button class="jx" data-jx="'+i+'" aria-label="Supprimer">×</button></div>').join(''):'<div style="color:var(--ink-faint);font-size:14px;padding:8px 0">Notez ici vos pas relationnels · un appel, un café, une rencontre.</div>';
+  const defisList=state.defis.map((d,i)=>'<div class="defi'+(d.done?' done':'')+'" data-defi="'+i+'"><span class="ck">'+(d.done?'✓':'')+'</span><span class="dt">'+d.t+'</span></div>').join('');
+  const doneN=state.defis.filter(d=>d.done).length;
+  box.innerHTML='<div class="esp-grid"><div class="esp-card span2"><div class="esp-profile"><div>'+radarSVG(vals,190,col)+'</div><div style="flex:1;min-width:220px"><div class="esp-arch">Votre archétype · score '+state.score+'/100</div><div class="esp-name">'+state.archetype.name+'</div><div class="esp-desc">'+state.archetype.desc+'</div><div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" id="espRedo">Refaire le bilan</button><button class="btn btn-ghost btn-sm" id="espShare">Partager mon résultat</button></div></div></div></div><div class="esp-card"><div class="esp-h"><h3>📓 Journal relationnel</h3></div><div id="journalList">'+journalList+'</div><div class="j-add"><input id="journalInput" placeholder="Ex : Déjeuner avec Léa jeudi"><button class="btn btn-primary btn-sm" id="journalAdd">Ajouter</button></div></div><div class="esp-card"><div class="esp-h"><h3>🎯 Micro-défis</h3><span class="pill">'+doneN+'/'+state.defis.length+'</span></div><div id="defisList">'+defisList+'</div></div><div class="esp-card"><div class="esp-h"><h3>💡 Vos solutions</h3></div><div>'+savedList+'</div></div><div class="esp-card"><div class="esp-h"><h3>📈 Votre évolution</h3></div>'+evoChart(state.history)+'<div style="font-size:12.5px;color:var(--ink-faint);margin-top:8px">Refaites le bilan régulièrement pour suivre votre progression.</div></div></div>';
+  $("#espRedo").onclick=startIQRH;
+  $("#espShare").onclick=()=>toast('Carte de résultat copiée · prête à partager.','⤴');
+  $("#journalAdd").onclick=addJournal;
+  $("#journalInput").addEventListener('keydown',e=>{if(e.key==='Enter')addJournal();});
+  $$("#defisList .defi").forEach(el=>el.onclick=()=>{const i=+el.dataset.defi;state.defis[i].done=!state.defis[i].done;if(state.defis[i].done)toast('Défi accompli · bravo ! 🎉','🎯');renderEspace();});
+  $$("#journalList .jx").forEach(b=>b.onclick=()=>{state.journal.splice(+b.dataset.jx,1);renderEspace();});
+  $$("#espaceBody .saved-chip").forEach(c=>c.onclick=()=>openPartner(c.dataset.pid));
+}
+function addJournal(){const i=$("#journalInput");const v=i.value.trim();if(!v)return;const dt=new Date();state.journal.unshift({t:v,d:dt.getDate()+'/'+(dt.getMonth()+1)});renderEspace();toast('Note ajoutée à votre journal.','📓');}
+renderEspace();
+
+const ARTICLES=[
+  {cat:"Données",emoji:"📊",color:C.coral,t:"La solitude des 40-55 ans, un signal silencieux de santé relationnelle",dek:"Longtemps associée au grand âge, la solitude frappe désormais en plein milieu de vie.",read:"6 min",auteur:"Rédaction LINK OFFICE",body:["On imagine la solitude blanche et silencieuse, réservée aux dernières décennies de la vie. Les données du Baromètre racontent autre chose : c’est entre 40 et 55 ans que le décrochage relationnel est le plus brutal.","Charges familiales, séparations, carrière qui absorbe tout : les amitiés se raréfient sans qu’on s’en aperçoive. On remet à plus tard, et plus tard ne vient jamais.","La bonne nouvelle, c’est que cette tranche d’âge répond très vite aux dispositifs de remise en lien. Encore faut-il oser franchir la première porte."]},
+  {cat:"Décryptage",emoji:"🪞",color:C.amber,t:"Pourquoi « aller bien » est devenu une injonction qui isole",dek:"À force de devoir performer le bonheur, beaucoup n’osent plus dire qu’ils vont mal.",read:"8 min",auteur:"Rédaction LINK OFFICE",body:["« Ça va ? » · « Ça va. » Le rituel social s’est transformé en filtre : on trie ce qui peut se dire. Avouer la solitude, c’est risquer de paraître en échec.","Cette pression au positif crée un paradoxe cruel : plus on est censé aller bien, plus on se sent seul quand on ne va pas bien. Le lien se nourrit pourtant de vulnérabilité partagée.","Les espaces où l’on peut dire « je me sens seul » sans être jugé sont rares. Les créer est peut-être le geste le plus utile de notre époque."]},
+  {cat:"Portrait",emoji:"🍽️",color:C.sage,t:"Dîner avec des inconnus : ce que ça change vraiment",dek:"On a suivi trois personnes pendant un mois de dîners hebdomadaires entre étrangers.",read:"5 min",auteur:"Rédaction LINK OFFICE",body:["Le premier dîner, personne ne s’assoit volontiers. Le quatrième, on garde une place pour celui qui est en retard. En un mois, un groupe d’inconnus est devenu une habitude.","Ce qui se joue n’est pas l’amitié immédiate, mais la preuve concrète que rencontrer reste possible. Pour beaucoup, c’est ce déclic qui manquait.","« J’ai compris que je n’avais pas un problème de personnalité, mais un problème d’occasions », résume l’une des participantes."]}
+];
+(function(){const box=$("#articles");ARTICLES.forEach((a,i)=>{const el=document.createElement('div');el.className='article-card';el.innerHTML='<div class="acov" style="background:'+a.color+'">'+a.emoji+'</div><div><div class="acat">'+a.cat+'</div><h4>'+a.t+'</h4><p>'+a.dek+'</p><div class="ameta">'+a.read+' · '+a.auteur+'</div></div>';el.onclick=()=>openArticle(i);box.appendChild(el);});})();
+function openArticle(i){const a=ARTICLES[i];openModal('<div class="read-cat">'+a.cat+'</div><div class="read-title">'+a.t+'</div><div class="read-meta">'+a.read+' de lecture · '+a.auteur+' · LINK OFFICE</div><div class="read-body">'+a.body.map(p=>'<p>'+p+'</p>').join('')+'</div><div class="pm-actions"><button class="btn btn-primary" id="artBilan">Faire mon bilan IQRH</button><button class="btn btn-ghost" id="artShare">Partager l’article</button></div>');$("#artBilan").onclick=()=>{closeModal();startIQRH();};$("#artShare").onclick=()=>toast('Lien de l’article copié.','↗');}
+
+const EPISODES=[{n:"EP07",t:"Des millions de dîners entre inconnus",dur:"32 min"},{n:"EP06",t:"La solitude au sommet : paroles de dirigeants",dur:"41 min"},{n:"EP05",t:"Vieillir relié : le pari de l’intergénérationnel",dur:"28 min"}];
+(function(){const box=$("#podlist");EPISODES.forEach((e,i)=>{const el=document.createElement('div');el.className='pod-item';el.innerHTML='<div class="pplay"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></div><div><div class="pt">'+e.t+'</div><div class="pm">'+e.n+' · '+e.dur+'</div></div>';el.onclick=()=>playEpisode(i);box.appendChild(el);});})();
+
+let playing=false,prog=0,timer=null;const player=$("#player");
+function fmt(p){const total=32*60;const s=Math.round(total*p/100);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function playEpisode(i){const e=EPISODES[i];$("#playerEp").textContent='LA VOIX DES ÉCLAIREURS · '+e.n;$("#playerTit").textContent=e.t;prog=0;$("#playerProg").style.width='0%';player.classList.add('show');document.body.classList.add('player-open');setPlaying(true);}
+function setPlaying(p){playing=p;$("#playerIcon").innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';if(timer){clearInterval(timer);timer=null;}if(p){timer=setInterval(()=>{prog=Math.min(100,prog+0.5);$("#playerProg").style.width=prog+'%';$("#playerTime").textContent=fmt(prog);if(prog>=100)setPlaying(false);},300);}}
+$("#playerBtn").onclick=()=>setPlaying(!playing);
+$("#playerClose").onclick=()=>{player.classList.remove('show');document.body.classList.remove('player-open');setPlaying(false);};
+$("#playerTrack").onclick=e=>{const r=e.currentTarget.getBoundingClientRect();prog=Math.round((e.clientX-r.left)/r.width*100);$("#playerProg").style.width=prog+'%';$("#playerTime").textContent=fmt(prog);};
+$("#epPlay").onclick=()=>playEpisode(0);
+
+const FEED=[{a:"M",c:C.coral,name:"Marie L.",arch:"L’Isolé Invisible",t:"il y a 12 min",body:"Premier dîner entre inconnus hier soir. J’ai failli annuler trois fois. Finalement ? Quatre personnes adorables et un café prévu samedi 🙌",up:"▲ Score affectif 41 → 49",likes:86,liked:false},{a:"K",c:C.sage,name:"Karim B.",arch:"L’Entrepreneur Isolé",t:"il y a 1 h",body:"Micro-défi du vendredi validé : j’ai rappelé un ancien associé que je n’osais plus contacter depuis le dépôt de bilan. On déjeune mardi.",up:"▲ Défi #18 complété",likes:132,liked:false},{a:"S",c:C.amber,name:"Suzanne, 71 ans",arch:"Le Senior Délié",t:"il y a 3 h",body:"Mon binôme étudiant est passé ce matin. On a parlé deux heures. Je le note ici : trois mois que je n’avais pas ri comme ça.",up:"▲ Score IQRH global 33 → 58",likes:241,liked:false}];
+function renderFeed(){const box=$("#feed");box.innerHTML='';FEED.forEach((f,i)=>{const el=document.createElement('div');el.className='feed-item';el.innerHTML='<div class="ava" style="background:'+f.c+'">'+f.a+'</div><div style="flex:1"><div class="feed-meta"><b>'+f.name+'</b> · '+f.arch+' · '+f.t+'</div><div class="feed-body">'+f.body+'</div>'+(f.up?'<div class="badge-up">'+f.up+'</div>':'')+'<div class="feed-react"><button class="likeBtn'+(f.liked?' liked':'')+'" data-i="'+i+'">❤️ <span>'+f.likes+'</span></button><button class="cmtBtn">💬 commenter</button><button class="shrBtn">🔁 partager</button></div></div>';box.appendChild(el);});$$(".likeBtn",box).forEach(b=>b.onclick=()=>{const f=FEED[+b.dataset.i];f.liked=!f.liked;f.likes+=f.liked?1:-1;b.classList.toggle('liked',f.liked);b.querySelector('span').textContent=f.likes;});$$(".cmtBtn",box).forEach(b=>b.onclick=()=>toast('Espace commentaires ouvert.','💬'));$$(".shrBtn",box).forEach(b=>b.onclick=()=>toast('Lien de la publication copié.','🔁'));}
+renderFeed();
+$("#composerBtn").onclick=()=>{const i=$("#composerInput");const v=i.value.trim();if(!v){i.focus();return;}FEED.unshift({a:"V",c:C.violet,name:"Vous",arch:state.bilanDone?state.archetype.name:"Votre profil",t:"à l’instant",body:v,up:"",likes:0,liked:false});i.value='';renderFeed();toast('Votre victoire est publiée sur le Mur 💛','💛');};
+$("#composerInput").addEventListener('keydown',e=>{if(e.key==='Enter')$("#composerBtn").click();});
+
+const GROUPS=[{e:"💼",n:"Entrepreneurs",c:"3,4k",d:"La solitude du sommet, entre pairs. Échanges sans filtre et entraide concrète."},{e:"👶",n:"Parents solo",c:"2,1k",d:"S’entraider, souffler, se sentir compris·e quand on élève seul·e."},{e:"🌿",n:"Seniors",c:"1,8k",d:"Garder le lien, rencontrer, transmettre. Contre l’isolement du quotidien."},{e:"🎓",n:"Étudiants",c:"4,7k",d:"Campus, examens, nuit difficile : un espace d’écoute entre étudiants."},{e:"✨",n:"Atypiques",c:"1,2k",d:"Hypersensibles et neuro-atypiques : penser différemment, ensemble."},{e:"✈️",n:"Expatriés",c:"980",d:"Recommencer son cercle ailleurs, ou au retour. Le lien malgré la distance."}];
+const joined={};
+function renderGroups(){const box=$("#groups");box.innerHTML='';GROUPS.forEach((g,i)=>{const el=document.createElement('div');el.className='grp';el.innerHTML='<span class="emoji">'+g.e+'</span> '+g.n+' <span class="grp-n">'+g.c+'</span>';el.onclick=()=>openGroup(i);box.appendChild(el);});}
+renderGroups();
+function openGroup(i){const g=GROUPS[i];const on=!!joined[i];openModal('<div class="pm-hero"><div class="pm-logo" style="background:var(--violet);font-size:26px">'+g.e+'</div><div><div class="pm-name">Groupe '+g.n+'</div><div class="pm-base">'+g.c+' membres · communauté modérée</div></div></div><div class="pm-txt">'+g.d+'</div><div class="pm-sec">Dernières discussions</div><div style="display:flex;flex-direction:column;gap:10px;color:var(--ink-soft);font-size:13.5px"><div>💬 « Quelqu’un pour un café visio cette semaine ? » · 14 réponses</div><div>💬 « Comment vous relancez après une période de repli ? » · 28 réponses</div><div>💬 « Retour sur le dernier rituel du lundi » · 9 réponses</div></div><div class="pm-actions"><button class="btn btn-primary" id="grpJoin">'+(on?'✓ Vous êtes membre':'Rejoindre le groupe')+'</button></div>');$("#grpJoin").onclick=()=>{joined[i]=!joined[i];closeModal();toast(joined[i]?('Vous avez rejoint le groupe '+g.n+' 💛'):('Vous avez quitté le groupe '+g.n+'.'),joined[i]?'💛':'•');};}
+
+const RITUALS=[{d:"LUN",h:"21h",t:"Le cercle de parole",s:"Visio modérée · « la solitude qu’on n’ose pas dire »"},{d:"JEU",h:"13h",t:"Le café virtuel",s:"Pauses de 20 min en petits groupes aléatoires"},{d:"VEN",h:"18h",t:"Le défi du vendredi",s:"Un micro-pas relationnel à relever ce week-end"}];
+const ritualOn={};
+function renderRituals(){const box=$("#rituals");box.innerHTML='';RITUALS.forEach((r,i)=>{const el=document.createElement('div');el.className='ritual';el.innerHTML='<div class="day">'+r.d+'<b>'+r.h+'</b></div><div class="r-body"><b>'+r.t+'</b><small>'+r.s+'</small></div><button class="join'+(ritualOn[i]?' on':'')+'" data-i="'+i+'">'+(ritualOn[i]?'Inscrit ✓':'Rejoindre')+'</button>';box.appendChild(el);});$$(".join",box).forEach(b=>b.onclick=()=>{const i=+b.dataset.i;ritualOn[i]=!ritualOn[i];b.classList.toggle('on',ritualOn[i]);b.textContent=ritualOn[i]?'Inscrit ✓':'Rejoindre';if(ritualOn[i])toast('Inscrit·e à « '+RITUALS[i].t+' ». Rappel envoyé.','🗓️');});}
+renderRituals();
+$("#binomeBtn").onclick=()=>toast('Recherche d’un binôme complémentaire lancée · réponse sous 48 h.','🤝');
+
+const EVENTS=[{d:"15",m:"MAR",ville:"Marseille",lieu:"Friche la Belle de Mai",places:180},{d:"12",m:"AVR",ville:"Lyon",lieu:"H7 · Confluence",places:150},{d:"17",m:"MAI",ville:"Paris",lieu:"Ground Control",places:240},{d:"14",m:"JUIN",ville:"Bordeaux",lieu:"Darwin",places:120}];
+function renderEvents(){const box=$("#eventsMini");if(!box)return;box.innerHTML='';EVENTS.forEach((e,i)=>{const el=document.createElement('div');el.className='ev-item';el.style.padding='16px';el.innerHTML='<div class="ev-date"><b>'+e.d+'</b><small>'+e.m+'</small></div><div class="ev-body"><h4>LOVE SUNDAY '+e.ville+'</h4><div class="el">'+e.lieu+'</div><div class="ep" id="evp'+i+'">🎟️ '+e.places+' places</div></div><button class="join" data-ev="'+i+'">Réserver</button>';box.appendChild(el);});$$("#eventsMini .join").forEach(b=>b.onclick=()=>reserveEvent(+b.dataset.ev));}
+function reserveEvent(i){const e=EVENTS[i];openModal('<div class="res-arch">LOVE SUNDAY · présentiel</div><div class="read-title" style="font-size:26px">LOVE SUNDAY '+e.ville+'</div><div class="read-meta">Dimanche '+e.d+' '+e.m.toLowerCase()+' · '+e.lieu+'</div><div class="pm-txt">Le rendez-vous physique du lien : une après-midi pour se rencontrer en vrai, autour d’ateliers, de temps d’échange et de moments conviviaux. Entrée à prix libre, sur réservation.</div><div class="pm-stats" style="grid-template-columns:repeat(3,1fr)"><div class="pm-stat"><b>'+e.places+'</b><small>places restantes</small></div><div class="pm-stat"><b>14h</b><small>ouverture</small></div><div class="pm-stat"><b>Libre</b><small>tarif</small></div></div><div class="pm-actions"><button class="btn btn-primary" id="evConfirm">Confirmer ma réservation</button><button class="btn btn-ghost" id="evCal">Ajouter à mon agenda</button></div>');$("#evConfirm").onclick=()=>{if(e.places>0)e.places--;const p=$("#evp"+i);if(p)p.textContent='🎟️ '+e.places+' places';closeModal();toast('Place réservée pour LOVE SUNDAY '+e.ville+' 🎟️','★');};$("#evCal").onclick=()=>toast('Événement ajouté à votre agenda.','📅');}
+renderEvents();
+
+const FORUM=[{q:"Comment recréer du lien après un déménagement dans une ville où je ne connais personne ?",by:"Le Déraciné",n:23,tag:"↳ Lovexpat",ans:"Trois pistes qui marchent : un groupe local Voisins Solidaires, un premier dîner entre inconnus pour briser la glace, et un rituel hebdo pour ancrer la régularité."},{q:"Mon ado de 15 ans s’isole depuis le confinement, par où commencer ?",by:"Le Parent Solo Saturé",n:41,tag:"↳ Nightline",ans:"Ne forcez pas la parole, créez des occasions à côté. Une ligne d’écoute jeune comme Nightline peut offrir un espace neutre, sans jugement."},{q:"Existe-t-il des dîners entre inconnus pour les plus de 60 ans ?",by:"Le Senior Délié",n:18,tag:"↳ Les Petites Cantines",ans:"Oui : Les Petites Cantines accueillent tous les âges à prix libre, et l’ambiance y est particulièrement chaleureuse en journée."}];
+function renderForum(){const box=$("#forum");box.innerHTML='';FORUM.forEach((f,i)=>{const el=document.createElement('div');el.className='forum-row';el.innerHTML='<div class="q">'+f.q+'<small>Posée par '+f.by+' · '+f.n+' réponses</small></div><span class="partner-tag">'+f.tag+'</span>';el.onclick=()=>openModal('<div class="res-arch">Forum d’entraide</div><div class="read-title" style="font-size:23px">'+f.q+'</div><div class="pm-txt" style="margin-bottom:6px"><b>Réponse la mieux notée</b> '+f.tag.replace('↳ ','· par ')+'</div><div class="pm-quote">'+f.ans+'</div><div class="pm-actions"><button class="btn btn-primary" id="fHelp">Cette réponse m’aide</button><button class="btn btn-ghost" id="fAns">Répondre</button></div>');box.appendChild(el);});}
+renderForum();
+overlay.addEventListener('click',e=>{if(e.target.id==='fHelp'){closeModal();toast('Merci · votre vote aide la communauté.','👍');}if(e.target.id==='fAns'){closeModal();toast('Espace de réponse ouvert.','💬');}});
+
+/* ===== IRIS coach ===== */
+const irisPanel=$("#irisPanel"),irisMsgs=$("#irisMsgs");
+function irisSay(html,open){const m=document.createElement('div');m.className='imsg bot';m.innerHTML=html;irisMsgs.appendChild(m);irisMsgs.scrollTop=irisMsgs.scrollHeight;if(open)irisPanel.classList.add('show');}
+function irisUser(txt){const m=document.createElement('div');m.className='imsg user';m.textContent=txt;irisMsgs.appendChild(m);irisMsgs.scrollTop=irisMsgs.scrollHeight;}
+const IRIS_QUICK=["Expliquer mon archétype","Une solution pour moi","Le défi du jour","Prochain événement"];
+(function(){const box=$("#irisQuick");IRIS_QUICK.forEach(q=>{const b=document.createElement('button');b.className='iqk';b.textContent=q;b.onclick=()=>irisHandle(q);box.appendChild(b);});})();
+function irisReply(t){
+  const q=t.toLowerCase();
+  if(/archét|profil|résultat|resultat|score/.test(q)){return state.bilanDone?('Vous êtes <b>'+state.archetype.name+'</b> (score '+state.score+'/100). '+state.archetype.desc):'Vous n’avez pas encore fait votre bilan IQRH. Cliquez sur « Faites votre bilan » en haut · 5 minutes suffisent pour découvrir votre archétype.';}
+  if(/solution|recommand|orient|partenaire/.test(q)){if(state.bilanDone){const id=state.archetype.reco[0];const p=PARTNERS[id];return 'Pour votre profil, je commencerais par <b>'+p.name+'</b> : '+p.base.toLowerCase()+' ('+COUT_LABEL[p.cout]+'). Ouvrez sa fiche dans l’annuaire pour en savoir plus.';}return 'Faites d’abord votre bilan : je pourrai alors vous recommander 3 solutions vraiment adaptées. Sinon, l’annuaire est filtrable par besoin et par coût.';}
+  if(/défi|defi|exercice|action/.test(q)){if(state.bilanDone){const next=state.defis.find(d=>!d.done);return next?('Votre prochain micro-défi : <b>'+next.t+'</b>. Un petit pas vaut mieux qu’un grand projet. Vous le retrouvez dans Mon espace.'):'Vous avez relevé tous vos défis · bravo ! Refaites le bilan pour mesurer le chemin parcouru.';}return 'Mon défi universel du jour : envoyez un message à une personne que vous n’avez pas contactée depuis longtemps. Rien d’autre. C’est souvent là que tout commence.';}
+  if(/événement|evenement|love sunday|rencontre|sortir/.test(q)){const e=EVENTS[0];return 'Le prochain <b>LOVE SUNDAY</b> est à '+e.ville+', le '+e.d+' '+e.m.toLowerCase()+' ('+e.lieu+'). Il reste des places · consultez les ressources et partenaires proposés.';}
+  if(/seul|solitude|triste|isolé|isole|mal/.test(q)){return 'Ce que vous ressentez est partagé par beaucoup plus de monde qu’on ne le croit · près d’un Français sur trois. Le bilan IQRH peut aider à y voir clair, et des ressources adaptées peuvent vous aider à agir.';}
+  if(/bonjour|salut|coucou|hello/.test(q)){return 'Bonjour ! Je suis IRIS, votre coach relationnel. Je peux expliquer votre archétype, vous suggérer une solution, un micro-défi ou un événement. Que souhaitez-vous ?';}
+  if(/merci/.test(q)){return 'Avec plaisir. Le lien se construit un petit pas à la fois · je suis là quand vous voulez.';}
+  return 'Je peux vous aider sur votre <b>archétype</b>, une <b>solution adaptée</b>, un <b>micro-défi</b> ou un <b>événement</b>. Essayez l’un des boutons ci-dessous.';
+}
+function irisHandle(txt){irisUser(txt);setTimeout(()=>irisSay(irisReply(txt)),320);}
+$("#irisLaunch").onclick=()=>{irisPanel.classList.toggle('show');if(irisPanel.classList.contains('show')&&!irisMsgs.children.length){irisSay('Bonjour 👋 Je suis <b>IRIS</b>, votre coach relationnel. Faites votre bilan pour des conseils sur mesure, ou posez-moi une question.');}};
+$("#irisClose").onclick=()=>irisPanel.classList.remove('show');
+$("#irisSend").onclick=()=>{const i=$("#irisInput");const v=i.value.trim();if(!v)return;i.value='';irisHandle(v);};
+$("#irisInput").addEventListener('keydown',e=>{if(e.key==='Enter')$("#irisSend").click();});
+
+/* ===== newsletter ===== */
+$("#newsBtn").onclick=()=>{const i=$("#newsInput");const v=i.value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){i.focus();toast('Entrez un email valide pour vous inscrire.','!');return;}i.value='';toast('Inscription confirmée au Baromètre LINK OFFICE ✉️','✉️');};
+$("#newsInput").addEventListener('keydown',e=>{if(e.key==='Enter')$("#newsBtn").click();});
+
+/* ===== reveal + counters + gauge ===== */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
+$$(".rv").forEach(el=>io.observe(el));
+function animateCount(el){const target=+el.dataset.count;const small=el.querySelector('small');const dur=1500;const start=performance.now();function tick(now){const p=Math.min((now-start)/dur,1);const v=Math.round(target*(1-Math.pow(1-p,3)));el.firstChild.nodeValue=v.toLocaleString('fr-FR');if(small)el.appendChild(small);if(p<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);}
+const cIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){animateCount(e.target);cIO.unobserve(e.target);}}),{threshold:.5});
+$$("[data-count]").forEach(el=>cIO.observe(el));
+window.addEventListener('load',()=>setTimeout(()=>$$(".sc-bar span,.ctr-mini span").forEach(s=>s.style.width=s.dataset.w+'%'),400));
+const gIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const arc=$("#gaugeArc");arc.style.transition='stroke-dashoffset 1.8s cubic-bezier(.2,.7,.2,1)';arc.style.strokeDashoffset=314-(314*58/100);$$(".ringfill").forEach(r=>{const pc=+r.dataset.pct;r.style.transition='stroke-dashoffset 1.4s ease';r.style.strokeDasharray='100';r.style.strokeDashoffset=100;setTimeout(()=>r.style.strokeDashoffset=100-pc,200);});gIO.unobserve(e.target);}}),{threshold:.4});
+if($(".gauge"))gIO.observe($(".gauge"));
+
+/* ===== hex map ===== */
+const HEXROWS=[[3,6],[2,7],[1,8],[1,8],[1,9],[2,8],[2,7],[3,6],[4,5]];
+const HEX=[];HEXROWS.forEach((r,ri)=>{for(let c=r[0];c<=r[1];c++)HEX.push([c,ri]);});HEX.push([10,7]);HEX.push([10,8]);
+const DEPTS=["Nord","Pas-de-Calais","Somme","Seine-Maritime","Oise","Aisne","Ardennes","Marne","Eure","Calvados","Manche","Finistère","Morbihan","Ille-et-Vilaine","Mayenne","Sarthe","Loiret","Yonne","Côte-d'Or","Haut-Rhin","Vosges","Loire-Atlantique","Maine-et-Loire","Vendée","Indre","Cher","Nièvre","Saône-et-Loire","Jura","Doubs","Charente","Vienne","Haute-Vienne","Creuse","Allier","Rhône","Ain","Haute-Savoie","Gironde","Dordogne","Corrèze","Cantal","Loire","Isère","Savoie","Landes","Lot","Aveyron","Lozère","Ardèche","Drôme","Hautes-Alpes","Pyrénées-Atl.","Gers","Tarn","Hérault","Gard","Vaucluse","Alpes-Mar.","Haute-Garonne","Aude","Bouches-du-Rhône","Var","Ariège","Pyr.-Orientales","Corse-du-Sud","Haute-Corse"];
+function scoreColor(s){const t=Math.max(0,Math.min(1,(s-32)/44));let r,g,b;if(t<.5){const k=t/.5;r=240+(232-240)*k;g=87+(169-87)*k;b=61+(59-61)*k;}else{const k=(t-.5)/.5;r=232+(86-232)*k;g=169+(210-169)*k;b=59+(154-59)*k;}return 'rgb('+(r|0)+','+(g|0)+','+(b|0)+')';}
+let mapDim='global';const HEXDATA=[];
+(function(){
+  const svg=$("#hexmap");const R=17;const w=Math.sqrt(3)*R;const h=2*R*0.75;const tip=$("#maptip");const sel=$("#mapsel");
+  let seed=7;function rnd(){seed=(seed*9301+49297)%233280;return seed/233280;}
+  HEX.forEach(([c,ri],i)=>{
+    const x=20+c*w+(ri%2?w/2:0);const y=20+ri*h;
+    let base=46+rnd()*30;if(c<=2&&ri>=3&&ri<=5)base-=14;if(c>=4&&c<=5&&ri===8)base-=10;
+    const g0=Math.round(Math.max(33,Math.min(77,base)));
+    const dims={global:g0,social:Math.max(28,Math.min(80,Math.round(g0+(rnd()*20-10)))),affectif:Math.max(28,Math.min(80,Math.round(g0+(rnd()*20-12)))),professionnel:Math.max(28,Math.min(80,Math.round(g0+(rnd()*20-8))))};
+    const pts=[];for(let a=0;a<6;a++){const ang=Math.PI/180*(60*a-30);pts.push((x+R*Math.cos(ang)).toFixed(1)+','+(y+R*Math.sin(ang)).toFixed(1));}
+    const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points',pts.join(' '));poly.setAttribute('fill',scoreColor(dims.global));poly.setAttribute('class','hex');
+    const name=DEPTS[i%DEPTS.length];HEXDATA.push({poly:poly,dims:dims,name:name});
+    poly.addEventListener('mousemove',ev=>{const s=dims[mapDim];tip.style.opacity=1;tip.style.left=(ev.clientX+14)+'px';tip.style.top=(ev.clientY-10)+'px';tip.innerHTML='<b>'+name+'</b><span class="ms">Score '+mapDim+' '+s+'/100</span>';});
+    poly.addEventListener('mouseleave',()=>{tip.style.opacity=0;});
+    poly.addEventListener('click',()=>{$$(".hex").forEach(hh=>hh.classList.remove('sel'));poly.classList.add('sel');const s=dims[mapDim];sel.innerHTML='<b>'+name+'</b> · score '+mapDim+' '+s+'/100'+(s<48?'':' · au-dessus de la moyenne');});
+    svg.appendChild(poly);
+  });
+})();
+$$("#mapFilter .mfc").forEach(b=>b.onclick=()=>{$$("#mapFilter .mfc").forEach(x=>x.classList.remove('active'));b.classList.add('active');mapDim=b.dataset.dim;HEXDATA.forEach(d=>d.poly.setAttribute('fill',scoreColor(d.dims[mapDim])));});
+
+/* ===== archetype bars + CSV ===== */
+const ARCH_DIST=[["Le Connecté Solitaire",16,"#00A99D","Beaucoup de contacts, peu de confidents."],["L'Isolé Invisible",13,"#FFC629","Une solitude que personne ne voit."],["Le Senior Délié",11,"#4DBDB2","Des cercles qui se sont clairsemés."],["L'Entrepreneur Isolé",10,"#00A99D","La solitude du sommet."],["Le Jeune en Décrochage",9,"#FFC629","Hyperconnecté et pourtant seul."],["Le Parent Solo Saturé",8,"#4DBDB2","Tout porter, sans relais."],["Le Cœur en Attente",7,"#00A99D","En attente d’un lien qui compte."],["Le Chercheur de Sens",6,"#FFC629","En quête d’appartenance."]];
+(function(){const box=$("#archbars");ARCH_DIST.forEach(([n,p,col,desc])=>{const row=document.createElement('div');row.className='arch-row';row.innerHTML='<span class="an">'+n+'</span><div class="track"><span style="background:'+col+'"></span></div><span class="ap">'+p+'%</span>';row.onclick=()=>toast(n+' · '+desc,'◆');box.appendChild(row);row._p=p;row._s=row.querySelector('.track span');});const bIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){box.querySelectorAll('.arch-row').forEach((r,i)=>setTimeout(()=>r._s.style.width=(r._p*5)+'%',i*90));bIO.disconnect();}}),{threshold:.3});bIO.observe(box);})();
+$("#csvBtn").onclick=()=>{let csv='Archetype,Part (%)\n'+ARCH_DIST.map(a=>'"'+a[0]+'",'+a[1]).join('\n')+'\n';const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='barometre-du-lien_archetypes.csv';a.click();URL.revokeObjectURL(url);toast('Données du Baromètre exportées (CSV).','⬇');};
+$("#shareShock").onclick=()=>toast('Visuel de la donnée copié · prêt pour la presse et les réseaux.','⤴');
+
+/* ===== line chart ===== */
+(function(){
+  const svg=$("#linechart");const W=520,H=200,pad=30;
+  const data=[54,54,55,55,56,55,56,57,57,56,57,58];const months=["J","A","S","O","N","D","J","F","M","A","M","J"];
+  const min=50,max=60;const xs=i=>pad+(i/(data.length-1))*(W-pad-12);const ys=v=>H-pad-((v-min)/(max-min))*(H-pad-20);
+  for(let g=min;g<=max;g+=2){const y=ys(g);const ln=document.createElementNS('http://www.w3.org/2000/svg','line');ln.setAttribute('x1',pad);ln.setAttribute('x2',W-12);ln.setAttribute('y1',y);ln.setAttribute('y2',y);ln.setAttribute('class','lc-grid');svg.appendChild(ln);const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',4);t.setAttribute('y',y+3);t.setAttribute('class','lc-lab');t.textContent=g;svg.appendChild(t);}
+  let d='',area='M'+xs(0)+' '+(H-pad);data.forEach((v,i)=>{d+=(i?'L':'M')+xs(i).toFixed(1)+' '+ys(v).toFixed(1)+' ';area+=' L'+xs(i).toFixed(1)+' '+ys(v).toFixed(1);});
+  area+=' L'+xs(data.length-1)+' '+(H-pad)+' Z';
+  const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+  defs.innerHTML='<linearGradient id="lcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC629" stop-opacity=".35"/><stop offset="1" stop-color="#FFC629" stop-opacity="0"/></linearGradient>';svg.appendChild(defs);
+  const ar=document.createElementNS('http://www.w3.org/2000/svg','path');ar.setAttribute('d',area);ar.setAttribute('class','lc-area');ar.setAttribute('fill','url(#lcg)');svg.appendChild(ar);
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',d.trim());path.setAttribute('class','lc-path');svg.appendChild(path);
+  data.forEach((v,i)=>{const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');dot.setAttribute('cx',xs(i));dot.setAttribute('cy',ys(v));dot.setAttribute('r',i===data.length-1?4:2.5);dot.setAttribute('class','lc-dot');svg.appendChild(dot);const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',xs(i));t.setAttribute('y',H-pad+15);t.setAttribute('text-anchor','middle');t.setAttribute('class','lc-lab');t.textContent=months[i];svg.appendChild(t);});
+  const lIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const L=path.getTotalLength();path.style.strokeDasharray=L;path.style.strokeDashoffset=L;requestAnimationFrame(()=>{path.style.transition='stroke-dashoffset 2s ease';path.style.strokeDashoffset=0;ar.style.opacity=1;});lIO.disconnect();}}),{threshold:.3});
+  lIO.observe(svg);
+})();
+</script>
+</body>
+</html>

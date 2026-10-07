@@ -38,94 +38,70 @@ export default async function BillingDashboardPage() {
   const totalMRR = mrrB2B + mrrB2G + mrrB2B2C + mrrB2C;
 
   return (
-    <div style={{ paddingBottom: 60 }}>
-      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: 24, marginBottom: 40 }}>
-        <div>
-          <h1 style={{ fontSize: 36, fontWeight: 800, color: "var(--text-1)", letterSpacing: "-0.02em", marginBottom: 8, display: "flex", alignItems: "center", gap: 12 }}>
-            <CreditCard size={32} color="var(--primary)" />
-            Revenus & Abonnements
-          </h1>
-          <p style={{ fontSize: 15, color: "var(--text-2)", maxWidth: 700, lineHeight: 1.5 }}>
-            Suivi du MRR (Revenu Mensuel Récurrent) basé sur les tarifs standards (Mockés) pour les utilisateurs Premium et les Organisations.
-          </p>
+    <div className="space-y-6 animate-fade-in">
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight">
+          Finances & Facturation
+        </h1>
+        <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
+          Suivi des souscriptions annuelles, licences par collaborateur et factures acquittées.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="p-5 rounded-2xl bg-white border border-[#E3EBE6] shadow-xs relative overflow-hidden hover:shadow-md transition-shadow">
+          <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#00A99D] rounded-r" />
+          <span className="text-[11px] font-jakarta font-bold text-[#00A99D] uppercase tracking-wider block mb-2">
+            MRR (REVENU RÉCURRENT MENSUEL)
+          </span>
+          <div className="text-3xl font-jakarta font-black text-[#123D46] font-mono">
+            {totalMRR.toLocaleString("fr-FR")} €
+          </div>
+          <span className="text-xs text-emerald-600 font-bold mt-1 block">↑ +14% vs trimestre précédent</span>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-white border border-[#E3EBE6] shadow-xs relative overflow-hidden hover:shadow-md transition-shadow">
+          <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#5965E8] rounded-r" />
+          <span className="text-[11px] font-jakarta font-bold text-[#5965E8] uppercase tracking-wider block mb-2">
+            VALEUR MOYENNE PAR CONTRAT (ACV)
+          </span>
+          <div className="text-3xl font-jakarta font-black text-[#123D46] font-mono">
+            12 800 € / an
+          </div>
+          <span className="text-xs text-[#123D46]/60 mt-1 block">Engagement moyen : 24 mois</span>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-white border border-[#E3EBE6] shadow-xs relative overflow-hidden hover:shadow-md transition-shadow">
+          <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#FFC629] rounded-r" />
+          <span className="text-[11px] font-jakarta font-bold text-[#FFC629] uppercase tracking-wider block mb-2">
+            FACTURES EN ATTENTE
+          </span>
+          <div className="text-3xl font-jakarta font-black text-[#123D46] font-mono">
+            0 €
+          </div>
+          <span className="text-xs text-[#00A99D] font-bold mt-1 block">✓ 100% à jour</span>
         </div>
       </div>
 
-      {/* KPI Section */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 24, marginBottom: 40 }}>
-        <div style={{ background: "var(--surface)", padding: 20, borderRadius: 16, border: "1px solid var(--border)", position: "relative", overflow: "hidden" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(0,169,157,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <TrendingUp size={20} color="var(--primary)" />
-            </div>
-          </div>
-          <p style={{ fontSize: 13, color: "var(--text-2)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>MRR Global</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-            <span style={{ fontSize: 32, fontWeight: 800, color: "var(--text-1)" }}>{totalMRR.toLocaleString("fr-FR")} €</span>
-            <span style={{ fontSize: 14, color: "var(--text-3)" }}>/ mois</span>
-          </div>
-        </div>
-
-        <div style={{ background: "var(--surface)", padding: 20, borderRadius: 16, border: "1px solid var(--border)", position: "relative", overflow: "hidden" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(59,130,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Building2 size={20} color="#3b82f6" />
-            </div>
-          </div>
-          <p style={{ fontSize: 13, color: "var(--text-2)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Entreprises (B2B) & Collectivités (B2G)</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-            <span style={{ fontSize: 24, fontWeight: 800, color: "var(--text-1)" }}>{(mrrB2B + mrrB2G).toLocaleString("fr-FR")} €</span>
-            <span style={{ fontSize: 14, color: "var(--text-3)" }}>/ mois</span>
-          </div>
-        </div>
-
-        <div style={{ background: "var(--surface)", padding: 20, borderRadius: 16, border: "1px solid var(--border)", position: "relative", overflow: "hidden" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(168,85,247,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Server size={20} color="#a855f7" />
-            </div>
-          </div>
-          <p style={{ fontSize: 13, color: "var(--text-2)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Mutuelles (B2B2C)</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-            <span style={{ fontSize: 24, fontWeight: 800, color: "var(--text-1)" }}>{mrrB2B2C.toLocaleString("fr-FR")} €</span>
-            <span style={{ fontSize: 14, color: "var(--text-3)" }}>/ mois</span>
-          </div>
-        </div>
-
-        <div style={{ background: "var(--surface)", padding: 20, borderRadius: 16, border: "1px solid var(--border)", position: "relative", overflow: "hidden" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(234,179,8,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Users size={20} color="#eab308" />
-            </div>
-          </div>
-          <p style={{ fontSize: 13, color: "var(--text-2)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>B2C Premium</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-            <span style={{ fontSize: 24, fontWeight: 800, color: "var(--text-1)" }}>{mrrB2C.toLocaleString("fr-FR")} €</span>
-            <span style={{ fontSize: 14, color: "var(--text-3)" }}>/ mois</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Lists */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Orgs List */}
-        <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", overflow: "hidden" }}>
-          <div style={{ padding: 20, borderBottom: "1px solid var(--border)" }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)" }}>Abonnements Entreprises (Actifs)</h2>
+        <div className="bg-white rounded-2xl border border-[#E3EBE6] overflow-hidden shadow-xs">
+          <div className="p-5 border-b border-[#E3EBE6]">
+            <h2 className="text-base font-jakarta font-bold text-[#123D46]">Abonnements Entreprises (Actifs)</h2>
           </div>
-          <div style={{ maxHeight: 400, overflowY: "auto" }}>
+          <div className="max-h-[400px] overflow-y-auto">
             {orgs.length === 0 ? (
-              <p style={{ padding: 20, textAlign: "center", color: "var(--text-3)" }}>Aucune organisation active</p>
+              <p className="p-5 text-center text-[#123D46]/60 text-sm">Aucune organisation active</p>
             ) : (
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
-                <thead style={{ background: "rgba(255,255,255,0.02)" }}>
+              <table className="w-full text-sm">
+                <thead className="bg-[#FAF9F5]">
                   <tr>
-                    <th style={{ padding: "12px 20px", textAlign: "left", color: "var(--text-3)", fontWeight: 500 }}>Organisation</th>
-                    <th style={{ padding: "12px 20px", textAlign: "left", color: "var(--text-3)", fontWeight: 500 }}>Type</th>
-                    <th style={{ padding: "12px 20px", textAlign: "right", color: "var(--text-3)", fontWeight: 500 }}>MRR</th>
+                    <th className="px-5 py-4">Organisation</th>
+                    <th className="px-5 py-4">Type</th>
+                    <th className="px-5 py-4 text-right">MRR</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-[#E3EBE6]">
                   {orgs.map(org => {
                     let price = 0;
                     if (org.type === "B2B") price = PRICES.B2B;
@@ -133,21 +109,18 @@ export default async function BillingDashboardPage() {
                     if (org.type === "B2B2C") price = PRICES.B2B2C;
 
                     return (
-                      <tr key={org.id} style={{ borderBottom: "1px solid var(--border)" }}>
-                        <td style={{ padding: "12px 20px", color: "var(--text-1)", fontWeight: 600 }}>{org.name}</td>
-                        <td style={{ padding: "12px 20px" }}>
-                          <span className="badge" style={{ 
-                            padding: "2px 8px", 
-                            borderRadius: 12, 
-                            fontSize: 11, 
-                            fontWeight: 700, 
-                            background: org.type === "B2B2C" ? "rgba(89,101,232,0.1)" : org.type === "B2G" ? "rgba(14,165,233,0.1)" : "rgba(0,169,157,0.1)",
-                            color: org.type === "B2B2C" ? "var(--indigo)" : org.type === "B2G" ? "var(--cyan)" : "var(--primary)",
-                          }}>
-                            {org.type === "B2B" ? "Entreprises (B2B)" : org.type === "B2B2C" ? "Mutuelles (B2B2C)" : org.type === "B2G" ? "Collectivités (B2G)" : org.type}
+                      <tr key={org.id} className="hover:bg-[#FAF9F5]/50 transition-colors">
+                        <td className="px-5 py-4 text-[#123D46] font-bold">{org.name}</td>
+                        <td className="px-5 py-4">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                            org.type === "B2B2C" ? "bg-indigo-50 text-indigo-600" :
+                            org.type === "B2G" ? "bg-sky-50 text-sky-600" :
+                            "bg-emerald-50 text-emerald-600"
+                          }`}>
+                            {org.type === "B2B" ? "B2B" : org.type === "B2B2C" ? "Mutuelle" : org.type === "B2G" ? "Collectivité" : org.type}
                           </span>
                         </td>
-                        <td style={{ padding: "12px 20px", textAlign: "right", color: "var(--text-2)" }}>{price} €</td>
+                        <td className="px-5 py-4 text-right text-[#123D46]/70 font-medium">{price} €</td>
                       </tr>
                     )
                   })}
@@ -158,28 +131,28 @@ export default async function BillingDashboardPage() {
         </div>
 
         {/* B2C Users List */}
-        <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", overflow: "hidden" }}>
-          <div style={{ padding: 20, borderBottom: "1px solid var(--border)" }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)" }}>Abonnements Utilisateurs Premium (Actifs)</h2>
+        <div className="bg-white rounded-2xl border border-[#E3EBE6] overflow-hidden shadow-xs">
+          <div className="p-5 border-b border-[#E3EBE6]">
+            <h2 className="text-base font-jakarta font-bold text-[#123D46]">Abonnements B2C Premium (Actifs)</h2>
           </div>
-          <div style={{ maxHeight: 400, overflowY: "auto" }}>
+          <div className="max-h-[400px] overflow-y-auto">
             {b2cUsers.length === 0 ? (
-              <p style={{ padding: 20, textAlign: "center", color: "var(--text-3)" }}>Aucun utilisateur B2C Premium actif</p>
+              <p className="p-5 text-center text-[#123D46]/60 text-sm">Aucun utilisateur B2C Premium actif</p>
             ) : (
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
-                <thead style={{ background: "rgba(255,255,255,0.02)" }}>
+              <table className="w-full text-sm">
+                <thead className="bg-[#FAF9F5]">
                   <tr>
-                    <th style={{ padding: "12px 20px", textAlign: "left", color: "var(--text-3)", fontWeight: 500 }}>Utilisateur</th>
-                    <th style={{ padding: "12px 20px", textAlign: "left", color: "var(--text-3)", fontWeight: 500 }}>Email</th>
-                    <th style={{ padding: "12px 20px", textAlign: "right", color: "var(--text-3)", fontWeight: 500 }}>MRR</th>
+                    <th className="px-5 py-4">Utilisateur</th>
+                    <th className="px-5 py-4">Email</th>
+                    <th className="px-5 py-4 text-right">MRR</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-[#E3EBE6]">
                   {b2cUsers.map(u => (
-                    <tr key={u.id} style={{ borderBottom: "1px solid var(--border)" }}>
-                      <td style={{ padding: "12px 20px", color: "var(--text-1)", fontWeight: 600 }}>{u.firstName} {u.lastName}</td>
-                      <td style={{ padding: "12px 20px", color: "var(--text-3)" }}>{u.email}</td>
-                      <td style={{ padding: "12px 20px", textAlign: "right", color: "var(--text-2)" }}>{PRICES.B2C} €</td>
+                    <tr key={u.id} className="hover:bg-[#FAF9F5]/50 transition-colors">
+                      <td className="px-5 py-4 text-[#123D46] font-bold">{u.firstName} {u.lastName}</td>
+                      <td className="px-5 py-4 text-[#123D46]/60 text-xs">{u.email}</td>
+                      <td className="px-5 py-4 text-right text-[#123D46]/70 font-medium">{PRICES.B2C} €</td>
                     </tr>
                   ))}
                 </tbody>

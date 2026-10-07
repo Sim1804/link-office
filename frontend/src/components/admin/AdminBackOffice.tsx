@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Logo } from '../brand/Logo';
+import { ToastContainer, ToastMessage } from '../common/Toast';
 import {
   LayoutDashboard,
   FileSpreadsheet,
@@ -25,6 +26,9 @@ import {
   Clock,
   Sparkles,
   BarChart3,
+  Calendar,
+  Award,
+  Activity,
   ExternalLink,
   Filter,
   Lock,
@@ -56,6 +60,7 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
   // Top level mode: 'console' (Super Admin) or 'partenaires' (simulation of partner portails)
   const [topMode, setTopMode] = useState<'console' | 'partenaires'>('console');
   const [selectedPartnerPortal, setSelectedPartnerPortal] = useState<string>('acme');
+  const [partnerSubTab, setPartnerSubTab] = useState<'apercu' | 'observatoire' | 'campagnes' | 'collectifs' | 'rapports'>('apercu');
 
   // Active sub-tab
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
@@ -75,6 +80,16 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
   // Notifications drawer / popup state
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
+
+  // In-App Toast state
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const addToast = (title: string, message: string, type: 'success' | 'info' | 'warning' = 'success') => {
+    const id = `toast-${Date.now()}-${Math.random()}`;
+    setToasts(prev => [...prev, { id, title, message, type }]);
+  };
+  const removeToast = (id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
 
   // Modals state
   const [isAddPartnerOpen, setIsAddPartnerOpen] = useState(false);
@@ -263,6 +278,19 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
   const [newCatalogPoints, setNewCatalogPoints] = useState('25');
   const [newCatalogDifficulty, setNewCatalogDifficulty] = useState<CatalogItem['difficulty']>('Facile');
 
+  // Catalog item edit state
+  const [editingCatalogItem, setEditingCatalogItem] = useState<CatalogItem | null>(null);
+  const [editCatalogTitle, setEditCatalogTitle] = useState('');
+  const [editCatalogType, setEditCatalogType] = useState<CatalogItem['type']>('Micro-défis');
+  const [editCatalogTheme, setEditCatalogTheme] = useState('');
+  const [editCatalogTarget, setEditCatalogTarget] = useState('Émotion');
+  const [editCatalogPoints, setEditCatalogPoints] = useState('20');
+  const [editCatalogDifficulty, setEditCatalogDifficulty] = useState<CatalogItem['difficulty']>('Facile');
+  const [editCatalogStatus, setEditCatalogStatus] = useState<CatalogItem['status']>('Actif');
+
+  // Catalog item delete confirmation state
+  const [deletingCatalogItem, setDeletingCatalogItem] = useState<CatalogItem | null>(null);
+
   // 4. Media Library (CMS)
   const [medias, setMedias] = useState<MediaItem[]>([
     {
@@ -296,6 +324,32 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
       category: 'Déontologie'
     }
   ]);
+
+  // New media form state
+  const [newMediaTitle, setNewMediaTitle] = useState('');
+  const [newMediaType, setNewMediaType] = useState<MediaItem['type']>('Article');
+  const [newMediaCategory, setNewMediaCategory] = useState('Management');
+  const [newMediaAuthor, setNewMediaAuthor] = useState('Comité Scientifique LINK OFFICE');
+  const [newMediaStatus, setNewMediaStatus] = useState<MediaItem['status']>('Publié');
+  const [newMediaDuration, setNewMediaDuration] = useState('5');
+  const [newMediaSummary, setNewMediaSummary] = useState('');
+  const [newMediaContent, setNewMediaContent] = useState('');
+  const [newMediaImageUrl, setNewMediaImageUrl] = useState('');
+
+  // Edit media state
+  const [editingMediaItem, setEditingMediaItem] = useState<MediaItem | null>(null);
+  const [editMediaTitle, setEditMediaTitle] = useState('');
+  const [editMediaType, setEditMediaType] = useState<MediaItem['type']>('Article');
+  const [editMediaCategory, setEditMediaCategory] = useState('');
+  const [editMediaAuthor, setEditMediaAuthor] = useState('');
+  const [editMediaStatus, setEditMediaStatus] = useState<MediaItem['status']>('Publié');
+  const [editMediaDuration, setEditMediaDuration] = useState('5');
+  const [editMediaSummary, setEditMediaSummary] = useState('');
+  const [editMediaContent, setEditMediaContent] = useState('');
+  const [editMediaImageUrl, setEditMediaImageUrl] = useState('');
+
+  // Delete media state
+  const [deletingMediaItem, setDeletingMediaItem] = useState<MediaItem | null>(null);
 
   // 5. Binômes (Screenshot 4)
   const [binomes] = useState<BinomeRelation[]>([
@@ -382,6 +436,49 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
     setCatalogItems([newItem, ...catalogItems]);
     setIsAddCatalogOpen(false);
     setNewCatalogTitle('');
+    addToast('Élément créé', `L'élément « ${newItem.title} » a été ajouté au catalogue.`, 'success');
+  };
+
+  const handleOpenEditCatalog = (item: CatalogItem) => {
+    setEditingCatalogItem(item);
+    setEditCatalogTitle(item.title);
+    setEditCatalogType(item.type);
+    setEditCatalogTheme(item.theme);
+    setEditCatalogTarget(item.targetCategory || 'Émotion');
+    setEditCatalogPoints(String(item.points));
+    setEditCatalogDifficulty(item.difficulty);
+    setEditCatalogStatus(item.status);
+  };
+
+  const handleSaveEditCatalog = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCatalogItem || !editCatalogTitle) return;
+
+    setCatalogItems(catalogItems.map(item =>
+      item.id === editingCatalogItem.id
+        ? {
+            ...item,
+            title: editCatalogTitle,
+            type: editCatalogType,
+            theme: editCatalogTheme,
+            targetCategory: editCatalogTarget,
+            points: parseInt(editCatalogPoints, 10) || 0,
+            difficulty: editCatalogDifficulty,
+            status: editCatalogStatus
+          }
+        : item
+    ));
+
+    addToast('Élément modifié', `L'élément « ${editCatalogTitle} » a été mis à jour avec succès.`, 'success');
+    setEditingCatalogItem(null);
+  };
+
+  const handleConfirmDeleteCatalogItem = () => {
+    if (!deletingCatalogItem) return;
+    const title = deletingCatalogItem.title;
+    setCatalogItems(catalogItems.filter(item => item.id !== deletingCatalogItem.id));
+    setDeletingCatalogItem(null);
+    addToast('Élément supprimé', `L'élément « ${title} » a été supprimé du catalogue.`, 'info');
   };
 
   const handleDeleteCatalogItem = (id: string) => {
@@ -390,6 +487,77 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
 
   const handleConvertLead = (leadId: string) => {
     setLeads(leads.map(l => l.id === leadId ? { ...l, status: 'Converti' } : l));
+  };
+
+  // Media CMS handlers
+  const handleAddMedia = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMediaTitle) return;
+    const newMedia: MediaItem = {
+      id: `med-${Date.now()}`,
+      title: newMediaTitle,
+      type: newMediaType,
+      category: newMediaCategory,
+      author: newMediaAuthor || 'Comité Scientifique LINK OFFICE',
+      status: newMediaStatus,
+      date: new Date().toLocaleDateString('fr-FR'),
+      reads: 0,
+      durationMinutes: parseInt(newMediaDuration, 10) || 5,
+      summary: newMediaSummary,
+      content: newMediaContent,
+      imageUrl: newMediaImageUrl || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80'
+    };
+    setMedias([newMedia, ...medias]);
+    setIsAddMediaOpen(false);
+    setNewMediaTitle('');
+    setNewMediaSummary('');
+    setNewMediaContent('');
+    setNewMediaImageUrl('');
+    addToast('Média créé', `Le contenu « ${newMedia.title} » a été ajouté à la médiathèque.`, 'success');
+  };
+
+  const handleOpenEditMedia = (med: MediaItem) => {
+    setEditingMediaItem(med);
+    setEditMediaTitle(med.title);
+    setEditMediaType(med.type);
+    setEditMediaCategory(med.category);
+    setEditMediaAuthor(med.author);
+    setEditMediaStatus(med.status);
+    setEditMediaDuration(String(med.durationMinutes || 5));
+    setEditMediaSummary(med.summary || '');
+    setEditMediaContent(med.content || '');
+    setEditMediaImageUrl(med.imageUrl || '');
+  };
+
+  const handleSaveEditMedia = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingMediaItem || !editMediaTitle) return;
+    setMedias(medias.map(m =>
+      m.id === editingMediaItem.id
+        ? {
+            ...m,
+            title: editMediaTitle,
+            type: editMediaType,
+            category: editMediaCategory,
+            author: editMediaAuthor,
+            status: editMediaStatus,
+            durationMinutes: parseInt(editMediaDuration, 10) || 5,
+            summary: editMediaSummary,
+            content: editMediaContent,
+            imageUrl: editMediaImageUrl
+          }
+        : m
+    ));
+    addToast('Média modifié', `Le contenu « ${editMediaTitle} » a été mis à jour avec succès.`, 'success');
+    setEditingMediaItem(null);
+  };
+
+  const handleConfirmDeleteMediaItem = () => {
+    if (!deletingMediaItem) return;
+    const title = deletingMediaItem.title;
+    setMedias(medias.filter(m => m.id !== deletingMediaItem.id));
+    setDeletingMediaItem(null);
+    addToast('Média supprimé', `Le contenu « ${title} » a été supprimé de la médiathèque.`, 'info');
   };
 
   return (
@@ -575,135 +743,218 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
         </div>
       </header>
 
-      {/* ==================== 2. HORIZONTAL SUB-NAVIGATION TABS (9 Modules Clés) ==================== */}
-      <div className="bg-white border-b border-[#E3EBE6] px-4 sm:px-8 overflow-x-auto scrollbar-none py-2.5">
-        <div className="max-w-[1480px] mx-auto flex items-center gap-1.5 sm:gap-2">
-          {/* 1. Dashboard 360 */}
-          <button
-            onClick={() => setActiveTab('dashboard')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'dashboard'
-                ? 'bg-[#00A99D]/10 text-[#00A99D] ring-1 ring-[#00A99D]/30'
-                : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/60'
-            }`}
-          >
-            <LayoutDashboard className="w-4 h-4" />
-            <span>Dashboard 360</span>
-          </button>
+      {/* ==================== 2. HORIZONTAL SUB-NAVIGATION TABS ==================== */}
+      {/* Quand topMode === 'console' : Sous-menu Super Admin (9 Modules Clés) */}
+      {topMode === 'console' ? (
+        <div className="bg-white border-b border-[#E3EBE6] px-4 sm:px-8 overflow-x-auto scrollbar-none py-2.5">
+          <div className="max-w-[1480px] mx-auto flex items-center gap-1.5 sm:gap-2">
+            {/* 1. Dashboard 360 */}
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                activeTab === 'dashboard'
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+              }`}
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              <span>Dashboard 360</span>
+            </button>
 
-          {/* 2. Devis */}
-          <button
-            onClick={() => setActiveTab('devis')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'devis'
-                ? 'bg-[#00A99D]/10 text-[#00A99D] ring-1 ring-[#00A99D]/30'
-                : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/60'
-            }`}
-          >
-            <FileSpreadsheet className="w-4 h-4" />
-            <span>Devis</span>
-            {pendingQuotes > 0 && (
-              <span className="w-4 h-4 rounded-full bg-[#FFC629] text-[#123D46] text-[10px] font-bold flex items-center justify-center">
-                {pendingQuotes}
+            {/* 2. Devis */}
+            <button
+              onClick={() => setActiveTab('devis')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                activeTab === 'devis'
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+              }`}
+            >
+              <FileSpreadsheet className="w-4 h-4" />
+              <span>Devis</span>
+              {pendingQuotes > 0 && (
+                <span className="w-4 h-4 rounded-full bg-[#FFC629] text-[#123D46] text-[10px] font-bold flex items-center justify-center">
+                  {pendingQuotes}
+                </span>
+              )}
+            </button>
+
+            {/* 3. Organisations */}
+            <button
+              onClick={() => setActiveTab('organisations')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                activeTab === 'organisations'
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+              }`}
+            >
+              <Building2 className="w-4 h-4" />
+              <span>Organisations</span>
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-md font-mono ${
+                activeTab === 'organisations' ? 'bg-[#00A99D]/20 text-[#00A99D]' : 'bg-[#123D46]/5 text-[#123D46]/70'
+              }`}>
+                {organisations.length}
               </span>
-            )}
-          </button>
+            </button>
 
-          {/* 3. Organisations */}
-          <button
-            onClick={() => setActiveTab('organisations')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'organisations'
-                ? 'bg-[#00A99D]/10 text-[#00A99D] ring-1 ring-[#00A99D]/30'
-                : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/60'
-            }`}
-          >
-            <Building2 className="w-4 h-4" />
-            <span>Organisations</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-[#123D46]/5 text-[#123D46]/70 font-mono">
-              {organisations.length}
-            </span>
-          </button>
+            {/* 4. Finances */}
+            <button
+              onClick={() => setActiveTab('finances')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                activeTab === 'finances'
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+              }`}
+            >
+              <Wallet className="w-4 h-4" />
+              <span>Finances</span>
+            </button>
 
-          {/* 4. Finances */}
-          <button
-            onClick={() => setActiveTab('finances')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'finances'
-                ? 'bg-[#00A99D]/10 text-[#00A99D] ring-1 ring-[#00A99D]/30'
-                : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/60'
-            }`}
-          >
-            <Wallet className="w-4 h-4" />
-            <span>Finances</span>
-          </button>
+            {/* 5. Médias */}
+            <button
+              onClick={() => setActiveTab('medias')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                activeTab === 'medias'
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+              }`}
+            >
+              <Newspaper className="w-4 h-4" />
+              <span>Médias</span>
+            </button>
 
-          {/* 5. Médias */}
-          <button
-            onClick={() => setActiveTab('medias')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'medias'
-                ? 'bg-[#00A99D]/10 text-[#00A99D] ring-1 ring-[#00A99D]/30'
-                : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/60'
-            }`}
-          >
-            <Newspaper className="w-4 h-4" />
-            <span>Médias</span>
-          </button>
+            {/* 6. Utilisateurs */}
+            <button
+              onClick={() => setActiveTab('utilisateurs')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                activeTab === 'utilisateurs'
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              <span>Utilisateurs</span>
+            </button>
 
-          {/* 6. Utilisateurs */}
-          <button
-            onClick={() => setActiveTab('utilisateurs')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'utilisateurs'
-                ? 'bg-[#00A99D]/10 text-[#00A99D] ring-1 ring-[#00A99D]/30'
-                : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/60'
-            }`}
-          >
-            <Users className="w-4 h-4" />
-            <span>Utilisateurs</span>
-          </button>
+            {/* 7. Binômes */}
+            <button
+              onClick={() => setActiveTab('binomes')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                activeTab === 'binomes'
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+              }`}
+            >
+              <Handshake className="w-4 h-4" />
+              <span>Binômes</span>
+            </button>
 
-          {/* 7. Binômes */}
-          <button
-            onClick={() => setActiveTab('binomes')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'binomes'
-                ? 'bg-[#00A99D]/10 text-[#00A99D] ring-1 ring-[#00A99D]/30'
-                : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/60'
-            }`}
-          >
-            <Handshake className="w-4 h-4" />
-            <span>Binômes</span>
-          </button>
+            {/* 8. Catalogues */}
+            <button
+              onClick={() => setActiveTab('catalogues')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                activeTab === 'catalogues'
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+              }`}
+            >
+              <FolderTree className="w-4 h-4" />
+              <span>Catalogues</span>
+            </button>
 
-          {/* 8. Catalogues */}
-          <button
-            onClick={() => setActiveTab('catalogues')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'catalogues'
-                ? 'bg-[#00A99D]/10 text-[#00A99D] ring-1 ring-[#00A99D]/30'
-                : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/60'
-            }`}
-          >
-            <FolderTree className="w-4 h-4" />
-            <span>Catalogues</span>
-          </button>
-
-          {/* 9. Sécurité */}
-          <button
-            onClick={() => setActiveTab('securite')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'securite'
-                ? 'bg-[#00A99D]/10 text-[#00A99D] ring-1 ring-[#00A99D]/30'
-                : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/60'
-            }`}
-          >
-            <ShieldCheck className="w-4 h-4" />
-            <span>Sécurité</span>
-          </button>
+            {/* 9. Sécurité */}
+            <button
+              onClick={() => setActiveTab('securite')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                activeTab === 'securite'
+                  ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                  : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span>Sécurité</span>
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        /* Quand topMode === 'partenaires' : Le sous menu Dashboard 360, Devis, etc. N'APPARAÎT PAS ! */
+        <div className="bg-white border-b border-[#E3EBE6] px-4 sm:px-8 overflow-x-auto scrollbar-none py-2.5">
+          <div className="max-w-[1480px] mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <button
+                onClick={() => setPartnerSubTab('apercu')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                  partnerSubTab === 'apercu'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Supervision Portails</span>
+              </button>
+
+              <button
+                onClick={() => setPartnerSubTab('observatoire')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                  partnerSubTab === 'observatoire'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <Activity className="w-4 h-4" />
+                <span>Observatoire & Baromètre</span>
+              </button>
+
+              <button
+                onClick={() => setPartnerSubTab('campagnes')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                  partnerSubTab === 'campagnes'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Campagnes Diagnostics</span>
+              </button>
+
+              <button
+                onClick={() => setPartnerSubTab('collectifs')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                  partnerSubTab === 'collectifs'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <Users className="w-4 h-4" />
+                <span>Collectifs (k ≥ 5)</span>
+              </button>
+
+              <button
+                onClick={() => setPartnerSubTab('rapports')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-jakarta transition-all whitespace-nowrap ${
+                  partnerSubTab === 'rapports'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <Award className="w-4 h-4" />
+                <span>Rapports & Certifications</span>
+              </button>
+            </div>
+
+            {onSwitchToRHAdmin && (
+              <button
+                onClick={onSwitchToRHAdmin}
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-colors shadow-2xs shrink-0"
+              >
+                <Building2 className="w-3.5 h-3.5" />
+                <span>Ouvrir l'Espace RH Dédié</span>
+                <ArrowUpRight className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ==================== 3. MAIN WORKSPACE CONTENT ==================== */}
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-8">
@@ -711,18 +962,30 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
         {/* -------------------- VIEW A: PORTAILS PARTENAIRES SWITCHER VIEW -------------------- */}
         {topMode === 'partenaires' ? (
           <div className="space-y-6">
-            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 sm:p-8">
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 sm:p-8 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E3EBE6]">
                 <div>
-                  <h1 className="text-2xl font-jakarta font-extrabold text-[#123D46]">
-                    Portails Partenaires Dédiés
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#5965E8]/10 text-[#5965E8]">
+                      PORTAIL PARTENAIRE ACTIF
+                    </span>
+                    <span className="text-xs font-mono text-[#123D46]/60">
+                      {selectedPartnerPortal === 'acme' ? 'ACME-B2B-2026' : selectedPartnerPortal === 'mutuelle' ? 'SOLIS-B2B2C-2026' : 'VILLE-B2G-2026'}
+                    </span>
+                  </div>
+                  <h1 className="text-2xl font-jakarta font-extrabold text-[#123D46] mt-1">
+                    {selectedPartnerPortal === 'acme'
+                      ? 'Acme Corp — Portail RH Entreprise (B2B)'
+                      : selectedPartnerPortal === 'mutuelle'
+                      ? 'Mutuelle Solis — Espace Santé & Adhérents (B2B2C)'
+                      : 'Ville de Testville — Collectivité Territoriale (B2G)'}
                   </h1>
                   <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
-                    Supervision des espaces cloisonnés par client : Entreprises (B2B), Mutuelles (B2B2C) et Collectivités (B2G).
+                    Supervision cloisonnée conforme RGPD avec garantie mathématique de k-anonymat (k ≥ 5).
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-[#123D46]/60">Choisir le portail actif :</span>
+                  <span className="text-xs text-[#123D46]/60">Changer d'organisation :</span>
                   <select
                     value={selectedPartnerPortal}
                     onChange={(e) => setSelectedPartnerPortal(e.target.value)}
@@ -735,41 +998,204 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
                 </div>
               </div>
 
-              {/* Partner View Simulation */}
-              <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="p-5 rounded-2xl bg-[#F8F9FA] border border-[#E3EBE6] space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#00A99D]">STATISTIQUES DE CAMPAGNE</span>
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  </div>
-                  <div className="text-3xl font-jakarta font-black text-[#123D46]">94.8%</div>
-                  <p className="text-xs text-[#123D46]/70">
-                    Taux d’engagement anonymisé au Baromètre IQRH ce trimestre.
-                  </p>
-                </div>
+              {/* Sub-view 1: Aperçu Général */}
+              {partnerSubTab === 'apercu' && (
+                <div className="space-y-6">
+                  {/* Partner View Simulation Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="p-5 rounded-2xl bg-[#F8F9FA] border border-[#E3EBE6] space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-[#00A99D]">STATISTIQUES DE CAMPAGNE</span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      </div>
+                      <div className="text-3xl font-jakarta font-black text-[#123D46]">94.8%</div>
+                      <p className="text-xs text-[#123D46]/70">
+                        Taux d’engagement anonymisé au Baromètre IQRH ce trimestre.
+                      </p>
+                    </div>
 
-                <div className="p-5 rounded-2xl bg-[#F8F9FA] border border-[#E3EBE6] space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#5965E8]">INDICE IQRH GLOBAL</span>
-                    <TrendingUp className="w-4 h-4 text-[#5965E8]" />
-                  </div>
-                  <div className="text-3xl font-jakarta font-black text-[#123D46]">73.4 <span className="text-sm font-normal text-[#123D46]/50">/ 100</span></div>
-                  <p className="text-xs text-[#123D46]/70">
-                    +4.2 pts depuis le lancement des ateliers de feedback structurés.
-                  </p>
-                </div>
+                    <div className="p-5 rounded-2xl bg-[#F8F9FA] border border-[#E3EBE6] space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-[#5965E8]">INDICE IQRH GLOBAL</span>
+                        <TrendingUp className="w-4 h-4 text-[#5965E8]" />
+                      </div>
+                      <div className="text-3xl font-jakarta font-black text-[#123D46]">73.4 <span className="text-sm font-normal text-[#123D46]/50">/ 100</span></div>
+                      <p className="text-xs text-[#123D46]/70">
+                        +4.2 pts depuis le lancement des ateliers de feedback structurés.
+                      </p>
+                    </div>
 
-                <div className="p-5 rounded-2xl bg-[#F8F9FA] border border-[#E3EBE6] space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#FFC629]">RESPECT DU K-ANONYMAT</span>
-                    <ShieldCheck className="w-4 h-4 text-[#00A99D]" />
+                    <div className="p-5 rounded-2xl bg-[#F8F9FA] border border-[#E3EBE6] space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-[#FFC629]">RESPECT DU K-ANONYMAT</span>
+                        <ShieldCheck className="w-4 h-4 text-[#00A99D]" />
+                      </div>
+                      <div className="text-3xl font-jakarta font-black text-[#123D46]">N &ge; 5</div>
+                      <p className="text-xs text-[#123D46]/70">
+                        Garantie mathématique : aucune sous-équipe de moins de 5 personnes n'est isolée.
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-3xl font-jakarta font-black text-[#123D46]">N &ge; 5</div>
-                  <p className="text-xs text-[#123D46]/70">
-                    Garantie mathématique : aucune sous-équipe de moins de 5 personnes n'est isolée.
-                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div className="p-4 rounded-xl border border-[#E3EBE6] bg-[#FAF9F5] space-y-2">
+                      <span className="text-xs font-bold text-[#123D46] block">Référent Institutionnel</span>
+                      <div className="text-xs text-[#123D46]/80 flex justify-between">
+                        <span>Nom :</span>
+                        <strong>Sophie Laurent — DRH Groupe</strong>
+                      </div>
+                      <div className="text-xs text-[#123D46]/80 flex justify-between">
+                        <span>Email contact :</span>
+                        <span className="font-mono">s.laurent@acme-corp.fr</span>
+                      </div>
+                      <div className="text-xs text-[#123D46]/80 flex justify-between">
+                        <span>Périmètre :</span>
+                        <span>450 collaborateurs · France entière</span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-[#E3EBE6] bg-[#FAF9F5] space-y-2">
+                      <span className="text-xs font-bold text-[#123D46] block">Prochaine Échéance Institutionnelle</span>
+                      <div className="text-xs text-[#123D46]/80 flex justify-between">
+                        <span>Clôture diagnostic :</span>
+                        <strong className="text-[#00A99D]">15 Octobre 2026</strong>
+                      </div>
+                      <div className="text-xs text-[#123D46]/80 flex justify-between">
+                        <span>Présentation CSE :</span>
+                        <span>24 Octobre 2026</span>
+                      </div>
+                      <div className="text-xs text-[#123D46]/80 flex justify-between">
+                        <span>État conformité RGPD :</span>
+                        <span className="text-emerald-700 font-bold">100% Validé (k ≥ 5)</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* Sub-view 2: Observatoire & Baromètre */}
+              {partnerSubTab === 'observatoire' && (
+                <div className="space-y-4">
+                  <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+                    Observatoire de la Qualité Relationnelle — Baromètre
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {[
+                      { title: 'Climat & Confiance', score: '78 / 100', status: 'Favorable', trend: '+5.1 pts' },
+                      { title: 'Régulation de la Charge', score: '62 / 100', status: 'À surveiller', trend: '-1.4 pts' },
+                      { title: 'Soutien entre Pairs', score: '81 / 100', status: 'Excellent', trend: '+3.8 pts' }
+                    ].map((item, idx) => (
+                      <div key={idx} className="p-4 rounded-xl border border-[#E3EBE6] bg-[#FAF9F5] space-y-2">
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="font-bold text-[#123D46]">{item.title}</span>
+                          <span className="text-emerald-700 font-bold text-[10px]">{item.trend}</span>
+                        </div>
+                        <div className="text-2xl font-jakarta font-extrabold text-[#123D46]">{item.score}</div>
+                        <span className="text-[11px] text-[#00A99D] font-medium block">{item.status}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sub-view 3: Campagnes Diagnostics */}
+              {partnerSubTab === 'campagnes' && (
+                <div className="space-y-4">
+                  <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+                    Campagnes de Diagnostic Actives
+                  </h3>
+                  <div className="border border-[#E3EBE6] rounded-xl overflow-hidden text-xs">
+                    <table className="w-full text-left">
+                      <thead className="bg-[#F8F9FA] border-b border-[#E3EBE6] text-[#123D46]/60 font-bold uppercase text-[10px]">
+                        <tr>
+                          <th className="px-4 py-3">Campagne</th>
+                          <th className="px-4 py-3">Cible</th>
+                          <th className="px-4 py-3">Taux de réponse</th>
+                          <th className="px-4 py-3">Statut RGPD</th>
+                          <th className="px-4 py-3 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#E3EBE6]">
+                        <tr>
+                          <td className="px-4 py-3 font-bold text-[#123D46]">Campagne QVT Automne 2026</td>
+                          <td className="px-4 py-3 text-[#123D46]/70">Tous départements (450 salariés)</td>
+                          <td className="px-4 py-3 font-mono font-bold text-[#00A99D]">94.8% (426/450)</td>
+                          <td className="px-4 py-3"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[10px]">k ≥ 5 Validé</span></td>
+                          <td className="px-4 py-3 text-right">
+                            <button
+                              onClick={() => addToast('Relance anonyme', 'Rappel anonyme envoyé par le serveur.', 'info')}
+                              className="px-2.5 py-1 rounded-lg bg-[#00A99D]/10 text-[#00A99D] hover:bg-[#00A99D] hover:text-white font-bold transition-colors"
+                            >
+                              Relancer non-répondants
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Sub-view 4: Collectifs (k ≥ 5) */}
+              {partnerSubTab === 'collectifs' && (
+                <div className="space-y-4">
+                  <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+                    Collectifs et Pôles Métiers (Cloisonnement k-anonymat)
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                    {[
+                      { pole: 'Pôle R&D & Ingénierie', effectif: 85, score: '76.4/100', kSafe: true },
+                      { pole: 'Pôle Commercial & Conseil', effectif: 120, score: '71.2/100', kSafe: true },
+                      { pole: 'Pôle Support & Opérations', effectif: 45, score: '74.8/100', kSafe: true }
+                    ].map((col, idx) => (
+                      <div key={idx} className="p-4 rounded-xl border border-[#E3EBE6] bg-[#FAF9F5] space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-[#123D46]">{col.pole}</span>
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">k ≥ 5 OK</span>
+                        </div>
+                        <div className="text-xs text-[#123D46]/70">Effectif déclaré : <strong>{col.effectif} collaborateurs</strong></div>
+                        <div className="text-xs text-[#123D46]/70">Indice IQRH : <strong className="text-[#00A99D] font-mono">{col.score}</strong></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sub-view 5: Rapports & Certifications */}
+              {partnerSubTab === 'rapports' && (
+                <div className="space-y-4">
+                  <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+                    Rapports Certifiés & Exports Anonymisés
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div className="p-4 rounded-xl border border-[#E3EBE6] bg-[#FAF9F5] flex items-center justify-between">
+                      <div>
+                        <strong className="block text-[#123D46]">Bilan Annuel CSE & QVCT (PDF)</strong>
+                        <span className="text-[11px] text-[#123D46]/60">Format réglementaire 2026 certifié</span>
+                      </div>
+                      <button
+                        onClick={() => addToast('Téléchargement', 'Bilan Annuel CSE généré en PDF.', 'success')}
+                        className="px-3 py-1.5 rounded-lg bg-[#123D46] text-white font-bold"
+                      >
+                        Télécharger
+                      </button>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-[#E3EBE6] bg-[#FAF9F5] flex items-center justify-between">
+                      <div>
+                        <strong className="block text-[#123D46]">Données Agrégées Anonymisées (CSV)</strong>
+                        <span className="text-[11px] text-[#123D46]/60">Conforme RGPD · k ≥ 5 garanti</span>
+                      </div>
+                      <button
+                        onClick={() => addToast('Export CSV', 'Export CSV anonymisé généré.', 'success')}
+                        className="px-3 py-1.5 rounded-lg bg-[#00A99D] text-white font-bold"
+                      >
+                        Exporter
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Action Banner */}
               <div className="mt-8 p-4 rounded-xl bg-[#00A99D]/5 border border-[#00A99D]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -1465,7 +1891,7 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
                   <div className="flex items-center gap-2.5">
                     {/* Importer JSON (Dark Button from screenshot 5) */}
                     <button
-                      onClick={() => alert("Fonctionnalité d'import JSON activée : format standardisé LINK OFFICE")}
+                      onClick={() => addToast('Import Catalogue', 'Format standardisé LINK OFFICE chargé avec succès.', 'success')}
                       className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#123D46] hover:bg-[#0D2530] text-white font-jakarta font-bold text-xs transition-colors shadow-2xs"
                     >
                       <Download className="w-3.5 h-3.5" />
@@ -1554,16 +1980,16 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
 
                               <td className="px-6 py-4 text-right space-x-1.5">
                                 <button
-                                  onClick={() => alert(`Édition de l'élément ${item.code}`)}
-                                  className="w-8 h-8 rounded-lg bg-[#123D46]/5 hover:bg-[#123D46]/10 text-[#123D46] inline-flex items-center justify-center transition-colors"
-                                  title="Modifier"
+                                  onClick={() => handleOpenEditCatalog(item)}
+                                  className="w-8 h-8 rounded-lg bg-[#123D46]/5 hover:bg-[#00A99D]/15 hover:text-[#00A99D] text-[#123D46] inline-flex items-center justify-center transition-colors shadow-2xs"
+                                  title="Modifier cet élément"
                                 >
                                   <Edit2 className="w-3.5 h-3.5" />
                                 </button>
                                 <button
-                                  onClick={() => handleDeleteCatalogItem(item.id)}
-                                  className="w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 inline-flex items-center justify-center transition-colors"
-                                  title="Supprimer"
+                                  onClick={() => setDeletingCatalogItem(item)}
+                                  className="w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 inline-flex items-center justify-center transition-colors shadow-2xs"
+                                  title="Supprimer cet élément"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </button>
@@ -1647,10 +2073,18 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
 
                             <td className="px-6 py-4 text-right space-x-1.5">
                               <button
-                                onClick={() => alert(`Édition média : ${med.title}`)}
-                                className="w-8 h-8 rounded-lg bg-[#123D46]/5 hover:bg-[#123D46]/10 text-[#123D46] inline-flex items-center justify-center transition-colors"
+                                onClick={() => handleOpenEditMedia(med)}
+                                className="w-8 h-8 rounded-lg bg-[#123D46]/5 hover:bg-[#00A99D]/15 hover:text-[#00A99D] text-[#123D46] inline-flex items-center justify-center transition-colors shadow-2xs"
+                                title="Modifier ce média"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => setDeletingMediaItem(med)}
+                                className="w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 inline-flex items-center justify-center transition-colors shadow-2xs"
+                                title="Supprimer ce média"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             </td>
                           </tr>
@@ -1985,6 +2419,7 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
                     <option value="Recommandations">Recommandations</option>
                     <option value="Questions IQRH">Questions IQRH</option>
                     <option value="Modules Adaptatifs">Modules Adaptatifs</option>
+                    <option value="Partenaires">Partenaires</option>
                   </select>
                 </div>
                 <div>
@@ -2038,6 +2473,193 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 2 bis: Formulaire de MODIFICATION d'un Élément au Catalogue */}
+      {editingCatalogItem && (
+        <div className="fixed inset-0 z-50 bg-[#123D46]/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 animate-scale-in">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E3EBE6]">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center">
+                  <Edit2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-jakarta font-bold text-lg text-[#123D46]">
+                    Modifier l'Élément du Catalogue
+                  </h3>
+                  <span className="text-[10px] font-mono text-[#123D46]/60">
+                    Référence : {editingCatalogItem.code}
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setEditingCatalogItem(null)}
+                className="p-1 rounded-lg text-[#123D46]/50 hover:bg-[#F4F1E8]"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEditCatalog} className="space-y-4 text-xs font-medium">
+              <div>
+                <label className="block text-[#123D46] mb-1 font-semibold">Titre de l'action / défi *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Titre de l'élément"
+                  value={editCatalogTitle}
+                  onChange={(e) => setEditCatalogTitle(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Type d'élément</label>
+                  <select
+                    value={editCatalogType}
+                    onChange={(e) => setEditCatalogType(e.target.value as CatalogItem['type'])}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  >
+                    <option value="Micro-défis">Micro-défis</option>
+                    <option value="Recommandations">Recommandations</option>
+                    <option value="Questions IQRH">Questions IQRH</option>
+                    <option value="Modules Adaptatifs">Modules Adaptatifs</option>
+                    <option value="Partenaires">Partenaires</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Thème relationnel</label>
+                  <input
+                    type="text"
+                    value={editCatalogTheme}
+                    onChange={(e) => setEditCatalogTheme(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Ciblage relationnel</label>
+                  <select
+                    value={editCatalogTarget}
+                    onChange={(e) => setEditCatalogTarget(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  >
+                    <option value="Émotion">Émotion</option>
+                    <option value="Professionnel">Professionnel</option>
+                    <option value="Collectif">Collectif</option>
+                    <option value="Couple">Couple / Binôme</option>
+                    <option value="Social">Social</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Statut</label>
+                  <select
+                    value={editCatalogStatus}
+                    onChange={(e) => setEditCatalogStatus(e.target.value as CatalogItem['status'])}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  >
+                    <option value="Actif">Actif</option>
+                    <option value="Archivé">Archivé</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Points diamant (XP)</label>
+                  <input
+                    type="number"
+                    value={editCatalogPoints}
+                    onChange={(e) => setEditCatalogPoints(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Niveau de difficulté</label>
+                  <select
+                    value={editCatalogDifficulty}
+                    onChange={(e) => setEditCatalogDifficulty(e.target.value as CatalogItem['difficulty'])}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  >
+                    <option value="Facile">Facile</option>
+                    <option value="Moyenne">Moyenne</option>
+                    <option value="Avancée">Avancée</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-[#E3EBE6] flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingCatalogItem(null)}
+                  className="px-4 py-2 rounded-xl border border-[#E3EBE6] text-[#123D46] hover:bg-[#F4F1E8]"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold shadow-xs transition-colors"
+                >
+                  Enregistrer les modifications
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 2 ter: CONFIRMATION DE SUPPRESSION d'un Élément au Catalogue */}
+      {deletingCatalogItem && (
+        <div className="fixed inset-0 z-50 bg-[#123D46]/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-scale-in">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 border border-rose-200">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+                  Confirmer la suppression
+                </h3>
+                <p className="text-xs text-[#123D46]/75 mt-1 leading-relaxed">
+                  Êtes-vous sûr de vouloir supprimer définitivement l'élément suivant du catalogue ?
+                </p>
+                <div className="mt-2.5 p-3 rounded-xl bg-[#FAF9F5] border border-[#E3EBE6] text-xs">
+                  <div className="font-mono text-[10px] text-[#123D46]/60">
+                    {deletingCatalogItem.code} · {deletingCatalogItem.type}
+                  </div>
+                  <div className="font-jakarta font-bold text-[#123D46] mt-0.5">
+                    {deletingCatalogItem.title}
+                  </div>
+                </div>
+                <p className="text-[11px] text-rose-600 font-medium mt-2">
+                  ⚠️ Cette action est irréversible et retirera cet élément des recommandations de tous les portails partenaires.
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-[#E3EBE6] flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setDeletingCatalogItem(null)}
+                className="px-4 py-2 rounded-xl border border-[#E3EBE6] text-[#123D46] hover:bg-[#F4F1E8] text-xs font-semibold"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDeleteCatalogItem}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-jakarta font-bold text-xs shadow-xs transition-colors flex items-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Supprimer définitivement</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -2115,6 +2737,393 @@ export const AdminBackOffice: React.FC<AdminBackOfficeProps> = ({
           </div>
         </div>
       )}
+
+      {/* Modal 4: CRÉATION DE NOUVEAU MÉDIA (CMS) */}
+      {isAddMediaOpen && (
+        <div className="fixed inset-0 z-50 bg-[#123D46]/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl space-y-5 animate-scale-in my-8 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E3EBE6]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center shrink-0">
+                  <Newspaper className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-jakarta font-bold text-lg text-[#123D46]">
+                    Créer un nouveau contenu média
+                  </h3>
+                  <p className="text-xs text-[#123D46]/70">
+                    Médiathèque (CMS) · Diffusion sur l'Espace Média Salarié & Portail Public
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsAddMediaOpen(false)}
+                className="p-1 rounded-lg text-[#123D46]/50 hover:bg-[#F4F1E8] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddMedia} className="space-y-4 text-xs font-medium">
+              <div>
+                <label className="block text-[#123D46] mb-1 font-semibold">Titre du contenu *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ex : Le lien humain, premier bouclier contre l’épuisement professionnel"
+                  value={newMediaTitle}
+                  onChange={(e) => setNewMediaTitle(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Format du contenu</label>
+                  <select
+                    value={newMediaType}
+                    onChange={(e) => setNewMediaType(e.target.value as MediaItem['type'])}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  >
+                    <option value="Article">Article rédigé</option>
+                    <option value="Podcast">Podcast audio</option>
+                    <option value="Fiche Pratique">Fiche Pratique méthodologique</option>
+                    <option value="Recherche">Recherche & Rapport scientifique</option>
+                    <option value="Dossier">Dossier thématique approfondi</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Catégorie thématique</label>
+                  <select
+                    value={newMediaCategory}
+                    onChange={(e) => setNewMediaCategory(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  >
+                    <option value="Management">Management & Leadership</option>
+                    <option value="Sociologie du travail">Sociologie du travail</option>
+                    <option value="Déontologie">Déontologie & Éthique</option>
+                    <option value="Relations & Binômes">Relations & Binômes</option>
+                    <option value="Santé mentale au travail">Santé mentale au travail</option>
+                    <option value="Communication non-violente">Communication interpersonnelle</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Auteur / Pôle référent</label>
+                  <input
+                    type="text"
+                    placeholder="Ex : Comité Scientifique LINK OFFICE"
+                    value={newMediaAuthor}
+                    onChange={(e) => setNewMediaAuthor(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[#123D46] mb-1 font-semibold">Durée (min)</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={newMediaDuration}
+                      onChange={(e) => setNewMediaDuration(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[#123D46] mb-1 font-semibold">Statut</label>
+                    <select
+                      value={newMediaStatus}
+                      onChange={(e) => setNewMediaStatus(e.target.value as MediaItem['status'])}
+                      className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                    >
+                      <option value="Publié">Publié immédiatement</option>
+                      <option value="Brouillon">Brouillon interne</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[#123D46] mb-1 font-semibold">URL de l'image de couverture (optionnel)</label>
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    placeholder="https://images.unsplash.com/photo-..."
+                    value={newMediaImageUrl}
+                    onChange={(e) => setNewMediaImageUrl(e.target.value)}
+                    className="flex-1 px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none text-xs"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setNewMediaImageUrl('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80')}
+                    className="px-3 py-2 rounded-xl bg-[#FAF9F5] border border-[#E3EBE6] text-[#123D46] text-[11px] font-semibold hover:bg-[#F4F1E8]"
+                  >
+                    Image par défaut
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[#123D46] mb-1 font-semibold">Résumé / Chapeau introductif</label>
+                <textarea
+                  rows={2}
+                  placeholder="Accroche synthétique qui apparaît sur les cartes de la bibliothèque..."
+                  value={newMediaSummary}
+                  onChange={(e) => setNewMediaSummary(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#123D46] mb-1 font-semibold">Corps du contenu / Transcription</label>
+                <textarea
+                  rows={4}
+                  placeholder="Rédigez ici le contenu de l'article, les points clés du podcast ou les étapes de la fiche pratique..."
+                  value={newMediaContent}
+                  onChange={(e) => setNewMediaContent(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none font-sans"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[#E3EBE6] flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsAddMediaOpen(false)}
+                  className="px-4 py-2 rounded-xl border border-[#E3EBE6] text-[#123D46] hover:bg-[#F4F1E8]"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold shadow-xs transition-colors flex items-center gap-1.5"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Créer le contenu</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 4 bis: ÉDITION D'UN MÉDIA EXISTANT (CMS) */}
+      {editingMediaItem && (
+        <div className="fixed inset-0 z-50 bg-[#123D46]/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl space-y-5 animate-scale-in my-8 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E3EBE6]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center shrink-0">
+                  <Edit2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-jakarta font-bold text-lg text-[#123D46]">
+                    Modifier le contenu média
+                  </h3>
+                  <p className="text-xs text-[#123D46]/70 truncate max-w-md">
+                    {editingMediaItem.title}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setEditingMediaItem(null)}
+                className="p-1 rounded-lg text-[#123D46]/50 hover:bg-[#F4F1E8] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEditMedia} className="space-y-4 text-xs font-medium">
+              <div>
+                <label className="block text-[#123D46] mb-1 font-semibold">Titre du contenu *</label>
+                <input
+                  type="text"
+                  required
+                  value={editMediaTitle}
+                  onChange={(e) => setEditMediaTitle(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Format du contenu</label>
+                  <select
+                    value={editMediaType}
+                    onChange={(e) => setEditMediaType(e.target.value as MediaItem['type'])}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  >
+                    <option value="Article">Article rédigé</option>
+                    <option value="Podcast">Podcast audio</option>
+                    <option value="Fiche Pratique">Fiche Pratique méthodologique</option>
+                    <option value="Recherche">Recherche & Rapport scientifique</option>
+                    <option value="Dossier">Dossier thématique approfondi</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Catégorie thématique</label>
+                  <select
+                    value={editMediaCategory}
+                    onChange={(e) => setEditMediaCategory(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  >
+                    <option value="Management">Management & Leadership</option>
+                    <option value="Sociologie du travail">Sociologie du travail</option>
+                    <option value="Déontologie">Déontologie & Éthique</option>
+                    <option value="Relations & Binômes">Relations & Binômes</option>
+                    <option value="Santé mentale au travail">Santé mentale au travail</option>
+                    <option value="Communication non-violente">Communication interpersonnelle</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#123D46] mb-1 font-semibold">Auteur / Pôle référent</label>
+                  <input
+                    type="text"
+                    value={editMediaAuthor}
+                    onChange={(e) => setEditMediaAuthor(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[#123D46] mb-1 font-semibold">Durée (min)</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={editMediaDuration}
+                      onChange={(e) => setEditMediaDuration(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[#123D46] mb-1 font-semibold">Statut</label>
+                    <select
+                      value={editMediaStatus}
+                      onChange={(e) => setEditMediaStatus(e.target.value as MediaItem['status'])}
+                      className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                    >
+                      <option value="Publié">Publié immédiatement</option>
+                      <option value="Brouillon">Brouillon interne</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[#123D46] mb-1 font-semibold">URL de l'image de couverture</label>
+                <input
+                  type="url"
+                  value={editMediaImageUrl}
+                  onChange={(e) => setEditMediaImageUrl(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#123D46] mb-1 font-semibold">Résumé / Chapeau introductif</label>
+                <textarea
+                  rows={2}
+                  value={editMediaSummary}
+                  onChange={(e) => setEditMediaSummary(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#123D46] mb-1 font-semibold">Corps du contenu / Transcription</label>
+                <textarea
+                  rows={4}
+                  value={editMediaContent}
+                  onChange={(e) => setEditMediaContent(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none font-sans"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[#E3EBE6] flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingMediaItem(null)}
+                  className="px-4 py-2 rounded-xl border border-[#E3EBE6] text-[#123D46] hover:bg-[#F4F1E8]"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold shadow-xs transition-colors"
+                >
+                  Enregistrer les modifications
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 4 ter: CONFIRMATION DE SUPPRESSION D'UN MÉDIA (CMS) */}
+      {deletingMediaItem && (
+        <div className="fixed inset-0 z-50 bg-[#123D46]/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E3EBE6] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-scale-in">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 border border-rose-200">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-jakarta font-bold text-base text-[#123D46]">
+                  Supprimer ce contenu média ?
+                </h3>
+                <p className="text-xs text-[#123D46]/75 mt-1 leading-relaxed">
+                  Êtes-vous sûr de vouloir supprimer définitivement le contenu suivant de la médiathèque ?
+                </p>
+                <div className="mt-2.5 p-3 rounded-xl bg-[#FAF9F5] border border-[#E3EBE6] text-xs">
+                  <div className="font-mono text-[10px] text-[#123D46]/60">
+                    {deletingMediaItem.type} · {deletingMediaItem.category}
+                  </div>
+                  <div className="font-jakarta font-bold text-[#123D46] mt-0.5">
+                    {deletingMediaItem.title}
+                  </div>
+                  <div className="text-[10px] text-[#123D46]/50 mt-1">
+                    Par {deletingMediaItem.author} · {deletingMediaItem.date}
+                  </div>
+                </div>
+                <p className="text-[11px] text-rose-600 font-medium mt-2">
+                  ⚠️ Cette action est irréversible et retirera ce média de l'Espace Média de tous les collaborateurs ainsi que du site public.
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-[#E3EBE6] flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setDeletingMediaItem(null)}
+                className="px-4 py-2 rounded-xl border border-[#E3EBE6] text-[#123D46] hover:bg-[#F4F1E8] text-xs font-semibold"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDeleteMediaItem}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-jakarta font-bold text-xs shadow-xs transition-colors flex items-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Supprimer définitivement</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Global In-App Toast Container */}
+      <ToastContainer toasts={toasts} onDismiss={removeToast} />
     </div>
   );
 };

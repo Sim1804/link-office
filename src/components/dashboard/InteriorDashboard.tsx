@@ -3,18 +3,43 @@ import { Logo } from '../brand/Logo';
 import { IrisMark } from '../brand/IrisLogo';
 import { RadarChart } from './RadarChart';
 import { IrisDrawer } from './IrisDrawer';
+import { ToastContainer, ToastMessage } from '../common/Toast';
+import {
+  Activity,
+  TrendingUp,
+  ClipboardList,
+  Sparkles,
+  Users,
+  BookOpen,
+  Award,
+  FileText
+} from 'lucide-react';
 
 interface InteriorDashboardProps {
   onLogout: () => void;
   onReturnToPublic: () => void;
+  onSwitchToRHAdmin?: () => void;
+  onSwitchToSuperAdmin?: () => void;
 }
 
 export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
   onLogout,
-  onReturnToPublic
+  onReturnToPublic,
+  onSwitchToRHAdmin,
+  onSwitchToSuperAdmin
 }) => {
   // Top Tabs: 'evaluation' | 'progression' | 'media'
   const [activeMainTab, setActiveMainTab] = useState<'evaluation' | 'progression' | 'media'>('evaluation');
+
+  // In-App Toast state
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const addToast = (title: string, message: string, type: 'success' | 'info' | 'warning' = 'success') => {
+    const id = `toast-${Date.now()}-${Math.random()}`;
+    setToasts(prev => [...prev, { id, title, message, type }]);
+  };
+  const removeToast = (id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
 
   // Sub Tabs in "Mon évaluation": 'sante' | 'evolution' | 'plan' | 'ressources' | 'relations' | 'journal'
   const [subTab, setSubTab] = useState<'sante' | 'evolution' | 'plan' | 'ressources' | 'relations' | 'journal'>('sante');
@@ -45,15 +70,21 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3.5 shadow-2xs">
         <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           {/* Left: Brand Logo & Public site link */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <div onClick={onReturnToPublic} className="cursor-pointer">
               <Logo size="sm" showTagline={false} />
             </div>
+            <div className="hidden sm:flex items-center gap-2 pl-3 border-l border-[#E3EBE6]">
+              <span className="text-xs font-jakarta font-bold px-2.5 py-1 rounded-lg bg-[#00A99D]/10 text-[#00A99D] flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00A99D]" />
+                <span>Espace Collaborateur (Personnel & Anonyme)</span>
+              </span>
+            </div>
             <button
               onClick={onReturnToPublic}
-              className="hidden sm:inline-flex items-center gap-1 text-xs text-[#123D46]/60 hover:text-[#00A99D] font-jakarta font-medium transition-colors border-l border-[#E3EBE6] pl-4"
+              className="hidden lg:inline-flex items-center gap-1 text-xs text-[#123D46]/60 hover:text-[#00A99D] font-jakarta font-medium transition-colors border-l border-[#E3EBE6] pl-3"
             >
-              <span>← Retour au site public</span>
+              <span>← Site public</span>
             </button>
           </div>
 
@@ -105,7 +136,7 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
           {/* Right: Notifications & Profile Capsule */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => alert('Aucune nouvelle notification.')}
+              onClick={() => addToast('Notifications', 'Aucune nouvelle alerte personnelle en attente.', 'info')}
               className="w-9 h-9 rounded-full bg-[#FAF9F5] border border-[#E3EBE6] hover:border-[#00A99D] text-[#123D46]/70 hover:text-[#00A99D] flex items-center justify-center transition-colors relative"
               title="Notifications"
             >
@@ -151,6 +182,28 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                   >
                     ⭐ Passer à Premium
                   </button>
+                  {onSwitchToRHAdmin && (
+                    <button
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                        onSwitchToRHAdmin();
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-[#5965E8]/10 text-[#5965E8] font-bold"
+                    >
+                      🏢 Portail RH B2B (Acme Corp)
+                    </button>
+                  )}
+                  {onSwitchToSuperAdmin && (
+                    <button
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                        onSwitchToSuperAdmin();
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-[#00A99D]/10 text-[#00A99D] font-bold"
+                    >
+                      🛡️ Console Super Admin
+                    </button>
+                  )}
                   <button
                     onClick={() => {
                       setIsProfileMenuOpen(false);
@@ -177,7 +230,124 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
         </div>
       </header>
 
-      {/* ==================== 2. MAIN WORKSPACE CONTENT ==================== */}
+      {/* ==================== 2. HORIZONTAL SUB-NAVIGATION TABS (Partie Salarié) ==================== */}
+      <div className="bg-white border-b border-[#E3EBE6] px-4 sm:px-8 overflow-x-auto scrollbar-none py-2.5">
+        <div className="max-w-[1440px] mx-auto flex items-center gap-1.5 sm:gap-2">
+          {activeMainTab === 'evaluation' && (
+            <>
+              <button
+                onClick={() => setSubTab('sante')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap ${
+                  subTab === 'sante'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <Activity className="w-4 h-4" />
+                <span>Santé & Bilans</span>
+              </button>
+
+              <button
+                onClick={() => setSubTab('evolution')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap ${
+                  subTab === 'evolution'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <TrendingUp className="w-4 h-4" />
+                <span>Évolution</span>
+              </button>
+
+              <button
+                onClick={() => setSubTab('plan')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap ${
+                  subTab === 'plan'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <ClipboardList className="w-4 h-4" />
+                <span>Mon Plan & Actions</span>
+              </button>
+
+              <button
+                onClick={() => setSubTab('ressources')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap ${
+                  subTab === 'ressources'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Ressources</span>
+              </button>
+
+              <button
+                onClick={() => setSubTab('relations')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap ${
+                  subTab === 'relations'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <Users className="w-4 h-4" />
+                <span>Relations</span>
+              </button>
+
+              <button
+                onClick={() => setSubTab('journal')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap ${
+                  subTab === 'journal'
+                    ? 'bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs'
+                    : 'text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold'
+                }`}
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Journal de bord</span>
+              </button>
+            </>
+          )}
+
+          {activeMainTab === 'progression' && (
+            <>
+              <button
+                className="flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs"
+              >
+                <Award className="w-4 h-4" />
+                <span>Objectifs & Micro-défis</span>
+              </button>
+              <button
+                onClick={() => addToast('Historique XP', 'Historique des gains synchronisé avec votre profil.', 'info')}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold"
+              >
+                <TrendingUp className="w-4 h-4" />
+                <span>Historique des gains</span>
+              </button>
+            </>
+          )}
+
+          {activeMainTab === 'media' && (
+            <>
+              <button
+                className="flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap bg-[#00A99D]/12 text-[#00A99D] ring-1 ring-[#00A99D]/30 font-bold shadow-2xs"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Bibliothèque de contenus</span>
+              </button>
+              <button
+                onClick={() => addToast('Favoris', '3 contenus enregistrés dans vos favoris.', 'info')}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-jakarta transition-all whitespace-nowrap text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 font-semibold"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Favoris & Recommandés</span>
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* ==================== 3. MAIN WORKSPACE CONTENT ==================== */}
       <main className="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
 
         {/* TOP STATUS CARD (As in Image 1) */}
@@ -209,16 +379,16 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
 
             {/* Right: Gamification Badges & Upgrade */}
             <div className="flex items-center gap-3 shrink-0">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FAF9F5] border border-[#E3EBE6] text-xs font-jakarta font-bold text-[#123D46]">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF9F5] border border-[#E3EBE6] text-xs font-jakarta font-bold text-[#123D46]">
                 <span className="text-[#FFC629]">⭐</span>
                 <span className="font-mono">{xpPoints} pts</span>
               </div>
-              <span className="px-3 py-1.5 rounded-xl bg-[#00A99D]/10 text-[#00A99D] text-xs font-jakarta font-bold">
+              <span className="px-3 py-1.5 rounded-full bg-[#00A99D]/10 text-[#00A99D] text-xs font-jakarta font-bold">
                 Débutant
               </span>
               <button
                 onClick={() => setShowPremiumModal(true)}
-                className="px-4 py-2 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-1"
+                className="px-4 py-2 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-1"
               >
                 <span>Premium</span>
                 <span>→</span>
@@ -242,7 +412,7 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                 <button
                   key={mood.key}
                   onClick={() => setDailyMood(mood.key as any)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-jakarta font-semibold transition-all ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-jakarta font-semibold transition-all ${
                     dailyMood === mood.key
                       ? 'bg-[#00A99D] text-white shadow-xs'
                       : 'bg-[#FAF9F5] text-[#123D46]/75 hover:bg-[#F4F1E8] border border-[#E3EBE6]'
@@ -266,31 +436,6 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
         {/* VIEW 1: MON ÉVALUATION */}
         {activeMainTab === 'evaluation' && (
           <div className="space-y-6">
-            {/* Sub Navigation Tabs (Santé, Évolution, Plan, Ressources, Relations, Journal) */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-              {[
-                { id: 'sante', label: 'Santé', icon: '🩺' },
-                { id: 'evolution', label: 'Évolution', icon: '⏱️' },
-                { id: 'plan', label: 'Plan', icon: '📋' },
-                { id: 'ressources', label: 'Ressources', icon: '✨' },
-                { id: 'relations', label: 'Relations', icon: '👥' },
-                { id: 'journal', label: 'Journal', icon: '📖' }
-              ].map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setSubTab(tab.id as any)}
-                  className={`px-4 py-2 rounded-2xl text-xs font-jakarta font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
-                    subTab === tab.id
-                      ? 'bg-[#00A99D] text-white shadow-xs'
-                      : 'bg-white text-[#123D46]/75 hover:bg-[#FAF9F5] border border-[#E3EBE6]'
-                  }`}
-                >
-                  <span>{tab.icon}</span>
-                  <span>{tab.label}</span>
-                </button>
-              ))}
-            </div>
-
             {/* SUB-VIEW: SANTÉ & BILANS (Image 1, 2, 3) */}
             {subTab === 'sante' && (
               <div className="space-y-6 animate-fade-in">
@@ -635,7 +780,7 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                   <button
                     onClick={() => {
                       setUserScore(prev => Math.min(100, prev + 1));
-                      alert('Nouvelle passation enregistrée avec succès !');
+                      addToast('Évaluation IQRH', 'Nouvelle passation enregistrée dans votre carnet personnel !', 'success');
                     }}
                     className="px-5 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-2 self-start sm:self-auto"
                   >
@@ -760,9 +905,9 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                     <button
                       onClick={() => {
                         setXpPoints(prev => prev + 20);
-                        alert('Action #1 activée ! (+20 XP)');
+                        addToast('Micro-Action Activée', 'Action #1 activée ! (+20 XP attribués)', 'success');
                       }}
-                      className="w-full py-2.5 rounded-xl border border-[#00A99D] text-[#00A99D] hover:bg-[#00A99D] hover:text-white transition-all text-xs font-jakarta font-bold text-center"
+                      className="w-full py-2.5 rounded-full border border-[#00A99D] text-[#00A99D] hover:bg-[#00A99D] hover:text-white transition-all text-xs font-jakarta font-bold text-center"
                     >
                       Activer cette action
                     </button>
@@ -793,9 +938,9 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                     <button
                       onClick={() => {
                         setXpPoints(prev => prev + 20);
-                        alert('Action #2 activée ! (+20 XP)');
+                        addToast('Micro-Action Activée', 'Action #2 activée ! (+20 XP attribués)', 'success');
                       }}
-                      className="w-full py-2.5 rounded-xl border border-[#00A99D] text-[#00A99D] hover:bg-[#00A99D] hover:text-white transition-all text-xs font-jakarta font-bold text-center"
+                      className="w-full py-2.5 rounded-full border border-[#00A99D] text-[#00A99D] hover:bg-[#00A99D] hover:text-white transition-all text-xs font-jakarta font-bold text-center"
                     >
                       Activer cette action
                     </button>
@@ -826,9 +971,9 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                     <button
                       onClick={() => {
                         setXpPoints(prev => prev + 20);
-                        alert('Action #3 activée ! (+20 XP)');
+                        addToast('Micro-Action Activée', 'Action #3 activée ! (+20 XP attribués)', 'success');
                       }}
-                      className="w-full py-2.5 rounded-xl border border-[#00A99D] text-[#00A99D] hover:bg-[#00A99D] hover:text-white transition-all text-xs font-jakarta font-bold text-center"
+                      className="w-full py-2.5 rounded-full border border-[#00A99D] text-[#00A99D] hover:bg-[#00A99D] hover:text-white transition-all text-xs font-jakarta font-bold text-center"
                     >
                       Activer cette action
                     </button>
@@ -910,7 +1055,7 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                     <p className="text-xs text-[#123D46]/70 leading-relaxed">
                       Guides méthodologiques, fiches rituels et modèles d'entretiens annuels bienveillants.
                     </p>
-                    <button className="text-xs text-[#B8870A] font-bold hover:underline">
+                    <button className="text-xs text-[#00A99D] font-bold hover:underline">
                       Accéder à la bibliothèque →
                     </button>
                   </div>
@@ -930,7 +1075,7 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                       Visualisez la qualité du lien au sein de vos différents cercles de vie.
                     </p>
                   </div>
-                  <button className="px-4 py-2 rounded-xl bg-[#00A99D] text-white text-xs font-jakarta font-bold">
+                  <button className="px-4 py-2 rounded-full bg-[#00A99D] text-white text-xs font-jakarta font-bold">
                     + Ajouter une relation
                   </button>
                 </div>
@@ -985,8 +1130,8 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                     </p>
                   </div>
                   <button
-                    onClick={() => alert('Entrée de journal enregistrée.')}
-                    className="px-4 py-2 rounded-xl bg-[#00A99D] text-white text-xs font-jakarta font-bold"
+                    onClick={() => addToast('Journal de bord', 'Entrée de journal enregistrée et chiffrée.', 'success')}
+                    className="px-4 py-2 rounded-full bg-[#00A99D] text-white text-xs font-jakarta font-bold"
                   >
                     + Nouvelle note
                   </button>
@@ -1174,9 +1319,9 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                   onClick={() => {
                     setXpPoints(prev => prev + 15);
                     setCompletedDefis(prev => prev + 1);
-                    alert('Nouveau défi complété ! (+15 XP)');
+                    addToast('Défi Validé', 'Nouveau rituel d’écoute complété ! (+15 XP attribués)', 'success');
                   }}
-                  className="w-full py-2.5 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs"
+                  className="w-full py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs"
                 >
                   Valider un rituel d'écoute aujourd'hui (+15 XP)
                 </button>
@@ -1296,16 +1441,16 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
             <div className="flex items-center gap-3 pt-2">
               <button
                 onClick={() => setShowPremiumModal(false)}
-                className="w-1/2 py-2.5 rounded-xl border border-[#E3EBE6] text-xs font-jakarta font-semibold text-[#123D46]"
+                className="w-1/2 py-2.5 rounded-full border border-[#E3EBE6] text-xs font-jakarta font-semibold text-[#123D46]"
               >
                 Plus tard
               </button>
               <button
                 onClick={() => {
-                  alert('Félicitations Camille, votre compte a été passé en Premium Démo !');
+                  addToast('Statut Compte', 'Votre compte a été passé en Premium Démo avec succès !', 'success');
                   setShowPremiumModal(false);
                 }}
-                className="w-1/2 py-2.5 rounded-xl bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold shadow-xs"
+                className="w-1/2 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold shadow-xs"
               >
                 Activer l'offre
               </button>
@@ -1313,6 +1458,9 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
           </div>
         </div>
       )}
+
+      {/* Global In-App Toast Container */}
+      <ToastContainer toasts={toasts} onDismiss={removeToast} />
     </div>
   );
 };

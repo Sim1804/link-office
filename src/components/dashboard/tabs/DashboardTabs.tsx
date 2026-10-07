@@ -46,7 +46,7 @@ export function DashboardTabs({ data, isPremium, isPremiumPlus, DIMENSIONS_LABEL
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={`px-4 py-2 rounded-2xl text-xs font-jakarta font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
+              className={`px-4 py-2 rounded-full text-xs font-jakarta font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
                 isActive
                   ? 'bg-[#00A99D] text-white shadow-xs'
                   : 'bg-white text-[#123D46]/75 hover:bg-[#FAF9F5] border border-[#E3EBE6]'

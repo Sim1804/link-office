@@ -52,7 +52,7 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
     <>
       <ReadingProgress />
       <PublicNavbar />
-      <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 100, paddingBottom: 80 }}>
+      <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 32, paddingBottom: 80 }}>
         
         {/* Cover Section - Classic Header */}
         <div style={{ paddingBottom: 40, borderBottom: "1px solid var(--border)", marginBottom: 40 }}>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { 
-  BarChart3, MapPin, Activity, Target, Users, TrendingUp, User, PenTool, Calendar, ShieldCheck
+  BarChart3, MapPin, Activity, Target, Users, TrendingUp, User, PenTool, Calendar, ShieldCheck, ChevronDown
 } from "lucide-react";
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
@@ -69,89 +69,92 @@ export function BarometreDashboard({ availableRegions }: { availableRegions: str
   ] : [];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+    <div className="space-y-6 animate-fade-in">
       
-      {/* ── ROW 1: EDITORIAL & PARAMÈTRES (Section 69 Cahier des charges) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 24 }}>
+      {/* ── ROW 1: EDITORIAL & PARAMÈTRES ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Gestion Éditoriale (Chiffre à la Une + Commentaire) */}
-        <div className="card" style={{ padding: 24, borderTop: "3px solid var(--primary)", background: "linear-gradient(135deg, var(--surface) 0%, rgba(0,169,157,0.03) 100%)" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 8 }}>
-              <PenTool size={18} color="var(--primary)" /> Gestion Éditoriale
-            </h2>
-            <span style={{ fontSize: 11, color: "var(--text-3)", display: "flex", alignItems: "center", gap: 4 }}>
-              <Calendar size={12} /> Mise à jour : {new Date().toLocaleDateString('fr-FR')}
-            </span>
-          </div>
-
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-3)", marginBottom: 6, textTransform: "uppercase" }}>Chiffre à la Une</label>
-            <div style={{ display: "flex", gap: 8 }}>
-              <input 
-                type="text" 
-                value={highlightNumber} 
-                onChange={(e) => setHighlightNumber(e.target.value)}
-                className="input" 
-                style={{ width: "80px", fontSize: 16, fontWeight: 800, color: "var(--primary)" }} 
-              />
-              <input 
-                type="text" 
-                value={highlightText} 
-                onChange={(e) => setHighlightText(e.target.value)}
-                className="input" 
-                style={{ flex: 1, fontSize: 13 }} 
-              />
-            </div>
-          </div>
-
-          <div>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-3)", marginBottom: 6, textTransform: "uppercase" }}>Commentaire d'analyse</label>
-            <textarea 
-              value={editorialComment}
-              onChange={(e) => setEditorialComment(e.target.value)}
-              className="input" 
-              rows={4}
-              style={{ width: "100%", fontSize: 13, lineHeight: 1.5, resize: "none" }}
-            />
-          </div>
+        <div className="lg:col-span-1 bg-white border border-[#E3EBE6] border-t-4 border-t-[#00A99D] rounded-2xl shadow-sm relative overflow-hidden flex flex-col">
+          {/* Subtle background gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#00A99D]/5 to-transparent pointer-events-none" />
           
-          <button className="btn btn-primary" style={{ width: "100%", marginTop: 16 }}>
-            Publier sur la page d'accueil
-          </button>
+          <div className="p-5 sm:p-6 relative z-10 flex flex-col flex-1">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-[15px] font-bold text-[#123D46] flex items-center gap-2">
+                <PenTool className="w-4 h-4 text-[#00A99D]" /> Gestion Éditoriale
+              </h2>
+              <span className="text-[10px] font-medium text-[#123D46]/50 flex items-center gap-1 bg-white/60 px-2 py-1 rounded-md border border-[#E3EBE6]">
+                <Calendar className="w-3 h-3" /> {new Date().toLocaleDateString('fr-FR')}
+              </span>
+            </div>
+
+            <div className="space-y-5 flex-1">
+              <div>
+                <label className="block text-[10px] font-bold text-[#123D46]/60 mb-2 uppercase tracking-wider">Chiffre à la Une</label>
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="text" 
+                    value={highlightNumber} 
+                    onChange={(e) => setHighlightNumber(e.target.value)}
+                    className="w-20 px-3 py-2 bg-white border border-[#E3EBE6] rounded-xl text-base font-black text-[#00A99D] focus:outline-none focus:border-[#00A99D] focus:ring-1 focus:ring-[#00A99D] transition-shadow text-center" 
+                  />
+                  <input 
+                    type="text" 
+                    value={highlightText} 
+                    onChange={(e) => setHighlightText(e.target.value)}
+                    className="flex-1 px-3 py-2 bg-white border border-[#E3EBE6] rounded-xl text-xs font-medium text-[#123D46] focus:outline-none focus:border-[#00A99D] focus:ring-1 focus:ring-[#00A99D] transition-shadow" 
+                  />
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col">
+                <label className="block text-[10px] font-bold text-[#123D46]/60 mb-2 uppercase tracking-wider">Commentaire d'analyse</label>
+                <textarea 
+                  value={editorialComment}
+                  onChange={(e) => setEditorialComment(e.target.value)}
+                  className="flex-1 w-full p-3 bg-white border border-[#E3EBE6] rounded-xl text-xs text-[#123D46] leading-relaxed resize-none focus:outline-none focus:border-[#00A99D] focus:ring-1 focus:ring-[#00A99D] transition-shadow min-h-[100px]" 
+                />
+              </div>
+            </div>
+            
+            <button className="w-full mt-5 bg-[#00A99D] hover:bg-[#199E9A] text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-sm">
+              Publier sur la page d'accueil
+            </button>
+          </div>
         </div>
 
         {/* Filtres de Données */}
-        <div className="card" style={{ padding: 24 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", display: "flex", alignItems: "center", gap: 8 }}>
-              <Activity size={18} color="var(--primary)" /> Filtres de l'Observatoire
+        <div className="lg:col-span-2 bg-white border border-[#E3EBE6] rounded-2xl shadow-sm p-5 sm:p-6 flex flex-col">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-[15px] font-bold text-[#123D46] flex items-center gap-2">
+              <Activity className="w-4 h-4 text-[#00A99D]" /> Filtres de l'Observatoire
             </h2>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 10px", background: "rgba(16,185,129,0.1)", borderRadius: 999, color: "#10b981", fontSize: 12, fontWeight: 600 }}>
-              <ShieldCheck size={14} /> Seuil d'anonymat respecté
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 border border-emerald-100 rounded-full text-emerald-600 text-[10px] font-bold">
+              <ShieldCheck className="w-3.5 h-3.5" /> Seuil d'anonymat respecté
             </div>
           </div>
           
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
-            <div>
-              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-3)", marginBottom: 6, textTransform: "uppercase" }}>Période</label>
-              <Select value={period} onChange={setPeriod} options={[{ value: "ALL", label: "Depuis toujours" }, { value: "this_year", label: "Cette année" }, { value: "last_30_days", label: "30 derniers jours" }]} style={{ width: "100%" }} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-5 flex-1">
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-[#123D46]/60 uppercase tracking-wider">Période</label>
+              <Select value={period} onChange={setPeriod} options={[{ value: "ALL", label: "Depuis toujours" }, { value: "this_year", label: "Cette année" }, { value: "last_30_days", label: "30 derniers jours" }]} />
             </div>
-            <div>
-              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-3)", marginBottom: 6, textTransform: "uppercase" }}>Structure</label>
-              <Select value={type} onChange={setType} options={[{ value: "ALL", label: "Toutes confondues" }, { value: "B2C", label: "Particuliers" }, { value: "B2B", label: "Entreprises" }, { value: "B2B2C", label: "Mutuelles" }, { value: "B2G", label: "Collectivités" }]} style={{ width: "100%" }} />
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-[#123D46]/60 uppercase tracking-wider">Structure</label>
+              <Select value={type} onChange={setType} options={[{ value: "ALL", label: "Toutes confondues" }, { value: "B2C", label: "Particuliers" }, { value: "B2B", label: "Entreprises" }, { value: "B2B2C", label: "Mutuelles" }, { value: "B2G", label: "Collectivités" }]} />
             </div>
-            <div>
-              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-3)", marginBottom: 6, textTransform: "uppercase" }}>Département</label>
-              <Select value={region} onChange={setRegion} options={[{ value: "ALL", label: "France entière" }, ...availableRegions.map(r => ({ value: r, label: r }))]} style={{ width: "100%" }} />
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-[#123D46]/60 uppercase tracking-wider">Département</label>
+              <Select value={region} onChange={setRegion} options={[{ value: "ALL", label: "France entière" }, ...availableRegions.map(r => ({ value: r, label: r }))]} />
             </div>
-            <div>
-              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-3)", marginBottom: 6, textTransform: "uppercase" }}>Âge</label>
-              <Select value={age} onChange={setAge} options={[{ value: "ALL", label: "Tous âges" }, { value: "18-25", label: "18-25 ans" }, { value: "26-40", label: "26-40 ans" }, { value: "41+", label: "41 ans et +" }]} style={{ width: "100%" }} />
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-[#123D46]/60 uppercase tracking-wider">Âge</label>
+              <Select value={age} onChange={setAge} options={[{ value: "ALL", label: "Tous âges" }, { value: "18-25", label: "18-25 ans" }, { value: "26-40", label: "26-40 ans" }, { value: "41+", label: "41 ans et +" }]} />
             </div>
-            <div>
-              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-3)", marginBottom: 6, textTransform: "uppercase" }}>Sexe</label>
-              <Select value={gender} onChange={setGender} options={[{ value: "ALL", label: "Tous" }, { value: "H", label: "Hommes" }, { value: "F", label: "Femmes" }]} style={{ width: "100%" }} />
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-[#123D46]/60 uppercase tracking-wider">Sexe</label>
+              <Select value={gender} onChange={setGender} options={[{ value: "ALL", label: "Tous" }, { value: "H", label: "Hommes" }, { value: "F", label: "Femmes" }]} />
             </div>
           </div>
         </div>
@@ -160,15 +163,15 @@ export function BarometreDashboard({ availableRegions }: { availableRegions: str
 
       {/* Loading State — Skeleton */}
       {loading && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 16 }}>
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[1, 2].map(i => (
-              <div key={i} className="card skeleton" style={{ height: 120 }} />
+              <div key={i} className="bg-white border border-[#E3EBE6] rounded-2xl h-28 animate-pulse" />
             ))}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: 16 }}>
-            {[1, 2].map(i => (
-              <div key={i} className="card skeleton" style={{ height: 300 }} />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="bg-white border border-[#E3EBE6] rounded-2xl h-[340px] animate-pulse" />
             ))}
           </div>
         </div>
@@ -176,129 +179,143 @@ export function BarometreDashboard({ availableRegions }: { availableRegions: str
 
       {/* ── CONTENT GRID ── */}
       {!loading && data && (
-        <div style={{ animation: "fadeIn 0.3s ease-out", display: "flex", flexDirection: "column", gap: 24 }}>
+        <div className="space-y-6 animate-fade-in">
           
           {/* Top KPI Row */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 24 }}>
-            <div className="card" style={{ padding: 24, display: "flex", alignItems: "center", gap: 16 }}>
-              <div style={{ width: 64, height: 64, borderRadius: 16, background: "rgba(99,102,241,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--indigo)" }}>
-                <Users size={32} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 shadow-xs flex items-center gap-5 hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center shrink-0">
+                <Users className="w-8 h-8" />
               </div>
               <div>
-                <h3 style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", color: "var(--text-3)", marginBottom: 4 }}>Volume d'évaluations</h3>
-                <div style={{ fontSize: 36, fontWeight: 900, color: "var(--text-1)", fontFamily: "var(--font-family-display)", lineHeight: 1 }}>
+                <h3 className="text-xs font-bold text-[#123D46]/60 uppercase tracking-wider mb-1">Volume d'évaluations</h3>
+                <div className="text-4xl font-jakarta font-black text-[#123D46] font-mono leading-none">
                   {data.totalPassages.toLocaleString()}
                 </div>
               </div>
             </div>
             
-            <div className="card" style={{ padding: 24, display: "flex", alignItems: "center", gap: 16 }}>
-              <div style={{ width: 64, height: 64, borderRadius: 16, background: "rgba(0,169,157,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--primary)" }}>
-                <BarChart3 size={32} />
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 shadow-xs flex items-center gap-5 hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 rounded-2xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center shrink-0">
+                <BarChart3 className="w-8 h-8" />
               </div>
               <div>
-                <h3 style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", color: "var(--text-3)", marginBottom: 4 }}>Moyenne IQRH Globale</h3>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                  <span style={{ fontSize: 36, fontWeight: 900, color: "var(--primary)", fontFamily: "var(--font-family-display)", lineHeight: 1 }}>{data.globalAverage}</span>
-                  <span style={{ fontSize: 16, fontWeight: 700, color: "var(--text-3)" }}>/100</span>
+                <h3 className="text-xs font-bold text-[#123D46]/60 uppercase tracking-wider mb-1">Moyenne IQRH Globale</h3>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-4xl font-jakarta font-black text-[#00A99D] font-mono leading-none">{data.globalAverage}</span>
+                  <span className="text-lg font-bold text-[#123D46]/40">/100</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Main Charts Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: 24 }}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Timeline */}
-            <div className="card" style={{ padding: 24 }}>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 24, display: "flex", alignItems: "center", gap: 8 }}>
-                <TrendingUp size={18} color="var(--primary)" /> Évolution des passages
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 sm:p-6 shadow-xs lg:col-span-2">
+              <h3 className="text-[15px] font-bold text-[#123D46] mb-6 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-[#00A99D]" /> Évolution des passages
               </h3>
-              <div style={{ width: "100%", height: 260 }}>
+              <div className="w-full h-[280px]">
                 {data.timeline.length > 0 ? (
                   <ResponsiveContainer>
                     <LineChart data={data.timeline} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                      <XAxis dataKey="date" stroke="var(--text-3)" fontSize={11} tickMargin={8} minTickGap={20} />
-                      <YAxis stroke="var(--text-3)" fontSize={11} tickMargin={8} />
-                      <RechartsTooltip contentStyle={{ borderRadius: 8, border: "1px solid var(--border)", fontSize: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }} />
-                      <Line type="monotone" dataKey="passages" stroke="var(--primary)" strokeWidth={2} dot={false} activeDot={{ r: 4 }} />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E3EBE6" />
+                      <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickMargin={10} minTickGap={20} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#94a3b8" fontSize={11} tickMargin={10} tickLine={false} axisLine={false} />
+                      <RechartsTooltip 
+                        contentStyle={{ borderRadius: '12px', border: "1px solid #E3EBE6", fontSize: '12px', boxShadow: "0 4px 12px rgba(0,0,0,0.05)", fontWeight: 500, color: "#123D46" }} 
+                      />
+                      <Line type="monotone" dataKey="passages" stroke="#00A99D" strokeWidth={3} dot={false} activeDot={{ r: 5, fill: "#00A99D", stroke: "#fff", strokeWidth: 2 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "var(--text-3)", fontSize: 12 }}>Aucune donnée pour cette période</div>
+                  <div className="flex items-center justify-center h-full text-xs text-[#123D46]/50">Aucune donnée pour cette période</div>
                 )}
               </div>
             </div>
 
             {/* Radar Dimensions */}
-            <div className="card" style={{ padding: 24 }}>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 24, display: "flex", alignItems: "center", gap: 8 }}>
-                <Target size={18} color="var(--primary)" /> Équilibre des dimensions
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 sm:p-6 shadow-xs">
+              <h3 className="text-[15px] font-bold text-[#123D46] mb-6 flex items-center gap-2">
+                <Target className="w-4 h-4 text-[#00A99D]" /> Équilibre des dimensions
               </h3>
-              <div style={{ width: "100%", height: 260 }}>
+              <div className="w-full h-[280px]">
                 <ResponsiveContainer>
                   <RadarChart data={radarData} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
-                    <PolarGrid stroke="var(--border)" />
-                    <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--text-2)', fontSize: 11, fontWeight: 600 }} />
-                    <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: 'var(--text-3)', fontSize: 10 }} />
-                    <Radar name="Moyenne" dataKey="A" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.2} />
-                    <RechartsTooltip contentStyle={{ borderRadius: 8, border: "1px solid var(--border)", fontSize: 12 }} />
+                    <PolarGrid stroke="#E3EBE6" />
+                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#123D46', fontSize: 11, fontWeight: 700 }} />
+                    <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#94a3b8', fontSize: 10 }} axisLine={false} />
+                    <Radar name="Moyenne" dataKey="A" stroke="#00A99D" strokeWidth={2} fill="#00A99D" fillOpacity={0.15} />
+                    <RechartsTooltip 
+                      contentStyle={{ borderRadius: '12px', border: "1px solid #E3EBE6", fontSize: '12px', boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }} 
+                    />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
             {/* Profils Relationnels */}
-            <div className="card" style={{ padding: 24 }}>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 24, display: "flex", alignItems: "center", gap: 8 }}>
-                <User size={18} color="var(--primary)" /> Profils Relationnels (Global)
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 sm:p-6 shadow-xs lg:col-span-1">
+              <h3 className="text-[15px] font-bold text-[#123D46] mb-6 flex items-center gap-2">
+                <User className="w-4 h-4 text-[#00A99D]" /> Profils Relationnels
               </h3>
-              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <div style={{ width: "50%", height: 200 }}>
+              <div className="flex flex-col gap-6">
+                <div className="w-full h-[180px]">
                   <ResponsiveContainer>
                     <PieChart>
-                      <Pie data={data.profils} innerRadius={50} outerRadius={80} paddingAngle={4} dataKey="value">
+                      <Pie data={data.profils} innerRadius={60} outerRadius={85} paddingAngle={2} dataKey="value" stroke="none">
                         {data.profils.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <RechartsTooltip contentStyle={{ borderRadius: 8, border: "1px solid var(--border)", fontSize: 12 }} />
+                      <RechartsTooltip 
+                        contentStyle={{ borderRadius: '12px', border: "none", fontSize: '12px', boxShadow: "0 4px 12px rgba(0,0,0,0.08)", fontWeight: 600 }} 
+                        itemStyle={{ color: "#123D46" }}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
-                <div style={{ width: "50%", display: "flex", flexDirection: "column", gap: 10 }}>
+                <div className="flex flex-col gap-3">
                   {data.profils.map(p => (
-                    <div key={p.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: p.color }} />
-                        <span style={{ fontSize: 13, color: "var(--text-2)", fontWeight: 500 }}>{p.name}</span>
+                    <div key={p.name} className="flex items-center justify-between p-2 rounded-xl hover:bg-[#F4F1E8]/40 transition-colors">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.color }} />
+                        <span className="text-xs font-semibold text-[#123D46]/80">{p.name}</span>
                       </div>
-                      <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-1)" }}>{p.value}%</span>
+                      <span className="text-xs font-black text-[#123D46]">{p.value}%</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
             
-            {/* Regions (Spans full width if odd number of charts) */}
-            <div className="card" style={{ padding: 24, gridColumn: "1 / -1" }}>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 24, display: "flex", alignItems: "center", gap: 8 }}>
-                <MapPin size={18} color="var(--primary)" /> Répartition par département (Top 15)
+            {/* Regions */}
+            <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 sm:p-6 shadow-xs lg:col-span-2">
+              <h3 className="text-[15px] font-bold text-[#123D46] mb-6 flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-[#00A99D]" /> Répartition par département (Top 15)
               </h3>
-              <div style={{ width: "100%", height: 300 }}>
+              <div className="w-full h-[320px]">
                 {data.regions.length > 0 ? (
                   <ResponsiveContainer>
-                    <BarChart data={data.regions} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                      <XAxis dataKey="name" stroke="var(--text-3)" fontSize={11} tickMargin={8} />
-                      <YAxis type="number" stroke="var(--text-3)" fontSize={11} tickMargin={8} />
-                      <RechartsTooltip contentStyle={{ borderRadius: 8, border: "1px solid var(--border)", fontSize: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }} cursor={{fill: 'var(--surface-2)'}} />
-                      <Bar dataKey="count" fill="var(--indigo)" radius={[4, 4, 0, 0]} name="Passages" maxBarSize={40} />
+                    <BarChart data={data.regions} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E3EBE6" />
+                      <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} tickMargin={10} tickLine={false} axisLine={false} />
+                      <YAxis type="number" stroke="#94a3b8" fontSize={11} tickMargin={10} tickLine={false} axisLine={false} />
+                      <RechartsTooltip 
+                        contentStyle={{ borderRadius: '12px', border: "1px solid #E3EBE6", fontSize: '12px', boxShadow: "0 4px 12px rgba(0,0,0,0.05)", fontWeight: 500, color: "#123D46" }} 
+                        cursor={{fill: 'rgba(0,169,157,0.05)'}} 
+                      />
+                      <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} name="Passages" maxBarSize={48}>
+                        {data.regions.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={index === 0 ? "#00A99D" : "#6366f1"} fillOpacity={index === 0 ? 1 : 0.7} />
+                        ))}
+                      </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "var(--text-3)", fontSize: 12 }}>Aucune donnée</div>
+                  <div className="flex items-center justify-center h-full text-xs text-[#123D46]/50">Aucune donnée</div>
                 )}
               </div>
             </div>
@@ -306,11 +323,6 @@ export function BarometreDashboard({ availableRegions }: { availableRegions: str
           </div>
         </div>
       )}
-
-      <style>{`
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-      `}</style>
     </div>
   );
 }
