@@ -46,14 +46,7 @@ export default function B2B2CDashboard() {
   // Menus & Modals
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [showNewCampaignModal, setShowNewCampaignModal] = useState(false);
   const [showActionPlanModal, setShowActionPlanModal] = useState(false);
-
-  // New Campaign Form State
-  const [newCampaignTitle, setNewCampaignTitle] = useState('');
-  const [newCampaignStartDate, setNewCampaignStartDate] = useState('2026-10-15');
-  const [newCampaignEndDate, setNewCampaignEndDate] = useState('2026-11-15');
-  const [newCampaignTarget, setNewCampaignTarget] = useState('Tous les bénéficiaires');
 
   // Actions
   const [addingActionId, setAddingActionId] = useState<string | null>(null);
@@ -79,15 +72,6 @@ export default function B2B2CDashboard() {
     } finally {
       setAddingActionId(null);
     }
-  };
-
-  const handleCreateCampaign = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newCampaignTitle) return;
-    // Call API here in real life
-    setShowNewCampaignModal(false);
-    setNewCampaignTitle('');
-    alert('Nouvelle campagne lancée avec invitations anonymisées sécurisées !');
   };
 
   useEffect(() => {
@@ -196,7 +180,13 @@ export default function B2B2CDashboard() {
                   />
                 </div>
 
-                <div className="flex items-center gap-4 text-xs font-jakarta font-semibold mt-1">
+                <div className="flex items-center gap-3 text-xs font-jakarta font-semibold mt-1">
+                  <Link
+                    href="/dashboard/b2b2c/campaigns/new"
+                    className="px-3.5 py-1.5 rounded-full bg-[#5965E8] hover:bg-[#4A55C0] text-white font-jakarta font-bold text-xs shadow-xs transition-colors flex items-center gap-1.5 no-underline"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Nouvelle campagne
+                  </Link>
                   <button
                     onClick={() => setActiveTab('campagnes')}
                     className="text-[#123D46]/75 hover:text-[#5965E8] transition-colors"
@@ -563,12 +553,12 @@ export default function B2B2CDashboard() {
                   Suivez vos campagnes IQRH, gérez les invitations et consultez les taux de participation.
                 </p>
               </div>
-              <button
-                onClick={() => setShowNewCampaignModal(true)}
-                className="px-5 py-2.5 rounded-full bg-[#5965E8] hover:bg-[#4A55C0] text-white font-jakarta font-bold shadow-xs transition-colors flex items-center gap-2 text-sm"
+              <Link
+                href="/dashboard/b2b2c/campaigns/new"
+                className="px-5 py-2.5 rounded-full bg-[#5965E8] hover:bg-[#4A55C0] text-white font-jakarta font-bold shadow-xs transition-colors flex items-center gap-2 text-sm no-underline"
               >
                 <Plus className="w-4 h-4" /> Nouvelle campagne
-              </button>
+              </Link>
             </div>
 
             {campaignsLoading ? (
@@ -582,12 +572,12 @@ export default function B2B2CDashboard() {
                   <p className="text-[#123D46]/70 text-sm max-w-md mx-auto mb-6">
                     Lancez votre première campagne IQRH pour évaluer le capital relationnel de vos équipes de manière anonyme et sécurisée.
                   </p>
-                  <button
-                    onClick={() => setShowNewCampaignModal(true)}
-                    className="px-5 py-2.5 rounded-full bg-[#5965E8] hover:bg-[#4A55C0] text-white font-jakarta font-bold shadow-xs transition-colors inline-flex items-center gap-2 text-sm"
+                  <Link
+                    href="/dashboard/b2b2c/campaigns/new"
+                    className="px-5 py-2.5 rounded-full bg-[#5965E8] hover:bg-[#4A55C0] text-white font-jakarta font-bold shadow-xs transition-colors inline-flex items-center gap-2 text-sm no-underline"
                   >
                     <Plus className="w-4 h-4" /> Créer ma première campagne
-                  </button>
+                  </Link>
                </div>
             ) : (
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
@@ -749,99 +739,6 @@ export default function B2B2CDashboard() {
       </main>
 
       {/* ==================== 3. MODALS ==================== */}
-
-      {/* Modal 1: Nouvelle Campagne */}
-      {showNewCampaignModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-[#E3EBE6] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 animate-scale-in">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E3EBE6]">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-[#5965E8]" />
-                <h3 className="font-jakarta font-bold text-lg text-[#123D46]">
-                  Lancer une Nouvelle Campagne IQRH
-                </h3>
-              </div>
-              <button
-                onClick={() => setShowNewCampaignModal(false)}
-                className="p-1 rounded-lg text-[#123D46]/50 hover:bg-[#F4F1E8]"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateCampaign} className="space-y-4 text-xs font-medium">
-              <div>
-                <label className="block text-[#123D46] mb-1">Nom de la campagne *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Ex : Baromètre QVT Hiver 2026"
-                  value={newCampaignTitle}
-                  onChange={(e) => setNewCampaignTitle(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#5965E8] focus:outline-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[#123D46] mb-1">Date de début</label>
-                  <input
-                    type="date"
-                    value={newCampaignStartDate}
-                    onChange={(e) => setNewCampaignStartDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#5965E8] focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[#123D46] mb-1">Date de fin</label>
-                  <input
-                    type="date"
-                    value={newCampaignEndDate}
-                    onChange={(e) => setNewCampaignEndDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#5965E8] focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[#123D46] mb-1">Périmètre / Population ciblée</label>
-                <input
-                  type="text"
-                  value={newCampaignTarget}
-                  onChange={(e) => setNewCampaignTarget(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#5965E8] focus:outline-none"
-                />
-              </div>
-
-              <div className="p-3 rounded-xl bg-[#5965E8]/5 border border-[#5965E8]/20 text-[11px] text-[#123D46] space-y-1">
-                <span className="font-bold flex items-center gap-1 text-[#5965E8]">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  Garantie RGPD & Anonymat
-                </span>
-                <p className="text-[#123D46]/75">
-                  Les liens d'accès envoyés sont individuels mais à usage unique sans corrélation possible avec l'identité du répondant.
-                </p>
-              </div>
-
-              <div className="pt-3 border-t border-[#E3EBE6] flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowNewCampaignModal(false)}
-                  className="px-5 py-2 rounded-full border border-[#E3EBE6] text-[#123D46] hover:bg-[#F4F1E8] font-jakarta font-semibold text-xs"
-                >
-                  Annuler
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2 rounded-full bg-[#5965E8] hover:bg-[#4A55C0] text-white font-jakarta font-bold shadow-xs text-xs"
-                >
-                  Créer et Démarrer
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Modal 2: Plan d'action d'Équipe */}
       {showActionPlanModal && (

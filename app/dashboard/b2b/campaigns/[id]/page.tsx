@@ -6,7 +6,7 @@ import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import {
   Users, BarChart3, Settings, Mail, RefreshCw, Target,
   CheckCircle2, Clock, Calendar, Copy, QrCode, Link2,
-  Plus, ShieldCheck, Sparkles, Building2, Check, ExternalLink, AlertTriangle
+  Plus, ShieldCheck, Sparkles, Building2, Check, ExternalLink, AlertTriangle, List
 } from "lucide-react";
 import Link from "next/link";
 import { DashboardTabs } from "@/components/ui/DashboardTabs";
@@ -778,7 +778,44 @@ export default function CampaignDetailPage() {
                     </div>
                   )}
 
-                  {/* Bloc 5: Historique si Renouvellement */}
+                  {/* Bloc 5: Questionnaires et variables complémentaires */}
+                  <div className="bg-[#FAF9F5] border border-[#E3EBE6] rounded-2xl p-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs font-jakarta font-bold uppercase tracking-wider text-[#123D46]/60">
+                        <List className="w-3.5 h-3.5 text-[#00A99D]" />
+                        Questionnaires complémentaires ({campaign.CampaignVariable?.length || 0})
+                      </div>
+                      <span className="text-[11px] text-[#123D46]/50">
+                        Posées après le questionnaire IQRH
+                      </span>
+                    </div>
+                    {campaign.CampaignVariable && campaign.CampaignVariable.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        {campaign.CampaignVariable.map((cv: any) => (
+                          <div key={cv.id} className="bg-white border border-[#E3EBE6] rounded-xl p-3.5 text-xs shadow-2xs space-y-1.5">
+                            <p className="font-bold text-[#123D46]">{cv.question}</p>
+                            {cv.options && Array.isArray(cv.options) && cv.options.length > 0 ? (
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {cv.options.map((opt: string, idx: number) => (
+                                  <span key={idx} className="px-2 py-0.5 rounded-md bg-[#FAF9F5] border border-[#E3EBE6] text-[10px] text-[#123D46]/70">
+                                    {opt}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="text-[10px] text-[#123D46]/50 italic">Réponse libre</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-[#123D46]/60 italic py-2">
+                        Aucun questionnaire ou variable complémentaire configuré pour cette campagne.
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Bloc 6: Historique si Renouvellement */}
                   {campaign.parentCampaign && (
                     <div className="p-4 rounded-2xl bg-[#5965E8]/8 border border-[#5965E8]/20 flex items-center justify-between gap-4">
                       <div className="space-y-1">
@@ -800,7 +837,7 @@ export default function CampaignDetailPage() {
                     </div>
                   )}
 
-                  {/* Bloc 6: Sécurité & RGPD */}
+                  {/* Bloc 7: Sécurité & RGPD */}
                   <div className="p-4 rounded-2xl bg-[#00A99D]/5 border border-[#00A99D]/20 flex items-start gap-3 text-xs text-[#123D46]">
                     <ShieldCheck className="w-5 h-5 text-[#00A99D] shrink-0 mt-0.5" />
                     <div className="space-y-1 leading-relaxed">
