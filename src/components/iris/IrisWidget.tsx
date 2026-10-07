@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Send, X, MessageCircle, FileText, RefreshCw, ChevronDown, Sparkles } from "lucide-react";
 import { startIrisConversation, sendIrisMessage, getIrisExplication } from "@/lib/api";
 import { IrisMark } from "@/components/brand/IrisLogo";
+import { useIris } from "@/src/context/IrisContext";
 
 const formatText = (text: string) => {
   if (!text) return null;
@@ -45,14 +46,13 @@ export function IrisWidget() {
   const pathname = usePathname();
   const router = useRouter();
   
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, setIsOpen, activeTab, setActiveTab } = useIris();
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [explicationLoading, setExplicationLoading] = useState(false);
   const [explication, setExplication] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"coach" | "explication">("coach");
   
   const widgetRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -69,7 +69,8 @@ export function IrisWidget() {
     if (!isOpen) return;
 
     const handleOutsideClick = (e: MouseEvent) => {
-      if (widgetRef.current && !widgetRef.current.contains(e.target as Node)) {
+      // On mobile screens (< 1024px), clicking outside closes the drawer
+      if (window.innerWidth < 1024 && widgetRef.current && !widgetRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -253,11 +254,11 @@ export function IrisWidget() {
         </button>
       )}
 
-      {/* ── 2. CARTE CHAT FLOTTANTE (STANDARDS INTERCOM / CRISP : ANCRÉE EN BAS À DROITE) ── */}
+      {/* ── 2. PANNEAU LATÉRAL INCORPORÉ (DOCK LATÉRAL : S'INCORPORE DANS LA PAGE PENDANT QUE LE CONTENU BASCULE À GAUCHE) ── */}
       {isOpen && (
-        <div 
+        <aside 
           ref={widgetRef}
-          className="fixed bottom-5 sm:bottom-6 right-3 sm:right-6 z-50 w-[410px] max-w-[calc(100vw-1.5rem)] h-[620px] max-h-[calc(100vh-5rem)] bg-white rounded-3xl shadow-2xl flex flex-col border border-[#E3EBE6] overflow-hidden transition-all duration-200 animate-scale-in"
+          className="fixed top-0 right-0 z-50 w-full sm:w-[420px] h-screen bg-white shadow-2xl flex flex-col border-l border-[#E3EBE6] overflow-hidden transition-transform duration-300 ease-in-out"
           role="dialog"
           aria-label="Coach IRIS"
         >
@@ -468,7 +469,7 @@ export function IrisWidget() {
               </div>
             </div>
           )}
-        </div>
+        </aside>
       )}
     </>
   );

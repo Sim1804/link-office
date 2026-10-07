@@ -125,9 +125,7 @@ export default function App() {
                 {/* Column 1: Brand & Mission */}
                 <div className="space-y-3 md:pr-4">
                   <div onClick={() => scrollTo('accueil')} className="cursor-pointer inline-block">
-                    <div className="bg-[#F4F1E8] px-3 py-1.5 rounded-lg inline-flex items-center">
-                      <Logo size="sm" showTagline={false} />
-                    </div>
+                    <Logo variant="dark" size="sm" showTagline={true} />
                   </div>
                   <p className="text-xs text-[#E3EBE6] leading-relaxed font-inter">
                     Laboratoire du lien humain. Comprendre, observer, mesurer et agir pour valoriser la santé relationnelle des organisations et des collectifs de travail.
