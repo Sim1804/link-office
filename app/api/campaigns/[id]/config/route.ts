@@ -42,6 +42,15 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+    const existingCampaign = await prisma.campaign.findUnique({ where: { id: params.id } });
+    if (!existingCampaign) {
+      return NextResponse.json({ error: "Campagne introuvable" }, { status: 404 });
+    }
+    if (existingCampaign.organizationId !== user?.organizationId && session.user.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
+    }
+
     const data = await request.json();
     
     const updateData: any = {};
@@ -60,7 +69,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
         data: updateData
       });
     } else {
-      campaign = await prisma.campaign.findUnique({ where: { id: params.id } });
+      campaign = existingCampaign;
     }
 
     if (data.variable) {

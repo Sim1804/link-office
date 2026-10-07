@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Calendar, Save, Search, CheckCircle2, Settings, List, Plus, Trash2, ArrowLeft, ArrowRight, Activity, Target, HelpCircle, AlertCircle, Info, Users, MapPin, Zap, Crown, ChevronRight } from "lucide-react";
 import { Stepper } from "@/components/ui/Stepper";
@@ -28,8 +28,11 @@ const PUBLIC_TYPES = [
 ];
 
 /* ── Composant ──────────────────────────────────────────────────── */
-export default function CreateB2GCampaignPage() {
+function CreateB2GCampaignContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const orgId = searchParams.get("orgId");
+
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,6 +70,7 @@ export default function CreateB2GCampaignPage() {
           territory: form.territory || null,
           offer: form.offer,
           status: "PLANIFIEE",
+          organizationId: orgId || undefined,
         }),
       });
       const data = await res.json();
@@ -93,17 +97,18 @@ export default function CreateB2GCampaignPage() {
       <Navbar />
       <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 88, paddingBottom: 64, position: "relative" }}>
         <PartnerPortalsNavigation />
-        
-        
 
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
-          <Link href="/dashboard/b2g/campaigns" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--text-3)", fontSize: 14, textDecoration: "none", marginBottom: 28 }}>
-            <ArrowLeft size={15} /> Retour aux campagnes
+          <Link 
+            href={orgId ? `/dashboard/superadmin/organizations/${orgId}` : "/dashboard/b2g/campaigns"} 
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--text-3)", fontSize: 14, textDecoration: "none", marginBottom: 28 }}
+          >
+            <ArrowLeft size={15} /> {orgId ? "Retour à l'organisation" : "Retour aux campagnes"}
           </Link>
 
           <div style={{ marginBottom: 32 }}>
             <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 800, fontSize: 28, color: "var(--text-1)", marginBottom: 6 }}>
-              Nouvelle campagne B2G
+              Nouvelle campagne B2G {orgId ? "(Mode Super Admin)" : ""}
             </h1>
             <p style={{ color: "var(--text-3)", fontSize: 14 }}>
               Déployez LINK OFFICE auprès d'une population et obtenez un baromètre relationnel agrégé et anonymisé.
@@ -192,7 +197,7 @@ export default function CreateB2GCampaignPage() {
           {/* ── STEP 2 ── */}
           {step === 2 && (
             <div style={{ ...cardStyle, display: "flex", flexDirection: "column", gap: 18 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ display: "center", alignItems: "center", gap: 10 }}>
                 <Users size={20} style={{ color: "#06b6d4" }} />
                 <h2 style={{ fontSize: 17, fontWeight: 700, color: "var(--text-1)", margin: 0 }}>Variables complémentaires B2G</h2>
               </div>
@@ -271,10 +276,10 @@ export default function CreateB2GCampaignPage() {
                     ["Période", form.startDate && form.endDate ? `${new Date(form.startDate).toLocaleDateString("fr-FR")} → ${new Date(form.endDate).toLocaleDateString("fr-FR")}` : "—"],
                     ["Variables B2G", `${selectedVars.length + (customVar.trim() ? 1 : 0)} activées`],
                   ].map(([k, v]) => (
-                    <>
+                    <div key={k} style={{ display: "contents" }}>
                       <span style={{ color: "var(--text-3)" }}>{k} :</span>
                       <span style={{ color: "var(--text-2)", fontWeight: 500 }}>{v}</span>
-                    </>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -299,5 +304,13 @@ export default function CreateB2GCampaignPage() {
         </div>
       </main>
     </>
+  );
+}
+
+export default function CreateB2GCampaignPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-sm text-[#123D46]/60">Chargement de la page de création...</div>}>
+      <CreateB2GCampaignContent />
+    </Suspense>
   );
 }

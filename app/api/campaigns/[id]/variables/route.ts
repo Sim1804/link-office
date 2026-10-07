@@ -27,16 +27,42 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
   try {
     const session = await auth();
     if (!session?.user?.id) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
-    if (!["ADMIN_B2G", "SUPER_ADMIN"].includes(session.user.role ?? "")) {
+    const ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
+    if (!ALLOWED_ROLES.includes(session.user.role ?? "")) {
+      return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
+    }
+
+    const campaign = await prisma.campaign.findUnique({ where: { id } });
+    if (!campaign) return NextResponse.json({ error: "Campagne introuvable" }, { status: 404 });
+
+    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+    if (campaign.organizationId !== user?.organizationId && session.user.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
     }
 
     const { variables } = await req.json(); // Array of variables: { id?, question, options, required }
+    if (!Array.isArray(variables)) {
+      return NextResponse.json({ error: "Le paramètre variables doit être une liste" }, { status: 400 });
+    }
 
     // On supprime les anciennes variables qui ne sont plus envoyées
     const existingVariables = await prisma.campaignVariable.findMany({ where: { campaignId: id } });
     const existingIds = existingVariables.map(v => v.id);
-    const newIds = variables.map((v: any) => v.id).filter(Boolean);
+
+    // Identifiants uniques préfixés par la campagne pour éviter les collisions globales
+    const preparedVars = variables.map((v: any) => {
+      const uniqueId = v.id && v.id.startsWith(`${id}_`)
+        ? v.id
+        : `${id}_${v.id || crypto.randomUUID()}`;
+      return {
+        id: uniqueId,
+        question: v.question,
+        options: v.options || [],
+        required: v.required || false,
+      };
+    });
+
+    const newIds = preparedVars.map(v => v.id);
     const idsToDelete = existingIds.filter(eid => !newIds.includes(eid));
 
     await prisma.$transaction(async (tx) => {
@@ -46,24 +72,24 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         });
       }
 
-      for (const v of variables) {
-        if (v.id && existingIds.includes(v.id)) {
+      for (const v of preparedVars) {
+        if (existingIds.includes(v.id)) {
           await tx.campaignVariable.update({
             where: { id: v.id },
             data: {
               question: v.question,
               options: v.options,
-              required: v.required
+              required: v.required,
             }
           });
         } else {
           await tx.campaignVariable.create({
             data: {
-              id: v.id || crypto.randomUUID(),
+              id: v.id,
               campaignId: id,
               question: v.question,
               options: v.options,
-              required: v.required
+              required: v.required,
             }
           });
         }

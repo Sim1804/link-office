@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Calendar, Save, Search, CheckCircle2, Settings, List, Plus, Trash2, ArrowLeft, ArrowRight, Activity, Target, HelpCircle, AlertCircle, Info, Zap, Crown, ChevronRight } from "lucide-react";
 import { Stepper } from "@/components/ui/Stepper";
@@ -19,8 +19,11 @@ const CAMPAIGN_VARIABLES_LIBRARY = [
   { id: "rythme",         question: "Comment décririez-vous votre rythme de travail ?",    options: ["Régulier et prévisible","Variable selon les périodes","Intense et soutenu","Très intense"] },
 ];
 
-export default function PartnerNewCampaignPage() {
+function PartnerNewCampaignContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const orgId = searchParams.get("orgId");
+
   const [step, setStep] = useState<1|2|3>(1);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string|null>(null);
@@ -58,6 +61,7 @@ export default function PartnerNewCampaignPage() {
           endDate: form.endDate,
           targetPopulation: form.targetPopulation || null,
           status: "PLANIFIEE",
+          organizationId: orgId || undefined,
         }),
       });
       const data = await res.json();
@@ -65,18 +69,13 @@ export default function PartnerNewCampaignPage() {
 
       const campaignId = data.campaign.id;
 
-      // Creer les variables complementaires si selectionnees
+      // Créer les variables complémentaires de manière atomique
       if (vars.length > 0) {
-        for (const v of vars) {
-          await fetch(`/api/campaigns/${campaignId}/config`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              questionnaireConfig: { hiddenDemographics: [], allowedSituations: null },
-              variable: { id: v.id, question: v.question, options: v.options, required: false },
-            }),
-          });
-        }
+        await fetch(`/api/campaigns/${campaignId}/variables`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ variables: vars }),
+        });
       }
 
       router.push(`/dashboard/b2b2c/campaigns/${campaignId}`);
@@ -97,14 +96,17 @@ export default function PartnerNewCampaignPage() {
         <div style={{ maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1 }}>
 
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
-            <Link href="/dashboard/b2b2c/campaigns" style={{ color: "var(--text-3)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 13 }}>
-              <ArrowLeft size={15} /> Mes campagnes
+            <Link 
+              href={orgId ? `/dashboard/superadmin/organizations/${orgId}` : "/dashboard/b2b2c/campaigns"} 
+              style={{ color: "var(--text-3)", display: "flex", alignItems: "center", gap: 4, textDecoration: "none", fontSize: 13 }}
+            >
+              <ArrowLeft size={15} /> {orgId ? "Retour à l'organisation" : "Mes campagnes"}
             </Link>
           </div>
 
           <div style={{ marginBottom: 32 }}>
             <h1 style={{ fontFamily: "'Plus Jakarta Sans',Inter,sans-serif", fontWeight: 800, fontSize: 26, color: "var(--text-1)" }}>
-              Nouvelle campagne (Partenaire)
+              Nouvelle campagne (Partenaire) {orgId ? "(Mode Super Admin)" : ""}
             </h1>
             <p style={{ color: "var(--text-3)", fontSize: 14, marginTop: 4 }}>
               Etape {step}/3 — {step === 1 ? "Choix de l'offre" : step === 2 ? "Parametres" : "Variables complementaires"}
@@ -231,5 +233,13 @@ export default function PartnerNewCampaignPage() {
         </div>
       </main>
     </>
+  );
+}
+
+export default function PartnerNewCampaignPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-sm text-[#123D46]/60">Chargement de la page de création...</div>}>
+      <PartnerNewCampaignContent />
+    </Suspense>
   );
 }

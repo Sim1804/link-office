@@ -12,7 +12,7 @@ export function Footer() {
           {/* Column 1: Brand & Mission */}
           <div className="space-y-3 md:pr-4">
             <Link href="/" className="inline-block no-underline">
-              <Logo variant="dark" size="sm" showTagline={true} />
+              <Logo variant="dark" size="sm" showTagline={false} />
             </Link>
             <p className="text-xs text-[#E3EBE6] leading-relaxed font-inter">
               Laboratoire du lien humain. Comprendre, observer, mesurer et agir pour valoriser la santé relationnelle des organisations et des collectifs de travail.

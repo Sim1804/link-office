@@ -160,7 +160,7 @@ export default function OrganizationDetailPage(props: { params: Promise<{ id: st
             </h2>
             <button
               onClick={() => {
-                const route = org.type === "B2B" ? "rh" : org.type.toLowerCase();
+                const route = org.type === "B2B" ? "b2b" : org.type === "B2B2C" ? "b2b2c" : "b2g";
                 router.push(`/dashboard/${route}/campaigns/new?orgId=${org.id}`);
               }}
               className="flex items-center gap-1.5 px-5 py-2 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-xs transition-colors shadow-2xs cursor-pointer"
@@ -171,20 +171,27 @@ export default function OrganizationDetailPage(props: { params: Promise<{ id: st
 
           {org.campaigns?.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {org.campaigns.map((c: any) => (
-                <div key={c.id} className="flex items-center justify-between p-4 bg-[#FAF9F5] rounded-xl border border-[#E3EBE6] hover:border-[#00A99D]/30 transition-colors">
-                  <div>
-                    <div className="text-[#123D46] font-semibold text-sm">{c.title}</div>
-                    <div className="text-[#123D46]/60 text-xs mt-0.5">
-                      Du {new Date(c.startDate).toLocaleDateString('fr-FR')} au {c.endDate ? new Date(c.endDate).toLocaleDateString('fr-FR') : "—"}
+              {org.campaigns.map((c: any) => {
+                const route = org.type === "B2B" ? "b2b" : org.type === "B2B2C" ? "b2b2c" : "b2g";
+                return (
+                  <Link
+                    key={c.id}
+                    href={`/dashboard/${route}/campaigns/${c.id}`}
+                    className="flex items-center justify-between p-4 bg-[#FAF9F5] rounded-xl border border-[#E3EBE6] hover:border-[#00A99D]/40 hover:bg-white transition-all no-underline group"
+                  >
+                    <div>
+                      <div className="text-[#123D46] font-semibold text-sm group-hover:text-[#00A99D] transition-colors">{c.title}</div>
+                      <div className="text-[#123D46]/60 text-xs mt-0.5">
+                        Du {new Date(c.startDate).toLocaleDateString('fr-FR')} au {c.endDate ? new Date(c.endDate).toLocaleDateString('fr-FR') : "—"}
+                      </div>
                     </div>
-                  </div>
-                  <div className="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-50 text-amber-500 border border-amber-200 flex items-center gap-1.5">
-                    <Crown className="w-3 h-3" />
-                    {c.offer}
-                  </div>
-                </div>
-              ))}
+                    <div className="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-50 text-amber-500 border border-amber-200 flex items-center gap-1.5">
+                      <Crown className="w-3 h-3" />
+                      {c.offer}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <div className="text-center p-10 border border-dashed border-[#123D46]/15 rounded-xl">

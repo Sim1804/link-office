@@ -59,21 +59,33 @@ export async function POST(request: Request) {
     }
 
     const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+    if (!user) return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
     const data = await request.json();
     
-    // Si c'est un SUPER_ADMIN sans orga, ou qu'il veut créer pour une autre orga, on prend data.organizationId si fourni
-    let orgId = user?.organizationId || data.organizationId;
-    if (!orgId) {
-      if (user?.role === "SUPER_ADMIN") {
-        const defaultOrg = await prisma.organization.findFirst();
-        if (defaultOrg) {
-          orgId = defaultOrg.id;
-        } else {
-          return NextResponse.json({ error: "Aucune organisation disponible dans la base pour lier cette campagne." }, { status: 400 });
-        }
+    // Résolution de l'organisation :
+    // - Si SUPER_ADMIN : priorité à data.organizationId pour cibler n'importe quel partenaire
+    // - Si Admin d'organisation : restreint strictement à son propre user.organizationId
+    let orgId: string | null = null;
+    if (user.role === "SUPER_ADMIN") {
+      if (data.organizationId) {
+        orgId = data.organizationId;
+      } else if (user.organizationId) {
+        orgId = user.organizationId;
       } else {
-        return NextResponse.json({ error: "Aucune organisation associee" }, { status: 400 });
+        const defaultOrg = await prisma.organization.findFirst();
+        if (defaultOrg) orgId = defaultOrg.id;
       }
+    } else {
+      orgId = user.organizationId || null;
+    }
+
+    if (!orgId) {
+      return NextResponse.json({ error: "Aucune organisation disponible pour lier cette campagne." }, { status: 400 });
+    }
+
+    const org = await prisma.organization.findUnique({ where: { id: orgId } });
+    if (!org) {
+      return NextResponse.json({ error: "Organisation cible introuvable." }, { status: 404 });
     }
 
     if (!data.title || !data.startDate || !data.endDate) {
@@ -92,13 +104,33 @@ export async function POST(request: Request) {
         startDate: new Date(data.startDate),
         endDate: new Date(data.endDate),
         targetPopulation: data.targetPopulation ? parseInt(data.targetPopulation) : null,
+        quota: data.quota ? parseInt(data.quota) : null,
+        territory: data.territory ?? null,
+        logoUrl: data.logoUrl ?? null,
         offer,
         status: data.status ?? "DRAFT",
         organizationId: orgId,
         parentCampaignId: data.parentCampaignId ?? null,
-        questionnaireConfig: { hiddenDemographics: [], allowedSituations: null },
+        questionnaireConfig: data.questionnaireConfig ?? { hiddenDemographics: [], allowedSituations: null },
       },
     });
+
+    // Création transactionnelle des variables si transmises directement
+    if (data.variables && Array.isArray(data.variables) && data.variables.length > 0) {
+      for (const v of data.variables) {
+        if (!v.question) continue;
+        const varId = `${campaign.id}_${v.id || Math.random().toString(36).substring(2, 9)}`;
+        await prisma.campaignVariable.create({
+          data: {
+            id: varId,
+            campaignId: campaign.id,
+            question: v.question,
+            options: v.options || [],
+            required: v.required || false,
+          },
+        });
+      }
+    }
 
     return NextResponse.json({ campaign }, { status: 201 });
   } catch (error: any) {
