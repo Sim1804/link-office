@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 interface IrisContextType {
   isOpen: boolean;
@@ -76,11 +77,13 @@ export function useIris() {
  */
 export function IrisLayoutWrapper({ children }: { children: React.ReactNode }) {
   const { isOpen } = useIris();
+  const { data: session, status } = useSession();
+  const isShifted = isOpen && status === "authenticated" && !!session?.user;
 
   return (
     <div
       className={`min-h-screen w-full transition-[margin,width] duration-300 ease-in-out ${
-        isOpen ? "lg:mr-[420px] lg:w-[calc(100%-420px)]" : "mr-0 w-full"
+        isShifted ? "lg:mr-[420px] lg:w-[calc(100%-420px)]" : "mr-0 w-full"
       }`}
     >
       {children}

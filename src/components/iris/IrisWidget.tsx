@@ -42,7 +42,7 @@ const QUICK_PROMPTS = [
 ];
 
 export function IrisWidget() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const pathname = usePathname();
   const router = useRouter();
   
@@ -224,7 +224,10 @@ export function IrisWidget() {
     }
   };
 
-  // Do not display during survey evaluations to prevent distraction
+  // Le widget IRIS ne s'affiche que si l'utilisateur est connecté
+  if (status !== "authenticated" || !session?.user) return null;
+
+  // Ne pas afficher pendant les évaluations de questionnaire pour éviter la distraction
   if (pathname?.startsWith("/questionnaire")) return null;
 
   return (
