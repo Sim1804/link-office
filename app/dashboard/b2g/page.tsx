@@ -129,7 +129,7 @@ export default function B2GDashboard() {
   const flopDim = sortedDims[sortedDims.length - 1];
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#123D46] font-inter flex flex-col selection:bg-[#F26D35]/20 selection:text-[#123D46]">
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#F26D35]/20 selection:text-[#123D46]">
       {/* 1. TOP NAVBAR SPÉCIFIQUE ADMIN B2B */}
       <PartnerAdminHeader
         portalType="B2G"
@@ -244,9 +244,9 @@ export default function B2GDashboard() {
             {loading ? (
               <DashboardSkeleton />
             ) : stats?.anonymityBlocked ? (
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-8 text-center mt-6">
+              <div className="bg-[#FAF9F5] border border-[#FFC629]/40 rounded-2xl p-8 text-center mt-6">
                 <div className="text-5xl mb-4">🔒</div>
-                <h2 className="text-amber-600 font-bold text-xl mb-2">
+                <h2 className="text-[#123D46] font-bold text-xl mb-2">
                   Données non disponibles — Anonymat protégé
                 </h2>
                 <p className="text-[#123D46]/70 max-w-lg mx-auto text-sm">
@@ -259,7 +259,7 @@ export default function B2GDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                   {/* IQRH Moyen */}
                   <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 shadow-xs flex items-center gap-4 hover:shadow-md transition-shadow">
-                    <div className="w-12 h-12 rounded-2xl bg-[#F26D35]/10 text-[#F26D35] flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center shrink-0">
                       <Activity className="w-6 h-6" />
                     </div>
                     <div>
@@ -286,13 +286,13 @@ export default function B2GDashboard() {
 
                   {/* Point Fort */}
                   <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 shadow-xs flex items-center gap-4 hover:shadow-md transition-shadow">
-                    <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#00A99D]/10 text-[#00A99D] flex items-center justify-center shrink-0">
                       <Target className="w-6 h-6" />
                     </div>
                     <div>
-                      <span className="text-[10px] font-jakarta font-bold text-emerald-700 uppercase tracking-wider block">POINT FORT</span>
+                      <span className="text-[10px] font-jakarta font-bold text-[#00A99D] uppercase tracking-wider block">POINT FORT</span>
                       <div className="text-lg font-jakarta font-extrabold text-[#123D46] mt-0.5">{topDim?.name || "N/A"}</div>
-                      <div className="text-xs font-mono font-bold text-emerald-600 flex items-center gap-1">
+                      <div className="text-xs font-mono font-bold text-[#00A99D] flex items-center gap-1">
                         <Sparkles className="w-3 h-3" /> <span>{topDim?.score || 0} / 100</span>
                       </div>
                     </div>
@@ -300,13 +300,13 @@ export default function B2GDashboard() {
 
                   {/* Fragilité */}
                   <div className="bg-white border border-[#E3EBE6] rounded-2xl p-5 shadow-xs flex items-center gap-4 hover:shadow-md transition-shadow">
-                    <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
-                      <AlertTriangle className="w-6 h-6" />
+                    <div className="w-12 h-12 rounded-2xl bg-[#FFC629]/20 text-[#123D46] flex items-center justify-center shrink-0">
+                      <AlertTriangle className="w-6 h-6 text-[#B8870A]" />
                     </div>
                     <div>
-                      <span className="text-[10px] font-jakarta font-bold text-rose-700 uppercase tracking-wider block">FRAGILITÉ</span>
+                      <span className="text-[10px] font-jakarta font-bold text-[#B8870A] uppercase tracking-wider block">FRAGILITÉ</span>
                       <div className="text-lg font-jakarta font-extrabold text-[#123D46] mt-0.5">{flopDim?.name || "N/A"}</div>
-                      <div className="text-xs font-mono font-bold text-rose-600 flex items-center gap-1">
+                      <div className="text-xs font-mono font-bold text-[#B8870A] flex items-center gap-1">
                         <TrendingDown className="w-3 h-3" /> <span>{flopDim?.score || 0} / 100</span>
                       </div>
                     </div>

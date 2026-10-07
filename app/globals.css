@@ -16,7 +16,7 @@
   --color-deep-dark: #0D2530;
   --color-ivory: #F4F1E8;
   --color-sage: #E3EBE6;
-  --color-canvas: #F8F9FA;
+  --color-canvas: #F4F1E8;
   --color-warm: #FAF9F5;
 
   --font-jakarta: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -28,10 +28,10 @@
   color-scheme: light;
 
   /* Fond & Surfaces */
-  --bg:           #F8F9FA;
+  --bg:           #F4F1E8;
   --surface:      #FFFFFF;
   --surface-2:    #FAF9F5;
-  --surface-3:    #EEF3F2;
+  --surface-3:    #E3EBE6;
 
   /* Bordures */
   --border:       #E3EBE6;

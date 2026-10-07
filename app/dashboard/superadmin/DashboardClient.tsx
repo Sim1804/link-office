@@ -220,8 +220,8 @@ export function DashboardClient({ stats, availableRegions }: DashboardClientProp
           <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 shadow-xs">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center">
-                  <Handshake className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-[#FFC629]/20 text-[#123D46] flex items-center justify-center">
+                  <Handshake className="w-4 h-4 text-[#B8870A]" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-[#123D46]">Pipeline Entrant</h3>
@@ -236,7 +236,7 @@ export function DashboardClient({ stats, availableRegions }: DashboardClientProp
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {stats.recentLeads && stats.recentLeads.length > 0 ? (
                 stats.recentLeads.map((lead: any) => (
-                  <div key={lead.id} className="bg-[#F8F9FA] border border-[#E3EBE6] rounded-xl p-4 flex flex-col gap-2 hover:border-[#00A99D]/30 transition-colors">
+                  <div key={lead.id} className="bg-[#F4F1E8] border border-[#E3EBE6] rounded-xl p-4 flex flex-col gap-2 hover:border-[#00A99D]/30 transition-colors">
                     <div className="flex justify-between items-start">
                       <div className="text-sm font-bold text-[#123D46]">{lead.organization}</div>
                       <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#5965E8]/10 text-[#5965E8] uppercase">{lead.planType}</span>

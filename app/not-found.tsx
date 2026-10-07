@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-[#F4F1E8] flex items-center justify-center p-6 relative overflow-hidden">
       {/* Glow blobs (subtle light) */}
       <div className="absolute -top-[15%] -right-[8%] w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(0,169,157,0.05) 0%, transparent 70%)" }} />
       <div className="absolute -bottom-[15%] -left-[8%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(89,101,232,0.05) 0%, transparent 70%)" }} />

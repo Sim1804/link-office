@@ -69,7 +69,7 @@ export default function PremiumPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#F8F9FA] flex items-center justify-center pt-24 pb-16">
+        <main className="min-h-screen bg-[#F4F1E8] flex items-center justify-center pt-24 pb-16">
           <div className="max-w-md mx-auto text-center animate-fade-in">
             <div className="w-16 h-16 rounded-2xl bg-[#00A99D]/10 border border-[#00A99D]/20 flex items-center justify-center mx-auto mb-6">
               <Star size={28} className="text-[#00A99D]" />
@@ -91,7 +91,7 @@ export default function PremiumPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#F8F9FA] relative overflow-hidden pt-20 pb-24">
+      <main className="min-h-screen bg-[#F4F1E8] relative overflow-hidden pt-20 pb-24">
         {/* Removed ambient glow to match other pages */}
 
         <div className="max-w-[960px] mx-auto px-4 sm:px-6 relative z-10">

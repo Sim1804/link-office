@@ -175,15 +175,15 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
                   <tr key={item.id} className="table-row-hover" >
                     <td className="px-6 py-4">
                       <div className="flex flex-col items-start gap-1.5">
-                        <span className="text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#F8F9FA] text-[#123D46]/50 rounded-full border border-[#E3EBE6]">
+                        <span className="text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#F4F1E8] text-[#123D46]/60 rounded-full border border-[#E3EBE6]">
                           {item.id}
                         </span>
                         {item.isDimensionGroup ? (
-                          <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${item.dimensionName === "SOCIAL" ? "bg-teal-50 text-teal-600" : item.dimensionName === "AFFECTIVE" ? "bg-rose-50 text-rose-500" : item.dimensionName === "SENTIMENTAL" ? "bg-indigo-50 text-indigo-500" : item.dimensionName === "PROFESSIONAL" ? "bg-amber-50 text-amber-500" : item.dimensionName === "SELF" ? "bg-cyan-50 text-cyan-500" : "bg-emerald-50 text-emerald-500"}`}>
+                          <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${item.dimensionName === "SOCIAL" ? "bg-[#00A99D]/10 text-[#00A99D]" : item.dimensionName === "AFFECTIVE" ? "bg-[#199E9A]/10 text-[#199E9A]" : item.dimensionName === "SENTIMENTAL" ? "bg-[#FFC629]/20 text-[#B8870A]" : item.dimensionName === "PROFESSIONAL" ? "bg-[#5965E8]/10 text-[#5965E8]" : item.dimensionName === "SELF" ? "bg-[#4DBDB2]/15 text-[#123D46]" : "bg-[#00A99D]/10 text-[#00A99D]"}`}>
                             {item.dimensionLabel}
                           </span>
                         ) : (
-                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-teal-50 text-teal-600">
+                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#00A99D]/10 text-[#00A99D]">
                             {item.triggerSituation || "Universel"}
                           </span>
                         )}
@@ -219,10 +219,10 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
               <tr key={item.id} className="table-row-hover" >
                 <td className="px-6 py-4">
                   <div className="flex flex-col items-start gap-1.5">
-                    <span className="text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#F8F9FA] text-[#123D46]/50 rounded-full border border-[#E3EBE6]">
+                    <span className="text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#F4F1E8] text-[#123D46]/60 rounded-full border border-[#E3EBE6]">
                       {item.id}
                     </span>
-                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${item.library === "Micro-défis" ? "bg-cyan-50 text-cyan-500" : item.library === "Partenaires" ? "bg-amber-50 text-amber-500" : "bg-indigo-50 text-indigo-500"}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${item.library === "Micro-défis" ? "bg-[#00A99D]/10 text-[#00A99D]" : item.library === "Partenaires" ? "bg-[#FFC629]/20 text-[#B8870A]" : "bg-[#5965E8]/10 text-[#5965E8]"}`}>
                       {item.library}
                     </span>
                   </div>

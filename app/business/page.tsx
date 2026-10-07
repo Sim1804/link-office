@@ -146,7 +146,7 @@ export default function BusinessPage() {
   const activePlan = PLANS.find(p => p.id === selectedPlan);
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#123D46] font-inter selection:bg-[#00A99D]/20 selection:text-[#123D46]">
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter selection:bg-[#00A99D]/20 selection:text-[#123D46]">
       <PublicNavbar />
 
       <main className="flex-1 w-full mx-auto pb-16 pt-4 sm:pt-6">

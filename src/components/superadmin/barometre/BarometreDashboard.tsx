@@ -130,7 +130,7 @@ export function BarometreDashboard({ availableRegions }: { availableRegions: str
             <h2 className="text-[15px] font-bold text-[#123D46] flex items-center gap-2">
               <Activity className="w-4 h-4 text-[#00A99D]" /> Filtres de l'Observatoire
             </h2>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 border border-emerald-100 rounded-full text-emerald-600 text-[10px] font-bold">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00A99D]/10 border border-[#00A99D]/20 rounded-full text-[#00A99D] text-[10px] font-bold">
               <ShieldCheck className="w-3.5 h-3.5" /> Seuil d'anonymat respecté
             </div>
           </div>
@@ -184,7 +184,7 @@ export function BarometreDashboard({ availableRegions }: { availableRegions: str
           {/* Top KPI Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 shadow-xs flex items-center gap-5 hover:shadow-md transition-shadow">
-              <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center shrink-0">
+              <div className="w-16 h-16 rounded-2xl bg-[#5965E8]/10 text-[#5965E8] flex items-center justify-center shrink-0">
                 <Users className="w-8 h-8" />
               </div>
               <div>

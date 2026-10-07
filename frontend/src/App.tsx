@@ -119,53 +119,55 @@ export default function App() {
           </main>
 
           {/* Pristine, Executive-Grade Footer for LINK OFFICE */}
-          <footer className="bg-white border-t border-[#E3EBE6] py-12 px-4 sm:px-8 mt-16">
+          <footer className="bg-[#123D46] border-t border-[#123D46] py-12 px-4 sm:px-8 mt-16 text-[#E3EBE6]">
             <div className="max-w-[1440px] mx-auto space-y-10">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-xs text-[#123D46]/75">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-xs text-[#E3EBE6]">
                 {/* Column 1: Brand & Mission */}
                 <div className="space-y-3 md:pr-4">
                   <div onClick={() => scrollTo('accueil')} className="cursor-pointer inline-block">
-                    <Logo size="sm" showTagline={true} />
+                    <div className="bg-[#F4F1E8] px-3 py-1.5 rounded-lg inline-flex items-center">
+                      <Logo size="sm" showTagline={false} />
+                    </div>
                   </div>
-                  <p className="text-xs text-[#123D46]/70 leading-relaxed font-inter">
+                  <p className="text-xs text-[#E3EBE6] leading-relaxed font-inter">
                     Laboratoire du lien humain. Comprendre, observer, mesurer et agir pour valoriser la santé relationnelle des organisations et des collectifs de travail.
                   </p>
-                  <div className="text-[11px] text-[#00A99D] font-bold font-jakarta">
+                  <div className="text-[11px] text-[#FFC629] font-bold font-jakarta">
                     Comprendre · Observer · Mesurer · Agir
                   </div>
                 </div>
 
                 {/* Column 2: Navigation Accueil */}
                 <div>
-                  <span className="font-jakarta font-bold text-[#123D46] uppercase tracking-wider block mb-3">
+                  <span className="font-jakarta font-bold text-[#4DBDB2] uppercase tracking-wider block mb-3">
                     Plateforme & Outils
                   </span>
-                  <ul className="space-y-2.5 font-medium">
+                  <ul className="space-y-2.5 font-medium text-[#E3EBE6]">
                     <li>
-                      <button onClick={() => scrollTo('methode')} className="hover:text-[#00A99D] transition-colors text-left">
+                      <button onClick={() => scrollTo('methode')} className="hover:text-[#FFC629] transition-colors text-left cursor-pointer">
                         La démarche scientifique en 4 temps
                       </button>
                     </li>
                     <li>
-                      <button onClick={() => scrollTo('barometre')} className="hover:text-[#00A99D] transition-colors flex items-center gap-1.5 text-left">
+                      <button onClick={() => scrollTo('barometre')} className="hover:text-[#FFC629] transition-colors flex items-center gap-1.5 text-left cursor-pointer">
                         <span>Baromètre national en direct</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#4DBDB2] animate-pulse" />
                       </button>
                     </li>
                     <li>
-                      <button onClick={() => scrollTo('iqrh')} className="hover:text-[#00A99D] transition-colors text-left">
+                      <button onClick={() => scrollTo('iqrh')} className="hover:text-[#FFC629] transition-colors text-left cursor-pointer">
                         Évaluation de l'Indice IQRH
                       </button>
                     </li>
                     <li>
-                      <button onClick={() => scrollTo('iris')} className="hover:text-[#00A99D] transition-colors text-left">
+                      <button onClick={() => scrollTo('iris')} className="hover:text-[#FFC629] transition-colors text-left cursor-pointer">
                         Coach IRIS (Intelligence Relationnelle)
                       </button>
                     </li>
                     <li>
                       <button
                         onClick={() => setViewMode('employee')}
-                        className="text-[#00A99D] font-bold hover:underline transition-colors text-left flex items-center gap-1"
+                        className="text-[#4DBDB2] font-bold hover:text-[#FFC629] transition-colors text-left flex items-center gap-1 cursor-pointer"
                       >
                         <span>Espace Salarié Connecté (Démo Camille)</span>
                         <span>→</span>
@@ -174,7 +176,7 @@ export default function App() {
                     <li>
                       <button
                         onClick={() => setViewMode('rh_admin')}
-                        className="text-[#5965E8] font-bold hover:underline transition-colors text-left flex items-center gap-1 pt-1"
+                        className="text-[#5965E8] font-bold hover:text-[#FFC629] transition-colors text-left flex items-center gap-1 pt-1 cursor-pointer"
                       >
                         <Building2 className="w-3.5 h-3.5" />
                         <span>Portail RH B2B (Observatoire & Campagnes)</span>
@@ -183,9 +185,9 @@ export default function App() {
                     <li>
                       <button
                         onClick={() => setViewMode('super_admin')}
-                        className="text-[#123D46] font-bold hover:text-[#00A99D] transition-colors text-left flex items-center gap-1 pt-1"
+                        className="text-[#4DBDB2] font-bold hover:text-[#FFC629] transition-colors text-left flex items-center gap-1 pt-1 cursor-pointer"
                       >
-                        <ShieldCheck className="w-3.5 h-3.5 text-[#00A99D]" />
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#4DBDB2]" />
                         <span>Console Super Admin (Gouvernance)</span>
                       </button>
                     </li>
@@ -194,29 +196,29 @@ export default function App() {
 
                 {/* Column 3: Entreprises & Tarifs */}
                 <div>
-                  <span className="font-jakarta font-bold text-[#123D46] uppercase tracking-wider block mb-3">
+                  <span className="font-jakarta font-bold text-[#4DBDB2] uppercase tracking-wider block mb-3">
                     Pour les Organisations
                   </span>
-                  <ul className="space-y-2.5 font-medium">
+                  <ul className="space-y-2.5 font-medium text-[#E3EBE6]">
                     <li>
-                      <button onClick={() => scrollTo('organisations')} className="hover:text-[#00A99D] transition-colors text-left">
+                      <button onClick={() => scrollTo('organisations')} className="hover:text-[#FFC629] transition-colors text-left cursor-pointer">
                         Audit interne & Baromètre dédié
                       </button>
                     </li>
                     <li>
-                      <button onClick={() => scrollTo('organisations')} className="hover:text-[#00A99D] transition-colors text-left">
+                      <button onClick={() => scrollTo('organisations')} className="hover:text-[#FFC629] transition-colors text-left cursor-pointer">
                         Accompagnement des directions & DRH
                       </button>
                     </li>
                     <li>
-                      <button onClick={() => scrollTo('tarifs')} className="hover:text-[#00A99D] transition-colors text-left">
+                      <button onClick={() => scrollTo('tarifs')} className="hover:text-[#FFC629] transition-colors text-left cursor-pointer">
                         Formules & Déploiement d'équipe
                       </button>
                     </li>
                     <li>
                       <button
                         onClick={() => setViewMode('rh_admin')}
-                        className="text-[#5965E8] font-semibold hover:underline transition-colors text-left flex items-center gap-1"
+                        className="text-[#5965E8] font-semibold hover:text-[#FFC629] transition-colors text-left flex items-center gap-1 cursor-pointer"
                       >
                         <span>Accès Démo Espace Entreprise Acme</span>
                         <span>→</span>
@@ -227,23 +229,23 @@ export default function App() {
 
                 {/* Column 4: Déontologie & Contact */}
                 <div>
-                  <span className="font-jakarta font-bold text-[#123D46] uppercase tracking-wider block mb-3">
+                  <span className="font-jakarta font-bold text-[#4DBDB2] uppercase tracking-wider block mb-3">
                     Éthique & Contact
                   </span>
-                  <ul className="space-y-2 text-[11px] text-[#123D46]/70">
-                    <li className="font-medium text-[#123D46]">
+                  <ul className="space-y-2 text-[11px] text-[#E3EBE6]">
+                    <li className="font-semibold text-[#F4F1E8]">
                       contact@linkoffice.fr
                     </li>
                     <li>
                       Paris 8e · Siège de recherche sociologique
                     </li>
-                    <li className="pt-1 text-[#00A99D] font-medium">
+                    <li className="pt-1 text-[#4DBDB2] font-medium">
                       ✓ Anonymat strict garanti (Protocole RGPD N &ge; 5)
                     </li>
-                    <li className="text-[#123D46]/60">
+                    <li className="text-[#E3EBE6]/80">
                       ✓ Données hébergées en France
                     </li>
-                    <li className="text-[#123D46]/60">
+                    <li className="text-[#E3EBE6]/80">
                       ✓ Aucun traçage individuel transmis à l'employeur
                     </li>
                   </ul>
@@ -251,22 +253,22 @@ export default function App() {
               </div>
 
               {/* Bottom Bar */}
-              <div className="pt-6 border-t border-[#E3EBE6] flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-[11px] text-[#123D46]/60">
-                <div>
-                  © 2024 LINK OFFICE — Laboratoire du Lien Humain. Tous droits réservés.
+              <div className="pt-6 border-t border-[rgba(227,235,230,0.14)] flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-[11px] text-[#4DBDB2]">
+                <div className="text-[#E3EBE6]/80">
+                  © 2026 LINK OFFICE — Laboratoire du Lien Humain. Tous droits réservés.
                 </div>
-                <div className="flex flex-wrap items-center gap-4">
-                  <span>Mentions légales</span>
+                <div className="flex flex-wrap items-center gap-4 text-[#E3EBE6]">
+                  <span className="hover:text-[#FFC629] transition-colors cursor-pointer">Mentions légales</span>
                   <span>·</span>
-                  <span>Politique de confidentialité</span>
+                  <span className="hover:text-[#FFC629] transition-colors cursor-pointer">Politique de confidentialité</span>
                   <span>·</span>
-                  <span>Charte déontologique</span>
+                  <span className="hover:text-[#FFC629] transition-colors cursor-pointer">Charte déontologique</span>
                   <span>·</span>
-                  <button onClick={() => setViewMode('rh_admin')} className="text-[#5965E8] hover:underline font-medium">
+                  <button onClick={() => setViewMode('rh_admin')} className="text-[#5965E8] hover:text-[#FFC629] transition-colors font-medium cursor-pointer">
                     Portail RH B2B
                   </button>
                   <span>·</span>
-                  <button onClick={() => setViewMode('super_admin')} className="text-[#00A99D] hover:underline font-medium">
+                  <button onClick={() => setViewMode('super_admin')} className="text-[#4DBDB2] hover:text-[#FFC629] transition-colors font-medium cursor-pointer">
                     Console Super Admin
                   </button>
                 </div>

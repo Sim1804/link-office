@@ -193,7 +193,7 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#123D46] font-inter flex flex-col relative pb-16">
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col relative pb-16">
       <Navbar />
       <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 py-6 sm:py-10 animate-fade-in">
         

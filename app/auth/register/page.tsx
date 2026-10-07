@@ -55,7 +55,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F4F1E8] flex flex-col items-center justify-center p-4">
       {/* Container matching AuthModal frontend design */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-xl border border-[#E3EBE6] relative animate-fade-in">
         <div className="text-center mb-6">

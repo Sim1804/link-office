@@ -129,11 +129,11 @@ export const BarometreView: React.FC<BarometreViewProps> = ({
 
         <div className="relative z-10 space-y-6">
           {/* Real-time status header bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(227,235,230,0.12)] pb-5">
             <div className="flex flex-wrap items-center gap-3">
-              <div className="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-400/30 px-3 py-1 rounded-full text-xs font-jakarta font-medium text-emerald-300">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                <span className="w-2 h-2 rounded-full bg-emerald-400 -ml-4" />
+              <div className="inline-flex items-center gap-2 bg-[#174B55] border border-[rgba(227,235,230,0.20)] px-3 py-1 rounded-full text-xs font-jakarta font-medium text-[#4DBDB2]">
+                <span className="w-2 h-2 rounded-full bg-[#4DBDB2] animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-[#4DBDB2] -ml-4" />
                 <span className="font-semibold uppercase tracking-wider text-[11px]">
                   Observatoire National certifié · Données réelles consolidées
                 </span>
@@ -151,11 +151,11 @@ export const BarometreView: React.FC<BarometreViewProps> = ({
                 type="button"
                 onClick={handleRefresh}
                 disabled={isRefreshing}
-                className="text-xs font-jakarta font-semibold px-3.5 py-1.5 rounded-full border border-white/20 text-[#E3EBE6] hover:bg-white/10 transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                className="text-xs font-jakarta font-semibold px-3.5 py-1.5 rounded-full border border-[rgba(227,235,230,0.24)] text-[#E3EBE6] hover:bg-[rgba(227,235,230,0.08)] transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 title="Actualiser les données en direct depuis la base de données"
               >
                 <svg
-                  className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#00A99D]' : 'text-emerald-300'}`}
+                  className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#00A99D]' : 'text-[#4DBDB2]'}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -187,72 +187,72 @@ export const BarometreView: React.FC<BarometreViewProps> = ({
               <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* 1. Nombre de personnes ayant passé le test */}
                 <div
-                  className={`p-4 bg-white/10 backdrop-blur-xs rounded-2xl border transition-all duration-300 ${
+                  className={`p-4 bg-[#174B55] rounded-2xl border border-[rgba(227,235,230,0.16)] transition-all duration-300 ${
                     recentlyIncremented
                       ? 'border-[#00A99D] ring-2 ring-[#00A99D] bg-[#00A99D]/20 scale-[1.02]'
-                      : 'border-white/10'
+                      : ''
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-[#FFC629] font-medium block">
+                    <span className="text-[11px] text-[#E3EBE6] font-semibold uppercase tracking-wider block">
                       Personnes ayant passé le test
                     </span>
-                    <span className="text-[10px] text-emerald-400 font-mono font-bold">
+                    <span className="text-[10px] text-[#4DBDB2] font-mono font-bold">
                       BASE ACTIVE ↑
                     </span>
                   </div>
                   <div className="mt-1 flex items-baseline gap-2">
-                    <span className="font-jakarta font-extrabold text-2xl sm:text-3xl text-white font-mono tabular-nums tracking-tight">
+                    <span className="font-jakarta font-extrabold text-2xl sm:text-3xl text-[#FFC629] font-mono tabular-nums tracking-tight">
                       {respondents.toLocaleString('fr-FR')}
                     </span>
-                    <span className="text-xs text-emerald-300 font-semibold">
+                    <span className="text-xs text-[#E3EBE6]/80 font-semibold">
                       participants
                     </span>
                   </div>
-                  <span className="text-[10px] text-[#E3EBE6]/80 block mt-1">
+                  <span className="text-[10px] text-[#4DBDB2] block mt-1 font-medium">
                     ● Calculé en temps réel depuis PostgreSQL
                   </span>
                 </div>
 
                 {/* 2. La Moyenne Nationale */}
                 <div
-                  className={`p-4 bg-white/10 backdrop-blur-xs rounded-2xl border transition-all duration-300 ${
+                  className={`p-4 bg-[#174B55] rounded-2xl border border-[rgba(227,235,230,0.16)] transition-all duration-300 ${
                     recentlyIncremented
                       ? 'border-[#FFC629] ring-2 ring-[#FFC629] bg-[#FFC629]/15 scale-[1.02]'
-                      : 'border-white/10'
+                      : ''
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-[#FFC629] font-medium block">
+                    <span className="text-[11px] text-[#E3EBE6] font-semibold uppercase tracking-wider block">
                       Moyenne Nationale IQRH
                     </span>
-                    <span className="text-[10px] text-emerald-400 font-mono font-bold">
+                    <span className="text-[10px] text-[#4DBDB2] font-mono font-bold">
                       TEMPS RÉEL
                     </span>
                   </div>
                   <div className="mt-1 flex items-baseline gap-1">
-                    <span className="font-jakarta font-extrabold text-2xl sm:text-3xl text-white font-mono tabular-nums tracking-tight">
+                    <span className="font-jakarta font-extrabold text-2xl sm:text-3xl text-[#FFC629] font-mono tabular-nums tracking-tight">
                       {typeof average === 'number' ? average.toFixed(1) : average}
                     </span>
-                    <span className="text-xs text-[#E3EBE6]/60">/ 100</span>
+                    <span className="text-xs text-[#E3EBE6]/70 font-semibold">/ 100</span>
                   </div>
-                  <span className="text-[10px] text-emerald-300 block mt-1">
+                  <span className="text-[10px] text-[#4DBDB2] block mt-1 font-medium">
                     Indice consolidé des relations humaines
                   </span>
                 </div>
 
                 {/* 3. Organisations engagées */}
-                <div className="p-4 bg-white/10 backdrop-blur-xs rounded-2xl border border-white/10">
-                  <span className="text-[11px] text-[#FFC629] font-medium block">
+                <div className="p-4 bg-[#174B55] rounded-2xl border border-[rgba(227,235,230,0.16)]">
+                  <span className="text-[11px] text-[#E3EBE6] font-semibold uppercase tracking-wider block">
                     Organisations suivies
                   </span>
                   <div className="mt-1 flex items-baseline gap-1">
-                    <span className="font-jakarta font-extrabold text-2xl sm:text-3xl text-white font-mono tabular-nums tracking-tight">
+                    <span className="font-jakarta font-extrabold text-2xl sm:text-3xl text-[#FFC629] font-mono tabular-nums tracking-tight">
                       {organisations.toLocaleString('fr-FR')}
                     </span>
-                    <span className="text-xs text-[#E3EBE6]/60">structures</span>
+                    <span className="text-xs text-[#E3EBE6]/70 font-semibold">structures</span>
                   </div>
-                  <span className="text-[10px] text-[#E3EBE6]/80 block mt-1">
+                  <span className="text-[10px] text-[#4DBDB2] block mt-1 font-medium">
                     Acme Corp, Ville de Testville, Mutuelle Solis
                   </span>
                 </div>
@@ -260,7 +260,7 @@ export const BarometreView: React.FC<BarometreViewProps> = ({
             </div>
 
             {/* Quick Action: Pass the test to participate */}
-            <div className="lg:col-span-4 bg-white/10 border border-white/20 rounded-2xl p-6 backdrop-blur-sm space-y-4">
+            <div className="lg:col-span-4 bg-[#174B55] border border-[rgba(227,235,230,0.20)] rounded-2xl p-6 space-y-4">
               <span className="text-xs font-jakarta font-bold uppercase tracking-wider text-[#FFC629] block">
                 Faites évoluer le baromètre
               </span>
@@ -282,14 +282,14 @@ export const BarometreView: React.FC<BarometreViewProps> = ({
                       if (el) el.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="w-full py-3 px-4 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-md flex items-center justify-center gap-2 group cursor-pointer"
+                  className="w-full py-3 px-4 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-[#F4F1E8] text-xs font-jakarta font-bold transition-all shadow-md flex items-center justify-center gap-2 group cursor-pointer"
                 >
                   <span>Passer mon test IQRH</span>
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </button>
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-[#E3EBE6]/70 pt-1">
+              <div className="flex items-center justify-between text-[11px] text-[#4DBDB2] pt-1 font-medium">
                 <span>✓ 100% Anonyme</span>
                 <span>·</span>
                 <span>✓ Calcul immédiat</span>
@@ -363,7 +363,7 @@ export const BarometreView: React.FC<BarometreViewProps> = ({
                 />
               </div>
             </div>
-            <span className="text-[11px] text-emerald-600 font-semibold block">
+            <span className="text-[11px] text-[#00A99D] font-semibold block">
               ● {currentSectorData.progress}
             </span>
           </div>
@@ -399,7 +399,7 @@ export const BarometreView: React.FC<BarometreViewProps> = ({
                 Cible d&apos;Excellence Relationnelle
               </span>
               <div className="my-3 flex items-baseline gap-2">
-                <span className="font-jakarta font-extrabold text-4xl text-[#B8870A] font-mono tabular-nums">
+                <span className="font-jakarta font-extrabold text-4xl text-[#FFC629] font-mono tabular-nums">
                   {currentSectorData.target}
                 </span>
                 <span className="text-sm font-semibold text-[#123D46]/60">/ 100</span>
@@ -431,7 +431,7 @@ export const BarometreView: React.FC<BarometreViewProps> = ({
             <span className="text-xs uppercase font-bold text-[#123D46]/60 tracking-wider">
               Scores moyens consolidés par dimension relationnelle (Base active)
             </span>
-            <span className="text-[11px] text-emerald-600 font-semibold">
+            <span className="text-[11px] text-[#00A99D] font-semibold">
               ● Calcul certifié
             </span>
           </div>
@@ -472,7 +472,7 @@ export const BarometreView: React.FC<BarometreViewProps> = ({
                 <ValueBadge type="fiabilite" size={36} />
                 <div className="mt-3 flex items-center justify-between">
                   <span className="font-jakarta font-bold text-xs sm:text-sm text-[#123D46]">Vie Sentimentale</span>
-                  <span className="font-mono font-bold text-xs sm:text-sm text-[#B8870A]">
+                  <span className="font-mono font-bold text-xs sm:text-sm text-[#FFC629]">
                     {dimensions.sentimental.toFixed(1)}/100
                   </span>
                 </div>

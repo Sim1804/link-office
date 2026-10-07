@@ -135,7 +135,7 @@ export default function ActionsPage() {
   const getActionsByStatus = (status: string) => actions.filter(a => a.status === status);
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#123D46] font-inter flex flex-col selection:bg-[#00A99D]/20 selection:text-[#123D46]">
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#00A99D]/20 selection:text-[#123D46]">
       <PartnerAdminHeader
         portalType="B2G"
         themeColor="#4DBDB2"

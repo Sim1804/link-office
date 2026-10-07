@@ -65,7 +65,7 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#123D46] font-inter flex flex-col relative pb-16 selection:bg-[#00A99D]/20 selection:text-[#123D46]">
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col relative pb-16 selection:bg-[#00A99D]/20 selection:text-[#123D46]">
       {/* ==================== 1. TOP DASHBOARD HEADER ==================== */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3.5 shadow-2xs">
         <div className="max-w-[1440px] mx-auto flex items-center justify-between">
