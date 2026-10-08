@@ -51,10 +51,10 @@ describe("Tests HTTP Réels des Failles Corrigées (Isolation Tenant, Upload & W
         data: {
           title: "Campagne Test Org B",
           organizationId: orgB.id,
-          offer: "B2B_PREMIUM",
+          offer: "PREMIUM",
           startDate: new Date(),
+          endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
           status: "ACTIVE",
-          updatedAt: new Date(),
         },
       });
     }

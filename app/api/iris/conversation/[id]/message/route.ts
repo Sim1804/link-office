@@ -23,7 +23,6 @@ import { MatchingService } from "@/lib/binome/matching-service";
 import { prisma } from "@/lib/prisma";
 import { generateResponse, streamResponse } from "@/lib/iris/llm";
 import {
-  evaluateInputSafety,
   evaluateInputSafetyCascaded,
   evaluateOutputSafety,
   logSecurityEvent,
@@ -164,11 +163,11 @@ export async function POST(
       });
     }
 
-    // ── Chargement de l'historique depuis la BDD (Sliding window 10 messages) ──
+    // ── Chargement de l'historique depuis la BDD (Sliding window 20 messages pour dialogue continu) ──
     const recentDbHistory = await prisma.irisMessage.findMany({
       where: { conversationId },
       orderBy: { createdAt: "desc" },
-      take: 10,
+      take: 20,
       select: { role: true, content: true },
     });
     const dbHistory = recentDbHistory.reverse();
@@ -233,6 +232,11 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
       "- Pour les questions de coaching personnel : va à l'essentiel avec chaleur et bienveillance, et termine par une question ouverte ciblée.",
       "- Si tu utilises l'outil recommend_partners, liste les partenaires trouvés clairement en français avec leurs descriptions concises.",
       "- Utilise un langage clair, sans jargon technique ou clinique excessif.",
+      "\n\nRÈGLES FONDAMENTALES DU DIALOGUE CONTINU :",
+      "- Continuité et mémoire : Tu as accès à l'historique complet des messages échangés. Fais des liens directs et fluides avec ce que l'utilisateur a partagé plus tôt ('Comme vous l'indiquiez...', 'Pour approfondir votre réflexion sur...').",
+      "- Pas de salutations répétées : Une fois la conversation engagée (dès le second message), ne redis JAMAIS 'Bonjour', 'Je suis IRIS', ou 'En tant que coach'. Réponds directement avec proximité et professionnalisme.",
+      "- Approfondissement progressif : Si l'utilisateur pose une question de suivi ou demande des précisions sur un point spécifique, apporte une réponse concrète, pratique, enrichie d'exemples de situations vécues au travail ou dans la vie quotidienne.",
+      "- Orthographe et syntaxe irréprochables : Rédige dans un français impeccable, soigné, chaleureux et professionnel. Respecte scrupuleusement la typographie française (espaces insécables avant les ponctuations doubles, tirets élégants).",
       "\n\nGESTION DES MICRO-DÉFIS ET DE L'ORDONNANCE :",
       "L'utilisateur possède une Ordonnance Relationnelle avec des recommandations et des micro-défis (MICRO_CHALLENGE).",
       "- Prends l'initiative de lui demander des nouvelles d'un défi s'il n'en parle pas.",
@@ -480,7 +484,7 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
     });
 
     let finalResponseText = llmResult.text;
-    let isDegraded = llmResult.degraded;
+    const isDegraded = llmResult.degraded;
 
     // En cas d'indisponibilité du LLM distant, fallback analytique local haute cohérence
     if (isDegraded) {
@@ -504,22 +508,34 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
       const priorityDim = res?.priorityDimension ? res.priorityDimension.replace("_", " ").toLowerCase() : "coopération";
       const bestDim = res?.bestDimension ? res.bestDimension.replace("_", " ").toLowerCase() : "relations affectives";
 
-      if (q.includes("sentimentale") || q.includes("couple") || q.includes("intime")) {
-        finalResponseText = `Pour votre dimension sentimentale, le Laboratoire du Lien Humain préconise le protocole d'« attention sanctuarisée » : définir un moment d'écoute mutuelle non négociable chaque semaine, sans écran ni contraintes logistiques. Souhaitez-vous planifier ce temps d'échange cette semaine ?`;
+      if (q.includes("dimension") || q.includes("5")) {
+        finalResponseText = "Les 5 dimensions du climat relationnel LinkOffice sont :\n\n1. **Dimension Sociale** : Réseau relationnel élargi, sentiment d'appartenance et liens faibles protecteurs au quotidien.\n2. **Dimension Affective** : Liens de confiance profonde, écoute sincère et soutien émotionnel des pairs.\n3. **Vie Sentimentale / Intime** : Sphère privée, sécurité affective et équilibre dans les relations proches.\n4. **Vie Professionnelle** : Coopération, sécurité psychologique, reconnaissance et équité managériale au travail.\n5. **Relation à Soi** : Écoute de ses propres limites, auto-bienveillance et régulation de la charge mentale.\n\nSouhaitez-vous que nous approfondissions l'une de ces dimensions ou que nous l'appliquions à votre quotidien ?";
+      } else if (q.includes("organisation") || q.includes("entreprise") || q.includes("pro") || q.includes("équipe") || q.includes("solution")) {
+        finalResponseText = "LinkOffice propose aux organisations un accompagnement complet et éprouvé :\n\n• **Baromètre d'équipe et Climat Social** : Mesure du bien-être relationnel collectif, 100% anonymisée avec k-anonymat strict (dès 5 répondants).\n• **Programme Binôme Relationnel** : Mise en relation de pairs volontaires pour briser les silos, créer de l'entraide et favoriser l'intégration.\n• **Plans d'actions RH & managériaux** : Recommandations opérationnelles pour prévenir les RPS et améliorer la QVCT.\n• **Portails dédiés** : B2B (entreprises), B2G (collectivités) et B2B2C (mutuelles et réseaux de santé).\n\nSouhaitez-vous découvrir comment déployer ces solutions au sein de votre structure ?";
+      } else if (q.includes("iris") || q.includes("coach") || q.includes("ia") || q.includes("fonctionne")) {
+        finalResponseText = "En tant que coach d'intelligence relationnelle, mon accompagnement repose sur 4 piliers fondamentaux :\n\n1. **Analyse de votre bilan IQRH** pour identifier vos forces motrices et vos leviers d'amélioration.\n2. **Ordonnance Relationnelle sur-mesure** avec des recommandations personnalisées et des micro-défis hebdomadaires progressifs.\n3. **Dialogue continu** pour surmonter vos blocages, préparer des discussions sensibles ou désamorcer des tensions.\n4. **Validation des défis** et suivi gamifié de votre progression relationnelle.\n\nSur quel défi ou enjeu relationnel souhaiteriez-vous avancer aujourd'hui ?";
+      } else if (q.includes("calcul") || q.includes("score") || q.includes("iqrh")) {
+        finalResponseText = "Votre score IQRH (Indice de Qualité Relationnelle et Humaine, sur 100) est issu du questionnaire psychométrique LinkOffice (~8 à 10 minutes).\n\nIl mesure l'équilibre de vos 5 dimensions de vie fondamentales, enrichi de l'ICR (Complexité Relationnelle), de l'IER (Équilibre Relationnel) et de votre Météo relationnelle dynamique.\n\nPour obtenir votre diagnostic individuel précis, vous pouvez compléter votre évaluation : [Commencer mon évaluation](/questionnaire).";
+      } else if (q.includes("sentimentale") || q.includes("couple") || q.includes("intime")) {
+        finalResponseText = "Pour votre dimension sentimentale, le Laboratoire du Lien Humain préconise le protocole d'« attention sanctuarisée » : définir un moment d'écoute mutuelle non négociable chaque semaine, sans écran ni contraintes logistiques. Souhaitez-vous planifier ce temps d'échange cette semaine ?";
       } else if (q.includes("force") || q.includes("point fort") || q.includes("atout")) {
         finalResponseText = `Votre plus grand point d'appui s'exprime dans vos **${bestDim}**. C'est un véritable capital confiance qui vous permet de prendre du recul face aux imprévus. Vous pouvez vous appuyer sereinement sur ce socle.`;
       } else if (q.includes("priorité") || q.includes("faible") || q.includes("attention") || q.includes("vigilance")) {
         finalResponseText = `Votre axe de vigilance prioritaire concerne la dimension **${priorityDim}**. De légers ajustements de communication et une clarification de vos attentes mutuelles permettront de désamorcer les tensions et d'alléger votre charge mentale.`;
       } else if (q.includes("rituel") || q.includes("5 minutes") || q.includes("action") || q.includes("exercice")) {
-        finalResponseText = `Je vous suggère le micro-rituel « La météo du lien » : en début de journée ou de réunion, évaluez votre niveau d'énergie relationnelle sur une échelle de 1 à 5. Cela permet d'ajuster vos échanges en toute transparence. Aimeriez-vous tester dès demain ?`;
+        finalResponseText = "Je vous suggère le micro-rituel « La météo du lien » : en début de journée ou de réunion, évaluez votre niveau d'énergie relationnelle sur une échelle de 1 à 5. Cela permet d'ajuster vos échanges en toute transparence. Aimeriez-vous le tester dès demain ?";
       } else if (q.includes("binôme") || q.includes("partenaire") || q.includes("collègue")) {
-        finalResponseText = `Le programme de Binôme Relationnel vous permet d'échanger en miroir avec un collègue bienveillant. Vous pouvez consulter votre statut et vos correspondances dans l'onglet « Relations & Binôme » de votre tableau de bord. Souhaitez-vous que je vous guide ?`;
+        finalResponseText = "Le programme de Binôme Relationnel vous permet d'échanger en miroir avec un collègue bienveillant. Vous pouvez consulter votre statut et vos correspondances dans l'onglet « Relations & Binôme » de votre tableau de bord. Souhaitez-vous que je vous guide ?";
       } else if (q.includes("stress") || q.includes("charge") || q.includes("fatigue") || q.includes("pression")) {
-        finalResponseText = `Face à la fatigue relationnelle, il est crucial de sanctuariser des temps de récupération. Avec votre score IQRH de **${score}/100**, vous disposez de solides ressources protectrices. Prenez un moment aujourd'hui pour poser vos limites avec bienveillance.`;
+        finalResponseText = res
+          ? `Face à la fatigue relationnelle, il est crucial de sanctuariser des temps de récupération. Avec votre score IQRH de **${score}/100**, vous disposez de solides ressources protectrices. Prenez un moment aujourd'hui pour poser vos limites avec bienveillance.`
+          : "Face à la fatigue relationnelle, il est crucial de sanctuariser des temps de récupération et de poser des limites claires. Souhaitez-vous que nous explorions ensemble des micro-actions simples pour préserver votre énergie ?";
       } else if (q.includes("défi") || q.includes("terminé") || q.includes("validé") || q.includes("fait")) {
-        finalResponseText = `Bravo pour votre passage à l'action ! Chaque micro-défi accompli renforce durablement la santé de votre collectif et crédite votre expérience. Continuons sur cette excellente dynamique ! 🎉`;
+        finalResponseText = "Bravo pour votre passage à l'action ! Chaque micro-défi accompli renforce durablement la santé de votre collectif et crédite votre expérience. Continuons sur cette excellente dynamique ! 🎉";
       } else {
-        finalResponseText = `C'est une excellente question. Au regard de votre bilan IQRH (${score}/100), le secret d'un équilibre durable réside dans la régularité des micro-ajustements. Souhaitez-vous que nous examinions ensemble une situation relationnelle concrète ?`;
+        finalResponseText = res
+          ? `C'est une excellente question. Au regard de votre bilan IQRH (${score}/100), le secret d'un équilibre durable réside dans la régularité des micro-ajustements au quotidien. Souhaitez-vous que nous examinions ensemble une situation relationnelle concrète ?`
+          : "C'est une excellente question sur vos dynamiques relationnelles. Le secret d'un équilibre durable réside dans la régularité des micro-ajustements au quotidien. Pour obtenir votre diagnostic personnalisé complet, vous pouvez démarrer votre évaluation : [Commencer mon évaluation](/questionnaire). Avez-vous une situation concrète à partager ?";
       }
     } else {
       // Contrôle de sécurité de sortie

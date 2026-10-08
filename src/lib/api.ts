@@ -96,6 +96,16 @@ export async function startIrisConversation(userId: string): Promise<IRISConvers
   });
 }
 
+/** Récupère la conversation IRIS active de l'utilisateur (dialogue continu) */
+export async function getActiveIrisConversation(): Promise<{
+  conversation: {
+    id: string;
+    messages: Array<{ id: string; sender: "user" | "iris"; text: string; timestamp: string }>;
+  } | null;
+}> {
+  return apiFetch("/api/iris/conversation/active");
+}
+
 /** Envoie un message à IRIS */
 export async function sendIrisMessage(conversationId: string, messageUser: string, history: Array<{role: string, content: string}> = []): Promise<IRISMessage> {
   return apiFetch<IRISMessage>(`/api/iris/conversation/${conversationId}/message`, {

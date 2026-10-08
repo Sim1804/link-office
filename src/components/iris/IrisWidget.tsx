@@ -1,60 +1,206 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { Send, X, MessageCircle, FileText, RefreshCw, ChevronDown, Sparkles } from "lucide-react";
-import { startIrisConversation, sendIrisMessage, getIrisExplication } from "@/lib/api";
+import { Send, X, MessageCircle, FileText, RefreshCw } from "lucide-react";
+import { startIrisConversation, sendIrisMessage, getIrisExplication, getActiveIrisConversation } from "@/lib/api";
 import { IrisMark } from "@/components/brand/IrisLogo";
 import { useIris } from "@/src/context/IrisContext";
 
-const formatText = (text: string) => {
+/**
+ * Règles typographiques françaises : insère des espaces insécables avant les ponctuations doubles (: ; ? !)
+ * et après/avant les guillemets « ».
+ */
+function applyFrenchTypography(text: string): string {
+  return text
+    .replace(/\s+([:;?!»])/g, "\u00A0$1")
+    .replace(/([«])\s+/g, "$1\u00A0");
+}
+
+function renderInline(
+  text: string,
+  isUser: boolean,
+  onNavigate: (url: string) => void
+) {
   if (!text) return null;
 
-  return text.split("\n").map((line, idx) => {
-    let cleanLine = line;
-    let isBullet = false;
+  // Découpage des liens [label](url), gras **bold**, italique *italic*, et code `code`
+  const parts = text.split(/(\[.*?\]\(.*?\)|\*\*.*?\*\*|\*[^*]+?\*|`.*?`)/g);
 
-    const trimmed = cleanLine.trimStart();
-    if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
-      isBullet = true;
-      cleanLine = trimmed.slice(2);
-    } else if (trimmed.startsWith("• ")) {
-      isBullet = true;
-      cleanLine = trimmed.slice(2);
+  return parts.map((part, i) => {
+    if (!part) return null;
+
+    // Gras **texte**
+    if (part.startsWith("**") && part.endsWith("**") && part.length >= 4) {
+      return (
+        <strong key={i} className={`font-bold ${isUser ? "text-white" : "text-[#123D46]"}`}>
+          {applyFrenchTypography(part.slice(2, -2))}
+        </strong>
+      );
     }
 
-    // Parsing des liens [label](url) et du gras **bold**
-    const parts = cleanLine.split(/(\[.*?\]\(.*?\)|\*\*.*?\*\*)/g);
+    // Lien [label](url)
+    const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
+    if (linkMatch) {
+      const [, label, url] = linkMatch;
+      const isInternal = url.startsWith("/");
+      if (isInternal) {
+        return (
+          <button
+            key={i}
+            type="button"
+            onClick={() => onNavigate(url)}
+            className="text-[#00A99D] underline font-bold hover:text-[#199E9A] transition-colors cursor-pointer inline p-0 bg-transparent border-none text-left"
+          >
+            {applyFrenchTypography(label)}
+          </button>
+        );
+      }
+      return (
+        <a
+          key={i}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#00A99D] underline font-bold hover:text-[#199E9A] transition-colors inline"
+        >
+          {applyFrenchTypography(label)}
+        </a>
+      );
+    }
 
-    return (
-      <span key={idx} className={isBullet ? "flex items-start gap-2 my-1" : "block my-0.5"}>
-        {isBullet && <span className="text-[#00A99D] font-bold shrink-0 leading-relaxed">•</span>}
-        <span className="flex-1">
-          {parts.map((part, i) => {
-            if (part.startsWith("**") && part.endsWith("**")) {
-              return <strong key={i} className="font-bold text-inherit">{part.slice(2, -2)}</strong>;
-            }
-            const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
-            if (linkMatch) {
-              const [, label, url] = linkMatch;
-              return (
-                <a
-                  key={i}
-                  href={url}
-                  className="text-[#00A99D] underline font-bold hover:text-[#199E9A] transition-colors inline-block"
-                >
-                  {label}
-                </a>
-              );
-            }
-            return <span key={i}>{part}</span>;
-          })}
-        </span>
-      </span>
-    );
+    // Italique *texte*
+    if (part.startsWith("*") && part.endsWith("*") && part.length >= 3) {
+      return (
+        <em key={i} className="italic">
+          {applyFrenchTypography(part.slice(1, -1))}
+        </em>
+      );
+    }
+
+    // Code inline `texte`
+    if (part.startsWith("`") && part.endsWith("`") && part.length >= 3) {
+      return (
+        <code key={i} className="px-1.5 py-0.5 rounded bg-black/5 font-mono text-[11px]">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+
+    // Texte brut avec typographie française
+    return <span key={i}>{applyFrenchTypography(part)}</span>;
   });
-};
+}
+
+function FormattedIrisContent({
+  content,
+  isUser,
+  onNavigate,
+}: {
+  content: string;
+  isUser: boolean;
+  onNavigate: (url: string) => void;
+}) {
+  if (!content) return null;
+
+  const lines = content.split("\n");
+  const elements: React.ReactNode[] = [];
+
+  let idx = 0;
+  while (idx < lines.length) {
+    const rawLine = lines[idx];
+    const trimmed = rawLine.trim();
+
+    if (!trimmed) {
+      idx++;
+      continue;
+    }
+
+    // 1. Titre H3/H2: ### ou ##
+    if (trimmed.startsWith("### ") || trimmed.startsWith("## ")) {
+      const titleText = trimmed.replace(/^#{2,3}\s+/, "");
+      elements.push(
+        <h4
+          key={`h-${idx}`}
+          className={`font-jakarta font-bold text-xs sm:text-[13px] mt-2.5 mb-1 flex items-center gap-1.5 ${
+            isUser ? "text-white" : "text-[#123D46]"
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00A99D] inline-block shrink-0" />
+          <span>{renderInline(titleText, isUser, onNavigate)}</span>
+        </h4>
+      );
+      idx++;
+      continue;
+    }
+
+    // 2. Citation / Callout: >
+    if (trimmed.startsWith("> ")) {
+      const quoteText = trimmed.slice(2);
+      elements.push(
+        <div
+          key={`q-${idx}`}
+          className="my-2 p-2.5 px-3 rounded-xl bg-[#00A99D]/8 border-l-2 border-[#00A99D] text-xs leading-relaxed text-[#123D46] font-medium"
+        >
+          {renderInline(quoteText, isUser, onNavigate)}
+        </div>
+      );
+      idx++;
+      continue;
+    }
+
+    // 3. Liste numérotée: 1. ... 2. ...
+    const numberedMatch = trimmed.match(/^(\d+)[.)]\s+(.*)$/);
+    if (numberedMatch) {
+      const num = numberedMatch[1];
+      const itemText = numberedMatch[2];
+      elements.push(
+        <div key={`num-${idx}`} className="flex items-start gap-2.5 my-1.5">
+          <span
+            className={`shrink-0 w-5 h-5 rounded-full font-jakarta font-extrabold text-[10px] flex items-center justify-center mt-0.5 ${
+              isUser
+                ? "bg-white/20 text-white"
+                : "bg-[#00A99D]/12 text-[#00A99D]"
+            }`}
+          >
+            {num}
+          </span>
+          <div className="flex-1 leading-relaxed text-xs sm:text-[13px]">
+            {renderInline(itemText, isUser, onNavigate)}
+          </div>
+        </div>
+      );
+      idx++;
+      continue;
+    }
+
+    // 4. Liste à puces: - , * , •
+    if (trimmed.startsWith("- ") || trimmed.startsWith("* ") || trimmed.startsWith("• ")) {
+      const itemText = trimmed.replace(/^[-*•]\s+/, "");
+      elements.push(
+        <div key={`bullet-${idx}`} className="flex items-start gap-2.5 my-1.5">
+          <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#00A99D] mt-2" />
+          <div className="flex-1 leading-relaxed text-xs sm:text-[13px]">
+            {renderInline(itemText, isUser, onNavigate)}
+          </div>
+        </div>
+      );
+      idx++;
+      continue;
+    }
+
+    // 5. Paragraphe standard
+    elements.push(
+      <p key={`p-${idx}`} className="my-1.5 leading-relaxed text-xs sm:text-[13px]">
+        {renderInline(trimmed, isUser, onNavigate)}
+      </p>
+    );
+    idx++;
+  }
+
+  return <div className="space-y-0.5">{elements}</div>;
+}
 
 interface Message {
   id: string;
@@ -147,9 +293,14 @@ export function IrisWidget() {
     }
   };
 
+  const handleNavigate = useCallback((url: string) => {
+    setIsOpen(false);
+    router.push(url);
+  }, [router, setIsOpen]);
+
   const startChat = async () => {
     if (!session?.user?.id) {
-      // Welcome message for non-authenticated visitor
+      // Message de bienvenue pour visiteur non connecté
       if (messages.length === 0) {
         setMessages([{
           id: "welcome-guest",
@@ -161,28 +312,69 @@ export function IrisWidget() {
       return;
     }
     
-    if (conversationId) return;
+    if (conversationId && messages.length > 0) return;
     setLoading(true);
     try {
+      // 1. Tenter de restaurer la conversation active (dialogue continu persistant)
+      const activeRes = await getActiveIrisConversation();
+      if (activeRes?.conversation?.id && activeRes.conversation.messages.length > 0) {
+        setConversationId(activeRes.conversation.id);
+        setMessages(activeRes.conversation.messages.map(m => ({
+          id: m.id,
+          sender: m.sender,
+          text: m.text,
+          timestamp: new Date(m.timestamp),
+        })));
+        return;
+      }
+
+      // 2. Sinon, initialiser une nouvelle session propre
       const conv = await startIrisConversation(session.user.id);
       setConversationId(conv.conversation_id);
+      const userName = session.user.name?.trim();
+      const welcomeText = userName
+        ? `Bonjour ${userName} ! Je suis IRIS, votre coach relationnel. J'ai analysé vos indicateurs et vos dynamiques d'équipe. Comment puis-je vous accompagner aujourd'hui ?`
+        : "Bonjour ! Je suis IRIS, votre coach relationnel. J'ai analysé vos indicateurs et vos dynamiques d'équipe. Comment puis-je vous accompagner aujourd'hui ?";
+
       setMessages([{
         id: "welcome",
         sender: "iris",
-        text: `Bonjour ${session.user.name || ""} ! Je suis IRIS, votre coach relationnel. J'ai analysé vos indicateurs et vos dynamiques d'équipe. Comment puis-je vous accompagner aujourd'hui ?`,
+        text: welcomeText,
         timestamp: new Date(),
       }]);
     } catch {
-      setMessages([{ id: "err", sender: "iris", text: "IRIS est indisponible pour le moment.", timestamp: new Date() }]);
+      setMessages([{ id: "err", sender: "iris", text: "IRIS est momentanément indisponible. Veuillez réessayer dans quelques instants.", timestamp: new Date() }]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleResetChat = () => {
-    setConversationId(null);
-    setMessages([]);
-    startChat();
+  const handleResetChat = async () => {
+    if (!session?.user?.id) {
+      setMessages([]);
+      startChat();
+      return;
+    }
+    setLoading(true);
+    try {
+      const conv = await startIrisConversation(session.user.id);
+      setConversationId(conv.conversation_id);
+      const userName = session.user.name?.trim();
+      const welcomeText = userName
+        ? `Bonjour ${userName} ! Je suis IRIS, votre coach relationnel. J'ai réinitialisé notre échange. Comment puis-je vous accompagner aujourd'hui ?`
+        : "Bonjour ! Je suis IRIS, votre coach relationnel. J'ai réinitialisé notre échange. Comment puis-je vous accompagner aujourd'hui ?";
+
+      setMessages([{
+        id: `welcome-${Date.now()}`,
+        sender: "iris",
+        text: welcomeText,
+        timestamp: new Date(),
+      }]);
+    } catch {
+      setMessages([{ id: "err", sender: "iris", text: "Impossible de réinitialiser la discussion pour le moment.", timestamp: new Date() }]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -402,19 +594,19 @@ export function IrisWidget() {
                 {explicationLoading ? (
                   <div className="flex flex-col items-center justify-center py-12 gap-3">
                     <span className="w-6 h-6 border-2 border-[#00A99D] border-t-transparent rounded-full animate-spin" />
-                    <span className="text-xs text-[#123D46]/60 font-inter">Génération de l'analyse par IRIS...</span>
+                    <span className="text-xs text-[#123D46]/60 font-inter">{"Génération de l'analyse par IRIS..."}</span>
                   </div>
                 ) : explication ? (
                   <div className="space-y-4">
                     <div className="p-4 rounded-2xl bg-[#F4F1E8]/60 border border-[#E3EBE6] text-xs sm:text-[13px] text-[#123D46] leading-relaxed font-inter">
-                      {formatText(explication)}
+                      <FormattedIrisContent content={explication} isUser={false} onNavigate={handleNavigate} />
                     </div>
                     <button 
                       type="button"
                       onClick={() => loadExplication(true)} 
                       className="w-full flex items-center justify-center gap-2 py-2.5 px-5 rounded-full bg-white border border-[#E3EBE6] hover:bg-[#FAF9F5] text-[#123D46] font-jakarta font-semibold text-xs transition-colors cursor-pointer"
                     >
-                      <RefreshCw size={14} /> Actualiser l'analyse
+                      <RefreshCw size={14} /> {"Actualiser l'analyse"}
                     </button>
                   </div>
                 ) : (
@@ -438,13 +630,19 @@ export function IrisWidget() {
                     className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}
                   >
                     <div
-                      className={`max-w-[85%] p-3.5 sm:p-4 rounded-2xl text-xs sm:text-[13px] leading-relaxed font-inter ${
+                      className={`${
+                        msg.sender === "user" ? "max-w-[85%]" : "max-w-[92%]"
+                      } p-3.5 sm:p-4 rounded-2xl text-xs sm:text-[13px] leading-relaxed font-inter ${
                         msg.sender === "user"
                           ? "bg-[#00A99D] text-white rounded-br-xs shadow-xs"
-                          : "bg-[#FAF9F5] border border-[#E3EBE6] text-[#123D46] rounded-bl-xs"
+                          : "bg-[#FAF9F5] border border-[#E3EBE6] text-[#123D46] rounded-bl-xs shadow-2xs"
                       }`}
                     >
-                      {formatText(msg.text)}
+                      <FormattedIrisContent
+                        content={msg.text}
+                        isUser={msg.sender === "user"}
+                        onNavigate={handleNavigate}
+                      />
                       
                       {msg.isPremiumCTA && (
                         <div className="mt-3">

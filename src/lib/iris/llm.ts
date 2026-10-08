@@ -47,13 +47,13 @@ export interface LlmResponseOutput {
  */
 export async function generateResponse(options: LlmCallOptions): Promise<LlmResponseOutput> {
   const startTime = performance.now();
-  const maxOutputTokens = options.maxOutputTokens ?? 350;
+  const maxOutputTokens = options.maxOutputTokens ?? 800;
 
   if (!process.env.GROQ_API_KEY) {
     const latencyMs = Math.round(performance.now() - startTime);
     console.warn(`[IRIS_LLM] GROQ_API_KEY non définie. Bascule en mode dégradé (${latencyMs}ms).`);
     return {
-      text: "Je suis actuellement en mode de maintenance simplifiée. Je reste à votre écoute pour vos questions prioritaires sur votre bilan relationnel.",
+      text: "Je suis actuellement en mode de maintenance allégé. Je reste à votre entière disposition pour répondre à vos questions prioritaires sur votre bilan relationnel.",
       degraded: true,
       latencyMs,
       model: "fallback-local",
@@ -128,7 +128,7 @@ export async function generateResponse(options: LlmCallOptions): Promise<LlmResp
  */
 export async function streamResponse(options: LlmCallOptions) {
   const startTime = performance.now();
-  const maxOutputTokens = options.maxOutputTokens ?? 400;
+  const maxOutputTokens = options.maxOutputTokens ?? 800;
 
   if (!process.env.GROQ_API_KEY) {
     throw new Error("GROQ_API_KEY_MISSING");
