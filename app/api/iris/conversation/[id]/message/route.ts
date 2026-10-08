@@ -24,6 +24,7 @@ import { prisma } from "@/lib/prisma";
 import { generateResponse, streamResponse } from "@/lib/iris/llm";
 import {
   evaluateInputSafety,
+  evaluateInputSafetyCascaded,
   evaluateOutputSafety,
   logSecurityEvent,
   IRIS_DAILY_QUOTA_FREEMIUM,
@@ -133,8 +134,8 @@ export async function POST(
       }
     }
 
-    // ── Filtre de sécurité programmatique d'entrée (AVANT appel LLM) ──────────
-    const safetyCheck = evaluateInputSafety(userMessage);
+    // ── Filtre de sécurité programmatique d'entrée en cascade (AVANT appel LLM) ──
+    const safetyCheck = await evaluateInputSafetyCascaded(userMessage, userId);
     if (!safetyCheck.safe) {
       if (safetyCheck.category) {
         await logSecurityEvent(userId, safetyCheck.category, {
@@ -352,7 +353,7 @@ export async function POST(
       }),
     };
 
-    // ── Détection du streaming demandé (Option A Décision 2.2) ─────────────────
+    // ── Détection du streaming demandé (Option A Décision 2.2 & C3) ───────────
     const acceptsStream = request.headers.get("accept")?.includes("text/event-stream");
     const isStreamRequested = requestBody.stream === true || acceptsStream;
 
@@ -364,7 +365,71 @@ export async function POST(
         userId,
         conversationId,
       });
-      return stream.toTextStreamResponse();
+
+      // Contrôle de sécurité de sortie en flux avec ReadableStream et vérification en temps réel (C3)
+      let accumulatedOutput = "";
+      const textStream = stream.textStream;
+      const reader = textStream.getReader();
+
+      const customStream = new ReadableStream({
+        async start(controller) {
+          const encoder = new TextEncoder();
+          try {
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              accumulatedOutput += value;
+
+              // Vérification de sortie en temps réel contre les hallucinations médicales
+              const outputSafety = evaluateOutputSafety(accumulatedOutput);
+              if (!outputSafety.safe) {
+                // Interception immédiate du flux en cours de diffusion
+                const warningMsg = "\n\n[Message interrompu : IRIS ne peut délivrer de conseil médical ou d'ordonnance. Veuillez consulter un professionnel de santé.]";
+                if (acceptsStream) {
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: warningMsg })}\n\n`));
+                } else {
+                  controller.enqueue(encoder.encode(warningMsg));
+                }
+                await logSecurityEvent(userId, "MEDICAL", {
+                  matchedPattern: outputSafety.flaggedTerms?.join(", "),
+                  conversationId,
+                }).catch(() => {});
+                controller.close();
+                return;
+              }
+
+              // Émission conforme SSE (data: ...) ou texte brut
+              if (acceptsStream) {
+                controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: value })}\n\n`));
+              } else {
+                controller.enqueue(encoder.encode(value));
+              }
+            }
+
+            if (acceptsStream) {
+              controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+            }
+            controller.close();
+
+            // Persistance de la réponse générée en base de données
+            if (accumulatedOutput) {
+              await prisma.irisMessage.create({
+                data: { conversationId, role: "assistant", content: accumulatedOutput },
+              }).catch(console.error);
+            }
+          } catch (streamErr) {
+            controller.error(streamErr);
+          }
+        },
+      });
+
+      return new Response(customStream, {
+        headers: {
+          "Content-Type": acceptsStream ? "text/event-stream; charset=utf-8" : "text/plain; charset=utf-8",
+          "Cache-Control": "no-cache",
+          "Connection": "keep-alive",
+        },
+      });
     }
 
     // ── Mode standard (Réponse unitaire structurée) ───────────────────────────

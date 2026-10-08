@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "date": "2026-10-08T18:54:21.106Z",
+    "modelTested": "qwen/qwen3.8-27b",
+    "iterations": 10,
+    "protocol": "Mesure réelle séparée : Filtre entrée -> LLM (TTFT & Total via SSE stream) -> Filtre sortie",
+    "nature": "measured_production_like"
+  },
+  "phases": {
+    "inputSafetyFilterMs": {
+      "mean": 0.57,
+      "p50": 0.24,
+      "p95": 2.01,
+      "p99": 2.01,
+      "min": 0.1,
+      "max": 2.01
+    },
+    "llmTimeToFirstTokenMs": {
+      "mean": 184.36,
+      "p50": 192.51,
+      "p95": 294.15,
+      "p99": 294.15,
+      "min": 74.69,
+      "max": 294.15
+    },
+    "llmTotalInferenceMs": {
+      "mean": 383.47,
+      "p50": 348.51,
+      "p95": 714.42,
+      "p99": 714.42,
+      "min": 183.34,
+      "max": 714.42
+    },
+    "outputSafetyFilterMs": {
+      "mean": 0.08,
+      "p50": 0.06,
+      "p95": 0.16,
+      "p99": 0.16,
+      "min": 0.04,
+      "max": 0.16
+    },
+    "endToEndPipelineMs": {
+      "mean": 384.13,
+      "p50": 348.82,
+      "p95": 714.75,
+      "p99": 714.75,
+      "min": 183.67,
+      "max": 714.75
+    }
+  },
+  "samples": [
+    {
+      "query": "Bonjour IRIS, comment puis-je améliorer la communication avec mon binôme ?",
+      "inputFilterMs": 2.013,
+      "ttftMs": 294.15,
+      "llmTotalMs": 437.31,
+      "outputFilterMs": 0.157,
+      "endToEndMs": 439.48
+    },
+    {
+      "query": "Que signifie mon score de 65 sur la dimension affective ?",
+      "inputFilterMs": 0.996,
+      "ttftMs": 243.12,
+      "llmTotalMs": 357.95,
+      "outputFilterMs": 0.059,
+      "endToEndMs": 359
+    },
+    {
+      "query": "Quel micro-défi quotidien me conseillez-vous pour déconnecter sereinement le soir ?",
+      "inputFilterMs": 1.289,
+      "ttftMs": 120.77,
+      "llmTotalMs": 273.84,
+      "outputFilterMs": 0.134,
+      "endToEndMs": 275.27
+    },
+    {
+      "query": "Comment exprimer mes limites à mon manager sans créer de tension ?",
+      "inputFilterMs": 0.133,
+      "ttftMs": 231.39,
+      "llmTotalMs": 440.89,
+      "outputFilterMs": 0.069,
+      "endToEndMs": 441.1
+    },
+    {
+      "query": "Mon équipe manque de cohésion depuis le passage au travail hybride, des conseils ?",
+      "inputFilterMs": 0.273,
+      "ttftMs": 80.18,
+      "llmTotalMs": 714.42,
+      "outputFilterMs": 0.048,
+      "endToEndMs": 714.75
+    },
+    {
+      "query": "Quels sont les atouts principaux d'un profil relationnel Connecteur ?",
+      "inputFilterMs": 0.099,
+      "ttftMs": 77.58,
+      "llmTotalMs": 538.2,
+      "outputFilterMs": 0.036,
+      "endToEndMs": 538.33
+    },
+    {
+      "query": "Comment instaurer un rituel d'attention sanctuarisée efficace en couple ?",
+      "inputFilterMs": 0.249,
+      "ttftMs": 74.69,
+      "llmTotalMs": 183.34,
+      "outputFilterMs": 0.073,
+      "endToEndMs": 183.67
+    },
+    {
+      "query": "Je ressens une fatigue relationnelle en réunion, comment préserver mon énergie ?",
+      "inputFilterMs": 0.238,
+      "ttftMs": 284.91,
+      "llmTotalMs": 301.2,
+      "outputFilterMs": 0.055,
+      "endToEndMs": 301.5
+    },
+    {
+      "query": "Pouvez-vous m'expliquer le calcul de l'Indice de Charge Relationnelle (ICR) ?",
+      "inputFilterMs": 0.235,
+      "ttftMs": 244.28,
+      "llmTotalMs": 348.51,
+      "outputFilterMs": 0.076,
+      "endToEndMs": 348.82
+    },
+    {
+      "query": "Comment valoriser les efforts discrets au sein de notre collectif de travail ?",
+      "inputFilterMs": 0.211,
+      "ttftMs": 192.51,
+      "llmTotalMs": 239.06,
+      "outputFilterMs": 0.063,
+      "endToEndMs": 239.34
+    }
+  ]
+}
