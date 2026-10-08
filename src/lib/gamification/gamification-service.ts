@@ -21,67 +21,73 @@ export class GamificationService {
    * @returns Un objet de statut contenant le nombre de points gagnés, le nouveau total et la liste des badges fraîchement débloqués.
    */
   static async completeChallenge(userId: string, prescriptionItemId: string) {
-    const item = await prisma.prescriptionItem.findUnique({
-      where: { id: prescriptionItemId },
-      include: { prescription: true, libraryItem: true },
-    });
+    return await prisma.$transaction(async (tx) => {
+      // 1. Mise à jour conditionnelle atomique : garantit l'exclusion mutuelle stricte
+      // Seule la première requête concurrente trouve status: { not: "COMPLETED" }
+      const updated = await tx.prescriptionItem.updateMany({
+        where: {
+          id: prescriptionItemId,
+          status: { not: "COMPLETED" },
+          prescription: { userId },
+        },
+        data: { status: "COMPLETED" },
+      });
 
-    if (!item || item.prescription.userId !== userId) {
-      throw new Error("Défi introuvable ou non autorisé.");
-    }
-
-    if (item.status === "COMPLETED") {
-      throw new Error("Défi déjà complété.");
-    }
-
-    // Mise à jour du statut du défi
-    await prisma.prescriptionItem.update({
-      where: { id: prescriptionItemId },
-      data: { status: "COMPLETED" },
-    });
-
-    // Détermination du nombre de points à attribuer (lecture depuis le JSON de l'item ou fallback par défaut)
-    const libraryMetadata = item.libraryItem?.data as any;
-    const pointsToAward = libraryMetadata?.points ? Number(libraryMetadata.points) : GamificationService.POINTS_PER_CHALLENGE;
-
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: { points: { increment: pointsToAward } },
-    });
-
-    const newLevel = calculateLevel(updatedUser.points).level;
-
-    await prisma.userStats.upsert({
-      where: { userId },
-      create: {
-        userId,
-        totalPoints: updatedUser.points,
-        weeklyPoints: pointsToAward,
-        monthlyPoints: pointsToAward,
-        currentLevel: newLevel,
-      },
-      update: {
-        totalPoints: updatedUser.points,
-        weeklyPoints: { increment: pointsToAward },
-        monthlyPoints: { increment: pointsToAward },
-        currentLevel: newLevel,
+      if (updated.count === 0) {
+        throw new Error("Défi déjà complété ou non autorisé.");
       }
+
+      // 2. Récupération des métadonnées du défi pour les points
+      const item = await tx.prescriptionItem.findUniqueOrThrow({
+        where: { id: prescriptionItemId },
+        include: { libraryItem: true },
+      });
+
+      const libraryMetadata = item.libraryItem?.data as any;
+      const pointsToAward = libraryMetadata?.points
+        ? Number(libraryMetadata.points)
+        : GamificationService.POINTS_PER_CHALLENGE;
+
+      // 3. Crédit atomique des points sur l'utilisateur
+      const updatedUser = await tx.user.update({
+        where: { id: userId },
+        data: { points: { increment: pointsToAward } },
+      });
+
+      const newLevel = calculateLevel(updatedUser.points).level;
+
+      await tx.userStats.upsert({
+        where: { userId },
+        create: {
+          userId,
+          totalPoints: updatedUser.points,
+          weeklyPoints: pointsToAward,
+          monthlyPoints: pointsToAward,
+          currentLevel: newLevel,
+        },
+        update: {
+          totalPoints: updatedUser.points,
+          weeklyPoints: { increment: pointsToAward },
+          monthlyPoints: { increment: pointsToAward },
+          currentLevel: newLevel,
+        },
+      });
+
+      await EventLogger.log({
+        userId,
+        eventType: "micro_challenge_completed",
+        eventData: { prescriptionItemId, pointsEarned: pointsToAward },
+      });
+
+      const newlyUnlockedBadges = await this.checkAndAwardBadges(userId, updatedUser.points, tx);
+
+      return {
+        success: true,
+        pointsEarned: pointsToAward,
+        totalPoints: updatedUser.points,
+        newBadges: newlyUnlockedBadges,
+      };
     });
-
-    await EventLogger.log({
-      userId,
-      eventType: "micro_challenge_completed",
-      eventData: { prescriptionItemId, pointsEarned: pointsToAward },
-    });
-
-    const newlyUnlockedBadges = await this.checkAndAwardBadges(userId, updatedUser.points);
-
-    return {
-      success: true,
-      pointsEarned: pointsToAward,
-      totalPoints: updatedUser.points,
-      newBadges: newlyUnlockedBadges,
-    };
   }
 
   /**
@@ -92,9 +98,9 @@ export class GamificationService {
    * @param currentPoints - Le solde de points actuel de l'utilisateur (après une action)
    * @returns Le tableau des badges qui viennent d'être débloqués
    */
-  private static async checkAndAwardBadges(userId: string, currentPoints: number) {
+  private static async checkAndAwardBadges(userId: string, currentPoints: number, tx: any = prisma) {
     // Récupération des badges éligibles que l'utilisateur ne possède pas encore
-    const eligibleBadges = await prisma.badge.findMany({
+    const eligibleBadges = await tx.badge.findMany({
       where: {
         pointsRequired: { lte: currentPoints },
         users: {
@@ -107,7 +113,7 @@ export class GamificationService {
 
     // Attribution des nouveaux badges
     for (const badge of eligibleBadges) {
-      await prisma.userBadge.create({
+      await tx.userBadge.create({
         data: {
           userId,
           badgeId: badge.id,

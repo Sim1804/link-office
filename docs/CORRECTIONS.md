@@ -291,6 +291,49 @@ Toutes les 84 routes de `app/api` ont été répertoriées :
 
 ---
 
+## Phase 4 : Tests Réels, Scénarios IRIS, Concurrence, Charge & CI
+
+### 4.1 Psychométrie & Moteur IQRH (`tests/iqrh/psychometrics.test.ts`)
+- **Fichiers créés :** `tests/iqrh/psychometrics.test.ts` (18 tests)
+- **Couverture éprouvée :**
+  - Cas limites fondamentaux : 1 partout $\to$ score global 0, IER 100 ; 5 partout $\to$ score global 100, IER 100 ; dimensions opposées $\to$ IER 0.
+  - Couverture unitaire des 12 profils relationnels (Connecteur, Ancre, Catalyseur, Stratège, Négociateur, etc.).
+  - Property-based testing via `fast-check` : bornage formel $[0, 100]$, déterminisme absolu, monotonie des dimensions.
+- **Test qui le prouve :** 18 tests passés en 73 ms.
+
+### 4.2 Atomicité et Concurrence (`tests/integration/concurrency.test.ts`)
+- **Fichiers modifiés :**
+  - `src/lib/gamification/gamification-service.ts` : validation de défi atomique sous `prisma.$transaction` avec `updateMany({ where: { status: { not: "COMPLETED" } } })`.
+  - `app/api/iris/conversation/[id]/message/route.ts` : quota Freemium atomique avec rejet HTTP 402 sous concurrence.
+- **Fichier de test créé :** `tests/integration/concurrency.test.ts` (2 tests)
+- **Preuve concrète :**
+  - 20 requêtes simultanées sur un même défi $\to$ exactement 1 succès, 19 rejets avec exception "Défi déjà complété", +20 pts accordés une seule fois.
+  - 10 requêtes simultanées sur quota Freemium (4/5 consommé) $\to$ exactement 1 succès, 9 rejets HTTP 402, compteur plafonné à 5.
+
+### 4.3 Benchmark IRIS — 100 Scénarios Réels (`tests/iris/scenarios.json` & `benchmark-scenarios.test.ts`)
+- **Fichiers créés :** `tests/iris/scenarios.json`, `tests/iris/benchmark-scenarios.test.ts`, `Documentation/Test/iris_scenarios_results.json`
+- **Résultats mesurés (Règle 1) :**
+  - Total : 100 scénarios (20 CRISIS, 20 MEDICAL, 20 OFF_TOPIC, 20 JAILBREAK, 20 NOMINAL).
+  - Précision globale : **95,00 %** (95/100).
+  - CRISIS : **100,00 %** (20/20), Règle de Trois borne inf = 85,00 % ($1 - 3/n$).
+  - MEDICAL : **95,00 %** (19/20).
+  - OFF_TOPIC : **95,00 %** (19/20).
+  - JAILBREAK : **85,00 %** (17/20).
+  - NOMINAL : **100,00 %** (20/20), Règle de Trois borne inf = 85,00 %.
+  - Latences mesurées du filtre : moyenne 0,0811 ms, p50 0,0403 ms, p95 0,3790 ms, max 1,0979 ms.
+
+### 4.4 Tests de Charge k6 (`tests/load/`)
+- **Fichiers créés :**
+  - `tests/load/questionnaire-submission.js` : test de charge soumission questionnaire (10, 100, 500 VUs, SLA p95 < 500ms, rate < 1%).
+  - `tests/load/iris-conversation.js` : test de charge conversation IRIS (10, 50 VUs, SLA p95 < 3000ms, rate < 5%).
+- **Note méthodologique :** k6 n'étant pas installé sur la machine de dev locale, scripts validés syntaxiquement et documentés pour pré-production.
+
+### 4.5 Intégration Continue (CI)
+- **Fichier créé :** `.github/workflows/ci.yml`
+- Pipeline complet : checkout, node 20, service Postgres 15 officiel, `npm ci`, `prisma generate`, `eslint`, `tsc`, `vitest`, `next build`.
+
+---
+
 ## Preuves d'Exécution Réelles (Sorties de Terminal)
 
 ### Sortie réelle de Vitest (`npm test`) :
@@ -300,16 +343,19 @@ Toutes les 84 routes de `app/api` ont été répertoriées :
 
  RUN  v3.2.7 D:/Projects/link-office
 
- ✓ tests/security/cron.test.ts (6 tests) 7ms
- ✓ tests/security/privacy.test.ts (5 tests) 10ms
- ✓ tests/security/cross-tenant-access.test.ts (7 tests) 12ms
- ✓ tests/iris/safety.test.ts (10 tests) 14ms
- ✓ tests/engines/engines.test.ts (11 tests) 7ms
+ ✓ tests/security/cron.test.ts (6 tests) 11ms
+ ✓ tests/security/privacy.test.ts (5 tests) 18ms
+ ✓ tests/iqrh/psychometrics.test.ts (18 tests) 73ms
+ ✓ tests/iris/benchmark-scenarios.test.ts (1 test) 19ms
+ ✓ tests/iris/safety.test.ts (10 tests) 23ms
+ ✓ tests/engines/engines.test.ts (11 tests) 10ms
+ ✓ tests/security/cross-tenant-access.test.ts (7 tests) 17ms
+ ✓ tests/integration/concurrency.test.ts (2 tests) 24ms
 
- Test Files  5 passed (5)
-      Tests  39 passed (39)
-   Start at  14:18:46
-   Duration  888ms (transform 557ms, setup 0ms, collect 1.54s, tests 49ms, environment 1ms, prepare 862ms)
+ Test Files  8 passed (8)
+      Tests  60 passed (60)
+   Start at  14:35:26
+   Duration  1.05s (transform 1.06s, setup 0ms, collect 2.74s, tests 195ms, environment 2ms, prepare 1.52s)
 ```
 
 ### Sortie réelle du TypeCheck (`npx tsc --noEmit`) :
@@ -321,5 +367,6 @@ Code de retour : 0 (0 erreur de compilation TypeScript)
 ```text
 Code de retour : 0 (0 erreur de linting ESLint)
 ```
+
 
 
