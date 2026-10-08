@@ -10,9 +10,9 @@ export function ReadingProgress() {
 
     const updateProgress = () => {
       const currentScrollY = window.scrollY;
-      const scrollHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (scrollHeight > 0) {
-        setProgress(Number((currentScrollY / scrollHeight).toFixed(2)) * 100);
+        setProgress(Math.min(100, Math.max(0, (currentScrollY / scrollHeight) * 100)));
       }
       ticking = false;
     };
@@ -31,22 +31,14 @@ export function ReadingProgress() {
   }, []);
 
   return (
-    <div style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      height: 4,
-      background: "transparent",
-      zIndex: 9999,
-      pointerEvents: "none"
-    }}>
-      <div style={{
-        height: "100%",
-        width: `${progress}%`,
-        background: "linear-gradient(90deg, #a855f7, #ec4899)",
-        transition: "width 0.1s ease-out"
-      }} />
+    <div
+      className="fixed top-0 left-0 right-0 h-1 bg-transparent z-50 pointer-events-none"
+      aria-hidden="true"
+    >
+      <div
+        className="h-full bg-gradient-to-r from-[#00A99D] via-[#5965E8] to-[#00A99D] transition-all duration-150 ease-out shadow-[0_0_12px_rgba(0,169,157,0.5)]"
+        style={{ width: `${progress}%` }}
+      />
     </div>
   );
 }

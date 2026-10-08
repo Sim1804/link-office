@@ -1,4 +1,6 @@
-import { User, Star, Briefcase } from "lucide-react";
+"use client";
+
+import { User, Award, HeartHandshake, ShieldCheck } from "lucide-react";
 import type { MediaEclaireur } from "@prisma/client";
 
 interface EclaireurCardProps {
@@ -9,42 +11,59 @@ export function EclaireurCard({ eclaireur }: EclaireurCardProps) {
   const isPro = eclaireur.type === "PROFESSIONNEL";
 
   return (
-    <div style={{
-      border: `1px solid ${isPro ? "rgba(56,189,248,0.2)" : "rgba(236,72,153,0.2)"}`,
-      display: "flex",
-      flexDirection: "column",
-      gap: 20,
-      position: "relative",
-      overflow: "hidden",
-    }} className="card card-hover">
-
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 16, zIndex: 1 }}>
-        <div style={{
-          width: 64, height: 64, borderRadius: "50%",
-          background: eclaireur.photoUrl ? `url(${eclaireur.photoUrl}) center/cover` : "rgba(18,61,70,0.05)",
-          border: `2px solid ${isPro ? "#38bdf8" : "#ec4899"}`,
-          display: "flex", alignItems: "center", justifyContent: "center"
-        }}>
-          {!eclaireur.photoUrl && <User size={28} color="var(--text-2)" />}
-        </div>
-        
-        <div>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, fontSize: 11, fontWeight: 700, marginBottom: 8, background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--text-3)" }}>
-            {isPro ? <Briefcase size={12} color="var(--text-2)" /> : <Star size={12} color="var(--text-2)" />}
-            {isPro ? "Professionnel / Expert" : "Témoin"}
+    <div className="bg-white rounded-3xl border border-[#E3EBE6] p-6 shadow-sm hover:shadow-md transition-all duration-300">
+      {/* Header avec Avatar & Rôle */}
+      <div className="flex items-start gap-4">
+        {/* Photo Avatar */}
+        <div className="relative shrink-0">
+          <div
+            className="w-16 h-16 rounded-2xl bg-[#123D46]/5 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center bg-cover bg-center"
+            style={eclaireur.photoUrl ? { backgroundImage: `url(${eclaireur.photoUrl})` } : {}}
+          >
+            {!eclaireur.photoUrl && (
+              <User className="w-8 h-8 text-[#123D46]/40" />
+            )}
           </div>
-          <h4 style={{ color: "var(--text-1)", fontSize: 18, fontWeight: 700, margin: 0 }}>
+          <div
+            className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center border-2 border-white ${
+              isPro ? "bg-[#00A99D] text-white" : "bg-[#5965E8] text-white"
+            }`}
+            title={isPro ? "Expert validé" : "Témoin Éclaireur"}
+          >
+            {isPro ? <ShieldCheck className="w-3 h-3" /> : <HeartHandshake className="w-3 h-3" />}
+          </div>
+        </div>
+
+        {/* Identité & Statut */}
+        <div className="flex-1 min-w-0">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider mb-2 bg-[#FAF9F5] border border-[#E3EBE6]">
+            {isPro ? (
+              <span className="text-[#00A99D] flex items-center gap-1">
+                <Award className="w-3 h-3" /> Expert Clinique & RH
+              </span>
+            ) : (
+              <span className="text-[#5965E8] flex items-center gap-1">
+                <HeartHandshake className="w-3 h-3" /> Témoin Éclaireur
+              </span>
+            )}
+          </div>
+
+          <h4 className="font-jakarta font-bold text-base sm:text-lg text-[#123D46] truncate">
             {eclaireur.name}
           </h4>
+
           {eclaireur.profession && (
-            <div style={{ color: "var(--text-2)", fontSize: 14, marginTop: 4 }}>{eclaireur.profession}</div>
+            <p className="text-xs sm:text-sm text-[#123D46]/70 leading-snug mt-0.5 line-clamp-2">
+              {eclaireur.profession}
+            </p>
           )}
         </div>
       </div>
 
+      {/* Bio & Contexte */}
       {eclaireur.bio && (
-        <p style={{ color: "var(--text-3)", fontSize: 15, lineHeight: 1.6, margin: 0, padding: "16px 0 0 0", borderTop: "1px solid rgba(255,255,255,0.08)", zIndex: 1 }}>
-          {eclaireur.bio}
+        <p className="mt-4 pt-4 border-t border-[#E3EBE6] text-xs sm:text-sm text-[#123D46]/75 leading-relaxed italic">
+          « {eclaireur.bio} »
         </p>
       )}
     </div>

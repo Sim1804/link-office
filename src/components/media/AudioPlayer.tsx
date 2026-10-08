@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward, Download } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward, Download, Headphones } from "lucide-react";
 
 interface AudioPlayerProps {
   src: string;
@@ -26,7 +26,9 @@ export function AudioPlayer({ src, title, eclaireurName, coverImage }: AudioPlay
     const setAudioData = () => setDuration(audio.duration);
     const setAudioTime = () => {
       setCurrentTime(audio.currentTime);
-      setProgress((audio.currentTime / audio.duration) * 100);
+      if (audio.duration) {
+        setProgress((audio.currentTime / audio.duration) * 100);
+      }
     };
     const onEnded = () => {
       setIsPlaying(false);
@@ -65,12 +67,12 @@ export function AudioPlayer({ src, title, eclaireurName, coverImage }: AudioPlay
 
   const skip = (amount: number) => {
     if (audioRef.current) {
-      audioRef.current.currentTime += amount;
+      audioRef.current.currentTime = Math.max(0, Math.min(duration, audioRef.current.currentTime + amount));
     }
   };
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (progressBarRef.current && audioRef.current) {
+    if (progressBarRef.current && audioRef.current && audioRef.current.duration) {
       const rect = progressBarRef.current.getBoundingClientRect();
       const pos = (e.clientX - rect.left) / rect.width;
       audioRef.current.currentTime = pos * audioRef.current.duration;
@@ -78,118 +80,120 @@ export function AudioPlayer({ src, title, eclaireurName, coverImage }: AudioPlay
   };
 
   const formatTime = (time: number) => {
-    if (isNaN(time)) return "00:00";
+    if (isNaN(time) || time === 0) return "00:00";
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
   return (
-    <div style={{ 
-      background: "linear-gradient(145deg, rgba(30,41,59,0.7) 0%, rgba(15,23,42,0.9) 100%)", 
-      padding: 32, borderRadius: 32, 
-      border: "1px solid var(--border)",
-      boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 0 var(--border)",
-      backdropFilter: "blur(20px)",
-      display: "flex", flexDirection: "column", gap: 32,
-      position: "relative", overflow: "hidden"
-    }}>
-      {/* Decorative gradient orb */}
-      <div style={{ position: "absolute", top: -50, right: -50, width: 150, height: 150, background: "rgba(192,132,252,0.3)", filter: "blur(60px)", borderRadius: "50%", pointerEvents: "none" }} />
-      
-      {/* Header / Info */}
-      <div style={{ display: "flex", alignItems: "center", gap: 20, position: "relative", zIndex: 1 }}>
-        <div style={{ width: 80, height: 80, borderRadius: 20, overflow: "hidden", flexShrink: 0, border: "2px solid var(--border)", boxShadow: "0 10px 25px rgba(0,0,0,0.4)" }}>
+    <div className="relative overflow-hidden bg-gradient-to-br from-[#123D46] via-[#10343C] to-[#0A242B] text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-[#00A99D]/20">
+      {/* Halo lumineux d'ambiance */}
+      <div className="absolute top-0 right-0 w-72 h-72 bg-[#00A99D]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-60 h-60 bg-[#5965E8]/10 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Header / Info piste */}
+      <div className="relative z-10 flex items-center gap-4 sm:gap-6 mb-6">
+        <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shrink-0 border border-white/20 shadow-md">
           {coverImage ? (
-            <img src={coverImage} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src={coverImage} alt={title} className="w-full h-full object-cover" />
           ) : (
-            <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, var(--primary), #ec4899)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Play size={32} color="white" />
+            <div className="w-full h-full bg-[#00A99D] flex items-center justify-center">
+              <Headphones className="w-8 h-8 text-white" />
             </div>
           )}
         </div>
-        <div style={{ flexGrow: 1, minWidth: 0 }}>
-          <div style={{ display: "inline-block", padding: "4px 10px", background: "var(--border)", borderRadius: 999, fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: 1, textTransform: "uppercase", marginBottom: 8 }}>
-            En écoute
+
+        <div className="flex-1 min-w-0">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 text-[#00A99D] text-[11px] font-bold uppercase tracking-wider mb-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00A99D] animate-pulse" />
+            En écoute • Podcast
           </div>
-          <h4 style={{ color: "#ffffff", fontSize: 22, fontWeight: 800, margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", letterSpacing: "-0.01em" }}>
+          <h4 className="font-jakarta font-bold text-lg sm:text-xl text-white truncate">
             {title}
           </h4>
           {eclaireurName && (
-            <div style={{ color: "var(--text-2)", fontSize: 15, marginTop: 4, fontWeight: 500 }}>Avec {eclaireurName}</div>
+            <p className="text-xs sm:text-sm text-white/70 truncate mt-0.5">
+              Avec {eclaireurName}
+            </p>
           )}
         </div>
-        <a href={src} download style={{ color: "rgba(255,255,255,0.5)", transition: "all 0.3s ease", padding: 12, background: "rgba(18,61,70,0.05)", borderRadius: "50%" }} className="hover-btn-dl">
-          <Download size={22} />
-        </a>
+
+        {src && (
+          <a
+            href={src}
+            download
+            title="Télécharger l'épisode"
+            className="p-2.5 rounded-full bg-white/10 text-white/80 hover:text-white hover:bg-white/20 transition-colors"
+          >
+            <Download className="w-5 h-5" />
+          </a>
+        )}
       </div>
 
       <audio ref={audioRef} src={src} preload="metadata" />
 
-      {/* Progress Bar */}
-      <div style={{ position: "relative", zIndex: 1 }}>
-        <div 
+      {/* Barre de progression */}
+      <div className="relative z-10 space-y-2 mb-6">
+        <div
           ref={progressBarRef}
           onClick={handleProgressClick}
-          className="progress-container"
-          style={{
-            height: 8, background: "var(--surface)", borderRadius: 4, cursor: "pointer", position: "relative", overflow: "visible"
-          }}
+          className="group relative h-2.5 bg-white/15 rounded-full cursor-pointer overflow-hidden transition-all hover:h-3"
         >
-          <div style={{
-            position: "absolute", top: 0, left: 0, height: "100%", background: "linear-gradient(90deg, #a855f7, #ec4899)",
-            width: `${progress}%`, borderRadius: 4, transition: "width 0.1s linear"
-          }} />
-          <div className="progress-thumb" style={{
-            position: "absolute", top: "50%", left: `${progress}%`, transform: "translate(-50%, -50%)",
-            width: 16, height: 16, background: "var(--surface)", borderRadius: "50%", boxShadow: "0 0 15px rgba(236,72,153,0.8)",
-            opacity: isPlaying ? 1 : 0, transition: "opacity 0.2s, transform 0.2s"
-          }} />
+          <div
+            className="h-full bg-gradient-to-r from-[#00A99D] to-[#5965E8] rounded-full transition-all duration-100 ease-out"
+            style={{ width: `${progress}%` }}
+          />
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", color: "var(--text-2)", fontSize: 13, marginTop: 12, fontWeight: 600, fontFamily: "monospace" }}>
+
+        <div className="flex justify-between text-xs font-mono font-medium text-white/70">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
       </div>
 
-      {/* Controls */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 32, position: "relative", zIndex: 1 }}>
-        <button onClick={toggleMute} style={{ background: "none", border: "none", color: isMuted ? "#ef4444" : "rgba(255,255,255,0.5)", cursor: "pointer", padding: 8, transition: "color 0.2s" }} className="hover-text-white">
-          {isMuted ? <VolumeX size={22} /> : <Volume2 size={22} />}
-        </button>
-        
-        <button onClick={() => skip(-15)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.8)", cursor: "pointer", padding: 8, transition: "transform 0.2s, color 0.2s" }} className="hover-text-white hover-scale">
-          <SkipBack size={28} />
-        </button>
-        
-        <button 
-          onClick={togglePlay}
-          style={{ 
-            width: 72, height: 72, borderRadius: "50%", border: "none", cursor: "pointer",
-            background: "linear-gradient(135deg, #a855f7, #ec4899)", color: "white",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: isPlaying ? "0 0 30px rgba(236,72,153,0.6)" : "0 10px 25px rgba(0,0,0,0.5)",
-            transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)", transform: isPlaying ? "scale(0.95)" : "scale(1)"
-          }}
-          className="play-btn"
+      {/* Contrôles Audio */}
+      <div className="relative z-10 flex items-center justify-center gap-6 sm:gap-8">
+        <button
+          type="button"
+          onClick={toggleMute}
+          aria-label={isMuted ? "Activer le son" : "Couper le son"}
+          className="p-2 text-white/70 hover:text-white transition-colors"
         >
-          {isPlaying ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" style={{ marginLeft: 6 }} />}
+          {isMuted ? <VolumeX className="w-5 h-5 text-red-400" /> : <Volume2 className="w-5 h-5" />}
         </button>
-        
-        <button onClick={() => skip(15)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.8)", cursor: "pointer", padding: 8, transition: "transform 0.2s, color 0.2s" }} className="hover-text-white hover-scale">
-          <SkipForward size={28} />
-        </button>
-        
-        <div style={{ width: 38 }} /> {/* Spacer to balance mute button */}
-      </div>
 
-      <style>{`
-        .hover-btn-dl:hover { color: #fff !important; background: rgba(255,255,255,0.15) !important; transform: translateY(-2px); }
-        .hover-text-white:hover { color: #fff !important; }
-        .hover-scale:hover { transform: scale(1.1); }
-        .progress-container:hover .progress-thumb { opacity: 1 !important; transform: translate(-50%, -50%) scale(1.2) !important; }
-        .play-btn:hover { transform: scale(1.05); }
-      `}</style>
+        <button
+          type="button"
+          onClick={() => skip(-15)}
+          aria-label="Reculer de 15 secondes"
+          className="p-2 text-white/80 hover:text-white hover:scale-110 transition-transform"
+        >
+          <SkipBack className="w-6 h-6" />
+        </button>
+
+        <button
+          type="button"
+          onClick={togglePlay}
+          aria-label={isPlaying ? "Mettre en pause" : "Lancer la lecture"}
+          className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#00A99D] hover:bg-[#008f84] text-white flex items-center justify-center shadow-lg shadow-[#00A99D]/40 hover:scale-105 active:scale-95 transition-all"
+        >
+          {isPlaying ? (
+            <Pause className="w-7 h-7 fill-current" />
+          ) : (
+            <Play className="w-7 h-7 fill-current ml-0.5" />
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => skip(15)}
+          aria-label="Avancer de 15 secondes"
+          className="p-2 text-white/80 hover:text-white hover:scale-110 transition-transform"
+        >
+          <SkipForward className="w-6 h-6" />
+        </button>
+      </div>
     </div>
   );
 }

@@ -147,6 +147,8 @@ export default async function MediaIndexPage({ searchParams }: { searchParams: P
                 <select name="type" defaultValue={typeFilter || ""} className="bg-[#FAF9F5] border border-[#E3EBE6] text-[#123D46] text-sm rounded-full py-2.5 px-4 focus:outline-none focus:border-[#00A99D] focus:ring-1 focus:ring-[#00A99D]/30 transition-all">
                   <option value="">Tous les formats</option>
                   <option value="ARTICLE">Articles</option>
+                  <option value="GUIDE">Guides pratiques</option>
+                  <option value="ANALYSE">Analyses & Décryptages</option>
                   <option value="PODCAST">Podcasts</option>
                   <option value="INTERVIEW">Interviews</option>
                   <option value="DOSSIER">Dossiers</option>
