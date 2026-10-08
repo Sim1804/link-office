@@ -58,14 +58,14 @@ export interface SubscriptionBadgeProps {
 
 // ── Tokens de design par tier ─────────────────────────────────────────────────
 
-const TIER_CONFIG = {
+export const TIER_CONFIG = {
   FREEMIUM: {
     label: "Freemium",
     icon: Circle,
-    iconColor: "var(--text-2, #9ca3af)",
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "rgba(156, 163, 175, 0.25)",
-    color: "var(--text-2, #9ca3af)",
+    iconColor: "var(--text-2, #64748b)",
+    background: "rgba(100, 116, 139, 0.08)",
+    border: "rgba(148, 163, 184, 0.35)",
+    color: "#475569",
     title: "Accès gratuit — fonctionnalités de base",
     upgradeLabel: "Passer à Premium",
     nextTier: "PREMIUM" as SubscriptionTier,
@@ -74,9 +74,9 @@ const TIER_CONFIG = {
     label: "Premium",
     icon: Zap,
     iconColor: "var(--primary, #00a99d)",
-    background: "rgba(0, 169, 157, 0.08)",
-    border: "rgba(0, 169, 157, 0.28)",
-    color: "var(--primary, #00a99d)",
+    background: "rgba(0, 169, 157, 0.09)",
+    border: "rgba(0, 169, 157, 0.30)",
+    color: "#008f85",
     title: "Accès Premium — coaching IRIS, ordonnance complète",
     upgradeLabel: "Passer à Premium+",
     nextTier: "PREMIUM_PLUS" as SubscriptionTier,
@@ -84,10 +84,10 @@ const TIER_CONFIG = {
   PREMIUM_PLUS: {
     label: "Premium+",
     icon: Crown,
-    iconColor: "var(--amber, #f59e0b)",
-    background: "rgba(245, 158, 11, 0.10)",
-    border: "rgba(245, 158, 11, 0.32)",
-    color: "var(--amber, #f59e0b)",
+    iconColor: "#D97706",
+    background: "rgba(245, 158, 11, 0.12)",
+    border: "rgba(217, 119, 6, 0.35)",
+    color: "#B45309",
     title: "Accès Premium+ — inclut le programme Binôme Relationnel",
     upgradeLabel: null,
     nextTier: null,
@@ -106,38 +106,38 @@ const TIER_CONFIG = {
 
 // ── Tokens de taille ──────────────────────────────────────────────────────────
 
-const SIZE_CONFIG = {
+export const SIZE_CONFIG = {
   xs: {
     padding: "2px 7px",
     fontSize: 10,
     gap: 3,
-    iconSize: 9,
+    iconSize: 10,
     fontWeight: 600,
     letterSpacing: "0.02em",
   },
   sm: {
-    padding: "2px 8px",
-    fontSize: 10,
-    gap: 3,
-    iconSize: 10,
+    padding: "3px 9px",
+    fontSize: 11,
+    gap: 3.5,
+    iconSize: 11,
     fontWeight: 600,
-    letterSpacing: "0.03em",
+    letterSpacing: "0.02em",
   },
   md: {
-    padding: "3px 10px",
-    fontSize: 11,
-    gap: 4,
-    iconSize: 11,
-    fontWeight: 700,
-    letterSpacing: "0.04em",
-  },
-  lg: {
-    padding: "6px 14px",
-    fontSize: 13,
-    gap: 6,
+    padding: "4.5px 12px",
+    fontSize: 12,
+    gap: 5,
     iconSize: 13,
     fontWeight: 700,
-    letterSpacing: "0.05em",
+    letterSpacing: "0.02em",
+  },
+  lg: {
+    padding: "6px 16px",
+    fontSize: 13,
+    gap: 6,
+    iconSize: 14,
+    fontWeight: 700,
+    letterSpacing: "0.03em",
   },
 } as const satisfies Record<NonNullable<SubscriptionBadgeProps["size"]>, {
   padding: string;
@@ -228,12 +228,12 @@ export function SubscriptionUpgradeButton({
   const isFreemium = tier === "FREEMIUM";
 
   const sizeClasses = {
-    xs: "text-[10px] px-2 py-0.5 gap-1",
-    sm: "text-[11px] px-2.5 py-1 gap-1.5",
-    md: "text-xs px-3.5 py-1.5 gap-2",
+    xs: "text-[10px] px-2.5 py-0.5 gap-1",
+    sm: "text-xs px-3.5 py-1.5 gap-1.5",
+    md: "text-xs px-4 py-2 gap-2",
   }[size];
 
-  const iconSize = size === "xs" ? 10 : size === "sm" ? 12 : 14;
+  const iconSize = size === "xs" ? 10 : size === "sm" ? 13 : 14;
 
   if (isFreemium) {
     return (
@@ -241,11 +241,13 @@ export function SubscriptionUpgradeButton({
         href="/premium"
         onClick={onClick}
         title="Passer à Link Office Premium"
-        className={`inline-flex items-center rounded-full font-jakarta font-bold transition-all whitespace-nowrap shadow-xs hover:shadow-sm ${sizeClasses} ${className}`}
+        className={`inline-flex items-center rounded-full font-jakarta font-bold transition-all whitespace-nowrap shadow-xs hover:shadow-sm hover:brightness-105 active:scale-95 ${sizeClasses} ${className}`}
         style={{
           background: "linear-gradient(135deg, #00A99D 0%, #008f85 100%)",
           color: "#ffffff",
           textDecoration: "none",
+          border: "1px solid rgba(0, 169, 157, 0.40)",
+          boxShadow: "0 1px 3px rgba(0, 169, 157, 0.25)",
           ...style,
         }}
       >
@@ -262,11 +264,13 @@ export function SubscriptionUpgradeButton({
       href="/premium"
       onClick={onClick}
       title="Passer à Link Office Premium+"
-      className={`inline-flex items-center rounded-full font-jakarta font-bold transition-all whitespace-nowrap shadow-xs hover:shadow-sm ${sizeClasses} ${className}`}
+      className={`inline-flex items-center rounded-full font-jakarta font-bold transition-all whitespace-nowrap shadow-xs hover:shadow-sm hover:brightness-105 active:scale-95 ${sizeClasses} ${className}`}
       style={{
         background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
         color: "#ffffff",
         textDecoration: "none",
+        border: "1px solid rgba(217, 119, 6, 0.45)",
+        boxShadow: "0 1px 3px rgba(245, 158, 11, 0.28)",
         ...style,
       }}
     >

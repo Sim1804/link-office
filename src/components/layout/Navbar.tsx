@@ -167,9 +167,9 @@ export function Navbar() {
             <>
               {/* Badge d'abonnement & Évolution proposée - Uniforme & visible sur tous les écrans */}
               {!userRole.startsWith("ADMIN_") && userRole !== "SUPER_ADMIN" && (
-                <div className="flex items-center gap-2 mr-1">
-                  <SubscriptionBadge tier={subscriptionTier} size="sm" />
-                  <SubscriptionUpgradeButton tier={subscriptionTier} size="xs" />
+                <div className="flex items-center gap-2.5 mr-1">
+                  <SubscriptionBadge tier={subscriptionTier} size="md" />
+                  <SubscriptionUpgradeButton tier={subscriptionTier} size="sm" />
                 </div>
               )}
 
@@ -373,13 +373,13 @@ export function Navbar() {
                   <div className="text-xs font-bold mt-0.5" style={{ color: roleBadge.color }}>{roleBadge.label}</div>
                 </div>
                 {!userRole.startsWith("ADMIN_") && userRole !== "SUPER_ADMIN" && (
-                  <SubscriptionBadge tier={subscriptionTier} size="sm" />
+                  <SubscriptionBadge tier={subscriptionTier} size="md" />
                 )}
               </div>
               {!userRole.startsWith("ADMIN_") && userRole !== "SUPER_ADMIN" && (
                 <div className="pt-2 border-t border-[#E3EBE6]/60 flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#123D46]/60">Offre</span>
-                  <SubscriptionUpgradeButton tier={subscriptionTier} size="xs" onClick={() => setIsMobileMenuOpen(false)} />
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#123D46]/60">Offre</span>
+                  <SubscriptionUpgradeButton tier={subscriptionTier} size="sm" onClick={() => setIsMobileMenuOpen(false)} />
                 </div>
               )}
             </div>
