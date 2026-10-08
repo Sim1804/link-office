@@ -247,6 +247,50 @@ Toutes les 84 routes de `app/api` ont été répertoriées :
 
 ---
 
+## Phase 3 : Moteurs et Cohérence avec la Spécification
+
+### 3.1 Moteur de Recommandation & Poids de Prescription (`prescription-service.ts`)
+- **Fichier modifié :** [src/lib/iqrh/prescription-service.ts](file:///d:/Projects/link-office/src/lib/iqrh/prescription-service.ts)
+- **Défaut résolu :** Les poids étaient des nombres magiques disséminés dans le code avec une logique de correspondance textuelle non documentée.
+- **Correction :**
+  - Ajout d'une documentation complète d'en-tête formalisant l'algorithme par règles de correspondance textuelle.
+  - Extraction de `PRESCRIPTION_SCORING_WEIGHTS` : paliers dimensionnels (< 40 : +5, 40-59 : +4, 60-79 : +3, >= 80 : +2), situations de vie (+3), profil principal (+2), profil secondaire (+1), besoins dominants (+2), facteurs de risque (+2), facteurs protecteurs (+1.5), angle de profil (+1.5).
+  - Exportation de la fonction de scoring pure `calculatePrescriptionItemScore` pour validation unitaire.
+- **Test qui le prouve :** `tests/engines/engines.test.ts` (test d'exactitude numérique à 16.9 pts).
+
+### 3.2 Renormalisation de l'Échelle ICR sur [0, 100] (Décision 3.2 — Option A)
+- **Fichier modifié :** [src/lib/iqrh/icr-calculation-service.ts](file:///d:/Projects/link-office/src/lib/iqrh/icr-calculation-service.ts)
+- **Défaut résolu :** Le score brut maximal était borné à 85 ($20 + 20 + 20 + 25 - 0$), créant un décalage par rapport à l'échelle annoncée $[0, 100]$.
+- **Correction :**
+  - Renormalisation : $\text{scoreFinal} = \min(100, \text{round}(\frac{\text{rawScore} \times 100}{85}))$.
+  - Conservation de `rawScore` pour les besoins de traçabilité scientifique.
+- **Test qui le prouve :** `tests/engines/engines.test.ts` (un profil de charge maximale 85 atteint 100).
+
+### 3.3 Plafond de Notifications & Alerte Chute de 15 points (`notifications.ts`)
+- **Fichiers modifiés :**
+  - [src/lib/notifications.ts](file:///d:/Projects/link-office/src/lib/notifications.ts) : `WEEKLY_NOTIFICATION_LIMIT = 2` glissant sur 7 jours en BDD. Ajout de `checkScoreDropAlert` et `isScoreDropEligible` déclenchant une notification d'alerte relationnelle prioritaire dès une baisse $\ge 15$ points.
+  - [app/api/cron/binome/route.ts](file:///d:/Projects/link-office/app/api/cron/binome/route.ts) : suppression du `TODO` et implémentation des notifications in-app pour le bilan J30 et le nudge d'inactivité de 7 jours.
+- **Test qui le prouve :** `tests/engines/engines.test.ts`.
+
+### 3.4 Algorithme du Binôme Relationnel (`matching-service.ts`)
+- **Fichier modifié :** [src/lib/binome/matching-service.ts](file:///d:/Projects/link-office/src/lib/binome/matching-service.ts)
+- **Défaut résolu :** Imbrication du calcul avec la persistance BDD, rendant les règles de synergie et similarité difficiles à auditer.
+- **Correction :**
+  - Extraction de la fonction pure `calculateCompatibilityScore` selon les paramètres de la spécification : Base 50, Synergie forte/faible (+30), Similarité même dimension forte (+20), Seuil minimal d'éligibilité (75).
+  - Preuve par cas concrets : synergie seule ($80 \ge 75$, éligible) ; similarité seule ($70 < 75$, rejeté) ; combiné ($100$, match parfait) ; ni l'un ni l'autre ($50$, rejeté).
+- **Test qui le prouve :** `tests/engines/engines.test.ts` (4 cas aux limites validés).
+
+### 3.5 Harmonisation de la Durée Estimée du Questionnaire
+- **Fichiers modifiés :**
+  - [app/dashboard/page.tsx](file:///d:/Projects/link-office/app/dashboard/page.tsx) : `~8 à 10 minutes`.
+  - [app/api/iris/explication/route.ts](file:///d:/Projects/link-office/app/api/iris/explication/route.ts) : `~8 à 10 minutes`.
+- **Défaut résolu :** Incohérence entre les 15 minutes affichées et la durée réelle / de spécification (8 à 10 minutes).
+
+### 3.6 Analyse d'Arbitrage : pgvector vs Filtrage par Règles & Métadonnées
+- **Recommandation validée (Option A) :** Le filtrage actuel par règles et métadonnées contextuelles s'exécute en $< 3$ ms, pour un catalogue de 50 à 100 items. Il offre une auditabilité déterministe à 100% indispensable aux exigences éthiques, sans surcoût d'API ni complexité d'extension Postgres.
+
+---
+
 ## Preuves d'Exécution Réelles (Sorties de Terminal)
 
 ### Sortie réelle de Vitest (`npm test`) :
@@ -258,13 +302,14 @@ Toutes les 84 routes de `app/api` ont été répertoriées :
 
  ✓ tests/security/cron.test.ts (6 tests) 7ms
  ✓ tests/security/privacy.test.ts (5 tests) 10ms
- ✓ tests/iris/safety.test.ts (10 tests) 18ms
- ✓ tests/security/cross-tenant-access.test.ts (7 tests) 15ms
+ ✓ tests/security/cross-tenant-access.test.ts (7 tests) 12ms
+ ✓ tests/iris/safety.test.ts (10 tests) 14ms
+ ✓ tests/engines/engines.test.ts (11 tests) 7ms
 
- Test Files  4 passed (4)
-      Tests  28 passed (28)
-   Start at  14:06:30
-   Duration  747ms (transform 366ms, setup 0ms, collect 786ms, tests 50ms, environment 1ms, prepare 587ms)
+ Test Files  5 passed (5)
+      Tests  39 passed (39)
+   Start at  14:18:46
+   Duration  888ms (transform 557ms, setup 0ms, collect 1.54s, tests 49ms, environment 1ms, prepare 862ms)
 ```
 
 ### Sortie réelle du TypeCheck (`npx tsc --noEmit`) :
@@ -276,4 +321,5 @@ Code de retour : 0 (0 erreur de compilation TypeScript)
 ```text
 Code de retour : 0 (0 erreur de linting ESLint)
 ```
+
 

@@ -1,5 +1,58 @@
+/**
+ * @file prescription-service.ts
+ * @module lib/iqrh/prescription-service
+ * @description Moteur de recommandation des Ordonnances Relationnelles (Prescriptions).
+ *
+ * PRINCIPE ALGORITHMIQUE :
+ * Le moteur s'appuie sur une approche heuristique par règles et correspondances textuelles
+ * (dimension ciblée, situations de vie déclarées, profils dominants et besoins ICR).
+ * Pour chaque ressource de la bibliothèque (`LibraryItem`), un score d'adéquation contextuelle
+ * est calculé selon le barème pondéré standardisé :
+ *
+ * PONDÉRATION OFFICIELLE (`PRESCRIPTION_SCORING_WEIGHTS`) :
+ * - Palier dimensionnel d'action :
+ *   • Score dimensionnel < 40 : +5 pts (Action de "sécurisation", priorité vitale d'urgence)
+ *   • Score dimensionnel [40, 59] : +4 pts (Action de "reconstruction")
+ *   • Score dimensionnel [60, 79] : +3 pts (Action de "consolidation")
+ *   • Score dimensionnel >= 80 : +2 pts (Action de "préservation")
+ * - Situation de vie ciblée : +3 pts (Adéquation avec les moments de vie déclarés)
+ * - Profil relationnel principal : +2 pts
+ * - Profil relationnel secondaire : +1 pt
+ * - Besoins dominants ICR couverts : +2 pts
+ * - Facteurs de risque ICR couverts : +2 pts
+ * - Facteurs protecteurs ICR développés : +1.5 pt
+ * - Angle spécifique et mots-clés du profil : +1.5 pt
+ * - Pression ICR globale ciblée : +3 pts (critique), +2 pts (élevé), +1.5 pt (modéré), +1 pt (faible)
+ * - Bonus d'impact attendu : [0.1 à 0.5 pt] issu du catalogue (impact_attendu_1_5 / 10)
+ */
+
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
+
+/**
+ * Configuration unique et typée des poids du moteur de prescription.
+ */
+export const PRESCRIPTION_SCORING_WEIGHTS = {
+  dimensionActionTier: {
+    securisationUnder40: 5,
+    reconstruction40to59: 4,
+    consolidation60to79: 3,
+    preservation80Plus: 2,
+  },
+  lifeSituation: 3,
+  primaryProfile: 2,
+  secondaryProfile: 1,
+  dominantNeeds: 2,
+  riskFactors: 2,
+  protectiveFactors: 1.5,
+  profileAngleKeywords: 1.5,
+  icrTarget: {
+    critical: 3,
+    high: 2,
+    moderate: 1.5,
+    low: 1,
+  },
+} as const;
 
 /** Type générique pour représenter les données stockées dans la colonne JSON du modèle LibraryItem. */
 type LibraryData = Record<string, string | number | boolean | null>;
@@ -90,55 +143,81 @@ function matchesDimension(rawDimensionString: string, targetDimension: string): 
   });
 }
 
-function calculateScore(item: any, context: { situations: string[]; profileName: string; secondaryProfileName?: string; dimensionScore: number; dominantNeeds: string[]; icrScore: number; riskFactors: string[]; protectiveFactors: string[]; }): number {
+export function calculateScore(
+  item: any,
+  context: {
+    situations: string[];
+    profileName: string;
+    secondaryProfileName?: string;
+    dimensionScore: number;
+    dominantNeeds: string[];
+    icrScore: number;
+    riskFactors: string[];
+    protectiveFactors: string[];
+  }
+): number {
   let score = 0;
   
   // 1. Situation de vie
   if (context.situations.some(sit => containsValue(text(item.data, "situations_ciblees") || text(item.data, "public_cible"), sit))) {
-    score += 3;
+    score += PRESCRIPTION_SCORING_WEIGHTS.lifeSituation;
   }
   
   // 2. Profils (Principal et Secondaire)
-  if (context.profileName && containsProfile(text(item.data, "profils_cibles"), context.profileName)) score += 2;
-  if (context.secondaryProfileName && containsProfile(text(item.data, "profils_cibles"), context.secondaryProfileName)) score += 1;
+  if (context.profileName && containsProfile(text(item.data, "profils_cibles"), context.profileName)) {
+    score += PRESCRIPTION_SCORING_WEIGHTS.primaryProfile;
+  }
+  if (context.secondaryProfileName && containsProfile(text(item.data, "profils_cibles"), context.secondaryProfileName)) {
+    score += PRESCRIPTION_SCORING_WEIGHTS.secondaryProfile;
+  }
 
   // 3. Besoins dominants
   const needs = text(item.data, "besoins_couverts") || text(item.data, "besoin_cible");
   if (context.dominantNeeds && context.dominantNeeds.some(need => containsValue(needs, need))) {
-    score += 2;
+    score += PRESCRIPTION_SCORING_WEIGHTS.dominantNeeds;
   }
 
   // 4. Règles de personnalisation par niveau de sous-score (0-39, 40-59, 60-79, 80-100)
   const itemType = text(item.data, "type_recommandation") || text(item.data, "type_action");
   if (itemType) {
-    if (context.dimensionScore < 40 && contains(itemType, "sécurisation")) score += 5; // Priorité absolue
-    else if (context.dimensionScore >= 40 && context.dimensionScore < 60 && contains(itemType, "reconstruction")) score += 4;
-    else if (context.dimensionScore >= 60 && context.dimensionScore < 80 && contains(itemType, "consolidation")) score += 3;
-    else if (context.dimensionScore >= 80 && contains(itemType, "préservation")) score += 2;
+    if (context.dimensionScore < 40 && contains(itemType, "sécurisation")) {
+      score += PRESCRIPTION_SCORING_WEIGHTS.dimensionActionTier.securisationUnder40; // Priorité absolue (+5)
+    } else if (context.dimensionScore >= 40 && context.dimensionScore < 60 && contains(itemType, "reconstruction")) {
+      score += PRESCRIPTION_SCORING_WEIGHTS.dimensionActionTier.reconstruction40to59; // (+4)
+    } else if (context.dimensionScore >= 60 && context.dimensionScore < 80 && contains(itemType, "consolidation")) {
+      score += PRESCRIPTION_SCORING_WEIGHTS.dimensionActionTier.consolidation60to79; // (+3)
+    } else if (context.dimensionScore >= 80 && contains(itemType, "préservation")) {
+      score += PRESCRIPTION_SCORING_WEIGHTS.dimensionActionTier.preservation80Plus; // (+2)
+    }
   }
 
   // 5. ICR et Facteurs de risque
   const riskFactorsCible = text(item.data, "facteurs_risque_cibles");
   if (riskFactorsCible && context.riskFactors && context.riskFactors.length > 0) {
     if (context.riskFactors.some(rf => containsValue(riskFactorsCible, rf))) {
-      score += 2;
+      score += PRESCRIPTION_SCORING_WEIGHTS.riskFactors;
     }
   }
   
   const protectiveFactorsCible = text(item.data, "facteurs_protecteurs_developpes");
   if (protectiveFactorsCible && context.protectiveFactors && context.protectiveFactors.length > 0) {
     if (context.protectiveFactors.some(pf => containsValue(protectiveFactorsCible, pf))) {
-      score += 1.5;
+      score += PRESCRIPTION_SCORING_WEIGHTS.protectiveFactors;
     }
   }
 
-  // Fallback si icr_cible existe dans le futur
+  // Fallback si icr_cible existe dans le catalogue
   const icrCible = text(item.data, "icr_cible");
   if (icrCible) {
-    if (context.icrScore > 80 && contains(icrCible, "critique")) score += 3;
-    else if (context.icrScore > 40 && context.icrScore <= 80 && contains(icrCible, "élevé")) score += 2;
-    else if (context.icrScore > 20 && context.icrScore <= 40 && contains(icrCible, "modéré")) score += 1.5;
-    else if (context.icrScore <= 20 && contains(icrCible, "faible")) score += 1;
+    if (context.icrScore > 80 && contains(icrCible, "critique")) {
+      score += PRESCRIPTION_SCORING_WEIGHTS.icrTarget.critical;
+    } else if (context.icrScore > 40 && context.icrScore <= 80 && contains(icrCible, "élevé")) {
+      score += PRESCRIPTION_SCORING_WEIGHTS.icrTarget.high;
+    } else if (context.icrScore > 20 && context.icrScore <= 40 && contains(icrCible, "modéré")) {
+      score += PRESCRIPTION_SCORING_WEIGHTS.icrTarget.moderate;
+    } else if (context.icrScore <= 20 && contains(icrCible, "faible")) {
+      score += PRESCRIPTION_SCORING_WEIGHTS.icrTarget.low;
+    }
   }
 
   // 6. Impact attendu (bonus)
@@ -176,12 +255,15 @@ function calculateScore(item: any, context: { situations: string[]; profileName:
     };
     const keywords = rules[context.profileName] || [];
     if (keywords.some(kw => itemText.includes(kw))) {
-      profileAngleScore += 1.5; // Bonus fort pour le respect de l'angle du profil
+      profileAngleScore += PRESCRIPTION_SCORING_WEIGHTS.profileAngleKeywords; // Bonus fort (+1.5)
     }
   }
   
   return score + impactScore + profileAngleScore;
 }
+
+/** Alias exporté pour les tests unitaires */
+export const calculatePrescriptionItemScore = calculateScore;
 
 /** 
  * Service responsable de la génération et gestion des "Ordonnances Relationnelles" (Prescriptions).

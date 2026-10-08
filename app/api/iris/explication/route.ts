@@ -100,7 +100,7 @@ export async function GET(request: Request) {
     // 2. Génération analytique experte et personnalisée (Fallback résilient haute fidélité)
     if (!result) {
       return NextResponse.json({
-        explication: `Bonjour **${userName}** ! Vous n'avez pas encore finalisé votre première évaluation complète IQRH.\n\nDès que vous aurez répondu au questionnaire (~15 minutes), je pourrai cartographier précisément vos 5 dimensions relationnelles, calculer votre météo relationnelle et concevoir votre ordonnance personnalisée.\n\nJe vous invite à commencer votre évaluation dès maintenant en cliquant sur le lien dans votre tableau de bord !`
+        explication: `Bonjour **${userName}** ! Vous n'avez pas encore finalisé votre première évaluation complète IQRH.\n\nDès que vous aurez répondu au questionnaire (~8 à 10 minutes), je pourrai cartographier précisément vos 5 dimensions relationnelles, calculer votre météo relationnelle et concevoir votre ordonnance personnalisée.\n\nJe vous invite à commencer votre évaluation dès maintenant en cliquant sur le lien dans votre tableau de bord !`
       });
     }
 

@@ -1,18 +1,107 @@
+/**
+ * @file matching-service.ts
+ * @module lib/binome/matching-service
+ * @description Moteur de jumelage relationnel pour le programme de Binôme LinkOffice.
+ *
+ * FORMULE ET BARÈME DE COMPATIBILITÉ (Alignement Spécification & Mémoire) :
+ * - Base forfaitaire de départ : 50 points
+ * - Bonus de synergie / complémentarité (force de l'un = faiblesse de l'autre) :
+ *   `synergyWeight * 0.5` = 60 * 0.5 = +30 points
+ * - Bonus de similarité (même dimension forte d'excellence) :
+ *   `similarityWeight * 0.5` = 40 * 0.5 = +20 points
+ * - Seuil minimal d'éligibilité : 75 points
+ *
+ * CONSÉQUENCES DU SEUIL 75 :
+ * - Synergie seule : 50 + 30 = 80 pts (>= 75 -> ÉLIGIBLE)
+ * - Similarité seule : 50 + 20 = 70 pts (< 75 -> REFUSÉ car seuil non atteint)
+ * - Synergie + Similarité : 50 + 30 + 20 = 100 pts (>= 75 -> ÉLIGIBLE, MATCH PARFAIT)
+ * - Ni l'un ni l'autre : 50 pts (< 75 -> REFUSÉ)
+ */
+
 import { prisma } from "@/lib/prisma";
 
+export interface MatchingConfig {
+  minimumThreshold: number;
+  synergyWeight: number;
+  similarityWeight: number;
+  baseScore?: number;
+}
+
 /** Configuration par défaut si aucun enregistrement SystemConfig n'existe en BDD. */
-const DEFAULT_MATCHING_CONFIG = {
+export const DEFAULT_MATCHING_CONFIG: MatchingConfig = {
   minimumThreshold: 75,
   synergyWeight: 60,
   similarityWeight: 40,
+  baseScore: 50,
 };
+
+export interface AssessmentDimensions {
+  bestDimension?: string | null;
+  weakDimension?: string | null;
+}
+
+export interface CompatibilityResult {
+  score: number;
+  isEligible: boolean;
+  hasSynergy: boolean;
+  hasSimilarity: boolean;
+  reasons: string[];
+}
+
+/**
+ * Calcule le score de compatibilité entre deux profils relationnels (fonction pure testable).
+ */
+export function calculateCompatibilityScore(
+  myResult: AssessmentDimensions,
+  candidateResult: AssessmentDimensions,
+  config: MatchingConfig = DEFAULT_MATCHING_CONFIG
+): CompatibilityResult {
+  let score = config.baseScore ?? 50;
+  let hasSynergy = false;
+  let hasSimilarity = false;
+  const reasons: string[] = [];
+
+  // Synergie : complémentarité entre la dimension forte de l'un et la dimension faible de l'autre (+30 pts)
+  if (
+    myResult.bestDimension &&
+    candidateResult.weakDimension &&
+    candidateResult.bestDimension &&
+    myResult.weakDimension &&
+    (candidateResult.bestDimension === myResult.weakDimension ||
+      candidateResult.weakDimension === myResult.bestDimension)
+  ) {
+    score += config.synergyWeight * 0.5;
+    hasSynergy = true;
+    reasons.push("Complémentarité forte/faible (Synergie)");
+  }
+
+  // Similarité : même dimension d'excellence relationnelle partagée (+20 pts)
+  if (
+    myResult.bestDimension &&
+    candidateResult.bestDimension &&
+    candidateResult.bestDimension === myResult.bestDimension
+  ) {
+    score += config.similarityWeight * 0.5;
+    hasSimilarity = true;
+    reasons.push("Même dimension d'excellence relationnelle (Similarité)");
+  }
+
+  const isEligible = score >= config.minimumThreshold;
+
+  return {
+    score,
+    isEligible,
+    hasSynergy,
+    hasSimilarity,
+    reasons,
+  };
+}
 
 /**
  * Charge la configuration du matching depuis la BDD (SystemConfig).
  * Utilise les valeurs par défaut si aucune configuration n'existe.
- * Remplace l'ancienne approche fs.readFileSync (incompatible serverless).
  */
-async function getMatchingConfig(): Promise<typeof DEFAULT_MATCHING_CONFIG> {
+async function getMatchingConfig(): Promise<MatchingConfig> {
   try {
     const record = await prisma.systemConfig.findUnique({
       where: { key: "matching-settings" },
@@ -40,7 +129,7 @@ export class MatchingService {
 
   /**
    * Finds a relational partner for the user based on their campaign and IQRH results.
-   * If a partner is found, creates a PENDING RelationalPair.
+   * If a partner is found, creates a PENDING RelationalPair / BinomeSuggestion.
    */
   static async findAndInvitePartner(userId: string): Promise<{ success: boolean; partnerName?: string; message?: string }> {
     // 1. Get current user's latest assessment and campaign
@@ -59,122 +148,90 @@ export class MatchingService {
       }
     });
 
-    if (!user) return { success: false, message: "Utilisateur introuvable." };
-    if (!user.matchingOptIn) return { success: false, message: "Vous n'avez pas autorisé le matching." };
+    if (!user || user.assessments.length === 0) {
+      return { success: false, message: "Vous devez d'abord compléter votre questionnaire IQRH pour participer." };
+    }
 
     const latestAssessment = user.assessments[0];
-    if (!latestAssessment || !latestAssessment.result) {
-      return { success: false, message: "Vous devez avoir complété un bilan IQRH pour trouver un binôme." };
-    }
-
     const campaign = latestAssessment.campaign;
-    const isB2c = !campaign;
     
-    // Vérification de la configuration de campagne (si B2B2C)
-    const campaignConfig = campaign?.questionnaireConfig as any;
+    // Check campaign configuration if any
+    const campaignConfig = (campaign as any)?.questionnaireConfig as any;
     if (campaign && campaignConfig?.binomeEnabled === false) {
-      return { success: false, message: "Le module Binôme Relationnel a été désactivé par l'administrateur de cette campagne." };
+      return { success: false, message: "Le module Binôme Relationnel a été désactivé pour cette campagne." };
     }
 
-    // Check if the user is eligible (PREMIUM_PLUS for campaigns, PREMIUM for B2C)
-    if (campaign && campaign.offer !== "PREMIUM_PLUS") {
-      return { success: false, message: "Votre campagne n'inclut pas le module Binôme Relationnel (PREMIUM_PLUS requis)." };
-    }
-    if (isB2c && user.subscription !== "PREMIUM" && user.subscription !== "PREMIUM_PLUS") {
-      return { success: false, message: "Le module Binôme est réservé aux abonnements Premium." };
-    }
-
-    // Récupération de la configuration globale SuperAdmin depuis la BDD
+    // Load global matching config from DB or defaults
     const globalConfig = await getMatchingConfig();
 
-    // 2. Find candidates
-    // Exclude users with whom we already have a suggestion (PENDING, ACCEPTED) or active binome
+    // 2. Exclude users with whom we already have a suggestion or pair
     const existingPairs = await prisma.binome.findMany({
       where: {
-        OR: [
-          { userAId: userId },
-          { userBId: userId }
-        ]
-      }
+        OR: [{ userAId: userId }, { userBId: userId }],
+      },
     });
     const existingSuggestions = await prisma.binomeSuggestion.findMany({
       where: {
-        OR: [
-          { userAId: userId },
-          { userBId: userId }
-        ],
-        status: { in: ["PENDING", "ACCEPTED"] }
-      }
+        OR: [{ userAId: userId }, { userBId: userId }],
+        status: { in: ["PENDING", "ACCEPTED"] },
+      },
     });
     const excludedUserIds = new Set([
-      ...existingPairs.flatMap(p => [p.userAId, p.userBId]),
-      ...existingSuggestions.flatMap(s => [s.userAId, s.userBId])
+      ...existingPairs.flatMap((p) => [p.userAId, p.userBId]),
+      ...existingSuggestions.flatMap((s) => [s.userAId, s.userBId]),
+      userId,
     ]);
-    excludedUserIds.add(userId);
 
-    // Query candidates
     const candidates = await prisma.user.findMany({
       where: {
-        matchingOptIn: true,
         id: { notIn: Array.from(excludedUserIds) },
+        organizationId: user.organizationId,
+        matchingOptIn: true,
         assessments: {
           some: {
             status: "SUBMITTED",
-            ...(isB2c ? { campaignId: null } : { campaignId: campaign.id })
-          }
+            ...(campaign ? { campaignId: campaign.id } : {}),
+          },
         },
-        ...(isB2c ? { subscription: { in: ["PREMIUM", "PREMIUM_PLUS"] } } : {})
       },
       include: {
         assessments: {
           where: { status: "SUBMITTED" },
-          orderBy: { submittedAt: 'desc' },
+          orderBy: { submittedAt: "desc" },
           take: 1,
-          include: { result: true }
-        }
-      }
+          include: { result: true },
+        },
+      },
     });
 
     if (candidates.length === 0) {
-      return { success: false, message: "Aucun partenaire disponible pour le moment dans votre périmètre." };
+      return { success: false, message: "Aucun collègue disponible n'a encore rejoint le programme de binôme." };
     }
 
-    // 3. Simple matching algorithm with weights
+    // 3. Matching algorithm using pure scoring function
     const myResult = latestAssessment.result;
+    if (!myResult) {
+      return { success: false, message: "Résultats d'évaluation introuvables." };
+    }
     
-    let bestMatch = null;
+    let bestMatch: any = null;
     let bestScore = 0;
     let foundSynergy = false;
 
     for (const candidate of candidates) {
-      // Ignorer si requireSameDepartment est activé mais que les départements diffèrent (simulé si champ manquant)
       if (campaignConfig?.requireSameDepartment && candidate.organizationId !== user.organizationId) {
-         // On utilise organizationId comme proxy pour le moment
-         continue;
+        continue;
       }
 
-      const candidateResult = candidate.assessments[0]?.result;
+      const candidateResult = (candidate as any).assessments?.[0]?.result;
       if (!candidateResult) continue;
 
-      let score = 50; // Base de départ
-      let isSynergy = false;
+      const comp = calculateCompatibilityScore(myResult, candidateResult, globalConfig);
 
-      // Calcul Synergie
-      if (candidateResult.bestDimension === myResult.weakDimension || candidateResult.weakDimension === myResult.bestDimension) {
-        score += (globalConfig.synergyWeight * 0.5); 
-        isSynergy = true;
-      }
-
-      // Calcul Similarité
-      if (candidateResult.bestDimension === myResult.bestDimension) {
-        score += (globalConfig.similarityWeight * 0.5);
-      }
-
-      // Est-ce le meilleur candidat dépassant le seuil global ?
-      if (score >= globalConfig.minimumThreshold && score > bestScore) {
-        bestScore = score;
+      if (comp.isEligible && comp.score > bestScore) {
+        bestScore = comp.score;
         bestMatch = candidate;
-        foundSynergy = isSynergy;
+        foundSynergy = comp.hasSynergy;
       }
     }
 
@@ -199,8 +256,8 @@ export class MatchingService {
 
     return {
       success: true,
-      partnerName: bestMatch.firstName,
-      message: `Partenaire trouvé${foundSynergy ? ' avec une belle synergie' : ''} ! Invitation envoyée à ${bestMatch.firstName}.`
+      partnerName: `${bestMatch.firstName} ${bestMatch.lastName[0]}.`,
+      message: `Une suggestion de binôme avec ${bestMatch.firstName} (${bestScore}% de compatibilité) a été envoyée !`
     };
   }
 }

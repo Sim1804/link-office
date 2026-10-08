@@ -63,8 +63,10 @@ export interface IcrInput {
  * Persisté dans la table `IcrResult` via `ResultService.submit()`.
  */
 export interface IcrCalculation {
-  /** Score ICR global de 0 à 100 (plus élevé = charge plus importante) */
+  /** Score ICR global de 0 à 100 (plus élevé = charge plus importante, renormalisé via 100/85) */
   score: number;
+  /** Score brut non renormalisé (0–85) */
+  rawScore?: number;
   /** Sous-score : complexité familiale (0–20) */
   familyComplexity: number;
   /** Sous-score : complexité professionnelle (0–20) */
@@ -273,9 +275,12 @@ export class IcrCalculationService {
 
     const protectiveResources = clampToMax(protectivePoints, 15);
 
-    // ── Calcul du score ICR final ─────────────────────────────────────────────
+    // ── Calcul du score ICR final (Décision 3.2 — Option A) ──────────────────
+    // Somme brute des composantes : max théorique = 20 + 20 + 20 + 25 - 0 = 85 pts.
+    // Renormalisation sur [0, 100] via le ratio 100 / 85 (arrondi entier borné à 100).
     const rawScore = familyComplexity + professionalComplexity + lifeTransitions + relationalLoad - protectiveResources;
-    const finalScore = Math.max(0, Math.min(100, rawScore));
+    const clampedRaw = Math.max(0, Math.min(85, rawScore));
+    const finalScore = clampedRaw > 0 ? Math.round(Math.min(100, (clampedRaw * 100) / 85)) : 0;
 
     // ── Interprétation du niveau ICR ────────────────────────────────────────
     let level = "";
@@ -304,15 +309,15 @@ export class IcrCalculationService {
       interpretationPremium = "Votre ICR indique une complexité critique. Le cumul des responsabilités, transitions et charges vécues dépasse probablement le niveau que vos ressources protectrices peuvent absorber durablement. L'objectif est de sécuriser rapidement des relais, de réduire certaines charges lorsque cela est possible et de vous orienter vers les soutiens adaptés à votre situation. L'ICR ne constitue pas un diagnostic : il mesure la pression potentielle de votre contexte relationnel.";
     }
 
-    // ── Facteurs de risque ───────────────────────────────────────────────────
+    // ── Facteurs de risque (Libellés 100% français professionnels sans codes anglais) ────
     const riskFactors: string[] = [];
-    if (hasSituationAmong(selectedSituations, "Aidant")) riskFactors.push("caregiver_burden (Élevé) — Charge d'aidant familial");
-    if (hasSituationAmong(selectedSituations, "Divorce", "Deuil")) riskFactors.push("relationship_conflict (Élevé) — Transition relationnelle majeure");
-    if (hasSituationAmong(selectedSituations, "Demandeur")) riskFactors.push("lack_support (Moyen) — Recherche d'emploi");
-    if (hasSituationAmong(selectedSituations, "Famille monoparentale")) riskFactors.push("mental_load (Critique) — Charge monoparentale");
-    if (input.scores.SOCIAL < 40) riskFactors.push("social_isolation (Élevé) — Isolement social");
-    if (input.scores.SELF < 40) riskFactors.push("mental_load (Élevé) — Surcharge mentale");
-    if (hasSituationAmong(selectedSituations, "Entrepreneur", "Manager")) riskFactors.push("decision_loneliness (Moyen) — Solitude décisionnelle");
+    if (hasSituationAmong(selectedSituations, "Aidant")) riskFactors.push("Charge d'aidant familial (Élevée)");
+    if (hasSituationAmong(selectedSituations, "Divorce", "Deuil")) riskFactors.push("Transition relationnelle majeure (Élevée)");
+    if (hasSituationAmong(selectedSituations, "Demandeur")) riskFactors.push("Recherche d'emploi & soutien (Modéré)");
+    if (hasSituationAmong(selectedSituations, "Famille monoparentale")) riskFactors.push("Charge monoparentale (Critique)");
+    if (input.scores.SOCIAL < 40) riskFactors.push("Isolement social (Élevé)");
+    if (input.scores.SELF < 40) riskFactors.push("Surcharge mentale (Élevée)");
+    if (hasSituationAmong(selectedSituations, "Entrepreneur", "Manager")) riskFactors.push("Solitude décisionnelle (Modérée)");
 
     // ── Freins à l'action ────────────────────────────────────────────────────
     const identifiedBarriers: string[] = [];
@@ -552,6 +557,7 @@ export class IcrCalculationService {
 
     return {
       score: finalScore,
+      rawScore,
       familyComplexity,
       professionalComplexity,
       lifeTransitions,
@@ -572,4 +578,41 @@ export class IcrCalculationService {
       moduleDetails,
     };
   }
+}
+
+/**
+ * Nettoie et formate les libellés de facteurs de risque ICR pour un affichage 100% en français professionnel.
+ * Supprime les identifiants techniques anglais (ex: "mental_load (Élevé) — Surcharge mentale" -> "Surcharge mentale (Élevée)").
+ */
+export function formatRiskFactorLabel(label: string): string {
+  if (!label) return "";
+  const knownMappings: Record<string, string> = {
+    "mental_load (Élevé) — Surcharge mentale": "Surcharge mentale (Élevée)",
+    "mental_load (Critique) — Charge monoparentale": "Charge monoparentale (Critique)",
+    "social_isolation (Élevé) — Isolement social": "Isolement social (Élevé)",
+    "caregiver_burden (Élevé) — Charge d'aidant familial": "Charge d'aidant familial (Élevée)",
+    "relationship_conflict (Élevé) — Transition relationnelle majeure": "Transition relationnelle majeure (Élevée)",
+    "lack_support (Moyen) — Recherche d'emploi": "Recherche d'emploi & soutien (Modéré)",
+    "decision_loneliness (Moyen) — Solitude décisionnelle": "Solitude décisionnelle (Modérée)",
+  };
+
+  if (knownMappings[label]) {
+    return knownMappings[label];
+  }
+
+  // Regex pour nettoyer tout schéma du type "english_code (Niveau) — Libellé en français"
+  const match = label.match(/^[a-z_]+\s*\(([^)]+)\)\s*[—–-]\s*(.+)$/i);
+  if (match) {
+    const severity = match[1].trim();
+    const title = match[2].trim();
+    let sevDisplay = severity;
+    if (severity.toLowerCase() === "élevé" && /^(charge|surcharge|transition|solitude)/i.test(title)) {
+      sevDisplay = "Élevée";
+    } else if (severity.toLowerCase() === "moyen" && /^(solitude)/i.test(title)) {
+      sevDisplay = "Modérée";
+    }
+    return `${title} (${sevDisplay})`;
+  }
+
+  return label;
 }

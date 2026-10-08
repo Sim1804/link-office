@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { validateCronSecret } from "@/lib/cron";
+import { NotificationService } from "@/lib/notifications";
 
 export async function GET(req: Request) {
   try {
@@ -18,7 +19,7 @@ export async function GET(req: Request) {
       nudged: 0
     };
 
-    // 1. Fetch active binômes older than 30 days
+    // 1. Clôture des binômes actifs arrivés au terme des 30 jours
     const expiredBinomes = await prisma.binome.findMany({
       where: {
         status: "ACTIVE",
@@ -35,14 +36,29 @@ export async function GET(req: Request) {
         }
       });
       results.closed++;
-      // TODO: Send notification email for J30 Bilan
+
+      // Envoi de la notification in-app pour le bilan J30 du binôme
+      await NotificationService.send({
+        userId: binome.userAId,
+        type: "BINOME_CHECKIN",
+        title: "Bilan J30 Binôme",
+        message: "Votre cycle de 30 jours en binôme est achevé. Venez dresser le bilan !",
+        actionLink: "/binome",
+      });
+      await NotificationService.send({
+        userId: binome.userBId,
+        type: "BINOME_CHECKIN",
+        title: "Bilan J30 Binôme",
+        message: "Votre cycle de 30 jours en binôme est achevé. Venez dresser le bilan !",
+        actionLink: "/binome",
+      });
     }
 
-    // 2. Detect inactivity (No checkins in the last 7 days)
+    // 2. Détection d'inactivité (aucun checkin sur les 7 derniers jours)
     const inactiveBinomes = await prisma.binome.findMany({
       where: {
         status: "ACTIVE",
-        startDate: { gt: thirtyDaysAgo }, // not expired yet
+        startDate: { gt: thirtyDaysAgo },
         checkins: {
           none: {
             date: { gte: sevenDaysAgo }
@@ -56,8 +72,21 @@ export async function GET(req: Request) {
     });
 
     for (const binome of inactiveBinomes) {
-      // Logic for IRIS nudge. For now, simulate it.
       console.log(`[IRIS NUDGE] Inactivité détectée pour le binôme ${binome.id}`);
+      await NotificationService.send({
+        userId: binome.userAId,
+        type: "BINOME_CHECKIN",
+        title: "Relance Binôme Relationnel",
+        message: "Aucun échange n'a été enregistré cette semaine. Prenez quelques minutes pour un check-in !",
+        actionLink: "/binome",
+      });
+      await NotificationService.send({
+        userId: binome.userBId,
+        type: "BINOME_CHECKIN",
+        title: "Relance Binôme Relationnel",
+        message: "Aucun échange n'a été enregistré cette semaine. Prenez quelques minutes pour un check-in !",
+        actionLink: "/binome",
+      });
       results.nudged++;
     }
 

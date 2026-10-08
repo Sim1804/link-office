@@ -12,7 +12,7 @@ import { DashboardTabs } from "@/src/components/dashboard/tabs/DashboardTabs";
 import { B2b2cMemberRecommendations } from "@/components/dashboard/B2b2cMemberRecommendations";
 import { Brain, Star, Clock, Lock, Sparkles, TrendingUp, Search, User, ArrowRight, FileQuestion, Activity } from "lucide-react";
 import Link from "next/link";
-import { SubscriptionBadge, toSubscriptionTier } from "@/components/ui/SubscriptionBadge";
+import { SubscriptionBadge, UserPlanStatus, toSubscriptionTier } from "@/components/ui/SubscriptionBadge";
 
 
 export const metadata = {
@@ -167,7 +167,7 @@ export default async function DashboardPage() {
             <p className="text-xs font-medium text-[#123D46]/50 mt-6 flex items-center justify-center gap-3">
               <span>✓ Anonyme</span>
               <span>✓ Sécurisé</span>
-              <span>✓ ~15 minutes</span>
+              <span>✓ ~8 à 10 minutes</span>
             </p>
           </div>
         </main>
@@ -238,23 +238,10 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            {/* Gamification + Premium */}
+            {/* Gamification + Premium Status & Evolution */}
             <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 shrink-0">
               <GamificationSummary points={points} badges={badges} />
-              
-              <SubscriptionBadge tier={toSubscriptionTier(subscription)} size="sm" />
-              
-              {subscription === "PREMIUM" && (
-                <Link href="/premium" className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#00A99D]/10 border border-[#00A99D]/30 text-[11px] font-bold text-[#00A99D] hover:bg-[#00A99D]/20 transition-colors whitespace-nowrap">
-                  Passer à Premium+ →
-                </Link>
-              )}
-              
-              {subscription === "FREEMIUM" && (
-                <Link href="/premium" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#00A99D] text-white text-[11px] font-bold hover:bg-[#199E9A] transition-colors whitespace-nowrap shadow-sm">
-                  Devenir Premium →
-                </Link>
-              )}
+              <UserPlanStatus tier={toSubscriptionTier(subscription)} size="sm" showUpgrade={true} />
             </div>
           </div>
 
