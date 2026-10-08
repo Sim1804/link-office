@@ -136,7 +136,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
 
-  const ADMIN_ROLES = ["ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
+  const ADMIN_ROLES = ["ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
   if (!ADMIN_ROLES.includes(session.user.role)) {
     return NextResponse.json(
       { error: "Accès réservé aux administrateurs de collectivité." },
