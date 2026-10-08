@@ -33,13 +33,17 @@
     "uclaCorrelationNote": "Non mesuré (échelle UCLA-LS non administrée au panel synthétique)"
   },
   "recommendations": {
-    "pAt1": 1,
-    "pAt3": 1,
-    "pAt5": 1,
-    "map": 1,
-    "latencyMs": 3.374,
-    "sampleSize": 20,
-    "status": "Calculé sur les ordonnances et catalogues réels"
+    "circularMetricsRemoved": true,
+    "circularMetricsReason": "Supprimé car circulaire : la vérité terrain initiale dérivait des règles du moteur lui-même. Remplacé par protocole personas et benchmark.",
+    "latencyMs": {
+      "mean": 18.52,
+      "p50": 19.55,
+      "p95": 23.07,
+      "p99": 24.27,
+      "iterations": 1000,
+      "catalogItemsCount": 551
+    },
+    "status": "Mesuré empiriquement sur 1000 itérations contre le catalogue réel PostgreSQL (551 items)"
   },
   "binome": {
     "suggestionsCreated": 10,
@@ -91,7 +95,13 @@
         "ruleOfThreeLowerBoundAccuracyPct": 85
       }
     },
-    "cohenKappa": 0.8571,
+    "classifier_vs_label_kappa": 0.9375,
+    "classifier_vs_label_kappa_details": {
+      "observedAgreementPo": 0.95,
+      "chanceAgreementPe": 0.20,
+      "formula": "(Po - Pe) / (1 - Pe) = (0.95 - 0.20) / (1 - 0.20) = 0.75 / 0.80 = 0.9375",
+      "note": "Mesure l'accord entre les étiquettes attendues et la classification du filtre sur 5 classes de 20 cas (pas un accord inter-annotateurs humains)."
+    },
     "latenciesMs": {
       "mean": 0.0874,
       "p95": 0.1926999999996042

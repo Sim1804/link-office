@@ -227,6 +227,8 @@ model IcrResult {
   vulnerabilityDetails   Json       @default("[]")
   dominantNeedDetails    Json       @default("[]")
   moduleDetails          Json       @default("[]")
+  rawScore               Int?
+  icrScaleVersion        String     @default("v2_normalized")
   iqrhResult             IqrhResult @relation(fields: [iqrhResultId], references: [id], onDelete: Cascade)
 }
 

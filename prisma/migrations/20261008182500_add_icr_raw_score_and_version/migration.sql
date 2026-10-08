@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "IcrResult" ADD COLUMN IF NOT EXISTS "icrScaleVersion" TEXT NOT NULL DEFAULT 'v2_normalized',
+ADD COLUMN IF NOT EXISTS "rawScore" INTEGER;

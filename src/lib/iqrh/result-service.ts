@@ -156,7 +156,20 @@ export class ResultService {
       });
       
       const { rawScore, ...icrDbData } = icr as any;
-      await tx.icrResult.upsert({ where: { iqrhResultId: storedResult.id }, create: { iqrhResultId: storedResult.id, ...icrDbData }, update: icrDbData });
+      await tx.icrResult.upsert({
+        where: { iqrhResultId: storedResult.id },
+        create: {
+          iqrhResultId: storedResult.id,
+          ...icrDbData,
+          rawScore: (icr as any).rawScore ?? null,
+          icrScaleVersion: "v2_normalized",
+        },
+        update: {
+          ...icrDbData,
+          rawScore: (icr as any).rawScore ?? null,
+          icrScaleVersion: "v2_normalized",
+        },
+      });
       
       const { primaryDetails, secondaryDetails, ...profileDbData } = profile as any;
       await tx.profileResult.upsert({ where: { iqrhResultId: storedResult.id }, create: { iqrhResultId: storedResult.id, ...profileDbData }, update: profileDbData });

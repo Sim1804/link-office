@@ -1,0 +1,21 @@
+{
+  "testDate": "2026-10-08T18:22:00.069Z",
+  "benchmarkName": "Recommendation Engine In-Memory Scoring Latency",
+  "iterations": 1000,
+  "catalogItemsScoredPerIteration": 551,
+  "totalScoresComputed": 551000,
+  "metricsMs": {
+    "min": 7.9449,
+    "mean": 18.5215,
+    "p50": 19.5507,
+    "p90": 22.4618,
+    "p95": 23.0705,
+    "p99": 24.2706,
+    "max": 39.1652
+  },
+  "system": {
+    "platform": "win32",
+    "arch": "x64",
+    "nodeVersion": "v24.11.1"
+  }
+}
