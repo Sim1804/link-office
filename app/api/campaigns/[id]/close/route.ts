@@ -14,6 +14,11 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const campaign = await prisma.campaign.findUnique({ where: { id } });
     if (!campaign) return NextResponse.json({ error: "Campagne introuvable" }, { status: 404 });
 
+    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+    if (session.user.role !== "SUPER_ADMIN" && campaign.organizationId !== user?.organizationId) {
+      return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
+    }
+
     // Calculer le snapshot
     const assessments = await prisma.assessment.findMany({
       where: { campaignId: id, status: "SUBMITTED" },

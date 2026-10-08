@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+const ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
+
 // POST /api/campaigns/[id]/snapshot - Genere un snapshot fige des stats aggregees
 // GET  /api/campaigns/[id]/snapshot - Recupere le snapshot existant
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -9,7 +11,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
   try {
     const session = await auth();
     if (!session?.user?.id) return NextResponse.json({ error: "Non autorise" }, { status: 401 });
-    if (!["ADMIN_B2B","ADMIN_B2G","SUPER_ADMIN"].includes(session.user.role ?? "")) {
+    if (!ALLOWED_ROLES.includes(session.user.role ?? "")) {
       return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
     }
 
@@ -18,6 +20,11 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       include: { organization: true },
     });
     if (!campaign) return NextResponse.json({ error: "Campagne introuvable" }, { status: 404 });
+
+    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+    if (session.user.role !== "SUPER_ADMIN" && campaign.organizationId !== user?.organizationId) {
+      return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
+    }
 
     // Recuperer toutes les evaluations soumises pour cette campagne
     const results = await prisma.iqrhResult.findMany({
@@ -74,6 +81,18 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
   try {
     const session = await auth();
     if (!session?.user?.id) return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    if (!ALLOWED_ROLES.includes(session.user.role ?? "")) {
+      return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
+    }
+
+    const campaign = await prisma.campaign.findUnique({ where: { id } });
+    if (!campaign) return NextResponse.json({ error: "Campagne introuvable" }, { status: 404 });
+
+    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+    if (session.user.role !== "SUPER_ADMIN" && campaign.organizationId !== user?.organizationId) {
+      return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
+    }
+
     const snapshot = await prisma.campaignSnapshot.findUnique({ where: { campaignId: id } });
     if (!snapshot) return NextResponse.json({ error: "Snapshot non disponible" }, { status: 404 });
     return NextResponse.json(snapshot);

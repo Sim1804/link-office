@@ -53,6 +53,17 @@ export async function POST(request: Request) {
       });
     }
 
+    // Vérifier que l'utilisateur n'appartient pas déjà à une autre organisation
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { organizationId: true }
+    });
+    if (currentUser?.organizationId && currentUser.organizationId !== org.id) {
+      return NextResponse.json({
+        error: "Vous êtes déjà rattaché à une autre organisation. Changement d'organisation non autorisé."
+      }, { status: 403 });
+    }
+
     // Mettre à jour le rattachement direct de l'utilisateur
     await prisma.user.update({
       where: { id: session.user.id },

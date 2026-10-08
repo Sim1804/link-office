@@ -11,12 +11,22 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
+    if (!ALLOWED_ROLES.includes(session.user.role ?? "")) {
+      return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
+    }
+
     const campaign = await prisma.campaign.findUnique({
       where: { id: params.id },
     });
 
     if (!campaign) {
       return NextResponse.json({ error: "Campagne introuvable" }, { status: 404 });
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+    if (campaign.organizationId !== user?.organizationId && session.user.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
     }
 
     // On récupère aussi la liste des modules adaptatifs pour les situations possibles
