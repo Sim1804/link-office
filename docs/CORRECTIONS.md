@@ -334,6 +334,22 @@ Toutes les 84 routes de `app/api` ont été répertoriées :
 
 ---
 
+## Phase 5 : Assainissement du Script d'Expérimentation & Métriques Réelles
+
+### 5.1 Éradication des Constantes Arbitraires
+- **Fichier modifié :** `scripts/run-beta-experiment.ts`
+- **Artefact produit :** `Documentation/Test/beta_experiment_raw_data.json`
+- **Rapport dédié :** `Documentation/Test/RAPPORT_PHASE_5_EXPERIMENTATION.md`
+- **Modifications appliquées :**
+  - Suppression de toutes les additions hardcodées (`p1Sum += 0.60`, etc.).
+  - Requalification explicite du titre et des métadonnées : `"dataNature": "synthetic"`, `"seed": 42`, `"method": "simulation_and_automated_benchmark"`.
+  - Calcul réel de Precision@1 ($1.0$), Precision@3 ($1.0$), Precision@5 ($1.0$), MAP ($1.0$) et latence ($3.374$ ms) sur 20 bilans réels.
+  - Calcul réel du Kappa de Cohen sur la matrice de confusion des 100 scénarios IRIS : $\kappa = 0,8571$ ($P_o = 0,95$, $P_e = 0,65$).
+  - Enquête de satisfaction et échelle UCLA-LS requalifiées en `null` / `"non mesuré"` avec mention explicite de l'absence de recueil de terrain.
+  - Correction de l'exclusion de `rawScore` dans `ResultService.submit()` pour respecter le schéma `IcrResult`.
+
+---
+
 ## Preuves d'Exécution Réelles (Sorties de Terminal)
 
 ### Sortie réelle de Vitest (`npm test`) :
@@ -343,19 +359,19 @@ Toutes les 84 routes de `app/api` ont été répertoriées :
 
  RUN  v3.2.7 D:/Projects/link-office
 
- ✓ tests/security/cron.test.ts (6 tests) 11ms
- ✓ tests/security/privacy.test.ts (5 tests) 18ms
- ✓ tests/iqrh/psychometrics.test.ts (18 tests) 73ms
- ✓ tests/iris/benchmark-scenarios.test.ts (1 test) 19ms
+ ✓ tests/security/cron.test.ts (6 tests) 9ms
+ ✓ tests/security/privacy.test.ts (5 tests) 11ms
+ ✓ tests/iqrh/psychometrics.test.ts (18 tests) 72ms
  ✓ tests/iris/safety.test.ts (10 tests) 23ms
- ✓ tests/engines/engines.test.ts (11 tests) 10ms
+ ✓ tests/iris/benchmark-scenarios.test.ts (1 test) 17ms
+ ✓ tests/engines/engines.test.ts (11 tests) 9ms
  ✓ tests/security/cross-tenant-access.test.ts (7 tests) 17ms
- ✓ tests/integration/concurrency.test.ts (2 tests) 24ms
+ ✓ tests/integration/concurrency.test.ts (2 tests) 21ms
 
  Test Files  8 passed (8)
       Tests  60 passed (60)
-   Start at  14:35:26
-   Duration  1.05s (transform 1.06s, setup 0ms, collect 2.74s, tests 195ms, environment 2ms, prepare 1.52s)
+   Start at  14:47:42
+   Duration  1.16s (transform 1.15s, setup 0ms, collect 2.51s, tests 179ms, environment 2ms, prepare 1.85s)
 ```
 
 ### Sortie réelle du TypeCheck (`npx tsc --noEmit`) :
@@ -367,6 +383,7 @@ Code de retour : 0 (0 erreur de compilation TypeScript)
 ```text
 Code de retour : 0 (0 erreur de linting ESLint)
 ```
+
 
 
 

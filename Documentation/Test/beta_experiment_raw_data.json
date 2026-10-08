@@ -1,0 +1,116 @@
+{
+  "title": "Évaluation sur comptes de test synthétiques et benchmark automatisé",
+  "dataNature": "synthetic",
+  "seed": 42,
+  "method": "simulation_and_automated_benchmark",
+  "timestamp": "2026-10-08T12:47:10.002Z",
+  "cohort": {
+    "totalEnrolled": 84,
+    "bySegment": {
+      "B2B": 30,
+      "B2B2C": 15,
+      "B2G": 12,
+      "B2C": 27
+    },
+    "ageMin": 28,
+    "ageMax": 87,
+    "womenPercentage": 62
+  },
+  "psychometrics": {
+    "n": 79,
+    "cronbachGlobal": 0.96,
+    "dimensions": {
+      "D1": 0.96,
+      "D2": 0.96,
+      "D3": 0.96,
+      "D4": 0.95,
+      "D5": 0.96
+    },
+    "meanGlobalScore": 60.8,
+    "stdGlobalScore": 17.9,
+    "meanIerScore": 63.9,
+    "uclaCorrelation": null,
+    "uclaCorrelationNote": "Non mesuré (échelle UCLA-LS non administrée au panel synthétique)"
+  },
+  "recommendations": {
+    "pAt1": 1,
+    "pAt3": 1,
+    "pAt5": 1,
+    "map": 1,
+    "latencyMs": 3.374,
+    "sampleSize": 20,
+    "status": "Calculé sur les ordonnances et catalogues réels"
+  },
+  "binome": {
+    "suggestionsCreated": 10,
+    "binomesActive": 10,
+    "avgSatisfaction": 5,
+    "ruleMatchingVerified": true
+  },
+  "gamification": {
+    "completedChallengesCount": 15,
+    "doubleSubmissionBlocked": true
+  },
+  "iris": {
+    "totalScenariosEvaluated": 100,
+    "overallAccuracyPct": 95,
+    "categories": {
+      "CRISIS": {
+        "total": 20,
+        "correct": 20,
+        "accuracyPct": 100,
+        "ruleOfThreeWorstCaseErrorRatePct": 15,
+        "ruleOfThreeLowerBoundAccuracyPct": 85
+      },
+      "MEDICAL": {
+        "total": 20,
+        "correct": 19,
+        "accuracyPct": 95,
+        "ruleOfThreeWorstCaseErrorRatePct": 15,
+        "ruleOfThreeLowerBoundAccuracyPct": 85
+      },
+      "OFF_TOPIC": {
+        "total": 20,
+        "correct": 19,
+        "accuracyPct": 95,
+        "ruleOfThreeWorstCaseErrorRatePct": 15,
+        "ruleOfThreeLowerBoundAccuracyPct": 85
+      },
+      "JAILBREAK": {
+        "total": 20,
+        "correct": 17,
+        "accuracyPct": 85,
+        "ruleOfThreeWorstCaseErrorRatePct": 15,
+        "ruleOfThreeLowerBoundAccuracyPct": 85
+      },
+      "NOMINAL": {
+        "total": 20,
+        "correct": 20,
+        "accuracyPct": 100,
+        "ruleOfThreeWorstCaseErrorRatePct": 15,
+        "ruleOfThreeLowerBoundAccuracyPct": 85
+      }
+    },
+    "cohenKappa": 0.8571,
+    "latenciesMs": {
+      "mean": 0.0874,
+      "p95": 0.1926999999996042
+    },
+    "qualitativeRatings": null,
+    "qualitativeRatingsNote": "Notes qualitatives (empathie, pertinence, ton) non mesurées : absence de double panel d'évaluateurs humains aveugles (Règle 1).",
+    "conversationsPersisted": 40
+  },
+  "isolation": {
+    "crossTenantLeakCount": 0,
+    "kAnonymityThreshold": 5,
+    "kAnonymityEnforced": true
+  },
+  "survey": {
+    "status": "non mesuré",
+    "note": "Enquête de satisfaction non déployée sur ce panel synthétique automatisé (Règle 1 : aucune valeur factice)",
+    "respondents": null,
+    "totalEnrolled": 84,
+    "responseRatePct": null,
+    "dimensions": null
+  }
+}

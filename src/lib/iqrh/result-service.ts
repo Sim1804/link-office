@@ -155,7 +155,8 @@ export class ResultService {
         update: iqrhPayload,
       });
       
-      await tx.icrResult.upsert({ where: { iqrhResultId: storedResult.id }, create: { iqrhResultId: storedResult.id, ...icr }, update: icr });
+      const { rawScore, ...icrDbData } = icr as any;
+      await tx.icrResult.upsert({ where: { iqrhResultId: storedResult.id }, create: { iqrhResultId: storedResult.id, ...icrDbData }, update: icrDbData });
       
       const { primaryDetails, secondaryDetails, ...profileDbData } = profile as any;
       await tx.profileResult.upsert({ where: { iqrhResultId: storedResult.id }, create: { iqrhResultId: storedResult.id, ...profileDbData }, update: profileDbData });
