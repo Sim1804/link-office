@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { ANONYMITY_THRESHOLD, createAnonymityBlockedResponse } from "@/lib/privacy";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +70,10 @@ export async function GET(request: Request) {
       });
     }
 
+    if (totalPassages < ANONYMITY_THRESHOLD) {
+      return createAnonymityBlockedResponse(totalPassages);
+    }
+
     let globalSum = 0;
     let socialSum = 0;
     let affectiveSum = 0;
@@ -107,6 +112,7 @@ export async function GET(request: Request) {
     }
 
     const regions = Object.entries(regionsMap)
+      .filter(([, data]) => data.count >= ANONYMITY_THRESHOLD)
       .map(([name, data]) => ({
         name,
         count: data.count,

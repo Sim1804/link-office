@@ -35,8 +35,8 @@ export async function GET(
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
-    if (session.user.id !== userId && !["SUPER_ADMIN", "ADMIN_B2B"].includes(session.user.role || "")) {
-      return NextResponse.json({ error: "Interdit" }, { status: 403 });
+    if (session.user.id !== userId && session.user.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ error: "Interdit — Données personnelles strictement confidentielles." }, { status: 403 });
     }
 
     const prescription = await PrescriptionService.byUser(userId);

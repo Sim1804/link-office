@@ -17,23 +17,23 @@ export async function PATCH(
       select: { organizationId: true, role: true },
     });
 
-    if (!user?.organizationId) {
+    if (!user?.organizationId && user?.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
     }
 
-    if (!user.role.startsWith("ADMIN_") && user.role !== "SUPER_ADMIN") {
+    if (!user?.role.startsWith("ADMIN_") && user?.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Permission refusée" }, { status: 403 });
     }
 
     const { id } = await params;
     const body = await request.json();
 
-    // Verify the action belongs to the organization
+    // Verify the action belongs to the organization (sauf si SUPER_ADMIN)
     const existingAction = await prisma.actionItem.findUnique({
       where: { id },
     });
 
-    if (!existingAction || existingAction.organizationId !== user.organizationId) {
+    if (!existingAction || (existingAction.organizationId !== user.organizationId && user.role !== "SUPER_ADMIN")) {
       return NextResponse.json({ error: "Action introuvable ou non autorisée" }, { status: 404 });
     }
 
@@ -73,22 +73,22 @@ export async function DELETE(
       select: { organizationId: true, role: true },
     });
 
-    if (!user?.organizationId) {
+    if (!user?.organizationId && user?.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
     }
 
-    if (!user.role.startsWith("ADMIN_") && user.role !== "SUPER_ADMIN") {
+    if (!user?.role.startsWith("ADMIN_") && user?.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Permission refusée" }, { status: 403 });
     }
 
     const { id } = await params;
 
-    // Verify the action belongs to the organization
+    // Verify the action belongs to the organization (sauf si SUPER_ADMIN)
     const existingAction = await prisma.actionItem.findUnique({
       where: { id },
     });
 
-    if (!existingAction || existingAction.organizationId !== user.organizationId) {
+    if (!existingAction || (existingAction.organizationId !== user.organizationId && user.role !== "SUPER_ADMIN")) {
       return NextResponse.json({ error: "Action introuvable ou non autorisée" }, { status: 404 });
     }
 

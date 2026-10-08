@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { ANONYMITY_THRESHOLD, createAnonymityBlockedResponse } from "@/lib/privacy";
 
 export async function GET(req: Request) {
   try {
@@ -15,7 +16,7 @@ export async function GET(req: Request) {
       select: { role: true, organizationId: true }
     });
 
-    if (!user || user.role !== "ADMIN_B2B" || !user.organizationId) {
+    if (!user || (!["ADMIN_B2B", "SUPER_ADMIN"].includes(user.role)) || !user.organizationId) {
       return NextResponse.json({ error: "Accès interdit ou aucune organisation associée" }, { status: 403 });
     }
 
@@ -70,14 +71,9 @@ export async function GET(req: Request) {
 
     const totalParticipants = results.length;
 
-    // Règle de confidentialité : Minimum 5 participants pour afficher le baromètre
-    if (totalParticipants < 5) {
-      return NextResponse.json({ 
-        success: false, 
-        error: "CONFIDENTIALITY_LIMIT",
-        message: "Les données sont masquées pour garantir l'anonymat (moins de 5 participants).",
-        totalParticipants 
-      });
+    // Règle de confidentialité : Minimum ANONYMITY_THRESHOLD participants pour afficher le baromètre
+    if (totalParticipants < ANONYMITY_THRESHOLD) {
+      return createAnonymityBlockedResponse(totalParticipants);
     }
 
     // Calcul des moyennes et agrégations

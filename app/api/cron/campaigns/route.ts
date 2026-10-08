@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { validateCronSecret } from "@/lib/cron";
 
-// Sécurité basique pour le cron (en production, utiliser un webhook secret)
 export async function GET(req: Request) {
   try {
-    const url = new URL(req.url);
-    const cronSecret = url.searchParams.get("secret");
-    
-    // Vérification de sécurité obligatoire
-    if (cronSecret !== process.env.CRON_SECRET) {
+    // Vérification de sécurité obligatoire à temps constant via Authorization Bearer
+    if (!validateCronSecret(req)) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
     

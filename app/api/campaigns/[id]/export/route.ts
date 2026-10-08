@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { ANONYMITY_THRESHOLD } from "@/lib/privacy";
 
 export const dynamic = 'force-dynamic';
 
 const ALLOWED_ROLES = ["ADMIN_B2G", "ADMIN_B2B", "ADMIN_B2B2C", "SUPER_ADMIN"];
-const ANONYMITY_THRESHOLD = 5;
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;

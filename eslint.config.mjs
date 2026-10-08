@@ -14,6 +14,14 @@ const eslintConfig = defineConfig([
     // Binary / generated files
     "app/questionnaire/page.user.tsx",
     "prisma/link-office-library.json",
+    // Scratch & legacy temporary scripts
+    "scratch/**",
+    "frontend/**",
+    "scripts/**",
+    "trace-iris.js",
+    "test-*.js",
+    "scratch-*.js",
+    "scratch-*.ts",
   ]),
   // Project-level rule overrides.
   // Pre-existing code uses `any` and raw apostrophes in JSX — downgrade to warn
@@ -25,6 +33,7 @@ const eslintConfig = defineConfig([
       "react-hooks/set-state-in-effect": "warn",
       "prefer-const": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
+      "react-hooks/purity": "warn",
     },
   },
 ]);

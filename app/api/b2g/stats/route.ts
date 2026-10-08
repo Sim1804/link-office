@@ -34,12 +34,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-
-/**
- * Seuil minimal de répondants pour garantir l'anonymat des données territoriales.
- * TODO: Remettre à 5 en production. Actuellement à 0 pour les tests.
- */
-const ANONYMITY_THRESHOLD = 0;
+import { ANONYMITY_THRESHOLD, createAnonymityBlockedResponse } from "@/lib/privacy";
 
 /**
  * Structure d'une recommandation de politique publique générée par l'algorithme.
@@ -199,11 +194,7 @@ export async function GET(req: Request) {
   const respondentCount = assessments.length;
 
   if (respondentCount < ANONYMITY_THRESHOLD) {
-    return NextResponse.json({
-      anonymityBlocked: true,
-      respondentCount,
-      threshold: ANONYMITY_THRESHOLD,
-    });
+    return createAnonymityBlockedResponse(respondentCount);
   }
 
   const results = assessments.map((a) => a.result).filter(Boolean) as NonNullable<(typeof assessments)[0]["result"]>[];

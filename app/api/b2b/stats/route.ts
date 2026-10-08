@@ -31,13 +31,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-
-/**
- * Seuil minimal de répondants pour garantir l'anonymat des données.
- * En dessous de ce seuil, aucune statistique agrégée n'est retournée.
- * TODO: Remettre à 5 en production. Actuellement à 0 pour les tests (pour éviter le lock screen si 0 données).
- */
-const ANONYMITY_THRESHOLD = 0;
+import { formatRiskFactorLabel } from "@/lib/iqrh/icr-calculation-service";
+import { ANONYMITY_THRESHOLD, createAnonymityBlockedResponse, anonymizeCell } from "@/lib/privacy";
 
 /**
  * Calcule et retourne les statistiques IQRH agrégées de l'organisation B2B.
@@ -51,8 +46,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
 
-  // Vérification du rôle administrateur (B2B, B2B2C ou Super Admin)
-  const ADMIN_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "SUPER_ADMIN"];
+  // Vérification du rôle administrateur (B2B, B2B2C, B2G ou Super Admin)
+  const ADMIN_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
   if (!ADMIN_ROLES.includes(session.user.role)) {
     return NextResponse.json(
       { error: "Accès réservé aux responsables RH ou partenaires." },
@@ -70,8 +65,10 @@ export async function GET(request: Request) {
     },
   });
 
-  // Filtre optionnel par campagne et démographie
+  // Filtre optionnel par organisation, type de portail, campagne et démographie
   const { searchParams } = new URL(request.url);
+  const requestedOrgId = searchParams.get("orgId") || searchParams.get("organizationId");
+  const requestedType = searchParams.get("type") || searchParams.get("portalType"); // "B2B" | "B2B2C" | "B2G"
   const campaignId = searchParams.get("campaignId");
   const ageRange = searchParams.get("ageRange");
   const gender = searchParams.get("gender");
@@ -79,8 +76,53 @@ export async function GET(request: Request) {
   let targetOrgId = adminUser?.organizationId;
   let targetOrg = adminUser?.organization;
 
-  // Si une campagne spécifique est demandée, récupérer son organisation
-  if (campaignId) {
+  // Si SUPER_ADMIN, résolution dynamique selon les filtres fournis
+  if (adminUser?.role === "SUPER_ADMIN") {
+    if (requestedOrgId) {
+      const foundOrg = await prisma.organization.findUnique({
+        where: { id: requestedOrgId },
+        select: { id: true, name: true, type: true, subscription: { select: { status: true } } }
+      });
+      if (foundOrg) {
+        targetOrgId = foundOrg.id;
+        targetOrg = foundOrg;
+      }
+    } else if (campaignId) {
+      const campaignData = await prisma.campaign.findUnique({
+        where: { id: campaignId },
+        select: {
+          id: true,
+          organizationId: true,
+          organization: { select: { id: true, name: true, type: true, subscription: { select: { status: true } } } }
+        }
+      });
+      if (campaignData) {
+        targetOrgId = campaignData.organizationId;
+        targetOrg = campaignData.organization;
+      }
+    } else if (requestedType && ["B2B", "B2B2C", "B2G"].includes(requestedType)) {
+      // Trouver l'organisation principale correspondant au segment demandé (priorité aux organisations ayant des utilisateurs)
+      const matchedOrg = await prisma.organization.findFirst({
+        where: { type: requestedType as any },
+        orderBy: { users: { _count: "desc" } },
+        select: { id: true, name: true, type: true, subscription: { select: { status: true } } }
+      });
+      if (matchedOrg) {
+        targetOrgId = matchedOrg.id;
+        targetOrg = matchedOrg;
+      }
+    } else {
+      const fallbackOrg = await prisma.organization.findFirst({
+        orderBy: { users: { _count: "desc" } },
+        select: { id: true, name: true, type: true, subscription: { select: { status: true } } }
+      });
+      if (fallbackOrg) {
+        targetOrgId = fallbackOrg.id;
+        targetOrg = fallbackOrg;
+      }
+    }
+  } else if (campaignId) {
+    // Pour un admin dédié, vérifier que la campagne appartient bien à son périmètre
     const campaignData = await prisma.campaign.findUnique({
       where: { id: campaignId },
       select: {
@@ -89,33 +131,42 @@ export async function GET(request: Request) {
         organization: { select: { id: true, name: true, type: true, subscription: { select: { status: true } } } }
       }
     });
-    if (campaignData) {
-      targetOrgId = campaignData.organizationId;
-      targetOrg = campaignData.organization;
+    if (!campaignData || campaignData.organizationId !== adminUser?.organizationId) {
+      return NextResponse.json({ error: "Accès refusé à cette campagne." }, { status: 403 });
     }
+    targetOrgId = campaignData.organizationId;
+    targetOrg = campaignData.organization;
   }
 
-  // Si Super Admin sans organisation directe, cibler l'organisation B2B par défaut
-  if (!targetOrgId && adminUser?.role === "SUPER_ADMIN") {
-    const defaultB2bOrg = await prisma.organization.findFirst({
-      where: { type: "B2B" },
-      select: { id: true, name: true, type: true, subscription: { select: { status: true } } }
-    });
-    if (defaultB2bOrg) {
-      targetOrgId = defaultB2bOrg.id;
-      targetOrg = defaultB2bOrg;
-    }
-  }
+  // Liste des organisations disponibles pour le sélecteur Super Admin
+  const availableOrganizations = adminUser?.role === "SUPER_ADMIN"
+    ? await prisma.organization.findMany({
+        where: requestedType && ["B2B", "B2B2C", "B2G"].includes(requestedType) ? { type: requestedType as any } : undefined,
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          _count: { select: { users: true, campaigns: true } }
+        },
+        orderBy: { name: "asc" }
+      })
+    : [];
 
   if (!targetOrgId && !campaignId) {
     return NextResponse.json(
-      { error: "Aucune organisation associée." },
+      { error: "Aucune organisation associée.", availableOrganizations },
       { status: 404 }
     );
   }
 
   const demographicFilter: any = {};
-  if (ageRange) demographicFilter.ageRange = ageRange;
+  if (ageRange) {
+    if (ageRange === "46+" || ageRange === "46") {
+      demographicFilter.ageRange = { in: ["46-55", "56+", "46+"] };
+    } else {
+      demographicFilter.ageRange = ageRange;
+    }
+  }
   if (gender) demographicFilter.gender = gender;
 
   // Récupération de tous les assessments soumis et du compte d'utilisateurs
@@ -124,7 +175,7 @@ export async function GET(request: Request) {
       where: {
         status: "SUBMITTED",
         campaignId: campaignId || undefined,
-        ...(campaignId ? {} : (targetOrgId ? { user: { organizationId: targetOrgId } } : {})),
+        ...(targetOrgId ? { user: { organizationId: targetOrgId } } : {}),
         ...(Object.keys(demographicFilter).length > 0 && {
           demographic: { is: demographicFilter }
         })
@@ -175,6 +226,18 @@ export async function GET(request: Request) {
 
 
   // ── Règle d'or de l'anonymat ────────────────────────────────────
+  if (respondentCount === 0) {
+    return NextResponse.json({
+      noResults: true,
+      respondentCount: 0,
+      registeredUsersCount,
+      subscriptionStatus,
+      organization: targetOrg ? { id: targetOrg.id, name: targetOrg.name, type: targetOrg.type } : null,
+      availableOrganizations,
+      campaignsList,
+    });
+  }
+
   if (respondentCount < ANONYMITY_THRESHOLD) {
     return NextResponse.json({
       anonymityBlocked: true,
@@ -182,8 +245,10 @@ export async function GET(request: Request) {
       registeredUsersCount,
       threshold: ANONYMITY_THRESHOLD,
       subscriptionStatus,
+      organization: targetOrg ? { id: targetOrg.id, name: targetOrg.name, type: targetOrg.type } : null,
+      availableOrganizations,
       campaignsList,
-      message: `Les résultats ne sont pas disponibles : au moins ${ANONYMITY_THRESHOLD} répondants sont nécessaires pour garantir l'anonymat. Actuellement : ${respondentCount} répondant(s).`,
+      message: `Les résultats ne sont pas encore affichables : au moins ${ANONYMITY_THRESHOLD} répondants sont requis pour garantir le secret statistique et l'anonymat des collaborateurs. Actuellement : ${respondentCount} répondant(s).`,
     });
   }
 
@@ -193,7 +258,13 @@ export async function GET(request: Request) {
     .filter(Boolean) as NonNullable<(typeof submittedAssessments)[0]["result"]>[];
 
   if (resultsWithData.length === 0) {
-    return NextResponse.json({ respondentCount, noResults: true });
+    return NextResponse.json({
+      respondentCount,
+      noResults: true,
+      organization: targetOrg ? { id: targetOrg.id, name: targetOrg.name, type: targetOrg.type } : null,
+      availableOrganizations,
+      campaignsList
+    });
   }
 
   /** Calcule la moyenne arrondie d'un tableau de nombres */
@@ -207,8 +278,22 @@ export async function GET(request: Request) {
   const avgProfessionalScore = computeAverage(resultsWithData.map((result) => result.professionalScore));
   const avgSelfScore = computeAverage(resultsWithData.map((result) => result.selfScore));
 
+  // Norme sectorielle & nationale Link-Office de référence
+  const benchmarks = {
+    global: 58,
+    social: 60,
+    affective: 57,
+    sentimental: 59,
+    professional: 61,
+    self: 54,
+  };
+
   // ── Distribution ICR (4 paliers de complexité) ───────────────────────────
   const icrResultsOnly = resultsWithData.map((result) => result.icr).filter(Boolean);
+  const avgIcrScore = icrResultsOnly.length
+    ? Math.round(icrResultsOnly.reduce((sum, item) => sum + item!.score, 0) / icrResultsOnly.length)
+    : 0;
+
   const icrDistribution = {
     faible: icrResultsOnly.filter((icr) => icr!.score <= 25).length,
     modere: icrResultsOnly.filter((icr) => icr!.score > 25 && icr!.score <= 50).length,
@@ -225,7 +310,8 @@ export async function GET(request: Request) {
   for (const icrResult of icrResultsOnly) {
     if (!icrResult) continue;
     for (const riskFactor of icrResult.riskFactors) {
-      riskFactorCounts.set(riskFactor, (riskFactorCounts.get(riskFactor) ?? 0) + 1);
+      const cleanLabel = formatRiskFactorLabel(riskFactor);
+      riskFactorCounts.set(cleanLabel, (riskFactorCounts.get(cleanLabel) ?? 0) + 1);
     }
     for (const protectiveFactor of icrResult.protectiveFactors) {
       protectiveFactorCounts.set(protectiveFactor, (protectiveFactorCounts.get(protectiveFactor) ?? 0) + 1);
@@ -236,17 +322,21 @@ export async function GET(request: Request) {
   }
 
   // Tri par fréquence décroissante + calcul du pourcentage sur le total de répondants
+  // Masquage strict des facteurs et besoins comptant moins de ANONYMITY_THRESHOLD répondants
   const topRiskFactors = [...riskFactorCounts.entries()]
+    .filter(([, count]) => count >= ANONYMITY_THRESHOLD)
     .sort(([, countA], [, countB]) => countB - countA)
     .slice(0, 10)
     .map(([label, count]) => ({ label, count, pct: Math.round((count / respondentCount) * 100) }));
 
   const topProtectiveFactors = [...protectiveFactorCounts.entries()]
+    .filter(([, count]) => count >= ANONYMITY_THRESHOLD)
     .sort(([, countA], [, countB]) => countB - countA)
     .slice(0, 10)
     .map(([label, count]) => ({ label, count, pct: Math.round((count / respondentCount) * 100) }));
 
   const topDominantNeeds = [...dominantNeedCounts.entries()]
+    .filter(([, count]) => count >= ANONYMITY_THRESHOLD)
     .sort(([, countA], [, countB]) => countB - countA)
     .slice(0, 5)
     .map(([label, count]) => ({ label, count, pct: Math.round((count / respondentCount) * 100) }));
@@ -296,6 +386,7 @@ export async function GET(request: Request) {
 
   const COLORS = ["#10b981", "var(--primary)", "#f59e0b", "#ef4444", "#a855f7"];
   const profils = Object.entries(profilsMap)
+    .filter(([, count]) => count >= ANONYMITY_THRESHOLD)
     .map(([name, count], index) => ({
       name,
       value: Math.round((count / respondentCount) * 100),
@@ -304,6 +395,7 @@ export async function GET(request: Request) {
     .sort((a, b) => b.value - a.value);
 
   const momentsVie = Object.entries(momentsMap)
+    .filter(([, data]) => data.count >= ANONYMITY_THRESHOLD)
     .map(([name, data]) => ({
       name,
       score: Math.round(data.sum / data.count)
@@ -317,7 +409,7 @@ export async function GET(request: Request) {
     where: { library: "Recommandations" }
   });
 
-  const isB2B2C = adminUser?.role === "ADMIN_B2B2C";
+  const isB2B2C = adminUser?.role === "ADMIN_B2B2C" || targetOrg?.type === "B2B2C";
   
   // Filter and parse recommendations
   let recommendations = libraryRecs
@@ -352,6 +444,12 @@ export async function GET(request: Request) {
     registeredUsersCount,
     threshold: ANONYMITY_THRESHOLD,
     subscriptionStatus,
+    organization: targetOrg ? {
+      id: targetOrg.id,
+      name: targetOrg.name,
+      type: targetOrg.type
+    } : null,
+    availableOrganizations,
     campaignsList,
     averages: {
       global: avgGlobalScore,
@@ -361,6 +459,8 @@ export async function GET(request: Request) {
       professional: avgProfessionalScore,
       self: avgSelfScore,
     },
+    benchmarks,
+    avgIcrScore,
     icrDistribution,
     topRiskFactors,
     topProtectiveFactors,

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { formatRiskFactorLabel } from "@/lib/iqrh/icr-calculation-service";
+import { ANONYMITY_THRESHOLD, createAnonymityBlockedResponse } from "@/lib/privacy";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +61,10 @@ export async function GET() {
           public: { name: "Collectivités & Secteur Public", count: 0, avg: 0, target: 72, progress: "0 pt" },
         },
       });
+    }
+
+    if (totalAssessments < ANONYMITY_THRESHOLD) {
+      return createAnonymityBlockedResponse(totalAssessments);
     }
 
     // 2. Calcul des scores par dimensions
@@ -195,7 +201,8 @@ export async function GET() {
         dominantNeedCounts.set(need, (dominantNeedCounts.get(need) ?? 0) + 1);
       }
       for (const risk of icrResult.riskFactors) {
-        riskFactorCounts.set(risk, (riskFactorCounts.get(risk) ?? 0) + 1);
+        const cleanRisk = formatRiskFactorLabel(risk);
+        riskFactorCounts.set(cleanRisk, (riskFactorCounts.get(cleanRisk) ?? 0) + 1);
       }
     }
 

@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
+    const session = await auth();
+    if (!session?.user?.id || session.user.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ error: "Accès refusé. Rôle SUPER_ADMIN requis." }, { status: 403 });
+    }
+
     const users = await prisma.user.findMany({
       include: {
         organization: true,

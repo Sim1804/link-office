@@ -16,9 +16,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { formatRiskFactorLabel } from "@/lib/iqrh/icr-calculation-service";
+import { ANONYMITY_THRESHOLD } from "@/lib/privacy";
 
 const ALLOWED_ROLES = ["ADMIN_B2G", "ADMIN_B2B", "ADMIN_B2B2C", "SUPER_ADMIN"];
-const ANONYMITY_THRESHOLD = 5;
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
@@ -114,7 +115,10 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     const protectiveCount: Record<string, number> = {};
     results.forEach(r => {
       if (r.icr) {
-        (r.icr.riskFactors as string[]).forEach(f => { riskCount[f] = (riskCount[f] ?? 0) + 1; });
+        (r.icr.riskFactors as string[]).forEach(f => {
+          const cleanF = formatRiskFactorLabel(f);
+          riskCount[cleanF] = (riskCount[cleanF] ?? 0) + 1;
+        });
         (r.icr.protectiveFactors as string[]).forEach(f => { protectiveCount[f] = (protectiveCount[f] ?? 0) + 1; });
       }
     });

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { validateCronSecret } from "@/lib/cron";
 
 // Example function to calculate stats, same logic as /api/b2b/stats
 async function calculateCampaignStats(campaignId: string) {
@@ -47,11 +48,8 @@ async function calculateCampaignStats(campaignId: string) {
 
 export async function GET(request: Request) {
   try {
-    const authHeader = request.headers.get("authorization");
-    const cronSecret = process.env.CRON_SECRET;
-    
-    // Check cron authorization if CRON_SECRET is configured
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    // Vérification de sécurité obligatoire à temps constant via Authorization Bearer
+    if (!validateCronSecret(request)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
