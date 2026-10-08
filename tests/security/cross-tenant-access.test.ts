@@ -1,151 +1,159 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-
-// Mocking prisma & auth
-vi.mock("@/lib/prisma", () => {
-  return {
-    prisma: {
-      user: {
-        findUnique: vi.fn(),
-        count: vi.fn(),
-      },
-      campaign: {
-        findUnique: vi.fn(),
-        findMany: vi.fn(),
-      },
-      assessment: {
-        findMany: vi.fn(),
-        count: vi.fn(),
-      },
-      actionItem: {
-        findUnique: vi.fn(),
-        update: vi.fn(),
-        delete: vi.fn(),
-      },
-      iqrhResult: {
-        findMany: vi.fn(),
-      },
-    },
-  };
-});
-
-vi.mock("@/lib/auth", () => {
-  return {
-    auth: vi.fn(),
-  };
-});
-
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
-import { GET as getB2BStats } from "../../app/api/b2b/stats/route";
-import { GET as getCampaignStats } from "../../app/api/campaigns/[id]/stats/route";
-import { GET as getCampaignExport } from "../../app/api/campaigns/[id]/export/route";
-import { PATCH as patchAction, DELETE as deleteAction } from "../../app/api/actions/[id]/route";
-import { GET as getAdminUsersExport } from "../../app/api/admin/users/export/route";
-import { GET as getUserOrdonnance } from "../../app/api/ordonnances/[userId]/route";
-import { GET as getUserResultats } from "../../app/api/resultats/[userId]/route";
 
-describe("Audit et Isolation Multi-Tenant (Cross-Tenant Access Tests)", () => {
-  const userOrgA = {
-    id: "user-org-a-1",
-    role: "ADMIN_B2B",
-    organizationId: "org-alpha-123",
-  };
+const BASE_URL = process.env.TEST_APP_URL || "http://localhost:3000";
 
-  const campaignOrgB = {
-    id: "campaign-org-b-456",
-    organizationId: "org-beta-789",
-    title: "Campagne Organisation B",
-  };
+async function getSessionCookie(email: string): Promise<string> {
+  const csrfRes = await fetch(`${BASE_URL}/api/auth/csrf`);
+  const csrfCookies = csrfRes.headers.getSetCookie();
+  const csrfData = await csrfRes.json();
 
-  beforeEach(() => {
-    vi.clearAllMocks();
+  const formData = new URLSearchParams();
+  formData.append("email", email);
+  formData.append("password", "Admin1234!");
+  formData.append("csrfToken", csrfData.csrfToken);
+
+  const loginRes = await fetch(`${BASE_URL}/api/auth/callback/credentials`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: csrfCookies.map((c) => c.split(";")[0]).join("; "),
+    },
+    body: formData.toString(),
+    redirect: "manual",
   });
 
-  it("1. b2b/stats : un admin de l'Org A tentant de lire les stats d'une campagne de l'Org B reçoit un statut 403", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: userOrgA } as any);
-    vi.mocked(prisma.user.findUnique).mockResolvedValue(userOrgA as any);
-    vi.mocked(prisma.campaign.findUnique).mockResolvedValue(campaignOrgB as any);
+  const loginCookies = loginRes.headers.getSetCookie();
+  return [...csrfCookies, ...loginCookies].map((c) => c.split(";")[0]).join("; ");
+}
 
-    const req = new Request("http://localhost/api/b2b/stats?campaignId=campaign-org-b-456");
-    const res = await getB2BStats(req);
+describe("Tests de Sécurité Cross-Tenant par Requêtes HTTP Réelles (Next.js & PostgreSQL)", () => {
+  let cookieAliceOrgA: string;
+  let testActionIdOrgB: string;
+  let userOrgBId: string;
+  let orgBId: string;
+
+  beforeAll(async () => {
+    // 1. Session HTTP authentifiée pour Alice Dupont (ADMIN_B2B chez Novatech Conseil - Org A)
+    cookieAliceOrgA = await getSessionCookie("alice.dupont@novatech-conseil.fr");
+
+    // 2. Récupération d'une organisation distincte (Org B - Mutuelle Avenir Santé)
+    const orgB = await prisma.organization.findFirst({
+      where: { name: { contains: "Avenir" } },
+    });
+    if (!orgB) throw new Error("Organisation B introuvable en base");
+    orgBId = orgB.id;
+
+    // 3. Récupération d'un utilisateur cible appartenant à Org B
+    const memberOrgB = await prisma.user.findFirst({
+      where: { organizationId: orgBId, role: "MEMBER" },
+    });
+    if (!memberOrgB) throw new Error("Utilisateur de l'Organisation B introuvable en base");
+    userOrgBId = memberOrgB.id;
+
+    // 4. Création d'une action réelle pour Org B
+    const actionB = await prisma.actionItem.create({
+      data: {
+        organizationId: orgBId,
+        title: "Action confidentielle Avenir Santé",
+        description: "Données cloisonnées Org B",
+        status: "PROPOSEE",
+        priority: "HIGH",
+        dimension: "PROFESSIONAL",
+        updatedAt: new Date(),
+      },
+    });
+    testActionIdOrgB = actionB.id;
+  }, 20000);
+
+  afterAll(async () => {
+    if (testActionIdOrgB) {
+      await prisma.actionItem.deleteMany({ where: { id: testActionIdOrgB } });
+    }
+    await prisma.$disconnect();
+  });
+
+  it("1. GET /api/b2b/stats : un admin de l'Org A ciblant la campagne de l'Org B reçoit un HTTP 403 réel", async () => {
+    const res = await fetch(`${BASE_URL}/api/b2b/stats?campaignId=camp-avenirsante-2026`, {
+      headers: { Cookie: cookieAliceOrgA },
+    });
 
     expect(res.status).toBe(403);
-    const data = await res.json();
-    expect(data.error).toContain("Accès refusé");
+    const body = await res.json();
+    expect(body.error).toContain("Accès refusé");
   });
 
-  it("2. campaigns/[id]/stats : un admin de l'Org A ciblant la campagne de l'Org B reçoit un 403", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: userOrgA } as any);
-    vi.mocked(prisma.user.findUnique).mockResolvedValue(userOrgA as any);
-    vi.mocked(prisma.campaign.findUnique).mockResolvedValue(campaignOrgB as any);
+  it("2. GET /api/campaigns/[id]/stats : un admin de l'Org A ciblant la campagne de l'Org B reçoit un HTTP 403 réel", async () => {
+    const res = await fetch(`${BASE_URL}/api/campaigns/camp-avenirsante-2026/stats`, {
+      headers: { Cookie: cookieAliceOrgA },
+    });
 
-    const req = new Request("http://localhost/api/campaigns/campaign-org-b-456/stats");
-    const res = await getCampaignStats(req as any, { params: Promise.resolve({ id: "campaign-org-b-456" }) });
+    expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.error).toBe("Accès refusé");
+  });
+
+  it("3. GET /api/campaigns/[id]/export : un admin de l'Org A ciblant la campagne de l'Org B reçoit un HTTP 403 réel", async () => {
+    const res = await fetch(`${BASE_URL}/api/campaigns/camp-avenirsante-2026/export`, {
+      headers: { Cookie: cookieAliceOrgA },
+    });
 
     expect(res.status).toBe(403);
   });
 
-  it("3. campaigns/[id]/export : un admin de l'Org A tentant d'exporter une campagne de l'Org B reçoit un 403", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: userOrgA } as any);
-    vi.mocked(prisma.user.findUnique).mockResolvedValue(userOrgA as any);
-    vi.mocked(prisma.campaign.findUnique).mockResolvedValue(campaignOrgB as any);
-
-    const req = new Request("http://localhost/api/campaigns/campaign-org-b-456/export");
-    const res = await getCampaignExport(req as any, { params: Promise.resolve({ id: "campaign-org-b-456" }) });
-
-    expect(res.status).toBe(403);
-  });
-
-  it("4. actions/[id] (PATCH & DELETE) : un admin de l'Org A ciblant une action de l'Org B reçoit un 404 (non trouvé ou non autorisé)", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: userOrgA } as any);
-    vi.mocked(prisma.user.findUnique).mockResolvedValue(userOrgA as any);
-    vi.mocked(prisma.actionItem.findUnique).mockResolvedValue({
-      id: "action-org-b-999",
-      organizationId: "org-beta-789",
-    } as any);
-
-    const patchReq = new Request("http://localhost/api/actions/action-org-b-999", {
+  it("4. PATCH /api/actions/[id] : un admin de l'Org A tentant de modifier une action de l'Org B reçoit un HTTP 404 réel", async () => {
+    const res = await fetch(`${BASE_URL}/api/actions/${testActionIdOrgB}`, {
       method: "PATCH",
-      body: JSON.stringify({ title: "Attaque cross-tenant" }),
+      headers: {
+        Cookie: cookieAliceOrgA,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title: "Attaque cross-tenant réussie" }),
     });
-    const patchRes = await patchAction(patchReq, { params: Promise.resolve({ id: "action-org-b-999" }) });
-    expect(patchRes.status).toBe(404);
 
-    const deleteReq = new Request("http://localhost/api/actions/action-org-b-999", {
+    expect(res.status).toBe(404);
+    const body = await res.json();
+    expect(body.error).toMatch(/Action introuvable ou non autorisée/);
+  });
+
+  it("5. DELETE /api/actions/[id] : un admin de l'Org A tentant de supprimer une action de l'Org B reçoit un HTTP 404 réel", async () => {
+    const res = await fetch(`${BASE_URL}/api/actions/${testActionIdOrgB}`, {
       method: "DELETE",
+      headers: { Cookie: cookieAliceOrgA },
     });
-    const deleteRes = await deleteAction(deleteReq, { params: Promise.resolve({ id: "action-org-b-999" }) });
-    expect(deleteRes.status).toBe(404);
+
+    expect(res.status).toBe(404);
+    const body = await res.json();
+    expect(body.error).toMatch(/Action introuvable ou non autorisée/);
   });
 
-  it("5. admin/users/export : toute requête non authentifiée ou non SUPER_ADMIN est rejetée avec un statut 403", async () => {
-    vi.mocked(auth).mockResolvedValue(null as any);
-
-    const resUnauth = await getAdminUsersExport();
-    expect(resUnauth.status).toBe(403);
-
-    vi.mocked(auth).mockResolvedValue({ user: userOrgA } as any);
-    const resForbidden = await getAdminUsersExport();
-    expect(resForbidden.status).toBe(403);
-  });
-
-  it("6. ordonnances/[userId] : un utilisateur A ne peut pas lire l'ordonnance relationnelle d'un utilisateur B (403)", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user-alice", role: "EMPLOYEE" } } as any);
-
-    const req = new Request("http://localhost/api/ordonnances/user-bob");
-    const res = await getUserOrdonnance(req, { params: Promise.resolve({ userId: "user-bob" }) });
+  it("6. GET /api/admin/users/export : un admin d'organisation tentant d'exporter tous les utilisateurs reçoit un HTTP 403 réel", async () => {
+    const res = await fetch(`${BASE_URL}/api/admin/users/export`, {
+      headers: { Cookie: cookieAliceOrgA },
+    });
 
     expect(res.status).toBe(403);
-    const data = await res.json();
-    expect(data.error).toContain("Interdit");
+    const body = await res.json();
+    expect(body.error).toContain("SUPER_ADMIN requis");
   });
 
-  it("7. resultats/[userId] : un utilisateur A ne peut pas lire le bilan IQRH d'un utilisateur B (403)", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user-alice", role: "EMPLOYEE" } } as any);
-
-    const req = new Request("http://localhost/api/resultats/user-bob");
-    const res = await getUserResultats(req, { params: Promise.resolve({ userId: "user-bob" }) });
+  it("7. GET /api/ordonnances/[userId] : un tiers tentant de lire l'ordonnance relationnelle d'un autre utilisateur reçoit un HTTP 403 réel", async () => {
+    const res = await fetch(`${BASE_URL}/api/ordonnances/${userOrgBId}`, {
+      headers: { Cookie: cookieAliceOrgA },
+    });
 
     expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.error).toContain("Interdit");
+  });
+
+  it("8. GET /api/resultats/[userId] : un tiers tentant de lire le résultat IQRH d'un autre utilisateur reçoit un HTTP 403 réel", async () => {
+    const res = await fetch(`${BASE_URL}/api/resultats/${userOrgBId}`, {
+      headers: { Cookie: cookieAliceOrgA },
+    });
+
+    expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.error).toContain("Interdit");
   });
 });

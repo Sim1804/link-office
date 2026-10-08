@@ -21,123 +21,116 @@ export class GamificationService {
    * @returns Un objet de statut contenant le nombre de points gagnés, le nouveau total et la liste des badges fraîchement débloqués.
    */
   static async completeChallenge(userId: string, prescriptionItemId: string) {
-    return await prisma.$transaction(async (tx) => {
-      // 1. Mise à jour conditionnelle atomique : garantit l'exclusion mutuelle stricte
-      // Seule la première requête concurrente trouve status: { not: "COMPLETED" }
-      const updated = await tx.prescriptionItem.updateMany({
-        where: {
-          id: prescriptionItemId,
-          status: { not: "COMPLETED" },
-          prescription: { userId },
-        },
-        data: { status: "COMPLETED" },
-      });
+    const txResult = await prisma.$transaction(
+      async (tx) => {
+        // 1. Mise à jour conditionnelle atomique : garantit l'exclusion mutuelle stricte
+        // Seule la première requête concurrente trouve status: { not: "COMPLETED" }
+        const updated = await tx.prescriptionItem.updateMany({
+          where: {
+            id: prescriptionItemId,
+            status: { not: "COMPLETED" },
+            prescription: { userId },
+          },
+          data: { status: "COMPLETED" },
+        });
 
-      if (updated.count === 0) {
-        throw new Error("Défi déjà complété ou non autorisé.");
-      }
+        if (updated.count === 0) {
+          throw new Error("Défi déjà complété ou non autorisé.");
+        }
 
-      // 2. Récupération des métadonnées du défi pour les points
-      const item = await tx.prescriptionItem.findUniqueOrThrow({
-        where: { id: prescriptionItemId },
-        include: { libraryItem: true },
-      });
+        // 2. Récupération des métadonnées du défi pour les points
+        const item = await tx.prescriptionItem.findUniqueOrThrow({
+          where: { id: prescriptionItemId },
+          include: { libraryItem: true },
+        });
 
-      const libraryMetadata = item.libraryItem?.data as any;
-      const pointsToAward = libraryMetadata?.points
-        ? Number(libraryMetadata.points)
-        : GamificationService.POINTS_PER_CHALLENGE;
+        const libraryMetadata = item.libraryItem?.data as any;
+        const pointsToAward = libraryMetadata?.points
+          ? Number(libraryMetadata.points)
+          : GamificationService.POINTS_PER_CHALLENGE;
 
-      // 3. Crédit atomique des points sur l'utilisateur
-      const updatedUser = await tx.user.update({
-        where: { id: userId },
-        data: { points: { increment: pointsToAward } },
-      });
+        // 3. Crédit atomique des points sur l'utilisateur
+        const updatedUser = await tx.user.update({
+          where: { id: userId },
+          data: { points: { increment: pointsToAward } },
+        });
 
-      const newLevel = calculateLevel(updatedUser.points).level;
+        const newLevel = calculateLevel(updatedUser.points).level;
 
-      await tx.userStats.upsert({
-        where: { userId },
-        create: {
-          userId,
+        await tx.userStats.upsert({
+          where: { userId },
+          create: {
+            userId,
+            totalPoints: updatedUser.points,
+            weeklyPoints: pointsToAward,
+            monthlyPoints: pointsToAward,
+            currentLevel: newLevel,
+          },
+          update: {
+            totalPoints: updatedUser.points,
+            weeklyPoints: { increment: pointsToAward },
+            monthlyPoints: { increment: pointsToAward },
+            currentLevel: newLevel,
+          },
+        });
+
+        // 4. Recherche et création des nouveaux badges dans la transaction
+        const eligibleBadges = await tx.badge.findMany({
+          where: {
+            pointsRequired: { lte: updatedUser.points },
+            users: {
+              none: { userId: userId },
+            },
+          },
+        });
+
+        for (const badge of eligibleBadges) {
+          await tx.userBadge.create({
+            data: {
+              userId,
+              badgeId: badge.id,
+              source: "MICRO_DEFI",
+            },
+          });
+        }
+
+        return {
+          pointsEarned: pointsToAward,
           totalPoints: updatedUser.points,
-          weeklyPoints: pointsToAward,
-          monthlyPoints: pointsToAward,
-          currentLevel: newLevel,
-        },
-        update: {
-          totalPoints: updatedUser.points,
-          weeklyPoints: { increment: pointsToAward },
-          monthlyPoints: { increment: pointsToAward },
-          currentLevel: newLevel,
-        },
-      });
-
-      await EventLogger.log({
-        userId,
-        eventType: "micro_challenge_completed",
-        eventData: { prescriptionItemId, pointsEarned: pointsToAward },
-      });
-
-      const newlyUnlockedBadges = await this.checkAndAwardBadges(userId, updatedUser.points, tx);
-
-      return {
-        success: true,
-        pointsEarned: pointsToAward,
-        totalPoints: updatedUser.points,
-        newBadges: newlyUnlockedBadges,
-      };
-    });
-  }
-
-  /**
-   * Vérifie si le total de points actuel de l'utilisateur lui permet de débloquer de nouveaux badges
-   * qu'il ne possède pas encore, puis les lui attribue en base de données.
-   * 
-   * @param userId - L'identifiant de l'utilisateur
-   * @param currentPoints - Le solde de points actuel de l'utilisateur (après une action)
-   * @returns Le tableau des badges qui viennent d'être débloqués
-   */
-  private static async checkAndAwardBadges(userId: string, currentPoints: number, tx: any = prisma) {
-    // Récupération des badges éligibles que l'utilisateur ne possède pas encore
-    const eligibleBadges = await tx.badge.findMany({
-      where: {
-        pointsRequired: { lte: currentPoints },
-        users: {
-          none: { userId: userId },
-        },
+          newBadges: eligibleBadges,
+        };
       },
-    });
+      { timeout: 10000, maxWait: 10000 }
+    );
 
-    const unlockedBadges = [];
+    // 5. Effets de bord exécutés après le commit pour éviter l'épuisement du pool de connexions
+    EventLogger.log({
+      userId,
+      eventType: "micro_challenge_completed",
+      eventData: { prescriptionItemId, pointsEarned: txResult.pointsEarned },
+    }).catch(() => {});
 
-    // Attribution des nouveaux badges
-    for (const badge of eligibleBadges) {
-      await tx.userBadge.create({
-        data: {
-          userId,
-          badgeId: badge.id,
-          source: "MICRO_DEFI",
-        },
-      });
-      unlockedBadges.push(badge);
-
-      await EventLogger.log({
+    for (const badge of txResult.newBadges) {
+      EventLogger.log({
         userId,
         eventType: "badge_unlocked",
         eventData: { badgeId: badge.id, badgeName: badge.name },
-      });
+      }).catch(() => {});
 
-      // Notification
-      await NotificationService.send({
+      NotificationService.send({
         userId,
         type: "BADGE_UNLOCKED",
         title: "Nouveau badge débloqué ! 🏆",
         message: `Félicitations, vous avez obtenu le badge : ${badge.name}`,
-        actionLink: "/mon-profil"
-      });
+        actionLink: "/mon-profil",
+      }).catch(() => {});
     }
 
-    return unlockedBadges;
+    return {
+      success: true,
+      pointsEarned: txResult.pointsEarned,
+      totalPoints: txResult.totalPoints,
+      newBadges: txResult.newBadges,
+    };
   }
 }
