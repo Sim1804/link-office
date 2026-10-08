@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export const metadata = { title: "Éditer au catalogue — LinkOffice" };
+export const metadata = { title: "Éditer au catalogue — Link Office" };
 
 export default async function EditCatalogItemPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

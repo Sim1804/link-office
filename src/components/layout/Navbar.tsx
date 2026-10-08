@@ -1,7 +1,7 @@
 /**
  * @file Navbar.tsx
  * @module src/components/layout
- * @description Barre de navigation principale de LinkOffice — responsive et RBAC.
+ * @description Barre de navigation principale de Link Office — responsive et RBAC.
  *
  * La Navbar adapte dynamiquement son contenu selon le statut de session et le rôle :
  *
@@ -123,7 +123,7 @@ export function Navbar() {
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3.5 shadow-2xs">
       <div className="max-w-[1440px] mx-auto flex items-center justify-between">
 
-        {/* Logo LinkOffice — redirige vers le bon point d'entrée selon le rôle */}
+        {/* Logo Link Office — redirige vers le bon point d'entrée selon le rôle */}
         <Link href={session ? (userRole === "SUPER_ADMIN" ? "/dashboard/superadmin" : userRole.startsWith("ADMIN_") ? navLinks[0].href : "/dashboard") : "/"}
           className="flex items-center text-decoration-none shrink-0 hover:opacity-90 transition-opacity"
         >

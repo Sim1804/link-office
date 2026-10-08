@@ -1,12 +1,12 @@
 /**
- * app/not-found.tsx — Page 404 personnalisée LinkOffice
+ * app/not-found.tsx — Page 404 personnalisée Link Office
  */
 import Link from "next/link";
 import { Home, Search, AlertCircle } from "lucide-react";
 import { Logo } from "@/src/components/brand/Logo";
 
 export const metadata = {
-  title: "Page introuvable — LinkOffice",
+  title: "Page introuvable — Link Office",
   description: "La page que vous cherchez n'existe pas ou a été déplacée.",
 };
 

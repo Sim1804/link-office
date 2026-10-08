@@ -90,7 +90,7 @@ export default function JoinPage() {
 
       <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 480 }}>
 
-        {/* Logo LinkOffice */}
+        {/* Logo Link Office */}
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: 20 }}>
             <div style={{ width: 40, height: 40, background: "var(--primary)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 20px rgba(124,58,237,0.4)" }}>

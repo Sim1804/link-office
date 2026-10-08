@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const otpauthUrl = generateURI({ label: user.email, issuer: "LinkOffice", secret });
+    const otpauthUrl = generateURI({ label: user.email, issuer: "Link Office", secret });
 
     return NextResponse.json({
       secret,

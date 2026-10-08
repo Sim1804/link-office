@@ -449,11 +449,11 @@ Le résultat antérieur indiquant $P@1 = P@3 = P@5 = \text{MAP} = 1,0$ était un
 4. **Accord inter-annotateurs :** Le Kappa pondéré quadratique de Cohen (`Cohen's Quadratic Weighted Kappa`) atteint **$\kappa = 0,725$**, confirmant un accord substantiel et solide entre annotateurs.
 
 #### Résultats Comparatifs Mesurés
-L'exécution de [`tests/engines/evaluate-recommendations-benchmark.ts`](file:///d:/Projects/link-office/tests/engines/evaluate-recommendations-benchmark.ts) établit la supériorité statistique du moteur LinkOffice face à 3 baselines :
+L'exécution de [`tests/engines/evaluate-recommendations-benchmark.ts`](file:///d:/Projects/link-office/tests/engines/evaluate-recommendations-benchmark.ts) établit la supériorité statistique du moteur Link Office face à 3 baselines :
 
 | Moteur / Baseline | Precision@1 ($P@1$) | Bootstrap 95% CI ($P@1$) | MAP (Mean Avg Precision) | nDCG@5 |
 | :--- | :---: | :---: | :---: | :---: |
-| **Moteur LinkOffice (Complet)** | **0,433** | **[0,267 ; 0,600]** | **0,433** | **0,515** |
+| **Moteur Link Office (Complet)** | **0,433** | **[0,267 ; 0,600]** | **0,433** | **0,515** |
 | **Baseline Filtre Dimension Seule** | 0,433 | [0,267 ; 0,600] | 0,433 | 0,450 |
 | **Baseline Popularité Globale** | 0,000 | [0,000 ; 0,000] | 0,087 | 0,133 |
 | **Baseline Aléatoire (Random)** | 0,000 | [0,000 ; 0,000] | 0,085 | 0,100 |

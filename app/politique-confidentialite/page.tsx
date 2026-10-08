@@ -3,8 +3,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Shield, Lock, Database, UserX, Mail } from "lucide-react";
 
 export const metadata = {
-  title: "Politique de confidentialité — LinkOffice",
-  description: "Politique de confidentialité et protection des données personnelles de LinkOffice.",
+  title: "Politique de confidentialité — Link Office",
+  description: "Politique de confidentialité et protection des données personnelles de Link Office.",
 };
 
 export default function PolitiqueConfidentialite() {

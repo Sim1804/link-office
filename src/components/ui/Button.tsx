@@ -3,7 +3,7 @@
  * @module src/components/ui
  * @description Composant Button réutilisable avec variantes, tailles et état de chargement.
  *
- * Composant de base du design system LinkOffice. Encapsule un élément `<button>` natif
+ * Composant de base du design system Link Office. Encapsule un élément `<button>` natif
  * tout en appliquant automatiquement :
  * - Les styles de variantes (couleur, effet glow, hover)
  * - La gestion des états `disabled` et `loading`
@@ -73,7 +73,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       amber: "bg-[#FFC629] hover:bg-[#F26D35] text-white shadow-2xs",
     };
 
-    /** Classes de taille (padding + taille du texte) - Style capsule charte LinkOffice */
+    /** Classes de taille (padding + taille du texte) - Style capsule charte Link Office */
     const sizeClasses = {
       sm: "px-4 py-1.5 text-xs rounded-full",
       md: "px-5 py-2.5 text-xs sm:text-sm rounded-full",

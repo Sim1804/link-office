@@ -20,7 +20,7 @@ export const HeroModern: React.FC<HeroModernProps> = ({ onStartTest, onExploreMe
       statLabel: 'Indice Moyen Global',
       trend: '+12% ce trimestre',
       quote: '« La confiance est le premier levier de performance durable. »',
-      author: 'Observatoire LinkOffice 2024'
+      author: 'Observatoire Link Office 2024'
     },
     p1: {
       score: 86,

@@ -305,7 +305,7 @@ export function IrisWidget() {
         setMessages([{
           id: "welcome-guest",
           sender: "iris",
-          text: "Bonjour ! Je suis IRIS, l'intelligence relationnelle de LinkOffice. Je suis là pour vous faire découvrir notre méthodologie, répondre à vos questions sur l'IQRH et vous guider dans l'amélioration de vos relations.",
+          text: "Bonjour ! Je suis IRIS, l'intelligence relationnelle de Link Office. Je suis là pour vous faire découvrir notre méthodologie, répondre à vos questions sur l'IQRH et vous guider dans l'amélioration de vos relations.",
           timestamp: new Date(),
         }]);
       }
@@ -404,13 +404,13 @@ export function IrisWidget() {
         
         const lower = trimmed.toLowerCase();
         if (lower.includes("dimension") || lower.includes("5")) {
-          reply = "Les 5 dimensions LinkOffice sont :\n\n1. **Dimension Sociale** : Réseau élargi, sentiment d'appartenance et liens faibles protecteurs au quotidien.\n2. **Dimension Affective** : Liens de confiance profonde, écoute sincère et soutien émotionnel des pairs.\n3. **Vie Sentimentale / Intime** : Sphère privée, sécurité et équilibre affectif personnel.\n4. **Vie Professionnelle** : Coopération, sécurité psychologique, reconnaissance et équité managériale.\n5. **Relation à Soi** : Écoute de ses limites, auto-bienveillance et prévention de la charge mentale.";
+          reply = "Les 5 dimensions Link Office sont :\n\n1. **Dimension Sociale** : Réseau élargi, sentiment d'appartenance et liens faibles protecteurs au quotidien.\n2. **Dimension Affective** : Liens de confiance profonde, écoute sincère et soutien émotionnel des pairs.\n3. **Vie Sentimentale / Intime** : Sphère privée, sécurité et équilibre affectif personnel.\n4. **Vie Professionnelle** : Coopération, sécurité psychologique, reconnaissance et équité managériale.\n5. **Relation à Soi** : Écoute de ses limites, auto-bienveillance et prévention de la charge mentale.";
         } else if (lower.includes("organisation") || lower.includes("entreprise") || lower.includes("pro") || lower.includes("équipe") || lower.includes("solution")) {
-          reply = "LinkOffice propose aux organisations un accompagnement complet :\n\n• **Baromètre d'équipe anonyme** (k-anonymat strict dès 5 répondants) pour mesurer le climat social.\n• **Programme Binôme Relationnel** pour briser les silos et favoriser l'entraide.\n• **Plans d'actions RH & managériaux** pour prévenir les RPS et améliorer la QVCT.\n• **Portails dédiés** : B2B (entreprises), B2G (collectivités) et B2B2C (mutuelles/assurances).";
+          reply = "Link Office propose aux organisations un accompagnement complet :\n\n• **Baromètre d'équipe anonyme** (k-anonymat strict dès 5 répondants) pour mesurer le climat social.\n• **Programme Binôme Relationnel** pour briser les silos et favoriser l'entraide.\n• **Plans d'actions RH & managériaux** pour prévenir les RPS et améliorer la QVCT.\n• **Portails dédiés** : B2B (entreprises), B2G (collectivités) et B2B2C (mutuelles/assurances).";
         } else if (lower.includes("iris") || lower.includes("coach") || lower.includes("ia") || lower.includes("fonctionne")) {
           reply = "En tant que coach d'intelligence relationnelle, mon accompagnement repose sur 4 piliers :\n\n1. **Analyse personnalisée** de votre bilan IQRH pour révéler vos forces et axes de progression.\n2. **Ordonnance Relationnelle sur-mesure** avec des recommandations et micro-défis hebdomadaires progressifs.\n3. **Accompagnement continu** pour surmonter des blocages, préparer des discussions difficiles ou désamorcer des tensions.\n4. **Validation des défis** et suivi gamifié de votre progression.";
         } else if (lower.includes("calcul") || lower.includes("score") || lower.includes("iqrh")) {
-          reply = "Votre score IQRH (0 à 100) est calculé à partir du questionnaire psychométrique LinkOffice (~8 à 10 minutes). Il évalue vos comportements et ressentis à travers les 5 dimensions fondamentales, complété par l'ICR (Complexité), l'IER (Équilibre) et votre Météo relationnelle.";
+          reply = "Votre score IQRH (0 à 100) est calculé à partir du questionnaire psychométrique Link Office (~8 à 10 minutes). Il évalue vos comportements et ressentis à travers les 5 dimensions fondamentales, complété par l'ICR (Complexité), l'IER (Équilibre) et votre Météo relationnelle.";
         }
 
         setMessages((prev) => [...prev, {
@@ -451,13 +451,13 @@ export function IrisWidget() {
           isPremiumCTA: true 
         }]);
       } else {
-        // En cas de coupure réseau, fournir une réponse de haute qualité cohérente avec LinkOffice
+        // En cas de coupure réseau, fournir une réponse de haute qualité cohérente avec Link Office
         let fallbackReply = "Je reste à votre entière disposition pour vous accompagner dans votre équilibre relationnel. N'hésitez pas à explorer vos micro-défis du jour ou à me poser une autre question !";
         const lower = trimmed.toLowerCase();
         if (lower.includes("dimension") || lower.includes("5")) {
-          fallbackReply = "Les 5 dimensions du climat relationnel LinkOffice sont :\n\n1. **Dimension Sociale** : Réseau relationnel élargi, inclusion, sentiment d'appartenance et liens faibles protecteurs au quotidien.\n2. **Dimension Affective** : Liens de confiance profonde, écoute sincère et soutien émotionnel des pairs.\n3. **Vie Sentimentale / Intime** : Sphère privée, sécurité et équilibre affectif personnel.\n4. **Vie Professionnelle** : Coopération, sécurité psychologique, reconnaissance et équité managériale.\n5. **Relation à Soi** : Écoute de ses propres limites, auto-bienveillance et prévention de la charge mentale.";
+          fallbackReply = "Les 5 dimensions du climat relationnel Link Office sont :\n\n1. **Dimension Sociale** : Réseau relationnel élargi, inclusion, sentiment d'appartenance et liens faibles protecteurs au quotidien.\n2. **Dimension Affective** : Liens de confiance profonde, écoute sincère et soutien émotionnel des pairs.\n3. **Vie Sentimentale / Intime** : Sphère privée, sécurité et équilibre affectif personnel.\n4. **Vie Professionnelle** : Coopération, sécurité psychologique, reconnaissance et équité managériale.\n5. **Relation à Soi** : Écoute de ses propres limites, auto-bienveillance et prévention de la charge mentale.";
         } else if (lower.includes("organisation") || lower.includes("entreprise") || lower.includes("pro") || lower.includes("équipe") || lower.includes("solution")) {
-          fallbackReply = "LinkOffice propose aux organisations :\n\n• **Baromètre d'équipe et Climat Social** : Mesure du bien-être relationnel 100% anonymisée (k-anonymat strict dès 5 répondants).\n• **Programme Binôme Relationnel** : Mise en relation de pairs pour briser les silos et favoriser l'entraide.\n• **Plans d'actions RH & managériaux** : Prévention active des RPS et amélioration de la QVCT.\n• **Portails dédiés** : B2B (entreprises), B2G (collectivités) et B2B2C (mutuelles et réseaux de santé).";
+          fallbackReply = "Link Office propose aux organisations :\n\n• **Baromètre d'équipe et Climat Social** : Mesure du bien-être relationnel 100% anonymisée (k-anonymat strict dès 5 répondants).\n• **Programme Binôme Relationnel** : Mise en relation de pairs pour briser les silos et favoriser l'entraide.\n• **Plans d'actions RH & managériaux** : Prévention active des RPS et amélioration de la QVCT.\n• **Portails dédiés** : B2B (entreprises), B2G (collectivités) et B2B2C (mutuelles et réseaux de santé).";
         } else if (lower.includes("iris") || lower.includes("coach") || lower.includes("ia") || lower.includes("fonctionne")) {
           fallbackReply = "En tant que coach d'intelligence relationnelle, mon rôle est de vous guider pas à pas :\n\n1. **Analyse de votre bilan IQRH** pour identifier vos forces et leviers d'amélioration.\n2. **Génération d'une Ordonnance Relationnelle** avec des recommandations et micro-défis hebdomadaires progressifs.\n3. **Dialogue continu** pour surmonter des blocages, préparer des discussions difficiles ou désamorcer des tensions.\n4. **Validation des défis** et suivi gamifié de votre progression.";
         } else if (lower.includes("calcul") || lower.includes("score") || lower.includes("iqrh")) {

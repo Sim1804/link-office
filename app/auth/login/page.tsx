@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import { LoginForm } from "./LoginForm";
 
 export const metadata = {
-  title: "Connexion — LinkOffice",
-  description: "Accédez à votre espace LinkOffice",
+  title: "Connexion — Link Office",
+  description: "Accédez à votre espace Link Office",
 };
 
 export default function LoginPage() {

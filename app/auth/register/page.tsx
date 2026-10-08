@@ -68,7 +68,7 @@ export default function RegisterPage() {
             Créer votre compte
           </h3>
           <p className="text-xs text-[#123D46]/70 mt-1.5 font-inter">
-            Rejoignez LinkOffice et évaluez la santé relationnelle de votre équipe.
+            Rejoignez Link Office et évaluez la santé relationnelle de votre équipe.
           </p>
         </div>
 

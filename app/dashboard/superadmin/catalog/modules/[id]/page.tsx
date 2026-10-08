@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowLeft, Target, LayoutList, CheckCircle2, XCircle } from "lucide-react";
 
-export const metadata = { title: "Détail du Module Adaptatif — LinkOffice" };
+export const metadata = { title: "Détail du Module Adaptatif — Link Office" };
 
 export default async function ModuleDetailPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

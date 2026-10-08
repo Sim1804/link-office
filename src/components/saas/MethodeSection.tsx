@@ -38,7 +38,7 @@ export const MethodeSection: React.FC<{ onStartTest: () => void }> = ({ onStartT
           Fondement Scientifique
         </span>
         <h2 className="font-jakarta font-extrabold text-3xl sm:text-4xl text-[#123D46]">
-          La Méthode LinkOffice
+          La Méthode Link Office
         </h2>
         <p className="text-sm sm:text-base text-[#123D46]/70 font-inter">
           Une démarche en 4 temps issue de la recherche sociologique pour transformer le climat relationnel en levier de performance et de santé durable.

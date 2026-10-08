@@ -375,7 +375,7 @@ export const SaaSPlatform: React.FC<{
             Partenaires de Recherche & Réseaux Professionnels
           </h2>
           <p className="text-xs sm:text-sm text-[#123D46]/70 font-inter">
-            LinkOffice coopère avec des sociologues, des observatoires du travail et des associations de DRH pour enrichir continuellement la précision de l'indice IQRH.
+            Link Office coopère avec des sociologues, des observatoires du travail et des associations de DRH pour enrichir continuellement la précision de l'indice IQRH.
           </p>
         </div>
 

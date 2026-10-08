@@ -171,7 +171,7 @@ function matchesDim(itemCategoryOrData: string, personaDim: string): boolean {
   return false;
 }
 
-    // 1. Moteur LinkOffice (règles et métadonnées contextuelles)
+    // 1. Moteur Link Office (règles et métadonnées contextuelles)
     const scoredLO = libraryItems.map((item) => {
       const itemData = (item.data as any) || {};
       const catString = `${item.category || ""} ${itemData.dimensions_iqrh || ""} ${itemData.dimension || ""}`;
@@ -261,7 +261,7 @@ function matchesDim(itemCategoryOrData: string, personaDim: string): boolean {
       baselineRandom: summarizeMethod(results.baselineRandom),
     },
     conclusions: {
-      statisticalSuperiority: "Le moteur LinkOffice surpasse significativement la baseline aléatoire et la baseline de popularité sur MAP et nDCG@5",
+      statisticalSuperiority: "Le moteur Link Office surpasse significativement la baseline aléatoire et la baseline de popularité sur MAP et nDCG@5",
       nonCircularityProof: "La vérité terrain est découplée du moteur (issue d'annotations en aveugle avec accord Kappa calculé)",
     },
   };
@@ -271,7 +271,7 @@ function matchesDim(itemCategoryOrData: string, personaDim: string): boolean {
 
   console.log("\n====== RÉSULTATS DU BENCHMARK RECOMMANDATION NON-CIRCULAIRE (D3) ======");
   console.log(`Accord inter-annotateurs (Weighted Kappa) : ${interAnnotatorKappa}`);
-  console.log(`Moteur LinkOffice      : P@1=${finalReport.benchmarks.linkOfficeEngine.p1.mean} (CI: ${finalReport.benchmarks.linkOfficeEngine.p1.bootstrapCi95}) | MAP=${finalReport.benchmarks.linkOfficeEngine.map.mean} | nDCG@5=${finalReport.benchmarks.linkOfficeEngine.ndcg5.mean}`);
+  console.log(`Moteur Link Office      : P@1=${finalReport.benchmarks.linkOfficeEngine.p1.mean} (CI: ${finalReport.benchmarks.linkOfficeEngine.p1.bootstrapCi95}) | MAP=${finalReport.benchmarks.linkOfficeEngine.map.mean} | nDCG@5=${finalReport.benchmarks.linkOfficeEngine.ndcg5.mean}`);
   console.log(`Filtre Dimension Seule : P@1=${finalReport.benchmarks.baselineDimensionOnly.p1.mean} | MAP=${finalReport.benchmarks.baselineDimensionOnly.map.mean} | nDCG@5=${finalReport.benchmarks.baselineDimensionOnly.ndcg5.mean}`);
   console.log(`Baseline Popularité    : P@1=${finalReport.benchmarks.baselinePopularity.p1.mean} | MAP=${finalReport.benchmarks.baselinePopularity.map.mean} | nDCG@5=${finalReport.benchmarks.baselinePopularity.ndcg5.mean}`);
   console.log(`Baseline Aléatoire     : P@1=${finalReport.benchmarks.baselineRandom.p1.mean} | MAP=${finalReport.benchmarks.baselineRandom.map.mean} | nDCG@5=${finalReport.benchmarks.baselineRandom.ndcg5.mean}`);

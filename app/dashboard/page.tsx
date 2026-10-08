@@ -15,7 +15,7 @@ import Link from "next/link";
 
 
 export const metadata = {
-  title: "Tableau de bord — LinkOffice",
+  title: "Tableau de bord — Link Office",
   description: "Votre tableau de bord IQRH personnel",
 };
 

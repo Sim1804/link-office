@@ -9,8 +9,8 @@ interface IrisLogoProps {
 }
 
 /**
- * IrisMark: Sibling mark of LinkOffice Constellation
- * Fuses the LinkOffice constellation nodes & network lines
+ * IrisMark: Sibling mark of Link Office Constellation
+ * Fuses the Link Office constellation nodes & network lines
  * with an optical & neural iris aperture (Vision, Insight & Relational Intelligence).
  */
 export const IrisMark: React.FC<{
@@ -49,7 +49,7 @@ export const IrisMark: React.FC<{
         </linearGradient>
       </defs>
 
-      {/* 1. Subtle Outer Circular Boundary Ring - Exactly matching LinkOffice's r=44 ring */}
+      {/* 1. Subtle Outer Circular Boundary Ring - Exactly matching Link Office's r=44 ring */}
       <circle
         cx="50"
         cy="50"
@@ -81,7 +81,7 @@ export const IrisMark: React.FC<{
         fillOpacity="0.15"
       />
 
-      {/* 4. Network Connection Lines (DNA of LinkOffice Constellation) */}
+      {/* 4. Network Connection Lines (DNA of Link Office Constellation) */}
       {/* Outer relational link lines */}
       <line x1="16" y1="28" x2="35" y2="52" stroke="#B0C4DE" strokeWidth="1" strokeOpacity="0.85" />
       <line x1="16" y1="28" x2="58" y2="48" stroke="#D1D5DB" strokeWidth="0.8" strokeDasharray="2 3" strokeOpacity="0.7" />
@@ -99,7 +99,7 @@ export const IrisMark: React.FC<{
       <line x1="18" y1="76" x2="48" y2="50" stroke="#00A99D" strokeWidth="1" strokeDasharray="2 2" strokeOpacity="0.75" />
       <line x1="78" y1="28" x2="48" y2="50" stroke="#FFC629" strokeWidth="1" strokeDasharray="2 2" strokeOpacity="0.6" />
 
-      {/* 6. Constellation Nodes (Exact LinkOffice Heritage Nodes) */}
+      {/* 6. Constellation Nodes (Exact Link Office Heritage Nodes) */}
       {/* Node A: Top-left Coral Node (Emotion & Human) */}
       <circle cx="16" cy="28" r="4.2" fill="#F26D35" />
 
@@ -220,7 +220,7 @@ export const IrisLogo: React.FC<IrisLogoProps> = ({
           </div>
           {showTagline && (
             <span className="text-[10px] font-jakarta font-semibold text-[#00A99D] tracking-wide mt-1">
-              Intelligence Relationnelle · LinkOffice
+              Intelligence Relationnelle · Link Office
             </span>
           )}
         </div>
@@ -243,7 +243,7 @@ export const IrisLogo: React.FC<IrisLogoProps> = ({
         </div>
         {showTagline && (
           <span className="text-[10px] font-jakarta font-semibold text-[#00A99D] tracking-wider uppercase mt-0.5">
-            Intelligence Relationnelle · LinkOffice
+            Intelligence Relationnelle · Link Office
           </span>
         )}
       </div>

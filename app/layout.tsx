@@ -3,7 +3,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "LinkOffice — Évaluez et développez votre qualité relationnelle",
+  title: "Link Office — Évaluez et développez votre qualité relationnelle",
   description:
     "Évaluez votre Indice de Qualité Relationnelle et Humaine (IQRH) et bénéficiez des conseils personnalisés de l'IA IRIS.",
   keywords: ["IQRH", "qualité relationnelle", "bien-être", "IRIS", "coaching"],

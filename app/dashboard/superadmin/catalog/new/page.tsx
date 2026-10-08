@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, BookPlus } from "lucide-react";
 
 
-export const metadata = { title: "Ajouter au catalogue — LinkOffice" };
+export const metadata = { title: "Ajouter au catalogue — Link Office" };
 
 export default async function NewCatalogItemPage() {
   const session = await auth();

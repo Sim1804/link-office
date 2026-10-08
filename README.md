@@ -1,6 +1,6 @@
-# LinkOffice — Évaluez et développez votre qualité relationnelle
+# Link Office — Évaluez et développez votre qualité relationnelle
 
-LinkOffice est une application visant à mesurer l'Indice de Qualité Relationnelle et Humaine (IQRH) de ses utilisateurs à travers un questionnaire interactif. L'application propose un tableau de bord détaillé et un assistant virtuel (IRIS) pour accompagner l'utilisateur dans l'amélioration de ses relations.
+Link Office est une application visant à mesurer l'Indice de Qualité Relationnelle et Humaine (IQRH) de ses utilisateurs à travers un questionnaire interactif. L'application propose un tableau de bord détaillé et un assistant virtuel (IRIS) pour accompagner l'utilisateur dans l'amélioration de ses relations.
 
 Ce projet a été construit avec [Next.js](https://nextjs.org) (App Router), Tailwind CSS v4, et Recharts.
 

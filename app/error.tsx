@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * app/error.tsx — Page d'erreur globale LinkOffice
+ * app/error.tsx — Page d'erreur globale Link Office
  * Capte les erreurs non-gérées dans le tree React.
  */
 import { useEffect } from "react";

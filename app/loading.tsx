@@ -9,7 +9,7 @@ export default function Loading() {
       <div className="flex flex-col items-center gap-5 relative z-10">
         {/* Logo animé */}
         <div className="animate-pulse">
-          <img src="/logo_link_graphique.png" alt="LinkOffice Logo" width={120} height={120} className="object-contain" />
+          <img src="/logo_link_graphique.png" alt="Link Office Logo" width={120} height={120} className="object-contain" />
         </div>
 
         {/* Texte */}

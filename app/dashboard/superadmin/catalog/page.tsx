@@ -7,7 +7,7 @@ import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
 import { Select } from "@/components/ui/Select";
 import { CatalogImportButton } from "@/components/admin/CatalogImportButton";
 
-export const metadata = { title: "Catalogue (Back-Office) — LinkOffice" };
+export const metadata = { title: "Catalogue (Back-Office) — Link Office" };
 export const dynamic = "force-dynamic";
 
 export default async function CatalogPage({ searchParams }: { searchParams: Promise<{ filter?: string, page?: string }> }) {

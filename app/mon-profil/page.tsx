@@ -8,7 +8,7 @@ import { SituationChangementButton } from "./SituationChangementButton";
 import { ArrowLeft, ArrowRight, Trophy, Zap, Target, CheckCircle2, Shield } from "lucide-react";
 
 export const metadata = {
-  title: "Ma Progression — LinkOffice",
+  title: "Ma Progression — Link Office",
   description: "Vos statistiques et progression sur l'indice IQRH",
 };
 

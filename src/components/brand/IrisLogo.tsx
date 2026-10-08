@@ -9,8 +9,8 @@ interface IrisLogoProps {
 }
 
 /**
- * IrisMark: Sibling mark of LinkOffice Constellation
- * Fuses the LinkOffice constellation nodes & network lines
+ * IrisMark: Sibling mark of Link Office Constellation
+ * Fuses the Link Office constellation nodes & network lines
  * with an optical & neural iris aperture (Vision, Insight & Relational Intelligence).
  */
 export const IrisMark: React.FC<{
@@ -107,7 +107,7 @@ export const IrisLogo: React.FC<IrisLogoProps> = ({
           </div>
           {showTagline && (
             <span className="text-[10px] font-jakarta font-semibold text-[#00A99D] tracking-wide mt-1">
-              Intelligence Relationnelle · LinkOffice
+              Intelligence Relationnelle · Link Office
             </span>
           )}
         </div>
@@ -130,7 +130,7 @@ export const IrisLogo: React.FC<IrisLogoProps> = ({
         </div>
         {showTagline && (
           <span className="text-[10px] font-jakarta font-semibold text-[#00A99D] tracking-wider uppercase mt-0.5">
-            Intelligence Relationnelle · LinkOffice
+            Intelligence Relationnelle · Link Office
           </span>
         )}
       </div>

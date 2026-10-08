@@ -3,8 +3,8 @@ import { Footer } from "@/components/layout/Footer";
 import { FileText } from "lucide-react";
 
 export const metadata = {
-  title: "Mentions légales — LinkOffice",
-  description: "Mentions légales de la plateforme LinkOffice.",
+  title: "Mentions légales — Link Office",
+  description: "Mentions légales de la plateforme Link Office.",
 };
 
 export default function MentionsLegales() {
@@ -51,7 +51,7 @@ export default function MentionsLegales() {
             {
               title: "Limitation de responsabilité",
               content: [
-                "LinkOffice est un outil d'évaluation et d'accompagnement. Il ne constitue pas un acte médical, psychologique ou thérapeutique.",
+                "Link Office est un outil d'évaluation et d'accompagnement. Il ne constitue pas un acte médical, psychologique ou thérapeutique.",
                 "Les résultats fournis sont indicatifs et ne se substituent pas à un avis professionnel de santé.",
                 "L'éditeur ne peut être tenu responsable des décisions prises sur la base des résultats fournis par la plateforme.",
               ],

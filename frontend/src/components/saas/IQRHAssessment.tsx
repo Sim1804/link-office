@@ -243,7 +243,7 @@ export const IQRHAssessment: React.FC<{
           <div className="p-7 bg-[#123D46] text-white rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-md border border-[#00A99D]/30">
             <div className="space-y-2">
               <span className="text-xs uppercase font-bold text-[#FFC629] tracking-wider block">
-                Résultat Certifié LinkOffice
+                Résultat Certifié Link Office
               </span>
               <h4 className="font-jakarta font-extrabold text-3xl sm:text-4xl text-white">
                 Votre Indice Global IQRH : <span className="text-[#00A99D]">{score}</span> / 100

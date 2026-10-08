@@ -1,7 +1,7 @@
 /**
  * @file matching-service.ts
  * @module lib/binome/matching-service
- * @description Moteur de jumelage relationnel pour le programme de Binôme LinkOffice.
+ * @description Moteur de jumelage relationnel pour le programme de Binôme Link Office.
  *
  * FORMULE ET BARÈME DE COMPATIBILITÉ (Alignement Spécification & Mémoire) :
  * - Base forfaitaire de départ : 50 points

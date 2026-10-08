@@ -178,14 +178,14 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
                         {mainAuthor.name}
                       </div>
                       <div className="text-xs text-[#123D46]/60">
-                        {mainAuthor.profession || "Éclaireur LinkOffice"}
+                        {mainAuthor.profession || "Éclaireur Link Office"}
                       </div>
                     </div>
                   </>
                 ) : (
                   <div>
                     <div className="font-jakarta font-bold text-sm text-[#123D46]">
-                      Rédaction LinkOffice
+                      Rédaction Link Office
                     </div>
                     <div className="text-xs text-[#123D46]/60">
                       Laboratoire du Lien Humain
@@ -235,7 +235,7 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
                 className="w-full h-auto max-h-[520px] object-cover"
               />
               <div className="absolute bottom-3 right-4 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md text-white/80 text-[11px] font-medium">
-                Photo éditoriale © LinkOffice
+                Photo éditoriale © Link Office
               </div>
             </div>
           ) : null}
@@ -405,7 +405,7 @@ export default async function MediaDetailPage({ params }: { params: Promise<{ sl
                 Passez de la théorie à l'action relationnelle
               </h2>
               <p className="text-white/80 text-sm sm:text-base leading-relaxed">
-                Que vous soyez un particulier en quête d'équilibre ou une organisation soucieuse de la sécurité psychologique de ses équipes, la méthode LinkOffice vous accompagne.
+                Que vous soyez un particulier en quête d'équilibre ou une organisation soucieuse de la sécurité psychologique de ses équipes, la méthode Link Office vous accompagne.
               </p>
             </div>
 

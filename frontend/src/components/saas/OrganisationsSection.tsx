@@ -51,7 +51,7 @@ export const OrganisationsSection: React.FC<{ onContact: () => void }> = ({ onCo
           </h2>
 
           <p className="text-sm sm:text-base text-[#E3EBE6] font-inter leading-relaxed max-w-2xl">
-            Démissions imprévues, désengagement silencieux, perte de cohésion multi-sites : 80% des crises organisationnelles prennent racine dans une dégradation non mesurée du lien relationnel. LinkOffice vous donne la rigueur scientifique pour anticiper, diagnostiquer et agir durablement.
+            Démissions imprévues, désengagement silencieux, perte de cohésion multi-sites : 80% des crises organisationnelles prennent racine dans une dégradation non mesurée du lien relationnel. Link Office vous donne la rigueur scientifique pour anticiper, diagnostiquer et agir durablement.
           </p>
 
           <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -236,7 +236,7 @@ export const OrganisationsSection: React.FC<{ onContact: () => void }> = ({ onCo
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-[#FAF9F5] p-7 rounded-2xl border border-[#E3EBE6] flex flex-col justify-between space-y-4">
           <p className="text-sm text-[#123D46] font-inter italic leading-relaxed">
-            « Grâce à LinkOffice, nous avons pu objectiver ce que nous pressentions depuis des mois sans réussir à l’exprimer. L’indice IQRH nous a permis de cibler immédiatement les équipes en surcharge émotionnelle et de réinstaller des rituels de parole hebdomadaires. »
+            « Grâce à Link Office, nous avons pu objectiver ce que nous pressentions depuis des mois sans réussir à l’exprimer. L’indice IQRH nous a permis de cibler immédiatement les équipes en surcharge émotionnelle et de réinstaller des rituels de parole hebdomadaires. »
           </p>
           <div className="pt-4 border-t border-[#E3EBE6] flex items-center justify-between">
             <div>
@@ -255,7 +255,7 @@ export const OrganisationsSection: React.FC<{ onContact: () => void }> = ({ onCo
 
         <div className="bg-[#FAF9F5] p-7 rounded-2xl border border-[#E3EBE6] flex flex-col justify-between space-y-4">
           <p className="text-sm text-[#123D46] font-inter italic leading-relaxed">
-            « Dans notre secteur industriel, parler de relations humaines était perçu comme secondaire. La rigueur de mesure de LinkOffice a convaincu notre Comité de Direction : la qualité du lien est désormais suivie au même titre que nos indicateurs de production. »
+            « Dans notre secteur industriel, parler de relations humaines était perçu comme secondaire. La rigueur de mesure de Link Office a convaincu notre Comité de Direction : la qualité du lien est désormais suivie au même titre que nos indicateurs de production. »
           </p>
           <div className="pt-4 border-t border-[#E3EBE6] flex items-center justify-between">
             <div>

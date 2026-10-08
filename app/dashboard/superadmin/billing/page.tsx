@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { CreditCard, TrendingUp, Users, Building2, Server } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: "Finances & Facturation — LinkOffice" };
+export const metadata = { title: "Finances & Facturation — Link Office" };
 
 const PRICES = {
   B2C: 9.9,

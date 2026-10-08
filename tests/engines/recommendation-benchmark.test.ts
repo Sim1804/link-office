@@ -36,7 +36,7 @@ describe("D3. Benchmark de Recommandation Non-Circulaire (Vérité Terrain Déco
     expect(kappa).toBeGreaterThanOrEqual(0.70);
   });
 
-  it("3. Prouve la supériorité statistique du moteur LinkOffice vs baselines aléatoire et popularité", () => {
+  it("3. Prouve la supériorité statistique du moteur Link Office vs baselines aléatoire et popularité", () => {
     const results = JSON.parse(fs.readFileSync(resultsPath, "utf8"));
     const linkOffice = results.benchmarks.linkOfficeEngine;
     const random = results.benchmarks.baselineRandom;

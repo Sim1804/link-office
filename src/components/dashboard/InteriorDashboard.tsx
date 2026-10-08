@@ -701,7 +701,7 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                           Parler à IRIS — Votre coach IA
                         </h5>
                         <p className="text-xs text-[#123D46]/70 mt-0.5">
-                          Analyse personnalisée de vos résultats, guidée par l'intelligence relationnelle LinkOffice.
+                          Analyse personnalisée de vos résultats, guidée par l'intelligence relationnelle Link Office.
                         </p>
                       </div>
                     </div>
@@ -1037,7 +1037,7 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
                       Collectif Sociologie Appliquée
                     </h4>
                     <p className="text-xs text-[#123D46]/70 leading-relaxed">
-                      Intervenants certifiés LinkOffice pour animer des ateliers de cohésion et d'écoute active.
+                      Intervenants certifiés Link Office pour animer des ateliers de cohésion et d'écoute active.
                     </p>
                     <button className="text-xs text-[#5965E8] font-bold hover:underline">
                       Consulter les fiches contacts →
@@ -1416,7 +1416,7 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
             </div>
             <div className="space-y-1">
               <h3 className="font-jakarta font-extrabold text-xl text-[#123D46]">
-                Débloquez LinkOffice Premium
+                Débloquez Link Office Premium
               </h3>
               <p className="text-xs text-[#123D46]/70">
                 Accédez à l'historique complet, aux graphiques d'évolution et à l'analyse approfondie de votre profil.

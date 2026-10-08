@@ -259,7 +259,7 @@ export default function SuperAdminUsersPage() {
                     ) : user.role === "CITIZEN" ? (
                       <div className="text-[#123D46]/60 text-xs italic">Client Individuel (B2C)</div>
                     ) : user.role === "SUPER_ADMIN" ? (
-                      <div className="text-[#5965E8] text-xs font-semibold">Plateforme LinkOffice</div>
+                      <div className="text-[#5965E8] text-xs font-semibold">Plateforme Link Office</div>
                     ) : (
                       <div className="text-amber-700/70 text-xs italic">Non rattaché</div>
                     )}

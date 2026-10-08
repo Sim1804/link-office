@@ -130,7 +130,7 @@ export function evaluateOutputSafety(reply: string): OutputSafetyResult {
     return {
       safe: false,
       sanitizedContent:
-        "En tant que coach relationnel LinkOffice, je vous accompagne sur votre bien-être au travail et vos relations. Pour toute question médicale ou prescription, je vous oriente vers votre médecin traitant.",
+        "En tant que coach relationnel Link Office, je vous accompagne sur votre bien-être au travail et vos relations. Pour toute question médicale ou prescription, je vous oriente vers votre médecin traitant.",
       flaggedTerms,
     };
   }

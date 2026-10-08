@@ -14,7 +14,7 @@
 import { NextResponse } from "next/server";
 
 /**
- * Seuil minimal universel de k-anonymat pour la plateforme LinkOffice (B2B, B2G, Baromètre, Observatoire).
+ * Seuil minimal universel de k-anonymat pour la plateforme Link Office (B2B, B2G, Baromètre, Observatoire).
  */
 export const ANONYMITY_THRESHOLD = 5;
 

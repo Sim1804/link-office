@@ -179,7 +179,7 @@ Selon les travaux du Dr. Timothy Clark, une équipe chemine à travers quatre se
 
 ---
 
-## 3. Protocole d'action LinkOffice : 4 rituels concrets
+## 3. Protocole d'action Link Office : 4 rituels concrets
 
 Pour ancrer durablement la sécurité psychologique dans votre équipe, adoptez ces micro-habitudes :
 
@@ -288,7 +288,7 @@ Les liens faibles sont les personnes que vous croisez régulièrement sans parta
 - Le membre d'un groupe associatif avec lequel vous échangez sur un projet commun.
 
 \`\`\`
-L'écosystème relationnel complet selon LinkOffice :
+L'écosystème relationnel complet selon Link Office :
        ┌─────────────────────────────────────┐
        │     LIENS AMBIANTS (Quartier, Ville) │
        │   ┌─────────────────────────────┐   │
@@ -451,8 +451,8 @@ Chaque partenaire a le devoir impérieux de cultiver son propre jardin secret, s
     published: true,
     publishedAt: new Date("2026-10-07T07:00:00Z"),
     dimensionIqrh: "PROFESSIONAL" as const,
-    transcript: `[00:00] Générique audio LinkOffice — Pulsations calmes et piano ambiant.
-[00:15] Présentateur : « Bienvenue dans Résonance, le podcast de LinkOffice dédié à la science et au vécu de nos relations humaines. Aujourd'hui, nous recevons Sarah Danvers. »
+    transcript: `[00:00] Générique audio Link Office — Pulsations calmes et piano ambiant.
+[00:15] Présentateur : « Bienvenue dans Résonance, le podcast de Link Office dédié à la science et au vécu de nos relations humaines. Aujourd'hui, nous recevons Sarah Danvers. »
 [01:02] Sarah Danvers : « Pendant quinze ans, j'ai cru que le travail ne demandait que des compétences techniques et de l'énergie. Je n'avais pas compris que 80% de mon énergie vitale était absorbée par la friction relationnelle non résolue... »
 [08:24] « Le déclic est survenu un matin de réunion budgétaire. J'étais entourée de douze personnes, et je n'avais jamais ressenti une telle solitude dans toute ma vie. »
 [15:40] « Comment j'ai reconstruit mon réseau grâce à la méthode du binôme relationnel... »
@@ -461,7 +461,7 @@ Chaque partenaire a le devoir impérieux de cultiver son propre jardin secret, s
 
 Le burnout est traditionnellement décrit comme un épuisement professionnel lié à la surcharge de travail. Mais dans plus de la moitié des cas cliniques, la véritable étincelle est d'ordre **relationnel** : le sentiment d'isolement, le manque de reconnaissance sincère, la toxicité des non-dits ou la disparition du sentiment d'appartenance.
 
-Dans ce premier épisode de *Résonance*, **Sarah Danvers** (Directrice de transition et Témoin Éclaireur LinkOffice) livre un témoignage d'une lucidité rare sur les engrenages invisibles qui l'ont menée à la rupture, et sur le protocole méthodique qui lui a permis de restaurer son **Indice de Qualité des Relations Humaines (IQRH)**.
+Dans ce premier épisode de *Résonance*, **Sarah Danvers** (Directrice de transition et Témoin Éclaireur Link Office) livre un témoignage d'une lucidité rare sur les engrenages invisibles qui l'ont menée à la rupture, et sur le protocole méthodique qui lui a permis de restaurer son **Indice de Qualité des Relations Humaines (IQRH)**.
 
 ---
 

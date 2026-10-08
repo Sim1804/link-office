@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Plus, Building2, Users, Eye } from "lucide-react";
 
-export const metadata = { title: "Organisations (Partenaires) — LinkOffice" };
+export const metadata = { title: "Organisations (Partenaires) — Link Office" };
 export const dynamic = "force-dynamic";
 
 export default async function OrganizationsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {

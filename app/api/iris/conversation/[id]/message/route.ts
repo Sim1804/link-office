@@ -145,7 +145,7 @@ export async function POST(
 
       const escalationReply =
         safetyCheck.escalationResponse ||
-        "Mon accompagnement au sein de LinkOffice est exclusivement dédié à votre santé relationnelle.";
+        "Mon accompagnement au sein de Link Office est exclusivement dédié à votre santé relationnelle.";
 
       // Persistance en base de données pour la traçabilité
       await prisma.irisMessage.create({
@@ -185,14 +185,14 @@ BASE DE CONNAISSANCES OFFICIELLE LINKOFFICE (MÉTHODOLOGIE ET EXPERTISE) :
 
 1. L'IQRH (Indice de Qualité Relationnelle et Humaine) :
 - Définition : Indice scientifique sur 100 mesurant la qualité, la solidité et l'équilibre du capital relationnel d'un individu ou d'un collectif.
-- Calcul : Évalué via le questionnaire psychométrique LinkOffice (~8 à 10 minutes) explorant comportements, ressentis et satisfaction sur 5 dimensions pondérées.
+- Calcul : Évalué via le questionnaire psychométrique Link Office (~8 à 10 minutes) explorant comportements, ressentis et satisfaction sur 5 dimensions pondérées.
 - Indicateurs clés associés :
   * ICR (Indice de Complexité Relationnelle, sur 100) : mesure l'exigence et les frictions de l'écosystème relationnel (faible < 35, modéré 35-65, élevé > 65).
   * IER (Indice d'Équilibre Relationnel) : mesure l'harmonie et l'homogénéité de répartition entre les dimensions.
   * Météo Relationnelle : statut synthétique dynamique (Beau fixe, Éclaircies, Nuageux, Orageux).
   * 12 Profils Relationnels : Connecteur, Ancre, Catalyseur, Stratège, Négociateur, Médiateur, Pilier, Sentinelle, Explorateur, Inspirateur, Diplomate, Fédérateur.
 
-2. Les 5 Dimensions du Climat Relationnel LinkOffice :
+2. Les 5 Dimensions du Climat Relationnel Link Office :
 - 1. Dimension Sociale : Réseau relationnel élargi, sentiment d'appartenance, force protectrice des micro-interactions et liens faibles au quotidien.
 - 2. Dimension Affective : Liens de confiance profonde, écoute sincère, soutien émotionnel des pairs et proches.
 - 3. Vie Sentimentale / Intime : Sphère intime, équilibre affectif personnel, sécurité dans les relations privées.
@@ -220,7 +220,7 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
 - Ne refuse JAMAIS de répondre sous prétexte que l'utilisateur n'a pas encore passé son évaluation ! Si l'évaluation n'est pas encore complétée, délivre la réponse complète et invite ensuite chaleureusement à passer son évaluation [Commencer mon évaluation](/questionnaire) pour découvrir son diagnostic personnel.`;
 
     const systemPrompt = [
-      "Tu es IRIS, l'intelligence relationnelle bienveillante et coach expert de LinkOffice.",
+      "Tu es IRIS, l'intelligence relationnelle bienveillante et coach expert de Link Office.",
       linkOfficeKnowledgeBase,
       userIqrhContext === "NO_ASSESSMENT"
         ? "\n\nCONTEXTE UTILISATEUR : L'utilisateur n'a pas encore finalisé son évaluation IQRH. Réponds toujours avec bienveillance et expertise à ses questions, et invite-le avec tact à passer son évaluation [Commencer mon évaluation](/questionnaire) pour obtenir son diagnostic personnalisé."
@@ -509,13 +509,13 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
       const bestDim = res?.bestDimension ? res.bestDimension.replace("_", " ").toLowerCase() : "relations affectives";
 
       if (q.includes("dimension") || q.includes("5")) {
-        finalResponseText = "Les 5 dimensions du climat relationnel LinkOffice sont :\n\n1. **Dimension Sociale** : Réseau relationnel élargi, sentiment d'appartenance et liens faibles protecteurs au quotidien.\n2. **Dimension Affective** : Liens de confiance profonde, écoute sincère et soutien émotionnel des pairs.\n3. **Vie Sentimentale / Intime** : Sphère privée, sécurité affective et équilibre dans les relations proches.\n4. **Vie Professionnelle** : Coopération, sécurité psychologique, reconnaissance et équité managériale au travail.\n5. **Relation à Soi** : Écoute de ses propres limites, auto-bienveillance et régulation de la charge mentale.\n\nSouhaitez-vous que nous approfondissions l'une de ces dimensions ou que nous l'appliquions à votre quotidien ?";
+        finalResponseText = "Les 5 dimensions du climat relationnel Link Office sont :\n\n1. **Dimension Sociale** : Réseau relationnel élargi, sentiment d'appartenance et liens faibles protecteurs au quotidien.\n2. **Dimension Affective** : Liens de confiance profonde, écoute sincère et soutien émotionnel des pairs.\n3. **Vie Sentimentale / Intime** : Sphère privée, sécurité affective et équilibre dans les relations proches.\n4. **Vie Professionnelle** : Coopération, sécurité psychologique, reconnaissance et équité managériale au travail.\n5. **Relation à Soi** : Écoute de ses propres limites, auto-bienveillance et régulation de la charge mentale.\n\nSouhaitez-vous que nous approfondissions l'une de ces dimensions ou que nous l'appliquions à votre quotidien ?";
       } else if (q.includes("organisation") || q.includes("entreprise") || q.includes("pro") || q.includes("équipe") || q.includes("solution")) {
-        finalResponseText = "LinkOffice propose aux organisations un accompagnement complet et éprouvé :\n\n• **Baromètre d'équipe et Climat Social** : Mesure du bien-être relationnel collectif, 100% anonymisée avec k-anonymat strict (dès 5 répondants).\n• **Programme Binôme Relationnel** : Mise en relation de pairs volontaires pour briser les silos, créer de l'entraide et favoriser l'intégration.\n• **Plans d'actions RH & managériaux** : Recommandations opérationnelles pour prévenir les RPS et améliorer la QVCT.\n• **Portails dédiés** : B2B (entreprises), B2G (collectivités) et B2B2C (mutuelles et réseaux de santé).\n\nSouhaitez-vous découvrir comment déployer ces solutions au sein de votre structure ?";
+        finalResponseText = "Link Office propose aux organisations un accompagnement complet et éprouvé :\n\n• **Baromètre d'équipe et Climat Social** : Mesure du bien-être relationnel collectif, 100% anonymisée avec k-anonymat strict (dès 5 répondants).\n• **Programme Binôme Relationnel** : Mise en relation de pairs volontaires pour briser les silos, créer de l'entraide et favoriser l'intégration.\n• **Plans d'actions RH & managériaux** : Recommandations opérationnelles pour prévenir les RPS et améliorer la QVCT.\n• **Portails dédiés** : B2B (entreprises), B2G (collectivités) et B2B2C (mutuelles et réseaux de santé).\n\nSouhaitez-vous découvrir comment déployer ces solutions au sein de votre structure ?";
       } else if (q.includes("iris") || q.includes("coach") || q.includes("ia") || q.includes("fonctionne")) {
         finalResponseText = "En tant que coach d'intelligence relationnelle, mon accompagnement repose sur 4 piliers fondamentaux :\n\n1. **Analyse de votre bilan IQRH** pour identifier vos forces motrices et vos leviers d'amélioration.\n2. **Ordonnance Relationnelle sur-mesure** avec des recommandations personnalisées et des micro-défis hebdomadaires progressifs.\n3. **Dialogue continu** pour surmonter vos blocages, préparer des discussions sensibles ou désamorcer des tensions.\n4. **Validation des défis** et suivi gamifié de votre progression relationnelle.\n\nSur quel défi ou enjeu relationnel souhaiteriez-vous avancer aujourd'hui ?";
       } else if (q.includes("calcul") || q.includes("score") || q.includes("iqrh")) {
-        finalResponseText = "Votre score IQRH (Indice de Qualité Relationnelle et Humaine, sur 100) est issu du questionnaire psychométrique LinkOffice (~8 à 10 minutes).\n\nIl mesure l'équilibre de vos 5 dimensions de vie fondamentales, enrichi de l'ICR (Complexité Relationnelle), de l'IER (Équilibre Relationnel) et de votre Météo relationnelle dynamique.\n\nPour obtenir votre diagnostic individuel précis, vous pouvez compléter votre évaluation : [Commencer mon évaluation](/questionnaire).";
+        finalResponseText = "Votre score IQRH (Indice de Qualité Relationnelle et Humaine, sur 100) est issu du questionnaire psychométrique Link Office (~8 à 10 minutes).\n\nIl mesure l'équilibre de vos 5 dimensions de vie fondamentales, enrichi de l'ICR (Complexité Relationnelle), de l'IER (Équilibre Relationnel) et de votre Météo relationnelle dynamique.\n\nPour obtenir votre diagnostic individuel précis, vous pouvez compléter votre évaluation : [Commencer mon évaluation](/questionnaire).";
       } else if (q.includes("sentimentale") || q.includes("couple") || q.includes("intime")) {
         finalResponseText = "Pour votre dimension sentimentale, le Laboratoire du Lien Humain préconise le protocole d'« attention sanctuarisée » : définir un moment d'écoute mutuelle non négociable chaque semaine, sans écran ni contraintes logistiques. Souhaitez-vous planifier ce temps d'échange cette semaine ?";
       } else if (q.includes("force") || q.includes("point fort") || q.includes("atout")) {

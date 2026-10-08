@@ -13,7 +13,7 @@ import { BinomePreferencesForm } from "./BinomePreferencesForm";
 import { ActiveBinomeDashboard } from "./ActiveBinomeDashboard";
 
 export const metadata = {
-  title: "Binôme Relationnel — LinkOffice",
+  title: "Binôme Relationnel — Link Office",
   description: "Connectez-vous avec un partenaire de développement pour progresser ensemble.",
 };
 

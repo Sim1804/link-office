@@ -1,7 +1,7 @@
 import { SuperAdminHeader } from "@/src/components/superadmin/SuperAdminHeader";
 import { getSuperAdminStats } from "@/lib/adminStats";
 
-export const metadata = { title: "Super Admin — LinkOffice" };
+export const metadata = { title: "Super Admin — Link Office" };
 
 export default async function SuperAdminLayout({ children }: { children: React.ReactNode }) {
   const stats = await getSuperAdminStats();

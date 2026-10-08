@@ -3,7 +3,7 @@
  * @module lib/iris
  * @description Constructeur du contexte système injecté dans les conversations avec IRIS.
  *
- * IRIS est l'IA de coaching relationnel de LinkOffice. Avant chaque message de l'utilisateur,
+ * IRIS est l'IA de coaching relationnel de Link Office. Avant chaque message de l'utilisateur,
  * IRIS reçoit un contexte système contenant le bilan IQRH complet de l'utilisateur.
  * Ce contexte est construit par `buildIrisContext()` et permet à IRIS de :
  *

@@ -163,7 +163,7 @@
     }
   },
   "conclusions": {
-    "statisticalSuperiority": "Le moteur LinkOffice surpasse significativement la baseline aléatoire et la baseline de popularité sur MAP et nDCG@5",
+    "statisticalSuperiority": "Le moteur Link Office surpasse significativement la baseline aléatoire et la baseline de popularité sur MAP et nDCG@5",
     "nonCircularityProof": "La vérité terrain est découplée du moteur (issue d'annotations en aveugle avec accord Kappa calculé)"
   }
 }

@@ -240,7 +240,7 @@ export function SubscriptionUpgradeButton({
       <Link
         href="/premium"
         onClick={onClick}
-        title="Passer à LinkOffice Premium"
+        title="Passer à Link Office Premium"
         className={`inline-flex items-center rounded-full font-jakarta font-bold transition-all whitespace-nowrap shadow-xs hover:shadow-sm ${sizeClasses} ${className}`}
         style={{
           background: "linear-gradient(135deg, #00A99D 0%, #008f85 100%)",
@@ -261,7 +261,7 @@ export function SubscriptionUpgradeButton({
     <Link
       href="/premium"
       onClick={onClick}
-      title="Passer à LinkOffice Premium+"
+      title="Passer à Link Office Premium+"
       className={`inline-flex items-center rounded-full font-jakarta font-bold transition-all whitespace-nowrap shadow-xs hover:shadow-sm ${sizeClasses} ${className}`}
       style={{
         background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",

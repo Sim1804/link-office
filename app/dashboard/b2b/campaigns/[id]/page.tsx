@@ -845,7 +845,7 @@ export default function CampaignDetailPage() {
                         Garantie d'anonymat & Confidentialité RGPD
                       </p>
                       <p className="text-[#123D46]/75">
-                        Conformément au protocole LinkOffice, les résultats consolidés ne sont
+                        Conformément au protocole Link Office, les résultats consolidés ne sont
                         accessibles qu'à partir d'un seuil minimum de 5 réponses complétées afin de
                         préserver l'anonymat strict de chaque répondant.
                       </p>

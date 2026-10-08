@@ -55,7 +55,7 @@ const PLANS: {
       "Recommandations pour les politiques publiques",
       "Secret statistique et anonymat certifiés",
     ],
-    color: "#00A99D", // LinkOffice Teal
+    color: "#00A99D", // Link Office Teal
     bgLight: "bg-[#00A99D]/10",
     icon: <Globe size={24} />,
   },
@@ -71,7 +71,7 @@ const PLANS: {
       "Orientations bienveillantes vers vos services de soins",
       "Module exclusif Binôme Relationnel inclus",
     ],
-    color: "#FFC629", // LinkOffice Yellow
+    color: "#FFC629", // Link Office Yellow
     bgLight: "bg-[#FFC629]/15",
     icon: <HeartPulse size={24} />,
   },
@@ -88,8 +88,8 @@ const FAQS = [
     a: "La passation du diagnostic complet IQRH prend entre 6 et 8 minutes. Il est accessible sans téléchargement, sur mobile, tablette ou ordinateur de bureau.",
   },
   {
-    q: "En quoi LinkOffice répond-il aux exigences QVCT et RSE ?",
-    a: "Les indicateurs LinkOffice fournissent des données tangibles et auditables pour enrichir votre Document Unique d'Évaluation des Risques Professionnels (DUERP), vos bilans RSE et vos commissions QVCT.",
+    q: "En quoi Link Office répond-il aux exigences QVCT et RSE ?",
+    a: "Les indicateurs Link Office fournissent des données tangibles et auditables pour enrichir votre Document Unique d'Évaluation des Risques Professionnels (DUERP), vos bilans RSE et vos commissions QVCT.",
   },
   {
     q: "Comment s'intègrent les rituels du Coach IRIS au quotidien ?",
@@ -173,7 +173,7 @@ export default function BusinessPage() {
               </h1>
 
               <p className="text-[#E3EBE6] text-base sm:text-lg max-w-2xl leading-relaxed font-inter animate-fade-in">
-                Démissions imprévues, désengagement silencieux, perte de cohésion multi-sites : 80% des crises organisationnelles prennent racine dans une dégradation non mesurée du lien relationnel. LinkOffice vous apporte la rigueur méthodologique pour anticiper, diagnostiquer et agir durablement.
+                Démissions imprévues, désengagement silencieux, perte de cohésion multi-sites : 80% des crises organisationnelles prennent racine dans une dégradation non mesurée du lien relationnel. Link Office vous apporte la rigueur méthodologique pour anticiper, diagnostiquer et agir durablement.
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-3 animate-fade-in">
@@ -549,7 +549,7 @@ export default function BusinessPage() {
                   </div>
                   <h3 className="text-2xl font-bold font-jakarta text-[#123D46]">Demande transmise avec succès !</h3>
                   <p className="text-[#123D46]/70 text-xs sm:text-sm leading-relaxed">
-                    Merci pour votre intérêt. Un expert sociologue LinkOffice prendra contact avec vous sous 24h ouvrées pour affiner le dimensionnement de votre observatoire.
+                    Merci pour votre intérêt. Un expert sociologue Link Office prendra contact avec vous sous 24h ouvrées pour affiner le dimensionnement de votre observatoire.
                   </p>
                   <button
                     onClick={() => { setSubmitted(false); setSelectedPlan(null); setSubmitError(null); }}
@@ -729,7 +729,7 @@ export default function BusinessPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white p-7 sm:p-8 rounded-3xl border border-[#E3EBE6] flex flex-col justify-between space-y-4 shadow-xs hover:shadow-md transition-shadow">
               <p className="text-xs sm:text-sm text-[#123D46] font-inter italic leading-relaxed">
-                « Grâce à LinkOffice, nous avons pu objectiver ce que nous pressentions depuis des mois sans réussir à l'exprimer. L'indice IQRH nous a permis de cibler immédiatement les équipes en surcharge relationnelle et de réinstaller des rituels de parole hebdomadaires pérennes. »
+                « Grâce à Link Office, nous avons pu objectiver ce que nous pressentions depuis des mois sans réussir à l'exprimer. L'indice IQRH nous a permis de cibler immédiatement les équipes en surcharge relationnelle et de réinstaller des rituels de parole hebdomadaires pérennes. »
               </p>
               <div className="pt-4 border-t border-[#E3EBE6] flex items-center justify-between gap-4">
                 <div>
@@ -748,7 +748,7 @@ export default function BusinessPage() {
 
             <div className="bg-white p-7 sm:p-8 rounded-3xl border border-[#E3EBE6] flex flex-col justify-between space-y-4 shadow-xs hover:shadow-md transition-shadow">
               <p className="text-xs sm:text-sm text-[#123D46] font-inter italic leading-relaxed">
-                « Dans notre secteur industriel, parler de relations humaines était parfois perçu comme secondaire. La rigueur de mesure de LinkOffice a convaincu notre Comité de Direction : la qualité du lien est désormais suivie au même titre que nos indicateurs de production. »
+                « Dans notre secteur industriel, parler de relations humaines était parfois perçu comme secondaire. La rigueur de mesure de Link Office a convaincu notre Comité de Direction : la qualité du lien est désormais suivie au même titre que nos indicateurs de production. »
               </p>
               <div className="pt-4 border-t border-[#E3EBE6] flex items-center justify-between gap-4">
                 <div>

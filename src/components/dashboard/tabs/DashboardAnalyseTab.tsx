@@ -27,7 +27,7 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
               Parler à IRIS — Votre coach IA
             </h5>
             <p className="text-xs text-[#123D46]/70 mt-0.5">
-              Analyse personnalisée de vos résultats, guidée par l'intelligence relationnelle LinkOffice.
+              Analyse personnalisée de vos résultats, guidée par l'intelligence relationnelle Link Office.
             </p>
           </div>
         </div>

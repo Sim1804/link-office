@@ -112,7 +112,7 @@ export function PublicNavbar() {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3.5 shadow-2xs w-full">
       <div className="max-w-[1440px] mx-auto flex items-center justify-between">
-        {/* Zone 1: Logo LinkOffice (conforme au design standard Navbar) */}
+        {/* Zone 1: Logo Link Office (conforme au design standard Navbar) */}
         <Link
           href="/"
           onClick={handleLogoClick}

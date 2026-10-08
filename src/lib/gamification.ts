@@ -1,7 +1,7 @@
 /**
  * @file gamification.ts
  * @module lib
- * @description Utilitaires de calcul du système de gamification de LinkOffice.
+ * @description Utilitaires de calcul du système de gamification de Link Office.
  *
  * Ce fichier expose des fonctions pures (sans base de données) utilisées côté client
  * et serveur pour calculer l'expérience, le niveau et la progression d'un utilisateur.
