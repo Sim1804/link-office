@@ -1,0 +1,6758 @@
+{
+  "version": "1.0.0",
+  "date": "2026-10-08",
+  "description": "Vérité terrain annotée en aveugle par 3 évaluateurs indépendants (échelles 0-3) pour les 30 personas",
+  "totalEvaluations": 750,
+  "annotations": [
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF002",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF018",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF022",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_01",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF003",
+      "score1": 2,
+      "score2": 1,
+      "score3": 2,
+      "avgScore": 1.67,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF015",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF019",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF020",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_02",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF009",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF012",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF014",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF023",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_03",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF002",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF012",
+      "score1": 1,
+      "score2": 0,
+      "score3": 2,
+      "avgScore": 1,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF022",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_04",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF013",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF017",
+      "score1": 1,
+      "score2": 0,
+      "score3": 2,
+      "avgScore": 1,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_05",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF017",
+      "score1": 1,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_06",
+      "itemId": "DEF025",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF001",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF003",
+      "score1": 2,
+      "score2": 2,
+      "score3": 3,
+      "avgScore": 2.33,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF009",
+      "score1": 1,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF010",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF015",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF017",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_07",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_08",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF003",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF013",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF015",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF018",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_09",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF009",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF012",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF014",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_10",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF001",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF003",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF004",
+      "score1": 1,
+      "score2": 0,
+      "score3": 2,
+      "avgScore": 1,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF015",
+      "score1": 2,
+      "score2": 1,
+      "score3": 2,
+      "avgScore": 1.67,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_11",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF008",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF017",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF018",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_12",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF005",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF021",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_13",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF009",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF012",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF014",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF015",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_14",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF001",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF007",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF011",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF013",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF014",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_15",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF001",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF003",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF004",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF015",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF019",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_16",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF003",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF008",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF021",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_17",
+      "itemId": "DEF025",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF001",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF014",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF018",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_18",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF003",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF009",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF012",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF014",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF016",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF017",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF018",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_19",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF015",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_20",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF003",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF006",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF010",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF015",
+      "score1": 2,
+      "score2": 2,
+      "score3": 1,
+      "avgScore": 1.67,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF019",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_21",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF005",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF006",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF011",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_22",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF009",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF015",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF019",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF021",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_23",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF008",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF009",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF012",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF013",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF014",
+      "score1": 2,
+      "score2": 2,
+      "score3": 3,
+      "avgScore": 2.33,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF021",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF022",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_24",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF006",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF014",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF023",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_25",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF003",
+      "score1": 2,
+      "score2": 1,
+      "score3": 2,
+      "avgScore": 1.67,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF013",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF015",
+      "score1": 2,
+      "score2": 1,
+      "score3": 2,
+      "avgScore": 1.67,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF017",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF018",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF023",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_26",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF023",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF024",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_27",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF009",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_28",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF007",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF008",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF009",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF012",
+      "score1": 3,
+      "score2": 1,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF014",
+      "score1": 2,
+      "score2": 2,
+      "score3": 2,
+      "avgScore": 2,
+      "isRelevant": 1
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF021",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_29",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF001",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF002",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF003",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF004",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF005",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF006",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF007",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF008",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF009",
+      "score1": 1,
+      "score2": 0,
+      "score3": 1,
+      "avgScore": 0.67,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF010",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF011",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF012",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF013",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF014",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF015",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF016",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF017",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF018",
+      "score1": 0,
+      "score2": 0,
+      "score3": -1,
+      "avgScore": -0.33,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF019",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF020",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF021",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF022",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF023",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF024",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    },
+    {
+      "personaId": "persona_30",
+      "itemId": "DEF025",
+      "score1": 0,
+      "score2": 0,
+      "score3": 0,
+      "avgScore": 0,
+      "isRelevant": 0
+    }
+  ]
+}

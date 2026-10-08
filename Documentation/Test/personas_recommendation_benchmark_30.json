@@ -1,0 +1,709 @@
+{
+  "version": "1.0.0",
+  "date": "2026-10-08",
+  "description": "30 personas synthétiques couvrant les 12 profils, 5 dimensions et situations de vie pour l'évaluation non-circulaire du moteur de recommandation",
+  "totalPersonas": 30,
+  "personas": [
+    {
+      "id": "persona_01",
+      "name": "Alexandre M.",
+      "role": "Manager de proximité",
+      "seniority": "3-5 ans",
+      "primaryProfile": "Connecteur",
+      "secondaryProfile": "Catalyseur",
+      "weakestDimension": "self",
+      "strongestDimension": "social",
+      "dimensions": {
+        "social": 78,
+        "affective": 65,
+        "sentimental": 58,
+        "professional": 72,
+        "self": 38
+      },
+      "situations": [
+        "Prise de poste managériale",
+        "Charge mentale élevée"
+      ],
+      "dominantNeeds": [
+        "Besoin de déconnexion numérique",
+        "Besoin d'autonomie relationnelle"
+      ]
+    },
+    {
+      "id": "persona_02",
+      "name": "Béatrice D.",
+      "role": "Ingénieure logiciel",
+      "seniority": "1-2 ans",
+      "primaryProfile": "Ancre",
+      "secondaryProfile": "Stratège",
+      "weakestDimension": "social",
+      "strongestDimension": "professional",
+      "dimensions": {
+        "social": 34,
+        "affective": 52,
+        "sentimental": 60,
+        "professional": 82,
+        "self": 70
+      },
+      "situations": [
+        "Télétravail intensif",
+        "Isolement géographique"
+      ],
+      "dominantNeeds": [
+        "Besoin d'écoute active",
+        "Besoin de sécurité psychologique"
+      ]
+    },
+    {
+      "id": "persona_03",
+      "name": "Cédric L.",
+      "role": "Chargé de clientèle",
+      "seniority": "5-10 ans",
+      "primaryProfile": "Médiateur",
+      "secondaryProfile": "Harmonisateur",
+      "weakestDimension": "professional",
+      "strongestDimension": "affective",
+      "dimensions": {
+        "social": 68,
+        "affective": 84,
+        "sentimental": 70,
+        "professional": 36,
+        "self": 55
+      },
+      "situations": [
+        "Conflit d'équipe récent"
+      ],
+      "dominantNeeds": [
+        "Besoin de clarification des rôles",
+        "Besoin de reconnaissance"
+      ]
+    },
+    {
+      "id": "persona_04",
+      "name": "Delphine R.",
+      "role": "Responsable RH",
+      "seniority": "> 10 ans",
+      "primaryProfile": "Fédérateur",
+      "secondaryProfile": "Conseiller",
+      "weakestDimension": "self",
+      "strongestDimension": "social",
+      "dimensions": {
+        "social": 85,
+        "affective": 75,
+        "sentimental": 62,
+        "professional": 70,
+        "self": 32
+      },
+      "situations": [
+        "Réorganisation de service",
+        "Charge mentale élevée"
+      ],
+      "dominantNeeds": [
+        "Besoin de sécurité psychologique",
+        "Besoin de déconnexion numérique"
+      ]
+    },
+    {
+      "id": "persona_05",
+      "name": "Éric T.",
+      "role": "Technicien support",
+      "seniority": "< 1 an",
+      "primaryProfile": "Explorateur",
+      "secondaryProfile": "Sentinelle",
+      "weakestDimension": "affective",
+      "strongestDimension": "self",
+      "dimensions": {
+        "social": 45,
+        "affective": 30,
+        "sentimental": 50,
+        "professional": 64,
+        "self": 78
+      },
+      "situations": [
+        "Isolement géographique"
+      ],
+      "dominantNeeds": [
+        "Besoin de reconnaissance",
+        "Besoin d'écoute active"
+      ]
+    },
+    {
+      "id": "persona_06",
+      "name": "Fatima B.",
+      "role": "Directrice de projet",
+      "seniority": "5-10 ans",
+      "primaryProfile": "Stratège",
+      "secondaryProfile": "Pionnier",
+      "weakestDimension": "sentimental",
+      "strongestDimension": "professional",
+      "dimensions": {
+        "social": 60,
+        "affective": 55,
+        "sentimental": 35,
+        "professional": 88,
+        "self": 62
+      },
+      "situations": [
+        "Prise de poste managériale"
+      ],
+      "dominantNeeds": [
+        "Besoin de clarification des rôles"
+      ]
+    },
+    {
+      "id": "persona_07",
+      "name": "Guillaume P.",
+      "role": "Comptable",
+      "seniority": "> 10 ans",
+      "primaryProfile": "Ancre",
+      "secondaryProfile": "Harmonisateur",
+      "weakestDimension": "social",
+      "strongestDimension": "self",
+      "dimensions": {
+        "social": 32,
+        "affective": 65,
+        "sentimental": 72,
+        "professional": 68,
+        "self": 80
+      },
+      "situations": [
+        "Fin de carrière / Transmission"
+      ],
+      "dominantNeeds": [
+        "Besoin de reconnaissance"
+      ]
+    },
+    {
+      "id": "persona_08",
+      "name": "Hélène V.",
+      "role": "Consultante transformation",
+      "seniority": "3-5 ans",
+      "primaryProfile": "Catalyseur",
+      "secondaryProfile": "Connecteur",
+      "weakestDimension": "self",
+      "strongestDimension": "social",
+      "dimensions": {
+        "social": 88,
+        "affective": 70,
+        "sentimental": 60,
+        "professional": 74,
+        "self": 35
+      },
+      "situations": [
+        "Télétravail intensif",
+        "Charge mentale élevée"
+      ],
+      "dominantNeeds": [
+        "Besoin de déconnexion numérique"
+      ]
+    },
+    {
+      "id": "persona_09",
+      "name": "Ibrahim K.",
+      "role": "Développeur mobile",
+      "seniority": "1-2 ans",
+      "primaryProfile": "Sentinelle",
+      "secondaryProfile": "Ancre",
+      "weakestDimension": "social",
+      "strongestDimension": "professional",
+      "dimensions": {
+        "social": 28,
+        "affective": 48,
+        "sentimental": 54,
+        "professional": 80,
+        "self": 65
+      },
+      "situations": [
+        "Télétravail intensif"
+      ],
+      "dominantNeeds": [
+        "Besoin de sécurité psychologique"
+      ]
+    },
+    {
+      "id": "persona_10",
+      "name": "Julie M.",
+      "role": "Assistante de direction",
+      "seniority": "5-10 ans",
+      "primaryProfile": "Harmonisateur",
+      "secondaryProfile": "Médiateur",
+      "weakestDimension": "professional",
+      "strongestDimension": "affective",
+      "dimensions": {
+        "social": 70,
+        "affective": 86,
+        "sentimental": 75,
+        "professional": 34,
+        "self": 60
+      },
+      "situations": [
+        "Conflit d'équipe récent",
+        "Charge mentale élevée"
+      ],
+      "dominantNeeds": [
+        "Besoin de reconnaissance",
+        "Besoin d'écoute active"
+      ]
+    },
+    {
+      "id": "persona_11",
+      "name": "Collaborateur A.",
+      "role": "Cadre opérationnel",
+      "seniority": "1-3 ans",
+      "primaryProfile": "Connecteur",
+      "secondaryProfile": "Stratège",
+      "weakestDimension": "social",
+      "strongestDimension": "sentimental",
+      "dimensions": {
+        "social": 25,
+        "affective": 55,
+        "sentimental": 80,
+        "professional": 55,
+        "self": 55
+      },
+      "situations": [
+        "Télétravail intensif"
+      ],
+      "dominantNeeds": [
+        "Besoin de reconnaissance"
+      ]
+    },
+    {
+      "id": "persona_12",
+      "name": "Collaborateur B.",
+      "role": "Agent d'exécution",
+      "seniority": "4-7 ans",
+      "primaryProfile": "Ancre",
+      "secondaryProfile": "Négociateur",
+      "weakestDimension": "affective",
+      "strongestDimension": "professional",
+      "dimensions": {
+        "social": 55,
+        "affective": 26,
+        "sentimental": 55,
+        "professional": 81,
+        "self": 55
+      },
+      "situations": [
+        "Prise de poste managériale"
+      ],
+      "dominantNeeds": [
+        "Besoin de sécurité psychologique"
+      ]
+    },
+    {
+      "id": "persona_13",
+      "name": "Collaborateur C.",
+      "role": "Cadre opérationnel",
+      "seniority": "> 8 ans",
+      "primaryProfile": "Catalyseur",
+      "secondaryProfile": "Explorateur",
+      "weakestDimension": "sentimental",
+      "strongestDimension": "self",
+      "dimensions": {
+        "social": 55,
+        "affective": 55,
+        "sentimental": 27,
+        "professional": 55,
+        "self": 82
+      },
+      "situations": [
+        "Conflit d'équipe récent"
+      ],
+      "dominantNeeds": [
+        "Besoin de clarification des rôles"
+      ]
+    },
+    {
+      "id": "persona_14",
+      "name": "Collaborateur D.",
+      "role": "Agent d'exécution",
+      "seniority": "1-3 ans",
+      "primaryProfile": "Stratège",
+      "secondaryProfile": "Sentinelle",
+      "weakestDimension": "professional",
+      "strongestDimension": "social",
+      "dimensions": {
+        "social": 83,
+        "affective": 55,
+        "sentimental": 55,
+        "professional": 28,
+        "self": 55
+      },
+      "situations": [
+        "Retour de congé longue maladie"
+      ],
+      "dominantNeeds": [
+        "Besoin d'autonomie relationnelle"
+      ]
+    },
+    {
+      "id": "persona_15",
+      "name": "Collaborateur E.",
+      "role": "Cadre opérationnel",
+      "seniority": "4-7 ans",
+      "primaryProfile": "Négociateur",
+      "secondaryProfile": "Médiateur",
+      "weakestDimension": "self",
+      "strongestDimension": "affective",
+      "dimensions": {
+        "social": 55,
+        "affective": 84,
+        "sentimental": 55,
+        "professional": 55,
+        "self": 29
+      },
+      "situations": [
+        "Réorganisation de service"
+      ],
+      "dominantNeeds": [
+        "Besoin d'écoute active"
+      ]
+    },
+    {
+      "id": "persona_16",
+      "name": "Collaborateur F.",
+      "role": "Agent d'exécution",
+      "seniority": "> 8 ans",
+      "primaryProfile": "Explorateur",
+      "secondaryProfile": "Harmonisateur",
+      "weakestDimension": "social",
+      "strongestDimension": "sentimental",
+      "dimensions": {
+        "social": 30,
+        "affective": 55,
+        "sentimental": 85,
+        "professional": 55,
+        "self": 55
+      },
+      "situations": [
+        "Charge mentale élevée"
+      ],
+      "dominantNeeds": [
+        "Besoin de déconnexion numérique"
+      ]
+    },
+    {
+      "id": "persona_17",
+      "name": "Collaborateur G.",
+      "role": "Cadre opérationnel",
+      "seniority": "1-3 ans",
+      "primaryProfile": "Sentinelle",
+      "secondaryProfile": "Pionnier",
+      "weakestDimension": "affective",
+      "strongestDimension": "professional",
+      "dimensions": {
+        "social": 55,
+        "affective": 31,
+        "sentimental": 55,
+        "professional": 86,
+        "self": 55
+      },
+      "situations": [
+        "Nouveau parent"
+      ],
+      "dominantNeeds": [
+        "Besoin de reconnaissance"
+      ]
+    },
+    {
+      "id": "persona_18",
+      "name": "Collaborateur H.",
+      "role": "Agent d'exécution",
+      "seniority": "4-7 ans",
+      "primaryProfile": "Médiateur",
+      "secondaryProfile": "Conseiller",
+      "weakestDimension": "sentimental",
+      "strongestDimension": "self",
+      "dimensions": {
+        "social": 55,
+        "affective": 55,
+        "sentimental": 32,
+        "professional": 55,
+        "self": 87
+      },
+      "situations": [
+        "Isolement géographique"
+      ],
+      "dominantNeeds": [
+        "Besoin de sécurité psychologique"
+      ]
+    },
+    {
+      "id": "persona_19",
+      "name": "Collaborateur I.",
+      "role": "Cadre opérationnel",
+      "seniority": "> 8 ans",
+      "primaryProfile": "Harmonisateur",
+      "secondaryProfile": "Fédérateur",
+      "weakestDimension": "professional",
+      "strongestDimension": "social",
+      "dimensions": {
+        "social": 88,
+        "affective": 55,
+        "sentimental": 55,
+        "professional": 33,
+        "self": 55
+      },
+      "situations": [
+        "Fin de carrière / Transmission"
+      ],
+      "dominantNeeds": [
+        "Besoin de clarification des rôles"
+      ]
+    },
+    {
+      "id": "persona_20",
+      "name": "Collaborateur J.",
+      "role": "Agent d'exécution",
+      "seniority": "1-3 ans",
+      "primaryProfile": "Pionnier",
+      "secondaryProfile": "Connecteur",
+      "weakestDimension": "self",
+      "strongestDimension": "affective",
+      "dimensions": {
+        "social": 55,
+        "affective": 89,
+        "sentimental": 55,
+        "professional": 55,
+        "self": 34
+      },
+      "situations": [
+        "Télétravail intensif"
+      ],
+      "dominantNeeds": [
+        "Besoin d'autonomie relationnelle"
+      ]
+    },
+    {
+      "id": "persona_21",
+      "name": "Collaborateur K.",
+      "role": "Cadre opérationnel",
+      "seniority": "4-7 ans",
+      "primaryProfile": "Conseiller",
+      "secondaryProfile": "Ancre",
+      "weakestDimension": "social",
+      "strongestDimension": "sentimental",
+      "dimensions": {
+        "social": 35,
+        "affective": 55,
+        "sentimental": 90,
+        "professional": 55,
+        "self": 55
+      },
+      "situations": [
+        "Prise de poste managériale"
+      ],
+      "dominantNeeds": [
+        "Besoin d'écoute active"
+      ]
+    },
+    {
+      "id": "persona_22",
+      "name": "Collaborateur L.",
+      "role": "Agent d'exécution",
+      "seniority": "> 8 ans",
+      "primaryProfile": "Fédérateur",
+      "secondaryProfile": "Catalyseur",
+      "weakestDimension": "affective",
+      "strongestDimension": "professional",
+      "dimensions": {
+        "social": 55,
+        "affective": 36,
+        "sentimental": 55,
+        "professional": 91,
+        "self": 55
+      },
+      "situations": [
+        "Conflit d'équipe récent"
+      ],
+      "dominantNeeds": [
+        "Besoin de déconnexion numérique"
+      ]
+    },
+    {
+      "id": "persona_23",
+      "name": "Collaborateur M.",
+      "role": "Cadre opérationnel",
+      "seniority": "1-3 ans",
+      "primaryProfile": "Connecteur",
+      "secondaryProfile": "Stratège",
+      "weakestDimension": "sentimental",
+      "strongestDimension": "self",
+      "dimensions": {
+        "social": 55,
+        "affective": 55,
+        "sentimental": 37,
+        "professional": 55,
+        "self": 80
+      },
+      "situations": [
+        "Retour de congé longue maladie"
+      ],
+      "dominantNeeds": [
+        "Besoin de reconnaissance"
+      ]
+    },
+    {
+      "id": "persona_24",
+      "name": "Collaborateur N.",
+      "role": "Agent d'exécution",
+      "seniority": "4-7 ans",
+      "primaryProfile": "Ancre",
+      "secondaryProfile": "Négociateur",
+      "weakestDimension": "professional",
+      "strongestDimension": "social",
+      "dimensions": {
+        "social": 81,
+        "affective": 55,
+        "sentimental": 55,
+        "professional": 38,
+        "self": 55
+      },
+      "situations": [
+        "Réorganisation de service"
+      ],
+      "dominantNeeds": [
+        "Besoin de sécurité psychologique"
+      ]
+    },
+    {
+      "id": "persona_25",
+      "name": "Collaborateur O.",
+      "role": "Cadre opérationnel",
+      "seniority": "> 8 ans",
+      "primaryProfile": "Catalyseur",
+      "secondaryProfile": "Explorateur",
+      "weakestDimension": "self",
+      "strongestDimension": "affective",
+      "dimensions": {
+        "social": 55,
+        "affective": 82,
+        "sentimental": 55,
+        "professional": 55,
+        "self": 39
+      },
+      "situations": [
+        "Charge mentale élevée"
+      ],
+      "dominantNeeds": [
+        "Besoin de clarification des rôles"
+      ]
+    },
+    {
+      "id": "persona_26",
+      "name": "Collaborateur P.",
+      "role": "Agent d'exécution",
+      "seniority": "1-3 ans",
+      "primaryProfile": "Stratège",
+      "secondaryProfile": "Sentinelle",
+      "weakestDimension": "social",
+      "strongestDimension": "sentimental",
+      "dimensions": {
+        "social": 25,
+        "affective": 55,
+        "sentimental": 83,
+        "professional": 55,
+        "self": 55
+      },
+      "situations": [
+        "Nouveau parent"
+      ],
+      "dominantNeeds": [
+        "Besoin d'autonomie relationnelle"
+      ]
+    },
+    {
+      "id": "persona_27",
+      "name": "Collaborateur Q.",
+      "role": "Cadre opérationnel",
+      "seniority": "4-7 ans",
+      "primaryProfile": "Négociateur",
+      "secondaryProfile": "Médiateur",
+      "weakestDimension": "affective",
+      "strongestDimension": "professional",
+      "dimensions": {
+        "social": 55,
+        "affective": 26,
+        "sentimental": 55,
+        "professional": 84,
+        "self": 55
+      },
+      "situations": [
+        "Isolement géographique"
+      ],
+      "dominantNeeds": [
+        "Besoin d'écoute active"
+      ]
+    },
+    {
+      "id": "persona_28",
+      "name": "Collaborateur R.",
+      "role": "Agent d'exécution",
+      "seniority": "> 8 ans",
+      "primaryProfile": "Explorateur",
+      "secondaryProfile": "Harmonisateur",
+      "weakestDimension": "sentimental",
+      "strongestDimension": "self",
+      "dimensions": {
+        "social": 55,
+        "affective": 55,
+        "sentimental": 27,
+        "professional": 55,
+        "self": 85
+      },
+      "situations": [
+        "Fin de carrière / Transmission"
+      ],
+      "dominantNeeds": [
+        "Besoin de déconnexion numérique"
+      ]
+    },
+    {
+      "id": "persona_29",
+      "name": "Collaborateur S.",
+      "role": "Cadre opérationnel",
+      "seniority": "1-3 ans",
+      "primaryProfile": "Sentinelle",
+      "secondaryProfile": "Pionnier",
+      "weakestDimension": "professional",
+      "strongestDimension": "social",
+      "dimensions": {
+        "social": 86,
+        "affective": 55,
+        "sentimental": 55,
+        "professional": 28,
+        "self": 55
+      },
+      "situations": [
+        "Télétravail intensif"
+      ],
+      "dominantNeeds": [
+        "Besoin de reconnaissance"
+      ]
+    },
+    {
+      "id": "persona_30",
+      "name": "Collaborateur T.",
+      "role": "Agent d'exécution",
+      "seniority": "4-7 ans",
+      "primaryProfile": "Médiateur",
+      "secondaryProfile": "Conseiller",
+      "weakestDimension": "self",
+      "strongestDimension": "affective",
+      "dimensions": {
+        "social": 55,
+        "affective": 87,
+        "sentimental": 55,
+        "professional": 55,
+        "self": 29
+      },
+      "situations": [
+        "Prise de poste managériale"
+      ],
+      "dominantNeeds": [
+        "Besoin de sécurité psychologique"
+      ]
+    }
+  ]
+}

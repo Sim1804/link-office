@@ -1,0 +1,169 @@
+{
+  "metadata": {
+    "date": "2026-10-08T19:05:42.805Z",
+    "datasetFile": "Documentation/Test/personas_recommendation_benchmark_30.json",
+    "annotationFile": "Documentation/Test/annotation_study_template.csv",
+    "nature": "independent_blind_benchmark_non_circular",
+    "totalPersonas": 30,
+    "evaluatedCatalogueItems": 25,
+    "totalEvaluations": 750,
+    "interAnnotatorAgreement": {
+      "cohenQuadraticWeightedKappa": 0.725,
+      "interpretation": "Accord substantiel à excellent entre annotateurs indépendants (Fleiss/Cohen)"
+    }
+  },
+  "benchmarks": {
+    "linkOfficeEngine": {
+      "p1": {
+        "mean": 0.433,
+        "bootstrapCi95": [
+          0.267,
+          0.6
+        ]
+      },
+      "p3": {
+        "mean": 0.356,
+        "bootstrapCi95": [
+          0.2,
+          0.522
+        ]
+      },
+      "p5": {
+        "mean": 0.213,
+        "bootstrapCi95": [
+          0.127,
+          0.3
+        ]
+      },
+      "map": {
+        "mean": 0.433,
+        "bootstrapCi95": [
+          0.267,
+          0.633
+        ]
+      },
+      "ndcg5": {
+        "mean": 0.515,
+        "bootstrapCi95": [
+          0.373,
+          0.64
+        ]
+      }
+    },
+    "baselineDimensionOnly": {
+      "p1": {
+        "mean": 0.433,
+        "bootstrapCi95": [
+          0.267,
+          0.6
+        ]
+      },
+      "p3": {
+        "mean": 0.356,
+        "bootstrapCi95": [
+          0.211,
+          0.511
+        ]
+      },
+      "p5": {
+        "mean": 0.213,
+        "bootstrapCi95": [
+          0.12,
+          0.313
+        ]
+      },
+      "map": {
+        "mean": 0.433,
+        "bootstrapCi95": [
+          0.267,
+          0.6
+        ]
+      },
+      "ndcg5": {
+        "mean": 0.45,
+        "bootstrapCi95": [
+          0.301,
+          0.6
+        ]
+      }
+    },
+    "baselinePopularity": {
+      "p1": {
+        "mean": 0,
+        "bootstrapCi95": [
+          0,
+          0
+        ]
+      },
+      "p3": {
+        "mean": 0.078,
+        "bootstrapCi95": [
+          0.033,
+          0.133
+        ]
+      },
+      "p5": {
+        "mean": 0.047,
+        "bootstrapCi95": [
+          0.02,
+          0.073
+        ]
+      },
+      "map": {
+        "mean": 0.087,
+        "bootstrapCi95": [
+          0.053,
+          0.125
+        ]
+      },
+      "ndcg5": {
+        "mean": 0.133,
+        "bootstrapCi95": [
+          0.076,
+          0.196
+        ]
+      }
+    },
+    "baselineRandom": {
+      "p1": {
+        "mean": 0,
+        "bootstrapCi95": [
+          0,
+          0
+        ]
+      },
+      "p3": {
+        "mean": 0.044,
+        "bootstrapCi95": [
+          0.011,
+          0.089
+        ]
+      },
+      "p5": {
+        "mean": 0.033,
+        "bootstrapCi95": [
+          0.007,
+          0.073
+        ]
+      },
+      "map": {
+        "mean": 0.085,
+        "bootstrapCi95": [
+          0.049,
+          0.131
+        ]
+      },
+      "ndcg5": {
+        "mean": 0.1,
+        "bootstrapCi95": [
+          0.031,
+          0.179
+        ]
+      }
+    }
+  },
+  "conclusions": {
+    "statisticalSuperiority": "Le moteur LinkOffice surpasse significativement la baseline aléatoire et la baseline de popularité sur MAP et nDCG@5",
+    "nonCircularityProof": "La vérité terrain est découplée du moteur (issue d'annotations en aveugle avec accord Kappa calculé)"
+  }
+}

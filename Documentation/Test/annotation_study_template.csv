@@ -1,0 +1,751 @@
+persona_id,persona_name,persona_profile,weakest_dimension,situation,item_id,item_title,item_dimension,item_library,annotator_1_relevance,annotator_2_relevance,annotator_3_relevance,consensus_score,is_relevant_binary
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF002,"Proposer un café","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,1,0.33,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,1,0.33,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,1,0.33,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_01,"Alexandre M.",Connecteur,self,"Prise de poste managériale",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,-1,-0.33,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,2,1,2,1.67,1
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,-1,-0.33,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,1,0.33,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,2,2,2,2,1
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_02,"Béatrice D.",Ancre,social,"Télétravail intensif",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,1,0.33,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,1,0,1,0.67,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_03,"Cédric L.",Médiateur,professional,"Conflit d'équipe récent",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF002,"Proposer un café","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,1,0.33,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,1,0.33,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,1,0,2,1,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_04,"Delphine R.",Fédérateur,self,"Réorganisation de service",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF017,"Demander un relais #2","Couple  ",Micro-défis,1,0,2,1,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,-1,-0.33,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_05,"Éric T.",Explorateur,affective,"Isolement géographique",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,-1,-0.33,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF017,"Demander un relais #2","Couple  ",Micro-défis,1,0,0,0.33,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,1,0.33,0
+persona_06,"Fatima B.",Stratège,sentimental,"Prise de poste managériale",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,2,2,3,2.33,1
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,1,0,0,0.33,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,2,2,2,2,1
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF017,"Demander un relais #2","Couple  ",Micro-défis,1,0,1,0.67,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_07,"Guillaume P.",Ancre,social,"Fin de carrière / Transmission",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,-1,-0.33,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,-1,-0.33,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,1,0.33,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,-1,-0.33,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_08,"Hélène V.",Catalyseur,self,"Télétravail intensif",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,2,2,2,2,1
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,1,0.33,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,2,2,2,2,1
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_09,"Ibrahim K.",Sentinelle,social,"Télétravail intensif",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,1,0.33,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,1,0.33,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,1,0.33,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,-1,-0.33,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,1,0.33,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,1,0.33,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_10,"Julie M.",Harmonisateur,professional,"Conflit d'équipe récent",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,2,2,2,2,1
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,1,0,2,1,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,1,0.33,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,2,1,2,1.67,1
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_11,"Collaborateur A.",Connecteur,social,"Télétravail intensif",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,-1,-0.33,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF017,"Demander un relais #2","Couple  ",Micro-défis,1,0,1,0.67,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,-1,-0.33,0
+persona_12,"Collaborateur B.",Ancre,affective,"Prise de poste managériale",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,-1,-0.33,0
+persona_13,"Collaborateur C.",Catalyseur,sentimental,"Conflit d'équipe récent",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,1,0,1,0.67,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_14,"Collaborateur D.",Stratège,professional,"Retour de congé longue maladie",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF007,"Demander un relais","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,1,0,1,0.67,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,1,0,1,0.67,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,1,0.33,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_15,"Collaborateur E.",Négociateur,self,"Réorganisation de service",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,2,2,2,2,1
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,1,0.33,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,-1,-0.33,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,2,2,2,2,1
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_16,"Collaborateur F.",Explorateur,social,"Charge mentale élevée",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,1,0,1,0.67,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,-1,-0.33,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_17,"Collaborateur G.",Sentinelle,affective,"Nouveau parent",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,1,0,1,0.67,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_18,"Collaborateur H.",Médiateur,sentimental,"Isolement géographique",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,1,0,1,0.67,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,-1,-0.33,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,1,0,1,0.67,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF017,"Demander un relais #2","Couple  ",Micro-défis,1,0,1,0.67,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,1,0.33,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_19,"Collaborateur I.",Harmonisateur,professional,"Fin de carrière / Transmission",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,-1,-0.33,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,1,0.33,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,1,0,1,0.67,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,1,0.33,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_20,"Collaborateur J.",Pionnier,self,"Télétravail intensif",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,2,2,2,2,1
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,1,0,1,0.67,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,2,2,1,1.67,1
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,-1,-0.33,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_21,"Collaborateur K.",Conseiller,social,"Prise de poste managériale",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,1,0.33,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,1,0,1,0.67,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,-1,-0.33,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,1,0,1,0.67,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,1,0.33,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,-1,-0.33,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_22,"Collaborateur L.",Fédérateur,affective,"Conflit d'équipe récent",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,1,0,1,0.67,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,-1,-0.33,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,1,0,1,0.67,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_23,"Collaborateur M.",Connecteur,sentimental,"Retour de congé longue maladie",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,2,2,3,2.33,1
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,-1,-0.33,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,1,0.33,0
+persona_24,"Collaborateur N.",Ancre,professional,"Réorganisation de service",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,-1,-0.33,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,1,0,1,0.67,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,-1,-0.33,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,1,0,1,0.67,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,1,0,1,0.67,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_25,"Collaborateur O.",Catalyseur,self,"Charge mentale élevée",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,-1,-0.33,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,2,1,2,1.67,1
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,1,0.33,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,2,1,2,1.67,1
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF017,"Demander un relais #2","Couple  ",Micro-défis,1,0,1,0.67,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,1,0,1,0.67,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,1,0,1,0.67,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_26,"Collaborateur P.",Stratège,social,"Nouveau parent",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,1,0.33,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,-1,-0.33,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,1,0,1,0.67,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_27,"Collaborateur Q.",Négociateur,affective,"Isolement géographique",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,-1,-0.33,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,-1,-0.33,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_28,"Collaborateur R.",Explorateur,sentimental,"Fin de carrière / Transmission",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF007,"Demander un relais","Émotion  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,3,1,2,2,1
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,2,2,2,2,1
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,1,0,1,0.67,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,-1,-0.33,0
+persona_29,"Collaborateur S.",Sentinelle,professional,"Télétravail intensif",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF001,"Envoyer un message sincère","Organisation  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF002,"Proposer un café","Répit  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF003,"Dire merci précisément","Lien social  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF004,"Exprimer un besoin simple","Émotion  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF005,"Créer un moment sans écran","Émotion  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF006,"Préparer une conversation importante","Couple  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF007,"Demander un relais","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF008,"Bloquer un temps pour soi","Émotion  ",Micro-défis,1,0,1,0.67,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF009,"Rejoindre un événement","Professionnel  ",Micro-défis,1,0,1,0.67,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF010,"Faire un check-in IRIS","Organisation  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF011,"Envoyer un message sincère #2","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF012,"Proposer un café #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF013,"Dire merci précisément #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF014,"Exprimer un besoin simple #2","Professionnel  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF015,"Créer un moment sans écran #2","Lien social  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF016,"Préparer une conversation importante #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF017,"Demander un relais #2","Couple  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF018,"Bloquer un temps pour soi #2","Organisation  ",Micro-défis,0,0,-1,-0.33,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF019,"Rejoindre un événement #2","Émotion  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF020,"Faire un check-in IRIS #2","Répit  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF021,"Envoyer un message sincère #3","Répit  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF022,"Proposer un café #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF023,"Dire merci précisément #3","Ancrage  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF024,"Exprimer un besoin simple #3","Émotion  ",Micro-défis,0,0,0,0,0
+persona_30,"Collaborateur T.",Médiateur,self,"Prise de poste managériale",DEF025,"Créer un moment sans écran #3","Émotion  ",Micro-défis,0,0,0,0,0
