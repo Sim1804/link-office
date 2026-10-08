@@ -10,17 +10,47 @@ import { useIris } from "@/src/context/IrisContext";
 
 const formatText = (text: string) => {
   if (!text) return null;
-  return text.split("\n").map((line, idx, array) => {
-    const parts = line.split(/(\*\*.*?\*\*)/g);
+
+  return text.split("\n").map((line, idx) => {
+    let cleanLine = line;
+    let isBullet = false;
+
+    const trimmed = cleanLine.trimStart();
+    if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
+      isBullet = true;
+      cleanLine = trimmed.slice(2);
+    } else if (trimmed.startsWith("• ")) {
+      isBullet = true;
+      cleanLine = trimmed.slice(2);
+    }
+
+    // Parsing des liens [label](url) et du gras **bold**
+    const parts = cleanLine.split(/(\[.*?\]\(.*?\)|\*\*.*?\*\*)/g);
+
     return (
-      <span key={idx}>
-        {parts.map((part, i) => {
-          if (part.startsWith("**") && part.endsWith("**")) {
-            return <strong key={i} className="font-bold text-inherit">{part.slice(2, -2)}</strong>;
-          }
-          return <span key={i}>{part}</span>;
-        })}
-        {idx < array.length - 1 && <br />}
+      <span key={idx} className={isBullet ? "flex items-start gap-2 my-1" : "block my-0.5"}>
+        {isBullet && <span className="text-[#00A99D] font-bold shrink-0 leading-relaxed">•</span>}
+        <span className="flex-1">
+          {parts.map((part, i) => {
+            if (part.startsWith("**") && part.endsWith("**")) {
+              return <strong key={i} className="font-bold text-inherit">{part.slice(2, -2)}</strong>;
+            }
+            const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
+            if (linkMatch) {
+              const [, label, url] = linkMatch;
+              return (
+                <a
+                  key={i}
+                  href={url}
+                  className="text-[#00A99D] underline font-bold hover:text-[#199E9A] transition-colors inline-block"
+                >
+                  {label}
+                </a>
+              );
+            }
+            return <span key={i}>{part}</span>;
+          })}
+        </span>
       </span>
     );
   });
@@ -178,15 +208,17 @@ export function IrisWidget() {
     if (!session?.user?.id) {
       setLoading(true);
       setTimeout(() => {
-        let reply = "L'IQRH (Indice de Qualité Relationnelle et Humaine) mesure scientifiquement l'équilibre entre vos 5 dimensions de vie : sociale, affective, sentimentale, professionnelle et personnelle. Pour obtenir votre diagnostic individuel précis, passez le test gratuit en 3 minutes !";
+        let reply = "L'IQRH (Indice de Qualité Relationnelle et Humaine) est un score scientifique sur 100 mesurant l'équilibre de vos 5 dimensions de vie : sociale, affective, sentimentale, professionnelle et personnelle. Pour obtenir votre diagnostic individuel précis, passez le test en 8 à 10 minutes !";
         
         const lower = trimmed.toLowerCase();
         if (lower.includes("dimension") || lower.includes("5")) {
-          reply = "Les 5 dimensions LinkOffice sont : les Relations Sociales, les Relations Affectives, la Vie Sentimentale, la Vie Professionnelle et la Relation à Soi. Chacune fait l'objet d'un score précis et de recommandations concrètes.";
-        } else if (lower.includes("organisation") || lower.includes("entreprise") || lower.includes("pro") || lower.includes("équipe")) {
-          reply = "LinkOffice propose aux entreprises et collectivités des baromètres d'équipe anonymes, des diagnostics RPS/QVT et des plans d'action managériaux sur-mesure. Découvrez notre offre dans l'onglet Solutions PRO !";
-        } else if (lower.includes("iris") || lower.includes("coach") || lower.includes("ia")) {
-          reply = "Je suis IRIS, le coach IA développé par LinkOffice. J'analyse vos résultats IQRH pour vous proposer des micro-défis relationnels, désamorcer les tensions et renforcer la sécurité psychologique de votre quotidien.";
+          reply = "Les 5 dimensions LinkOffice sont :\n\n1. **Dimension Sociale** : Réseau élargi, sentiment d'appartenance et liens faibles protecteurs au quotidien.\n2. **Dimension Affective** : Liens de confiance profonde, écoute sincère et soutien émotionnel des pairs.\n3. **Vie Sentimentale / Intime** : Sphère privée, sécurité et équilibre affectif personnel.\n4. **Vie Professionnelle** : Coopération, sécurité psychologique, reconnaissance et équité managériale.\n5. **Relation à Soi** : Écoute de ses limites, auto-bienveillance et prévention de la charge mentale.";
+        } else if (lower.includes("organisation") || lower.includes("entreprise") || lower.includes("pro") || lower.includes("équipe") || lower.includes("solution")) {
+          reply = "LinkOffice propose aux organisations un accompagnement complet :\n\n• **Baromètre d'équipe anonyme** (k-anonymat strict dès 5 répondants) pour mesurer le climat social.\n• **Programme Binôme Relationnel** pour briser les silos et favoriser l'entraide.\n• **Plans d'actions RH & managériaux** pour prévenir les RPS et améliorer la QVCT.\n• **Portails dédiés** : B2B (entreprises), B2G (collectivités) et B2B2C (mutuelles/assurances).";
+        } else if (lower.includes("iris") || lower.includes("coach") || lower.includes("ia") || lower.includes("fonctionne")) {
+          reply = "En tant que coach d'intelligence relationnelle, mon accompagnement repose sur 4 piliers :\n\n1. **Analyse personnalisée** de votre bilan IQRH pour révéler vos forces et axes de progression.\n2. **Ordonnance Relationnelle sur-mesure** avec des recommandations et micro-défis hebdomadaires progressifs.\n3. **Accompagnement continu** pour surmonter des blocages, préparer des discussions difficiles ou désamorcer des tensions.\n4. **Validation des défis** et suivi gamifié de votre progression.";
+        } else if (lower.includes("calcul") || lower.includes("score") || lower.includes("iqrh")) {
+          reply = "Votre score IQRH (0 à 100) est calculé à partir du questionnaire psychométrique LinkOffice (~8 à 10 minutes). Il évalue vos comportements et ressentis à travers les 5 dimensions fondamentales, complété par l'ICR (Complexité), l'IER (Équilibre) et votre Météo relationnelle.";
         }
 
         setMessages((prev) => [...prev, {
@@ -197,27 +229,50 @@ export function IrisWidget() {
           isPremiumCTA: true,
         }]);
         setLoading(false);
-      }, 650);
+      }, 500);
       return;
     }
 
-    if (!conversationId) return;
+    let activeConvId = conversationId;
     setLoading(true);
     try {
-      const history = messages.map(m => ({ role: m.sender === "user" ? "user" : "assistant", content: m.text }));
-      const res = await sendIrisMessage(conversationId, trimmed, history);
-      const irisMsg: Message = { id: `iris-${Date.now()}`, sender: "iris", text: res.message_iris, timestamp: new Date() };
-      setMessages((prev) => [...prev, irisMsg]);
+      if (!activeConvId && session?.user?.id) {
+        const conv = await startIrisConversation(session.user.id);
+        activeConvId = conv.conversation_id;
+        setConversationId(activeConvId);
+      }
+
+      if (activeConvId) {
+        const history = messages.map(m => ({ role: m.sender === "user" ? "user" : "assistant", content: m.text }));
+        const res = await sendIrisMessage(activeConvId, trimmed, history);
+        const irisMsg: Message = { id: `iris-${Date.now()}`, sender: "iris", text: res.message_iris, timestamp: new Date() };
+        setMessages((prev) => [...prev, irisMsg]);
+      } else {
+        throw new Error("CONVERSATION_INIT_FAILED");
+      }
     } catch (err: any) {
       if (err.message && err.message.toLowerCase().includes("quota")) {
         setMessages((prev) => [...prev, { 
           id: "err", sender: "iris", 
-          text: "Vous avez atteint votre quota mensuel de questions avec IRIS. L'accès illimité au coach est réservé aux abonnés Premium.", 
+          text: "Vous avez atteint votre quota journalier de questions avec IRIS (5 messages / jour). L'accès illimité au coach est réservé aux abonnés Premium.", 
           timestamp: new Date(),
           isPremiumCTA: true 
         }]);
       } else {
-        setMessages((prev) => [...prev, { id: "err", sender: "iris", text: "IRIS est temporairement indisponible.", timestamp: new Date() }]);
+        // En cas de coupure réseau, fournir une réponse de haute qualité cohérente avec LinkOffice
+        let fallbackReply = "Je reste à votre entière disposition pour vous accompagner dans votre équilibre relationnel. N'hésitez pas à explorer vos micro-défis du jour ou à me poser une autre question !";
+        const lower = trimmed.toLowerCase();
+        if (lower.includes("dimension") || lower.includes("5")) {
+          fallbackReply = "Les 5 dimensions du climat relationnel LinkOffice sont :\n\n1. **Dimension Sociale** : Réseau relationnel élargi, inclusion, sentiment d'appartenance et liens faibles protecteurs au quotidien.\n2. **Dimension Affective** : Liens de confiance profonde, écoute sincère et soutien émotionnel des pairs.\n3. **Vie Sentimentale / Intime** : Sphère privée, sécurité et équilibre affectif personnel.\n4. **Vie Professionnelle** : Coopération, sécurité psychologique, reconnaissance et équité managériale.\n5. **Relation à Soi** : Écoute de ses propres limites, auto-bienveillance et prévention de la charge mentale.";
+        } else if (lower.includes("organisation") || lower.includes("entreprise") || lower.includes("pro") || lower.includes("équipe") || lower.includes("solution")) {
+          fallbackReply = "LinkOffice propose aux organisations :\n\n• **Baromètre d'équipe et Climat Social** : Mesure du bien-être relationnel 100% anonymisée (k-anonymat strict dès 5 répondants).\n• **Programme Binôme Relationnel** : Mise en relation de pairs pour briser les silos et favoriser l'entraide.\n• **Plans d'actions RH & managériaux** : Prévention active des RPS et amélioration de la QVCT.\n• **Portails dédiés** : B2B (entreprises), B2G (collectivités) et B2B2C (mutuelles et réseaux de santé).";
+        } else if (lower.includes("iris") || lower.includes("coach") || lower.includes("ia") || lower.includes("fonctionne")) {
+          fallbackReply = "En tant que coach d'intelligence relationnelle, mon rôle est de vous guider pas à pas :\n\n1. **Analyse de votre bilan IQRH** pour identifier vos forces et leviers d'amélioration.\n2. **Génération d'une Ordonnance Relationnelle** avec des recommandations et micro-défis hebdomadaires progressifs.\n3. **Dialogue continu** pour surmonter des blocages, préparer des discussions difficiles ou désamorcer des tensions.\n4. **Validation des défis** et suivi gamifié de votre progression.";
+        } else if (lower.includes("calcul") || lower.includes("score") || lower.includes("iqrh")) {
+          fallbackReply = "Votre score IQRH (0 à 100) est issu de notre évaluation psychométrique (~8 à 10 minutes). Il évalue vos comportements et ressentis à travers les 5 dimensions fondamentales, complété par l'ICR (Complexité), l'IER (Équilibre) et votre Météo relationnelle.";
+        }
+
+        setMessages((prev) => [...prev, { id: `iris-fallback-${Date.now()}`, sender: "iris", text: fallbackReply, timestamp: new Date() }]);
       }
     } finally {
       setLoading(false);
@@ -265,20 +320,20 @@ export function IrisWidget() {
           role="dialog"
           aria-label="Coach IRIS"
         >
-          {/* HEADER PREMIUM AUX COULEURS DE LINKOFFICE */}
-          <div className="p-4 sm:p-5 border-b border-[#E3EBE6] bg-gradient-to-r from-[#123D46] to-[#1E3048] text-white flex items-center justify-between shrink-0">
+          {/* HEADER PREMIUM AUX COULEURS DE LINKOFFICE (Hauteur alignée au pixel près sur la navbar = 65px) */}
+          <div className="h-[65px] min-h-[65px] max-h-[65px] px-4 sm:px-5 border-b border-[#E3EBE6] bg-gradient-to-r from-[#123D46] to-[#1E3048] text-white flex items-center justify-between shrink-0 box-border">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
-                <IrisMark size={32} monochrome isAnimated={true} />
+              <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                <IrisMark size={24} monochrome isAnimated={true} />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="font-jakarta font-extrabold text-sm sm:text-base text-white m-0">
+                <div className="flex items-center gap-2 leading-none">
+                  <h3 className="font-jakarta font-extrabold text-sm text-white m-0 leading-tight">
                     Coach IRIS
                   </h3>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 </div>
-                <p className="text-[11px] text-[#E3EBE6]/80 font-inter m-0">
+                <p className="text-[11px] text-[#E3EBE6]/80 font-inter m-0 leading-tight mt-0.5">
                   Intelligence Relationnelle · En ligne
                 </p>
               </div>

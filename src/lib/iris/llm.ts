@@ -14,8 +14,9 @@ import { EventLogger } from "@/lib/logger";
 
 /**
  * Nom du modèle LLM validé pour IRIS (configurable par variable d'environnement).
+ * Modèle par défaut ultra-rapide et éprouvé sur Groq avec structured output et streaming : qwen/qwen3.8-27b
  */
-export const IRIS_MODEL = process.env.IRIS_MODEL || "llama-3.3-70b-versatile";
+export const IRIS_MODEL = process.env.IRIS_MODEL || "qwen/qwen3.8-27b";
 
 export interface ChatMessage {
   role: "user" | "assistant" | "system";
