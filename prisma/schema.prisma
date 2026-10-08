@@ -1054,3 +1054,13 @@ model SystemConfig {
   value     Json
   updatedAt DateTime @updatedAt
 }
+
+// ─── Rate Limiting Distribué (PostgreSQL Sliding Window) ──────────────────────
+
+model RateLimitAttempt {
+  id        String   @id @default(cuid())
+  key       String
+  timestamp DateTime @default(now())
+
+  @@index([key, timestamp])
+}

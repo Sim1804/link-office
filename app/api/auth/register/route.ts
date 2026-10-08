@@ -27,7 +27,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { rateLimit, getRetryAfterSeconds } from "@/lib/rate-limit";
+import { checkDistributedRateLimit, getDistributedRetryAfterSeconds } from "@/lib/rate-limit";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 
@@ -68,8 +68,10 @@ export async function POST(request: Request) {
   // ── Rate limiting : 10 inscriptions max par IP par heure ──────────────────
   // Extrait l'IP réelle derrière un proxy/load balancer (x-forwarded-for)
   const clientIp = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0].trim();
-  if (!rateLimit(`register:${clientIp}`, { limit: 10, windowMs: 60 * 60 * 1000 })) {
-    const retryAfterSeconds = getRetryAfterSeconds(`register:${clientIp}`);
+  const rateLimitKey = `register:${clientIp}`;
+  const rateLimitResult = await checkDistributedRateLimit(rateLimitKey, { limit: 10, windowMs: 60 * 60 * 1000 });
+  if (!rateLimitResult.success) {
+    const retryAfterSeconds = await getDistributedRetryAfterSeconds(rateLimitKey, 60 * 60 * 1000);
     return NextResponse.json(
       { detail: `Trop de tentatives. Réessayez dans ${Math.ceil(retryAfterSeconds / 60)} minute(s).` },
       { status: 429, headers: { "Retry-After": String(retryAfterSeconds) } }

@@ -1,7 +1,19 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { checkDistributedRateLimit, getDistributedRetryAfterSeconds } from "@/lib/rate-limit";
 
 export async function GET(request: Request) {
+  const clientIp = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0].trim();
+  const rateLimitKey = `verify:${clientIp}`;
+  const rateLimitResult = await checkDistributedRateLimit(rateLimitKey, { limit: 10, windowMs: 60_000 });
+  if (!rateLimitResult.success) {
+    const retryAfter = await getDistributedRetryAfterSeconds(rateLimitKey, 60_000);
+    return NextResponse.json(
+      { detail: `Trop de requêtes de vérification. Réessayez dans ${retryAfter} seconde(s).` },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } }
+    );
+  }
+
   const { searchParams } = new URL(request.url);
   const token = searchParams.get("token");
   const type = searchParams.get("type"); // "magic-link" ou null (vérification d'email par défaut)

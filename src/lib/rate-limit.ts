@@ -1,30 +1,12 @@
 /**
- * src/lib/rate-limit.ts — Protection brute-force en mémoire
- * ──────────────────────────────────────────────────────────
- * Solution légère sans dépendance externe.
- * En production avec plusieurs instances, remplacer par Redis (Upstash).
+ * src/lib/rate-limit.ts — Rate Limiter Distribué PostgreSQL (Sliding Window)
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Utilise la table `RateLimitAttempt` pour garantir un contrôle d'accès cohérent
+ * entre toutes les instances serverless, prévenant le contournement par cold starts.
  *
- * Usage :
- *   const allowed = rateLimit(`login:${ip}`, { limit: 5, windowMs: 60_000 });
- *   if (!allowed) return 429;
+ * Inclut un mécanisme de fallback en mémoire en cas d'indisponibilité de la base.
  */
-
-interface RateLimitEntry {
-  count: number;
-  resetAt: number;
-}
-
-const store = new Map<string, RateLimitEntry>();
-
-// Nettoyage périodique pour éviter les fuites mémoire (toutes les 5 minutes)
-if (typeof setInterval !== "undefined") {
-  setInterval(() => {
-    const now = Date.now();
-    for (const [key, entry] of store.entries()) {
-      if (now > entry.resetAt) store.delete(key);
-    }
-  }, 5 * 60 * 1000);
-}
+import { prisma } from "@/lib/prisma";
 
 export interface RateLimitOptions {
   /** Nombre maximum de requêtes dans la fenêtre. Défaut : 5 */
@@ -33,33 +15,138 @@ export interface RateLimitOptions {
   windowMs?: number;
 }
 
-/**
- * Vérifie si une clé dépasse la limite de taux.
- * @returns `true` si la requête est autorisée, `false` si elle doit être bloquée.
- */
-export function rateLimit(
-  key: string,
-  { limit = 5, windowMs = 60_000 }: RateLimitOptions = {}
-): boolean {
-  const now = Date.now();
-  const entry = store.get(key);
+export interface RateLimitResult {
+  success: boolean;
+  remaining: number;
+  resetSeconds: number;
+}
 
+// Store en mémoire de secours (fallback de résilience)
+interface MemoryEntry {
+  count: number;
+  resetAt: number;
+}
+const memoryFallbackStore = new Map<string, MemoryEntry>();
+
+function fallbackMemoryRateLimit(key: string, limit: number, windowMs: number): boolean {
+  const now = Date.now();
+  const entry = memoryFallbackStore.get(key);
   if (!entry || now > entry.resetAt) {
-    store.set(key, { count: 1, resetAt: now + windowMs });
+    memoryFallbackStore.set(key, { count: 1, resetAt: now + windowMs });
     return true;
   }
-
   if (entry.count >= limit) return false;
-
   entry.count++;
   return true;
 }
 
 /**
- * Retourne le nombre de secondes avant la réinitialisation de la fenêtre.
+ * Vérifie le taux de requêtes de manière distribuée et asynchrone contre PostgreSQL.
+ * @param key Clé d'identification (ex: "login:alice@test.fr", "register:192.168.1.1", "iris:user-123")
+ * @param options Limite et fenêtre temporelle
  */
+export async function checkDistributedRateLimit(
+  key: string,
+  { limit = 5, windowMs = 60_000 }: RateLimitOptions = {}
+): Promise<RateLimitResult> {
+  const now = new Date();
+  const windowStart = new Date(now.getTime() - windowMs);
+  const resetSeconds = Math.ceil(windowMs / 1000);
+
+  try {
+    // 1. Compter les tentatives existantes dans la fenêtre glissante
+    const currentCount = await prisma.rateLimitAttempt.count({
+      where: {
+        key,
+        timestamp: { gte: windowStart },
+      },
+    });
+
+    if (currentCount >= limit) {
+      return {
+        success: false,
+        remaining: 0,
+        resetSeconds,
+      };
+    }
+
+    // 2. Enregistrer la nouvelle tentative
+    await prisma.rateLimitAttempt.create({
+      data: {
+        key,
+        timestamp: now,
+      },
+    });
+
+    // 3. Purge opportuniste des enregistrements obsolètes (> 2x fenêtre)
+    const purgeThreshold = new Date(now.getTime() - windowMs * 2);
+    prisma.rateLimitAttempt.deleteMany({
+      where: {
+        key,
+        timestamp: { lt: purgeThreshold },
+      },
+    }).catch(() => {});
+
+    return {
+      success: true,
+      remaining: Math.max(0, limit - (currentCount + 1)),
+      resetSeconds,
+    };
+  } catch (error) {
+    console.error(`[RATE_LIMIT_ERROR] Erreur PostgreSQL sur la clé ${key}, bascule sur le store mémoire:`, error);
+    const allowed = fallbackMemoryRateLimit(key, limit, windowMs);
+    return {
+      success: allowed,
+      remaining: allowed ? 1 : 0,
+      resetSeconds,
+    };
+  }
+}
+
+/**
+ * Wrapper asynchrone retournant un simple booléen (compatibilité fluide).
+ */
+export async function rateLimitAsync(
+  key: string,
+  options?: RateLimitOptions
+): Promise<boolean> {
+  const res = await checkDistributedRateLimit(key, options);
+  return res.success;
+}
+
+/**
+ * Pour compatibilité synchrone legacy (utilise le fallback mémoire).
+ * @deprecated Utiliser `checkDistributedRateLimit` ou `rateLimitAsync` pour la persistance distribuée.
+ */
+export function rateLimit(
+  key: string,
+  { limit = 5, windowMs = 60_000 }: RateLimitOptions = {}
+): boolean {
+  return fallbackMemoryRateLimit(key, limit, windowMs);
+}
+
+/**
+ * Récupère le temps d'attente restant en secondes via PostgreSQL.
+ */
+export async function getDistributedRetryAfterSeconds(
+  key: string,
+  windowMs: number = 60_000
+): Promise<number> {
+  try {
+    const oldestInWindow = await prisma.rateLimitAttempt.findFirst({
+      where: { key, timestamp: { gte: new Date(Date.now() - windowMs) } },
+      orderBy: { timestamp: "asc" },
+    });
+    if (!oldestInWindow) return Math.ceil(windowMs / 1000);
+    const elapsed = Date.now() - oldestInWindow.timestamp.getTime();
+    return Math.max(1, Math.ceil((windowMs - elapsed) / 1000));
+  } catch {
+    return Math.ceil(windowMs / 1000);
+  }
+}
+
 export function getRetryAfterSeconds(key: string): number {
-  const entry = store.get(key);
+  const entry = memoryFallbackStore.get(key);
   if (!entry) return 0;
   return Math.max(0, Math.ceil((entry.resetAt - Date.now()) / 1000));
 }

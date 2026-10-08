@@ -8,7 +8,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { rateLimit, getRetryAfterSeconds } from "@/lib/rate-limit";
+import { checkDistributedRateLimit, getDistributedRetryAfterSeconds } from "@/lib/rate-limit";
 import { verify as totpVerify } from "otplib";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
@@ -24,10 +24,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        // ── Rate limiting : 5 tentatives max par email par minute ──
+        // ── Rate limiting distribué : 5 tentatives max par email par minute ──
         const key = `login:${String(credentials.email).toLowerCase()}`;
-        if (!rateLimit(key, { limit: 5, windowMs: 60_000 })) {
-          const retry = getRetryAfterSeconds(key);
+        const limitRes = await checkDistributedRateLimit(key, { limit: 5, windowMs: 60_000 });
+        if (!limitRes.success) {
+          const retry = await getDistributedRetryAfterSeconds(key, 60_000);
           throw new Error(`RATE_LIMITED:${retry}`);
         }
 

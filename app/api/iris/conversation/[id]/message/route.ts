@@ -28,6 +28,7 @@ import {
   logSecurityEvent,
   IRIS_DAILY_QUOTA_FREEMIUM,
 } from "@/lib/iris/safety";
+import { checkDistributedRateLimit, getDistributedRetryAfterSeconds } from "@/lib/rate-limit";
 
 export async function POST(
   request: Request,
@@ -65,6 +66,17 @@ export async function POST(
     }
     if (conversation.userId !== userId) {
       return NextResponse.json({ error: "Accès interdit." }, { status: 403 });
+    }
+
+    // ── Rate Limiting Distribué anti-flood (20 requêtes / minute par utilisateur) ──
+    const rateLimitKey = `iris:${userId}`;
+    const rateLimitRes = await checkDistributedRateLimit(rateLimitKey, { limit: 20, windowMs: 60_000 });
+    if (!rateLimitRes.success) {
+      const retryAfter = await getDistributedRetryAfterSeconds(rateLimitKey, 60_000);
+      return NextResponse.json(
+        { error: `Trop de requêtes rapides. Réessayez dans ${retryAfter} seconde(s).` },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } }
+      );
     }
 
     // ── Récupération de l'utilisateur (quota + abonnement) ────────────────────
