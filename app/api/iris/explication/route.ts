@@ -26,6 +26,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { buildIrisContext } from "@/lib/iris/context-builder";
 import { prisma } from "@/lib/prisma";
+import { generateResponse } from "@/lib/iris/llm";
 
 export async function GET(request: Request) {
   try {
@@ -69,30 +70,31 @@ export async function GET(request: Request) {
     const userName = user?.firstName || "Camille";
     const result = latestAssessment?.result;
 
-    // 1. Essai avec Groq si clé configurée
-    if (process.env.GROQ_API_KEY) {
-      try {
-        const { groq } = await import("@ai-sdk/groq");
-        const { generateText } = await import("ai");
-        const userIqrhContext = await buildIrisContext(userId);
+    // 1. Essai avec le module centralisé IRIS LLM
+    try {
+      const userIqrhContext = await buildIrisContext(userId);
+      const llmResult = await generateResponse({
+        system:
+          "Tu es IRIS, la coach bienveillante et experte de Link-Office. Ton rôle est de fournir un commentaire et une explication personnalisée, humaine, positive et nuancée des résultats complets de l'évaluation IQRH (Météo relationnelle, statuts des dimensions, profil relationnel et ordonnance).\n" +
+          "- ADAPTE TON TON : Utilise le vouvoiement pour créer une proximité chaleureuse mais professionnelle.\n" +
+          "- PERSONNALISE : Prends impérativement en compte l'âge, la situation et la profession de la personne.\n" +
+          "- LANGAGE NATUREL : Rédige dans un français parfait sans jargon technique.\n" +
+          "- SOIS ENCOURAGEANTE : Mets en valeur ses forces avant de parler de ses points d'attention.",
+        messages: [
+          {
+            role: "user",
+            content: `Voici le contexte complet du bilan de l'utilisateur :\n${userIqrhContext}\n\nFais une restitution personnalisée et chaleureuse d'environ 3 paragraphes pour l'aider à interpréter ses résultats, sa météo relationnelle et l'encourager à réaliser les actions prioritaires de son ordonnance.`,
+          },
+        ],
+        userId,
+        maxOutputTokens: 600,
+      });
 
-        const { text: explanationText } = await generateText({
-          model: groq("llama-3.3-70b-versatile"),
-          system:
-            "Tu es IRIS, la coach bienveillante et experte de Link-Office. Ton rôle est de fournir un commentaire et une explication personnalisée, humaine, positive et nuancée des résultats complets de l'évaluation IQRH (Météo relationnelle, statuts des dimensions, profil relationnel et ordonnance).\n" +
-            "- ADAPTE TON TON : Utilise le vouvoiement pour créer une proximité chaleureuse mais professionnelle.\n" +
-            "- PERSONNALISE : Prends impérativement en compte l'âge, la situation et la profession de la personne.\n" +
-            "- LANGAGE NATUREL : Rédige dans un français parfait sans jargon technique.\n" +
-            "- SOIS ENCOURAGEANTE : Mets en valeur ses forces avant de parler de ses points d'attention.",
-          prompt: `Voici le contexte complet du bilan de l'utilisateur :\n${userIqrhContext}\n\nFais une restitution personnalisée et chaleureuse d'environ 3 paragraphes pour l'aider à interpréter ses résultats, sa météo relationnelle et l'encourager à réaliser les actions prioritaires de son ordonnance.`,
-        });
-
-        if (explanationText?.trim()) {
-          return NextResponse.json({ explication: explanationText });
-        }
-      } catch (groqErr) {
-        console.warn("[IRIS_EXPLICATION_GROQ_FALLBACK]:", groqErr);
+      if (!llmResult.degraded && llmResult.text?.trim()) {
+        return NextResponse.json({ explication: llmResult.text });
       }
+    } catch (groqErr) {
+      console.warn("[IRIS_EXPLICATION_FALLBACK]:", groqErr);
     }
 
     // 2. Génération analytique experte et personnalisée (Fallback résilient haute fidélité)

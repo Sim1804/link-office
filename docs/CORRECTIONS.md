@@ -192,9 +192,58 @@ Toutes les 84 routes de `app/api` ont été répertoriées :
 - **Recommandation pour la production :** Déployer un store distribué Redis avec Upstash (`@upstash/ratelimit` + `@upstash/redis`) ou une table PostgreSQL `RateLimitAttempt` avec nettoyage périodique.
 
 ### 1.7 Déclaration des Dépendances & Tests Automatisés
-- Ajout de `zod` (`^4.6.5` / `^3.x`) dans `dependencies` de `package.json`.
+- Ajout de `zod` (`^3.24.2`) dans `dependencies` de `package.json`.
 - Ajout de `vitest` (`^3.2.7`) et `fast-check` (`^4.5.3`) dans `devDependencies`.
 - Ajout des scripts `"test": "vitest run"` et `"test:watch": "vitest"`.
+
+---
+
+## Phase 2 : IRIS (LLM, Sécurité, Quotas, Streaming)
+
+### 2.1 Centralisation du Modèle LLM (`src/lib/iris/llm.ts`)
+- **Fichier créé :** [src/lib/iris/llm.ts](file:///d:/Projects/link-office/src/lib/iris/llm.ts)
+- **Défaut résolu :** Dispersion des appels Groq dans plusieurs routes (`message/route.ts`, `explication/route.ts`), modèle en dur sans abstraction unifiée, présence de commentaires périmés mentionnant Mixtral alors que Llama 3.3 est appelé, et absence de mesure de latence sans exposition des données sensibles.
+- **Correction :**
+  - Point d'appel unique au SDK via `generateResponse` et `streamResponse`.
+  - Lecture du modèle dans la variable d'environnement `IRIS_MODEL` (défaut : `llama-3.3-70b-versatile`).
+  - Suppression intégrale des commentaires obsolètes mentionnant Mixtral.
+  - Journalisation stricte sans contenu utilisateur (`iris_llm_inference`, `iris_llm_stream_finished`, `iris_llm_degraded_fallback`).
+  - Raccordement de `app/api/iris/explication/route.ts` et `app/api/iris/conversation/[id]/message/route.ts`.
+
+### 2.2 Streaming en direct (Décision 2.2 — Option A)
+- **Fichiers modifiés :**
+  - `src/lib/iris/llm.ts` (`streamResponse`)
+  - `app/api/iris/conversation/[id]/message/route.ts`
+- **Correction :** Support de la diffusion en continu par flux Vercel AI SDK (`toTextStreamResponse`) dès que le client sollicite le streaming via l'en-tête `Accept: text/event-stream` ou le paramètre `stream: true`.
+
+### 2.3 Filtres de Sécurité Programmatiques & Intégration du 3114 (Phase 2.3)
+- **Fichiers créés :**
+  - [src/lib/iris/safety-config.json](file:///d:/Projects/link-office/src/lib/iris/safety-config.json) (Patterns versionnés v1.0.0)
+  - [src/lib/iris/safety.ts](file:///d:/Projects/link-office/src/lib/iris/safety.ts) (`evaluateInputSafety`, `evaluateOutputSafety`, `logSecurityEvent`)
+- **Fichier modifié :** `app/api/iris/conversation/[id]/message/route.ts`
+- **Défaut résolu :** Absence totale de filtre logiciel : la sécurité reposait uniquement sur le prompt système. Le numéro national de prévention du suicide 3114 n'était jamais fourni dans le flux conversationnel réel.
+- **Correction :**
+  - **Filtre d'entrée :** Analyse par expressions régulières normalisées avant tout appel LLM :
+    - *Détresse vitale (CRISIS) :* Renvoie immédiatement les numéros d'urgence **3114** (Prévention Suicide) et **15** (SAMU), sans solliciter le LLM.
+    - *Demande médicale (MEDICAL) :* Refus des diagnostics et ordonnances de psychotropes (Xanax, Lexomil, antidépresseurs), rappel du périmètre non médical et renvoi vers le médecin traitant.
+    - *Jailbreak / Injection (JAILBREAK) :* Blocage des tentatives de contournement de consigne ("ignore previous instructions", "mode DAN").
+    - *Hors périmètre (OFF_TOPIC) :* Recadrage bienveillant sur la qualité de vie au travail pour le code, les devoirs ou la cuisine.
+  - **Filtre de sortie :** Analyse du texte généré par le modèle : interception des hallucinations de prescriptions médicamenteuses et substitution par un message sanitaire.
+  - **Journalisation :** Événement `iris_safety_incident` via `EventLogger`.
+- **Test qui le prouve :** `tests/iris/safety.test.ts` (10 tests unitaires validés).
+
+### 2.4 Quota Journalier et Code HTTP 402 (Décision 2.4 — Option A)
+- **Fichier :** `app/api/iris/conversation/[id]/message/route.ts:77-123`
+- **Défaut résolu :** Le code effectuait un contrôle mensuel (`isNewMonth`) et renvoyait un code HTTP 403 non informatif.
+- **Correction :**
+  - Exportation de la constante `IRIS_DAILY_QUOTA_FREEMIUM = 5`.
+  - Contrôle du jour calendaire UTC (`isNewDay`).
+  - En cas de dépassement de quota : renvoi du statut HTTP `402 (Payment Required)` avec un payload explicite `{ error: "Quota journalier atteint (5 messages / jour)...", quotaLimit: 5, upgradeUrl: "/premium" }`.
+  - Mise à jour atomique conditionnelle SQL (`updateMany`) prévenant toute race condition.
+
+### 2.5 Mode Dégradé Explicite (Phase 2.5)
+- **Fichiers :** `src/lib/iris/llm.ts`, `app/api/iris/conversation/[id]/message/route.ts`
+- **Correction :** Lorsque Groq est indisponible ou non configuré, la réponse JSON inclut le champ explicite `degraded: true` et bascule sur le moteur analytique local haute cohérence IQRH, garantissant la résilience de l'application.
 
 ---
 
@@ -207,14 +256,15 @@ Toutes les 84 routes de `app/api` ont été répertoriées :
 
  RUN  v3.2.7 D:/Projects/link-office
 
- ✓ tests/security/cron.test.ts (6 tests) 6ms
+ ✓ tests/security/cron.test.ts (6 tests) 7ms
  ✓ tests/security/privacy.test.ts (5 tests) 10ms
- ✓ tests/security/cross-tenant-access.test.ts (7 tests) 10ms
+ ✓ tests/iris/safety.test.ts (10 tests) 18ms
+ ✓ tests/security/cross-tenant-access.test.ts (7 tests) 15ms
 
- Test Files  3 passed (3)
-      Tests  18 passed (18)
-   Start at  13:52:02
-   Duration  704ms (transform 206ms, setup 0ms, collect 452ms, tests 26ms, environment 0ms, prepare 387ms)
+ Test Files  4 passed (4)
+      Tests  28 passed (28)
+   Start at  14:06:30
+   Duration  747ms (transform 366ms, setup 0ms, collect 786ms, tests 50ms, environment 1ms, prepare 587ms)
 ```
 
 ### Sortie réelle du TypeCheck (`npx tsc --noEmit`) :
@@ -224,5 +274,6 @@ Code de retour : 0 (0 erreur de compilation TypeScript)
 
 ### Sortie réelle du Linter (`npx eslint . --quiet`) :
 ```text
-Code de retour : 0 (0 erreur de linting)
+Code de retour : 0 (0 erreur de linting ESLint)
 ```
+

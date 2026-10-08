@@ -3,27 +3,31 @@
  * @module app/api/iris/conversation/[id]/message
  * @description Route API principale d'IRIS : envoie un message et retourne la réponse de coaching.
  *
- * Améliorations v2 :
- * - Modèle Groq : mixtral-8x7b-32768 (meilleure compréhension du français et du context long)
- * - Historique persisté en BDD (IrisMessage) — continuité inter-sessions garantie
- * - Quota Freemium atomique (updateMany avec WHERE) — pas de race condition
- * - `recommend_partners` : utilise le scoring contextuel du PrescriptionService
- *
- * @method POST
- * @param id — ID de la conversation (clé primaire IrisConversation en BDD)
- * @body {{ message_user: string }} — Message utilisateur (l'historique est lu depuis la BDD)
- * @returns {{ message_iris: string }} — Réponse textuelle d'IRIS
+ * Implémentation conforme Phase 2 :
+ * - Modèle LLM centralisé : piloté via `src/lib/iris/llm.ts` (IRIS_MODEL, défaut llama-3.3-70b-versatile)
+ * - Filtre de sécurité en entrée : détection détresse (3114, 15), médical, hors périmètre et jailbreak
+ * - Filtre de sécurité en sortie : détection des termes médicaux/prescriptions non autorisées
+ * - Quota journalier Freemium : 5 messages par jour calendaire UTC (HTTP 402 avec CTA Premium)
+ * - Mode dégradé explicite : champ `degraded: true` en cas d'indisponibilité du LLM
+ * - Support du streaming : Vercel AI SDK DataStream Protocol si demandé
+ * - Journalisation des événements de sécurité et de latence sans exposer le contenu utilisateur
  */
 
 import { NextResponse } from "next/server";
-import { groq } from "@ai-sdk/groq";
-import { generateText, tool } from "ai";
+import { tool } from "ai";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { buildIrisContext } from "@/lib/iris/context-builder";
 import { GamificationService } from "@/lib/gamification/gamification-service";
 import { MatchingService } from "@/lib/binome/matching-service";
 import { prisma } from "@/lib/prisma";
+import { generateResponse, streamResponse } from "@/lib/iris/llm";
+import {
+  evaluateInputSafety,
+  evaluateOutputSafety,
+  logSecurityEvent,
+  IRIS_DAILY_QUOTA_FREEMIUM,
+} from "@/lib/iris/safety";
 
 export async function POST(
   request: Request,
@@ -73,51 +77,90 @@ export async function POST(
       return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
     }
 
-    // ── Quota Freemium atomique (5 messages/mois, reset mensuel) ─────────────
+    // ── Quota Freemium atomique journalier (5 messages / jour calendaire UTC, HTTP 402) ──
     if (user.subscription === "FREEMIUM") {
       const now = new Date();
-      const isNewMonth =
+      const isNewDay =
         !user.lastIrisUsage ||
-        user.lastIrisUsage.getMonth() !== now.getMonth() ||
-        user.lastIrisUsage.getFullYear() !== now.getFullYear();
+        user.lastIrisUsage.toISOString().slice(0, 10) !== now.toISOString().slice(0, 10);
 
-      const currentCount = isNewMonth ? 0 : user.irisUsageCount;
+      const currentCount = isNewDay ? 0 : user.irisUsageCount;
 
-      if (currentCount >= 5) {
+      if (currentCount >= IRIS_DAILY_QUOTA_FREEMIUM) {
         return NextResponse.json(
-          { error: "Quota atteint. Passez à la version Premium pour continuer à discuter avec IRIS." },
-          { status: 403 }
+          {
+            error: "Quota journalier atteint (5 messages / jour). Passez à la formule Premium pour un accès illimité à IRIS.",
+            quotaLimit: IRIS_DAILY_QUOTA_FREEMIUM,
+            upgradeUrl: "/premium",
+          },
+          { status: 402 }
         );
       }
 
-      // updateMany avec WHERE atomique : garantit qu'aucune race condition ne dépasse le quota
+      // updateMany avec WHERE atomique : garantit l'absence de race condition sous forte concurrence
       const updated = await prisma.user.updateMany({
         where: {
           id: userId,
-          ...(isNewMonth ? {} : { irisUsageCount: { lt: 5 } }),
+          ...(isNewDay ? {} : { irisUsageCount: { lt: IRIS_DAILY_QUOTA_FREEMIUM } }),
         },
         data: {
-          irisUsageCount: isNewMonth ? 1 : { increment: 1 },
+          irisUsageCount: isNewDay ? 1 : { increment: 1 },
           lastIrisUsage: now,
         },
       });
 
       if (updated.count === 0) {
         return NextResponse.json(
-          { error: "Quota atteint. Passez à la version Premium pour continuer à discuter avec IRIS." },
-          { status: 403 }
+          {
+            error: "Quota journalier atteint (5 messages / jour). Passez à la formule Premium pour un accès illimité à IRIS.",
+            quotaLimit: IRIS_DAILY_QUOTA_FREEMIUM,
+            upgradeUrl: "/premium",
+          },
+          { status: 402 }
         );
       }
     }
 
-    // ── Chargement de l'historique depuis la BDD ──────────────────────────────
-    const dbHistory = await prisma.irisMessage.findMany({
+    // ── Filtre de sécurité programmatique d'entrée (AVANT appel LLM) ──────────
+    const safetyCheck = evaluateInputSafety(userMessage);
+    if (!safetyCheck.safe) {
+      if (safetyCheck.category) {
+        await logSecurityEvent(userId, safetyCheck.category, {
+          matchedPattern: safetyCheck.matchedPattern,
+          conversationId,
+        });
+      }
+
+      const escalationReply =
+        safetyCheck.escalationResponse ||
+        "Mon accompagnement au sein de LinkOffice est exclusivement dédié à votre santé relationnelle.";
+
+      // Persistance en base de données pour la traçabilité
+      await prisma.irisMessage.create({
+        data: { conversationId, role: "user", content: userMessage },
+      });
+      await prisma.irisMessage.create({
+        data: { conversationId, role: "assistant", content: escalationReply },
+      });
+
+      return NextResponse.json({
+        message_iris: escalationReply,
+        safetyEscalation: true,
+        category: safetyCheck.category,
+        degraded: false,
+      });
+    }
+
+    // ── Chargement de l'historique depuis la BDD (Sliding window 10 messages) ──
+    const recentDbHistory = await prisma.irisMessage.findMany({
       where: { conversationId },
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: "desc" },
+      take: 10,
       select: { role: true, content: true },
     });
+    const dbHistory = recentDbHistory.reverse();
 
-    // Persister le message utilisateur immédiatement
+    // Persister le message utilisateur valide immédiatement
     await prisma.irisMessage.create({
       data: { conversationId, role: "user", content: userMessage },
     });
@@ -132,12 +175,13 @@ export async function POST(
         : `\n\nCONTEXTE UTILISATEUR:\n${userIqrhContext}\n\nUtilise ce contexte avec beaucoup de tact et d'empathie. Tu dois guider l'utilisateur vers un meilleur équilibre relationnel.`,
       "\n\nTON STYLE DE COMMUNICATION :",
       "- 🛑 TU DOIS PARLER UNIQUEMENT EN FRANÇAIS. Ne réponds JAMAIS en anglais.",
-      "- Sois chaleureuse, empathique, professionnelle et encourageante.",
+      "- ⚡ DIRECTE ET SANS DÉTOUR (RÈGLE STRICTE ANTI-VERBOSITÉ & ÉCONOMIE DE JETONS) : Va DROIT AU BUT. Proscris absolument tout détour verbeux, bavardage préliminaire, préambule de complaisance ou reformulation superflue de la question. Ne commence pas par de longues formules introductives. Délivre immédiatement l'éclairage clé ou le conseil attendu.",
+      "- 🎯 CONCISION MAXIMALE : Tes réponses doivent comporter STRICTEMENT 2 à 3 phrases claires et percutantes maximum. Chaque mot doit compter pour minimiser la consommation de jetons et maximiser la clarté.",
+      "- Sois chaleureuse, empathique, professionnelle et encourageante sans être bavarde.",
       "- Utilise exclusivement le vouvoiement ('vous') pour t'adresser à l'utilisateur.",
-      "- Tes réponses doivent être très concises (2 à 3 phrases maximum) pour une lecture fluide.",
-      "- Si tu utilises l'outil recommend_partners, liste les partenaires trouvés clairement en français avec leurs descriptions.",
+      "- Si tu utilises l'outil recommend_partners, liste les partenaires trouvés clairement en français avec leurs descriptions concises.",
       "- Utilise un langage clair, sans jargon technique ou clinique.",
-      "- Termine souvent par une question ouverte pour maintenir l'engagement.",
+      "- Termine par une question ouverte courte et ciblée pour maintenir l'engagement.",
       "\n\nGESTION DES MICRO-DÉFIS ET DE L'ORDONNANCE :",
       "L'utilisateur possède une Ordonnance Relationnelle avec des recommandations et des micro-défis (MICRO_CHALLENGE).",
       "- Prends l'initiative de lui demander des nouvelles d'un défi s'il n'en parle pas.",
@@ -156,193 +200,182 @@ export async function POST(
     ].join("\n");
 
     // ── Construction de l'historique pour le LLM ─────────────────────────────
-    // L'historique DB contient déjà le message utilisateur qu'on vient d'insérer
-    // On le reconstruit pour le LLM (sans le dernier message utilisateur qui est passé séparément)
-    const chatMessages = dbHistory.map((m) => ({
+    const chatMessages: Array<{ role: "user" | "assistant" | "system"; content: string }> = dbHistory.map((m) => ({
       role: m.role as "user" | "assistant",
       content: m.content,
     }));
-    // Ajouter le message actuel à la fin
     chatMessages.push({ role: "user", content: userMessage });
 
-    // ── Appel au LLM Mixtral avec tool calling ────────────────────────────────
-    let irisResponse = "";
-
-    if (process.env.GROQ_API_KEY) {
-      try {
-        const llmResult = await generateText({
-          model: groq("llama-3.3-70b-versatile"),
-      system: systemPrompt,
-      messages: chatMessages,
-      toolChoice: "auto",
-      tools: {
-        /**
-         * Valide un micro-défi lorsque l'utilisateur indique l'avoir accompli.
-         * Déclenche GamificationService : points + badges.
-         */
-        complete_micro_challenge: tool({
-          description: "Valider un micro-défi (MICRO_CHALLENGE) lorsque l'utilisateur indique l'avoir accompli.",
-          parameters: z.object({
-            challengeId: z.string().describe("L'identifiant technique du défi à valider (fourni dans le contexte)."),
-          }),
-          // @ts-expect-error — zodSchema overload mismatch in ai@7.x; runtime is correct
-          execute: async ({ challengeId }: { challengeId: string }) => {
-            try {
-              await GamificationService.completeChallenge(userId, challengeId);
-              return { success: true };
-            } catch (error: unknown) {
-              return {
-                success: false,
-                error: error instanceof Error ? error.message : "Erreur inconnue",
-              };
-            }
-          },
+    // ── Outils fonctionnels IRIS ──────────────────────────────────────────────
+    const tools = {
+      complete_micro_challenge: tool({
+        description: "Valider un micro-défi (MICRO_CHALLENGE) lorsque l'utilisateur indique l'avoir accompli.",
+        parameters: z.object({
+          challengeId: z.string().describe("L'identifiant technique du défi à valider (fourni dans le contexte)."),
         }),
+        // @ts-expect-error — zodSchema overload mismatch in ai@7.x; runtime is correct
+        execute: async ({ challengeId }: { challengeId: string }) => {
+          try {
+            await GamificationService.completeChallenge(userId, challengeId);
+            return { success: true };
+          } catch (error: unknown) {
+            return {
+              success: false,
+              error: error instanceof Error ? error.message : "Erreur inconnue",
+            };
+          }
+        },
+      }),
 
-        /**
-         * Recommande des partenaires de soin (psychologues, assistants sociaux, associations)
-         * en utilisant le scoring contextuel basé sur le profil IQRH de l'utilisateur.
-         */
-        recommend_partners: tool({
-          description: "Rechercher et recommander des partenaires de confiance (psychologues, assistantes sociales, associations) selon le besoin exprimé.",
-          parameters: z.object({
-            need: z.string().describe("Le besoin principal (ex: 'psychologique', 'juridique', 'social', 'isolement')."),
-          }),
-          // @ts-expect-error — zodSchema overload mismatch in ai@7.x; runtime is correct
-          execute: async ({ need }: { need: string }) => {
-            try {
-              // Récupération du contexte IQRH pour le scoring contextuel
-              const userResult = await prisma.assessment.findFirst({
-                where: { userId, status: "SUBMITTED" },
-                orderBy: { submittedAt: "desc" },
-                include: {
-                  result: { include: { icr: true, profile: true } },
-                  demographic: true,
-                },
-              });
-
-              const allPartners = await prisma.libraryItem.findMany({
-                where: { library: "Partenaires" },
-              });
-
-              // Scoring contextuel : utilise les champs IQRH pour mieux cibler
-              const needLower = need.toLocaleLowerCase("fr-FR");
-              const situations = (userResult?.demographic?.selectedSituations as string[]) ?? [];
-              const dominantNeeds = (userResult?.result?.icr?.dominantNeeds as string[]) ?? [];
-              const profileName = userResult?.result?.primaryProfile ?? "";
-
-              const scored = allPartners
-                .map((p) => {
-                  const data = p.data as Record<string, unknown>;
-                  const searchString = [
-                    p.title,
-                    p.category ?? "",
-                    String(data?.besoins_couverts ?? ""),
-                    String(data?.description ?? ""),
-                    String(data?.public_cible ?? ""),
-                  ]
-                    .join(" ")
-                    .toLocaleLowerCase("fr-FR");
-
-                  let score = 0;
-
-                  // Correspondance directe avec le besoin exprimé
-                  if (searchString.includes(needLower)) score += 5;
-
-                  // Situations de vie de l'utilisateur
-                  if (situations.some((s) => searchString.includes(s.toLocaleLowerCase("fr-FR")))) score += 3;
-
-                  // Besoins dominants ICR
-                  if (dominantNeeds.some((n) => searchString.includes(n.toLocaleLowerCase("fr-FR")))) score += 2;
-
-                  // Profil relationnel
-                  if (profileName && searchString.includes(profileName.toLocaleLowerCase("fr-FR"))) score += 1;
-
-                  return { partner: p, score };
-                })
-                .filter((item) => item.score > 0)
-                .sort((a, b) => b.score - a.score)
-                .slice(0, 3);
-
-              // Fallback : si aucun match, retourner les 2 premiers partenaires
-              const results = scored.length > 0 ? scored : allPartners.slice(0, 2).map((p) => ({ partner: p, score: 0 }));
-
-              return {
-                success: true,
-                partners: results.map(({ partner }) => {
-                  const data = partner.data as Record<string, unknown>;
-                  return {
-                    id: partner.id,
-                    title: partner.title,
-                    category: partner.category,
-                    type: data?.type_partenaire,
-                    description: data?.description,
-                    territoire: data?.territoire,
-                  };
-                }),
-              };
-            } catch (_error: unknown) {
-              return { success: false, error: "Impossible de récupérer les partenaires." };
-            }
-          },
+      recommend_partners: tool({
+        description: "Rechercher et recommander des partenaires de confiance (psychologues, assistantes sociales, associations) selon le besoin exprimé.",
+        parameters: z.object({
+          need: z.string().describe("Le besoin principal (ex: 'psychologique', 'juridique', 'social', 'isolement')."),
         }),
+        // @ts-expect-error — zodSchema overload mismatch in ai@7.x; runtime is correct
+        execute: async ({ need }: { need: string }) => {
+          try {
+            const userResult = await prisma.assessment.findFirst({
+              where: { userId, status: "SUBMITTED" },
+              orderBy: { submittedAt: "desc" },
+              include: {
+                result: { include: { icr: true, profile: true } },
+                demographic: true,
+              },
+            });
 
-        /**
-         * Enregistre le consentement de l'utilisateur pour le programme de Binôme Relationnel.
-         */
-        opt_in_matching: tool({
-          description: "Enregistre le consentement de l'utilisateur pour participer au programme de Binôme Relationnel.",
-          parameters: z.object({}),
-          // @ts-expect-error AI SDK tool typing mismatch
-          execute: async () => {
-            try {
-              await MatchingService.setOptIn(userId, true);
-              return { success: true, message: "Consentement enregistré avec succès." };
-            } catch (_error: unknown) {
-              return { success: false, error: "Erreur lors de l'enregistrement du consentement." };
-            }
-          },
+            const allPartners = await prisma.libraryItem.findMany({
+              where: { library: "Partenaires" },
+            });
+
+            const needLower = need.toLocaleLowerCase("fr-FR");
+            const situations = (userResult?.demographic?.selectedSituations as string[]) ?? [];
+            const dominantNeeds = (userResult?.result?.icr?.dominantNeeds as string[]) ?? [];
+            const profileName = userResult?.result?.primaryProfile ?? "";
+
+            const scored = allPartners
+              .map((p) => {
+                const data = p.data as Record<string, unknown>;
+                const searchString = [
+                  p.title,
+                  p.category ?? "",
+                  String(data?.besoins_couverts ?? ""),
+                  String(data?.description ?? ""),
+                  String(data?.public_cible ?? ""),
+                ]
+                  .join(" ")
+                  .toLocaleLowerCase("fr-FR");
+
+                let score = 0;
+                if (searchString.includes(needLower)) score += 5;
+                for (const sit of situations) {
+                  if (searchString.includes(sit.toLocaleLowerCase("fr-FR"))) score += 3;
+                }
+                for (const dom of dominantNeeds) {
+                  if (searchString.includes(dom.toLocaleLowerCase("fr-FR"))) score += 2;
+                }
+                if (profileName && searchString.includes(profileName.toLocaleLowerCase("fr-FR"))) {
+                  score += 1;
+                }
+
+                return { item: p, score };
+              })
+              .filter((x) => x.score > 0)
+              .sort((a, b) => b.score - a.score)
+              .slice(0, 3);
+
+            return {
+              partners: scored.map((s) => ({
+                id: s.item.id,
+                title: s.item.title,
+                category: s.item.category,
+                description: (s.item.data as Record<string, unknown>)?.description ?? "",
+                website: (s.item.data as Record<string, unknown>)?.site_web ?? null,
+                phone: (s.item.data as Record<string, unknown>)?.telephone ?? null,
+              })),
+            };
+          } catch (error: unknown) {
+            return {
+              partners: [],
+              error: error instanceof Error ? error.message : "Erreur inconnue",
+            };
+          }
+        },
+      }),
+
+      opt_in_matching: tool({
+        description: "Enregistrer l'accord de l'utilisateur pour participer au programme de Binôme Relationnel.",
+        parameters: z.object({
+          optIn: z.boolean().default(true),
         }),
+        // @ts-expect-error — zodSchema overload mismatch in ai@7.x; runtime is correct
+        execute: async ({ optIn }: { optIn: boolean }) => {
+          try {
+            await MatchingService.setOptIn(userId, optIn ?? true);
+            return { success: true };
+          } catch (error: unknown) {
+            return {
+              success: false,
+              error: error instanceof Error ? error.message : "Erreur inconnue",
+            };
+          }
+        },
+      }),
 
-        /**
-         * Lance l'algorithme de matching pour trouver un Binôme compatible dans la même campagne.
-         */
-        find_relational_partner: tool({
-          description: "Cherche un partenaire de binôme compatible et crée l'invitation.",
-          parameters: z.object({}),
-          // @ts-expect-error AI SDK tool typing mismatch
-          execute: async () => {
-            try {
-              const result = await MatchingService.findAndInvitePartner(userId);
-              return result;
-            } catch (_error: unknown) {
-              return { success: false, error: "Erreur lors de la recherche de partenaire." };
-            }
-          },
-        }),
-      },
-    });
+      find_relational_partner: tool({
+        description: "Rechercher activement une suggestion de binôme relationnel parmi les collègues disponibles.",
+        parameters: z.object({}),
+        // @ts-expect-error — zodSchema overload mismatch in ai@7.x; runtime is correct
+        execute: async () => {
+          try {
+            const matchResult = await MatchingService.findAndInvitePartner(userId);
+            return matchResult;
+          } catch (error: unknown) {
+            return {
+              found: false,
+              error: error instanceof Error ? error.message : "Erreur inconnue",
+            };
+          }
+        },
+      }),
+    };
 
-    const rawResponseText = llmResult.text;
-        irisResponse = rawResponseText
-          ? rawResponseText
-              .replace(/<function\b[^>]*>(.*?)<\/function>/gi, "")
-              .replace(/<tool_call\b[^>]*>(.*?)<\/tool_call>/gi, "")
-              .trim()
-          : "";
-      } catch (groqError) {
-        console.warn("[IRIS_GROQ_CALL_FAILED_FALLING_BACK]:", groqError);
-      }
+    // ── Détection du streaming demandé (Option A Décision 2.2) ─────────────────
+    const acceptsStream = request.headers.get("accept")?.includes("text/event-stream");
+    const isStreamRequested = requestBody.stream === true || acceptsStream;
+
+    if (isStreamRequested && process.env.GROQ_API_KEY) {
+      const stream = await streamResponse({
+        system: systemPrompt,
+        messages: chatMessages,
+        tools,
+        userId,
+        conversationId,
+      });
+      return stream.toTextStreamResponse();
     }
 
-    // ── Fallback intelligent basé sur le profil réel de l'utilisateur ─────────
-    if (!irisResponse) {
+    // ── Mode standard (Réponse unitaire structurée) ───────────────────────────
+    const llmResult = await generateResponse({
+      system: systemPrompt,
+      messages: chatMessages,
+      tools,
+      userId,
+      conversationId,
+    });
+
+    let finalResponseText = llmResult.text;
+    let isDegraded = llmResult.degraded;
+
+    // En cas d'indisponibilité du LLM distant, fallback analytique local haute cohérence
+    if (isDegraded) {
       const latestAssessment = await prisma.assessment.findFirst({
-        where: { userId },
-        orderBy: { updatedAt: "desc" },
+        where: { userId, status: "SUBMITTED" },
+        orderBy: { submittedAt: "desc" },
         include: {
           result: {
             include: {
+              icr: true,
               profile: true,
               prescription: { include: { items: true } },
             },
@@ -357,33 +390,42 @@ export async function POST(
       const bestDim = res?.bestDimension ? res.bestDimension.replace("_", " ").toLowerCase() : "relations affectives";
 
       if (q.includes("sentimentale") || q.includes("couple") || q.includes("intime")) {
-        irisResponse = `Pour votre dimension sentimentale, le Laboratoire du Lien Humain préconise le protocole d'« attention sanctuarisée » : définir un moment d'écoute mutuelle non négociable chaque semaine, sans écran ni contraintes logistiques. Souhaitez-vous planifier ce temps d'échange cette semaine ?`;
+        finalResponseText = `Pour votre dimension sentimentale, le Laboratoire du Lien Humain préconise le protocole d'« attention sanctuarisée » : définir un moment d'écoute mutuelle non négociable chaque semaine, sans écran ni contraintes logistiques. Souhaitez-vous planifier ce temps d'échange cette semaine ?`;
       } else if (q.includes("force") || q.includes("point fort") || q.includes("atout")) {
-        irisResponse = `Votre plus grand point d'appui s'exprime dans vos **${bestDim}**. C'est un véritable capital confiance qui vous permet de prendre du recul face aux imprévus. Vous pouvez vous appuyer sereinement sur ce socle.`;
+        finalResponseText = `Votre plus grand point d'appui s'exprime dans vos **${bestDim}**. C'est un véritable capital confiance qui vous permet de prendre du recul face aux imprévus. Vous pouvez vous appuyer sereinement sur ce socle.`;
       } else if (q.includes("priorité") || q.includes("faible") || q.includes("attention") || q.includes("vigilance")) {
-        irisResponse = `Votre axe de vigilance prioritaire concerne la dimension **${priorityDim}**. De légers ajustements de communication et une clarification de vos attentes mutuelles permettront de désamorcer les tensions et d'alléger votre charge mentale.`;
+        finalResponseText = `Votre axe de vigilance prioritaire concerne la dimension **${priorityDim}**. De légers ajustements de communication et une clarification de vos attentes mutuelles permettront de désamorcer les tensions et d'alléger votre charge mentale.`;
       } else if (q.includes("rituel") || q.includes("5 minutes") || q.includes("action") || q.includes("exercice")) {
-        irisResponse = `Je vous suggère le micro-rituel « La météo du lien » : en début de journée ou de réunion, évaluez votre niveau d'énergie relationnelle sur une échelle de 1 à 5. Cela permet d'ajuster vos échanges en toute transparence. Aimeriez-vous tester dès demain ?`;
+        finalResponseText = `Je vous suggère le micro-rituel « La météo du lien » : en début de journée ou de réunion, évaluez votre niveau d'énergie relationnelle sur une échelle de 1 à 5. Cela permet d'ajuster vos échanges en toute transparence. Aimeriez-vous tester dès demain ?`;
       } else if (q.includes("binôme") || q.includes("partenaire") || q.includes("collègue")) {
-        irisResponse = `Le programme de Binôme Relationnel vous permet d'échanger en miroir avec un collègue bienveillant. Vous pouvez consulter votre statut et vos correspondances dans l'onglet « Relations & Binôme » de votre tableau de bord. Souhaitez-vous que je vous guide ?`;
+        finalResponseText = `Le programme de Binôme Relationnel vous permet d'échanger en miroir avec un collègue bienveillant. Vous pouvez consulter votre statut et vos correspondances dans l'onglet « Relations & Binôme » de votre tableau de bord. Souhaitez-vous que je vous guide ?`;
       } else if (q.includes("stress") || q.includes("charge") || q.includes("fatigue") || q.includes("pression")) {
-        irisResponse = `Face à la fatigue relationnelle, il est crucial de sanctuariser des temps de récupération. Avec votre score IQRH de **${score}/100**, vous disposez de solides ressources protectrices. Prenez un moment aujourd'hui pour poser vos limites avec bienveillance.`;
+        finalResponseText = `Face à la fatigue relationnelle, il est crucial de sanctuariser des temps de récupération. Avec votre score IQRH de **${score}/100**, vous disposez de solides ressources protectrices. Prenez un moment aujourd'hui pour poser vos limites avec bienveillance.`;
       } else if (q.includes("défi") || q.includes("terminé") || q.includes("validé") || q.includes("fait")) {
-        irisResponse = `Bravo pour votre passage à l'action ! Chaque micro-défi accompli renforce durablement la santé de votre collectif et crédite votre expérience. Continuons sur cette excellente dynamique ! 🎉`;
+        finalResponseText = `Bravo pour votre passage à l'action ! Chaque micro-défi accompli renforce durablement la santé de votre collectif et crédite votre expérience. Continuons sur cette excellente dynamique ! 🎉`;
       } else {
-        irisResponse = `C'est une excellente question. Au regard de votre bilan IQRH (${score}/100), le secret d'un équilibre durable réside dans la régularité des micro-ajustements. Souhaitez-vous que nous examinions ensemble une situation relationnelle concrète ?`;
+        finalResponseText = `C'est une excellente question. Au regard de votre bilan IQRH (${score}/100), le secret d'un équilibre durable réside dans la régularité des micro-ajustements. Souhaitez-vous que nous examinions ensemble une situation relationnelle concrète ?`;
+      }
+    } else {
+      // Contrôle de sécurité de sortie
+      const outputSafety = evaluateOutputSafety(finalResponseText);
+      if (!outputSafety.safe) {
+        finalResponseText = outputSafety.sanitizedContent || finalResponseText;
+        await logSecurityEvent(userId, "MEDICAL", {
+          matchedPattern: outputSafety.flaggedTerms?.join(", "),
+          conversationId,
+        });
       }
     }
 
     // ── Persistance de la réponse IRIS en BDD ─────────────────────────────────
     await prisma.irisMessage.create({
-      data: { conversationId, role: "assistant", content: irisResponse },
+      data: { conversationId, role: "assistant", content: finalResponseText },
     });
 
     // ── Mise à jour du titre de la conversation (à la première réponse) ───────
     const messageCount = await prisma.irisMessage.count({ where: { conversationId } });
     if (messageCount === 2) {
-      // 1 user + 1 assistant = première réponse : on génère un titre court
       const titleSnippet = userMessage.length > 60 ? userMessage.slice(0, 57) + "…" : userMessage;
       await prisma.irisConversation.update({
         where: { id: conversationId },
@@ -391,7 +433,10 @@ export async function POST(
       });
     }
 
-    return NextResponse.json({ message_iris: irisResponse });
+    return NextResponse.json({
+      message_iris: finalResponseText,
+      degraded: isDegraded,
+    });
 
   } catch (error) {
     console.error("[IRIS_MESSAGE_ERROR]:", error);
