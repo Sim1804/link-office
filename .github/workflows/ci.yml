@@ -64,13 +64,24 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
+      - name: Deploy Prisma Schema to Postgres Service
+        run: npx prisma db push --skip-generate
+
+      - name: Seed Database Fixtures
+        run: npx tsx prisma/seed.ts
+
       - name: Run ESLint
         run: npm run lint -- --quiet
 
       - name: Run TypeScript typecheck
         run: npx tsc --noEmit
 
-      - name: Run Vitest test suite (Unit & Integration)
+      - name: Start Background Next.js Server for HTTP Integration Tests
+        run: |
+          npm run dev &
+          npx wait-on http://localhost:3000/api/auth/csrf -t 60000
+
+      - name: Run Vitest test suite (Unit, Integration & Security)
         run: npm test
 
       - name: Build Next.js Application
