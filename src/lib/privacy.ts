@@ -77,3 +77,118 @@ export function createAnonymityBlockedResponse(respondentCount: number, customMe
     { status: 200 }
   );
 }
+
+export interface BreakdownItem<T = any> {
+  label: string;
+  count: number;
+  value?: T;
+  isMasked?: boolean;
+  suppressionType?: "PRIMARY" | "SECONDARY";
+}
+
+/**
+ * Applique la suppression complémentaire (Secondary Suppression / Anti-recoupement).
+ *
+ * PROBLÈME RÉSOLU :
+ * Si une ventilation comporte un total connu (ex: 20) et que seule 1 cellule est masquée
+ * (ex: CDI = 19, CDD = 1 avec seuil 5), masquer CDD seul permet à un attaquant de déduire
+ * immédiatement CDD = 20 - 19 = 1.
+ *
+ * RÈGLE CNIL / STATISTIQUE PUBLIQUE :
+ * Si exactement UNE SEULE cellule est masquée (< 5, suppression primaire), il est obligatoire
+ * de masquer AU MOINS UNE DEUXIÈME cellule (la plus petite des cellules non masquées)
+ * pour rendre l'équation à 2 inconnues non résoluble.
+ */
+export function applySecondarySuppression<T = any>(
+  items: Array<{ label: string; count: number; value?: T }>
+): Array<BreakdownItem<T>> {
+  if (!items || items.length === 0) return [];
+
+  // 1. Suppression primaire : masquer toutes les cellules < ANONYMITY_THRESHOLD
+  const result: Array<BreakdownItem<T>> = items.map((item) => {
+    if (item.count < ANONYMITY_THRESHOLD) {
+      return {
+        label: item.label,
+        count: 0,
+        value: undefined,
+        isMasked: true,
+        suppressionType: "PRIMARY",
+      };
+    }
+    return {
+      label: item.label,
+      count: item.count,
+      value: item.value,
+      isMasked: false,
+    };
+  });
+
+  const primaryMaskedCount = result.filter((r) => r.isMasked).length;
+
+  // 2. Si exactement 1 cellule est masquée et qu'il reste au moins 1 cellule non masquée :
+  // On doit masquer une 2e cellule (suppression secondaire) pour empêcher la déduction par soustraction.
+  if (primaryMaskedCount === 1) {
+    let minNonMaskedIndex = -1;
+    let minCount = Infinity;
+
+    result.forEach((item, index) => {
+      if (!item.isMasked && item.count < minCount) {
+        minCount = item.count;
+        minNonMaskedIndex = index;
+      }
+    });
+
+    if (minNonMaskedIndex !== -1) {
+      result[minNonMaskedIndex] = {
+        ...result[minNonMaskedIndex],
+        count: 0,
+        value: undefined,
+        isMasked: true,
+        suppressionType: "SECONDARY",
+      };
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Détecte le risque d'attribut homogène (Homogeneity Attack / l-diversity).
+ *
+ * PROBLÈME RÉSOLU :
+ * Si un groupe de 5 collaborateurs satisfait le seuil k >= 5, mais que 100% (ou >= 90%)
+ * partagent la même modalité sensible (ex: tous "Risque critique" ou "Détresse"),
+ * l'attaquant sait avec certitude que chaque membre du groupe a cet attribut.
+ *
+ * RÈGLE :
+ * Si la proportion de la modalité dominante dépasse `maxHomogeneityRatio` (par défaut 0.9 = 90%),
+ * le groupe est signalé à risque et la restitution doit être masquée ou neutralisée.
+ */
+export function checkHomogeneityRisk(
+  items: Array<{ label: string; count: number }>,
+  totalCount: number,
+  maxHomogeneityRatio = 0.9
+): {
+  hasHomogeneityRisk: boolean;
+  dominantLabel?: string;
+  dominantRatio?: number;
+  reason?: string;
+} {
+  if (totalCount <= 0 || !items || items.length === 0) {
+    return { hasHomogeneityRisk: false };
+  }
+
+  for (const item of items) {
+    const ratio = item.count / totalCount;
+    if (ratio >= maxHomogeneityRatio) {
+      return {
+        hasHomogeneityRisk: true,
+        dominantLabel: item.label,
+        dominantRatio: Math.round(ratio * 100) / 100,
+        reason: `Risque d'inférence par homogénéité : ${Math.round(ratio * 100)}% des membres du sous-groupe partagent la modalité « ${item.label} ». Restitution bloquée pour préserver la vie privée.`,
+      };
+    }
+  }
+
+  return { hasHomogeneityRisk: false };
+}
