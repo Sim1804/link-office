@@ -37,15 +37,13 @@ export function SuperAdminHeader({ stats }: SuperAdminHeaderProps) {
   return (
     <>
       {/* 1. TOP HEADER */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3 transition-all">
-        <div className="max-w-[1480px] mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3.5 shadow-2xs transition-all">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           
           {/* Left: Brand Logo */}
-          <div className="flex items-center gap-4">
-            <Link href="/" className="cursor-pointer hover:opacity-90 transition-opacity">
-              <Logo size="sm" showTagline={false} />
-            </Link>
-          </div>
+          <Link href="/" className="flex items-center text-decoration-none shrink-0 hover:opacity-90 transition-opacity">
+            <Logo size="navbar" showTagline={false} />
+          </Link>
 
           {/* Center: Top Level Switcher (Console Administrateur vs Portails Partenaires) */}
           <nav className="flex items-center gap-4 sm:gap-8 font-jakarta text-sm font-semibold">
@@ -174,7 +172,7 @@ export function SuperAdminHeader({ stats }: SuperAdminHeaderProps) {
 
       {/* 2. HORIZONTAL SUB-NAVIGATION TABS */}
       <div className="bg-white border-b border-[#E3EBE6] px-4 sm:px-8 overflow-x-auto scrollbar-none py-2.5">
-        <div className="max-w-[1480px] mx-auto flex items-center gap-1.5 sm:gap-2">
+        <div className="max-w-[1440px] mx-auto flex items-center gap-1.5 sm:gap-2">
           {tabs.map((tab) => {
             const isActive = tab.exact ? pathname === tab.href : pathname.startsWith(tab.href);
             return (
@@ -192,13 +190,6 @@ export function SuperAdminHeader({ stats }: SuperAdminHeaderProps) {
                 {tab.badge && (
                   <span className="w-4 h-4 rounded-full bg-[#FFC629] text-[#123D46] text-[10px] font-bold flex items-center justify-center">
                     {tab.badge}
-                  </span>
-                )}
-                {tab.key === 'organisations' && (
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-md font-mono ${
-                    isActive ? 'bg-[#00A99D]/20 text-[#00A99D]' : 'bg-[#123D46]/5 text-[#123D46]/70'
-                  }`}>
-                    {stats?.totalOrganizations || 0}
                   </span>
                 )}
               </Link>

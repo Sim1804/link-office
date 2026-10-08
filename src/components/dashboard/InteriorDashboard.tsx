@@ -71,8 +71,8 @@ export const InteriorDashboard: React.FC<InteriorDashboardProps> = ({
         <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           {/* Left: Brand Logo & Public site link */}
           <div className="flex items-center gap-3 sm:gap-4">
-            <div onClick={onReturnToPublic} className="cursor-pointer">
-              <Logo size="sm" showTagline={false} />
+            <div onClick={onReturnToPublic} className="cursor-pointer flex items-center shrink-0 hover:opacity-90 transition-opacity">
+              <Logo size="navbar" showTagline={false} />
             </div>
             <div className="hidden sm:flex items-center gap-2 pl-3 border-l border-[#E3EBE6]">
               <span className="text-xs font-jakarta font-bold px-2.5 py-1 rounded-lg bg-[#00A99D]/10 text-[#00A99D] flex items-center gap-1.5">

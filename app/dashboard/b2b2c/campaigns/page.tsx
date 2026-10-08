@@ -2,10 +2,10 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import { Calendar, Users, ChevronRight, CheckCircle2, Clock, Archive, RefreshCw, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
+
 import { SubscriptionBadge } from "@/components/ui/SubscriptionBadge";
 
 interface Campaign {
@@ -37,7 +37,7 @@ export default function PartnerCampaignsListPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/campaigns")
+    fetch("/api/campaigns?type=B2B2C")
       .then(r => r.json())
       .then(d => { if (d.campaigns) setCampaigns(d.campaigns); })
       .finally(() => setLoading(false));
@@ -110,10 +110,9 @@ export default function PartnerCampaignsListPage() {
   };
 
   return (
-    <>
-      <Navbar />
-      <main className="page-main">
-        <PartnerPortalsNavigation />
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#5965E8]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2B2C" activeTab="campagnes" />
+      <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
         <div className="page-container-wide" style={{ position: "relative", zIndex: 1 }}>
 
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 36 }}>
@@ -188,6 +187,6 @@ export default function PartnerCampaignsListPage() {
           )}
         </div>
       </main>
-    </>
+    </div>
   );
 }

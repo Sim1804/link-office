@@ -153,7 +153,7 @@ export const SaaSPlatform: React.FC<{
       </section>
 
       <section id="solutions" className="scroll-mt-28">
-        <OrganisationsSection onContact={() => router.push('/auth/register')} />
+        <OrganisationsSection onContact={() => router.push('/business#devis')} />
       </section>
 
       {/* ==================== SECTION: TARIFS ==================== */}

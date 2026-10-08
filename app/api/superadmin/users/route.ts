@@ -10,16 +10,26 @@ export async function GET(req: NextRequest) {
     }
 
     // Fetch all users with their organizations and campaigns
-    const users = await prisma.user.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        organization: { select: { name: true, type: true } },
-        campaign: { select: { title: true } },
-        _count: { select: { assessments: true } },
-      }
-    });
+    const [users, organizations, campaigns] = await Promise.all([
+      prisma.user.findMany({
+        orderBy: { createdAt: "desc" },
+        include: {
+          organization: { select: { id: true, name: true, type: true } },
+          campaign: { select: { id: true, title: true } },
+          _count: { select: { assessments: true } },
+        }
+      }),
+      prisma.organization.findMany({
+        select: { id: true, name: true, type: true },
+        orderBy: { name: "asc" }
+      }),
+      prisma.campaign.findMany({
+        select: { id: true, title: true, organizationId: true },
+        orderBy: { title: "asc" }
+      })
+    ]);
 
-    return NextResponse.json({ users });
+    return NextResponse.json({ users, organizations, campaigns });
   } catch (error) {
     console.error("GET /api/superadmin/users:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

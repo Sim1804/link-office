@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import {
   ArrowLeft, FileText, Download, AlertTriangle,
   CheckCircle2, TrendingUp, Users, Calendar, MapPin,
@@ -12,6 +12,7 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
   ResponsiveContainer,
 } from "recharts";
+import { formatRiskFactorLabel } from "@/lib/iqrh/icr-calculation-service";
 
 /* ── Types ──────────────────────────────────────────────────────── */
 interface CampaignStats {
@@ -73,12 +74,13 @@ export default function CampaignReportPage({ params }: { params: Promise<{ id: s
 
   if (loading) {
     return (
-      <><Navbar />
-        <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 88, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ width: 32, height: 32, border: "3px solid rgba(6,182,212,0.3)", borderTopColor: "#06b6d4", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+      <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#F26D35]/20 selection:text-[#123D46]">
+        <PartnerAdminHeader portalType="B2G" activeTab="consultations" />
+        <main style={{ minHeight: "100vh", background: "transparent", paddingTop: 32, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 32, height: 32, border: "3px solid rgba(242,109,53,0.3)", borderTopColor: "#F26D35", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </main>
-      </>
+      </div>
     );
   }
 
@@ -87,9 +89,9 @@ export default function CampaignReportPage({ params }: { params: Promise<{ id: s
   const generatedAt = new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 
   return (
-    <>
-      <Navbar />
-      <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 88, paddingBottom: 64, position: "relative" }}>
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#F26D35]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2G" activeTab="consultations" />
+      <main style={{ minHeight: "100vh", background: "transparent", paddingTop: 32, paddingBottom: 64, position: "relative" }}>
         <div style={{ position: "fixed", top: "-10%", right: "-5%", width: 500, height: 500, background: "radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
 
         <div style={{ maxWidth: 860, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
@@ -274,7 +276,7 @@ export default function CampaignReportPage({ params }: { params: Promise<{ id: s
                         <p style={{ fontSize: 13, fontWeight: 600, color: "#f87171", marginBottom: 12 }}>⚠️ Facteurs de vulnérabilité</p>
                         {stats.topRiskFactors.map((f, i) => (
                           <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "rgba(248,113,113,0.04)", borderRadius: 8, marginBottom: 6, border: "1px solid rgba(248,113,113,0.1)" }}>
-                            <span style={{ fontSize: 13, color: "var(--text-2)" }}>{f.factor}</span>
+                            <span style={{ fontSize: 13, color: "var(--text-2)" }}>{formatRiskFactorLabel(f.factor)}</span>
                             <span style={{ fontSize: 12, color: "#f87171", fontWeight: 600 }}>{f.pct}%</span>
                           </div>
                         ))}
@@ -346,6 +348,6 @@ export default function CampaignReportPage({ params }: { params: Promise<{ id: s
         </div>
       </main>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </>
+    </div>
   );
 }

@@ -104,6 +104,8 @@ export async function POST(request: Request) {
     // Le code d'accès est distribué par les organisations B2B aux membres de leur équipe.
     // Il détermine l'organisation de rattachement ET le rôle initial dans l'application.
     let organizationId: string | null = null;
+    let campaignId: string | null = null;
+    let subscriptionTier: "FREEMIUM" | "PREMIUM" | "PREMIUM_PLUS" = "FREEMIUM";
     let userRole: "EMPLOYEE" | "CITIZEN" | "MEMBER" = "EMPLOYEE";
 
     if (codeAccess) {
@@ -115,18 +117,23 @@ export async function POST(request: Request) {
 
       if (matchingCampaign) {
         organizationId = matchingCampaign.organizationId;
+        campaignId = matchingCampaign.id;
+        subscriptionTier = matchingCampaign.offer; // PREMIUM or PREMIUM_PLUS
         userRole = "EMPLOYEE"; // B2B2C beneficiaries are considered employees
-        
-        // Link to campaign
-        const campaignUpdate = {
-          campaignId: matchingCampaign.id,
-          subscription: matchingCampaign.offer, // PREMIUM or PREMIUM_PLUS
-        };
         
         // Create user with campaign link
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = await prisma.user.create({
-          data: { firstName: prenom, lastName: nom, email, password: hashedPassword, organizationId, role: userRole, ...campaignUpdate },
+          data: {
+            firstName: prenom,
+            lastName: nom,
+            email,
+            password: hashedPassword,
+            organizationId,
+            campaignId,
+            subscription: subscriptionTier,
+            role: userRole
+          },
           select: { id: true, email: true, firstName: true, lastName: true, role: true, organizationId: true, subscription: true },
         });
         
@@ -147,6 +154,15 @@ export async function POST(request: Request) {
         if (matchingOrganization.type === "B2B") userRole = "EMPLOYEE";
         else if (matchingOrganization.type === "B2B2C") userRole = "MEMBER";
         else if (matchingOrganization.type === "B2G") userRole = "CITIZEN";
+
+        const activeCampaign = await prisma.campaign.findFirst({
+          where: { organizationId: matchingOrganization.id, status: "ACTIVE" },
+          orderBy: { startDate: "desc" },
+        });
+        if (activeCampaign) {
+          campaignId = activeCampaign.id;
+          subscriptionTier = activeCampaign.offer; // PREMIUM or PREMIUM_PLUS
+        }
       }
     }
 
@@ -161,6 +177,8 @@ export async function POST(request: Request) {
         password: hashedPassword,
         role: userRole,
         organizationId,
+        campaignId,
+        subscription: subscriptionTier,
       },
       select: {
         id: true,

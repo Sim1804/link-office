@@ -6,7 +6,7 @@ import { Target, Plus, CheckCircle2, Circle, Clock, Trash2, Edit3, Save, X, Cale
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
+
 import Link from "next/link";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
@@ -135,16 +135,8 @@ export default function ActionsPage() {
   const getActionsByStatus = (status: string) => actions.filter(a => a.status === status);
 
   return (
-    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#00A99D]/20 selection:text-[#123D46]">
-      <PartnerAdminHeader
-        portalType="B2G"
-        themeColor="#4DBDB2"
-        adminTitle="Admin Collectivité"
-        adminSubtitle="Espace B2G"
-        tabs={[]}
-        activeTab=""
-        onTabChange={() => {}}
-      />
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#F26D35]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2G" />
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
         <div className="relative z-10 animate-fade-in">
           <Breadcrumb

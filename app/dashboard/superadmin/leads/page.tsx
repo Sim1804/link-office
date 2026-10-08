@@ -85,7 +85,7 @@ export default function LeadsPage() {
   const paginatedLeads = currentLeads.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   const planLabel = (type: string) => {
-    if (type === "B2B_PREMIUM") return "Entreprises (B2B)";
+    if (type === "B2B_PREMIUM" || type === "B2B_ENTREPRISE") return "Entreprises (B2B)";
     if (type === "B2B2C_PARTENAIRE") return "Mutuelles (B2B2C)";
     if (type === "B2G") return "Collectivités (B2G)";
     return type;

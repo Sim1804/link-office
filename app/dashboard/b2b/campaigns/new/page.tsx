@@ -2,12 +2,11 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import { Calendar, Save, Search, CheckCircle2, Settings, List, Plus, Trash2, ArrowLeft, ArrowRight, Activity, Target, HelpCircle, AlertCircle, Info, Zap, Crown, ChevronRight } from "lucide-react";
 import { Stepper } from "@/components/ui/Stepper";
 import { OfferCard } from "@/components/ui/OfferCard";
 import Link from "next/link";
-import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
 
 const B2B_SITUATIONS_REMOVED = ["Entrepreneur","Retraite","Demandeur d'emploi","Création d'entreprise"];
 
@@ -112,10 +111,9 @@ function NewCampaignContent() {
   };
 
   return (
-    <>
-      <Navbar />
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#00A99D]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2B" activeTab="campagnes" />
       <main className="page-main">
-        <PartnerPortalsNavigation />
         <div className="blob-violet" />
         <div className="blob-cyan" />
         <div style={{ maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1 }}>
@@ -279,7 +277,7 @@ function NewCampaignContent() {
           )}
         </div>
       </main>
-    </>
+    </div>
   );
 }
 

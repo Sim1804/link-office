@@ -69,19 +69,21 @@ async function main() {
     }
   }
   
-  console.log(`${items.length} partenaires trouvés. Nettoyage des existants et insertion...`);
+  console.log(`${items.length} partenaires trouvés. Upsert dans LibraryItem...`);
   
-  // Suppression des anciens partenaires de la base
-  await prisma.libraryItem.deleteMany({
-    where: { library: "Partenaires" }
-  });
+  for (const item of items) {
+    await prisma.libraryItem.upsert({
+      where: { id: item.id },
+      create: item,
+      update: {
+        title: item.title,
+        category: item.category,
+        data: item.data,
+      },
+    });
+  }
   
-  // Insertion des nouveaux
-  await prisma.libraryItem.createMany({
-    data: items
-  });
-  
-  console.log(`✅ ${items.length} partenaires insérés avec succès dans la table LibraryItem !`);
+  console.log(`✅ ${items.length} partenaires upsertés avec succès dans la table LibraryItem !`);
 }
 
 main()

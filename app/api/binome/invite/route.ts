@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 // Rôles autorisés à utiliser le Binôme Relationnel
-const BINOME_ALLOWED_ROLES = ["EMPLOYEE", "SUPER_ADMIN"];
+const BINOME_ALLOWED_ROLES = ["CITIZEN", "MEMBER", "EMPLOYEE", "SUPER_ADMIN"];
 
 export async function POST(req: Request) {
   try {
@@ -12,10 +12,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
-    // [BUG FIX] Bloquer les rôles MEMBER et CITIZEN — spec §11 : Binôme ❌ pour ces rôles
     if (!BINOME_ALLOWED_ROLES.includes(session.user.role)) {
       return NextResponse.json(
-        { error: "Le Binôme Relationnel est réservé aux comptes individuels (EMPLOYEE_PRO). Les adhérents mutuelle et citoyens n'ont pas accès à cette fonctionnalité." },
+        { error: "Le Binôme Relationnel est réservé aux bénéficiaires individuels (Particuliers, Employés, Membres)." },
         { status: 403 }
       );
     }

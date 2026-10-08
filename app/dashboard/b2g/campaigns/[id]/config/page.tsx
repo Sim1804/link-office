@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import { Settings, Save, CheckCircle, ShieldAlert, ArrowLeft, Layers, Key, Plus, Trash2 } from "lucide-react";
 
 export default function CampaignConfigPage() {
@@ -112,9 +112,9 @@ export default function CampaignConfigPage() {
   }
 
   return (
-    <>
-      <Navbar />
-      <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 88, paddingBottom: 64, position: "relative" }}>
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#F26D35]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2G" activeTab="consultations" />
+      <main style={{ minHeight: "100vh", background: "transparent", paddingTop: 32, paddingBottom: 64, position: "relative" }}>
         {/* Effets Glass */}
         <div style={{ position: "fixed", top: "-15%", right: "-8%", width: 600, height: 600, background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
         <div style={{ position: "fixed", bottom: "-15%", left: "-8%", width: 500, height: 500, background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
@@ -296,6 +296,6 @@ export default function CampaignConfigPage() {
         </div>
       </main>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </>
+    </div>
   );
 }

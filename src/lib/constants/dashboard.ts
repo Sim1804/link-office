@@ -52,12 +52,21 @@ export function buildIcrData(
 
 /**
  * Construit le tableau de données pour le RadarChart IQRH à partir
- * des moyennes renvoyées par l'API.
+ * des moyennes renvoyées par l'API et de la norme nationale comparative.
  */
-export function buildRadarData(averages: Record<string, number>) {
+export function buildRadarData(averages: Record<string, number>, benchmarks?: Record<string, number>) {
+  const DEFAULT_BENCHMARKS: Record<string, number> = {
+    social: 60,
+    affective: 57,
+    sentimental: 59,
+    professional: 61,
+    self: 54,
+  };
+  const bench = benchmarks || DEFAULT_BENCHMARKS;
   return Object.entries(DIMENSION_LABELS).map(([key, name]) => ({
     dimension: name,
     score: averages[key] ?? 0,
+    benchmark: bench[key] ?? 58,
     fullMark: 100,
   }));
 }

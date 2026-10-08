@@ -2,10 +2,9 @@
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import { ArrowLeft, RefreshCw, Zap, Crown, AlertTriangle, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
 
 export default function RenewCampaignPage() {
   const params = useParams<{ id: string }>();
@@ -71,12 +70,18 @@ export default function RenewCampaignPage() {
   const toPlus = offerChanged && form.offer === "PREMIUM_PLUS";
   const fromPlus = offerChanged && parent.offer === "PREMIUM_PLUS" && form.offer === "PREMIUM";
 
-  if (loading) return (<><Navbar /><main className="page-main">
-        <PartnerPortalsNavigation /><div style={{ textAlign:"center", padding:"80px 0", color: "var(--text-3)" }}>Chargement...</div></main></>);
+  if (loading) return (
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#5965E8]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2B2C" activeTab="campagnes" />
+      <main className="page-main">
+        <div style={{ textAlign:"center", padding:"80px 0", color: "var(--text-3)" }}>Chargement...</div>
+      </main>
+    </div>
+  );
 
   return (
-    <>
-      <Navbar />
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#5965E8]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2B2C" activeTab="campagnes" />
       <main className="page-main">
         <div className="blob-violet" /><div className="blob-cyan" />
         <div style={{ maxWidth:700, margin:"0 auto", position:"relative", zIndex:1 }}>
@@ -182,6 +187,6 @@ export default function RenewCampaignPage() {
           )}
         </div>
       </main>
-    </>
+    </div>
   );
 }

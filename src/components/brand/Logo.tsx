@@ -2,7 +2,7 @@ import React from 'react';
 
 interface LogoProps {
   variant?: 'light' | 'dark' | 'badge' | 'circle' | 'mark-only' | 'white';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'navbar';
   showTagline?: boolean;
   className?: string;
 }
@@ -76,9 +76,10 @@ export const Logo: React.FC<LogoProps> = ({
   const isDark = variant === 'dark' || variant === 'badge';
   const isWhite = variant === 'white';
 
-  const sizeClasses = {
+  const sizeClasses: Record<string, string> = {
+    navbar: 'h-9 max-h-9',
     sm: 'h-8 sm:h-9',
-    md: 'h-9 sm:h-11',
+    md: 'h-9 max-h-9',
     lg: 'h-12 sm:h-14',
     xl: 'h-16 sm:h-20',
   };
@@ -99,7 +100,7 @@ export const Logo: React.FC<LogoProps> = ({
   if (variant === 'mark-only') {
     return (
       <ConstellationMark 
-        size={size === 'sm' ? 34 : size === 'md' ? 44 : size === 'lg' ? 56 : 72} 
+        size={size === 'sm' ? 32 : size === 'navbar' ? 36 : size === 'md' ? 36 : size === 'lg' ? 48 : 64} 
         variant={isWhite ? 'white' : isDark ? 'dark' : 'light'} 
         className={className} 
       />
@@ -117,7 +118,7 @@ export const Logo: React.FC<LogoProps> = ({
       <img
         src="/link_office_logo.svg"
         alt="LINK OFFICE"
-        className={`${sizeClasses[size]} w-auto object-contain shrink-0 ${filterClass}`}
+        className={`${sizeClasses[size] || sizeClasses.navbar} w-auto object-contain shrink-0 ${filterClass}`}
       />
       {showTagline && (
         <span className={`text-[9.5px] sm:text-[10px] font-medium tracking-normal mt-0.5 whitespace-nowrap ${isDark ? 'text-[#FFC629]' : 'text-[#00A99D]'}`}>

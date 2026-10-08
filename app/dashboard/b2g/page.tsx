@@ -9,7 +9,7 @@ import {
   Bell, ChevronDown, Building2, Calendar, Users, ShieldCheck, TrendingUp,
   Activity, Award, Sparkles, ArrowUpRight, Plus, RefreshCw, Home,
   CheckCircle2, AlertTriangle, FileText, Filter, Layers, HeartHandshake, LogOut, X, Target, PieChart as PieChartIcon, TrendingDown, Briefcase, Lightbulb, User, BarChart as BarChart3,
-  Clock, Archive, ChevronRight, Mail, Link2, Copy, QrCode, Settings
+  Clock, Archive, ChevronRight, Mail, Link2, Copy, QrCode, Settings, Landmark
 } from "lucide-react";
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
@@ -24,12 +24,15 @@ import {
 } from "@/lib/constants/dashboard";
 import { Select } from "@/components/ui/Select";
 import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
-import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
+import { formatRiskFactorLabel } from "@/lib/iqrh/icr-calculation-service";
 
 export default function B2GDashboard() {
   const { data: session } = useSession();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedOrgId, setSelectedOrgId] = useState("");
+  const [currentOrg, setCurrentOrg] = useState<any>(null);
+  const [availableOrgs, setAvailableOrgs] = useState<any[]>([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState("");
   const [ageRange, setAgeRange] = useState("");
   const [gender, setGender] = useState("");
@@ -77,27 +80,38 @@ export default function B2GDashboard() {
   useEffect(() => {
     setLoading(true);
     const params = new URLSearchParams();
+    params.append("portalType", "B2G");
+    if (selectedOrgId) params.append("orgId", selectedOrgId);
     if (selectedCampaignId) params.append("campaignId", selectedCampaignId);
     if (ageRange) params.append("ageRange", ageRange);
     if (gender) params.append("gender", gender);
 
     fetch(`/api/b2b/stats?${params.toString()}`)
       .then((r) => r.json())
-      .then(setStats)
+      .then((data) => {
+        setStats(data);
+        if (data.organization) setCurrentOrg(data.organization);
+        if (data.availableOrganizations) setAvailableOrgs(data.availableOrganizations);
+      })
       .finally(() => setLoading(false));
-  }, [selectedCampaignId, ageRange, gender]);
+  }, [selectedOrgId, selectedCampaignId, ageRange, gender]);
 
   useEffect(() => {
-    if (activeTab === 'consultations' && campaigns.length === 0) {
+    if (activeTab === 'consultations') {
       setCampaignsLoading(true);
-      fetch("/api/campaigns")
+      const params = new URLSearchParams();
+      params.append("type", "B2G");
+      if (selectedOrgId || currentOrg?.id) {
+        params.append("orgId", selectedOrgId || currentOrg?.id);
+      }
+      fetch(`/api/campaigns?${params.toString()}`)
         .then(r => r.json())
         .then(d => { if (d.campaigns) setCampaigns(d.campaigns); })
         .finally(() => setCampaignsLoading(false));
     }
-  }, [activeTab, campaigns.length]);
+  }, [activeTab, selectedOrgId, currentOrg?.id]);
 
-  const radarData = buildRadarData(stats?.averages ?? {});
+  const radarData = buildRadarData(stats?.averages ?? {}, stats?.benchmarks);
   const icrData = stats?.icrDistribution ? buildIcrData(stats.icrDistribution) : [];
   const weatherData = stats?.weatherDistribution ? buildWeatherData(stats.weatherDistribution) : [];
   
@@ -114,18 +128,18 @@ export default function B2GDashboard() {
 
   return (
     <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#F26D35]/20 selection:text-[#123D46]">
-      {/* 1. TOP NAVBAR SPÉCIFIQUE ADMIN B2B */}
+      {/* 1. TOP NAVBAR SPÉCIFIQUE ADMIN B2G */}
       <PartnerAdminHeader
         portalType="B2G"
-        themeColor="#F26D35"
-        adminTitle="Admin Collectivité B2G"
-        adminSubtitle="Observatoire Territoire"
-        tabs={[{id:'observatoire',label:'Observatoire'},{id:'campagnes',label:'Consultations Citoyennes'}]}
+        tabs={[
+          { id: 'observatoire', label: 'Observatoire', href: '/dashboard/b2g' },
+          { id: 'consultations', label: 'Consultations Citoyennes', href: '/dashboard/b2g/campaigns' },
+          { id: 'actions', label: 'Plan d\'actions', href: '/dashboard/b2g/actions' }
+        ]}
         activeTab={activeTab}
         onTabChange={(t) => setActiveTab(t as any)}
       />
 
-      <PartnerPortalsNavigation />
 
       {/* 2. CONTENU PRINCIPAL DU PORTAIL RH */}
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
@@ -135,6 +149,34 @@ export default function B2GDashboard() {
             {/* Header & Filtres */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div>
+                <div className="flex items-center gap-2 mb-2 flex-wrap">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F26D35]/10 text-[#F26D35] font-jakarta font-bold text-xs border border-[#F26D35]/20">
+                    <Landmark className="w-3.5 h-3.5" />
+                    {stats?.organization?.name || currentOrg?.name || "Métropole Grand Paris"}
+                  </span>
+                  {availableOrgs && availableOrgs.length > 1 && (
+                    <div className="inline-flex items-center gap-1.5 bg-white border border-[#E3EBE6] px-2.5 py-1 rounded-full text-xs font-jakarta shadow-2xs">
+                      <span className="text-[#123D46]/60 text-[11px] font-medium">Changer :</span>
+                      <select
+                        value={selectedOrgId || currentOrg?.id || ""}
+                        onChange={(e) => {
+                          setSelectedOrgId(e.target.value);
+                          setSelectedCampaignId("");
+                        }}
+                        className="bg-transparent font-bold text-[#123D46] text-xs cursor-pointer outline-hidden"
+                      >
+                        {availableOrgs.map((org: any) => (
+                          <option key={org.id} value={org.id}>
+                            {org.name} ({org._count?.users || 0} citoyens)
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  <span className="text-[11px] text-[#123D46]/60 font-medium">
+                    {stats?.registeredUsersCount || 0} citoyens/agents inscrits · {stats?.respondentCount || 0} répondants
+                  </span>
+                </div>
                 <h1 className="text-2xl sm:text-3xl font-jakarta font-extrabold text-[#123D46] tracking-tight flex items-center gap-2">
                   <BarChart3 className="w-6 h-6 text-[#F26D35]" /> Observatoire du Territoire
                 </h1>
@@ -164,9 +206,11 @@ export default function B2GDashboard() {
                       { value: '18-25', label: '18-25 ans' },
                       { value: '26-35', label: '26-35 ans' },
                       { value: '36-45', label: '36-45 ans' },
-                      { value: '46+', label: '46 ans et +' }
+                      { value: '46-55', label: '46-55 ans' },
+                      { value: '56+', label: '56 ans et +' },
+                      { value: '46+', label: '46 ans et + (Cumul)' }
                     ]}
-                    className="text-[11px] font-jakarta font-semibold py-2 px-3 min-w-[120px]"
+                    className="text-[11px] font-jakarta font-semibold py-2 px-3 min-w-[130px]"
                   />
                   <Select
                     value={gender}
@@ -181,6 +225,14 @@ export default function B2GDashboard() {
                 </div>
 
                 <div className="flex items-center gap-3 text-xs font-jakarta font-semibold mt-1">
+                  <button
+                    onClick={() => window.print()}
+                    className="px-3.5 py-1.5 rounded-full bg-white border border-[#E3EBE6] hover:bg-[#F4F1E8] text-[#123D46] font-jakarta font-bold text-xs shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                    title="Imprimer ou exporter la synthèse au format PDF"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-[#F26D35]" />
+                    <span>Synthèse PDF</span>
+                  </button>
                   <Link
                     href="/dashboard/b2g/campaigns/new"
                     className="px-3.5 py-1.5 rounded-full bg-[#F26D35] hover:bg-[#E85B20] text-white font-jakarta font-bold text-xs shadow-xs transition-colors flex items-center gap-1.5 no-underline"
@@ -234,14 +286,46 @@ export default function B2GDashboard() {
             {loading ? (
               <DashboardSkeleton />
             ) : stats?.anonymityBlocked ? (
-              <div className="bg-[#FAF9F5] border border-[#FFC629]/40 rounded-2xl p-8 text-center mt-6">
-                <div className="text-5xl mb-4">🔒</div>
-                <h2 className="text-[#123D46] font-bold text-xl mb-2">
-                  Données non disponibles — Anonymat protégé
+              <div className="bg-[#FAF9F5] border border-[#FFC629]/50 rounded-2xl p-8 sm:p-10 text-center mt-6 shadow-xs animate-fade-in">
+                <div className="text-5xl mb-3">🔒</div>
+                <h2 className="text-[#123D46] font-jakarta font-extrabold text-xl mb-2">
+                  Données non disponibles — Secret statistique & Anonymat protégé
                 </h2>
-                <p className="text-[#123D46]/70 max-w-lg mx-auto text-sm">
+                <p className="text-[#123D46]/75 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed mb-4">
                   {stats.message}
                 </p>
+                <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200/80 text-amber-900 text-xs px-4 py-2 rounded-xl mb-6 max-w-xl text-left">
+                  <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>
+                    Conformément au protocole de k-anonymat (seuil légal k ≥ {stats.threshold || 5}), aucun rapport agrégé ne peut être restitué sur un sous-segment de moins de 5 personnes afin d'interdire toute ré-identification d'un citoyen ou agent.
+                  </span>
+                </div>
+                <div>
+                  <button
+                    onClick={() => { setAgeRange(''); setGender(''); }}
+                    className="px-5 py-2.5 rounded-full bg-[#F26D35] hover:bg-[#E85B20] text-white text-xs font-jakarta font-bold transition-all shadow-xs cursor-pointer inline-flex items-center gap-2"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" /> Réinitialiser les filtres (Voir la cohorte complète)
+                  </button>
+                </div>
+              </div>
+            ) : stats?.noResults || stats?.respondentCount === 0 ? (
+              <div className="bg-white border border-[#E3EBE6] rounded-2xl p-8 sm:p-10 text-center mt-6 shadow-xs animate-fade-in">
+                <div className="w-14 h-14 rounded-2xl bg-[#F4F1E8] text-[#123D46]/40 flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-7 h-7 text-[#123D46]/40" />
+                </div>
+                <h2 className="text-[#123D46] font-jakarta font-bold text-lg mb-1">
+                  Aucun répondant dans ce segment
+                </h2>
+                <p className="text-[#123D46]/60 text-xs max-w-md mx-auto mb-5 leading-relaxed">
+                  Aucun citoyen ou agent n'a encore validé d'évaluation avec ces critères de filtre {ageRange ? `(Tranche : ${ageRange})` : ''}{gender ? `(Genre : ${gender})` : ''}.
+                </p>
+                <button
+                  onClick={() => { setAgeRange(''); setGender(''); }}
+                  className="px-5 py-2.5 rounded-full bg-[#F26D35] hover:bg-[#E85B20] text-white text-xs font-jakarta font-bold transition-all shadow-xs cursor-pointer inline-flex items-center gap-2"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" /> Réinitialiser les filtres
+                </button>
               </div>
             ) : stats && stats.averages ? (
               <>
@@ -254,9 +338,18 @@ export default function B2GDashboard() {
                     </div>
                     <div>
                       <span className="text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider block">IQRH MOYEN</span>
-                      <div className="flex items-baseline gap-1.5 mt-0.5">
+                      <div className="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
                         <span className="text-3xl font-jakarta font-black text-[#123D46] font-mono">{stats.averages.global}</span>
                         <span className="text-xs text-[#123D46]/50 font-medium">/ 100</span>
+                        {typeof stats?.benchmarks?.global === 'number' && (
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1 ${
+                            stats.averages.global >= stats.benchmarks.global
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {stats.averages.global >= stats.benchmarks.global ? '+' : ''}{stats.averages.global - stats.benchmarks.global} vs Norme ({stats.benchmarks.global})
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -267,7 +360,7 @@ export default function B2GDashboard() {
                       <Users className="w-6 h-6" />
                     </div>
                     <div>
-                      <span className="text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider block">COLLABORATEURS ÉVALUÉS</span>
+                      <span className="text-[10px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider block">CITOYENS & AGENTS ÉVALUÉS</span>
                       <div className="flex items-baseline gap-1.5 mt-0.5">
                         <span className="text-3xl font-jakarta font-black text-[#123D46] font-mono">{stats.respondentCount}</span>
                       </div>
@@ -311,7 +404,7 @@ export default function B2GDashboard() {
                       <div className="flex items-center justify-between pb-3 border-b border-[#E3EBE6]">
                         <div>
                           <h3 className="font-jakarta font-bold text-base text-[#123D46]">Équilibre Relationnel Global (Radar)</h3>
-                          <p className="text-xs text-[#123D46]/60">Polygone d’équilibre sur les dimensions</p>
+                          <p className="text-xs text-[#123D46]/60">Polygone d’équilibre comparé à la norme nationale</p>
                         </div>
                       </div>
                       <div className="w-full h-[320px]">
@@ -320,7 +413,9 @@ export default function B2GDashboard() {
                             <PolarGrid stroke="#E3EBE6" />
                             <PolarAngleAxis dataKey="dimension" tick={{ fill: '#123D46', fontSize: 11, fontWeight: 600 }} />
                             <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} />
-                            <Radar name="Score" dataKey="score" stroke="#F26D35" strokeWidth={2.5} fill="#F26D35" fillOpacity={0.22} />
+                            <Radar name="Collectif Actuel" dataKey="score" stroke="#F26D35" strokeWidth={2.5} fill="#F26D35" fillOpacity={0.25} />
+                            <Radar name="Norme Nationale" dataKey="benchmark" stroke="#94A3B8" strokeWidth={2} strokeDasharray="3 3" fill="#94A3B8" fillOpacity={0.08} />
+                            <Legend verticalAlign="bottom" iconType="circle" wrapperStyle={{ fontSize: '11px', color: '#123D46', paddingTop: '8px' }} />
                             <RechartsTooltip contentStyle={{ borderRadius: 8, border: "1px solid #E3EBE6", fontSize: 12 }} />
                           </RadarChart>
                         </ResponsiveContainer>
@@ -331,8 +426,15 @@ export default function B2GDashboard() {
                     <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 shadow-xs space-y-4">
                       <div className="flex items-center justify-between pb-3 border-b border-[#E3EBE6]">
                         <div>
-                          <h3 className="font-jakarta font-bold text-base text-[#123D46]">Indice de Complexité Relationnelle (ICR)</h3>
-                          <p className="text-xs text-[#123D46]/60">Niveau d’exposition aux frictions relationnelles</p>
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-jakarta font-bold text-base text-[#123D46]">Indice de Complexité Relationnelle (ICR)</h3>
+                            {typeof stats?.avgIcrScore === 'number' && (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#123D46]/10 text-[#123D46]">
+                                Moy. {stats.avgIcrScore}/100
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-[#123D46]/60">Niveau d’exposition aux frictions relationnelles (Standard 0-100)</p>
                         </div>
                       </div>
                       <div className="w-full h-[320px]">
@@ -377,15 +479,21 @@ export default function B2GDashboard() {
                     <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 shadow-xs lg:col-span-2">
                       <h3 className="font-jakarta font-bold text-base text-[#123D46] mb-4">Évolution de l'IQRH</h3>
                       <div className="h-[300px]">
-                        <ResponsiveContainer>
-                          <LineChart data={stats.timeline || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E3EBE6" />
-                            <XAxis dataKey="month" stroke="#123D46" fontSize={12} tickMargin={10} />
-                            <YAxis stroke="#123D46" fontSize={12} tickMargin={10} domain={['dataMin - 5', 'dataMax + 5']} />
-                            <RechartsTooltip contentStyle={{ borderRadius: 12, border: "1px solid #E3EBE6", fontSize: 13 }} />
-                            <Line type="monotone" dataKey="score" stroke="#F26D35" strokeWidth={3} dot={{ r: 4, fill: "#F26D35", strokeWidth: 2, stroke: "#fff" }} activeDot={{ r: 6 }} />
-                          </LineChart>
-                        </ResponsiveContainer>
+                        {stats.timeline && stats.timeline.length > 0 ? (
+                          <ResponsiveContainer>
+                            <LineChart data={stats.timeline} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E3EBE6" />
+                              <XAxis dataKey="month" stroke="#123D46" fontSize={12} tickMargin={10} />
+                              <YAxis stroke="#123D46" fontSize={12} tickMargin={10} domain={[0, 100]} />
+                              <RechartsTooltip contentStyle={{ borderRadius: 12, border: "1px solid #E3EBE6", fontSize: 13 }} />
+                              <Line type="monotone" dataKey="score" stroke="#F26D35" strokeWidth={3} dot={{ r: 5, fill: "#F26D35", strokeWidth: 2, stroke: "#fff" }} activeDot={{ r: 7 }} />
+                            </LineChart>
+                          </ResponsiveContainer>
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-xs text-[#123D46]/50">
+                            Aucune donnée temporelle disponible pour ce segment.
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -393,16 +501,22 @@ export default function B2GDashboard() {
                     <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 shadow-xs">
                       <h3 className="font-jakarta font-bold text-base text-[#123D46] mb-4">Profils</h3>
                       <div className="h-[220px] mb-4">
-                        <ResponsiveContainer>
-                          <PieChart>
-                            <Pie data={stats.profils || []} innerRadius={60} outerRadius={90} paddingAngle={4} dataKey="value">
-                              {(stats.profils || []).map((entry: any, index: number) => (
-                                <Cell key={index} fill={entry.color || "#F26D35"} />
-                              ))}
-                            </Pie>
-                            <RechartsTooltip contentStyle={{ borderRadius: 8, border: "1px solid #E3EBE6" }} />
-                          </PieChart>
-                        </ResponsiveContainer>
+                        {stats.profils && stats.profils.length > 0 ? (
+                          <ResponsiveContainer>
+                            <PieChart>
+                              <Pie data={stats.profils} innerRadius={60} outerRadius={90} paddingAngle={4} dataKey="value">
+                                {stats.profils.map((entry: any, index: number) => (
+                                  <Cell key={index} fill={entry.color || "#F26D35"} />
+                                ))}
+                              </Pie>
+                              <RechartsTooltip contentStyle={{ borderRadius: 8, border: "1px solid #E3EBE6" }} />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-xs text-[#123D46]/50">
+                            Aucun profil enregistré dans ce segment.
+                          </div>
+                        )}
                       </div>
                       <div className="space-y-3">
                         {(stats.profils || []).map((p: any) => (
@@ -421,19 +535,25 @@ export default function B2GDashboard() {
                     <div className="bg-white border border-[#E3EBE6] rounded-2xl p-6 shadow-xs lg:col-span-3">
                       <h3 className="font-jakarta font-bold text-base text-[#123D46] mb-4">IQRH moyen selon les Moments de Vie</h3>
                       <div className="h-[300px]">
-                        <ResponsiveContainer>
-                          <BarChart data={stats.momentsVie || []} layout="vertical" margin={{ top: 0, right: 30, left: 10, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#E3EBE6" />
-                            <XAxis type="number" domain={[0, 100]} hide />
-                            <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fill: '#123D46', fontSize: 12 }} width={200} />
-                            <RechartsTooltip cursor={{fill: '#F8F9FA'}} contentStyle={{ borderRadius: 8, border: "1px solid #E3EBE6", fontSize: 12 }} />
-                            <Bar dataKey="score" radius={[0, 4, 4, 0]} maxBarSize={24}>
-                              {(stats.momentsVie || []).map((entry: any, index: number) => (
-                                <Cell key={index} fill={entry.score < 50 ? "#f43f5e" : entry.score < 60 ? "#f59e0b" : "#F26D35"} />
-                              ))}
-                            </Bar>
-                          </BarChart>
-                        </ResponsiveContainer>
+                        {stats.momentsVie && stats.momentsVie.length > 0 ? (
+                          <ResponsiveContainer>
+                            <BarChart data={stats.momentsVie} layout="vertical" margin={{ top: 0, right: 30, left: 10, bottom: 0 }}>
+                              <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#E3EBE6" />
+                              <XAxis type="number" domain={[0, 100]} hide />
+                              <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fill: '#123D46', fontSize: 12 }} width={200} />
+                              <RechartsTooltip cursor={{fill: '#F8F9FA'}} contentStyle={{ borderRadius: 8, border: "1px solid #E3EBE6", fontSize: 12 }} />
+                              <Bar dataKey="score" radius={[0, 4, 4, 0]} maxBarSize={24}>
+                                {stats.momentsVie.map((entry: any, index: number) => (
+                                  <Cell key={index} fill={entry.score < 50 ? "#f43f5e" : entry.score < 60 ? "#f59e0b" : "#F26D35"} />
+                                ))}
+                              </Bar>
+                            </BarChart>
+                          </ResponsiveContainer>
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-xs text-[#123D46]/50">
+                            Aucun moment de vie spécifique déclaré par les répondants de ce segment.
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -451,7 +571,7 @@ export default function B2GDashboard() {
                         {(stats.topRiskFactors ?? []).map((f: any, i: number) => (
                           <div key={i}>
                             <div className="flex justify-between text-xs mb-1.5">
-                              <span className="text-[#123D46]/70 font-medium">{f.label}</span>
+                              <span className="text-[#123D46]/70 font-medium">{formatRiskFactorLabel(f.label)}</span>
                               <span className="text-rose-600 font-bold">{f.pct}%</span>
                             </div>
                             <div className="h-1.5 bg-rose-100 rounded-full overflow-hidden">

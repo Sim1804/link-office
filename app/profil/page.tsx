@@ -7,10 +7,11 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
-import { User, ArrowRight, CheckCircle, Check, Shield, Mail, Building, Key, Settings } from "lucide-react";
+import { User, ArrowRight, CheckCircle, Check, Shield, Mail, Building, Key, Settings, Sparkles, Crown } from "lucide-react";
 import { getUserStatus, saveDemographics } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { SubscriptionBadge, SubscriptionUpgradeButton, toSubscriptionTier } from "@/components/ui/SubscriptionBadge";
 
 const DEPARTEMENTS = [
   "01 - Ain", "02 - Aisne", "03 - Allier", "04 - Alpes-de-Haute-Provence", "05 - Hautes-Alpes", "06 - Alpes-Maritimes", "07 - Ardèche", "08 - Ardennes", "09 - Ariège", "10 - Aube", "11 - Aude", "12 - Aveyron", "13 - Bouches-du-Rhône", "14 - Calvados", "15 - Cantal", "16 - Charente", "17 - Charente-Maritime", "18 - Cher", "19 - Corrèze", "2A - Corse-du-Sud", "2B - Haute-Corse", "21 - Côte-d'Or", "22 - Côtes-d'Armor", "23 - Creuse", "24 - Dordogne", "25 - Doubs", "26 - Drôme", "27 - Eure", "28 - Eure-et-Loir", "29 - Finistère", "30 - Gard", "31 - Haute-Garonne", "32 - Gers", "33 - Gironde", "34 - Hérault", "35 - Ille-et-Vilaine", "36 - Indre", "37 - Indre-et-Loire", "38 - Isère", "39 - Jura", "40 - Landes", "41 - Loir-et-Cher", "42 - Loire", "43 - Haute-Loire", "44 - Loire-Atlantique", "45 - Loiret", "46 - Lot", "47 - Lot-et-Garonne", "48 - Lozère", "49 - Maine-et-Loire", "50 - Manche", "51 - Marne", "52 - Haute-Marne", "53 - Mayenne", "54 - Meurthe-et-Moselle", "55 - Meuse", "56 - Morbihan", "57 - Moselle", "58 - Nièvre", "59 - Nord", "60 - Oise", "61 - Orne", "62 - Pas-de-Calais", "63 - Puy-de-Dôme", "64 - Pyrénées-Atlantiques", "65 - Hautes-Pyrénées", "66 - Pyrénées-Orientales", "67 - Bas-Rhin", "68 - Haut-Rhin", "69 - Rhône", "70 - Haute-Saône", "71 - Saône-et-Loire", "72 - Sarthe", "73 - Savoie", "74 - Haute-Savoie", "75 - Paris", "76 - Seine-Maritime", "77 - Seine-et-Marne", "78 - Yvelines", "79 - Deux-Sèvres", "80 - Somme", "81 - Tarn", "82 - Tarn-et-Garonne", "83 - Var", "84 - Vaucluse", "85 - Vendée", "86 - Vienne", "87 - Haute-Vienne", "88 - Vosges", "89 - Yonne", "90 - Territoire de Belfort", "91 - Essonne", "92 - Hauts-de-Seine", "93 - Seine-Saint-Denis", "94 - Val-de-Marne", "95 - Val-d'Oise", "971 - Guadeloupe", "972 - Martinique", "973 - Guyane", "974 - La Réunion", "976 - Mayotte"
@@ -398,6 +399,36 @@ function ProfilContent() {
               </div>
 
               <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                  <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5">
+                    <Sparkles className="w-[18px] h-[18px] text-[#00A99D]" />
+                    Formule & Abonnement
+                  </div>
+                  <SubscriptionBadge tier={toSubscriptionTier((session?.user as any)?.subscription)} size="md" />
+                </div>
+
+                <p className="text-[13px] text-[#123D46]/70 mb-4 leading-relaxed font-inter">
+                  {toSubscriptionTier((session?.user as any)?.subscription) === "FREEMIUM" &&
+                    "Vous utilisez actuellement la formule Freemium gratuite. Passez à Premium pour débloquer votre analyse approfondie, votre ordonnance relationnelle complète et le coaching IRIS sans restriction."}
+                  {toSubscriptionTier((session?.user as any)?.subscription) === "PREMIUM" &&
+                    "Vous bénéficiez de l'offre Premium. Passez à Premium+ pour débloquer le programme exclusif Binôme Relationnel, les suggestions intelligentes et le partage d'objectifs."}
+                  {toSubscriptionTier((session?.user as any)?.subscription) === "PREMIUM_PLUS" &&
+                    "Vous bénéficiez de l'offre maximale Premium+. Toutes les fonctionnalités avancées, incluant le Binôme Relationnel et l'analyse continue, sont débloquées."}
+                </p>
+
+                {toSubscriptionTier((session?.user as any)?.subscription) !== "PREMIUM_PLUS" ? (
+                  <div className="flex items-center gap-3">
+                    <SubscriptionUpgradeButton tier={toSubscriptionTier((session?.user as any)?.subscription)} size="md" />
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold font-jakarta">
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    Abonnement actif au plus haut niveau
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm">
                 <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5"><Key className="w-[18px] h-[18px] text-amber-500" /> Sécurité</div>
                 <p className="text-[13px] text-[#123D46]/70 mb-4">
                   Pour des raisons de sécurité, la modification du mot de passe requiert l'envoi d'un email de vérification.
@@ -410,7 +441,7 @@ function ProfilContent() {
                 </Button>
               </div>
 
-              {campaignOffer === "PREMIUM_PLUS" && (
+              {(campaignOffer === "PREMIUM_PLUS" || (session?.user as any)?.subscription === "PREMIUM_PLUS") && (
                 <div className="bg-white border border-[#E3EBE6] rounded-2xl p-7 shadow-sm">
                   <div className="font-jakarta font-semibold text-[15px] text-[#123D46] flex items-center gap-2.5 mb-5">
                     <div className="w-6 h-6 rounded-full bg-pink-500/20 flex items-center justify-center">

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
 import { ArrowLeft, Building2, UserCircle, Save, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";

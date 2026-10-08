@@ -17,13 +17,16 @@ const ROLE_LABELS: Record<string, string> = {
 
 export default function SuperAdminUsersPage() {
   const [users, setUsers] = useState<any[]>([]);
+  const [organizations, setOrganizations] = useState<any[]>([]);
+  const [campaigns, setCampaigns] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 20;
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("ALL");
+  const [filterOrg, setFilterOrg] = useState("ALL");
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
-  const [editForm, setEditForm] = useState({ subscription: "", role: "" });
+  const [editForm, setEditForm] = useState({ subscription: "", role: "", organizationId: "", campaignId: "" });
   const [isSaving, setIsSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -35,22 +38,24 @@ export default function SuperAdminUsersPage() {
       .then(res => res.json())
       .then(data => {
         setUsers(data.users || []);
+        if (data.organizations) setOrganizations(data.organizations);
+        if (data.campaigns) setCampaigns(data.campaigns);
         setLoading(false);
       });
   };
 
   useEffect(() => {
-    fetch("/api/superadmin/users")
-      .then(res => res.json())
-      .then(data => {
-        setUsers(data.users || []);
-        setLoading(false);
-      });
+    loadUsers();
   }, []);
 
   const handleManageClick = (user: any) => {
     setSelectedUser(user);
-    setEditForm({ subscription: user.subscription, role: user.role });
+    setEditForm({
+      subscription: user.subscription,
+      role: user.role,
+      organizationId: user.organizationId || "",
+      campaignId: user.campaignId || "",
+    });
     setConfirmDelete(false);
     setSaveError(null);
     setSaveSuccess(false);
@@ -118,13 +123,25 @@ export default function SuperAdminUsersPage() {
       user.firstName?.toLowerCase().includes(searchLower) ||
       user.lastName?.toLowerCase().includes(searchLower);
 
+    if (!matchSearch) return false;
+
     if (filterRole === "B2C") {
-      return matchSearch && ["CITIZEN", "EMPLOYEE", "MEMBER"].includes(user.role) && !user.organizationId;
+      if (user.organizationId || (user.role.startsWith("ADMIN_") || user.role === "SUPER_ADMIN")) {
+        return false;
+      }
+    } else if (filterRole === "ADMINS") {
+      if (!(user.role.startsWith("ADMIN_") || user.role === "SUPER_ADMIN")) {
+        return false;
+      }
     }
-    if (filterRole === "ADMINS") {
-      return matchSearch && (user.role.startsWith("ADMIN_") || user.role === "SUPER_ADMIN");
+
+    if (filterOrg === "NONE") {
+      if (user.organizationId) return false;
+    } else if (filterOrg !== "ALL") {
+      if (user.organizationId !== filterOrg) return false;
     }
-    return matchSearch;
+
+    return true;
   });
 
   const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
@@ -140,7 +157,7 @@ export default function SuperAdminUsersPage() {
             CRM Utilisateurs
           </h1>
           <p className="text-xs sm:text-sm text-[#123D46]/70 mt-1">
-            Gérez les utilisateurs individuels, abonnements et modérateurs.
+            Gérez les utilisateurs individuels, rattachements aux organisations, abonnements et modérateurs.
           </p>
         </div>
         <a href="/api/admin/users/export" download className="no-underline shrink-0">
@@ -159,7 +176,7 @@ export default function SuperAdminUsersPage() {
             type="text"
             placeholder="Rechercher par nom, email..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
             className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E3EBE6] focus:ring-1 focus:ring-[#00A99D] focus:outline-none text-sm text-[#123D46] placeholder:text-[#123D46]/40 bg-white"
           />
         </div>
@@ -167,11 +184,24 @@ export default function SuperAdminUsersPage() {
           value={filterRole}
           onChange={(val) => { setFilterRole(val); setCurrentPage(1); }}
           options={[
-            { value: "ALL", label: "Tous les utilisateurs" },
+            { value: "ALL", label: "Tous les statuts" },
             { value: "B2C", label: "Particuliers (B2C)" },
             { value: "ADMINS", label: "Administrateurs" }
           ]}
-          className="w-[220px] text-sm font-jakarta"
+          className="w-[180px] text-sm font-jakarta"
+        />
+        <Select
+          value={filterOrg}
+          onChange={(val) => { setFilterOrg(val); setCurrentPage(1); }}
+          options={[
+            { value: "ALL", label: "Toutes les organisations" },
+            { value: "NONE", label: "Sans organisation (B2C)" },
+            ...organizations.map(org => ({
+              value: org.id,
+              label: `${org.name} (${org.type})`
+            }))
+          ]}
+          className="w-[260px] text-sm font-jakarta"
         />
       </div>
 
@@ -215,16 +245,23 @@ export default function SuperAdminUsersPage() {
                   </td>
                   <td className="px-6 py-4">
                     {user.organization ? (
-                      <div className="text-[#123D46] text-xs font-medium">🏢 {user.organization.name}</div>
+                      <div>
+                        <div className="text-[#123D46] text-xs font-semibold flex items-center gap-1.5">
+                          <span>{user.organization.type === "B2G" ? "🏛️" : user.organization.type === "B2B2C" ? "🛡️" : "🏢"}</span>
+                          <span>{user.organization.name}</span>
+                        </div>
+                        {user.campaign && (
+                          <div className="text-[#123D46]/60 text-[11px] mt-0.5">
+                            Campagne : <span className="font-medium text-[#123D46]/85">{user.campaign.title}</span>
+                          </div>
+                        )}
+                      </div>
                     ) : user.role === "CITIZEN" ? (
-                      <div className="text-[#123D46]/50 text-xs italic">Client Individuel (B2C)</div>
+                      <div className="text-[#123D46]/60 text-xs italic">Client Individuel (B2C)</div>
                     ) : user.role === "SUPER_ADMIN" ? (
-                      <div className="text-[#5965E8] text-xs font-semibold">Plateforme</div>
+                      <div className="text-[#5965E8] text-xs font-semibold">Plateforme LinkOffice</div>
                     ) : (
-                      <div className="text-[#123D46]/40 text-xs italic">Non rattaché</div>
-                    )}
-                    {user.campaign && (
-                      <div className="text-[#123D46]/50 text-[11px] mt-1">Campagne: {user.campaign.name}</div>
+                      <div className="text-amber-700/70 text-xs italic">Non rattaché</div>
                     )}
                   </td>
                   <td className="px-6 py-4 text-center">
@@ -343,6 +380,46 @@ export default function SuperAdminUsersPage() {
                     { value: "ADMIN_B2B2C", label: "Admin Mutuelles (ADMIN_B2B2C)" },
                     { value: "ADMIN_B2G", label: "Admin Collectivités (ADMIN_B2G)" },
                     { value: "SUPER_ADMIN", label: "Super Admin (SUPER_ADMIN)" }
+                  ]}
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Organisation de Rattachement</label>
+                <Select
+                  value={editForm.organizationId}
+                  onChange={(val) => {
+                    setEditForm(prev => ({
+                      ...prev,
+                      organizationId: val,
+                      campaignId: campaigns.some(c => c.id === prev.campaignId && c.organizationId === val) ? prev.campaignId : ""
+                    }));
+                  }}
+                  options={[
+                    { value: "", label: "Aucune (Client B2C / Indépendant)" },
+                    ...organizations.map(org => ({
+                      value: org.id,
+                      label: `${org.name} (${org.type})`
+                    }))
+                  ]}
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Campagne / Consultation</label>
+                <Select
+                  value={editForm.campaignId}
+                  onChange={(val) => setEditForm(prev => ({ ...prev, campaignId: val }))}
+                  options={[
+                    { value: "", label: "Aucune campagne" },
+                    ...campaigns
+                      .filter(c => !editForm.organizationId || c.organizationId === editForm.organizationId)
+                      .map(c => ({
+                        value: c.id,
+                        label: c.title
+                      }))
                   ]}
                   className="w-full"
                 />

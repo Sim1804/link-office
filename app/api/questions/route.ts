@@ -23,5 +23,14 @@ import { QuestionnaireService } from "@/lib/iqrh/questionnaire-service";
  * Route publique (aucune authentification requise — les questions ne sont pas sensibles).
  */
 export async function GET() {
-  return NextResponse.json(await QuestionnaireService.getDefinition());
+  try {
+    const data = await QuestionnaireService.getDefinition();
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("GET /api/questions error:", error);
+    return NextResponse.json(
+      { error: "Impossible de charger les questions." },
+      { status: 500 }
+    );
+  }
 }

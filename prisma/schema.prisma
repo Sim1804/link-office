@@ -79,6 +79,7 @@ model Assessment {
 
   @@index([userId, status])
   @@index([campaignId, status])
+  @@index([campaignId, status, submittedAt])
 }
 
 model DemographicProfile {
@@ -604,7 +605,7 @@ model CampaignVariableAnswer {
 }
 
 model Lead {
-  id             String   @id
+  id             String   @id @default(cuid())
   organization   String
   contactName    String
   email          String

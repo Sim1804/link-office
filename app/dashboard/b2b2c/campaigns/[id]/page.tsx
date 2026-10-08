@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import {
   BarChart3, Target, CheckCircle2, Copy, QrCode, Link2, Calendar,
@@ -137,28 +137,28 @@ export default function PartnerCampaignDetailPage() {
 
   if (loading) {
     return (
-      <>
-        <Navbar />
+      <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#5965E8]/20 selection:text-[#123D46]">
+        <PartnerAdminHeader portalType="B2B2C" activeTab="campagnes" />
         <main className="page-main">
           <div className="page-container-wide text-center py-20 text-[#123D46]/60 font-jakarta">
-            <div className="w-8 h-8 border-3 border-[#00A99D] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <div className="w-8 h-8 border-3 border-[#5965E8] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
             Chargement de la campagne...
           </div>
         </main>
-      </>
+      </div>
     );
   }
 
   if (!campaign) {
     return (
-      <>
-        <Navbar />
+      <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#5965E8]/20 selection:text-[#123D46]">
+        <PartnerAdminHeader portalType="B2B2C" activeTab="campagnes" />
         <main className="page-main">
           <div className="page-container-wide text-center py-20 text-rose-500 font-jakarta">
             Campagne introuvable
           </div>
         </main>
-      </>
+      </div>
     );
   }
 
@@ -174,8 +174,8 @@ export default function PartnerCampaignDetailPage() {
   ];
 
   return (
-    <>
-      <Navbar />
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#5965E8]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2B2C" activeTab="campagnes" />
       <main className="page-main font-inter">
         <div className="page-container-wide relative z-1 space-y-6">
           <Breadcrumb
@@ -672,6 +672,6 @@ export default function PartnerCampaignDetailPage() {
           )}
         </div>
       </main>
-    </>
+    </div>
   );
 }

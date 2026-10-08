@@ -10,7 +10,7 @@ import { prisma } from "@/lib/prisma";
 const GET_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
 const POST_ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await auth();
     if (!session?.user?.id) return NextResponse.json({ error: "Non autorise" }, { status: 401 });
@@ -21,10 +21,23 @@ export async function GET() {
     const user = await prisma.user.findUnique({ where: { id: session.user.id } });
     if (!user) return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
 
+    const { searchParams } = new URL(request.url);
+    const requestedOrgId = searchParams.get("organizationId") || searchParams.get("orgId");
+    const requestedType = searchParams.get("type") || searchParams.get("portalType");
+
     if (user.role === "SUPER_ADMIN") {
+      const whereClause: any = {};
+      if (requestedOrgId) {
+        whereClause.organizationId = requestedOrgId;
+      } else if (requestedType) {
+        whereClause.organization = { type: requestedType };
+      }
+
       const campaigns = await prisma.campaign.findMany({
+        where: whereClause,
         orderBy: { startDate: "desc" },
         include: {
+          organization: { select: { id: true, name: true, type: true } },
           _count: { select: { assessments: true, users: true, invites: true } },
           snapshot: { select: { createdAt: true } },
         },
@@ -38,6 +51,7 @@ export async function GET() {
       where: { organizationId: user.organizationId },
       orderBy: { startDate: "desc" },
       include: {
+        organization: { select: { id: true, name: true, type: true } },
         _count: { select: { assessments: true, users: true, invites: true } },
         snapshot: { select: { createdAt: true } },
       },

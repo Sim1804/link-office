@@ -7,16 +7,21 @@ import { CheckCircle2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
+import { useSession } from "next-auth/react";
+
 export default function PremiumSuccessPage() {
   const [mounted, setMounted] = useState(false);
   const searchParams = useSearchParams();
   const isMock = searchParams.get("mock") === "true";
+  const { update } = useSession();
 
   useEffect(() => {
     setMounted(true);
-    // Dans une implémentation sans webhook immédiat, 
-    // on pourrait rafraîchir la session ici si nécessaire.
-  }, []);
+    // Rafraîchir la session JWT pour propager immédiatement le statut Premium/Premium+
+    if (update) {
+      update();
+    }
+  }, [update]);
 
   if (!mounted) return null;
 

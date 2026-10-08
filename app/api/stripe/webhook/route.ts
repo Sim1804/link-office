@@ -34,11 +34,14 @@ export async function POST(req: Request) {
       const organizationId = session.metadata?.organizationId;
       const plan = session.metadata?.plan;
       
-      // B2C Premium upgrade
-      if (userId && plan === "B2C_PREMIUM") {
+      // B2C Premium / Premium+ upgrade
+      if (userId && (plan === "B2C_PREMIUM" || plan === "B2C_PREMIUM_PLUS" || session.metadata?.tier)) {
+        const targetTier = session.metadata?.tier === "PREMIUM_PLUS" || plan === "B2C_PREMIUM_PLUS"
+          ? "PREMIUM_PLUS"
+          : "PREMIUM";
         await prisma.user.update({
           where: { id: userId },
-          data: { subscription: "PREMIUM" }
+          data: { subscription: targetTier as any }
         });
         
         // Update UserSubscription

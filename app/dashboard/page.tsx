@@ -12,7 +12,6 @@ import { DashboardTabs } from "@/src/components/dashboard/tabs/DashboardTabs";
 import { B2b2cMemberRecommendations } from "@/components/dashboard/B2b2cMemberRecommendations";
 import { Brain, Star, Clock, Lock, Sparkles, TrendingUp, Search, User, ArrowRight, FileQuestion, Activity } from "lucide-react";
 import Link from "next/link";
-import { SubscriptionBadge, UserPlanStatus, toSubscriptionTier } from "@/components/ui/SubscriptionBadge";
 
 
 export const metadata = {
@@ -238,10 +237,9 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            {/* Gamification + Premium Status & Evolution */}
+            {/* Gamification Summary */}
             <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 shrink-0">
               <GamificationSummary points={points} badges={badges} />
-              <UserPlanStatus tier={toSubscriptionTier(subscription)} size="sm" showUpgrade={true} />
             </div>
           </div>
 

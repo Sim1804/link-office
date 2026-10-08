@@ -19,7 +19,7 @@ export function PartnerPortalsNavigation() {
   ];
 
   return (
-    <div className="max-w-[1480px] w-full mx-auto px-4 sm:px-8 mt-4">
+    <div className="max-w-[1440px] w-full mx-auto px-4 sm:px-8 mt-4">
       <div className="flex flex-wrap items-center justify-between gap-3 p-2 bg-white border border-[#E3EBE6] rounded-2xl shadow-2xs">
         <div className="flex items-center gap-2 px-3 py-1">
           <span className="w-2 h-2 rounded-full bg-[#FFC629] animate-pulse" />

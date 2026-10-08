@@ -2,12 +2,11 @@
 
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import { Calendar, Save, Search, CheckCircle2, Settings, List, Plus, Trash2, ArrowLeft, ArrowRight, Activity, Target, HelpCircle, AlertCircle, Info, Users, MapPin, Zap, Crown, ChevronRight } from "lucide-react";
 import { Stepper } from "@/components/ui/Stepper";
 import { OfferCard } from "@/components/ui/OfferCard";
 import Link from "next/link";
-import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
 
 /* ── Données statiques ──────────────────────────────────────────── */
 const VARIABLE_LIBRARY = [
@@ -93,10 +92,9 @@ function CreateB2GCampaignContent() {
   const cardStyle = { background: "var(--surface)", backdropFilter: "blur(12px)", border: "1px solid var(--border)", borderRadius: 16, padding: 32 };
 
   return (
-    <>
-      <Navbar />
-      <main style={{ minHeight: "100vh", background: "var(--bg)", paddingTop: 88, paddingBottom: 64, position: "relative" }}>
-        <PartnerPortalsNavigation />
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#F26D35]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2G" activeTab="consultations" />
+      <main style={{ minHeight: "100vh", background: "transparent", paddingTop: 32, paddingBottom: 64, position: "relative" }}>
 
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
           <Link 
@@ -303,7 +301,7 @@ function CreateB2GCampaignContent() {
           )}
         </div>
       </main>
-    </>
+    </div>
   );
 }
 

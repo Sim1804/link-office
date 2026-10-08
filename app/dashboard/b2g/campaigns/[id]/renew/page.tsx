@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import { ArrowLeft, Save } from "lucide-react";
 import { use } from "react";
-import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
 
 export default function RenewCampaignPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -64,10 +63,9 @@ export default function RenewCampaignPage({ params }: { params: Promise<{ id: st
   if (!parent) return null;
 
   return (
-    <>
-      <Navbar />
-      <main className="page-main" style={{ minHeight: "100vh", paddingTop: 88, paddingBottom: 64 }}>
-        <PartnerPortalsNavigation />
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#F26D35]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2G" activeTab="consultations" />
+      <main className="page-main" style={{ minHeight: "100vh", paddingTop: 32, paddingBottom: 64 }}>
         <div className="blob-violet" />
         <div className="blob-cyan" />
         <div className="page-container-wide" style={{ maxWidth: 800 }}>
@@ -136,6 +134,6 @@ export default function RenewCampaignPage({ params }: { params: Promise<{ id: st
           </form>
         </div>
       </main>
-    </>
+    </div>
   );
 }

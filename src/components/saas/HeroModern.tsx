@@ -195,9 +195,10 @@ export const HeroModern: React.FC<HeroModernProps> = ({ onStartTest, onExploreMe
 
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center gap-4 pt-1">
-            <Link
-              href="/auth/register"
-              className="px-7 py-3.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm sm:text-base shadow-sm hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-3 group no-underline"
+            <button
+              type="button"
+              onClick={onStartTest}
+              className="px-7 py-3.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-sm sm:text-base shadow-sm hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-3 group"
             >
               <span>Faire mon test IQRH</span>
               <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
@@ -205,7 +206,7 @@ export const HeroModern: React.FC<HeroModernProps> = ({ onStartTest, onExploreMe
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </span>
-            </Link>
+            </button>
 
             <button
               onClick={onExploreMethode}
@@ -408,7 +409,7 @@ export const HeroModern: React.FC<HeroModernProps> = ({ onStartTest, onExploreMe
 
             {/* Quick interactive test launcher inside the widget */}
             <Link
-              href="/auth/register"
+              href="/business#devis"
               className="w-full py-2.5 rounded-full bg-white hover:bg-[#00A99D] hover:text-white text-[#123D46] text-xs font-jakarta font-bold border border-[#E3EBE6] hover:border-[#00A99D] transition-all flex items-center justify-center gap-2 group shadow-2xs no-underline"
             >
               <span>Évaluer mon équipe avec l’IQRH</span>

@@ -112,6 +112,7 @@ export default function BusinessPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [trap, setTrap] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,6 +132,7 @@ export default function BusinessPage() {
           companySize,
           populationSize,
           beneficiaries,
+          website_trap: trap,
         }),
       });
       const data = await res.json();
@@ -576,6 +578,17 @@ export default function BusinessPage() {
 
                   {selectedPlan ? (
                     <form onSubmit={handleSubmit} className="space-y-4">
+                      {/* Honeypot anti-bot trap */}
+                      <input
+                        type="text"
+                        name="website_trap"
+                        value={trap}
+                        onChange={e => setTrap(e.target.value)}
+                        tabIndex={-1}
+                        autoComplete="off"
+                        className="hidden"
+                        aria-hidden="true"
+                      />
                       <div>
                         <label className="block text-xs font-bold text-[#123D46]/80 mb-1.5">
                           {selectedPlan === "B2G" ? "Nom de la collectivité ou institution *" : selectedPlan === "B2B2C_PARTENAIRE" ? "Nom de la mutuelle / de l'organisme *" : "Nom de l'entreprise *"}

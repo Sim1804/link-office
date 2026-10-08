@@ -4,7 +4,6 @@ import { CatalogForm } from "@/components/admin/CatalogForm";
 import Link from "next/link";
 import { ArrowLeft, BookPlus } from "lucide-react";
 
-import { Navbar } from "@/components/layout/Navbar";
 
 export const metadata = { title: "Ajouter au catalogue — LinkOffice" };
 

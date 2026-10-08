@@ -15,6 +15,12 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     const updateData: any = {};
     if (body.subscription) updateData.subscription = body.subscription;
     if (body.role) updateData.role = body.role;
+    if (body.organizationId !== undefined) {
+      updateData.organizationId = body.organizationId ? body.organizationId : null;
+    }
+    if (body.campaignId !== undefined) {
+      updateData.campaignId = body.campaignId ? body.campaignId : null;
+    }
 
     const updatedUser = await prisma.user.update({
       where: { id },

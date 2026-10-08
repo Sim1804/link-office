@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import {
   Users, BarChart3, Settings, Mail, RefreshCw, Target,
@@ -180,28 +180,28 @@ export default function CampaignDetailPage() {
 
   if (loading) {
     return (
-      <>
-        <Navbar />
+      <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#00A99D]/20 selection:text-[#123D46]">
+        <PartnerAdminHeader portalType="B2B" activeTab="campagnes" />
         <main className="page-main">
           <div className="page-container-wide text-center py-20 text-[#123D46]/60 font-jakarta">
             <div className="w-8 h-8 border-3 border-[#00A99D] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
             Chargement de la campagne...
           </div>
         </main>
-      </>
+      </div>
     );
   }
 
   if (!campaign) {
     return (
-      <>
-        <Navbar />
+      <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#00A99D]/20 selection:text-[#123D46]">
+        <PartnerAdminHeader portalType="B2B" activeTab="campagnes" />
         <main className="page-main">
           <div className="page-container-wide text-center py-20 text-rose-500 font-jakarta">
             Campagne introuvable
           </div>
         </main>
-      </>
+      </div>
     );
   }
 
@@ -218,8 +218,8 @@ export default function CampaignDetailPage() {
   ];
 
   return (
-    <>
-      <Navbar />
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#00A99D]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2B" activeTab="campagnes" />
       <main className="page-main font-inter">
         <div className="page-container-wide relative z-1 space-y-6">
           <Breadcrumb
@@ -1030,6 +1030,6 @@ export default function CampaignDetailPage() {
           )}
         </div>
       </main>
-    </>
+    </div>
   );
 }

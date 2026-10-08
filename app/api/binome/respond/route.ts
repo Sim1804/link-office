@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const BINOME_ALLOWED_ROLES = ["EMPLOYEE", "SUPER_ADMIN"];
+const BINOME_ALLOWED_ROLES = ["CITIZEN", "MEMBER", "EMPLOYEE", "SUPER_ADMIN"];
 
 export async function POST(req: Request) {
   try {

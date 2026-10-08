@@ -38,15 +38,35 @@ export default function AdaptivePage() {
     if (!redirecting) setSubmitting(true);
     try {
       const consentStr = sessionStorage.getItem("iqrh_consent");
-      const demogStr = sessionStorage.getItem("iqrh_demographic");
+      let demogStr = sessionStorage.getItem("iqrh_demographic");
       const refStr = sessionStorage.getItem("iqrh_answers");
 
-      if (!consentStr || !demogStr || !refStr) throw new Error("Données manquantes");
+      if (!refStr) {
+        router.replace("/questionnaire");
+        return;
+      }
 
-      const consent = JSON.parse(consentStr);
-      const demographic = JSON.parse(demogStr);
+      // Fallback consentement par défaut
+      const consent = consentStr 
+        ? JSON.parse(consentStr) 
+        : { consentInformation: true, consentResearch: true, consentParticipation: false };
+
+      // Si le profil démographique n'est pas en session, tentative de récupération API
+      let demographic = demogStr ? JSON.parse(demogStr) : null;
+      if (!demographic) {
+        const dRes = await fetch("/api/v1/demographics");
+        if (dRes.ok) {
+          const dData = await dRes.json();
+          demographic = dData.demographic;
+        }
+      }
+
+      if (!demographic) {
+        router.replace("/profil?onboarding=true");
+        return;
+      }
+
       const refAnswers = JSON.parse(refStr);
-
       const formattedRef = Object.entries(refAnswers).map(([k, v]) => ({ questionId: k, value: v }));
       const formattedAdaptive = Object.entries(currentAdaptiveAnswers).map(([k, v]) => ({ questionId: k, value: v }));
 
@@ -55,7 +75,11 @@ export default function AdaptivePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: session?.user?.id }),
       });
-      const { id: assessmentId } = await startRes.json();
+      const startData = await startRes.json();
+      if (!startRes.ok || !startData.id) {
+        throw new Error(startData.error || "Impossible d'initialiser l'évaluation");
+      }
+      const assessmentId = startData.id;
 
       const saveRes = await fetch("/api/questionnaire/save", {
         method: "POST",
@@ -85,34 +109,62 @@ export default function AdaptivePage() {
         throw new Error("Erreur de soumission finale: " + JSON.stringify(errorData));
       }
 
+      // Nettoyage sessionStorage après soumission réussie
+      try {
+        sessionStorage.removeItem("iqrh_answers");
+      } catch (e) {
+        // ignore
+      }
+
       if (!redirecting) {
         setSubmitted(true);
         setTimeout(() => router.push("/dashboard"), 1000);
       } else {
         router.replace("/dashboard");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       if (!redirecting) {
         setSubmitting(false);
-        setSubmitError("Une erreur est survenue lors de la sauvegarde finale. Veuillez réessayer.");
+        setSubmitError(err?.message || "Une erreur est survenue lors de la sauvegarde finale. Veuillez réessayer.");
       }
     }
   }, [answers, session, router]);
 
   useEffect(() => {
-    const demogStr = sessionStorage.getItem("iqrh_demographic");
-    if (!demogStr) {
-      router.replace("/profil");
+    if (session === null) {
+      router.replace("/auth/register?callbackUrl=/adaptive");
       return;
     }
-    const demog = JSON.parse(demogStr);
 
-    fetch("/api/questions")
-      .then((r) => r.json())
-      .then(async (d) => {
+    async function loadAdaptiveFlow() {
+      let demogStr = sessionStorage.getItem("iqrh_demographic");
+      let demog = demogStr ? JSON.parse(demogStr) : null;
+
+      if (!demog) {
+        try {
+          const dRes = await fetch("/api/v1/demographics");
+          if (dRes.ok) {
+            const dData = await dRes.json();
+            if (dData.demographic) {
+              demog = dData.demographic;
+              sessionStorage.setItem("iqrh_demographic", JSON.stringify(demog));
+            }
+          }
+        } catch (e) {
+          console.error("Erreur de chargement démographique :", e);
+        }
+      }
+
+      if (!demog) {
+        router.replace("/profil?onboarding=true");
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/questions");
+        const d = await res.json();
         const selectedSituations = demog.selectedSituations || [];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const matchingModules = (d.modules || []).filter((m: any) =>
           selectedSituations.includes(m.triggerSituation)
         );
@@ -123,9 +175,16 @@ export default function AdaptivePage() {
           setModules(matchingModules);
           setLoading(false);
         }
-      })
-      .catch(() => setLoading(false));
-  }, [router, submitAll]);
+      } catch (err) {
+        console.error("Erreur de chargement des questions :", err);
+        setLoading(false);
+      }
+    }
+
+    if (session?.user?.id) {
+      loadAdaptiveFlow();
+    }
+  }, [session, router, submitAll]);
 
   if (loading) {
     return <div style={{ minHeight: "100vh", background: "var(--bg)" }} />;

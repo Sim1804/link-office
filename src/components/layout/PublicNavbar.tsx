@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { Menu, X, ArrowRight, Shield, Building2, HeartHandshake, Landmark, User } from "lucide-react";
 import { Logo } from "../brand/Logo";
 
 export interface NavLink {
@@ -25,6 +26,8 @@ const publicLinks: NavLink[] = [
 ];
 
 export function PublicNavbar() {
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("accueil");
   const pathname = usePathname();
@@ -113,9 +116,9 @@ export function PublicNavbar() {
         <Link
           href="/"
           onClick={handleLogoClick}
-          className="flex items-center text-decoration-none shrink-0"
+          className="flex items-center text-decoration-none shrink-0 hover:opacity-90 transition-opacity"
         >
-          <Logo size="sm" />
+          <Logo size="navbar" />
         </Link>
 
         {/* Zone 2: Desktop Nav (Alignée sur le standard Navbar avec soulignement actif) */}
@@ -148,19 +151,53 @@ export function PublicNavbar() {
 
         {/* Zone 3: Actions (Identiques aux boutons capsules des autres pages) */}
         <div className="flex items-center gap-2.5 shrink-0">
-          <Link
-            href="/auth/login"
-            className="hidden sm:inline-flex text-xs font-jakarta font-semibold text-[#123D46]/75 hover:text-[#123D46] px-4 py-2 rounded-full border border-[#E3EBE6] hover:border-[#00A99D] bg-[#FAF9F5] transition-all no-underline shadow-2xs"
-          >
-            Connexion
-          </Link>
-          <Link
-            href="/auth/register"
-            className="px-4 sm:px-5 py-2 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold shadow-xs hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-1.5 whitespace-nowrap no-underline"
-          >
-            <span>Faire mon test IQRH</span>
-            <ArrowRight size={13} className="hidden sm:inline" />
-          </Link>
+          {session ? (
+            <Link
+              href={
+                userRole === "SUPER_ADMIN" ? "/dashboard/superadmin" :
+                userRole === "ADMIN_B2B" ? "/dashboard/b2b" :
+                userRole === "ADMIN_B2B2C" ? "/dashboard/b2b2c" :
+                userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G" ? "/dashboard/b2g" :
+                "/dashboard"
+              }
+              className={`px-4 sm:px-5 py-2 rounded-full text-white text-xs font-jakarta font-bold shadow-xs hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-1.5 whitespace-nowrap no-underline ${
+                userRole === "SUPER_ADMIN" ? "bg-[#123D46] hover:bg-[#0D2530]" :
+                userRole === "ADMIN_B2B2C" ? "bg-[#5965E8] hover:bg-[#4A55C0]" :
+                userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G" ? "bg-[#F26D35] hover:bg-[#E85B20]" :
+                "bg-[#00A99D] hover:bg-[#199E9A]"
+              }`}
+            >
+              {userRole === "SUPER_ADMIN" ? <Shield size={14} className="text-[#FFC629]" /> :
+               userRole === "ADMIN_B2B" ? <Building2 size={14} /> :
+               userRole === "ADMIN_B2B2C" ? <HeartHandshake size={14} /> :
+               userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G" ? <Landmark size={14} /> :
+               <User size={14} />}
+              <span>
+                {userRole === "SUPER_ADMIN" ? "Console Super Admin" :
+                 userRole === "ADMIN_B2B" ? "Espace Entreprise" :
+                 userRole === "ADMIN_B2B2C" ? "Espace Mutuelle" :
+                 userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G" ? "Espace Collectivité" :
+                 "Mon Espace"}
+              </span>
+              <ArrowRight size={13} className="hidden sm:inline" />
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/auth/login"
+                className="hidden sm:inline-flex text-xs font-jakarta font-semibold text-[#123D46]/75 hover:text-[#123D46] px-4 py-2 rounded-full border border-[#E3EBE6] hover:border-[#00A99D] bg-[#FAF9F5] transition-all no-underline shadow-2xs"
+              >
+                Connexion
+              </Link>
+              <Link
+                href="/auth/register"
+                className="px-4 sm:px-5 py-2 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold shadow-xs hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-1.5 whitespace-nowrap no-underline"
+              >
+                <span>Faire mon test IQRH</span>
+                <ArrowRight size={13} className="hidden sm:inline" />
+              </Link>
+            </>
+          )}
 
           {/* Mobile Toggle */}
           <button
@@ -195,21 +232,51 @@ export function PublicNavbar() {
               );
             })}
             <div className="mt-2 pt-3 border-t border-[#E3EBE6] flex flex-col gap-2">
-              <Link
-                href="/auth/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-full font-jakarta font-bold text-sm text-center text-[#123D46] bg-[#FAF9F5] border border-[#E3EBE6] no-underline hover:bg-slate-100 transition-colors"
-              >
-                Connexion
-              </Link>
-              <Link
-                href="/auth/register"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-full font-jakarta font-bold text-sm text-center text-white bg-[#00A99D] hover:bg-[#199E9A] no-underline transition-colors flex items-center justify-center gap-2 shadow-xs"
-              >
-                <span>Faire mon test IQRH</span>
-                <ArrowRight size={14} />
-              </Link>
+              {session ? (
+                <Link
+                  href={
+                    userRole === "SUPER_ADMIN" ? "/dashboard/superadmin" :
+                    userRole === "ADMIN_B2B" ? "/dashboard/b2b" :
+                    userRole === "ADMIN_B2B2C" ? "/dashboard/b2b2c" :
+                    userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G" ? "/dashboard/b2g" :
+                    "/dashboard"
+                  }
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`px-4 py-2.5 rounded-full font-jakarta font-bold text-sm text-center text-white no-underline transition-colors flex items-center justify-center gap-2 shadow-xs ${
+                    userRole === "SUPER_ADMIN" ? "bg-[#123D46]" :
+                    userRole === "ADMIN_B2B2C" ? "bg-[#5965E8]" :
+                    userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G" ? "bg-[#F26D35]" :
+                    "bg-[#00A99D]"
+                  }`}
+                >
+                  <span>
+                    {userRole === "SUPER_ADMIN" ? "Console Super Admin" :
+                     userRole === "ADMIN_B2B" ? "Espace Entreprise" :
+                     userRole === "ADMIN_B2B2C" ? "Espace Mutuelle" :
+                     userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G" ? "Espace Collectivité" :
+                     "Mon Espace"}
+                  </span>
+                  <ArrowRight size={14} />
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="px-4 py-2.5 rounded-full font-jakarta font-bold text-sm text-center text-[#123D46] bg-[#FAF9F5] border border-[#E3EBE6] no-underline hover:bg-slate-100 transition-colors"
+                  >
+                    Connexion
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="px-4 py-2.5 rounded-full font-jakarta font-bold text-sm text-center text-white bg-[#00A99D] hover:bg-[#199E9A] no-underline transition-colors flex items-center justify-center gap-2 shadow-xs"
+                  >
+                    <span>Faire mon test IQRH</span>
+                    <ArrowRight size={14} />
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}

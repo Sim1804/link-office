@@ -98,7 +98,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session: updateSession }) {
       if (user) {
         token.userId = user.id;
         token.role = (user as { role: string }).role;
@@ -106,6 +106,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.organizationId = (user as { organizationId: string | null }).organizationId ?? null;
         token.logoUrl = (user as any).logoUrl ?? null;
         token.mustChangePassword = (user as any).mustChangePassword;
+      }
+      if (trigger === "update" && (updateSession as any)?.subscription) {
+        token.subscription = (updateSession as any).subscription;
       }
       return token;
     },

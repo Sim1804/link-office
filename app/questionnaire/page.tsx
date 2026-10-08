@@ -121,19 +121,21 @@ export default function QuestionnairePage() {
   };
 
   const handleSubmit = async () => {
-    if (!session?.user?.id) return;
-    setSubmitting(true);
     try {
       sessionStorage.setItem("iqrh_answers", JSON.stringify(answers));
-      setSubmitted(true);
-      setTimeout(() => router.push("/adaptive"), 500);
-    } catch (err) {
-      console.error("Erreur de soumission questionnaire :", err);
-      setSubmitting(false);
-      // Erreur silencieuse — sessionStorage non disponible (mode privé strict)
-      // On redirige quand même pour ne pas bloquer l'utilisateur
-      router.push("/adaptive");
+    } catch (e) {
+      console.error("Storage error:", e);
     }
+
+    if (!session?.user?.id) {
+      setSubmitted(true);
+      setTimeout(() => router.push("/auth/register?callbackUrl=/adaptive"), 800);
+      return;
+    }
+
+    setSubmitting(true);
+    setSubmitted(true);
+    setTimeout(() => router.push("/adaptive"), 500);
   };
 
   // ── État soumis ──────────────────────────────────────────────────────────
@@ -145,7 +147,11 @@ export default function QuestionnairePage() {
           <h2 className="font-jakarta font-extrabold text-2xl text-[#123D46] mb-2">
             Questionnaire de référence terminé !
           </h2>
-          <p className="text-sm text-[#123D46]/70">Redirection vers les modules adaptatifs…</p>
+          <p className="text-sm text-[#123D46]/70">
+            {!session?.user?.id
+              ? "Vos 30 réponses sont sauvegardées. Redirection pour créer votre compte et découvrir votre bilan…"
+              : "Redirection vers les modules adaptatifs…"}
+          </p>
         </div>
       </div>
     );

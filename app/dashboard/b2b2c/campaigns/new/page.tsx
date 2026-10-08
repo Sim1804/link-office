@@ -1,12 +1,12 @@
 "use client";
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
+import { PartnerAdminHeader } from "@/src/components/dashboard/PartnerAdminHeader";
 import { Calendar, Save, Search, CheckCircle2, Settings, List, Plus, Trash2, ArrowLeft, ArrowRight, Activity, Target, HelpCircle, AlertCircle, Info, Zap, Crown, ChevronRight } from "lucide-react";
 import { Stepper } from "@/components/ui/Stepper";
 import { OfferCard } from "@/components/ui/OfferCard";
 import Link from "next/link";
-import { PartnerPortalsNavigation } from "@/components/superadmin/PartnerPortalsNavigation";
+
 
 const CAMPAIGN_VARIABLES_LIBRARY = [
   { id: "service",        question: "Quel est votre service ou direction ?",              options: ["Direction Générale","RH","Finance","Commercial","IT","Opérations","Marketing","Autre"] },
@@ -87,10 +87,9 @@ function PartnerNewCampaignContent() {
   };
 
   return (
-    <>
-      <Navbar />
+    <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#5965E8]/20 selection:text-[#123D46]">
+      <PartnerAdminHeader portalType="B2B2C" activeTab="campagnes" />
       <main className="page-main">
-        <PartnerPortalsNavigation />
         <div className="blob-violet" />
         <div className="blob-cyan" />
         <div style={{ maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1 }}>
@@ -232,7 +231,7 @@ function PartnerNewCampaignContent() {
           )}
         </div>
       </main>
-    </>
+    </div>
   );
 }
 

@@ -135,15 +135,8 @@ export default function ActionsPage() {
 
   return (
     <div className="min-h-screen bg-[#F4F1E8] text-[#123D46] font-inter flex flex-col selection:bg-[#00A99D]/20 selection:text-[#123D46]">
-      <PartnerAdminHeader
-        portalType="B2B"
-        themeColor="#00A99D"
-        adminTitle="RH Admin B2B"
-        adminSubtitle="Espace Entreprise"
-        tabs={[]}
-        activeTab=""
-        onTabChange={() => {}}
-      />
+      <PartnerAdminHeader portalType="B2B" />
+
       <main className="flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
         <div className="relative z-10 animate-fade-in">
           <Breadcrumb

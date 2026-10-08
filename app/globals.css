@@ -411,3 +411,26 @@ select.input-field option { background-color: #fff; color: var(--text-1); }
 .animate-slide-left {
   animation: slide-left 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ── Styles d'impression & Export PDF Executive Board-Ready ──────────────── */
+@media print {
+  header, nav, .print-hidden, button, a[href^="/dashboard"], .fixed, .sticky {
+    display: none !important;
+  }
+  body, main {
+    background: #FFFFFF !important;
+    color: #123D46 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  main {
+    max-width: 100% !important;
+    box-shadow: none !important;
+    padding-top: 10px !important;
+  }
+  div[class*="rounded-2xl"] {
+    box-shadow: none !important;
+    border: 1px solid #E2E8F0 !important;
+    break-inside: avoid;
+  }
+}
