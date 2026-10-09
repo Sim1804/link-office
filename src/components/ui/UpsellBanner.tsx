@@ -1,14 +1,15 @@
 /**
  * @file UpsellBanner.tsx
- * @description Bannière d'upsell réutilisable.
- * - Freemium → propose Premium
- * - Premium → propose Premium+
- * Utilise le design system global (btn, tokens CSS).
+ * @description Bannière d'upsell réutilisable et canonique.
+ * - Freemium → propose Premium (turquoise Link Office, icône Zap)
+ * - Premium  → propose Premium+ (ambre doré, icône Crown)
+ * Utilise le design system global et les tokens officiels.
  */
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import { Lock, Sparkles, ArrowRight, Star } from "lucide-react";
+import { Lock, Zap, Crown, ArrowRight } from "lucide-react";
 import { SubscriptionBadge, SubscriptionTier } from "@/components/ui/SubscriptionBadge";
 
 interface UpsellBannerProps {
@@ -19,80 +20,116 @@ interface UpsellBannerProps {
   featureName?: string;
   /** Texte descriptif optionnel */
   description?: string;
+  /** Libellé optionnel personnalisé pour le bouton CTA */
+  ctaLabel?: string;
   /** Afficher un fond flou derrière la bannière (pour les paywalls) */
   withBlur?: boolean;
 }
-
-const VARIANTS = {
-  freemium: {
-    icon: Lock,
-    iconBg: "rgba(18,61,70,0.06)",
-    iconColor: "var(--text-2)",
-    badge: null as SubscriptionTier | null,
-    title: (f?: string) => f ? `${f} réservé aux abonnés Premium` : "Fonctionnalité Premium",
-    description: "Passez à Premium pour débloquer l'accès complet à cette section.",
-    cta: "Passer à Premium",
-    ctaHref: "/premium",
-    ctaClass: "btn btn-primary btn-md",
-    borderColor: "var(--border-strong)",
-  },
-  premium: {
-    icon: Sparkles,
-    iconBg: "rgba(0,169,157,0.08)",
-    iconColor: "var(--primary)",
-    badge: "PREMIUM_PLUS" as SubscriptionTier,
-    title: (f?: string) => f ? `${f} inclus dans Premium+` : "Fonctionnalité exclusive Premium+",
-    description: "Vous êtes déjà Premium 🎉 — passez à Premium+ pour accéder au Binôme Relationnel, aux suggestions IRIS et à la gamification avancée.",
-    cta: "Découvrir Premium+",
-    ctaHref: "/premium",
-    ctaClass: "btn btn-primary btn-md",
-    borderColor: "rgba(0,169,157,0.3)",
-  },
-};
 
 export function UpsellBanner({
   variant,
   featureName,
   description,
-  withBlur = false,
+  ctaLabel,
 }: UpsellBannerProps) {
-  const v = VARIANTS[variant];
-  const Icon = v.icon;
+  const isPremiumVariant = variant === "premium";
+
+  // Configuration par variante
+  const config = {
+    freemium: {
+      tier: "PREMIUM" as SubscriptionTier,
+      badge: "PREMIUM" as SubscriptionTier,
+      title: (f?: string) =>
+        f ? `${f} réservé aux abonnés Premium` : "Fonctionnalité réservée aux abonnés Premium",
+      defaultDescription:
+        "Passez à Premium pour débloquer l'accès complet à cette section et à l'ensemble de vos analyses.",
+      cta: "Passer à Premium",
+      ctaStyle: {
+        background: "linear-gradient(135deg, #00A99D 0%, #008f85 100%)",
+        color: "#ffffff",
+        border: "1px solid rgba(0, 169, 157, 0.40)",
+        boxShadow: "0 2px 6px rgba(0, 169, 157, 0.30)",
+      },
+      TotemIcon: Zap,
+      guarantee: "✓ Sans engagement · Résiliable à tout moment",
+    },
+    premium: {
+      tier: "PREMIUM_PLUS" as SubscriptionTier,
+      badge: "PREMIUM_PLUS" as SubscriptionTier,
+      title: (f?: string) =>
+        f ? `${f} exclusif à l'offre Premium+` : "Fonctionnalité exclusive Premium+",
+      defaultDescription:
+        "Vous êtes déjà Premium 🎉 — passez à Premium+ pour accéder au Binôme Relationnel, aux suggestions IRIS et à l'accompagnement avancé.",
+      cta: "Passer à Premium+",
+      ctaStyle: {
+        background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
+        color: "#ffffff",
+        border: "1px solid rgba(217, 119, 6, 0.45)",
+        boxShadow: "0 2px 6px rgba(245, 158, 11, 0.32)",
+      },
+      TotemIcon: Crown,
+      guarantee: "✓ Activation instantanée · Différence au pro-rata",
+    },
+  }[variant];
+
+  const TotemIcon = config.TotemIcon;
+  const finalCta = ctaLabel || config.cta;
 
   return (
-    <div className={`rounded-3xl p-8 sm:p-10 border shadow-xs flex flex-col items-center justify-center text-center space-y-4 ${variant === "premium" ? "bg-gradient-to-b from-[#FAF9F5] to-[#F0FDF4] border-[#00A99D]/20" : "bg-white border-[#E3EBE6]"}`}>
-      {v.badge && (
-        <div className="mb-2">
-          <SubscriptionBadge tier={v.badge} size="md" />
-        </div>
-      )}
-
-      {/* Icône */}
-      <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center text-2xl ${variant === "premium" ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-[#FAF9F5] border-[#E3EBE6]"}`}>
-        {variant === "freemium" ? "🔒" : "✨"}
+    <div
+      className={`rounded-3xl p-8 sm:p-10 border shadow-xs flex flex-col items-center justify-center text-center space-y-4 transition-all ${
+        isPremiumVariant
+          ? "bg-gradient-to-b from-[#FFFBEB]/45 via-white to-[#FAF9F5] border-amber-200/80"
+          : "bg-white border-[#E3EBE6]"
+      }`}
+    >
+      {/* Badge officiel de tier */}
+      <div className="mb-1">
+        <SubscriptionBadge tier={config.badge} size="sm" />
       </div>
 
-      {/* Texte */}
-      <div className="max-w-[460px]">
-        <h4 className="font-jakarta font-extrabold text-lg sm:text-xl text-[#123D46] mb-2">
-          {v.title(featureName)}
+      {/* Icône SVG vectorielle */}
+      <div
+        className={`w-14 h-14 rounded-2xl border flex items-center justify-center shadow-xs ${
+          isPremiumVariant
+            ? "bg-gradient-to-br from-amber-500/15 to-amber-500/5 text-[#D97706] border-amber-500/25"
+            : "bg-gradient-to-br from-[#00A99D]/12 to-[#00A99D]/5 text-[#00A99D] border-[#00A99D]/20"
+        }`}
+      >
+        {isPremiumVariant ? (
+          <Crown size={26} className="text-[#D97706]" />
+        ) : (
+          <Lock size={24} className="text-[#00A99D]" />
+        )}
+      </div>
+
+      {/* Titre & Description */}
+      <div className="max-w-[480px]">
+        <h4 className="font-jakarta font-extrabold text-lg sm:text-xl text-[#123D46] mb-2 leading-snug">
+          {config.title(featureName)}
         </h4>
         <p className="text-xs text-[#123D46]/70 leading-relaxed font-inter">
-          {description || v.description}
+          {description || config.defaultDescription}
         </p>
       </div>
 
-      {/* CTA */}
+      {/* Bouton CTA */}
       <Link
-        href={v.ctaHref}
-        className="px-6 py-3 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-2"
+        href="/premium"
+        className="group px-6 py-3 rounded-full text-xs font-jakarta font-bold transition-all duration-200 active:scale-95 shadow-xs hover:shadow-md flex items-center gap-2"
+        style={config.ctaStyle}
       >
-        <span>{v.cta}</span>
-        <ArrowRight size={16} />
+        <TotemIcon size={14} className="shrink-0" />
+        <span>{finalCta}</span>
+        <ArrowRight
+          size={14}
+          className="shrink-0 opacity-80 group-hover:translate-x-0.5 transition-transform"
+        />
       </Link>
 
-      <span className="text-[11px] text-[#123D46]/50">
-        {variant === "freemium" ? "✓ Sans engagement · Résiliable à tout moment" : "✓ Mise à niveau instantanée · Différence pro-rata"}
+      {/* Micro-réassurance */}
+      <span className="text-[11px] text-[#123D46]/55 font-inter tracking-tight">
+        {config.guarantee}
       </span>
     </div>
   );

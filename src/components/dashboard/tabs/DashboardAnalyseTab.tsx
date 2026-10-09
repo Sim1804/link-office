@@ -4,6 +4,7 @@ import { User, Lock, Sparkles, BarChart3, Activity } from "lucide-react";
 import Link from "next/link";
 import { DimensionsList } from "@/components/dashboard/DimensionsList";
 import { IrisMark } from "@/components/brand/IrisLogo";
+import { LockedContentOverlay } from "@/components/ui/LockedContentOverlay";
 
 const SCORE_CONFIG = (score: number) => {
   if (score >= 80) return { grad: "linear-gradient(135deg, #34d399 0%, #059669 100%)", color: "#34d399", bg: "rgba(52,211,153,0.1)", border: "rgba(52,211,153,0.2)" };
@@ -96,16 +97,13 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
           )}
 
           {!isPremium && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-white/90 to-[#FAF9F5]/95 backdrop-blur-sm z-10 p-6 text-center">
-              <div className="w-12 h-12 rounded-2xl bg-white shadow-xs border border-[#E3EBE6] flex items-center justify-center text-xl mb-3">
-                🔒
-              </div>
-              <p className="font-jakarta font-bold text-base text-[#123D46] mb-1">Détail du Profil</p>
-              <p className="text-xs text-[#123D46]/60 mb-5">Accessible en version Premium</p>
-              <Link href="/premium" className="px-6 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs">
-                Débloquer
-              </Link>
-            </div>
+            <LockedContentOverlay
+              tier="PREMIUM"
+              title="Détail du Profil"
+              description="Accédez à l'analyse détaillée de vos 5 dimensions relationnelles et vos leviers d'action."
+              actionLabel="Débloquer avec Premium"
+              compact={true}
+            />
           )}
         </div>
 
@@ -191,16 +189,13 @@ export function DashboardAnalyseTab({ iqrh, profil, icr, isPremium }: { iqrh: an
             </div>
 
             {!isPremium && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-white/90 to-[#FAF9F5]/95 backdrop-blur-sm z-10 p-6 text-center">
-                <div className="w-12 h-12 rounded-2xl bg-white shadow-xs border border-[#E3EBE6] flex items-center justify-center text-xl mb-3">
-                  🔒
-                </div>
-                <p className="font-jakarta font-bold text-base text-[#123D46] mb-1">Détail ICR Premium</p>
-                <p className="text-xs text-[#123D46]/60 mb-5">Décomposition complète réservée aux abonnés</p>
-                <Link href="/premium" className="px-6 py-2.5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs">
-                  Débloquer
-                </Link>
-              </div>
+              <LockedContentOverlay
+                tier="PREMIUM"
+                title="Détail ICR Premium"
+                description="Décomposition approfondie de votre charge relationnelle et vos besoins prioritaires."
+                actionLabel="Débloquer avec Premium"
+                compact={true}
+              />
             )}
           </div>
         )}

@@ -1,8 +1,8 @@
 "use client";
 
 import { PrescriptionItemCard } from "@/components/dashboard/PrescriptionItemCard";
-import { ListChecks, Lock, Sparkles, Target } from "lucide-react";
-import Link from "next/link";
+import { ListChecks, Sparkles, Target } from "lucide-react";
+import { LockedContentOverlay } from "@/components/ui/LockedContentOverlay";
 
 export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: { iqrh: any, isPremium: boolean, DIMENSIONS_LABELS: any }) {
   const allItems = iqrh?.prescription?.items || [];
@@ -72,38 +72,21 @@ export function DashboardOrdonnanceTab({ iqrh, isPremium, DIMENSIONS_LABELS }: {
 
           {/* Premium Upsell Blur Gate */}
           {!isPremium && hiddenCount > 0 && (
-            <div className="mt-8 rounded-3xl border border-[#E3EBE6] overflow-hidden relative bg-white min-h-[340px]">
-              {/* Blurred preview cards */}
-              <div className="blur-[6px] opacity-40 pt-5 px-5 pointer-events-none">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {[...Array(Math.min(hiddenCount, 3))].map((_, i) => (
-                    <div key={i} className="h-32 rounded-2xl bg-[#FAF9F5] border border-[#E3EBE6]" />
-                  ))}
+            <div className="mt-8">
+              <LockedContentOverlay
+                tier="PREMIUM"
+                title={`${hiddenCount} contenu${hiddenCount > 1 ? "s" : ""} Premium restant${hiddenCount > 1 ? "s" : ""}`}
+                description="Débloquez l'intégralité de votre ordonnance relationnelle, validez vos micro-défis et accédez à vos leviers d'évolution."
+                actionLabel="Débloquer avec Premium"
+              >
+                <div className="p-8 w-full">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {[...Array(Math.min(hiddenCount, 3))].map((_, i) => (
+                      <div key={i} className="h-44 rounded-2xl bg-[#FAF9F5] border border-[#E3EBE6]" />
+                    ))}
+                  </div>
                 </div>
-              </div>
-              
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-white/95" />
-              
-              {/* CTA */}
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-8 text-center space-y-4">
-                <div className="w-14 h-14 rounded-2xl bg-[#FAF9F5] border border-[#E3EBE6] flex items-center justify-center text-2xl">
-                  🔒
-                </div>
-                <h4 className="font-jakarta font-extrabold text-xl text-[#123D46]">
-                  {hiddenCount} contenu{hiddenCount > 1 ? "s" : ""} Premium restant{hiddenCount > 1 ? "s" : ""}
-                </h4>
-                <p className="text-xs text-[#123D46]/70 max-w-md font-inter leading-relaxed">
-                  Débloquez l'intégralité de votre ordonnance, cochez vos défis terminés et accédez aux partenaires certifiés.
-                </p>
-                <Link href="/premium" className="px-6 py-3 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-2">
-                  <span>Passer à Premium</span>
-                  <span>→</span>
-                </Link>
-                <span className="text-[11px] text-[#123D46]/50">
-                  ✓ Sans engagement · Résiliable à tout moment
-                </span>
-              </div>
+              </LockedContentOverlay>
             </div>
           )}
         </>

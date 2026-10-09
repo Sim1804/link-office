@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Book, Plus, Calendar, Tag, Lock, MoreHorizontal, Pencil, Trash, X, Check } from "lucide-react";
+import { Book, Plus, Calendar, Tag, MoreHorizontal, Pencil, Trash, X, Check } from "lucide-react";
+import { LockedContentOverlay } from "@/components/ui/LockedContentOverlay";
 
 export function DashboardJournalTab({ isPremium }: { isPremium: boolean }) {
   const [entries, setEntries] = useState<any[]>([]);
@@ -89,34 +90,22 @@ export function DashboardJournalTab({ isPremium }: { isPremium: boolean }) {
 
   if (!isPremium) {
     return (
-      <div className="mt-2 rounded-3xl border border-[#E3EBE6] overflow-hidden relative bg-white min-h-[340px]">
-        <div className="blur-[6px] opacity-40 p-6 pointer-events-none">
-          <div className="bg-[#FAF9F5] border border-[#E3EBE6] p-5 rounded-2xl mb-4">
-            <h3 className="text-[#123D46] text-lg font-bold mb-4 flex items-center gap-2">
-              <Book size={20} className="text-[#00A99D]" /> Nouvelle note
-            </h3>
-            <div className="w-full h-24 bg-white border border-[#E3EBE6] rounded-xl" />
+      <div className="mt-2">
+        <LockedContentOverlay
+          tier="PREMIUM"
+          title="Mon Journal Relationnel"
+          description="Prenez du recul et notez vos ressentis, petites victoires et réflexions dans votre espace sécurisé."
+          actionLabel="Débloquer avec Premium"
+        >
+          <div className="p-8 w-full">
+            <div className="bg-[#FAF9F5] border border-[#E3EBE6] p-6 rounded-2xl mb-4">
+              <h3 className="text-[#123D46] text-lg font-bold mb-4 flex items-center gap-2">
+                <Book size={20} className="text-[#00A99D]" /> Nouvelle note
+              </h3>
+              <div className="w-full h-36 bg-white border border-[#E3EBE6] rounded-xl" />
+            </div>
           </div>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-white/95" />
-        <div className="absolute bottom-0 left-0 right-0 z-10 p-8 pt-10 text-center flex flex-col items-center space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#FAF9F5] border border-[#E3EBE6] flex items-center justify-center text-2xl">
-            🔒
-          </div>
-          <h4 className="font-jakarta font-extrabold text-xl text-[#123D46]">
-            Journal réservé aux abonnés Premium
-          </h4>
-          <p className="text-xs text-[#123D46]/70 max-w-md font-inter leading-relaxed">
-            Prenez du recul et notez vos ressentis, petites victoires et réflexions dans votre espace sécurisé.
-          </p>
-          <a href="/premium" className="px-6 py-3 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold transition-all shadow-xs flex items-center gap-2">
-            <span>Passer à Premium</span>
-            <span>→</span>
-          </a>
-          <span className="text-[11px] text-[#123D46]/50">
-            ✓ Sans engagement · Résiliable à tout moment
-          </span>
-        </div>
+        </LockedContentOverlay>
       </div>
     );
   }
