@@ -1,0 +1,26 @@
+# .vercelignore
+# Fichiers et dossiers exclus du déploiement Vercel en production
+
+# Tests et scripts d'expérimentation
+tests/
+scratch/
+Documentation/
+docs/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+test-*.js
+test-*.ts
+scratch-*.js
+scratch-*.ts
+trace-*.js
+
+# Fichiers d'environnement locaux
+.env*.local
+.env.vercel*
+.env.linkoffice-prod
+
+# Divers
+*.md
+!README.md
