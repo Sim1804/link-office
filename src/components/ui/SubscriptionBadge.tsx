@@ -251,7 +251,7 @@ export function SubscriptionUpgradeButton({
           ...style,
         }}
       >
-        <Sparkles size={iconSize} className="shrink-0" />
+        <Zap size={iconSize} className="shrink-0" />
         <span>Passer à Premium</span>
         <ArrowRight size={iconSize} className="shrink-0 opacity-80" />
       </Link>

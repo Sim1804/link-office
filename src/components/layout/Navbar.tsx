@@ -32,7 +32,7 @@ import { signOut, useSession } from "next-auth/react";
 import {
   Menu, X, Brain, LayoutDashboard, MessageCircle, User, LogOut,
   ChevronDown, Shield, Building2, HeartPulse, Landmark, BookOpen, Users, BarChart3,
-  Sparkles, Crown, ArrowRight
+  Sparkles, Crown, ArrowRight, Zap
 } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
 import { Logo } from "../brand/Logo";
@@ -239,7 +239,7 @@ export function Navbar() {
                             onClick={() => setIsProfileDropdownOpen(false)}
                             className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-full bg-[#00A99D] hover:bg-[#008f85] text-white text-[11px] font-jakarta font-bold transition-all shadow-2xs"
                           >
-                            <Sparkles size={12} />
+                            <Zap size={12} />
                             <span>Passer à Premium</span>
                             <ArrowRight size={12} className="opacity-80" />
                           </Link>

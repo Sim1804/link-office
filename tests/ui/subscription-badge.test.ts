@@ -95,4 +95,16 @@ describe("SubscriptionBadge & Design System Conformance", () => {
       expect(SIZE_CONFIG.md.iconSize).toBeLessThan(SIZE_CONFIG.lg.iconSize);
     });
   });
+
+  describe("Symétrie 1:1 des Icônes (Badge vs Bouton d'Upgrade)", () => {
+    it("utilise l'icône Zap pour le badge PREMIUM et pour le bouton 'Passer à Premium'", () => {
+      // Le badge Premium a Zap (l'éclair)
+      expect(TIER_CONFIG.PREMIUM.icon.name || TIER_CONFIG.PREMIUM.icon.displayName).toBe("Zap");
+    });
+
+    it("utilise l'icône Crown pour le badge PREMIUM_PLUS et pour le bouton 'Passer à Premium+'", () => {
+      // Le badge Premium+ a Crown (la couronne)
+      expect(TIER_CONFIG.PREMIUM_PLUS.icon.name || TIER_CONFIG.PREMIUM_PLUS.icon.displayName).toBe("Crown");
+    });
+  });
 });
