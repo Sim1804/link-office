@@ -45,7 +45,10 @@ export async function POST(req: Request) {
     const session = await auth();
     if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const body = await req.json();
+    const body = await req.json().catch(() => ({}));
+    if (!body || typeof body !== "object" || !body.gender || !body.ageRange) {
+      return NextResponse.json({ error: "Données démographiques invalides ou manquantes." }, { status: 400 });
+    }
 
     let assessment = await prisma.assessment.findFirst({
       where: { userId: session.user.id },

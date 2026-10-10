@@ -7,16 +7,16 @@ export async function POST(req: Request) {
   const payload = await req.text();
   const signature = req.headers.get("stripe-signature");
 
+  if (!signature) {
+    return new NextResponse("Missing stripe-signature header", { status: 400 });
+  }
+
   let event: Stripe.Event;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
     console.error("Stripe Webhook Error: STRIPE_WEBHOOK_SECRET is not configured");
     return new NextResponse("Webhook secret is not configured", { status: 500 });
-  }
-
-  if (!signature) {
-    return new NextResponse("Missing stripe-signature header", { status: 400 });
   }
 
   try {

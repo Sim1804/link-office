@@ -13,6 +13,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const contentType = req.headers.get("content-type") || "";
+    if (!contentType.includes("multipart/form-data")) {
+      return NextResponse.json({ error: "Content-Type invalide (multipart/form-data requis)" }, { status: 400 });
+    }
+
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
 

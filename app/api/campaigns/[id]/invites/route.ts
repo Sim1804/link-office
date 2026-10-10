@@ -95,7 +95,11 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
       return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
     }
 
-    const { email } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    if (!body?.email || typeof body.email !== "string") {
+      return NextResponse.json({ error: "Email requis pour la suppression" }, { status: 400 });
+    }
+    const email = body.email;
     await prisma.campaignInvite.deleteMany({ where: { campaignId: id, email } });
     return NextResponse.json({ success: true });
   } catch (e) { console.error(e); return NextResponse.json({ error: "Erreur serveur" }, { status: 500 }); }

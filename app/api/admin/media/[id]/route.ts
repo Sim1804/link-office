@@ -19,6 +19,11 @@ export async function DELETE(
       return NextResponse.json({ error: "ID manquant" }, { status: 400 });
     }
 
+    const media = await prisma.mediaContent.findUnique({ where: { id: mediaId } });
+    if (!media) {
+      return NextResponse.json({ error: "Média introuvable" }, { status: 404 });
+    }
+
     // On supprime le média (les relations sont gérées par onDelete: Cascade dans le schéma)
     await prisma.mediaContent.delete({
       where: { id: mediaId },

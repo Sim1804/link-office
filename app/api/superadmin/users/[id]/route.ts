@@ -22,6 +22,11 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
       updateData.campaignId = body.campaignId ? body.campaignId : null;
     }
 
+    const existing = await prisma.user.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ error: "Utilisateur introuvable" }, { status: 404 });
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id },
       data: updateData,
@@ -42,6 +47,11 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
     }
 
     const { id } = await context.params;
+
+    const existing = await prisma.user.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ error: "Utilisateur introuvable" }, { status: 404 });
+    }
 
     await prisma.user.delete({
       where: { id },
