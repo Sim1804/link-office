@@ -40,4 +40,36 @@ describe("Tests de Sécurité IRIS Couche 2 (Cascade LLM) et Streaming (C2 & C3)
     expect(check.sanitizedContent).toContain("médecin traitant");
     expect(check.flaggedTerms).toContain("xanax");
   });
+
+  describe("6. Sécurité IRIS : Repli Fermé (Fail-Closed) — Passe 4", () => {
+    it("oriente vers 3114 et 15 si la Couche 2 est indisponible (clé absente)", async () => {
+      const savedKey = process.env.GROQ_API_KEY;
+      delete process.env.GROQ_API_KEY;
+      try {
+        const res = await evaluateInputSafetyCascaded("Message anodin mais Couche 2 indisponible");
+        expect(res.safe).toBe(false);
+        expect(res.category).toBe("CRISIS");
+        expect(res.failSafe).toBe(true);
+        expect(res.escalationResponse).toContain("3114");
+        expect(res.escalationResponse).toContain("15");
+      } finally {
+        process.env.GROQ_API_KEY = savedKey;
+      }
+    });
+
+    it("oriente vers 3114 et 15 si la Couche 2 renvoie une erreur ou un timeout", async () => {
+      const savedKey = process.env.GROQ_API_KEY;
+      process.env.GROQ_API_KEY = "gsk_invalid_test_key_forcing_401_error";
+      try {
+        const res = await evaluateInputSafetyCascaded("Message à tester sous panne Couche 2");
+        expect(res.safe).toBe(false);
+        expect(res.category).toBe("CRISIS");
+        expect(res.failSafe).toBe(true);
+        expect(res.escalationResponse).toContain("3114");
+        expect(res.escalationResponse).toContain("15");
+      } finally {
+        process.env.GROQ_API_KEY = savedKey;
+      }
+    });
+  });
 });

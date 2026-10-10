@@ -27,6 +27,11 @@ export interface SafetyCheckResult {
   escalationResponse?: string;
   shouldCallLlm: boolean;
   matchedPattern?: string;
+  decisiveLayer?: "LAYER_1_REGEX" | "LAYER_2_LLM" | "LAYER_1_FAILSAFE";
+  confidence?: number;
+  failSafe?: boolean;
+  model?: string;
+  layer2LatencyMs?: number;
 }
 
 export interface OutputSafetyResult {
@@ -166,6 +171,8 @@ export interface ClassificationResult {
   isJailbreak: boolean;
   confidence: number;
   reasoning: string;
+  model?: string;
+  latencyMs?: number;
 }
 
 /**
@@ -192,12 +199,14 @@ Réponds UNIQUEMENT sous forme d'un objet JSON strict :
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 1500);
 
+  const t0 = performance.now();
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
+        "User-Agent": "LinkOffice-IRIS-Safety/1.0",
       },
       body: JSON.stringify({
         model: process.env.IRIS_CLASSIFIER_MODEL || "qwen/qwen3.8-27b",
@@ -218,6 +227,7 @@ Réponds UNIQUEMENT sous forme d'un objet JSON strict :
       throw new Error(`Erreur API Groq ${response.status}: ${await response.text()}`);
     }
 
+    const latencyMs = Math.round(performance.now() - t0);
     const data = await response.json();
     const rawContent = data.choices?.[0]?.message?.content || "{}";
     const parsed = JSON.parse(rawContent);
@@ -228,6 +238,8 @@ Réponds UNIQUEMENT sous forme d'un objet JSON strict :
       isJailbreak: Boolean(parsed.isJailbreak),
       confidence: typeof parsed.confidence === "number" ? parsed.confidence : 0.8,
       reasoning: String(parsed.reasoning || ""),
+      model: data.model || process.env.IRIS_CLASSIFIER_MODEL || "qwen/qwen3.8-27b",
+      latencyMs,
     };
   } catch (error) {
     clearTimeout(timeoutId);
@@ -236,10 +248,12 @@ Réponds UNIQUEMENT sous forme d'un objet JSON strict :
 }
 
 /**
- * Évaluation en cascade à deux couches (Décision C2 Option A) :
+ * Évaluation en cascade à deux couches avec repli fermé (Fail-Closed) :
  * 1. Couche 1 synchrone ultra-rapide par Regex (< 0.1ms).
  * 2. Si non bloqué par la couche 1, Couche 2 par classifieur LLM sémantique.
- * Fail-safe : Si le classifieur hésite (confidence < 0.70 avec signaux) ou en cas de panne LLM, bascule prudente.
+ * Repli fermé strict : Si la Couche 2 est indisponible, en erreur, en timeout,
+ * en HTTP 429, ou si elle renvoie une confiance < 0.70, le système bascule
+ * immédiatement en repli fermé sécuritaire et oriente vers le 3114 / 15 (jamais safe: true par défaut).
  */
 export async function evaluateInputSafetyCascaded(
   content: string,
@@ -247,9 +261,16 @@ export async function evaluateInputSafetyCascaded(
 ): Promise<SafetyCheckResult> {
   // Couche 1 : Filtre Regex immédiat
   const layer1 = evaluateInputSafety(content);
-  if (!layer1.safe && layer1.category === "CRISIS") {
-    // Si la couche 1 détecte une crise avec certitude, escalade immédiate sans latence LLM
-    return layer1;
+  if (!layer1.safe) {
+    // Si la couche 1 détecte une violation (CRISIS, MEDICAL, JAILBREAK, OFF_TOPIC), escalade immédiate sans latence LLM
+    return {
+      ...layer1,
+      decisiveLayer: "LAYER_1_REGEX",
+      confidence: 1.0,
+      failSafe: false,
+      model: "none",
+      layer2LatencyMs: 0,
+    };
   }
 
   // Couche 2 : Validation sémantique par classifieur LLM
@@ -257,46 +278,101 @@ export async function evaluateInputSafetyCascaded(
     try {
       const layer2 = await classifyWithLLM(content);
 
-      // Règle de prudence : si détresse détectée OU doute raisonnable
-      if (layer2.isCrisis || (layer2.confidence < 0.7 && /mort|suicide|souffr|vivre|adieu|finir|crever/i.test(content))) {
+      // Repli fermé : Si crise détectée OU doute / confiance < 0.70
+      if (layer2.isCrisis || layer2.confidence < 0.70) {
         return {
           safe: false,
           category: "CRISIS",
           escalationResponse: safetyConfig.escalationResponses.crisis,
           shouldCallLlm: false,
-          matchedPattern: `LLM_CLASSIFIER_CRISIS: ${layer2.reasoning}`,
+          matchedPattern: layer2.isCrisis
+            ? `LLM_CLASSIFIER_CRISIS: ${layer2.reasoning}`
+            : `FAIL_CLOSED_LOW_CONFIDENCE_${layer2.confidence}: ${layer2.reasoning}`,
+          decisiveLayer: "LAYER_2_LLM",
+          confidence: layer2.confidence,
+          failSafe: layer2.confidence < 0.70,
+          model: layer2.model,
+          layer2LatencyMs: layer2.latencyMs,
         };
       }
 
-      if (layer2.isMedical && layer1.safe) {
+      if (layer2.isMedical) {
         return {
           safe: false,
           category: "MEDICAL",
           escalationResponse: safetyConfig.escalationResponses.medical,
           shouldCallLlm: false,
           matchedPattern: `LLM_CLASSIFIER_MEDICAL: ${layer2.reasoning}`,
+          decisiveLayer: "LAYER_2_LLM",
+          confidence: layer2.confidence,
+          failSafe: false,
+          model: layer2.model,
+          layer2LatencyMs: layer2.latencyMs,
         };
       }
 
-      if (layer2.isJailbreak && layer1.safe) {
+      if (layer2.isJailbreak) {
         return {
           safe: false,
           category: "JAILBREAK",
           escalationResponse: safetyConfig.escalationResponses.jailbreak,
           shouldCallLlm: false,
           matchedPattern: `LLM_CLASSIFIER_JAILBREAK: ${layer2.reasoning}`,
+          decisiveLayer: "LAYER_2_LLM",
+          confidence: layer2.confidence,
+          failSafe: false,
+          model: layer2.model,
+          layer2LatencyMs: layer2.latencyMs,
         };
       }
+
+      // Décision nominale / safe par la Couche 2 (confiance >= 0.70)
+      return {
+        safe: true,
+        shouldCallLlm: true,
+        decisiveLayer: "LAYER_2_LLM",
+        confidence: layer2.confidence,
+        failSafe: false,
+        model: layer2.model,
+        layer2LatencyMs: layer2.latencyMs,
+      };
     } catch (err) {
-      // Mode d'échec explicite (Fail-safe) : Journaliser l'indisponibilité de la couche 2
-      console.warn("[IRIS_SAFETY] Couche 2 (LLM) indisponible ou timeout, repli prudent sur Couche 1:", err);
+      // Repli fermé strict : en cas d'erreur API, timeout, ou 429 sur Couche 2, bascule vers 3114 / 15
+      console.warn(
+        "[IRIS_SAFETY] Couche 2 (LLM) indisponible ou en erreur/timeout/429 — Repli fermé d'urgence vers 3114/15:",
+        err
+      );
       if (userId) {
         await logSecurityEvent(userId, "CRISIS", {
-          matchedPattern: "LAYER2_CLASSIFIER_TIMEOUT_OR_UNAVAILABLE",
+          matchedPattern: "FAIL_CLOSED_LAYER2_ERROR_OR_TIMEOUT",
         }).catch(() => {});
       }
+      return {
+        safe: false,
+        category: "CRISIS",
+        escalationResponse: safetyConfig.escalationResponses.crisis,
+        shouldCallLlm: false,
+        matchedPattern: "FAIL_CLOSED_LAYER2_ERROR_OR_TIMEOUT",
+        decisiveLayer: "LAYER_1_FAILSAFE",
+        confidence: 0.0,
+        failSafe: true,
+        model: "none",
+        layer2LatencyMs: 0,
+      };
     }
   }
 
-  return layer1;
+  // Si GROQ_API_KEY est absente (Couche 2 indisponible) : repli fermé strict d'urgence
+  return {
+    safe: false,
+    category: "CRISIS",
+    escalationResponse: safetyConfig.escalationResponses.crisis,
+    shouldCallLlm: false,
+    matchedPattern: "FAIL_CLOSED_LAYER2_UNAVAILABLE_NO_KEY",
+    decisiveLayer: "LAYER_1_FAILSAFE",
+    confidence: 0.0,
+    failSafe: true,
+    model: "none",
+    layer2LatencyMs: 0,
+  };
 }
