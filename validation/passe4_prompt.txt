@@ -1,0 +1,89 @@
+<USER_REQUEST>
+# PROMPT PASSE 4 — Corriger le harnais de validation puis les défauts réels (Antigravity)
+
+> Contexte : la passe 3 a produit `validation/REPORT.md` et des `result.json`. L'analyse des fichiers bruts a montré que **le harnais lui-même contient des erreurs**, et que `REPORT.md` contient des affirmations que les fichiers bruts ne soutiennent pas. Cette passe corrige d'abord les instruments de mesure, ensuite le produit.
+
+## RÈGLES ABSOLUES (identiques à la passe 3, rappel)
+
+1. Aucun chiffre en dur ni recopié à la main. **`REPORT.md` doit être GÉNÉRÉ par un script à partir des `result.json`** (aucune phrase de verdict écrite à la main).
+2. Aucun seuil assoupli, aucun cas retiré, aucun statut attendu élargi après avoir vu les résultats.
+3. Chaque test garde son test témoin, rejoué à chaque exécution.
+4. Un verdict n'a que quatre valeurs : RESPECTÉ, NON RESPECTÉ, NON CONCLUANT, BLOQUÉ. Si l'instrument de mesure est douteux : NON CONCLUANT.
+5. Ne jamais écrire de cookies de session, jetons ou secrets dans les artefacts (`setup_data`, logs, rapports). Les masquer à l'écriture.
+6. En cas de doute : `validation/BLOCKERS.md`, puis test suivant. Ne comble rien par supposition.
+
+## PARTIE A — Corriger les instruments (avant tout correctif produit)
+
+### A1. T1 : la cascade n'est jamais appelée
+Constat : dans `eval_development_180.json`, les 180 lignes ont `decisiveLayer = LAYER_1_REGEX`, `confidence = 1`, `failSafe = false`, et le champ `model` vaut `qwen/qwen3.8-27b` partout alors qu'aucun modèle n'a été appelé.
+À faire :
+- Faire appeler par le harnais **la même fonction que la route `app/api/iris/conversation/[id]/message`** (pas une fonction regex isolée). Si la couche 2 n'est pas câblée dans cette route, l'écrire dans `BLOCKERS.md` et s'arrêter sur T1.
+- Journaliser par message : couche décisive réelle, catégorie, confiance renvoyée par le classifieur, `failSafe`, latence de la couche 2, **modèle lu dans la réponse du fournisseur** (jamais depuis la configuration).
+- Test d'intégrité : au moins un message du jeu doit être décidé par `LAYER_2` quand la couche 2 est disponible ; sinon NON CONCLUANT.
+- Mode panne : forcer erreur, timeout, 429. Résultat attendu pour le comportement **sûr** : 100 % des messages non captés par la couche 1 reçoivent l'escalade (3114 / 15). Rapporter le comportement actuel tel quel.
+- Rejouer sur le jeu de développement uniquement (pas de jeu gelé disponible).
+
+### A2. T2 : `result.json` contredit `raw/k6-summary.json`
+Constat : `result.json` affiche `measuredMs: 0` (P95 questionnaire, TTFT) et `measuredRate: 0` avec `passed: true`, et `k6SuccessCount: 0`. Le résumé k6 donne : P95 `questionnaire_submission_duration` ≈ 3 877 ms, P95 `iris_time_to_first_token` ≈ 45 343 ms, taux de statuts inattendus ≈ 1,08 %, 456 soumissions réussies.
+À faire :
+- Faire lire les critères **directement dans `k6-summary.json`** ; un champ introuvable doit lever une erreur, jamais valoir 0.
+- Toute valeur `0` non justifiée par une mesure déclenche NON CONCLUANT.
+- Expliquer l'écart base/k6 : +200 lignes en base pour 456 succès comptés.
+
+### A3. T2 : conception de la charge
+- Semer au moins 500 comptes sur les 4 segments et les utiliser réellement (seulement 20 sessions `b2b.user.1..20` figurent dans `setup_data`).
+- Le scénario « lecture » accepte 403 (« 200 or 403 ») : le remplacer par un endpoint que l'utilisateur de test a le droit de lire (200 exigé seul). Un 403 n'est pas un succès de lecture.
+- Le scénario IRIS doit utiliser le **stub à latence fixe** pour mesurer la plateforme ; le vrai modèle dans un run séparé, petit et étiqueté. Le quota de 5 messages par jour fait que 20 comptes produisent surtout des 402 : prévoir assez de comptes.
+- Un timeout (statut 0 ou 60 s) est un statut inattendu.
+- Si possible, lancer k6 depuis une autre machine ; sinon le noter dans `env.json`.
+- Supprimer `setup_data` (cookies) des fichiers de sortie.
+
+### A4. T4 : classification des écarts
+Constat : `result.json` annonce « 56 cellules interdites avec 200 ». Le fichier brut montre : 642 cellules, 265 écarts, dont 156 réponses 5xx, 58 « attendu 2xx, reçu 4xx », 19 « 401 attendu, 403 reçu », 21 autres et **11 cellules interdites avec 2xx**.
+À faire :
+- Classer chaque écart dans une catégorie fermée : (1) interdit mais 2xx ; (2) 5xx ; (3) 401/403 interchangeables ; (4) entrée de test invalide ; (5) spécification manquante.
+- Pour les routes qui dérivent l'organisation de la session (`/api/actions`, `/api/actions/export`, `/api/b2b/invite`, `/api/b2b/organization`, `/api/b2b/stats`, `/api/b2b2c/orientation`), un admin d'une autre organisation qui reçoit 200 reçoit **ses propres données** : ce n'est pas une fuite. Le test doit, pour ces routes, vérifier que le **corps** ne contient aucune donnée de l'organisation A (comparaison des identifiants), plutôt que le seul statut.
+- Pour chaque cellule « 2xx interdite », enregistrer le corps (taille, type, identifiants contenus) et trancher : fuite réelle ou attendu erroné.
+- Corriger la spécification pour `/api/iris/conversation/active` (6 cellules `UNSPECIFIED`) après décision humaine.
+- Rejouer sans suivre les redirections (`redirect: manual`).
+
+### A5. REPORT.md
+- Le générer depuis les `result.json` et `raw/`. Y inclure le nombre de cellules, la répartition des écarts par catégorie et, pour chaque défaut, le fichier et la ligne de preuve.
+- Retirer toute affirmation de la forme « 100 % des témoins ont échoué comme attendu » qui ne soit pas recalculée.
+
+## PARTIE B — Corriger le produit (un commit par défaut, annoncé avant correction)
+
+Ordre de priorité :
+
+1. **Sécurité IRIS : repli fermé.** Si la couche 2 est indisponible, en erreur, en timeout, en 429, ou renvoie une confiance < 0,70, la réponse doit pointer vers le 3114 / 15 (jamais `safe: true` par défaut). Ajouter les tests unitaires correspondants et rejouer A1.
+2. **Cinq accès verticaux à confirmer puis corriger si réels** : `EMPLOYEE` sur `GET /api/b2b/organization` et `GET /api/campaigns/[id]` ; `EMPLOYEE` sur `GET /api/ordonnances/[userId]` et `GET /api/resultats/[userId]` (vérifier d'abord si `userId` est celui de l'appelant) ; `ORG_ADMIN` sur `GET /api/campaigns/[id]/config` (la spécification dit super-administrateur seul : trancher spécification contre code).
+3. **157 réponses 500** sur des appels d'écriture (138 POST, 9 PUT, 6 PATCH, 4 DELETE) avec des corps de test : valider les entrées (Zod) et répondre 400. Un 500 ne prouve pas que l'accès est refusé : rejouer la matrice après correction.
+4. **Dépendances** : mettre Next.js à jour, relancer `npm audit --omit=dev`, trier chaque alerte (directe ou transitive, atteignable en production ou seulement à la compilation). Ne pas écrire qu'un avis « Windows » est sans effet sans l'avoir vérifié sur l'avis.
+5. **T10** : lister les tables par génération automatique depuis le schéma Prisma (le JSON n'en contient que 20 alors que le rapport en annonce 57) ; ajouter un vrai scan de l'historique git (gitleaks) archivé dans `raw/` ; vérifier le drapeau `Secure` du **jeton de session** sur HTTPS en préproduction.
+6. **T3** : relancer quand le quota fournisseur le permet ; ne rapporter aucun coût sans jetons mesurés ; nommer le modèle renvoyé par le fournisseur.
+
+## PARTIE C — Livrables
+
+- `validation/REPORT.md` généré, avec la répartition des écarts T4, les verdicts à quatre valeurs et la liste des tests NON CONCLUANT avec la raison.
+- `validation/CHANGELOG-instruments.md` : pour chaque correction du harnais, le défaut, le correctif, la preuve (un test qui échouait avant et réussit après).
+- Après chaque étape : la commande exécutée, sa durée et son code de sortie.
+
+## DÉCISIONS QUI ME REVIENNENT
+
+- Spécification des rôles pour les cellules ambiguës (`/api/iris/conversation/active`, `ordonnances`, `resultats`, `campaigns/[id]/config`).
+- Écriture du jeu gelé de T1 (clinicien).
+- Machine de charge et quota du fournisseur LLM.
+
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-10T16:01:25+02:00.
+
+The user's current state is as follows:
+Active Document: d:\Projects\link-office\Documentation\Thesis\THESIS_EXACT_REPLACEMENTS_DIFF.md (LANGUAGE_MARKDOWN)
+Cursor is on line: 1
+Other open documents:
+- d:\Projects\link-office\Documentation\Thesis\THESIS_EXACT_REPLACEMENTS_DIFF.md (LANGUAGE_MARKDOWN)
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from Gemini 3.8 Flash (High) to Claude Opus 4.6 (Thinking). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>

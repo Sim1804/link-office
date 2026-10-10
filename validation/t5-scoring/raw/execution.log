@@ -1,0 +1,14 @@
+[2026-10-09T13:45:32.057Z] === Démarrage du Banc T5 : Scoring et Renormalisation ===
+[2026-10-09T13:45:32.058Z] Exécution des tests de propriété fast-check (numRuns: 1000)...
+[2026-10-09T13:45:32.086Z] ✓ Propriété 1 (Bornes [0, 100]) validée sur 1000 vecteurs.
+[2026-10-09T13:45:32.103Z] ✓ Propriété 2 (Monotonie réponses -> scores) validée sur 1000 vecteurs.
+[2026-10-09T13:45:32.132Z] ✓ Propriété 3 (Indépendance IQRH / ICR) validée sur 1000 vecteurs.
+[2026-10-09T13:45:32.148Z] ✓ Propriété 4 (Partition exacte des 12 profils) validée sur 1000 vecteurs.
+[2026-10-09T13:45:32.150Z] ✓ Propriété 5 (Renormalisation ICR : 0->0, 85->100, monotonie) validée sur 1000 paires.
+[2026-10-09T13:45:32.150Z] Validation des cas fixes de la spécification...
+[2026-10-09T13:45:32.150Z] Cas fixes validés : TOUS CONFORMES
+[2026-10-09T13:45:32.150Z] Évaluation sur les données persistées de la base PostgreSQL...
+[2026-10-09T13:45:32.319Z] Base de données analysée : 79 évaluations.
+[2026-10-09T13:45:32.319Z] Évaluations dont la bande change suite à la renormalisation : 0 / 79
+[2026-10-09T13:45:32.320Z] Exécution du test témoin : injection d'une fonction de scoring erronée...
+[2026-10-09T13:45:32.325Z] ✓ Témoin réussi : la fonction erronée a fait échouer la propriété comme attendu.

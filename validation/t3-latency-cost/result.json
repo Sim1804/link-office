@@ -1,0 +1,35 @@
+{
+  "test": "T3-latency-cost",
+  "status": "BLOQUÉ",
+  "reason": "Fournisseur d'inférence Groq plafonné à 1 000 jetons de sortie par minute (OTPM) sur le tier gratuit on_demand, déclenchant des erreurs systématiques HTTP 429 lors de la collecte séquentielle.",
+  "timestamp": "2026-10-09T14:19:30.000Z",
+  "modelDiscrepancy": {
+    "hasDiscrepancy": true,
+    "configuredModel": "qwen/qwen3.8-27b",
+    "documentedModel": "llama-3.3-70b-versatile",
+    "returnedModel": "qwen/qwen3.8-27b",
+    "alert": "Le modèle d'exécution physique réel (qwen/qwen3.8-27b) diverge du modèle mentionné dans les spécifications (llama-3.3-70b-versatile)."
+  },
+  "quotaConstraints": {
+    "provider": "Groq",
+    "serviceTier": "on_demand",
+    "limitOtpm": 1000,
+    "requestedTokensPerCall": 800,
+    "observedError": "Rate limit reached for model qwen/qwen3.8-27b ... on output tokens per minute (OTPM): Limit 1000, Used 969, Requested 800. Please try again in 46.14s."
+  },
+  "sample": {
+    "targetCalls": 200,
+    "measuredCallsCompleted": 0,
+    "warmupAttempted": 5,
+    "blockerLogged": true
+  },
+  "costMetrics": {
+    "pricingSource": {
+      "url": "https://groq.com/pricing",
+      "consultationDate": "2026-10-09"
+    },
+    "tokensMeasured": false,
+    "costReported": null,
+    "costEvaluation": "NON CONCLUANT : Aucun coût rapporté sans jetons mesurés directement depuis le fournisseur LLM, conformément à la règle B6."
+  }
+}

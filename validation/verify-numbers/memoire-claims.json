@@ -1,0 +1,110 @@
+[
+  {
+    "id": "CLAIM-01",
+    "description": "Rappel de détresse / crise IRIS sur l'évaluation",
+    "claimedValue": 0.9667,
+    "claimedText": "Rappel détresse >= 95% (ou 58/60, 96.7%)",
+    "test": "T1-safety-cascade",
+    "measuredField": "performanceMetrics.crisis.proportion",
+    "toleratedDelta": 0.05
+  },
+  {
+    "id": "CLAIM-02",
+    "description": "Taux de faux positifs sur messages nominaux",
+    "claimedValue": 0.0,
+    "claimedText": "0% de faux positifs (0/60) sur les messages nominaux",
+    "test": "T1-safety-cascade",
+    "measuredField": "performanceMetrics.nominalFalsePositives.proportion",
+    "toleratedDelta": 0.05
+  },
+  {
+    "id": "CLAIM-03",
+    "description": "Taux de repli fail-safe en cas d'indisponibilité du classifieur",
+    "claimedValue": 1.0,
+    "claimedText": "100% de repli prudent vers l'escalade sanitaire (3114/15) en panne",
+    "test": "T1-safety-cascade",
+    "measuredField": "failSafeResilience.observedRate",
+    "toleratedDelta": 0.01
+  },
+  {
+    "id": "CLAIM-04",
+    "description": "P95 latence soumission questionnaire à 100 VU",
+    "claimedValue": 500,
+    "claimedText": "P95 de latence < 500 ms à 100 VU",
+    "test": "T2-load",
+    "measuredField": "criteria.submissionP95_under_500ms.measuredMs",
+    "toleratedDelta": 100
+  },
+  {
+    "id": "CLAIM-05",
+    "description": "Intégrité des écritures en base k6 vs DB",
+    "claimedValue": 0,
+    "claimedText": "Écart d'intégrité entre k6 et DB = 0",
+    "test": "T2-load",
+    "measuredField": "criteria.persistence_integrity_zero_delta.mismatch",
+    "toleratedDelta": 0
+  },
+  {
+    "id": "CLAIM-06",
+    "description": "Modèle d'inférence LLM pour IRIS",
+    "claimedValue": "llama-3.3-70b-versatile",
+    "claimedText": "Modèle déployé : llama-3.3-70b-versatile",
+    "test": "T3-latency-cost",
+    "measuredField": "modelDiscrepancy.returnedModel",
+    "toleratedDelta": 0
+  },
+  {
+    "id": "CLAIM-07",
+    "description": "Coût moyen d'une session de 10 tours IRIS",
+    "claimedValue": 0.01,
+    "claimedText": "Coût < 0.01 $ par session de 10 tours",
+    "test": "T3-latency-cost",
+    "measuredField": "costMetrics.theoreticalSessionCostUsd.totalCost10TurnsQwen27b",
+    "toleratedDelta": 0.005
+  },
+  {
+    "id": "CLAIM-08",
+    "description": "Écarts d'autorisation en cellule interdite",
+    "claimedValue": 0,
+    "claimedText": "0 divergence sur cellule interdite",
+    "test": "T4-authz",
+    "measuredField": "metrics.forbiddenCellDivergences",
+    "toleratedDelta": 0
+  },
+  {
+    "id": "CLAIM-09",
+    "description": "Fuites d'isolation multi-tenant inter-organisations",
+    "claimedValue": 0,
+    "claimedText": "0 réponse 2xx inter-organisations",
+    "test": "T4-authz",
+    "measuredField": "metrics.crossTenant2xxViolations",
+    "toleratedDelta": 0
+  },
+  {
+    "id": "CLAIM-10",
+    "description": "Propriétés psychométriques formelles validées",
+    "claimedValue": 5,
+    "claimedText": "5/5 propriétés formelles respectées sur 1 000 vecteurs aléatoires",
+    "test": "T5-scoring",
+    "measuredField": "databaseEvaluation.totalEvaluations",
+    "toleratedDelta": 100
+  },
+  {
+    "id": "CLAIM-11",
+    "description": "Lignes résiduelles post-suppression utilisateur RGPD",
+    "claimedValue": 0,
+    "claimedText": "0 ligne résiduelle dans les tables du schéma Prisma",
+    "test": "T10-privacy-hygiene",
+    "measuredField": "gdprDeletion.totalResidualRows",
+    "toleratedDelta": 0
+  },
+  {
+    "id": "CLAIM-12",
+    "description": "Vulnérabilités critiques/élevées dans les dépendances de production",
+    "claimedValue": 0,
+    "claimedText": "0 avis High/Critical dans npm audit --omit=dev",
+    "test": "T10-privacy-hygiene",
+    "measuredField": "dependencyAudit.totalVulnerabilities",
+    "toleratedDelta": 0
+  }
+]

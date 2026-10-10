@@ -1,0 +1,84 @@
+{
+  "test": "T4-authz-matrix",
+  "status": "NON RESPECTÉ",
+  "timestamp": "2026-10-10T15:09:41.379Z",
+  "durationMs": 38631,
+  "totalCells": 642,
+  "passedCells": 425,
+  "divergenceBreakdown": {
+    "forbiddenBut2xx": 6,
+    "error5xx": 0,
+    "interchange401_403": 27,
+    "invalidTestInput": 184,
+    "unspecified": 0,
+    "totalDivergences": 217
+  },
+  "forbidden2xxDetails": [
+    {
+      "endpoint": "/api/actions",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 2,
+      "bodyContainsOrgA": false,
+      "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
+      "snippet": "[]"
+    },
+    {
+      "endpoint": "/api/actions/export",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 73,
+      "bodyContainsOrgA": false,
+      "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
+      "snippet": "Titre,Description,Statut,Priorité,Pilote,Date d'échéance,Campagne,Créé le"
+    },
+    {
+      "endpoint": "/api/b2b/invite",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 3200,
+      "bodyContainsOrgA": false,
+      "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
+      "snippet": "{\"organizationName\":\"Avenir Santé Mutuelle\",\"codeAccess\":\"AVENIR-MUTU-2026\",\"inviteUrl\":\"http://localhost:3000/join/AVENIR-MUTU-2026\",\"qrCode\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCA..."
+    },
+    {
+      "endpoint": "/api/b2b/organization",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 1017,
+      "bodyContainsOrgA": false,
+      "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
+      "snippet": "{\"id\":\"cmuyj281v0001v6h87ao4uo9f\",\"name\":\"Avenir Santé Mutuelle\",\"type\":\"B2B2C\",\"siren\":\"429103948\",\"domainName\":\"avenirsante-mutuelle.fr\",\"codeAccess\":\"AVENIR-MUTU-2026\",\"logoUrl\":null,\"contactName\":..."
+    },
+    {
+      "endpoint": "/api/b2b/stats",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 2548,
+      "bodyContainsOrgA": false,
+      "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
+      "snippet": "{\"anonymityBlocked\":false,\"respondentCount\":14,\"registeredUsersCount\":140,\"threshold\":5,\"subscriptionStatus\":\"ACTIVE\",\"organization\":{\"id\":\"cmuyj281v0001v6h87ao4uo9f\",\"name\":\"Avenir Santé Mutuelle\",\"t..."
+    },
+    {
+      "endpoint": "/api/b2b2c/orientation",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 114,
+      "bodyContainsOrgA": false,
+      "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
+      "snippet": "{\"hasResults\":true,\"recommendations\":[],\"scores\":{\"social\":67,\"affective\":83,\"professional\":58,\"self\":92,\"icr\":0}}"
+    }
+  ],
+  "differentialPrivacy": {
+    "secondarySuppressionMaskedCount": 2,
+    "kAnonymityStrict": true,
+    "individualValuesDerivable": 0,
+    "passed": true
+  }
+}
