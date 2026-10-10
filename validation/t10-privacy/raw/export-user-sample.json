@@ -1,0 +1,240 @@
+{
+  "id": "cmv2ivcuz0000v69kl3t164ru",
+  "email": "gdpr.audit.1791644490785@linkoffice.fr",
+  "firstName": "Jean",
+  "lastName": "RGPD",
+  "createdAt": "2026-10-10T15:01:30.971Z",
+  "organizationId": null,
+  "campaignId": null,
+  "password": "$2a$10$gR7lY2iKAz5MzLruAuDSSOicfJzYznqnvHO4uH4OaceVDXW8wvEjK",
+  "points": 120,
+  "role": "EMPLOYEE",
+  "newsletterOptIn": false,
+  "subscription": "PREMIUM",
+  "matchingOptIn": true,
+  "mustChangePassword": false,
+  "twoFactorSecret": null,
+  "isTwoFactorEnabled": false,
+  "emailVerified": null,
+  "irisUsageCount": 0,
+  "lastIrisUsage": null,
+  "assessments": [
+    {
+      "id": "cmv2ivcvi0002v69k4d3hfgvm",
+      "userId": "cmv2ivcuz0000v69kl3t164ru",
+      "status": "SUBMITTED",
+      "consentInformation": true,
+      "consentResearch": true,
+      "consentParticipation": true,
+      "startedAt": "2026-10-10T15:01:30.989Z",
+      "submittedAt": "2026-10-10T15:01:30.987Z",
+      "updatedAt": "2026-10-10T15:01:30.989Z",
+      "campaignId": null,
+      "questionnaireConfigSnapshot": null,
+      "demographic": {
+        "id": "cmv2ivcvt0004v69k9xkzm4xu",
+        "assessmentId": "cmv2ivcvi0002v69k4d3hfgvm",
+        "gender": "HOMME",
+        "ageRange": "30_39",
+        "country": "FR",
+        "department": null,
+        "occupation": "INGENIEUR",
+        "organizationSize": null,
+        "relationshipStatus": "EN_COUPLE",
+        "children": false,
+        "childrenCount": null,
+        "livingSituation": "APPARTEMENT",
+        "livingSituationOther": null,
+        "selectedSituations": [],
+        "primarySituation": null
+      },
+      "result": {
+        "id": "cmv2ivcw30006v69ksbgwi0lj",
+        "assessmentId": "cmv2ivcvi0002v69k4d3hfgvm",
+        "globalScore": 78.5,
+        "socialScore": 80,
+        "affectiveScore": 75,
+        "sentimentalScore": 82,
+        "professionalScore": 70,
+        "selfScore": 85,
+        "weather": "BEAU_FIXE",
+        "balanceIndex": 88,
+        "priorityDimension": "PROFESSIONAL",
+        "strengths": [
+          "Écoute",
+          "Stabilité"
+        ],
+        "watchpoints": [
+          "Délégation"
+        ],
+        "primaryProfile": "Pilier",
+        "secondaryProfile": "Connecteur",
+        "profileSummary": "Profil solide et équilibré",
+        "createdAt": "2026-10-10T15:01:31.012Z",
+        "bestDimension": "SOCIAL",
+        "secondBestDimension": "SOCIAL",
+        "thirdBestDimension": "SOCIAL",
+        "weakDimension": "SOCIAL",
+        "weatherText": "",
+        "weatherTitle": "",
+        "balanceInterpretation": "",
+        "balanceLevel": "",
+        "weatherIcon": "",
+        "weatherTextPremium": "",
+        "weatherTitleFull": "",
+        "dimensionDetails": [],
+        "balanceInterpretationPremium": "",
+        "radarSummary": "",
+        "strengthDetails": [],
+        "watchpointDetails": [],
+        "globalScoreText": "",
+        "globalScoreTextPremium": "",
+        "icr": {
+          "id": "cmv2ivcwf0008v69kcl609f9k",
+          "iqrhResultId": "cmv2ivcw30006v69ksbgwi0lj",
+          "score": 42,
+          "familyComplexity": 10,
+          "professionalComplexity": 15,
+          "lifeTransitions": 5,
+          "relationalLoad": 8,
+          "protectiveResources": 12,
+          "level": "MODERATE",
+          "interpretation": "Complexité modérée",
+          "riskFactors": [],
+          "protectiveFactors": [],
+          "resources": [],
+          "vulnerabilities": [],
+          "barriers": [],
+          "levers": [],
+          "dominantNeeds": [
+            "Reconnaissance"
+          ],
+          "interpretationPremium": "",
+          "vulnerabilityDetails": [],
+          "dominantNeedDetails": [],
+          "moduleDetails": [],
+          "rawScore": null,
+          "icrScaleVersion": "v2_normalized"
+        },
+        "profile": {
+          "id": "cmv2ivcwp000av69k1dtr9740",
+          "iqrhResultId": "cmv2ivcw30006v69ksbgwi0lj",
+          "primaryName": "Pilier",
+          "secondaryName": "Connecteur",
+          "primaryScore": 85,
+          "secondaryScore": 75,
+          "primaryConfidence": 90,
+          "secondaryConfidence": 80,
+          "signature": "SIG-TEST-RGPD",
+          "scores": {},
+          "irisContext": {}
+        }
+      },
+      "answers": []
+    }
+  ],
+  "prescriptions": [
+    {
+      "id": "cmv2ivcwy000cv69k3u7nkm6z",
+      "userId": "cmv2ivcuz0000v69kl3t164ru",
+      "iqrhResultId": "cmv2ivcw30006v69ksbgwi0lj",
+      "title": "Ordonnance Relationnelle",
+      "summary": "Synthèse personnalisée",
+      "priorityDimension": "PROFESSIONAL",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-10T15:01:31.042Z",
+      "updatedAt": "2026-10-10T15:01:31.042Z",
+      "items": []
+    }
+  ],
+  "irisConversations": [
+    {
+      "id": "cmv2ivcxb000ev69kvx8dczbo",
+      "userId": "cmv2ivcuz0000v69kl3t164ru",
+      "title": "Session Coaching RGPD",
+      "createdAt": "2026-10-10T15:01:31.056Z",
+      "updatedAt": "2026-10-10T15:01:31.056Z",
+      "messages": [
+        {
+          "id": "cmv2ivcxi000gv69k2qc53hub",
+          "conversationId": "cmv2ivcxb000ev69kvx8dczbo",
+          "role": "user",
+          "content": "Message de test pour validation RGPD",
+          "createdAt": "2026-10-10T15:01:31.062Z"
+        },
+        {
+          "id": "cmv2ivcxr000iv69knij4idyw",
+          "conversationId": "cmv2ivcxb000ev69kvx8dczbo",
+          "role": "assistant",
+          "content": "Réponse de test conservée",
+          "createdAt": "2026-10-10T15:01:31.071Z"
+        }
+      ]
+    }
+  ],
+  "journalEntries": [
+    {
+      "id": "cmv2ivcxv000kv69ko87kh4lo",
+      "userId": "cmv2ivcuz0000v69kl3t164ru",
+      "date": "2026-10-10T15:01:31.075Z",
+      "content": "Entrée de journal confidentielle pour test effacement",
+      "dimension": "PROFESSIONAL",
+      "lifeEventId": null,
+      "promptUsed": null
+    }
+  ],
+  "meteoCheckins": [
+    {
+      "id": "cmv2ivcy0000mv69kn14e6i5e",
+      "userId": "cmv2ivcuz0000v69kl3t164ru",
+      "date": "2026-10-10T15:01:31.080Z",
+      "weather": "TRES_BIEN",
+      "factors": [
+        "travail"
+      ],
+      "note": "Note météo relationnelle"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "cmv2ivcy7000ov69kgqtbs756",
+      "userId": "cmv2ivcuz0000v69kl3t164ru",
+      "type": "NEW_PRESCRIPTION",
+      "title": "Notification de bienvenue",
+      "message": "Votre bilan est disponible",
+      "actionLink": null,
+      "status": "UNREAD",
+      "createdAt": "2026-10-10T15:01:31.087Z"
+    }
+  ],
+  "stats": {
+    "userId": "cmv2ivcuz0000v69kl3t164ru",
+    "totalPoints": 100,
+    "weeklyPoints": 20,
+    "monthlyPoints": 50,
+    "currentLevel": 2,
+    "lastUpdated": "2026-10-10T15:01:31.094Z"
+  },
+  "binomePreference": {
+    "id": "cmv2ivcyj000qv69kihy5p80k",
+    "userId": "cmv2ivcuz0000v69kl3t164ru",
+    "optIn": true,
+    "availability": [
+      "midi"
+    ],
+    "communicationMode": [
+      "messages"
+    ],
+    "preferredFrequency": "reguliere",
+    "agePreference": "indifferent",
+    "genderPreference": "indifferent",
+    "geographicalPreference": "indifferente",
+    "expectations": [
+      "partage"
+    ],
+    "consentDate": null,
+    "charterVersion": null,
+    "createdAt": "2026-10-10T15:01:31.100Z",
+    "updatedAt": "2026-10-10T15:01:31.100Z"
+  }
+}
