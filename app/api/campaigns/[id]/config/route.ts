@@ -3,6 +3,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
 
+const ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
+
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const params = await context.params;
   try {
@@ -11,7 +13,6 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
-    const ALLOWED_ROLES = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE", "SUPER_ADMIN"];
     if (!ALLOWED_ROLES.includes(session.user.role ?? "")) {
       return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
     }
@@ -65,8 +66,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
     }
 
-    const data = await request.json();
-    
+    const data = await request.json().catch(() => null);
+    if (!data || typeof data !== "object") {
+      return NextResponse.json({ error: "Corps de requête invalide" }, { status: 400 });
+    }
+
     const updateData: any = {};
     if (data.questionnaireConfig !== undefined) {
       updateData.questionnaireConfig = data.questionnaireConfig;
