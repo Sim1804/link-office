@@ -14,7 +14,14 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
     "seed:badges": "tsx prisma/seed-badges.ts",
-    "seed:media": "tsx prisma/seed-media.ts"
+    "seed:media": "tsx prisma/seed-media.ts",
+    "validate:t1": "tsx validation/t1-safety/run.ts",
+    "validate:t2": "tsx validation/t2-load/run.ts",
+    "validate:t3": "tsx validation/t3-latency-cost/run.ts",
+    "validate:t4": "tsx validation/t4-authz/run.ts",
+    "validate:t5": "tsx validation/t5-scoring/run.ts",
+    "validate:t10": "tsx validation/t10-privacy/run.ts",
+    "validate:all": "tsx validation/run-all.ts"
   },
   "dependencies": {
     "@ai-sdk/groq": "^4.0.12",
@@ -32,7 +39,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "lucide-react": "^0.468.0",
-    "next": "^15.5.9",
+    "next": "^15.5.27",
     "next-auth": "^5.0.0-beta.31",
     "otplib": "^13.5.0",
     "papaparse": "^5.7.0",
