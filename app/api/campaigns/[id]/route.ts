@@ -20,6 +20,9 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       },
     });
     if (!campaign) return NextResponse.json({ error: "Campagne introuvable" }, { status: 404 });
+    if (!["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "SUPER_ADMIN"].includes(session.user.role ?? "")) {
+      return NextResponse.json({ error: "Accès réservé aux administrateurs" }, { status: 403 });
+    }
     if (campaign.organizationId !== user?.organizationId && session.user.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Acces refuse" }, { status: 403 });
     }

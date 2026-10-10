@@ -53,6 +53,10 @@ export async function GET() {
     return NextResponse.json({ error: "Aucune organisation associée." }, { status: 404 });
   }
 
+  if (!ADMIN_ROLES.includes(user.role)) {
+    return NextResponse.json({ error: "Accès réservé aux administrateurs." }, { status: 403 });
+  }
+
   const org = await prisma.organization.findUnique({
     where: { id: user.organizationId },
     include: {

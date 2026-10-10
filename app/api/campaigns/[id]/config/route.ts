@@ -57,6 +57,10 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (!existingCampaign) {
       return NextResponse.json({ error: "Campagne introuvable" }, { status: 404 });
     }
+    if (!ALLOWED_ROLES.includes(session.user.role ?? "")) {
+      return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
+    }
+
     if (existingCampaign.organizationId !== user?.organizationId && session.user.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Droits insuffisants" }, { status: 403 });
     }
