@@ -1,0 +1,1192 @@
+[
+  {
+    "endpoint": "/api/actions",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/actions",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/actions",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/actions",
+    "method": "POST",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/actions/[id]",
+    "method": "DELETE",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/actions/[id]",
+    "method": "DELETE",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/actions/[id]",
+    "method": "PATCH",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/actions/[id]",
+    "method": "PATCH",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/actions/export",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/export/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/actions/export",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/export/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/actions/suggest",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/suggest/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/actions/suggest",
+    "method": "POST",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/actions/suggest/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/admin/leads/[id]/convert",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/admin/leads/[id]/convert/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès au rôle SUPER_ADMIN strict dans son handler, rejetant ORG_ADMIN et CROSS_ADMIN en 403."
+  },
+  {
+    "endpoint": "/api/admin/leads/[id]/convert",
+    "method": "POST",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/admin/leads/[id]/convert/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès au rôle SUPER_ADMIN strict dans son handler, rejetant ORG_ADMIN et CROSS_ADMIN en 403."
+  },
+  {
+    "endpoint": "/api/assessment/[id]/prescription",
+    "method": "GET",
+    "role": "ANONYMOUS",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "401",
+    "filePath": "app/api/assessment/[id]/prescription/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/assessment/[id]/prescription",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "403",
+    "filePath": "app/api/assessment/[id]/prescription/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Un utilisateur B2C n'a pas d'organisationId ni de rôle d'entreprise, la garde de tenant rejette en 403."
+  },
+  {
+    "endpoint": "/api/assessment/[id]/prescription",
+    "method": "GET",
+    "role": "EMPLOYEE",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "2xx",
+    "filePath": "app/api/assessment/[id]/prescription/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/assessment/[id]/prescription",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "403",
+    "filePath": "app/api/assessment/[id]/prescription/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/assessment/[id]/prescription",
+    "method": "GET",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/assessment/[id]/prescription/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/assessment/[id]/prescription",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "2xx",
+    "filePath": "app/api/assessment/[id]/prescription/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/b2b/barometre",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/barometre/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès à ADMIN_B2B et SUPER_ADMIN rattaché, rejetant EMPLOYEE en 403."
+  },
+  {
+    "endpoint": "/api/b2b/barometre",
+    "method": "GET",
+    "role": "EMPLOYEE",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/b2b/barometre/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès à ADMIN_B2B et SUPER_ADMIN rattaché, rejetant EMPLOYEE en 403."
+  },
+  {
+    "endpoint": "/api/b2b/barometre",
+    "method": "GET",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/b2b/barometre/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès à ADMIN_B2B et SUPER_ADMIN rattaché, rejetant EMPLOYEE en 403."
+  },
+  {
+    "endpoint": "/api/b2b/barometre",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/barometre/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès à ADMIN_B2B et SUPER_ADMIN rattaché, rejetant EMPLOYEE en 403."
+  },
+  {
+    "endpoint": "/api/b2b/invite",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/invite/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/b2b/invite",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/invite/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/b2b/organization",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/organization/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/b2b/organization",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/organization/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/b2b/organization",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/organization/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/b2b/organization",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/b2b/organization/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/b2b/organization",
+    "method": "POST",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/organization/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/b2b/organization",
+    "method": "PUT",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/organization/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/b2b/organization",
+    "method": "PUT",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/organization/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/b2b/stats",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/stats/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/b2b/stats",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b/stats/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/b2b2c/orientation",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b2c/orientation/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/b2b2c/orientation",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2b2c/orientation/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/b2g/stats",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2g/stats/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/b2g/stats",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/b2g/stats/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/checkin",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/binome/[id]/checkin/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/checkin",
+    "method": "GET",
+    "role": "EMPLOYEE",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/[id]/checkin/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/checkin",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/[id]/checkin/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/checkin",
+    "method": "GET",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/[id]/checkin/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/checkin",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/binome/[id]/checkin/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/checkin",
+    "method": "POST",
+    "role": "EMPLOYEE",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/[id]/checkin/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/checkin",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/[id]/checkin/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/checkin",
+    "method": "POST",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/[id]/checkin/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/feedback",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/binome/[id]/feedback/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/feedback",
+    "method": "POST",
+    "role": "EMPLOYEE",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/[id]/feedback/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/feedback",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/[id]/feedback/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/[id]/feedback",
+    "method": "POST",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/[id]/feedback/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route vérifie que l'utilisateur est membre actif du binome (userAId ou userBId) et rejette les tiers en 403."
+  },
+  {
+    "endpoint": "/api/binome/invite",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/invite/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/binome/preferences",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/preferences/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/binome/preferences",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/preferences/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/binome/respond",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/respond/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/binome/settings",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/settings/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/binome/status",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/status/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/binome/status",
+    "method": "GET",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/status/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/binome/suggest",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/binome/suggest/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]",
+    "method": "PATCH",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]",
+    "method": "PATCH",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/config",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/config/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/config",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/config/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/config",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/config/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/config",
+    "method": "POST",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/config/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/export",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/export/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/export",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/export/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/participation",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/participation/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/participation",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/participation/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/renew",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/renew/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/renew",
+    "method": "POST",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/renew/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/stats",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/stats/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/stats",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/stats/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/variables",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/variables/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/variables",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/variables/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/variables",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "403",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/variables/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/campaigns/[id]/variables",
+    "method": "POST",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403_OR_404",
+    "filePath": "app/api/campaigns/[id]/variables/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le handler exige `session.user.organizationId` pour cloisonner l'accès tenant ; un SUPER_ADMIN sans organisation en session reçoit 403."
+  },
+  {
+    "endpoint": "/api/cron/binome",
+    "method": "GET",
+    "role": "ANONYMOUS",
+    "expectedBefore": "401_OR_403",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/binome/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/binome",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/binome/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/binome",
+    "method": "GET",
+    "role": "EMPLOYEE",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/binome/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/binome",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/binome/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/binome",
+    "method": "GET",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/binome/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/binome",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/binome/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/campaigns",
+    "method": "GET",
+    "role": "ANONYMOUS",
+    "expectedBefore": "401_OR_403",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/campaigns",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/campaigns",
+    "method": "GET",
+    "role": "EMPLOYEE",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/campaigns",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/campaigns",
+    "method": "GET",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/campaigns",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/cleanup",
+    "method": "GET",
+    "role": "ANONYMOUS",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/cleanup/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/cleanup",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/cleanup/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/cleanup",
+    "method": "GET",
+    "role": "EMPLOYEE",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/cleanup/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/cleanup",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/cleanup/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/cleanup",
+    "method": "GET",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/cleanup/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/cleanup",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "ABSENT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/cleanup/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/close-campaigns",
+    "method": "GET",
+    "role": "ANONYMOUS",
+    "expectedBefore": "401_OR_403",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/close-campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/close-campaigns",
+    "method": "GET",
+    "role": "B2C",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/close-campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/close-campaigns",
+    "method": "GET",
+    "role": "EMPLOYEE",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/close-campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/close-campaigns",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/close-campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/close-campaigns",
+    "method": "GET",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/close-campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/cron/close-campaigns",
+    "method": "GET",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "401",
+    "filePath": "app/api/cron/close-campaigns/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route cron vérifie l'en-tête CRON_SECRET (Bearer) et renvoie 401 si absent, quel que soit le cookie de session utilisateur."
+  },
+  {
+    "endpoint": "/api/stripe/webhook",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "400_OR_500",
+    "filePath": "app/api/stripe/webhook/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le webhook Stripe vérifie l'en-tête stripe-signature et renvoie 400 en l'absence de signature valide."
+  },
+  {
+    "endpoint": "/api/stripe/webhook",
+    "method": "POST",
+    "role": "EMPLOYEE",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "400_OR_500",
+    "filePath": "app/api/stripe/webhook/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le webhook Stripe vérifie l'en-tête stripe-signature et renvoie 400 en l'absence de signature valide."
+  },
+  {
+    "endpoint": "/api/stripe/webhook",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "400_OR_500",
+    "filePath": "app/api/stripe/webhook/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le webhook Stripe vérifie l'en-tête stripe-signature et renvoie 400 en l'absence de signature valide."
+  },
+  {
+    "endpoint": "/api/stripe/webhook",
+    "method": "POST",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "400_OR_500",
+    "filePath": "app/api/stripe/webhook/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le webhook Stripe vérifie l'en-tête stripe-signature et renvoie 400 en l'absence de signature valide."
+  },
+  {
+    "endpoint": "/api/stripe/webhook",
+    "method": "POST",
+    "role": "SUPER_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "400_OR_500",
+    "filePath": "app/api/stripe/webhook/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Le webhook Stripe vérifie l'en-tête stripe-signature et renvoie 400 en l'absence de signature valide."
+  },
+  {
+    "endpoint": "/api/superadmin/organizations",
+    "method": "GET",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/superadmin/organizations/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès au rôle SUPER_ADMIN strict dans son handler, rejetant ORG_ADMIN et CROSS_ADMIN en 403."
+  },
+  {
+    "endpoint": "/api/superadmin/organizations",
+    "method": "GET",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/superadmin/organizations/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès au rôle SUPER_ADMIN strict dans son handler, rejetant ORG_ADMIN et CROSS_ADMIN en 403."
+  },
+  {
+    "endpoint": "/api/superadmin/organizations",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/superadmin/organizations/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès au rôle SUPER_ADMIN strict dans son handler, rejetant ORG_ADMIN et CROSS_ADMIN en 403."
+  },
+  {
+    "endpoint": "/api/superadmin/organizations",
+    "method": "POST",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx",
+    "expectedAfter": "403",
+    "filePath": "app/api/superadmin/organizations/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route réserve l'accès au rôle SUPER_ADMIN strict dans son handler, rejetant ORG_ADMIN et CROSS_ADMIN en 403."
+  },
+  {
+    "endpoint": "/api/superadmin/users/[id]",
+    "method": "DELETE",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "403_OR_404",
+    "expectedAfter": "403",
+    "filePath": "app/api/superadmin/users/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/superadmin/users/[id]",
+    "method": "PATCH",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "403_OR_404",
+    "expectedAfter": "403",
+    "filePath": "app/api/superadmin/users/[id]/route.ts",
+    "verdict": "CONFORME",
+    "justification": "Vérification dans le handler de route."
+  },
+  {
+    "endpoint": "/api/v1/upload",
+    "method": "POST",
+    "role": "ANONYMOUS",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "401",
+    "filePath": "app/api/v1/upload/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route exige l'authentification (session.user), rejetant ANONYMOUS en 401."
+  },
+  {
+    "endpoint": "/api/v1/upload",
+    "method": "POST",
+    "role": "B2C",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "2xx",
+    "filePath": "app/api/v1/upload/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route exige l'authentification (session.user), rejetant ANONYMOUS en 401."
+  },
+  {
+    "endpoint": "/api/v1/upload",
+    "method": "POST",
+    "role": "EMPLOYEE",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "2xx",
+    "filePath": "app/api/v1/upload/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route exige l'authentification (session.user), rejetant ANONYMOUS en 401."
+  },
+  {
+    "endpoint": "/api/v1/upload",
+    "method": "POST",
+    "role": "ORG_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "2xx",
+    "filePath": "app/api/v1/upload/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route exige l'authentification (session.user), rejetant ANONYMOUS en 401."
+  },
+  {
+    "endpoint": "/api/v1/upload",
+    "method": "POST",
+    "role": "CROSS_ADMIN",
+    "expectedBefore": "2xx_OR_4xx_INPUT",
+    "expectedAfter": "2xx",
+    "filePath": "app/api/v1/upload/route.ts",
+    "verdict": "CONFORME",
+    "justification": "La route exige l'authentification (session.user), rejetant ANONYMOUS en 401."
+  }
+]
