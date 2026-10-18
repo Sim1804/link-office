@@ -20,6 +20,7 @@ describe("C4 — Effacement RGPD : Témoins Positifs et Élimination des Résidu
       await prisma.user.deleteMany({ where: { id: { in: [testUserId, partnerUserId] } } });
       await prisma.campaign.deleteMany({ where: { id: campaignId } });
       await prisma.organization.deleteMany({ where: { id: orgId } });
+      await prisma.badge.deleteMany({ where: { name: `badge-gdpr-${timestamp}` } });
       await prisma.adaptiveQuestion.deleteMany({ where: { id: questionId } });
       await prisma.adaptiveModule.deleteMany({ where: { id: moduleId } });
       await prisma.$disconnect();
@@ -207,6 +208,70 @@ describe("C4 — Effacement RGPD : Témoins Positifs et Élimination des Résidu
       },
     });
 
+    // Témoin 10 : UserBadge (V4)
+    const badge = await prisma.badge.upsert({
+      where: { name: `badge-gdpr-${timestamp}` },
+      create: {
+        name: `badge-gdpr-${timestamp}`,
+        description: "Badge Test RGPD",
+        pointsRequired: 10,
+        icon: "star",
+        category: "DISCOVERY",
+      },
+      update: {},
+    });
+    await prisma.userBadge.create({
+      data: {
+        userId: testUserId,
+        badgeId: badge.id,
+      },
+    });
+
+    // Témoin 11 : BinomePreference (V4)
+    await prisma.binomePreference.create({
+      data: {
+        userId: testUserId,
+        optIn: true,
+        availability: ["matin"],
+        communicationMode: ["messages"],
+        preferredFrequency: "reguliere",
+        agePreference: "indifferent",
+        genderPreference: "indifferent",
+        geographicalPreference: "indifferente",
+      },
+    });
+
+    // Témoin 12 : UserSubscription (V4)
+    await prisma.userSubscription.create({
+      data: {
+        id: `sub-gdpr-${timestamp}`,
+        userId: testUserId,
+        status: "ACTIVE",
+        updatedAt: new Date(),
+      },
+    });
+
+    // Témoin 13 : ResourceRelation (V4)
+    await prisma.resourceRelation.create({
+      data: {
+        userId: testUserId,
+        name: "Collègue Test RGPD",
+        category: "collegue",
+        frequency: "quotidienne",
+        proximity: "proche",
+        supportType: ["pratique"],
+      },
+    });
+
+    // Témoin 14 : SavedResource (V4)
+    await prisma.savedResource.create({
+      data: {
+        userId: testUserId,
+        resourceType: "EXTERNAL",
+        title: "Ressource Test RGPD",
+      },
+    });
+
     // ── Vérification préalable : Chaque témoin contient au moins 1 ligne ──
     expect(await prisma.adaptiveAnswer.count({ where: { assessmentId } })).toBeGreaterThanOrEqual(1);
     expect(await prisma.eventLog.count({ where: { userId: testUserId } })).toBeGreaterThanOrEqual(1);
@@ -217,12 +282,17 @@ describe("C4 — Effacement RGPD : Témoins Positifs et Élimination des Résidu
     expect(await prisma.binomeGamification.count({ where: { binomeId } })).toBeGreaterThanOrEqual(1);
     expect(await prisma.campaignVariableAnswer.count({ where: { assessmentId } })).toBeGreaterThanOrEqual(1);
     expect(await prisma.userMicroDefi.count({ where: { userId: testUserId } })).toBeGreaterThanOrEqual(1);
+    expect(await prisma.userBadge.count({ where: { userId: testUserId } })).toBeGreaterThanOrEqual(1);
+    expect(await prisma.binomePreference.count({ where: { userId: testUserId } })).toBeGreaterThanOrEqual(1);
+    expect(await prisma.userSubscription.count({ where: { userId: testUserId } })).toBeGreaterThanOrEqual(1);
+    expect(await prisma.resourceRelation.count({ where: { userId: testUserId } })).toBeGreaterThanOrEqual(1);
+    expect(await prisma.savedResource.count({ where: { userId: testUserId } })).toBeGreaterThanOrEqual(1);
 
     // ── Déclenchement de la suppression de compte RGPD transactionnelle ──
     const { deleteUserAccount } = await import("@/lib/user/account-service");
     await deleteUserAccount(testUserId);
 
-    // ── Vérification stricte : ZÉRO résidu pour l'utilisateur dans les 9 tables ──
+    // ── Vérification stricte : ZÉRO résidu pour l'utilisateur dans les 14 tables ──
     const resAdaptiveAnswer = await prisma.adaptiveAnswer.count({ where: { assessmentId } });
     const resEventLog = await prisma.eventLog.count({ where: { userId: testUserId } });
     const resBinome = await prisma.binome.count({ where: { userAId: testUserId } });
@@ -232,6 +302,11 @@ describe("C4 — Effacement RGPD : Témoins Positifs et Élimination des Résidu
     const resBinomeGamification = await prisma.binomeGamification.count({ where: { userAId: testUserId } });
     const resCampaignVarAnswer = await prisma.campaignVariableAnswer.count({ where: { assessmentId } });
     const resUserMicroDefi = await prisma.userMicroDefi.count({ where: { userId: testUserId } });
+    const resUserBadge = await prisma.userBadge.count({ where: { userId: testUserId } });
+    const resBinomePref = await prisma.binomePreference.count({ where: { userId: testUserId } });
+    const resUserSub = await prisma.userSubscription.count({ where: { userId: testUserId } });
+    const resResourceRel = await prisma.resourceRelation.count({ where: { userId: testUserId } });
+    const resSavedRes = await prisma.savedResource.count({ where: { userId: testUserId } });
 
     expect(resAdaptiveAnswer).toBe(0);
     expect(resEventLog).toBe(0);
@@ -242,5 +317,10 @@ describe("C4 — Effacement RGPD : Témoins Positifs et Élimination des Résidu
     expect(resBinomeGamification).toBe(0);
     expect(resCampaignVarAnswer).toBe(0);
     expect(resUserMicroDefi).toBe(0);
+    expect(resUserBadge).toBe(0);
+    expect(resBinomePref).toBe(0);
+    expect(resUserSub).toBe(0);
+    expect(resResourceRel).toBe(0);
+    expect(resSavedRes).toBe(0);
   });
 });
