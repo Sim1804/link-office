@@ -414,4 +414,68 @@ export class PrescriptionService {
       include: { items: { orderBy: { position: "asc" }, include: { libraryItem: true } } },
     });
   }
+
+  /**
+   * Filtre côté serveur les éléments d'une ordonnance selon le statut d'abonnement réel
+   * de l'utilisateur (lu en base de données, avec repli Freemium si la campagne est expirée).
+   * 
+   * Règle Freemium : au plus 3 recommandations et 3 micro-défis.
+   * Règle Premium / Premium+ : l'ensemble des éléments persistés.
+   * 
+   * @param prescription - L'ordonnance relationnelle avec ses `items`
+   * @param userId - L'identifiant de l'utilisateur concerné
+   */
+  static async filterForUserPlan<T extends { items?: any[] }>(prescription: T, userId: string): Promise<T> {
+    if (!prescription || !Array.isArray(prescription.items)) {
+      return prescription;
+    }
+
+    const dbUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        subscription: true,
+        campaignId: true,
+        campaign: {
+          select: {
+            endDate: true,
+            status: true,
+          },
+        },
+      },
+    });
+
+    let currentTier = dbUser?.subscription || "FREEMIUM";
+
+    // Vérification campagne : si expirée ou fermée en base, traitement comme FREEMIUM
+    if (dbUser?.campaign) {
+      const isExpired = dbUser.campaign.endDate && new Date(dbUser.campaign.endDate) < new Date();
+      const isClosed = dbUser.campaign.status === "CLOSED";
+      if (isExpired || isClosed) {
+        currentTier = "FREEMIUM";
+      }
+    }
+
+    const isPremium = currentTier === "PREMIUM" || currentTier === "PREMIUM_PLUS";
+    if (isPremium) {
+      return prescription;
+    }
+
+    // Filtrage Freemium : max 3 recommandations et max 3 micro-défis
+    const recommendations = prescription.items
+      .filter((item: any) => item.kind === "RECOMMENDATION")
+      .slice(0, 3);
+
+    const microChallenges = prescription.items
+      .filter((item: any) => item.kind === "MICRO_CHALLENGE")
+      .slice(0, 3);
+
+    const otherItems = prescription.items
+      .filter((item: any) => item.kind !== "RECOMMENDATION" && item.kind !== "MICRO_CHALLENGE");
+
+    return {
+      ...prescription,
+      items: [...recommendations, ...microChallenges, ...otherItems],
+    };
+  }
 }

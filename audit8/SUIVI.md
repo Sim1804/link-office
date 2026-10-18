@@ -11,7 +11,7 @@ Vocabulaire d'état : `FAIT`, `PARTIEL`, `BLOQUÉ`, `NON FAIT`
 | **C3** | FAIT | fix(security): C3 en-tetes de securite CSP Report-Only et X-Frame-Options DENY | tests/security/security-headers.test.ts | next.config.ts |
 | **C4** | FAIT | fix(privacy): C4 effacement RGPD transactionnel EventLog et temoins positifs | tests/security/gdpr-positive-witness.test.ts | src/lib/user/account-service.ts, app/api/superadmin/users/[id]/route.ts, validation/t10-privacy/run.ts |
 | **C5** | FAIT | fix(billing): C5 webhook stripe idempotence et cycle de vie | tests/billing/stripe-webhook-lifecycle.test.ts | app/api/stripe/webhook/route.ts, prisma/schema.prisma, prisma/migrations/20261018150000_add_stripe_event/migration.sql |
-| **C6** | NON FAIT | — | — | — |
+| **C6** | FAIT | fix(reco): C6 limite freemium 3 recommandations cote serveur | tests/reco/freemium-server-limit.test.ts | src/lib/iqrh/prescription-service.ts, app/api/ordonnances/[userId]/route.ts, app/api/resultats/[userId]/route.ts, app/api/assessment/[id]/prescription/route.ts |
 | **C7** | NON FAIT | — | — | — |
 | **C8** | NON FAIT | — | — | — |
 | **C9** | NON FAIT | — | — | — |

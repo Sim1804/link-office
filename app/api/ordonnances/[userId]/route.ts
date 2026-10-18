@@ -40,7 +40,11 @@ export async function GET(
     }
 
     const prescription = await PrescriptionService.byUser(userId);
-    return NextResponse.json({ prescription });
+    if (!prescription) {
+      return NextResponse.json({ prescription: null });
+    }
+    const filteredPrescription = await PrescriptionService.filterForUserPlan(prescription, userId);
+    return NextResponse.json({ prescription: filteredPrescription });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Erreur serveur" },

@@ -41,6 +41,10 @@ export async function GET(
     }
 
     const userResult = await ResultService.byUser(userId);
+    if (userResult?.prescription) {
+      const { PrescriptionService } = await import("@/lib/iqrh/prescription-service");
+      userResult.prescription = await PrescriptionService.filterForUserPlan(userResult.prescription, userId);
+    }
     return NextResponse.json(userResult);
   } catch {
     // Aucun résultat trouvé pour cet utilisateur
