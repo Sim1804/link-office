@@ -21,7 +21,18 @@
     "mettre fin à mes jours",
     "automutil",
     "me couper les veines",
-    "plus la force de vivre"
+    "plus la force de vivre",
+    "(avale|avaler|gobe|gober|ingere|ingerer|pris|prendre|prends).*(boite|plaquette|flacon|tube).*(somnif|medic|cachet|pilule|comprim|anxiolyt|antidepress|lexomil|xanax|prozac|valium|temesta|zoloft)",
+    "(boite|plaquette|flacon|tube).*(somnif|medic|cachet|pilule|comprim).*(avale|avaler|gobe|gober|ingere|ingerer|pris|prendre|prends)",
+    "(avale|avaler|gobe|gober|ingere|ingerer|pris|prendre|prends).*(une|des|les|[0-9]+).*boite(s)?.*(somnif|medic|cachet|pilule|comprim)",
+    "(avale|avaler|gobe|gober|ingere|ingerer|pris|prendre|prends).*(une|des|les|[0-9]+).*plaquette(s)?.*(somnif|medic|cachet|pilule|comprim)",
+    "(surdose|surdosage|overdose|dose mortelle|dose massive|dose letale)",
+    "(avale|avaler|gobe|gober|ingere|ingerer|pris|prendre|prends).*trop de (somnif|medic|cachet|pilule|comprim)",
+    "(avale|avaler|gobe|gober|ingere|ingerer|pris|prendre|prends).*(somnif|medic|cachet|pilule|comprim|anxiolyt|lexomil|xanax|prozac|valium|temesta|zoloft).*(alcool|vodka|vin|biere|whisky)",
+    "(avale|avaler|gobe|gober|ingere|ingerer|pris|prendre|prends).*(alcool|vodka|vin|biere|whisky).*(somnif|medic|cachet|pilule|comprim|anxiolyt|lexomil|xanax|prozac|valium|temesta|zoloft)",
+    "(boite|plaquette).*(somnif|medic|cachet|pilule|comprim).*avec.*(alcool|vodka|vin|biere|whisky)",
+    "(avale|avaler|gobe|gober|ingere|ingerer|pris|prendre|prends).*(tous|toutes) (mes|les) (somnif|medic|cachet|pilule|comprim)",
+    "(avale|avaler|gobe|gober|ingere|ingerer|pris|prendre|prends).*toute.*(boite|plaquette)"
   ],
   "medicalPatterns": [
     "antid[eé]presseur",
