@@ -89,8 +89,21 @@ export async function POST(
       return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
     }
 
+    // ── Lancement en parallèle sans spéculation : sécurité vs pré-chargement du contexte ──
+    // Le classifieur de sécurité est sur le chemin critique.
+    // Interdit : démarrer la génération LLM avant la décision de sécurité.
+    // Autorisé : lancer en parallèle le chargement du contexte (profil, ICR, ordonnance) et de l'historique.
+    const safetyCheckPromise = evaluateInputSafetyCascaded(userMessage, userId);
+    const contextPromise = buildIrisContext(userId);
+    const historyPromise = prisma.irisMessage.findMany({
+      where: { conversationId },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+      select: { role: true, content: true },
+    });
+
     // ── Filtre de sécurité programmatique d'entrée en cascade (PRIORITÉ ABSOLUE : AVANT décompte quota) ──
-    const safetyCheck = await evaluateInputSafetyCascaded(userMessage, userId);
+    const safetyCheck = await safetyCheckPromise;
     if (!safetyCheck.safe) {
       if (safetyCheck.category) {
         await logSecurityEvent(userId, safetyCheck.category, {
@@ -166,22 +179,17 @@ export async function POST(
       }
     }
 
-    // ── Chargement de l'historique depuis la BDD (Sliding window 20 messages pour dialogue continu) ──
-    const recentDbHistory = await prisma.irisMessage.findMany({
-      where: { conversationId },
-      orderBy: { createdAt: "desc" },
-      take: 20,
-      select: { role: true, content: true },
-    });
+    // ── Résolution des données pré-chargées en parallèle (Historique + Contexte IQRH) ──
+    const [userIqrhContext, recentDbHistory] = await Promise.all([
+      contextPromise,
+      historyPromise,
+    ]);
     const dbHistory = recentDbHistory.reverse();
 
     // Persister le message utilisateur valide immédiatement
     await prisma.irisMessage.create({
       data: { conversationId, role: "user", content: userMessage, aiGenerated: false },
     });
-
-    // ── Construction du prompt système ────────────────────────────────────────
-    const userIqrhContext = await buildIrisContext(userId);
 
     const linkOfficeKnowledgeBase = `
 BASE DE CONNAISSANCES OFFICIELLE LINKOFFICE (MÉTHODOLOGIE ET EXPERTISE) :
