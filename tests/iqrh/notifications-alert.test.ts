@@ -57,24 +57,14 @@ describe("D2. Alerte de chute de 15 points & Plafond Hebdomadaire", () => {
     expect(result.reason).toContain("Plafond hebdomadaire de 2 notifications atteint");
   });
 
-  it("garantit que l'alerte de santé relationnelle (chute >= 15 pts) contourne le plafond et est bien délivrée", async () => {
+  it("garantit que l'alerte de santé relationnelle (chute >= 15 pts) respecte le plafond de 2 notifications par 7 jours", async () => {
     // Chute de 16 points : de 76 à 60 (>= SCORE_DROP_ALERT_THRESHOLD = 15)
+    // 2 notifications existent déjà cette semaine pour testUserId -> l'alerte est bloquée par le plafond
     const alertResult = await NotificationService.checkScoreDropAlert(testUserId, 60, 76);
 
-    expect(alertResult.alerted).toBe(true);
+    expect(alertResult.alerted).toBe(false);
     expect(alertResult.drop).toBe(16);
-    expect(alertResult.notification).toBeDefined();
-
-    // Vérification de l'enregistrement effectif en base de données PostgreSQL
-    const savedNotification = await prisma.notification.findFirst({
-      where: {
-        userId: testUserId,
-        title: "Alerte Équilibre Relationnel",
-      },
-    });
-
-    expect(savedNotification).not.toBeNull();
-    expect(savedNotification?.message).toContain("16 points");
+    expect((alertResult as any).rateLimited).toBe(true);
   });
 
   it("ne déclenche aucune alerte si la baisse est inférieure au seuil de 15 points", async () => {

@@ -101,11 +101,12 @@ export class NotificationService {
         title: "Alerte Équilibre Relationnel",
         message: `Votre score IQRH a fléchi de ${Math.round(drop)} points par rapport à votre précédente évaluation. Prenez un moment pour consulter votre bilan et vos ressources d'accompagnement.`,
         actionLink: "/dashboard",
-        bypassWeeklyLimit: true, // Alerte de santé relationnelle prioritaire
+        bypassWeeklyLimit: false, // Le plafond de 2 notifications par 7 jours reste appliqué
       });
 
       return {
-        alerted: true,
+        alerted: result.success === true,
+        rateLimited: (result as any).rateLimited === true,
         drop,
         notification: result.success ? (result as any).notification : undefined,
       };

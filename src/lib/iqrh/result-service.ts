@@ -179,6 +179,30 @@ export class ResultService {
 
     // Génération asynchrone de l'ordonnance relationnelle (Recommandations et Défis)
     await PrescriptionService.generateForResult(result.id);
+
+    // C7: Alerte de baisse de 15 points (T7.2)
+    try {
+      const previousResult = await prisma.iqrhResult.findFirst({
+        where: {
+          assessment: { userId: assessment.userId },
+          id: { not: result.id },
+        },
+        orderBy: { createdAt: "desc" },
+        select: { globalScore: true },
+      });
+
+      if (previousResult) {
+        const { NotificationService } = await import("@/lib/notifications");
+        await NotificationService.checkScoreDropAlert(
+          assessment.userId,
+          result.globalScore,
+          previousResult.globalScore
+        );
+      }
+    } catch (notifError) {
+      console.error("[NOTIFICATION_ALERT_ERROR] Erreur lors de la vérification de baisse de score :", notifError);
+    }
+
     return result;
   }
 
