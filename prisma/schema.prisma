@@ -634,6 +634,12 @@ model UserSubscription {
   User                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model StripeEvent {
+  id         String   @id
+  type       String
+  receivedAt DateTime @default(now())
+}
+
 enum AssessmentStatus {
   DRAFT
   SUBMITTED

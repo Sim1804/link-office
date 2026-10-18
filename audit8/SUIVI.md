@@ -10,7 +10,7 @@ Vocabulaire d'état : `FAIT`, `PARTIEL`, `BLOQUÉ`, `NON FAIT`
 | **C2** | FAIT | fix(iris): C2 delai configurable classifieur securite et repli ferme | tests/iris/classifier-timeout-failsafe.test.ts | src/lib/iris/safety.ts, .env.example |
 | **C3** | FAIT | fix(security): C3 en-tetes de securite CSP Report-Only et X-Frame-Options DENY | tests/security/security-headers.test.ts | next.config.ts |
 | **C4** | FAIT | fix(privacy): C4 effacement RGPD transactionnel EventLog et temoins positifs | tests/security/gdpr-positive-witness.test.ts | src/lib/user/account-service.ts, app/api/superadmin/users/[id]/route.ts, validation/t10-privacy/run.ts |
-| **C5** | NON FAIT | — | — | — |
+| **C5** | FAIT | fix(billing): C5 webhook stripe idempotence et cycle de vie | tests/billing/stripe-webhook-lifecycle.test.ts | app/api/stripe/webhook/route.ts, prisma/schema.prisma, prisma/migrations/20261018150000_add_stripe_event/migration.sql |
 | **C6** | NON FAIT | — | — | — |
 | **C7** | NON FAIT | — | — | — |
 | **C8** | NON FAIT | — | — | — |
@@ -21,7 +21,7 @@ Vocabulaire d'état : `FAIT`, `PARTIEL`, `BLOQUÉ`, `NON FAIT`
 ---
 
 ## Liste des migrations Prisma
-*(Chaque migration créée au cours de la passe 8 sera listée ici avec son nom et son objet)*
+- `20261018150000_add_stripe_event` : Ajout de la table `StripeEvent` (id, type, receivedAt) pour la mémorisation et l'idempotence des événements Stripe.
 
 ---
 
