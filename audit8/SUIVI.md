@@ -7,7 +7,7 @@ Vocabulaire d'état : `FAIT`, `PARTIEL`, `BLOQUÉ`, `NON FAIT`
 | ID | État | Commit | Test | Fichiers modifiés |
 | :--- | :---: | :--- | :--- | :--- |
 | **C1** | FAIT | fix(iris): C1 inversion de l'ordre quota et filtre de securite | tests/iris/quota-safety-order.test.ts | app/api/iris/conversation/[id]/message/route.ts |
-| **C2** | NON FAIT | — | — | — |
+| **C2** | FAIT | fix(iris): C2 delai configurable classifieur securite et repli ferme | tests/iris/classifier-timeout-failsafe.test.ts | src/lib/iris/safety.ts, .env.example |
 | **C3** | NON FAIT | — | — | — |
 | **C4** | NON FAIT | — | — | — |
 | **C5** | NON FAIT | — | — | — |

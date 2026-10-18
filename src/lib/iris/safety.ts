@@ -197,7 +197,10 @@ Réponds UNIQUEMENT sous forme d'un objet JSON strict :
 {"isCrisis": boolean, "isMedical": boolean, "isJailbreak": boolean, "confidence": number, "reasoning": string}`;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 1500);
+  const timeoutMs = process.env.IRIS_CLASSIFIER_TIMEOUT_MS
+    ? parseInt(process.env.IRIS_CLASSIFIER_TIMEOUT_MS, 10)
+    : 10000;
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   const t0 = performance.now();
   try {
