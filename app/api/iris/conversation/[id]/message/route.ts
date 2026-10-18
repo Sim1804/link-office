@@ -89,7 +89,39 @@ export async function POST(
       return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
     }
 
+    // ── Filtre de sécurité programmatique d'entrée en cascade (PRIORITÉ ABSOLUE : AVANT décompte quota) ──
+    const safetyCheck = await evaluateInputSafetyCascaded(userMessage, userId);
+    if (!safetyCheck.safe) {
+      if (safetyCheck.category) {
+        await logSecurityEvent(userId, safetyCheck.category, {
+          matchedPattern: safetyCheck.matchedPattern,
+          conversationId,
+        });
+      }
+
+      const escalationReply =
+        safetyCheck.escalationResponse ||
+        "Mon accompagnement au sein de Link Office est exclusivement dédié à votre santé relationnelle.";
+
+      // Persistance en base de données pour la traçabilité
+      await prisma.irisMessage.create({
+        data: { conversationId, role: "user", content: userMessage },
+      });
+      await prisma.irisMessage.create({
+        data: { conversationId, role: "assistant", content: escalationReply },
+      });
+
+      // L'escalade d'urgence ne consomme jamais le quota Freemium et ne renvoie jamais de HTTP 402
+      return NextResponse.json({
+        message_iris: escalationReply,
+        safetyEscalation: true,
+        category: safetyCheck.category,
+        degraded: false,
+      });
+    }
+
     // ── Quota Freemium atomique journalier (5 messages / jour calendaire UTC, HTTP 402) ──
+    // Appliqué uniquement aux messages sûrs autorisés vers le LLM
     if (user.subscription === "FREEMIUM") {
       const now = new Date();
       const isNewDay =
@@ -131,36 +163,6 @@ export async function POST(
           { status: 402 }
         );
       }
-    }
-
-    // ── Filtre de sécurité programmatique d'entrée en cascade (AVANT appel LLM) ──
-    const safetyCheck = await evaluateInputSafetyCascaded(userMessage, userId);
-    if (!safetyCheck.safe) {
-      if (safetyCheck.category) {
-        await logSecurityEvent(userId, safetyCheck.category, {
-          matchedPattern: safetyCheck.matchedPattern,
-          conversationId,
-        });
-      }
-
-      const escalationReply =
-        safetyCheck.escalationResponse ||
-        "Mon accompagnement au sein de Link Office est exclusivement dédié à votre santé relationnelle.";
-
-      // Persistance en base de données pour la traçabilité
-      await prisma.irisMessage.create({
-        data: { conversationId, role: "user", content: userMessage },
-      });
-      await prisma.irisMessage.create({
-        data: { conversationId, role: "assistant", content: escalationReply },
-      });
-
-      return NextResponse.json({
-        message_iris: escalationReply,
-        safetyEscalation: true,
-        category: safetyCheck.category,
-        degraded: false,
-      });
     }
 
     // ── Chargement de l'historique depuis la BDD (Sliding window 20 messages pour dialogue continu) ──
