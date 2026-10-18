@@ -13,7 +13,7 @@ Vocabulaire d'état : `FAIT`, `PARTIEL`, `BLOQUÉ`, `NON FAIT`
 | **C5** | FAIT | fix(billing): C5 webhook stripe idempotence et cycle de vie | tests/billing/stripe-webhook-lifecycle.test.ts | app/api/stripe/webhook/route.ts, prisma/schema.prisma, prisma/migrations/20261018150000_add_stripe_event/migration.sql |
 | **C6** | FAIT | fix(reco): C6 limite freemium 3 recommandations cote serveur | tests/reco/freemium-server-limit.test.ts | src/lib/iqrh/prescription-service.ts, app/api/ordonnances/[userId]/route.ts, app/api/resultats/[userId]/route.ts, app/api/assessment/[id]/prescription/route.ts |
 | **C7** | FAIT | fix(iqrh): C7 alerte baisse 15 points sur soumission resultat | tests/iqrh/score-drop-alert.test.ts | src/lib/iqrh/result-service.ts, src/lib/notifications.ts, tests/iqrh/notifications-alert.test.ts |
-| **C8** | NON FAIT | — | — | — |
+| **C8** | FAIT | fix(iris): C8 etiquette origine IA sur messages conversationnels | tests/iris/ai-label.test.ts | prisma/schema.prisma, prisma/migrations/20261018160000_add_iris_message_ai_generated/migration.sql, app/api/iris/conversation/[id]/message/route.ts, src/components/iris/IrisWidget.tsx |
 | **C9** | NON FAIT | — | — | — |
 | **C10** | NON FAIT | — | — | — |
 | **C11** | NON FAIT | — | — | — |
@@ -22,6 +22,7 @@ Vocabulaire d'état : `FAIT`, `PARTIEL`, `BLOQUÉ`, `NON FAIT`
 
 ## Liste des migrations Prisma
 - `20261018150000_add_stripe_event` : Ajout de la table `StripeEvent` (id, type, receivedAt) pour la mémorisation et l'idempotence des événements Stripe.
+- `20261018160000_add_iris_message_ai_generated` : Ajout du champ `aiGenerated` (Boolean, default false) sur le modèle `IrisMessage` pour l'étiquetage d'origine artificielle des réponses IRIS.
 
 ---
 

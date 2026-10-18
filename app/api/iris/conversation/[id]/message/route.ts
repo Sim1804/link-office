@@ -105,10 +105,10 @@ export async function POST(
 
       // Persistance en base de données pour la traçabilité
       await prisma.irisMessage.create({
-        data: { conversationId, role: "user", content: userMessage },
+        data: { conversationId, role: "user", content: userMessage, aiGenerated: false },
       });
       await prisma.irisMessage.create({
-        data: { conversationId, role: "assistant", content: escalationReply },
+        data: { conversationId, role: "assistant", content: escalationReply, aiGenerated: true },
       });
 
       // L'escalade d'urgence ne consomme jamais le quota Freemium et ne renvoie jamais de HTTP 402
@@ -117,6 +117,7 @@ export async function POST(
         safetyEscalation: true,
         category: safetyCheck.category,
         degraded: false,
+        aiGenerated: true,
       });
     }
 
@@ -176,7 +177,7 @@ export async function POST(
 
     // Persister le message utilisateur valide immédiatement
     await prisma.irisMessage.create({
-      data: { conversationId, role: "user", content: userMessage },
+      data: { conversationId, role: "user", content: userMessage, aiGenerated: false },
     });
 
     // ── Construction du prompt système ────────────────────────────────────────
@@ -553,7 +554,7 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
 
     // ── Persistance de la réponse IRIS en BDD ─────────────────────────────────
     await prisma.irisMessage.create({
-      data: { conversationId, role: "assistant", content: finalResponseText },
+      data: { conversationId, role: "assistant", content: finalResponseText, aiGenerated: true },
     });
 
     // ── Mise à jour du titre de la conversation (à la première réponse) ───────
@@ -569,6 +570,7 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
     return NextResponse.json({
       message_iris: finalResponseText,
       degraded: isDegraded,
+      aiGenerated: true,
     });
 
   } catch (error) {

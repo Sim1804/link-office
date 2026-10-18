@@ -91,7 +91,7 @@ export class NotificationService {
     userId: string,
     currentScore: number,
     previousScore: number
-  ): Promise<{ alerted: boolean; drop: number; notification?: any }> {
+  ): Promise<{ alerted: boolean; drop: number; notification?: any; rateLimited?: boolean }> {
     const drop = previousScore - currentScore;
 
     if (this.isScoreDropEligible(currentScore, previousScore)) {

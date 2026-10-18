@@ -1046,6 +1046,7 @@ model IrisMessage {
   conversationId String
   role           String           // "user" | "assistant"
   content        String           @db.Text
+  aiGenerated    Boolean          @default(false)
   createdAt      DateTime         @default(now())
 
   conversation   IrisConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)

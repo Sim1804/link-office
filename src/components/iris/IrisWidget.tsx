@@ -208,6 +208,7 @@ interface Message {
   text: string;
   timestamp: Date;
   isPremiumCTA?: boolean;
+  aiGenerated?: boolean;
 }
 
 const QUICK_PROMPTS = [
@@ -657,6 +658,12 @@ export function IrisWidget() {
                           >
                             {!session ? "Faire mon test gratuit →" : "Découvrir Premium →"}
                           </button>
+                        </div>
+                      )}
+
+                      {msg.sender === "iris" && (
+                        <div className="mt-2 pt-1 border-t border-[#E3EBE6]/50 text-[9px] text-[#123D46]/50 font-medium select-none flex items-center gap-1">
+                          <span>Généré par IA</span>
                         </div>
                       )}
                     </div>
