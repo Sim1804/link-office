@@ -1,0 +1,39 @@
+{
+  "totalPersonalTables": 32,
+  "tablesWithWitness": [
+    "User",
+    "Assessment",
+    "DemographicProfile",
+    "IqrhResult",
+    "IcrResult",
+    "ProfileResult",
+    "RelationalPrescription",
+    "UserStats",
+    "Notification",
+    "BinomePreference",
+    "MeteoCheckin",
+    "JournalEntry",
+    "IrisConversation",
+    "IrisMessage"
+  ],
+  "tablesWithoutWitness": [
+    "QuestionnaireAnswer",
+    "AdaptiveAnswer",
+    "PrescriptionItem",
+    "UserBadge",
+    "EventLog",
+    "BinomeCheckin",
+    "BinomeFeedback",
+    "CampaignInvite",
+    "CampaignVariableAnswer",
+    "Lead",
+    "UserSubscription",
+    "LifeEvent",
+    "RelationalPlan",
+    "PlanPriority",
+    "PlanAction",
+    "UserMicroDefi",
+    "ResourceRelation",
+    "SavedResource"
+  ]
+}
