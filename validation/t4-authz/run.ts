@@ -13,6 +13,7 @@ import fs from "fs";
 import path from "path";
 import { getEnvironmentMetadata } from "../common/env";
 import { getSessionCookie } from "../common/auth-client";
+import { generateSync } from "otplib";
 import { getExpectedStatus } from "./spec-rules";
 import {
   applySecondarySuppression,
@@ -188,24 +189,339 @@ async function main() {
   let totalEvaluatedCells = 0;
   let passedCells = 0;
 
+const USER_IDS: Record<Identity, string> = {
+  ANONYMOUS: "",
+  B2C: "cmv10wzey0001v6w8pn1sw93e",
+  EMPLOYEE: "cmuyj285o0006v6h8ag9v5fzw",
+  ORG_ADMIN: "cmuyj285g0004v6h8y3bm11p4",
+  CROSS_ADMIN: "cmuyj288e001sv6h8koubxnap",
+  SUPER_ADMIN: "cmumryfjf0097v6ykxyimlyub",
+};
+
+const USER_ASSESSMENTS: Record<Identity, string> = {
+  ANONYMOUS: "cmvdviptn0037v6c8k9zjo1td",
+  B2C: "cmvdvipra0035v6c8gnx4ubp6",
+  EMPLOYEE: "cmvdviptn0037v6c8k9zjo1td",
+  ORG_ADMIN: "cmvdvipvt0039v6c881yt4qkd",
+  CROSS_ADMIN: "cmvdvipxv003bv6c84o1rjrac",
+  SUPER_ADMIN: "cmvdviq03003dv6c8wm3kv75m",
+};
+
+const USER_SECRETS: Record<Identity, string> = {
+  ANONYMOUS: "",
+  B2C: "74VUP7DPCJGGAPEAWONDKPAYN4UXJBLW",
+  EMPLOYEE: "ASZMO4LFFOWO6Y5AK7WEGE3WF5JVU5LX",
+  ORG_ADMIN: "CTFJBFHHX674YYCZMNOVZWZVOZW7TI3K",
+  CROSS_ADMIN: "ZTUSO2I5FNKXFKQN44W67ASKP54NJU54",
+  SUPER_ADMIN: "FPSI2OCSGRV3SIMKCKAZFEVUK5YUY5IL",
+};
+
+function resolveEndpointUrl(endpoint: string, id: Identity): string {
+  let actual = endpoint;
+  if (actual.includes("/api/actions/[id]")) {
+    actual = actual.replace("[id]", "cmvdveux6000dv6c8p2d7lk36");
+  } else if (actual.includes("/api/admin/catalog/[id]")) {
+    actual = actual.replace("[id]", "Tags_3");
+  } else if (actual.includes("/api/admin/leads/[id]")) {
+    actual = actual.replace("[id]", "lead-fixture-2026");
+  } else if (actual.includes("/api/admin/media/[id]")) {
+    actual = actual.replace("[id]", "cmuzm0htn000ov6q0iezsq2zc");
+  } else if (actual.includes("/api/admin/organizations/[id]")) {
+    actual = actual.replace("[id]", "cmuyj280k0000v6h87dvugtq1");
+  } else if (actual.includes("/api/organizations/[id]")) {
+    actual = actual.replace("[id]", "cmuyj280k0000v6h87dvugtq1");
+  } else if (actual.includes("/api/superadmin/organizations/[id]")) {
+    actual = actual.replace("[id]", "cmuyj280k0000v6h87dvugtq1");
+  } else if (actual.includes("/api/binome/[id]")) {
+    actual = actual.replace("[id]", "cmuzj74tl058rv6hkhkm0vfd8");
+  } else if (actual.includes("/api/carnet/journal/[id]")) {
+    const targetUid = USER_IDS[id] || "cmuyj285o0006v6h8ag9v5fzw";
+    actual = actual.replace("[id]", `t4-journal-${targetUid}`);
+  } else if (actual.includes("/api/iris/conversation/[id]")) {
+    const targetUid = USER_IDS[id] || "cmuyj285o0006v6h8ag9v5fzw";
+    actual = actual.replace("[id]", `t4-conv-${targetUid}`);
+  } else if (actual.includes("/api/superadmin/users/[id]")) {
+    actual = actual.replace("[id]", "cmuyj28a4002qv6h87f53gw54");
+  } else if (actual.includes("/api/assessment/[id]")) {
+    actual = actual.replace("[id]", USER_ASSESSMENTS[id] || "cmvdviptn0037v6c8k9zjo1td");
+  } else {
+    actual = actual.replace(/\[id\]/g, "camp-novatech-2026");
+  }
+
+  const userTarget = USER_IDS[id] || "cmuyj285o0006v6h8ag9v5fzw";
+  actual = actual
+    .replace(/\[userId\]/g, userTarget)
+    .replace(/\[code\]/g, "NOVATECH-2026");
+
+  if (actual === "/api/b2b/invite") {
+    actual = "/api/b2b/invite?campaignId=camp-novatech-2026";
+  } else if (actual === "/api/auth/verify") {
+    actual = "/api/auth/verify?token=dummy-token";
+  }
+
+  return actual;
+}
+
+function getValidPayload(endpoint: string, method: string, id: Identity): any {
+  if (endpoint === "/api/actions" && method === "POST") {
+    return {
+      title: "Plan QVT Novatech",
+      description: "Action test QVT",
+      category: "ORGANISATION",
+      priority: "MEDIUM",
+      status: "PROPOSEE",
+      campaignId: "camp-novatech-2026",
+    };
+  }
+  if (endpoint === "/api/actions/suggest" && method === "POST") {
+    return { campaignId: "camp-novatech-2026" };
+  }
+  if (endpoint === "/api/actions/[id]" && method === "PATCH") {
+    return { title: "Action mise à jour", status: "VALIDEE" };
+  }
+  if (endpoint === "/api/admin/campaigns" && method === "POST") {
+    return {
+      organizationId: "cmuyj280k0000v6h87dvugtq1",
+      title: "Campagne Test T4",
+      type: "B2B",
+      startDate: "2026-01-01",
+      endDate: "2026-12-31",
+    };
+  }
+  if (endpoint === "/api/admin/catalog" && method === "POST") {
+    return {
+      id: "test_t4_" + Date.now(),
+      library: "autre",
+      title: "Ressource Test T4",
+      data: {},
+    };
+  }
+  if (endpoint === "/api/admin/catalog/[id]" && method === "PUT") {
+    return {
+      library: "Tags",
+      title: "Vie professionnelle et engagement",
+      category: "dimensions",
+      data: { tag_type: "dimensions", tag_value: "Vie professionnelle et engagement" },
+    };
+  }
+  if (endpoint === "/api/admin/leads/[id]/convert" && method === "POST") {
+    return { offer: "PREMIUM" };
+  }
+  if (endpoint === "/api/auth/2fa/enable" && method === "POST") {
+    const secret = USER_SECRETS[id] || "FPSI2OCSGRV3SIMKCKAZFEVUK5YUY5IL";
+    return { code: generateSync({ secret }) };
+  }
+  if (endpoint === "/api/auth/change-password" && method === "POST") {
+    return { password: "Password123!" };
+  }
+  if (endpoint === "/api/auth/register" && method === "POST") {
+    const rand = `${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    return {
+      prenom: "Test",
+      nom: "User",
+      email: `test.reg.t4.${rand}@novatech-conseil.fr`,
+      password: "Password123!",
+      confirmPassword: "Password123!",
+      codeAccess: "NOVATECH-2026",
+    };
+  }
+  if (endpoint === "/api/b2b/organization" && method === "POST") {
+    return { name: "Nouvelle Org T4 " + Date.now(), type: "B2B" };
+  }
+  if (endpoint === "/api/b2b/organization" && method === "PUT") {
+    return { id: "cmuyj280k0000v6h87dvugtq1", name: "Novatech Conseil Paris" };
+  }
+  if (endpoint === "/api/binome/invite" && method === "POST") {
+    return { email: "b2b.user.20@linkoffice-loadtest.fr" };
+  }
+  if (endpoint === "/api/binome/preferences" && method === "POST") {
+    return { matchingOptIn: true, preferredDomains: ["SOCIAL", "PROFESSIONAL"] };
+  }
+  if (endpoint === "/api/binome/respond" && method === "POST") {
+    return { pairId: "cmuzj74q6057dv6hkw2it92z4", accept: true };
+  }
+  if (endpoint === "/api/binome/settings" && method === "POST") {
+    return { optIn: true };
+  }
+  if (endpoint === "/api/binome/[id]/checkin" && method === "POST") {
+    return { mood: 4, actionStatus: "FAIT", encouragement: "Bon échange", checkinType: "RAPIDE" };
+  }
+  if (endpoint === "/api/binome/[id]/feedback" && method === "POST") {
+    return { rating: 5, comment: "Très bon accompagnement binôme" };
+  }
+  if (endpoint === "/api/campaigns" && method === "POST") {
+    return {
+      title: "Nouvelle Campagne QVT " + Date.now(),
+      organizationId: "cmuyj280k0000v6h87dvugtq1",
+      startDate: "2026-01-01",
+      endDate: "2026-12-31",
+    };
+  }
+  if (endpoint === "/api/campaigns/[id]" && method === "PATCH") {
+    return { title: "Campagne Test MàJ" };
+  }
+  if (endpoint === "/api/campaigns/[id]/config" && method === "POST") {
+    return { questionnaireConfig: {} };
+  }
+  if (endpoint === "/api/campaigns/[id]/invites" && method === "POST") {
+    return { emails: [`invite.test.${Date.now()}@novatech-conseil.fr`] };
+  }
+  if (endpoint === "/api/campaigns/[id]/invites" && method === "DELETE") {
+    return { email: "invite.test@novatech-conseil.fr" };
+  }
+  if (endpoint === "/api/campaigns/[id]/renew" && method === "POST") {
+    return {
+      title: "Campagne Renouvelée " + Date.now(),
+      startDate: "2026-06-01",
+      endDate: "2026-12-31",
+      offer: "PREMIUM",
+    };
+  }
+  if (endpoint === "/api/campaigns/[id]/variables" && method === "POST") {
+    return { variables: [{ question: "Département", options: ["R&D", "RH"] }] };
+  }
+  if (endpoint === "/api/campaigns/join" && method === "POST") {
+    return { codeAccess: "NOVATECH-2026" };
+  }
+  if (endpoint === "/api/carnet/journal" && method === "POST") {
+    return { content: "Entrée de test journal", mood: "Grand soleil" };
+  }
+  if (endpoint === "/api/carnet/journal/[id]" && method === "PUT") {
+    return { content: "Mise à jour entrée journal" };
+  }
+  if (endpoint === "/api/carnet/life-events" && method === "POST") {
+    return { date: "2026-01-15", category: "PROFESSIONNEL", impact: "POSITIVE", description: "Nouvel emploi" };
+  }
+  if (endpoint === "/api/carnet/meteo" && method === "POST") {
+    return { weather: "Grand soleil", note: "Très bonne forme" };
+  }
+  if (endpoint === "/api/carnet/plan" && method === "POST") {
+    return { objective: "Prendre des pauses régulières", dimension: "PROFESSIONAL", rationale: "Améliorer l'équilibre" };
+  }
+  if (endpoint === "/api/carnet/relations" && method === "POST") {
+    return { name: "Collègue", category: "PROFESSIONNEL", frequency: "HEBDOMADAIRE", proximity: "PROCHE", supportType: ["EMOTIONNEL"] };
+  }
+  if (endpoint === "/api/demographics/renew" && method === "POST") {
+    return {};
+  }
+  if (endpoint === "/api/gamification/complete" && method === "POST") {
+    return { prescriptionItemId: "DEF001" };
+  }
+  if (endpoint === "/api/iris/conversation" && method === "POST") {
+    return { title: "Nouvelle conversation T4" };
+  }
+  if (endpoint === "/api/iris/conversation/[id]/message" && method === "POST") {
+    return { message_user: "Bonjour IRIS, comment vas-tu ?" };
+  }
+  if (endpoint === "/api/iris/conversation/[id]/feedback" && method === "POST") {
+    return { rating: 5, comment: "Réponse très pertinente" };
+  }
+  if (endpoint === "/api/questionnaire/start" && method === "POST") {
+    return { userId: USER_IDS[id] || "cmuyj285o0006v6h8ag9v5fzw" };
+  }
+  if (endpoint === "/api/questionnaire/save" && method === "POST") {
+    return {
+      assessmentId: USER_ASSESSMENTS[id] || "cmvdviptn0037v6c8k9zjo1td",
+      consentInformation: true,
+      consentResearch: true,
+      consentParticipation: true,
+      answers: [{ questionId: "q_soc_1", value: 4 }],
+      adaptiveAnswers: [],
+    };
+  }
+  if (endpoint === "/api/questionnaire/submit" && method === "POST") {
+    return { assessmentId: USER_ASSESSMENTS[id] || "cmvdviptn0037v6c8k9zjo1td" };
+  }
+  if (endpoint === "/api/superadmin/organizations" && method === "POST") {
+    const rand = `${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+    return {
+      name: `Org SA ${rand}`,
+      type: "B2B",
+      codeAccess: `SA${rand}`.slice(0, 15),
+      adminEmail: `admin_${rand}@example.com`,
+      adminFirstName: "Admin",
+      adminLastName: "Super",
+      adminPassword: "Password123!",
+    };
+  }
+  if (endpoint === "/api/superadmin/users/[id]" && method === "PATCH") {
+    return { role: "EMPLOYEE" };
+  }
+  if (endpoint === "/api/v1/business/lead" && method === "POST") {
+    return {
+      plan: "B2B_ENTREPRISE",
+      organization: "Prospect Entreprise",
+      contactName: "Jean Dupont",
+      email: `contact.${Date.now()}@prospect.fr`,
+      phone: "0102030405",
+      companySize: "50-250",
+    };
+  }
+  if (endpoint === "/api/v1/business/register" && method === "POST") {
+    const rand = `${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+    return {
+      orgName: `Org T4 ${rand}`,
+      email: `biz.reg.${rand}@example.com`,
+      password: "Password123!",
+      plan: "B2B_ENTREPRISE",
+    };
+  }
+  if (endpoint === "/api/v1/demographics" && method === "POST") {
+    return {
+      gender: "FEMALE",
+      ageRange: "30-39",
+      country: "France",
+      department: "75",
+      occupation: "Salarié",
+      organizationSize: "51 à 250 salariés",
+      relationshipStatus: "En couple",
+      children: false,
+      childrenCount: 0,
+      livingSituation: "En couple avec ou sans enfant",
+      selectedSituations: ["Manager"],
+      primarySituation: "Manager",
+    };
+  }
+  if (endpoint === "/api/v1/user/settings" && method === "POST") {
+    return { matchingOptIn: true };
+  }
+  if (endpoint === "/api/v1/users/register" && method === "POST") {
+    const rand = `${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    return {
+      prenom: "John",
+      nom: "Doe",
+      email: `user.reg.t4.${rand}@example.com`,
+      password: "Password123!",
+    };
+  }
+  return {};
+}
+
   for (const r of discovered) {
-    const actualEndpoint = r.endpoint
-      .replace(/\[id\]/g, "camp-novatech-2026")
-      .replace(/\[userId\]/g, "cmuyj285o0006v6h8ag9v5fzw") // ID de Alice Martin (EMPLOYEE)
-      .replace(/\[code\]/g, "NOVATECH-2026");
-
-    const fullUrl = `${BASE_URL}${actualEndpoint}`;
-
     for (const m of r.methods) {
       for (const id of IDENTITIES) {
         totalEvaluatedCells++;
         const expected = expectedMatrix[r.endpoint][m][id];
         const cookie = cookies[id];
+        const actualEndpoint = resolveEndpointUrl(r.endpoint, id);
+        const fullUrl = `${BASE_URL}${actualEndpoint}`;
 
         const headers: Record<string, string> = {};
         if (cookie) headers["Cookie"] = cookie;
-        if (["POST", "PUT", "PATCH"].includes(m)) {
-          headers["Content-Type"] = "application/json";
+
+        let payload: any = undefined;
+        let fetchBody: any = undefined;
+
+        if (r.endpoint === "/api/v1/upload" && m === "POST") {
+          const formData = new FormData();
+          formData.append("file", new Blob(["fake-image-bytes"], { type: "image/png" }), "test.png");
+          fetchBody = formData;
+        } else if (["POST", "PUT", "PATCH", "DELETE"].includes(m)) {
+          payload = getValidPayload(r.endpoint, m, id);
+          if (payload !== undefined && Object.keys(payload).length > 0) {
+            headers["Content-Type"] = "application/json";
+            fetchBody = JSON.stringify(payload);
+          }
         }
 
         let status = 0;
@@ -215,7 +531,7 @@ async function main() {
             method: m,
             headers,
             redirect: "manual", // Règle A4 : sans suivre les redirections
-            body: ["POST", "PUT", "PATCH"].includes(m) ? JSON.stringify({}) : undefined,
+            body: fetchBody,
           });
           status = res.status;
           try {
@@ -426,7 +742,7 @@ async function main() {
   const envData = getEnvironmentMetadata({
     totalDiscoveredRoutes: discovered.length,
     matrixTotalCells: totalEvaluatedCells,
-  });
+  } as any);
 
   fs.writeFileSync(path.join(BASE_DIR, "result.json"), JSON.stringify(resultData, null, 2), "utf8");
   fs.writeFileSync(path.join(BASE_DIR, "env.json"), JSON.stringify(envData, null, 2), "utf8");

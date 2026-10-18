@@ -1,17 +1,17 @@
 {
   "test": "T4-authz-matrix",
   "status": "NON RESPECTÉ",
-  "timestamp": "2026-10-10T15:09:41.379Z",
-  "durationMs": 38631,
-  "totalCells": 642,
-  "passedCells": 425,
+  "timestamp": "2026-10-18T14:18:51.827Z",
+  "durationMs": 155325,
+  "totalCells": 654,
+  "passedCells": 537,
   "divergenceBreakdown": {
-    "forbiddenBut2xx": 6,
-    "error5xx": 0,
+    "forbiddenBut2xx": 40,
+    "error5xx": 6,
     "interchange401_403": 27,
-    "invalidTestInput": 184,
+    "invalidTestInput": 44,
     "unspecified": 0,
-    "totalDivergences": 217
+    "totalDivergences": 117
   },
   "forbidden2xxDetails": [
     {
@@ -19,50 +19,190 @@
       "method": "GET",
       "identity": "CROSS_ADMIN",
       "actualStatus": 200,
-      "bodyLength": 2,
-      "bodyContainsOrgA": false,
-      "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
-      "snippet": "[]"
+      "bodyLength": 1315,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "[{\"id\":\"cmvdwf3g2003mv6c8gwv0i3za\",\"organizationId\":\"cmuyj281v0001v6h87ao4uo9f\",\"title\":\"Plan QVT Novatech\",\"description\":\"Action test QVT\",\"status\":\"PROPOSEE\",\"priority\":\"MEDIUM\",\"pilot\":null,\"dueDat..."
+    },
+    {
+      "endpoint": "/api/actions",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 402,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "[{\"id\":\"cmvdwf3d3003kv6c8a0h1d5of\",\"organizationId\":\"cmuyj280k0000v6h87dvugtq1\",\"title\":\"Plan QVT Novatech\",\"description\":\"Action test QVT\",\"status\":\"PROPOSEE\",\"priority\":\"MEDIUM\",\"pilot\":null,\"dueDat..."
+    },
+    {
+      "endpoint": "/api/actions",
+      "method": "POST",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 336,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"id\":\"cmvdws4yb00arv6c8f87i2izl\",\"organizationId\":\"cmuyj281v0001v6h87ao4uo9f\",\"title\":\"Plan QVT Novatech\",\"description\":\"Action test QVT\",\"status\":\"PROPOSEE\",\"priority\":\"MEDIUM\",\"pilot\":null,\"dueDate..."
+    },
+    {
+      "endpoint": "/api/actions",
+      "method": "POST",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 336,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"id\":\"cmvdws51300atv6c8ssu3bkl7\",\"organizationId\":\"cmuyj280k0000v6h87dvugtq1\",\"title\":\"Plan QVT Novatech\",\"description\":\"Action test QVT\",\"status\":\"PROPOSEE\",\"priority\":\"MEDIUM\",\"pilot\":null,\"dueDate..."
     },
     {
       "endpoint": "/api/actions/export",
       "method": "GET",
       "identity": "CROSS_ADMIN",
       "actualStatus": 200,
-      "bodyLength": 73,
+      "bodyLength": 652,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "Titre,Description,Statut,Priorité,Pilote,Date d'échéance,Campagne,Créé le\n\"Plan QVT Novatech\",\"Action test QVT\",PROPOSEE,MEDIUM,\"\",,\"Baromètre QVT & Capital Relationnel 2026\",18/10/2026\n\"Plan QVT Nova..."
+    },
+    {
+      "endpoint": "/api/actions/export",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 409,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "Titre,Description,Statut,Priorité,Pilote,Date d'échéance,Campagne,Créé le\n\"Plan QVT Novatech\",\"Action test QVT\",PROPOSEE,MEDIUM,\"\",,\"Baromètre QVT & Capital Relationnel 2026\",18/10/2026\n\"Plan QVT Nova..."
+    },
+    {
+      "endpoint": "/api/actions/suggest",
+      "method": "POST",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 594,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"success\":true,\"count\":3,\"actions\":[{\"id\":\"cmvdvev14000fv6c8xabtthyf\",\"title\":\"Renforcer les rituels d'équipe\",\"description\":\"Instaurer des points de synchronisation hebdomadaires et des moments de c..."
+    },
+    {
+      "endpoint": "/api/actions/suggest",
+      "method": "POST",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 451,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"success\":true,\"count\":3,\"actions\":[{\"id\":\"cmvdwf3d3003kv6c8a0h1d5of\",\"title\":\"Plan QVT Novatech\",\"description\":\"Action test QVT\",\"dimension\":null,\"priority\":\"MEDIUM\"},{\"id\":\"cmvdws4vw00apv6c8rvaev6x..."
+    },
+    {
+      "endpoint": "/api/assessment/[id]/prescription",
+      "method": "GET",
+      "identity": "ORG_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 46460,
       "bodyContainsOrgA": false,
-      "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
-      "snippet": "Titre,Description,Statut,Priorité,Pilote,Date d'échéance,Campagne,Créé le"
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"prescription\":{\"id\":\"cmuzj6w1m006qv6hkyx5bpdcb\",\"userId\":\"cmuyj285g0004v6h8y3bm11p4\",\"iqrhResultId\":\"cmuzj6vyc006kv6hk45ag1kia\",\"title\":\"Ordonnance relationnelle — Relations sociales\",\"summary\":\"Cet..."
+    },
+    {
+      "endpoint": "/api/assessment/[id]/prescription",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 41806,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"prescription\":{\"id\":\"cmuzj6z8o01zev6hk10mnoevr\",\"userId\":\"cmuyj288e001sv6h8koubxnap\",\"iqrhResultId\":\"cmuzj6z6q01z8v6hk48epl9ff\",\"title\":\"Ordonnance relationnelle — Vie professionnelle et engagement\"..."
+    },
+    {
+      "endpoint": "/api/b2b/barometre",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 701,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"success\":true,\"totalParticipants\":477,\"data\":{\"globalScore\":51,\"socialScore\":43,\"affectiveScore\":59,\"sentimentalScore\":50,\"professionalScore\":47,\"selfScore\":54},\"timeline\":[{\"month\":\"2026-10\",\"score..."
     },
     {
       "endpoint": "/api/b2b/invite",
       "method": "GET",
-      "identity": "CROSS_ADMIN",
+      "identity": "SUPER_ADMIN",
       "actualStatus": 200,
-      "bodyLength": 3200,
-      "bodyContainsOrgA": false,
-      "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
-      "snippet": "{\"organizationName\":\"Avenir Santé Mutuelle\",\"codeAccess\":\"AVENIR-MUTU-2026\",\"inviteUrl\":\"http://localhost:3000/join/AVENIR-MUTU-2026\",\"qrCode\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCA..."
+      "bodyLength": 3645,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"organizationName\":\"Novatech Conseil Paris\",\"codeAccess\":\"camp-novatech-2026\",\"inviteUrl\":\"http://localhost:3000/join/camp-novatech-2026\",\"qrCode\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAA..."
     },
     {
       "endpoint": "/api/b2b/organization",
       "method": "GET",
       "identity": "CROSS_ADMIN",
       "actualStatus": 200,
-      "bodyLength": 1017,
+      "bodyLength": 1883,
       "bodyContainsOrgA": false,
       "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
       "snippet": "{\"id\":\"cmuyj281v0001v6h87ao4uo9f\",\"name\":\"Avenir Santé Mutuelle\",\"type\":\"B2B2C\",\"siren\":\"429103948\",\"domainName\":\"avenirsante-mutuelle.fr\",\"codeAccess\":\"AVENIR-MUTU-2026\",\"logoUrl\":null,\"contactName\":..."
+    },
+    {
+      "endpoint": "/api/b2b/organization",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 4913,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"id\":\"cmuyj280k0000v6h87dvugtq1\",\"name\":\"Novatech Conseil Paris\",\"type\":\"B2B\",\"siren\":\"849201832\",\"domainName\":\"novatech-conseil.fr\",\"codeAccess\":\"NOVATECH-2026\",\"logoUrl\":null,\"contactName\":\"Alice R..."
+    },
+    {
+      "endpoint": "/api/b2b/organization",
+      "method": "POST",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 201,
+      "bodyLength": 413,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"id\":\"cmvdwsodl00b9v6c8pm1j2b22\",\"name\":\"Nouvelle Org T4 1792333008394\",\"type\":\"B2B\",\"siren\":null,\"domainName\":null,\"codeAccess\":\"NOUVELLE-ORG-2026-9616\",\"logoUrl\":null,\"contactName\":null,\"contactEma..."
+    },
+    {
+      "endpoint": "/api/b2b/organization",
+      "method": "PUT",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 500,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"id\":\"cmuyj280k0000v6h87dvugtq1\",\"name\":\"Novatech Conseil Paris\",\"type\":\"B2B\",\"siren\":\"849201832\",\"domainName\":\"novatech-conseil.fr\",\"codeAccess\":\"NOVATECH-2026\",\"logoUrl\":null,\"contactName\":\"Alice R..."
     },
     {
       "endpoint": "/api/b2b/stats",
       "method": "GET",
       "identity": "CROSS_ADMIN",
       "actualStatus": 200,
-      "bodyLength": 2548,
+      "bodyLength": 2882,
       "bodyContainsOrgA": false,
       "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
-      "snippet": "{\"anonymityBlocked\":false,\"respondentCount\":14,\"registeredUsersCount\":140,\"threshold\":5,\"subscriptionStatus\":\"ACTIVE\",\"organization\":{\"id\":\"cmuyj281v0001v6h87ao4uo9f\",\"name\":\"Avenir Santé Mutuelle\",\"t..."
+      "snippet": "{\"anonymityBlocked\":false,\"respondentCount\":264,\"registeredUsersCount\":140,\"threshold\":5,\"subscriptionStatus\":\"ACTIVE\",\"organization\":{\"id\":\"cmuyj281v0001v6h87ao4uo9f\",\"name\":\"Avenir Santé Mutuelle\",\"..."
+    },
+    {
+      "endpoint": "/api/b2b/stats",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 6449,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"anonymityBlocked\":false,\"respondentCount\":480,\"registeredUsersCount\":160,\"threshold\":5,\"subscriptionStatus\":\"ACTIVE\",\"organization\":{\"id\":\"cmuyj280k0000v6h87dvugtq1\",\"name\":\"Novatech Conseil Paris\",..."
+    },
+    {
+      "endpoint": "/api/b2b2c/orientation",
+      "method": "GET",
+      "identity": "B2C",
+      "actualStatus": 200,
+      "bodyLength": 41,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"recommendations\":[],\"hasResults\":false}"
     },
     {
       "endpoint": "/api/b2b2c/orientation",
@@ -73,6 +213,206 @@
       "bodyContainsOrgA": false,
       "analysis": "Isolation multi-tenant confirmée : l'administrateur tiers reçoit ses propres données sans fuite de l'organisation A.",
       "snippet": "{\"hasResults\":true,\"recommendations\":[],\"scores\":{\"social\":67,\"affective\":83,\"professional\":58,\"self\":92,\"icr\":0}}"
+    },
+    {
+      "endpoint": "/api/b2b2c/orientation",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 41,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"recommendations\":[],\"hasResults\":false}"
+    },
+    {
+      "endpoint": "/api/b2g/stats",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 1523,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"anonymityBlocked\":false,\"respondentCount\":480,\"threshold\":5,\"averages\":{\"global\":51,\"social\":43,\"affective\":59,\"sentimental\":50,\"professional\":48,\"self\":54},\"weatherDistribution\":{\"Ciel couvert\":460..."
+    },
+    {
+      "endpoint": "/api/binome/status",
+      "method": "GET",
+      "identity": "ORG_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 32,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"success\":true,\"status\":\"none\"}"
+    },
+    {
+      "endpoint": "/api/binome/status",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 32,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"success\":true,\"status\":\"none\"}"
+    },
+    {
+      "endpoint": "/api/campaigns/[id]",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 1650,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"campaign\":{\"id\":\"camp-novatech-2026\",\"organizationId\":\"cmuyj280k0000v6h87dvugtq1\",\"title\":\"Baromètre QVT & Capital Relationnel 2026\",\"description\":null,\"startDate\":\"2026-10-01T00:00:00.000Z\",\"endDat..."
+    },
+    {
+      "endpoint": "/api/campaigns/[id]",
+      "method": "PATCH",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 434,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"campaign\":{\"id\":\"camp-novatech-2026\",\"organizationId\":\"cmuyj280k0000v6h87dvugtq1\",\"title\":\"Campagne Test MàJ\",\"description\":null,\"startDate\":\"2026-10-01T00:00:00.000Z\",\"endDate\":\"2026-12-31T00:00:00..."
+    },
+    {
+      "endpoint": "/api/campaigns/[id]/config",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 697,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"campaign\":{\"id\":\"camp-novatech-2026\",\"organizationId\":\"cmuyj280k0000v6h87dvugtq1\",\"title\":\"Campagne Test MàJ\",\"description\":null,\"startDate\":\"2026-10-01T00:00:00.000Z\",\"endDate\":\"2026-12-31T00:00:00..."
+    },
+    {
+      "endpoint": "/api/campaigns/[id]/config",
+      "method": "POST",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 371,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"id\":\"camp-novatech-2026\",\"organizationId\":\"cmuyj280k0000v6h87dvugtq1\",\"title\":\"Campagne Test MàJ\",\"description\":null,\"startDate\":\"2026-10-01T00:00:00.000Z\",\"endDate\":\"2026-12-31T00:00:00.000Z\",\"stat..."
+    },
+    {
+      "endpoint": "/api/campaigns/[id]/export",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 3894,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "ID Anonyme,Score Global,Social,Affectif,Sentimental,Professionnel,Moi,Météo,Niveau ICR,Score ICR,Facteurs de Risques,Facteurs Protecteurs\n\"R-1\",69.0,67.0,92.0,75.0,67.0,42.0,\"Éclaircies\",\"Complexité f..."
+    },
+    {
+      "endpoint": "/api/campaigns/[id]/participation",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 134,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"invited\":5,\"activated\":0,\"started\":28,\"completed\":26,\"target\":150,\"completionRate\":93,\"activationRate\":0,\"targetRate\":17,\"trend\":[]}"
+    },
+    {
+      "endpoint": "/api/campaigns/[id]/renew",
+      "method": "POST",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 201,
+      "bodyLength": 417,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"campaign\":{\"id\":\"cmvdwt8ob00btv6c81cv7s637\",\"organizationId\":\"cmuyj280k0000v6h87dvugtq1\",\"title\":\"Campagne Renouvelée 1792333034715\",\"description\":null,\"startDate\":\"2026-06-01T00:00:00.000Z\",\"endDat..."
+    },
+    {
+      "endpoint": "/api/campaigns/[id]/stats",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 1304,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"anonymityBlocked\":false,\"respondentCount\":26,\"threshold\":5,\"participation\":{\"invited\":5,\"started\":28,\"completed\":26,\"completionRate\":93,\"activationRate\":560},\"averages\":{\"global\":59.7,\"social\":63,\"a..."
+    },
+    {
+      "endpoint": "/api/campaigns/[id]/variables",
+      "method": "GET",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 179,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"variables\":[{\"id\":\"camp-novatech-2026_fbebfea3-8aa0-4cb0-8b31-88192716c74f\",\"campaignId\":\"camp-novatech-2026\",\"question\":\"Département\",\"options\":[\"R&D\",\"RH\"],\"required\":false}]}"
+    },
+    {
+      "endpoint": "/api/campaigns/[id]/variables",
+      "method": "POST",
+      "identity": "SUPER_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 194,
+      "bodyContainsOrgA": true,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: true)",
+      "snippet": "{\"success\":true,\"variables\":[{\"id\":\"camp-novatech-2026_cd3030bb-82e7-4e9f-b30b-a96e93dba655\",\"campaignId\":\"camp-novatech-2026\",\"question\":\"Département\",\"options\":[\"R&D\",\"RH\"],\"required\":false}]}"
+    },
+    {
+      "endpoint": "/api/ordonnances/[userId]",
+      "method": "GET",
+      "identity": "B2C",
+      "actualStatus": 200,
+      "bodyLength": 21,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"prescription\":null}"
+    },
+    {
+      "endpoint": "/api/ordonnances/[userId]",
+      "method": "GET",
+      "identity": "ORG_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 17039,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"prescription\":{\"id\":\"cmuzj6w1m006qv6hkyx5bpdcb\",\"userId\":\"cmuyj285g0004v6h8y3bm11p4\",\"iqrhResultId\":\"cmuzj6vyc006kv6hk45ag1kia\",\"title\":\"Ordonnance relationnelle — Relations sociales\",\"summary\":\"Cet..."
+    },
+    {
+      "endpoint": "/api/ordonnances/[userId]",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 15563,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"prescription\":{\"id\":\"cmuzj6z8o01zev6hk10mnoevr\",\"userId\":\"cmuyj288e001sv6h8koubxnap\",\"iqrhResultId\":\"cmuzj6z6q01z8v6hk48epl9ff\",\"title\":\"Ordonnance relationnelle — Vie professionnelle et engagement\"..."
+    },
+    {
+      "endpoint": "/api/resultats/[userId]",
+      "method": "GET",
+      "identity": "B2C",
+      "actualStatus": 200,
+      "bodyLength": 4,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "null"
+    },
+    {
+      "endpoint": "/api/resultats/[userId]",
+      "method": "GET",
+      "identity": "ORG_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 32222,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"id\":\"cmuzj6vyc006kv6hk45ag1kia\",\"assessmentId\":\"cmuzj6vwm004sv6hkfv9zuyds\",\"globalScore\":83,\"socialScore\":83,\"affectiveScore\":83,\"sentimentalScore\":83,\"professionalScore\":83,\"selfScore\":83,\"weather\"..."
+    },
+    {
+      "endpoint": "/api/resultats/[userId]",
+      "method": "GET",
+      "identity": "CROSS_ADMIN",
+      "actualStatus": 200,
+      "bodyLength": 30053,
+      "bodyContainsOrgA": false,
+      "analysis": "Accès 2xx non prévu sur cellule interdite (contientOrgA: false)",
+      "snippet": "{\"id\":\"cmuzj6z6q01z8v6hk48epl9ff\",\"assessmentId\":\"cmuzj6z5801xgv6hk2ybvttlq\",\"globalScore\":75,\"socialScore\":67,\"affectiveScore\":83,\"sentimentalScore\":75,\"professionalScore\":58,\"selfScore\":92,\"weather\"..."
     }
   ],
   "differentialPrivacy": {

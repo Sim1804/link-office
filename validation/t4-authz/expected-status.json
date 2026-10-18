@@ -2,57 +2,57 @@
   "/api/actions": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     },
     "POST": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/actions/[id]": {
     "PATCH": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     },
     "DELETE": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/actions/export": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/actions/suggest": {
     "POST": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/admin/barometre": {
@@ -136,8 +136,8 @@
       "ANONYMOUS": "401",
       "B2C": "403",
       "EMPLOYEE": "403",
-      "ORG_ADMIN": "2xx",
-      "CROSS_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
+      "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
   },
@@ -178,6 +178,16 @@
       "EMPLOYEE": "403",
       "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403",
+      "SUPER_ADMIN": "2xx"
+    }
+  },
+  "/api/assessment/[id]/prescription": {
+    "GET": {
+      "ANONYMOUS": "401",
+      "B2C": "403",
+      "EMPLOYEE": "2xx",
+      "ORG_ADMIN": "403",
+      "CROSS_ADMIN": "403_OR_404",
       "SUPER_ADMIN": "2xx"
     }
   },
@@ -235,47 +245,47 @@
   "/api/b2b/barometre": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
-      "EMPLOYEE": "2xx",
+      "B2C": "403_OR_404",
+      "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
-      "CROSS_ADMIN": "2xx",
-      "SUPER_ADMIN": "2xx"
+      "CROSS_ADMIN": "403",
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/b2b/invite": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/b2b/organization": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     },
     "POST": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
-      "ORG_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     },
     "PUT": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/b2b/organization/by-code/[code]": {
@@ -291,58 +301,58 @@
   "/api/b2b/stats": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/b2b2c/orientation": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "2xx",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "2xx",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/b2g/stats": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/binome/[id]/checkin": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "2xx",
-      "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
-      "CROSS_ADMIN": "2xx",
+      "B2C": "403_OR_404",
+      "EMPLOYEE": "403",
+      "ORG_ADMIN": "403",
+      "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     },
     "POST": {
       "ANONYMOUS": "401",
-      "B2C": "2xx",
-      "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
-      "CROSS_ADMIN": "2xx",
+      "B2C": "403_OR_404",
+      "EMPLOYEE": "403",
+      "ORG_ADMIN": "403",
+      "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
   },
   "/api/binome/[id]/feedback": {
     "POST": {
       "ANONYMOUS": "401",
-      "B2C": "2xx",
-      "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
-      "CROSS_ADMIN": "2xx",
+      "B2C": "403_OR_404",
+      "EMPLOYEE": "403",
+      "ORG_ADMIN": "403",
+      "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
   },
@@ -351,7 +361,7 @@
       "ANONYMOUS": "401",
       "B2C": "2xx",
       "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
@@ -361,7 +371,7 @@
       "ANONYMOUS": "401",
       "B2C": "403",
       "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     },
@@ -369,7 +379,7 @@
       "ANONYMOUS": "401",
       "B2C": "403",
       "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
@@ -379,7 +389,7 @@
       "ANONYMOUS": "401",
       "B2C": "2xx",
       "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
@@ -389,7 +399,7 @@
       "ANONYMOUS": "401",
       "B2C": "403",
       "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
@@ -399,8 +409,8 @@
       "ANONYMOUS": "401",
       "B2C": "2xx",
       "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
-      "CROSS_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
+      "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
   },
@@ -409,7 +419,7 @@
       "ANONYMOUS": "401",
       "B2C": "2xx",
       "EMPLOYEE": "2xx",
-      "ORG_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
       "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
@@ -435,19 +445,19 @@
   "/api/campaigns/[id]": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     },
     "PATCH": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/campaigns/[id]/close": {
@@ -463,29 +473,29 @@
   "/api/campaigns/[id]/config": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     },
     "POST": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/campaigns/[id]/export": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/campaigns/[id]/invites": {
@@ -517,21 +527,21 @@
   "/api/campaigns/[id]/participation": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/campaigns/[id]/renew": {
     "POST": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/campaigns/[id]/snapshot": {
@@ -555,29 +565,29 @@
   "/api/campaigns/[id]/stats": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/campaigns/[id]/variables": {
     "GET": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     },
     "POST": {
       "ANONYMOUS": "401",
-      "B2C": "403",
+      "B2C": "403_OR_404",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "2xx",
       "CROSS_ADMIN": "403_OR_404",
-      "SUPER_ADMIN": "2xx"
+      "SUPER_ADMIN": "403_OR_404"
     }
   },
   "/api/campaigns/join": {
@@ -694,32 +704,42 @@
   },
   "/api/cron/binome": {
     "GET": {
-      "ANONYMOUS": "401_OR_403",
-      "B2C": "2xx_OR_4xx_INPUT",
-      "EMPLOYEE": "2xx_OR_4xx_INPUT",
-      "ORG_ADMIN": "2xx_OR_4xx_INPUT",
-      "CROSS_ADMIN": "2xx_OR_4xx_INPUT",
-      "SUPER_ADMIN": "2xx"
+      "ANONYMOUS": "401",
+      "B2C": "401",
+      "EMPLOYEE": "401",
+      "ORG_ADMIN": "401",
+      "CROSS_ADMIN": "401",
+      "SUPER_ADMIN": "401"
     }
   },
   "/api/cron/campaigns": {
     "GET": {
-      "ANONYMOUS": "401_OR_403",
-      "B2C": "2xx_OR_4xx_INPUT",
-      "EMPLOYEE": "2xx_OR_4xx_INPUT",
-      "ORG_ADMIN": "2xx_OR_4xx_INPUT",
-      "CROSS_ADMIN": "2xx_OR_4xx_INPUT",
-      "SUPER_ADMIN": "2xx"
+      "ANONYMOUS": "401",
+      "B2C": "401",
+      "EMPLOYEE": "401",
+      "ORG_ADMIN": "401",
+      "CROSS_ADMIN": "401",
+      "SUPER_ADMIN": "401"
+    }
+  },
+  "/api/cron/cleanup": {
+    "GET": {
+      "ANONYMOUS": "401",
+      "B2C": "401",
+      "EMPLOYEE": "401",
+      "ORG_ADMIN": "401",
+      "CROSS_ADMIN": "401",
+      "SUPER_ADMIN": "401"
     }
   },
   "/api/cron/close-campaigns": {
     "GET": {
-      "ANONYMOUS": "401_OR_403",
-      "B2C": "2xx_OR_4xx_INPUT",
-      "EMPLOYEE": "2xx_OR_4xx_INPUT",
-      "ORG_ADMIN": "2xx_OR_4xx_INPUT",
-      "CROSS_ADMIN": "2xx_OR_4xx_INPUT",
-      "SUPER_ADMIN": "2xx"
+      "ANONYMOUS": "401",
+      "B2C": "401",
+      "EMPLOYEE": "401",
+      "ORG_ADMIN": "401",
+      "CROSS_ADMIN": "401",
+      "SUPER_ADMIN": "401"
     }
   },
   "/api/demographics/renew": {
@@ -893,11 +913,11 @@
   "/api/stripe/webhook": {
     "POST": {
       "ANONYMOUS": "400_OR_500",
-      "B2C": "2xx_OR_4xx_INPUT",
-      "EMPLOYEE": "2xx_OR_4xx_INPUT",
-      "ORG_ADMIN": "2xx_OR_4xx_INPUT",
-      "CROSS_ADMIN": "2xx_OR_4xx_INPUT",
-      "SUPER_ADMIN": "2xx"
+      "B2C": "400_OR_500",
+      "EMPLOYEE": "400_OR_500",
+      "ORG_ADMIN": "400_OR_500",
+      "CROSS_ADMIN": "400_OR_500",
+      "SUPER_ADMIN": "400_OR_500"
     }
   },
   "/api/superadmin/organizations": {
@@ -905,16 +925,16 @@
       "ANONYMOUS": "401",
       "B2C": "403",
       "EMPLOYEE": "403",
-      "ORG_ADMIN": "2xx",
-      "CROSS_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
+      "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     },
     "POST": {
       "ANONYMOUS": "401",
       "B2C": "403",
       "EMPLOYEE": "403",
-      "ORG_ADMIN": "2xx",
-      "CROSS_ADMIN": "2xx",
+      "ORG_ADMIN": "403",
+      "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
   },
@@ -934,7 +954,7 @@
       "B2C": "403",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "403",
-      "CROSS_ADMIN": "403_OR_404",
+      "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     },
     "DELETE": {
@@ -942,7 +962,7 @@
       "B2C": "403",
       "EMPLOYEE": "403",
       "ORG_ADMIN": "403",
-      "CROSS_ADMIN": "403_OR_404",
+      "CROSS_ADMIN": "403",
       "SUPER_ADMIN": "2xx"
     }
   },
@@ -986,11 +1006,11 @@
   },
   "/api/v1/upload": {
     "POST": {
-      "ANONYMOUS": "2xx_OR_4xx_INPUT",
-      "B2C": "2xx_OR_4xx_INPUT",
-      "EMPLOYEE": "2xx_OR_4xx_INPUT",
-      "ORG_ADMIN": "2xx_OR_4xx_INPUT",
-      "CROSS_ADMIN": "2xx_OR_4xx_INPUT",
+      "ANONYMOUS": "401",
+      "B2C": "2xx",
+      "EMPLOYEE": "2xx",
+      "ORG_ADMIN": "2xx",
+      "CROSS_ADMIN": "2xx",
       "SUPER_ADMIN": "2xx"
     }
   },

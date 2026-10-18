@@ -16,7 +16,7 @@ const sessionCache = new Map<string, AuthSession>();
 export async function getSessionCookie(
   baseUrl: string,
   email: string,
-  password = "Admin1234!"
+  password = "Password123!"
 ): Promise<string> {
   const cacheKey = `${baseUrl}|${email}`;
   const cached = sessionCache.get(cacheKey);
@@ -45,6 +45,23 @@ export async function getSessionCookie(
   formData.append("email", email);
   formData.append("password", password);
   formData.append("csrfToken", csrfData.csrfToken);
+
+  try {
+    const { PrismaClient } = await import("@prisma/client");
+    const { generateSync } = await import("otplib");
+    const prisma = new PrismaClient();
+    const dbUser = await prisma.user.findUnique({
+      where: { email },
+      select: { isTwoFactorEnabled: true, twoFactorSecret: true },
+    });
+    await prisma.$disconnect();
+    if (dbUser?.isTwoFactorEnabled && dbUser.twoFactorSecret) {
+      const code = generateSync({ secret: dbUser.twoFactorSecret });
+      formData.append("twoFactorCode", code);
+    }
+  } catch (err) {
+    console.warn("2FA resolution warning in auth-client:", err);
+  }
 
   const initialCookiesHeader = csrfCookies.map((c) => c.split(";")[0]).join("; ");
 

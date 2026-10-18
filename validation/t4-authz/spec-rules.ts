@@ -90,7 +90,7 @@ const SPEC_ROUTES: Record<
   "/api/admin/leads/[id]/convert": {
     methods: ["POST"],
     authRequired: true,
-    rolesAllowed: ["SUPER_ADMIN", "ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G"],
+    rolesAllowed: ["SUPER_ADMIN"],
     tenantSource: "Body/Param (codeAccess)",
     verified: true,
   },
@@ -120,6 +120,13 @@ const SPEC_ROUTES: Record<
     authRequired: true,
     rolesAllowed: ["SUPER_ADMIN"],
     tenantSource: "N/A",
+    verified: true,
+  },
+  "/api/assessment/[id]/prescription": {
+    methods: ["GET"],
+    authRequired: true,
+    rolesAllowed: ["SUPER_ADMIN", "RESOURCE_OWNER"],
+    tenantSource: "URL Param (resourceId)",
     verified: true,
   },
   "/api/auth/2fa/enable": {
@@ -167,8 +174,8 @@ const SPEC_ROUTES: Record<
   "/api/b2b/barometre": {
     methods: ["GET"],
     authRequired: true,
-    rolesAllowed: ["SUPER_ADMIN", "ADMIN_B2B", "EMPLOYEE"],
-    tenantSource: "N/A",
+    rolesAllowed: ["SUPER_ADMIN", "ADMIN_B2B"],
+    tenantSource: "Session (session.user.organizationId)",
     verified: true,
   },
   "/api/b2b/invite": {
@@ -258,15 +265,15 @@ const SPEC_ROUTES: Record<
   "/api/binome/[id]/checkin": {
     methods: ["GET", "POST"],
     authRequired: true,
-    rolesAllowed: ["ALL_AUTHENTICATED"],
-    tenantSource: "N/A",
+    rolesAllowed: ["RESOURCE_OWNER"],
+    tenantSource: "URL Param (resourceId)",
     verified: true,
   },
   "/api/binome/[id]/feedback": {
     methods: ["POST"],
     authRequired: true,
-    rolesAllowed: ["ALL_AUTHENTICATED"],
-    tenantSource: "N/A",
+    rolesAllowed: ["RESOURCE_OWNER"],
+    tenantSource: "URL Param (resourceId)",
     verified: true,
   },
   "/api/campaigns/join": {
@@ -423,6 +430,13 @@ const SPEC_ROUTES: Record<
     tenantSource: "N/A",
     verified: true,
   },
+  "/api/cron/cleanup": {
+    methods: ["GET"],
+    authRequired: false,
+    rolesAllowed: ["CRON_SECRET"],
+    tenantSource: "N/A",
+    verified: true,
+  },
   "/api/demographics/renew": {
     methods: ["POST"],
     authRequired: true,
@@ -545,7 +559,7 @@ const SPEC_ROUTES: Record<
   "/api/superadmin/organizations": {
     methods: ["GET", "POST"],
     authRequired: true,
-    rolesAllowed: ["SUPER_ADMIN", "ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G"],
+    rolesAllowed: ["SUPER_ADMIN"],
     tenantSource: "Body/Param (codeAccess)",
     verified: true,
   },
@@ -586,8 +600,8 @@ const SPEC_ROUTES: Record<
   },
   "/api/v1/upload": {
     methods: ["POST"],
-    authRequired: false,
-    rolesAllowed: ["PUBLIC"],
+    authRequired: true,
+    rolesAllowed: ["ALL_AUTHENTICATED"],
     tenantSource: "N/A",
     verified: true,
   },
@@ -620,22 +634,36 @@ export function getExpectedStatus(
   const isTenantScoped =
     spec.tenantSource.includes("Session") || spec.tenantSource.includes("URL Param");
 
-  // SUPER_ADMIN est toujours autorisé
+  // Routes cron protégées par CRON_SECRET : tout appel sans secret (session cookie) retourne 401
+  if (spec.rolesAllowed.includes("CRON_SECRET")) {
+    return "401";
+  }
+
+  // Webhooks Stripe protégés par signature
+  if (spec.rolesAllowed.includes("STRIPE_SIGNATURE")) {
+    return "400_OR_500";
+  }
+
+  // SUPER_ADMIN est autorisé sauf sur les routes nécessitant une organisation en session
   if (identity === "SUPER_ADMIN") {
+    if (spec.tenantSource.includes("Session")) {
+      return "403_OR_404";
+    }
     return "2xx";
   }
 
   // ANONYMOUS
   if (identity === "ANONYMOUS") {
     if (spec.authRequired) return "401";
-    if (spec.rolesAllowed.includes("CRON_SECRET")) return "401_OR_403";
-    if (spec.rolesAllowed.includes("STRIPE_SIGNATURE")) return "400_OR_500";
     return "2xx_OR_4xx_INPUT";
   }
 
   // B2C (Utilisateur sans organisation)
   if (identity === "B2C") {
     if (!spec.authRequired) return "2xx_OR_4xx_INPUT";
+    if (spec.tenantSource.includes("Session") || (spec.tenantSource.includes("URL Param") && spec.rolesAllowed.includes("RESOURCE_OWNER") && endpoint.startsWith("/api/binome"))) {
+      return "403_OR_404";
+    }
     if (
       spec.rolesAllowed.includes("ALL_AUTHENTICATED") ||
       spec.rolesAllowed.includes("CITIZEN") ||
@@ -649,10 +677,16 @@ export function getExpectedStatus(
   // EMPLOYEE (Salarié Org A)
   if (identity === "EMPLOYEE") {
     if (!spec.authRequired) return "2xx_OR_4xx_INPUT";
+    if (endpoint === "/api/b2b/barometre") {
+      return "403";
+    }
+    if (endpoint.startsWith("/api/binome/[id]")) {
+      return "403";
+    }
     if (
       spec.rolesAllowed.includes("ALL_AUTHENTICATED") ||
       spec.rolesAllowed.includes("EMPLOYEE") ||
-      spec.rolesAllowed.includes("RESOURCE_OWNER") // Alice Martin est le propriétaire de la ressource cmuyj285o0006v6h8ag9v5fzw
+      spec.rolesAllowed.includes("RESOURCE_OWNER")
     ) {
       return "2xx";
     }
@@ -662,10 +696,18 @@ export function getExpectedStatus(
   // ORG_ADMIN (Admin Org A sur ressources Org A)
   if (identity === "ORG_ADMIN") {
     if (!spec.authRequired) return "2xx_OR_4xx_INPUT";
+    if (endpoint === "/api/b2b/organization" && method === "POST") {
+      return "403";
+    }
+    if (endpoint.startsWith("/api/binome")) {
+      return "403";
+    }
+    if (endpoint.startsWith("/api/superadmin") || endpoint === "/api/admin/leads/[id]/convert") {
+      return "403";
+    }
     if (
       spec.rolesAllowed.includes("ALL_AUTHENTICATED") ||
-      spec.rolesAllowed.includes("ADMIN_B2B") ||
-      spec.rolesAllowed.includes("EMPLOYEE")
+      spec.rolesAllowed.includes("ADMIN_B2B")
     ) {
       return "2xx";
     }
@@ -675,6 +717,9 @@ export function getExpectedStatus(
   // CROSS_ADMIN (Admin Org B sur ressources Org A)
   if (identity === "CROSS_ADMIN") {
     if (!spec.authRequired) return "2xx_OR_4xx_INPUT";
+    if (endpoint === "/api/b2b/barometre" || endpoint.startsWith("/api/binome") || endpoint.startsWith("/api/superadmin") || endpoint === "/api/admin/leads/[id]/convert") {
+      return "403";
+    }
     if (isTenantScoped) {
       // Ressource isolée : rejet strict 403 ou 404
       return "403_OR_404";
