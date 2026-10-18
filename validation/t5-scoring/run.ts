@@ -88,29 +88,160 @@ async function main() {
   );
   log(`✓ Propriété 2 (Monotonie réponses -> scores) validée sur ${p2Runs} vecteurs.`);
 
-  // Propriété 3 : IQRH indépendant des entrées ICR
-  let p3Runs = 0;
+  // Propriété 3a : Déterminisme et répétabilité du calcul IQRH
+  let p3aRuns = 0;
+  fc.assert(
+    fc.property(answersArbitrary, (answers) => {
+      p3aRuns++;
+      // Le calcul IQRH pur est une fonction déterministe et pure des réponses
+      const r1 = IQRHCalculationService.calculate(answers);
+      const r2 = IQRHCalculationService.calculate(answers);
+      return (
+        r1.globalScore === r2.globalScore &&
+        r1.balanceIndex === r2.balanceIndex &&
+        r1.weather === r2.weather &&
+        r1.dimensions.every((d, i) => d.score === r2.dimensions[i].score)
+      );
+    }),
+    { numRuns: 1000 }
+  );
+  log(`✓ Propriété 3a (Déterminisme et répétabilité du calcul IQRH) validée sur ${p3aRuns} vecteurs.`);
+
+  // Propriété 3b : Vraie indépendance IQRH / ICR
+  // Pour des réponses IQRH fixées, faire varier toutes les entrées ICR (situations, réponses adaptatives) ne change jamais les sous-scores, le score global ni l'IER.
+  let p3bRuns = 0;
+  const icrContextArbitrary = fc.record({
+    occupation: fc.constantFrom("Salarié", "Manager", "Entrepreneur", "Demandeur", "Parent au foyer", "Étudiant", "Retraité"),
+    organizationSize: fc.constantFrom("1 à 10 salariés", "11 à 50 salariés", "51 à 250 salariés", "Plus de 250 salariés", null),
+    children: fc.boolean(),
+    childrenCount: fc.integer({ min: 0, max: 5 }),
+    relationshipStatus: fc.constantFrom("En couple", "Célibataire", "Séparé(e) / Divorcé(e)", "Veuf(ve)"),
+    selectedSituations: fc.subarray([
+      "Parent", "Aidant", "Célibataire", "Personne vivant seule", "Manager", "Divorce", "Deuil",
+      "Création d'entreprise", "Demandeur d'emploi", "Famille monoparentale", "Entrepreneur", "Étudiant", "Retraité",
+    ]),
+    adaptiveAnswers: fc.array(
+      fc.record({
+        value: fc.integer({ min: 1, max: 5 }),
+        polarity: fc.constantFrom("POSITIVE" as const, "NEGATIVE" as const),
+        label: fc.string({ minLength: 1, maxLength: 20 }),
+      }),
+      { maxLength: 10 }
+    ),
+  });
+
   fc.assert(
     fc.property(
       answersArbitrary,
-      fc.string({ minLength: 1, maxLength: 20 }),
-      fc.boolean(),
-      fc.array(fc.string({ minLength: 1, maxLength: 15 }), { maxLength: 5 }),
-      (answers, occupation, children, situations) => {
-        p3Runs++;
-        // Le calcul IQRH pur ne dépend QUE des answers
+      icrContextArbitrary,
+      icrContextArbitrary,
+      (answers, icrCtxA, icrCtxB) => {
+        p3bRuns++;
         const r1 = IQRHCalculationService.calculate(answers);
+        const scores1 = Object.fromEntries(
+          r1.dimensions.map(({ dimension, score }) => [dimension, score])
+        ) as Record<IqrhDimension, number>;
+        const icr1 = IcrCalculationService.calculate({
+          ...icrCtxA,
+          scores: scores1,
+          balanceIndex: r1.balanceIndex,
+          globalScore: r1.globalScore,
+        });
+
         const r2 = IQRHCalculationService.calculate(answers);
-        return (
-          r1.globalScore === r2.globalScore &&
-          r1.balanceIndex === r2.balanceIndex &&
-          r1.weather === r2.weather
-        );
+        const scores2 = Object.fromEntries(
+          r2.dimensions.map(({ dimension, score }) => [dimension, score])
+        ) as Record<IqrhDimension, number>;
+        const icr2 = IcrCalculationService.calculate({
+          ...icrCtxB,
+          scores: scores2,
+          balanceIndex: r2.balanceIndex,
+          globalScore: r2.globalScore,
+        });
+
+        if (typeof icr1.score !== "number" || typeof icr2.score !== "number") {
+          return false;
+        }
+
+        const sameDims = r1.dimensions.every((d, i) => d.score === r2.dimensions[i].score);
+        return sameDims && r1.globalScore === r2.globalScore && r1.balanceIndex === r2.balanceIndex;
       }
     ),
     { numRuns: 1000 }
   );
-  log(`✓ Propriété 3 (Indépendance IQRH / ICR) validée sur ${p3Runs} vecteurs.`);
+  log(`✓ Propriété 3b (Indépendance stricte IQRH / variations ICR) validée sur ${p3bRuns} vecteurs.`);
+
+  // Propriété 3c : Dépendance à sens unique ICR <- IQRH
+  // L'ICR varie quand l'IQRH varie (D1 >= 70 -> -3, IER >= 75 -> -2, global >= 70 -> -2)
+  let p3cRuns = 0;
+  const baseIcrArbitrary = fc.record({
+    occupation: fc.constantFrom("Salarié", "Manager"),
+    children: fc.boolean(),
+    childrenCount: fc.integer({ min: 0, max: 2 }),
+    relationshipStatus: fc.constantFrom("En couple", "Célibataire"),
+    selectedSituations: fc.subarray(["Aidant", "Manager", "Parent"]),
+    adaptiveAnswers: fc.constant([] as { value: number; polarity: "POSITIVE" | "NEGATIVE"; label: string }[]),
+  });
+
+  fc.assert(
+    fc.property(baseIcrArbitrary, (baseIcr) => {
+      p3cRuns++;
+      const lowScores: Record<IqrhDimension, number> = {
+        SOCIAL: 50,
+        AFFECTIVE: 50,
+        SENTIMENTAL: 50,
+        PROFESSIONAL: 50,
+        SELF: 50,
+      };
+      const lowBalanceIndex = 50;
+      const lowGlobalScore = 50;
+
+      const baseInput = {
+        ...baseIcr,
+        scores: lowScores,
+        balanceIndex: lowBalanceIndex,
+        globalScore: lowGlobalScore,
+      };
+      const resBase = IcrCalculationService.calculate(baseInput);
+
+      // Condition 1 : D1 (SOCIAL) >= 70 -> -3 pts
+      const resHighD1 = IcrCalculationService.calculate({
+        ...baseIcr,
+        scores: { ...lowScores, SOCIAL: 70 },
+        balanceIndex: lowBalanceIndex,
+        globalScore: lowGlobalScore,
+      });
+      if (resHighD1.protectiveResources - resBase.protectiveResources !== 3) return false;
+      if (resBase.rawScore! - resHighD1.rawScore! !== 3) return false;
+      if (resHighD1.score > resBase.score) return false;
+
+      // Condition 2 : IER >= 75 -> -2 pts
+      const resHighIER = IcrCalculationService.calculate({
+        ...baseIcr,
+        scores: lowScores,
+        balanceIndex: 75,
+        globalScore: lowGlobalScore,
+      });
+      if (resHighIER.protectiveResources - resBase.protectiveResources !== 2) return false;
+      if (resBase.rawScore! - resHighIER.rawScore! !== 2) return false;
+      if (resHighIER.score > resBase.score) return false;
+
+      // Condition 3 : Global >= 70 -> -2 pts
+      const resHighGlobal = IcrCalculationService.calculate({
+        ...baseIcr,
+        scores: lowScores,
+        balanceIndex: lowBalanceIndex,
+        globalScore: 70,
+      });
+      if (resHighGlobal.protectiveResources - resBase.protectiveResources !== 2) return false;
+      if (resBase.rawScore! - resHighGlobal.rawScore! !== 2) return false;
+      if (resHighGlobal.score > resBase.score) return false;
+
+      return true;
+    }),
+    { numRuns: 1000 }
+  );
+  log(`✓ Propriété 3c (Dépendance à sens unique ICR <- IQRH : D1>=70 -> -3, IER>=75 -> -2, global>=70 -> -2) validée sur ${p3cRuns} vecteurs.`);
 
   // Propriété 4 : Tout vecteur -> exactement 1 des 12 profils
   let p4Runs = 0;
@@ -360,7 +491,8 @@ async function main() {
     fastCheckProperties: {
       property1_bounds: { runs: p1Runs, status: "PASSED", bounds: "[0, 100]" },
       property2_monotonicity: { runs: p2Runs, status: "PASSED" },
-      property3_iqrh_independence: { runs: p3Runs, status: "PASSED" },
+      property3a_iqrh_determinism: { runs: p3aRuns, status: "PASSED" },
+      property3b_iqrh_independence: { runs: p3bRuns, status: "PASSED" },
       property4_profile_partition: { runs: p4Runs, status: "PASSED", totalProfiles: 12 },
       property5_icr_renormalization: { runs: p5Runs, status: "PASSED", boundsPreserved: "0->0, 85->100" },
     },

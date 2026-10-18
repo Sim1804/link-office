@@ -15,7 +15,7 @@ Vocabulaire d'état : `FAIT`, `PARTIEL`, `BLOQUÉ`, `NON FAIT`
 | **C7** | FAIT | fix(iqrh): C7 alerte baisse 15 points sur soumission resultat | tests/iqrh/score-drop-alert.test.ts | src/lib/iqrh/result-service.ts, src/lib/notifications.ts, tests/iqrh/notifications-alert.test.ts |
 | **C8** | FAIT | fix(iris): C8 etiquette origine IA sur messages conversationnels | tests/iris/ai-label.test.ts | prisma/schema.prisma, prisma/migrations/20261018160000_add_iris_message_ai_generated/migration.sql, app/api/iris/conversation/[id]/message/route.ts, src/components/iris/IrisWidget.tsx |
 | **C9** | FAIT | fix(cron): C9 retention et purge programmee des transcriptions | tests/cron/cleanup-transcripts.test.ts | app/api/cron/cleanup/route.ts, vercel.json, .env.example |
-| **C10** | NON FAIT | — | — | — |
+| **C10** | FAIT | fix(validation): C10 propriete fast-check T5 independance ICR IQRH | tests/iqrh/t5-independence.test.ts | validation/t5-scoring/run.ts |
 | **C11** | NON FAIT | — | — | — |
 
 ---
