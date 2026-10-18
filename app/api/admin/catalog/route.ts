@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { invalidateLibraryCache } from "@/lib/iqrh/prescription-service";
 
 const createItemSchema = z.object({
   id: z.string().min(1, "L'ID est requis"),
@@ -131,6 +132,8 @@ export async function POST(req: Request) {
 
       return libItem;
     });
+
+    invalidateLibraryCache();
 
     return NextResponse.json(newItem, { status: 201 });
   } catch (error) {

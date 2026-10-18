@@ -57,6 +57,31 @@ export const PRESCRIPTION_SCORING_WEIGHTS = {
 /** Type générique pour représenter les données stockées dans la colonne JSON du modèle LibraryItem. */
 type LibraryData = Record<string, string | number | boolean | null>;
 
+/**
+ * Cache mémoire du catalogue LibraryItem (TTL 5 minutes).
+ * Permet d'éviter de requêter la table LibraryItem à chaque soumission d'évaluation.
+ */
+const LIBRARY_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const libraryCache = new Map<string, { items: any[]; timestamp: number }>();
+
+export function invalidateLibraryCache() {
+  libraryCache.clear();
+}
+
+export async function getCachedLibraryItems(library: string) {
+  const now = Date.now();
+  const cached = libraryCache.get(library);
+  if (cached && (now - cached.timestamp < LIBRARY_CACHE_TTL_MS)) {
+    return cached.items;
+  }
+  const items = await prisma.libraryItem.findMany({
+    where: { library },
+    orderBy: { id: "asc" },
+  });
+  libraryCache.set(library, { items, timestamp: now });
+  return items;
+}
+
 /** Mapping entre les clés énumérées (base de données) et les libellés compréhensibles humainement (issus du catalogue). */
 const dimensionLabels: Record<string, string> = {
   SOCIAL: "Relations sociales",
@@ -308,11 +333,8 @@ export class PrescriptionService {
       protectiveFactors
     };
 
-    // 1. Récupération et tri des Recommandations
-    const allRecommendations = await prisma.libraryItem.findMany({
-      where: { library: "Recommandations" },
-      orderBy: { id: "asc" },
-    });
+    // 1. Récupération et tri des Recommandations (catalogue en cache mémoire R2)
+    const allRecommendations = await getCachedLibraryItems("Recommandations");
     
     const topRecommendations = allRecommendations
       .filter((item) => {
@@ -326,11 +348,8 @@ export class PrescriptionService {
       })
       .slice(0, 5); // 5 Recommandations Premium
 
-    // 2. Récupération et tri des Micro-défis
-    const allChallenges = await prisma.libraryItem.findMany({
-      where: { library: "Micro-défis" },
-      orderBy: { id: "asc" },
-    });
+    // 2. Récupération et tri des Micro-défis (catalogue en cache mémoire R2)
+    const allChallenges = await getCachedLibraryItems("Micro-défis");
 
     const topChallenges = allChallenges
       .filter((item) => {
@@ -344,11 +363,8 @@ export class PrescriptionService {
       })
       .slice(0, 2);
 
-    // 3. Récupération et tri des Partenaires
-    const allPartners = await prisma.libraryItem.findMany({
-      where: { library: "Partenaires" },
-      orderBy: { id: "asc" },
-    });
+    // 3. Récupération et tri des Partenaires (catalogue en cache mémoire R2)
+    const allPartners = await getCachedLibraryItems("Partenaires");
 
     const topPartners = allPartners
       .filter((item) => {

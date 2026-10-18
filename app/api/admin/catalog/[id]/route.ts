@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { invalidateLibraryCache } from "@/lib/iqrh/prescription-service";
 
 const updateItemSchema = z.object({
   library: z.string().min(1),
@@ -153,6 +154,8 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
       return libItem;
     });
 
+    invalidateLibraryCache();
+
     return NextResponse.json(updatedItem);
   } catch (error: any) {
     console.error("Erreur PUT /api/admin/catalog/[id] :", error);
@@ -182,6 +185,8 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
       }
       await tx.libraryItem.delete({ where: { id } });
     });
+
+    invalidateLibraryCache();
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

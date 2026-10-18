@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Dimension, QuestionKind } from "@prisma/client";
+import { invalidateLibraryCache } from "@/lib/iqrh/prescription-service";
 
 export async function POST(req: Request) {
   try {
@@ -95,6 +96,8 @@ export async function POST(req: Request) {
         });
       }
     }
+
+    invalidateLibraryCache();
 
     return NextResponse.json({ success: true, message: "Catalogue importé avec succès" });
   } catch (error: any) {
