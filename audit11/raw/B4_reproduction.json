@@ -1,0 +1,16 @@
+{
+  "p1Reproduction": {
+    "concurrency": 100,
+    "total": 100,
+    "success": 100,
+    "errors": 0,
+    "errorRate": 0,
+    "errorTypes": {}
+  },
+  "p2Reproduction": {
+    "total": 200,
+    "success": 200,
+    "errors": 0,
+    "errorRate": 0
+  }
+}
