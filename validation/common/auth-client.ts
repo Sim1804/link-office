@@ -16,7 +16,7 @@ const sessionCache = new Map<string, AuthSession>();
 export async function getSessionCookie(
   baseUrl: string,
   email: string,
-  password = "Password123!"
+  password = "Admin1234!"
 ): Promise<string> {
   const cacheKey = `${baseUrl}|${email}`;
   const cached = sessionCache.get(cacheKey);
@@ -48,17 +48,30 @@ export async function getSessionCookie(
 
   try {
     const { PrismaClient } = await import("@prisma/client");
-    const { generateSync } = await import("otplib");
+    const { generateSync, generateSecret } = await import("otplib");
     const prisma = new PrismaClient();
+    // Évite le verrouillage des fixtures de test par le rate limiter lors de tests parallèles
+    await prisma.rateLimitAttempt.deleteMany({
+      where: { key: `login:${email.toLowerCase()}` },
+    });
     const dbUser = await prisma.user.findUnique({
       where: { email },
       select: { isTwoFactorEnabled: true, twoFactorSecret: true },
     });
-    await prisma.$disconnect();
-    if (dbUser?.isTwoFactorEnabled && dbUser.twoFactorSecret) {
-      const code = generateSync({ secret: dbUser.twoFactorSecret });
+    if (dbUser?.isTwoFactorEnabled) {
+      let secret = dbUser.twoFactorSecret;
+      if (!secret) {
+        // La fixture initialise un secret TOTP de test dédié (jamais un secret réel)
+        secret = generateSecret();
+        await prisma.user.update({
+          where: { email },
+          data: { twoFactorSecret: secret },
+        });
+      }
+      const code = generateSync({ secret });
       formData.append("twoFactorCode", code);
     }
+    await prisma.$disconnect();
   } catch (err) {
     console.warn("2FA resolution warning in auth-client:", err);
   }
@@ -66,7 +79,7 @@ export async function getSessionCookie(
   const initialCookiesHeader = csrfCookies.map((c) => c.split(";")[0]).join("; ");
 
   // 2. Appel de connexion credentials
-  const loginRes = await fetch(`${baseUrl}/api/auth/callback/credentials`, {
+  let loginRes = await fetch(`${baseUrl}/api/auth/callback/credentials`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -76,15 +89,37 @@ export async function getSessionCookie(
     redirect: "manual",
   });
 
-  const loginCookies: string[] =
+  let loginCookies: string[] =
     typeof (loginRes.headers as any).getSetCookie === "function"
       ? (loginRes.headers as any).getSetCookie()
       : loginRes.headers.get("set-cookie")
       ? [loginRes.headers.get("set-cookie")!]
       : [];
 
-  const allCookies = [...csrfCookies, ...loginCookies];
-  const cookieHeader = allCookies.map((c) => c.split(";")[0]).join("; ");
+  let allCookies = [...csrfCookies, ...loginCookies];
+  let cookieHeader = allCookies.map((c) => c.split(";")[0]).join("; ");
+
+  // En cas d'échec, tenter le mot de passe alternatif de fixture ("Password123!")
+  if (!cookieHeader.includes("session-token") && password !== "Password123!") {
+    formData.set("password", "Password123!");
+    loginRes = await fetch(`${baseUrl}/api/auth/callback/credentials`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: initialCookiesHeader,
+      },
+      body: formData.toString(),
+      redirect: "manual",
+    });
+    loginCookies =
+      typeof (loginRes.headers as any).getSetCookie === "function"
+        ? (loginRes.headers as any).getSetCookie()
+        : loginRes.headers.get("set-cookie")
+        ? [loginRes.headers.get("set-cookie")!]
+        : [];
+    allCookies = [...csrfCookies, ...loginCookies];
+    cookieHeader = allCookies.map((c) => c.split(";")[0]).join("; ");
+  }
 
   if (!cookieHeader.includes("session-token")) {
     throw new Error(`Échec d'authentification pour ${email} : cookie de session absent`);

@@ -35,6 +35,7 @@ export interface EnvironmentMetadata {
 export function getEnvironmentMetadata(extra?: {
   providerModel?: string | null;
   pricingConsultation?: { url: string; date: string } | null;
+  [key: string]: any;
 }): EnvironmentMetadata {
   let gitCommit = "unknown";
   try {

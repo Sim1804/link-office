@@ -5,29 +5,9 @@ import { ANONYMITY_THRESHOLD, createAnonymityBlockedResponse } from "@/lib/priva
 
 const BASE_URL = process.env.TEST_APP_URL || "http://localhost:3000";
 
-async function getSessionCookie(email: string): Promise<string> {
-  const csrfRes = await fetch(`${BASE_URL}/api/auth/csrf`);
-  const csrfCookies = csrfRes.headers.getSetCookie();
-  const csrfData = await csrfRes.json();
+import { getSessionCookie as getAuthSessionCookie } from "../../validation/common/auth-client";
 
-  const formData = new URLSearchParams();
-  formData.append("email", email);
-  formData.append("password", "Admin1234!");
-  formData.append("csrfToken", csrfData.csrfToken);
-
-  const loginRes = await fetch(`${BASE_URL}/api/auth/callback/credentials`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Cookie: csrfCookies.map((c) => c.split(";")[0]).join("; "),
-    },
-    body: formData.toString(),
-    redirect: "manual",
-  });
-
-  const loginCookies = loginRes.headers.getSetCookie();
-  return [...csrfCookies, ...loginCookies].map((c) => c.split(";")[0]).join("; ");
-}
+const getSessionCookie = (email: string) => getAuthSessionCookie(BASE_URL, email, "Admin1234!");
 
 describe("A3. Tests Réels HTTP de K-Anonymat (Seuil légal = 5, Sous-groupe de 2 personnes)", () => {
   const timestamp = Date.now();
