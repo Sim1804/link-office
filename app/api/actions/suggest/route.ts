@@ -103,6 +103,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "campaignId requis" }, { status: 400 });
     }
 
+    const campaign = await prisma.campaign.findUnique({
+      where: { id: campaignId },
+      select: { organizationId: true },
+    });
+    if (!campaign || (campaign.organizationId !== user.organizationId && user.role !== "SUPER_ADMIN")) {
+      return NextResponse.json({ error: "Campagne introuvable ou non autorisée" }, { status: 404 });
+    }
+
     // ── Déduplication : ne pas recréer si des actions existent déjà pour cette campagne ──
     const existingActions = await prisma.actionItem.findMany({
       where: { organizationId: user.organizationId, campaignId },

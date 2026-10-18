@@ -156,4 +156,51 @@ describe("Tests de Sécurité Cross-Tenant par Requêtes HTTP Réelles (Next.js 
     const body = await res.json();
     expect(body.error).toContain("Interdit");
   });
+
+  it("9. POST /api/actions avec campaignId d'une autre organisation (Org B) par Admin Org A reçoit 404", async () => {
+    const res = await fetch(`${BASE_URL}/api/actions`, {
+      method: "POST",
+      headers: {
+        Cookie: cookieAliceOrgA,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: "Action illégitime sur campagne Org B",
+        description: "Test cross-tenant campaignId injection",
+        campaignId: "camp-avenirsante-2026",
+      }),
+    });
+
+    expect(res.status).toBe(404);
+    const body = await res.json();
+    expect(body.error).toBe("Campagne introuvable ou non autorisée");
+  });
+
+  it("10. POST /api/actions/suggest avec campaignId d'une autre organisation reçoit 404", async () => {
+    const res = await fetch(`${BASE_URL}/api/actions/suggest`, {
+      method: "POST",
+      headers: {
+        Cookie: cookieAliceOrgA,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        campaignId: "camp-avenirsante-2026",
+      }),
+    });
+
+    expect(res.status).toBe(404);
+    const body = await res.json();
+    expect(body.error).toBe("Campagne introuvable ou non autorisée");
+  });
+
+  it("11. GET /api/actions/export pour Org A ne contient aucun titre de campagne d'une autre organisation", async () => {
+    const res = await fetch(`${BASE_URL}/api/actions/export`, {
+      headers: { Cookie: cookieAliceOrgA },
+    });
+
+    expect(res.status).toBe(200);
+    const csvText = await res.text();
+    expect(csvText).not.toContain("Avenir Santé Mutuelle");
+    expect(csvText).not.toContain("camp-avenirsante-2026");
+  });
 });

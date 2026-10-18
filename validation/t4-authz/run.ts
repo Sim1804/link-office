@@ -166,13 +166,33 @@ async function main() {
   log("✓ Tous les cookies de session authentifiés obtenus.");
 
   // Identifiants connus de l'Organisation A (Novatech Conseil) pour détecter les fuites cross-tenant
+  const ORG_A_ID = "cmuyj280k0000v6h87dvugtq1";
   const ORG_A_MARKERS = [
-    "Novatech",
-    "novatech",
+    ORG_A_ID,
     "camp-novatech-2026",
-    "alice.dupont",
-    "alice.martin",
+    "alice.dupont@novatech-conseil.fr",
+    "alice.martin@novatech-conseil.fr",
   ];
+
+  function detectOrgALeak(bodyText: string, caller: Identity): boolean {
+    if (caller !== "CROSS_ADMIN") return false;
+    try {
+      const data = JSON.parse(bodyText);
+      const containsOrgA = (obj: any): boolean => {
+        if (!obj || typeof obj !== "object") return false;
+        if (obj.organizationId && obj.organizationId === ORG_A_ID) return true;
+        if (obj.campaign && obj.campaign.organizationId === ORG_A_ID) return true;
+        for (const k of Object.keys(obj)) {
+          if (typeof obj[k] === "object" && containsOrgA(obj[k])) return true;
+        }
+        return false;
+      };
+      if (Array.isArray(data)) return data.some(containsOrgA);
+      return containsOrgA(data);
+    } catch {
+      return ORG_A_MARKERS.some((m) => bodyText.includes(m));
+    }
+  }
 
   // 4. Exécution réelle de la matrice
   log("Exécution des requêtes HTTP réelles (redirect: manual) pour l'ensemble des cellules...");
@@ -587,10 +607,8 @@ function getValidPayload(endpoint: string, method: string, id: Identity): any {
           } else if (isForbiddenCell && status >= 200 && status < 300) {
             category = "FORBIDDEN_BUT_2XX";
 
-            // Vérification de fuite de données cross-tenant
-            bodyContainsOrgA = ORG_A_MARKERS.some((marker) =>
-              responseBodyText.includes(marker)
-            );
+            // Vérification de fuite de données cross-tenant par comparaison d'organizationId
+            bodyContainsOrgA = detectOrgALeak(responseBodyText, id);
 
             const isTenantDerived = TENANT_DERIVED_ROUTES.includes(r.endpoint);
             if (id === "CROSS_ADMIN" && isTenantDerived && !bodyContainsOrgA) {

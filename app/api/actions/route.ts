@@ -72,6 +72,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Titre requis" }, { status: 400 });
     }
 
+    if (campaignId) {
+      const campaign = await prisma.campaign.findUnique({
+        where: { id: campaignId },
+        select: { organizationId: true },
+      });
+      if (!campaign || (campaign.organizationId !== user.organizationId && user.role !== "SUPER_ADMIN")) {
+        return NextResponse.json({ error: "Campagne introuvable ou non autorisée" }, { status: 404 });
+      }
+    }
+
     const newAction = await prisma.actionItem.create({
       data: {
         title,

@@ -37,6 +37,16 @@ export async function PATCH(
       return NextResponse.json({ error: "Action introuvable ou non autorisée" }, { status: 404 });
     }
 
+    if (body.campaignId) {
+      const campaign = await prisma.campaign.findUnique({
+        where: { id: body.campaignId },
+        select: { organizationId: true },
+      });
+      if (!campaign || (campaign.organizationId !== user.organizationId && user.role !== "SUPER_ADMIN")) {
+        return NextResponse.json({ error: "Campagne introuvable ou non autorisée" }, { status: 404 });
+      }
+    }
+
     const updatedAction = await prisma.actionItem.update({
       where: { id },
       data: {
