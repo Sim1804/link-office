@@ -39,3 +39,18 @@ c59896e fix(iris): V3 priorisation surdosage et ingestion toxique sur filtre med
 - `tests`
 - `types`
 - `validation`
+
+## Historique des commits de la passe 11 (`git log --oneline 447eacf..HEAD`)
+```text
+341fdd6 test(audit): scripts de mesure et verification qualite de la passe 11
+4b06c69 test(privacy): D1 a D4 constats de retention et temoins d'effacement RGPD
+c5ff0c5 test(authz): C1 a C4 audit attentes, self-reads, superadmin et rejeu matrice T4
+ab08eda test(perf): B1 a B4 protocole, mesures de latence et analyse contradiction P1/P2
+3913aa4 test(safety): A5 analyse du rappel couche 1 medical et jailbreak
+b4bfaf1 test(safety): A4 mesure sur jeu FINAL
+93e6fd9 test(safety): A4 jeu FINAL scelle
+5b9dc03 fix(iris): A3 resserrage des motifs de couche 1 pour specificite et rappel
+3d0f15a test(safety): A3 test rouge des fausses alertes sur jeu DEV
+ff497c6 test(safety): A2 mesure de reference sur jeu RESERVE
+e6c22d7 test(safety): A1 jeux DEV et RÉSERVÉ scellés
+```

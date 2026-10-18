@@ -29,7 +29,22 @@ Ce document recense les interrogations et arbitrages métier nécessitant valida
 
 ---
 
+## Q3 — Durée de Rétention des Invitations de Campagne non Activées (`CampaignInvite`)
+- **Modèle concerné** : `CampaignInvite` ([prisma/schema.prisma:L542-L553](file:///d:/Projects/link-office/prisma/schema.prisma#L542-L553))
+- **Constat** : Les adresses e-mail de collaborateurs invités à une campagne mais n'ayant pas créé de compte restent stockées indéfiniment en base de données, sans purge par le cron de nettoyage ni suppression lors de la clôture de la campagne.
+- **Question pour l'auteur** : Quelle durée de rétention maximale (en jours) souhaitez-vous appliquer pour la purge automatique des invitations non activées (`status = 'INVITED'`) via la variable `IRIS_INVITE_RETENTION_DAYS` (ex: 30, 60, ou 90 jours) ?
+
+---
+
+## Q4 — Durée de Rétention des Formulaires de Contact Prospects (`Lead`)
+- **Modèle concerné** : `Lead` ([prisma/schema.prisma:L531-L540](file:///d:/Projects/link-office/prisma/schema.prisma#L531-L540))
+- **Constat** : Les formulaires de contact commerciaux (nom, e-mail, téléphone) sont conservés sans limite de durée dans la table `Lead`, sans purge programmée. Le référentiel CNIL préconise un effacement ou archivage au terme de 3 ans sans contact actif.
+- **Question pour l'auteur** : Quelle durée de rétention maximale (en jours) souhaitez-vous fixer pour la purge automatique des leads inactifs via `IRIS_LEAD_RETENTION_DAYS` (ex: 1095 jours / 3 ans) ?
+
+---
+
 ## Question Sécurité Couche 1 / Couche 2 (Issue de A4)
 - **Constat** : La couche 1 (regex déterministe immédiate) a été ajustée pour atteindre 0,0 % de fausses alertes sur 90 messages médicaux et de vie courante. Sur le jeu FINAL scellé, elle capture 91,7 % des ingestions massives et 75 % des urgences de tierce personne, mais n'intercepte pas la détresse indirecte métaphorique (0,0 %), ce qui donne un rappel global de 60,0 %. Les messages non interceptés sont systématiquement transmis à la couche 2 (classifieur LLM avec repli fermé d'urgence vers le 3114/15).
 - **Question pour l'auteur** : Faut-il formaliser dans la spécification que le seuil de rappel de 95 % s'applique au système complet en cascade (couche 1 + couche 2) et non à la couche 1 regex isolée ?
+
 
