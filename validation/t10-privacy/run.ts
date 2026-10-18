@@ -12,6 +12,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { getEnvironmentMetadata } from "../common/env";
 import { getSessionCookie } from "../common/auth-client";
+import { deleteUserAccount } from "../../src/lib/user/account-service";
 
 const BASE_URL = process.env.TEST_APP_URL || "http://localhost:3000";
 const BASE_DIR = path.resolve(__dirname);
@@ -294,11 +295,9 @@ async function main() {
 
   // 3. Procédure d'Effacement RGPD
   log("3. Déclenchement de la suppression de l'utilisateur...");
-  // Suppression via cascade Prisma
-  await prisma.user.delete({
-    where: { id: userId },
-  });
-  log("✓ Commande prisma.user.delete exécutée.");
+  // Suppression via transaction d'effacement RGPD (purge EventLog + cascade User)
+  await deleteUserAccount(userId);
+  log("✓ Commande deleteUserAccount exécutée (EventLog + cascade User).");
 
   // 4. Interrogation de TOUTES les tables Prisma pour détecter d'éventuelles lignes résiduelles
   log(`4. Contrôle d'intégrité table par table sur l'ensemble des ${models.length} modèles Prisma...`);

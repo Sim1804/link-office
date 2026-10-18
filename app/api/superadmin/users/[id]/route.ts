@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { deleteUserAccount } from "@/lib/user/account-service";
 
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -53,9 +54,7 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
       return NextResponse.json({ error: "Utilisateur introuvable" }, { status: 404 });
     }
 
-    await prisma.user.delete({
-      where: { id },
-    });
+    await deleteUserAccount(id);
 
     return NextResponse.json({ success: true });
   } catch (error) {
