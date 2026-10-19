@@ -116,11 +116,21 @@ export class NotificationService {
   }
 
   /**
-   * Marque une notification comme lue.
+   * Marque une notification comme lue pour un utilisateur donné.
    */
   static async markAsRead(notificationId: string, userId: string) {
-    return prisma.notification.update({
+    return prisma.notification.updateMany({
       where: { id: notificationId, userId },
+      data: { status: "READ" },
+    });
+  }
+
+  /**
+   * Marque toutes les notifications non lues d'un utilisateur comme lues.
+   */
+  static async markAllAsRead(userId: string) {
+    return prisma.notification.updateMany({
+      where: { userId, status: "UNREAD" },
       data: { status: "READ" },
     });
   }
@@ -132,6 +142,17 @@ export class NotificationService {
     return prisma.notification.findMany({
       where: { userId, status: "UNREAD" },
       orderBy: { createdAt: "desc" },
+    });
+  }
+
+  /**
+   * Récupère les notifications récentes d'un utilisateur (lues et non lues).
+   */
+  static async getRecent(userId: string, limit = 20) {
+    return prisma.notification.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: limit,
     });
   }
 }

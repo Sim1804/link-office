@@ -513,8 +513,8 @@ export function IrisWidget() {
           role="dialog"
           aria-label="Coach IRIS"
         >
-          {/* HEADER PREMIUM AUX COULEURS DE LINKOFFICE (Hauteur alignée au pixel près sur la navbar = 65px) */}
-          <div className="h-[65px] min-h-[65px] max-h-[65px] px-4 sm:px-5 border-b border-[#E3EBE6] bg-gradient-to-r from-[#123D46] to-[#1E3048] text-white flex items-center justify-between shrink-0 box-border">
+          {/* HEADER PREMIUM AUX COULEURS DE LINKOFFICE (Hauteur alignée au pixel près sur la navbar = 64px / h-16) */}
+          <div className="h-16 min-h-16 max-h-16 px-4 sm:px-5 border-b border-[#E3EBE6] bg-gradient-to-r from-[#123D46] to-[#1E3048] text-white flex items-center justify-between shrink-0 box-border">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
                 <IrisMark size={24} monochrome isAnimated={true} />

@@ -120,8 +120,8 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3.5 shadow-2xs">
-      <div className="max-w-[1440px] mx-auto flex items-center justify-between">
+    <header className="sticky top-0 z-40 h-16 min-h-16 max-h-16 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 shadow-2xs w-full flex items-center box-border">
+      <div className="max-w-[1440px] mx-auto w-full h-full flex items-center justify-between">
 
         {/* Logo Link Office — redirige vers le bon point d'entrée selon le rôle */}
         <Link href={session ? (userRole === "SUPER_ADMIN" ? "/dashboard/superadmin" : userRole.startsWith("ADMIN_") ? navLinks[0].href : "/dashboard") : "/"}
@@ -178,23 +178,23 @@ export function Navbar() {
               <div className="relative" ref={profileDropdownRef}>
                 <button
                   onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                  className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full bg-[#FAF9F5] border border-[#E3EBE6] hover:border-[#00A99D] transition-all text-left"
+                  className="flex items-center gap-2 h-9 px-2 rounded-full bg-[#FAF9F5] border border-[#E3EBE6] hover:border-[#00A99D] transition-all text-left cursor-pointer shadow-2xs"
                 >
                   {userRole === "SUPER_ADMIN" ? (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#123D46] to-[#1a5663] text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#123D46] to-[#1a5663] text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
                       SA
                     </div>
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-[#00A99D] text-white font-jakarta font-bold text-xs flex items-center justify-center shadow-2xs">
+                    <div className="w-7 h-7 rounded-full bg-[#00A99D] text-white font-jakarta font-bold text-xs flex items-center justify-center shadow-2xs shrink-0">
                       {session.user?.name ? session.user.name.charAt(0).toUpperCase() : "U"}
                     </div>
                   )}
                   
-                  <div>
+                  <div className="hidden sm:block">
                     <div className="font-jakarta font-bold text-xs text-[#123D46] leading-none mb-0.5">
                       {session.user?.name || session.user?.email?.split("@")[0]}
                     </div>
-                    <div className="text-[10px] font-medium" style={{ color: roleBadge.color }}>
+                    <div className="text-[10px] font-medium leading-none" style={{ color: roleBadge.color }}>
                       {roleBadge.label}
                     </div>
                   </div>

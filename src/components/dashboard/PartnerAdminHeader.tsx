@@ -5,7 +5,8 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/src/components/brand/Logo";
-import { Bell, ChevronDown, LogOut, ArrowUpRight, ShieldCheck, Building2 } from "lucide-react";
+import { NotificationBell } from "@/components/layout/NotificationBell";
+import { ChevronDown, LogOut, ArrowUpRight, ShieldCheck, Building2 } from "lucide-react";
 import { PartnerPortalsNavigation } from "@/src/components/superadmin/PartnerPortalsNavigation";
 
 export interface PartnerAdminTabItem {
@@ -103,8 +104,8 @@ export function PartnerAdminHeader({
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3.5 shadow-2xs">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-40 h-16 min-h-16 max-h-16 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 shadow-2xs w-full flex items-center box-border">
+        <div className="max-w-[1440px] mx-auto w-full h-full flex items-center justify-between">
           <Link href="/" className="flex items-center text-decoration-none shrink-0 hover:opacity-90 transition-opacity">
             <Logo size="navbar" showTagline={false} />
           </Link>
@@ -170,26 +171,15 @@ export function PartnerAdminHeader({
               </Link>
             )}
 
-            <div className="relative">
-              <button
-                onClick={() => setShowNotifications(!showNotifications)}
-                className="p-2 rounded-xl text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 transition-colors relative"
-                aria-label="Notifications"
-              >
-                <Bell className="w-4 h-4" />
-                {isSuperAdmin && (
-                  <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#FFC629] ring-2 ring-white animate-pulse" />
-                )}
-              </button>
-            </div>
+            <NotificationBell />
 
             <div className="relative">
               <button
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full border border-[#E3EBE6] bg-white hover:bg-[#F4F1E8]/50 transition-colors shadow-2xs"
+                className="flex items-center gap-2 h-9 px-2 rounded-full border border-[#E3EBE6] bg-white hover:bg-[#F4F1E8]/50 transition-colors shadow-2xs cursor-pointer"
               >
                 {isSuperAdmin ? (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#123D46] to-[#1a5663] text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#123D46] to-[#1a5663] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
                     SA
                   </div>
                 ) : (

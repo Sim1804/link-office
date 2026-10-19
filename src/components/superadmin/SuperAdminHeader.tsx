@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { Logo } from "@/components/brand/Logo";
+import { NotificationBell } from "@/components/layout/NotificationBell";
 import {
   LayoutDashboard, Building2, Wallet, Newspaper, Users, Handshake, FolderTree, ShieldCheck,
-  Bell, ArrowUpRight, ChevronDown, LogOut, Sparkles, Plus, Search, CheckCircle2, AlertTriangle, FileSpreadsheet
+  ArrowUpRight, ChevronDown, LogOut, Sparkles, Plus, Search, CheckCircle2, AlertTriangle, FileSpreadsheet
 } from "lucide-react";
 
 interface SuperAdminHeaderProps {
@@ -19,7 +20,6 @@ export function SuperAdminHeader({ stats }: SuperAdminHeaderProps) {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
 
   const tabs = [
@@ -37,8 +37,8 @@ export function SuperAdminHeader({ stats }: SuperAdminHeaderProps) {
   return (
     <>
       {/* 1. TOP HEADER */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3.5 shadow-2xs transition-all">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-40 h-16 min-h-16 max-h-16 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 shadow-2xs w-full flex items-center box-border transition-all">
+        <div className="max-w-[1440px] mx-auto w-full h-full flex items-center justify-between">
           
           {/* Left: Brand Logo */}
           <Link href="/" className="flex items-center text-decoration-none shrink-0 hover:opacity-90 transition-opacity">
@@ -67,65 +67,23 @@ export function SuperAdminHeader({ stats }: SuperAdminHeaderProps) {
           <div className="flex items-center gap-3 relative">
             <Link
               href="/"
-              className="hidden lg:inline-flex items-center gap-1 text-xs text-[#123D46]/60 hover:text-[#00A99D] font-medium mr-2"
+              className="hidden lg:inline-flex items-center gap-1 text-xs text-[#123D46]/60 hover:text-[#00A99D] font-medium mr-1"
               title="Retourner au site public SaaS"
             >
               <span>Site public</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
 
-            <div className="relative">
-              <button
-                onClick={() => setShowNotifications(!showNotifications)}
-                className="p-2 rounded-xl text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#F4F1E8]/70 transition-colors relative"
-                aria-label="Notifications"
-              >
-                <Bell className="w-4 h-4" />
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#FFC629] ring-2 ring-white animate-pulse" />
-              </button>
-
-              {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-white border border-[#E3EBE6] rounded-2xl shadow-xl p-4 z-50 animate-scale-in text-xs">
-                  <div className="flex items-center justify-between pb-2 border-b border-[#E3EBE6]">
-                    <span className="font-jakarta font-bold text-[#123D46]">Centre de Notifications</span>
-                    <span className="text-[10px] font-bold text-[#00A99D] bg-[#00A99D]/10 px-2 py-0.5 rounded-full">
-                      2 non lues
-                    </span>
-                  </div>
-                  <div className="divide-y divide-[#E3EBE6]/60 mt-2 max-h-60 overflow-y-auto space-y-2">
-                    <div className="pt-2 text-[#123D46]">
-                      <div className="flex items-center gap-1.5 font-bold text-[#123D46]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00A99D]" />
-                        <span>Nouveau devis entrant</span>
-                      </div>
-                      <p className="text-[11px] text-[#123D46]/70 mt-0.5">
-                        Groupe Méridien (450 salariés) a demandé un chiffrage B2B.
-                      </p>
-                      <span className="text-[10px] text-[#123D46]/40">Hier à 16:40</span>
-                    </div>
-                    <div className="pt-2 text-[#123D46]">
-                      <div className="flex items-center gap-1.5 font-bold text-[#123D46]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#FFC629]" />
-                        <span>Alerte Binôme</span>
-                      </div>
-                      <p className="text-[11px] text-[#123D46]/70 mt-0.5">
-                        Le score IQRH global est passé sous les 70 points.
-                      </p>
-                      <span className="text-[10px] text-[#123D46]/40">Il y a 2 jours</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <NotificationBell />
 
             <div className="w-px h-6 bg-[#E3EBE6] mx-1 hidden sm:block" />
 
             <div className="relative">
               <button
                 onClick={() => setShowAdminMenu(!showAdminMenu)}
-                className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full border border-[#E3EBE6] hover:bg-[#F4F1E8]/50 transition-colors"
+                className="flex items-center gap-2 h-9 px-2 rounded-full border border-[#E3EBE6] hover:bg-[#F4F1E8]/50 transition-colors cursor-pointer shadow-2xs"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#123D46] to-[#1a5663] text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#123D46] to-[#1a5663] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
                   SA
                 </div>
                 <div className="hidden sm:flex flex-col items-start">

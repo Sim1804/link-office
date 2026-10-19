@@ -110,8 +110,8 @@ export function PublicNavbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 py-3.5 shadow-2xs w-full">
-      <div className="max-w-[1440px] mx-auto flex items-center justify-between">
+    <header className="sticky top-0 z-40 h-16 min-h-16 max-h-16 bg-white/95 backdrop-blur-md border-b border-[#E3EBE6] px-4 sm:px-8 shadow-2xs w-full flex items-center box-border">
+      <div className="max-w-[1440px] mx-auto w-full h-full flex items-center justify-between">
         {/* Zone 1: Logo Link Office (conforme au design standard Navbar) */}
         <Link
           href="/"
@@ -160,7 +160,7 @@ export function PublicNavbar() {
                 userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G" ? "/dashboard/b2g" :
                 "/dashboard"
               }
-              className={`px-4 sm:px-5 py-2 rounded-full text-white text-xs font-jakarta font-bold shadow-xs hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-1.5 whitespace-nowrap no-underline ${
+              className={`px-4 sm:px-5 h-9 rounded-full text-white text-xs font-jakarta font-bold shadow-xs hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-1.5 whitespace-nowrap no-underline ${
                 userRole === "SUPER_ADMIN" ? "bg-[#123D46] hover:bg-[#0D2530]" :
                 userRole === "ADMIN_B2B2C" ? "bg-[#5965E8] hover:bg-[#4A55C0]" :
                 userRole === "ADMIN_COLLECTIVITE" || userRole === "ADMIN_B2G" ? "bg-[#F26D35] hover:bg-[#E85B20]" :
@@ -185,13 +185,13 @@ export function PublicNavbar() {
             <>
               <Link
                 href="/auth/login"
-                className="hidden sm:inline-flex text-xs font-jakarta font-semibold text-[#123D46]/75 hover:text-[#123D46] px-4 py-2 rounded-full border border-[#E3EBE6] hover:border-[#00A99D] bg-[#FAF9F5] transition-all no-underline shadow-2xs"
+                className="hidden sm:inline-flex text-xs font-jakarta font-semibold text-[#123D46]/75 hover:text-[#123D46] px-4 h-9 items-center rounded-full border border-[#E3EBE6] hover:border-[#00A99D] bg-[#FAF9F5] transition-all no-underline shadow-2xs"
               >
                 Connexion
               </Link>
               <Link
                 href="/auth/register"
-                className="px-4 sm:px-5 py-2 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold shadow-xs hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-1.5 whitespace-nowrap no-underline"
+                className="px-4 sm:px-5 h-9 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white text-xs font-jakarta font-bold shadow-xs hover:shadow-md active:scale-[0.98] transition-all flex items-center gap-1.5 whitespace-nowrap no-underline"
               >
                 <span>Faire mon test IQRH</span>
                 <ArrowRight size={13} className="hidden sm:inline" />
@@ -204,7 +204,7 @@ export function PublicNavbar() {
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Menu"
-            className="lg:hidden p-2 text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#FAF9F5] rounded-full transition-colors border border-[#E3EBE6]"
+            className="lg:hidden w-9 h-9 flex items-center justify-center text-[#123D46]/70 hover:text-[#123D46] hover:bg-[#FAF9F5] rounded-full transition-colors border border-[#E3EBE6] cursor-pointer"
           >
             {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
