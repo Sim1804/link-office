@@ -1,28 +1,44 @@
 import { Navbar } from "@/components/layout/Navbar";
+import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Footer } from "@/components/layout/Footer";
-import { Shield, Lock, Database, UserX, Mail } from "lucide-react";
+import { auth } from "@/lib/auth";
+import Link from "next/link";
+import { Shield, Lock, Database, UserX, Mail, ArrowLeft, ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Politique de confidentialité — Link Office",
   description: "Politique de confidentialité et protection des données personnelles de Link Office.",
 };
 
-export default function PolitiqueConfidentialite() {
+export default async function PolitiqueConfidentialite() {
+  const session = await auth();
+
   return (
     <>
-      <Navbar />
+      {session ? <Navbar /> : <PublicNavbar />}
       <main className="page-main">
         <div className="page-container" style={{ position: "relative", zIndex: 1 }}>
 
+          {/* Fil d'Ariane & Bouton Retour vers l'accueil */}
+          <div style={{ marginBottom: 20 }}>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-xs font-jakarta font-semibold text-[#123D46]/75 hover:text-[#00A99D] bg-white hover:bg-[#FAF9F5] border border-[#E3EBE6] px-3.5 py-1.5 rounded-full shadow-2xs transition-all group no-underline"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+              <span>Retour à l&apos;accueil</span>
+            </Link>
+          </div>
+
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 32 }}>
-            <div style={{ width: 48, height: 48, background: "rgba(124,58,237,0.12)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 48, height: 48, background: "rgba(0,169,157,0.12)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Shield style={{ width: 24, height: 24, color: "var(--primary)" }} />
             </div>
             <div>
-              <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 28, color: "var(--text-1)" }}>
+              <h1 style={{ fontFamily: "'Plus Jakarta Sans', Inter, sans-serif", fontWeight: 700, fontSize: 28, color: "var(--text-1)", margin: 0 }}>
                 Politique de confidentialité
               </h1>
-              <p style={{ color: "var(--text-2)", fontSize: 13 }}>Dernière mise à jour : 1er août 2026</p>
+              <p style={{ color: "var(--text-2)", fontSize: 13, margin: "4px 0 0 0" }}>Dernière mise à jour : 1er août 2026</p>
             </div>
           </div>
 
@@ -86,9 +102,9 @@ export default function PolitiqueConfidentialite() {
             <div key={title} className="card" style={{ marginBottom: 16 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
                 <Icon size={16} style={{ color: "var(--primary)" }} />
-                <h2 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 16 }}>{title}</h2>
+                <h2 style={{ color: "var(--text-1)", fontWeight: 600, fontSize: 16, margin: 0 }}>{title}</h2>
               </div>
-              <ul style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <ul style={{ display: "flex", flexDirection: "column", gap: 8, paddingLeft: 0, listStyle: "none" }}>
                 {content.map((item) => (
                   <li key={item} style={{ display: "flex", gap: 10, color: "var(--text-2)", fontSize: 14, lineHeight: 1.6 }}>
                     <span style={{ color: "var(--primary)", flexShrink: 0, marginTop: 2 }}>·</span>
@@ -99,13 +115,31 @@ export default function PolitiqueConfidentialite() {
             </div>
           ))}
 
-          <div style={{ textAlign: "center", marginTop: 24, padding: "20px", background: "rgba(124,58,237,0.05)", borderRadius: 12, border: "1px solid rgba(124,58,237,0.1)" }}>
-            <p style={{ color: "var(--text-2)", fontSize: 13 }}>
+          <div style={{ textAlign: "center", marginTop: 24, padding: "20px", background: "rgba(0,169,157,0.06)", borderRadius: 12, border: "1px solid rgba(0,169,157,0.15)" }}>
+            <p style={{ color: "var(--text-2)", fontSize: 13, margin: 0 }}>
               Pour toute question relative à la protection de vos données :{" "}
-              <a href="mailto:privacy@link-office.fr" style={{ color: "var(--primary)", textDecoration: "none" }}>
+              <a href="mailto:privacy@link-office.fr" style={{ color: "var(--primary)", textDecoration: "none", fontWeight: 600 }}>
                 privacy@link-office.fr
               </a>
             </p>
+          </div>
+
+          {/* Navigation bas de page */}
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 24, borderTop: "1px solid #E3EBE6", marginTop: 32 }}>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-xs font-jakarta font-bold text-[#00A99D] hover:text-[#199E9A] group transition-colors no-underline"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span>Retour à la page d&apos;accueil</span>
+            </Link>
+            <Link
+              href="/mentions-legales"
+              className="inline-flex items-center gap-1.5 text-xs font-jakarta text-[#123D46]/70 hover:text-[#00A99D] group transition-colors no-underline"
+            >
+              <span>Consulter les mentions légales</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
         </div>
       </main>
