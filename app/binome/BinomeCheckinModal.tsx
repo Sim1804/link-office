@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { X, Loader2, Smile, Meh, Frown, CheckCircle2, AlertCircle } from "lucide-react";
+import { X, Loader2, Smile, Meh, Frown, CheckCircle2, AlertCircle, Clock, Circle } from "lucide-react";
 
 export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; onClose: () => void }) {
   const [loading, setLoading] = useState(false);
@@ -107,23 +107,30 @@ export function BinomeCheckinModal({ binomeId, onClose }: { binomeId: string; on
               Où en êtes-vous de votre action prévue ?
             </label>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {["Réalisée", "En cours", "Pas commencée"].map(opt => {
-                const isSelected = actionStatus === opt;
+              {[
+                { label: "Réalisée", icon: CheckCircle2, activeColor: "#10b981", activeBg: "rgba(16,185,129,0.15)" },
+                { label: "En cours", icon: Clock, activeColor: "var(--primary)", activeBg: "rgba(0,169,157,0.15)" },
+                { label: "Pas commencée", icon: Circle, activeColor: "var(--text-2)", activeBg: "rgba(148,163,184,0.15)" }
+              ].map(opt => {
+                const isSelected = actionStatus === opt.label;
+                const Icon = opt.icon;
                 return (
                   <button
-                    key={opt}
-                    onClick={() => setActionStatus(opt)}
+                    key={opt.label}
+                    onClick={() => setActionStatus(opt.label)}
                     style={{
                       padding: "8px 16px", borderRadius: 999, fontSize: 13, fontWeight: 600,
-                      background: isSelected ? "rgba(0,169,157,0.15)" : "var(--bg)",
-                      color: isSelected ? "var(--primary)" : "var(--text-2)",
-                      border: `1px solid ${isSelected ? "rgba(0,169,157,0.3)" : "var(--border)"}`,
-                      cursor: "pointer", transition: "all 0.2s"
+                      background: isSelected ? opt.activeBg : "var(--bg)",
+                      color: isSelected ? opt.activeColor : "var(--text-2)",
+                      border: `1px solid ${isSelected ? opt.activeColor : "var(--border)"}`,
+                      cursor: "pointer", transition: "all 0.2s",
+                      display: "inline-flex", alignItems: "center", gap: 6
                     }}
                   >
-                    {opt}
+                    <Icon size={14} />
+                    {opt.label}
                   </button>
-                )
+                );
               })}
             </div>
           </div>

@@ -1,12 +1,23 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
+import { checkDistributedRateLimit } from "@/lib/rate-limit";
 
 const VALID_PLANS = ["B2B_ENTREPRISE", "B2G", "B2B2C_PARTENAIRE"] as const;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: Request) {
   try {
+    const clientIP =
+      (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() ||
+      req.headers.get("x-real-ip") ||
+      "127.0.0.1";
+
+    const rateLimit = await checkDistributedRateLimit(`lead:${clientIP}`, { limit: 5, windowMs: 60_000 });
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Trop de requêtes. Veuillez patienter avant d'envoyer une nouvelle demande." }, { status: 429 });
+    }
+
     const body = await req.json();
     const { 
       plan, 

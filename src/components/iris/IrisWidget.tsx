@@ -211,8 +211,29 @@ interface Message {
   aiGenerated?: boolean;
 }
 
-const QUICK_PROMPTS = [
-  "Comment est calculé mon score IQRH ?",
+const QUICK_PROMPTS_SUPERADMIN = [
+  "Comment fonctionne le seuil de k-anonymat (>= 5) ?",
+  "Comment interpréter les indicateurs IQRH, ICR et IER ?",
+  "Quels sont les modèles LLM configurés pour IRIS ?",
+  "Quelles sont les solutions pour les organisations ?"
+];
+
+const QUICK_PROMPTS_ORGADMIN = [
+  "Comment analyser le baromètre de mes équipes ?",
+  "Quelles actions managériales sur nos points d'attention ?",
+  "Comment fonctionne le programme Binôme Relationnel ?",
+  "Comment mobiliser nos collaborateurs sur la campagne ?"
+];
+
+const QUICK_PROMPTS_COMPLETED = [
+  "Comment interpréter mes résultats IQRH ?",
+  "Quelles actions prioritaires sur mes vigilances ?",
+  "Comment avancer sur mes micro-défis ?",
+  "Comment fonctionne le binôme relationnel ?"
+];
+
+const QUICK_PROMPTS_DEFAULT = [
+  "Comment fonctionne le bilan IQRH ?",
   "Quelles sont les 5 dimensions du climat relationnel ?",
   "Comment fonctionne le coaching IA IRIS ?",
   "Quelles sont les solutions pour mon organisation ?"
@@ -222,6 +243,10 @@ export function IrisWidget() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const router = useRouter();
+
+  const userRole = session?.user?.role;
+  const isSuperAdmin = userRole === "SUPER_ADMIN";
+  const isOrgAdmin = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE"].includes(userRole || "");
   
   const { isOpen, setIsOpen, activeTab, setActiveTab } = useIris();
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -230,6 +255,7 @@ export function IrisWidget() {
   const [loading, setLoading] = useState(false);
   const [explicationLoading, setExplicationLoading] = useState(false);
   const [explication, setExplication] = useState<string | null>(null);
+  const [hasCompletedAssessment, setHasCompletedAssessment] = useState<boolean>(!isSuperAdmin);
   
   const widgetRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -287,6 +313,9 @@ export function IrisWidget() {
     try {
       const res = await getIrisExplication();
       setExplication(res.explication);
+      if (typeof res.hasAssessment === "boolean") {
+        setHasCompletedAssessment(isSuperAdmin ? false : res.hasAssessment);
+      }
     } catch {
       setExplication("IRIS n'est pas disponible pour le moment. Veuillez réessayer plus tard.");
     } finally {
@@ -298,6 +327,19 @@ export function IrisWidget() {
     setIsOpen(false);
     router.push(url);
   }, [router, setIsOpen]);
+
+  const getWelcomeText = useCallback(() => {
+    const userName = session?.user?.name?.trim();
+    if (isSuperAdmin) {
+      return "Bonjour Super Admin ! Je suis IRIS, l'IA experte de Link Office. En tant qu'administrateur de la plateforme, je vous assiste dans le pilotage des organisations, la configuration des modèles IA, les règles méthodologiques IQRH et le support opérationnel. Comment puis-je vous accompagner aujourd'hui ?";
+    }
+    if (isOrgAdmin) {
+      return `Bonjour ${userName || "Gestionnaire"} ! Je suis IRIS, votre conseiller d'intelligence relationnelle. En tant que responsable de votre organisation, je vous accompagne dans l'animation de vos campagnes et l'analyse de votre baromètre d'équipe. Comment puis-je vous aider aujourd'hui ?`;
+    }
+    return userName
+      ? `Bonjour ${userName} ! Je suis IRIS, votre coach relationnel. J'ai analysé vos indicateurs et vos dynamiques d'équipe. Comment puis-je vous accompagner aujourd'hui ?`
+      : "Bonjour ! Je suis IRIS, votre coach relationnel. J'ai analysé vos indicateurs et vos dynamiques d'équipe. Comment puis-je vous accompagner aujourd'hui ?";
+  }, [isSuperAdmin, isOrgAdmin, session?.user?.name]);
 
   const startChat = async () => {
     if (!session?.user?.id) {
@@ -318,6 +360,9 @@ export function IrisWidget() {
     try {
       // 1. Tenter de restaurer la conversation active (dialogue continu persistant)
       const activeRes = await getActiveIrisConversation();
+      if (typeof activeRes?.hasCompletedAssessment === "boolean") {
+        setHasCompletedAssessment(isSuperAdmin ? false : activeRes.hasCompletedAssessment);
+      }
       if (activeRes?.conversation?.id && activeRes.conversation.messages.length > 0) {
         setConversationId(activeRes.conversation.id);
         setMessages(activeRes.conversation.messages.map(m => ({
@@ -331,16 +376,15 @@ export function IrisWidget() {
 
       // 2. Sinon, initialiser une nouvelle session propre
       const conv = await startIrisConversation(session.user.id);
+      if (typeof conv?.hasCompletedAssessment === "boolean") {
+        setHasCompletedAssessment(isSuperAdmin ? false : conv.hasCompletedAssessment);
+      }
       setConversationId(conv.conversation_id);
-      const userName = session.user.name?.trim();
-      const welcomeText = userName
-        ? `Bonjour ${userName} ! Je suis IRIS, votre coach relationnel. J'ai analysé vos indicateurs et vos dynamiques d'équipe. Comment puis-je vous accompagner aujourd'hui ?`
-        : "Bonjour ! Je suis IRIS, votre coach relationnel. J'ai analysé vos indicateurs et vos dynamiques d'équipe. Comment puis-je vous accompagner aujourd'hui ?";
 
       setMessages([{
         id: "welcome",
         sender: "iris",
-        text: welcomeText,
+        text: getWelcomeText(),
         timestamp: new Date(),
       }]);
     } catch {
@@ -359,16 +403,15 @@ export function IrisWidget() {
     setLoading(true);
     try {
       const conv = await startIrisConversation(session.user.id);
+      if (typeof conv?.hasCompletedAssessment === "boolean") {
+        setHasCompletedAssessment(isSuperAdmin ? false : conv.hasCompletedAssessment);
+      }
       setConversationId(conv.conversation_id);
-      const userName = session.user.name?.trim();
-      const welcomeText = userName
-        ? `Bonjour ${userName} ! Je suis IRIS, votre coach relationnel. J'ai réinitialisé notre échange. Comment puis-je vous accompagner aujourd'hui ?`
-        : "Bonjour ! Je suis IRIS, votre coach relationnel. J'ai réinitialisé notre échange. Comment puis-je vous accompagner aujourd'hui ?";
 
       setMessages([{
         id: `welcome-${Date.now()}`,
         sender: "iris",
-        text: welcomeText,
+        text: getWelcomeText(),
         timestamp: new Date(),
       }]);
     } catch {
@@ -486,8 +529,8 @@ export function IrisWidget() {
           type="button"
           onClick={() => setIsOpen(true)}
           className="fixed bottom-5 sm:bottom-6 right-4 sm:right-6 z-50 w-14 h-14 sm:w-[58px] sm:h-[58px] rounded-full bg-[#5965E8] hover:bg-[#4853d6] text-white flex items-center justify-center shadow-[0_8px_30px_rgba(89,101,232,0.42)] border-none cursor-pointer hover:scale-105 active:scale-95 transition-all p-0 group"
-          aria-label="Ouvrir Coach IRIS"
-          title="Coach IRIS — Intelligence Relationnelle"
+          aria-label={isSuperAdmin ? "Ouvrir IRIS Copilot" : isOrgAdmin ? "Ouvrir IRIS Conseiller RH" : "Ouvrir Coach IRIS"}
+          title={isSuperAdmin ? "IRIS Copilot — Supervision Plateforme" : isOrgAdmin ? "IRIS — Conseiller RH & QVT" : "Coach IRIS — Intelligence Relationnelle"}
         >
           {/* Logo IRIS avec marge intérieure minimale pour une visibilité optimale */}
           <div className="w-10 h-10 flex items-center justify-center">
@@ -499,7 +542,7 @@ export function IrisWidget() {
 
           {/* Infobulle d'accueil au survol sur desktop */}
           <span className="hidden sm:inline-flex items-center gap-1.5 absolute right-16 top-1/2 -translate-y-1/2 bg-white text-[#123D46] px-3.5 py-1.5 rounded-full shadow-lg border border-[#E3EBE6] text-xs font-jakarta font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-            <span>Coach IRIS IA</span>
+            <span>{isSuperAdmin ? "IRIS Copilot IA" : isOrgAdmin ? "IRIS Conseiller RH" : "Coach IRIS IA"}</span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           </span>
         </button>
@@ -511,7 +554,7 @@ export function IrisWidget() {
           ref={widgetRef}
           className="fixed top-0 right-0 z-50 w-full sm:w-[420px] h-screen bg-white shadow-2xl flex flex-col border-l border-[#E3EBE6] overflow-hidden transition-transform duration-300 ease-in-out"
           role="dialog"
-          aria-label="Coach IRIS"
+          aria-label={isSuperAdmin ? "IRIS Copilot" : isOrgAdmin ? "IRIS Conseiller RH" : "Coach IRIS"}
         >
           {/* HEADER PREMIUM AUX COULEURS DE LINKOFFICE (Hauteur alignée au pixel près sur la navbar = 64px / h-16) */}
           <div className="h-16 min-h-16 max-h-16 px-4 sm:px-5 border-b border-[#E3EBE6] bg-gradient-to-r from-[#123D46] to-[#1E3048] text-white flex items-center justify-between shrink-0 box-border">
@@ -522,12 +565,12 @@ export function IrisWidget() {
               <div>
                 <div className="flex items-center gap-2 leading-none">
                   <h3 className="font-jakarta font-extrabold text-sm text-white m-0 leading-tight">
-                    Coach IRIS
+                    {isSuperAdmin ? "IRIS Copilot" : isOrgAdmin ? "IRIS Conseiller RH" : "Coach IRIS"}
                   </h3>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 </div>
                 <p className="text-[11px] text-[#E3EBE6]/80 font-inter m-0 leading-tight mt-0.5">
-                  Intelligence Relationnelle · En ligne
+                  {isSuperAdmin ? "Supervision Plateforme · En ligne" : isOrgAdmin ? "Intelligence Relationnelle & QVT · En ligne" : "Intelligence Relationnelle · En ligne"}
                 </p>
               </div>
             </div>
@@ -548,7 +591,7 @@ export function IrisWidget() {
                 onClick={() => setIsOpen(false)}
                 className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border-none cursor-pointer"
                 title="Fermer IRIS (Échap)"
-                aria-label="Fermer Coach IRIS"
+                aria-label="Fermer IRIS"
               >
                 <X size={15} />
               </button>
@@ -563,14 +606,14 @@ export function IrisWidget() {
                 onClick={() => handleTabSwitch("coach")}
                 className={`flex-1 py-1.5 px-3 rounded-full font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer ${activeTab === "coach" ? "bg-white text-[#123D46] shadow-xs border border-[#E3EBE6]" : "text-[#123D46]/60 hover:text-[#123D46]"}`}
               >
-                <MessageCircle size={14} /> Coach
+                <MessageCircle size={14} /> {isSuperAdmin ? "Assistant" : isOrgAdmin ? "Conseiller" : "Coach"}
               </button>
               <button
                 type="button"
                 onClick={() => handleTabSwitch("explication")}
                 className={`flex-1 py-1.5 px-3 rounded-full font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer ${activeTab === "explication" ? "bg-white text-[#123D46] shadow-xs border border-[#E3EBE6]" : "text-[#123D46]/60 hover:text-[#123D46]"}`}
               >
-                <FileText size={14} /> Analyse
+                <FileText size={14} /> {isSuperAdmin ? "Gouvernance" : isOrgAdmin ? "Repères" : "Analyse"}
               </button>
             </div>
           )}
@@ -578,16 +621,16 @@ export function IrisWidget() {
           {/* ZONE DE CONTENU / MESSAGES */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 bg-white">
             
-            {/* ONGLET 2: EXPLICATION & DÉCODAGE DES RÉSULTATS */}
+            {/* ONGLET 2: EXPLICATION & DÉCODAGE DES RÉSULTATS / CADRAGE GOUVERNANCE */}
             {activeTab === "explication" && session?.user?.id && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between pb-3 border-b border-[#E3EBE6]">
                   <div>
                     <h4 className="font-jakarta font-bold text-sm text-[#123D46] m-0">
-                      Analyse de votre profil
+                      {isSuperAdmin ? "Cadrage de Gouvernance" : isOrgAdmin ? "Repères de Pilotage RH" : "Analyse de votre profil"}
                     </h4>
                     <p className="text-[11px] text-[#123D46]/60 font-inter m-0">
-                      Décodage personnalisé selon vos réponses IQRH
+                      {isSuperAdmin ? "Supervision globale et cadre méthodologique" : isOrgAdmin ? "Repères méthodologiques et climat social d'équipe" : "Décodage personnalisé selon vos réponses IQRH"}
                     </p>
                   </div>
                 </div>
@@ -595,7 +638,9 @@ export function IrisWidget() {
                 {explicationLoading ? (
                   <div className="flex flex-col items-center justify-center py-12 gap-3">
                     <span className="w-6 h-6 border-2 border-[#00A99D] border-t-transparent rounded-full animate-spin" />
-                    <span className="text-xs text-[#123D46]/60 font-inter">{"Génération de l'analyse par IRIS..."}</span>
+                    <span className="text-xs text-[#123D46]/60 font-inter">
+                      {isSuperAdmin ? "Chargement du cadrage de gouvernance..." : isOrgAdmin ? "Chargement des repères d'équipe..." : "Génération de l'analyse par IRIS..."}
+                    </span>
                   </div>
                 ) : explication ? (
                   <div className="space-y-4">
@@ -607,7 +652,7 @@ export function IrisWidget() {
                       onClick={() => loadExplication(true)} 
                       className="w-full flex items-center justify-center gap-2 py-2.5 px-5 rounded-full bg-white border border-[#E3EBE6] hover:bg-[#FAF9F5] text-[#123D46] font-jakarta font-semibold text-xs transition-colors cursor-pointer"
                     >
-                      <RefreshCw size={14} /> {"Actualiser l'analyse"}
+                      <RefreshCw size={14} /> {isSuperAdmin ? "Actualiser le cadrage" : isOrgAdmin ? "Actualiser les repères" : "Actualiser l'analyse"}
                     </button>
                   </div>
                 ) : (
@@ -616,13 +661,13 @@ export function IrisWidget() {
                     onClick={() => loadExplication(false)} 
                     className="w-full py-2.5 px-5 rounded-full bg-[#00A99D] hover:bg-[#199E9A] text-white font-jakarta font-bold text-xs transition-colors shadow-xs cursor-pointer"
                   >
-                    Obtenir mon analyse IRIS
+                    {isSuperAdmin ? "Consulter le cadrage de gouvernance" : isOrgAdmin ? "Consulter les repères d'équipe" : "Obtenir mon analyse IRIS"}
                   </button>
                 )}
               </div>
             )}
 
-            {/* ONGLET 1: COACHING CONVERSATIONNEL */}
+            {/* ONGLET 1: COACHING CONVERSATIONNEL / ASSISTANT SUPERADMIN */}
             {activeTab === "coach" && (
               <div className="flex flex-col gap-4">
                 {messages.map((msg) => (
@@ -645,7 +690,7 @@ export function IrisWidget() {
                         onNavigate={handleNavigate}
                       />
                       
-                      {msg.isPremiumCTA && (
+                      {msg.isPremiumCTA && !isSuperAdmin && (
                         <div className="mt-3">
                           <button
                             type="button"
@@ -677,10 +722,23 @@ export function IrisWidget() {
                 {messages.length <= 1 && (
                   <div className="pt-2 space-y-2">
                     <span className="text-[11px] font-jakarta font-bold text-[#123D46]/60 uppercase tracking-wider block">
-                      Questions fréquentes
+                      {isSuperAdmin 
+                        ? "Supervision & Gouvernance" 
+                        : isOrgAdmin 
+                          ? "Pilotage RH & Climat Social" 
+                          : hasCompletedAssessment 
+                            ? "Suggestions de coaching" 
+                            : "Questions fréquentes"}
                     </span>
                     <div className="flex flex-col gap-1.5">
-                      {QUICK_PROMPTS.map((prompt, idx) => (
+                      {(isSuperAdmin 
+                        ? QUICK_PROMPTS_SUPERADMIN 
+                        : isOrgAdmin 
+                          ? QUICK_PROMPTS_ORGADMIN 
+                          : hasCompletedAssessment 
+                            ? QUICK_PROMPTS_COMPLETED 
+                            : QUICK_PROMPTS_DEFAULT
+                      ).map((prompt, idx) => (
                         <button
                           key={idx}
                           type="button"
@@ -716,7 +774,13 @@ export function IrisWidget() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter") handleSendMessage(input); }}
-                  placeholder="Posez une question sur vos dynamiques relationnelles..."
+                  placeholder={
+                    isSuperAdmin 
+                      ? "Posez une question sur la supervision, le k-anonymat ou les règles IQRH..." 
+                      : isOrgAdmin 
+                        ? "Posez une question sur le climat social ou l'animation de campagne..." 
+                        : "Posez une question sur vos dynamiques relationnelles..."
+                  }
                   disabled={loading}
                   className="flex-1 px-4 py-2.5 rounded-full border border-[#E3EBE6] text-xs focus:outline-none focus:border-[#00A99D] text-[#123D46] bg-[#FAF9F5] disabled:opacity-50"
                 />

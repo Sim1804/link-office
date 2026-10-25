@@ -1,6 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
 .pnp.*
@@ -10,62 +8,107 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# Next.js build & cache
 /.next/
 /out/
 /build
 
-# misc
-.DS_Store
-Thumbs.db
-*.pem
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
 
-# debug
+# Testing & Validation
+/coverage
+tests_t1_t2/
+test_t1_t2/
+tests/
+validation/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+
+# Environment and Secrets (All .env files except template)
+.env
+.env.*
+!.env.example
+.env.vault
+
+# Certificates, Keys & Credentials
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+*.keystore
+id_rsa*
+id_ed25519*
+credentials.json
+service-account*.json
+google-services.json
+firebase*.json
+
+# Logs & Debug
+*.log
+logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
-.env
-.env*.local
-.env.development
-.env.test
-.env.production
-.env.local
-.env.vercel*
+# Database & Storage
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.dump
+*.backup
+.neon
 
-# vercel
+# Uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Sensitive Data Exports & Datasets (PII)
+*Users test*.csv
+*cohort*.csv
+*export*.csv
+*export*.json
+
+# Scratches, Audits & Benchmarks (Root only)
+/scratch/
+/scratch-*/
+/scratch-*
+/audit/
+/audit[0-9]*/
+/perf*/
+/benchmark*/
+/Documentation/
+/scripts/
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+venv/
+.venv/
+
+# Vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# IDEs and Editors
+# IDEs & System files
+.DS_Store
+Thumbs.db
+.idea
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.idea
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-# custom
 *.bak
-Documentation/
-scripts/
-
-# uploads
-/public/uploads/*
-!/public/uploads/.gitkeep
-
-# database
-*.db
-*.db-journal
-.neon

@@ -18,14 +18,24 @@ export async function GET() {
       orderBy: { createdAt: "desc" }
     });
 
+    function sanitizeCsvValue(val: string | null | undefined): string {
+      if (!val) return '""';
+      const str = String(val).replace(/"/g, '""');
+      // CWE-1236 : Si la cellule débute par =, +, -, @, \t ou \r, préfixer d'une apostrophe pour forcer l'interprétation texte
+      if (/^[=+\-@\t\r]/.test(str)) {
+        return `"'${str}"`;
+      }
+      return `"${str}"`;
+    }
+
     const csvHeaders = ["ID", "Prénom", "Nom", "Email", "Rôle", "Organisation", "Date de Création"];
     const csvRows = users.map(u => [
       u.id,
-      `"${(u.firstName || "").replace(/"/g, '""')}"`,
-      `"${(u.lastName || "").replace(/"/g, '""')}"`,
-      `"${(u.email || "").replace(/"/g, '""')}"`,
+      sanitizeCsvValue(u.firstName),
+      sanitizeCsvValue(u.lastName),
+      sanitizeCsvValue(u.email),
       u.role,
-      `"${(u.organization?.name || "").replace(/"/g, '""')}"`,
+      sanitizeCsvValue(u.organization?.name),
       new Date(u.createdAt).toLocaleDateString("fr-FR")
     ].join(","));
 

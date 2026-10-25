@@ -1,14 +1,33 @@
 /**
+ * Assainit une chaîne HTML pour neutraliser toute injection XSS
+ * (scripts, iframes, gestionnaires d'événements, URIs javascript:)
+ */
+export function sanitizeHtmlContent(html: string): string {
+  if (!html) return "";
+  let clean = html;
+  // 1. Suppression des balises exécutables ou dangereuses
+  clean = clean.replace(/<\s*(script|iframe|object|embed|applet|style|meta|link|base)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, "");
+  clean = clean.replace(/<\s*(script|iframe|object|embed|applet|style|meta|link|base)[^>]*\/?>/gi, "");
+  // 2. Suppression des gestionnaires d'événements (onload, onerror, onclick, etc.)
+  clean = clean.replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "");
+  // 3. Neutralisation des protocoles exécutables (javascript:, vbscript:)
+  clean = clean.replace(/(href|src|action)\s*=\s*["']?\s*(?:javascript|vbscript):[^"'>\s]*/gi, '$1="#"');
+  clean = clean.replace(/(href|src|action)\s*=\s*["']?\s*data:(?!image\/(?:png|jpeg|jpg|webp|gif);base64,)[^"'>\s]*/gi, '$1="#"');
+  return clean;
+}
+
+/**
  * Convertit un contenu média Markdown en HTML sémantique
- * ou préserve le code HTML s'il a déjà été généré par un éditeur WYSIWYG (TipTap).
+ * ou préserve le code HTML s'il a déjà été généré par un éditeur WYSIWYG (TipTap),
+ * tout en garantissant un assainissement strict anti-XSS.
  */
 export function formatMediaContent(content: string): string {
   if (!content) return "";
 
-  // Si le contenu comporte déjà des balises de bloc HTML standard, on le renvoie tel quel
+  // Si le contenu comporte déjà des balises de bloc HTML standard, on l'assainit et le renvoie
   const isHtml = /<\/?(p|h[1-6]|ul|ol|li|blockquote|div|section|article)\b/i.test(content);
   if (isHtml) {
-    return content;
+    return sanitizeHtmlContent(content);
   }
 
   let text = content.replace(/\r\n/g, "\n");
@@ -69,5 +88,5 @@ export function formatMediaContent(content: string): string {
     result = result.replace(`__CODE_BLOCK_${idx}__`, codeHtml);
   });
 
-  return result;
+  return sanitizeHtmlContent(result);
 }

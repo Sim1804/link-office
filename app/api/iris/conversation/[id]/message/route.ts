@@ -228,14 +228,15 @@ BASE DE CONNAISSANCES OFFICIELLE LINKOFFICE (MÉTHODOLOGIE ET EXPERTISE) :
 
 RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
 - Si l'utilisateur pose une question méthodologique, conceptuelle ou sur le fonctionnement (notamment sur le score IQRH, les 5 dimensions, le coaching IRIS ou les offres pour les organisations) : réponds TOUJOURS de manière exhaustive, pédagogique, structurée et valorisante avec les concepts exacts ci-dessus.
-- Ne refuse JAMAIS de répondre sous prétexte que l'utilisateur n'a pas encore passé son évaluation ! Si l'évaluation n'est pas encore complétée, délivre la réponse complète et invite ensuite chaleureusement à passer son évaluation [Commencer mon évaluation](/questionnaire) pour découvrir son diagnostic personnel.`;
+- Si l'évaluation n'est pas encore complétée (statut NO_ASSESSMENT), délivre la réponse complète et invite ensuite chaleureusement à passer son évaluation [Commencer mon évaluation](/questionnaire) pour découvrir son diagnostic personnel.
+- 🛑 Si l'évaluation est DÉJÀ complétée : il est FORMELLEMENT INTERDIT de lui suggérer de 'passer', 'repasser' ou 'commencer' son évaluation IQRH. Ne mentionne AUCUN lien vers /questionnaire. Fais référence à ses résultats réels et oriente-le vers son [Ordonnance Relationnelle](/dashboard/citoyen/ordonnance) ou ses défis !`;
 
     const systemPrompt = [
       "Tu es IRIS, l'intelligence relationnelle bienveillante et coach expert de Link Office.",
       linkOfficeKnowledgeBase,
       userIqrhContext === "NO_ASSESSMENT"
         ? "\n\nCONTEXTE UTILISATEUR : L'utilisateur n'a pas encore finalisé son évaluation IQRH. Réponds toujours avec bienveillance et expertise à ses questions, et invite-le avec tact à passer son évaluation [Commencer mon évaluation](/questionnaire) pour obtenir son diagnostic personnalisé."
-        : `\n\nCONTEXTE UTILISATEUR:\n${userIqrhContext}\n\nUtilise ce contexte avec tact et empathie pour personnaliser tes conseils.`,
+        : `\n\nCONTEXTE UTILISATEUR :\n${userIqrhContext}\n\n🛑 RÈGLE FONDAMENTALE DE SUIVI RELATIONNEL :\n- L'utilisateur a DÉJÀ complété et validé avec succès son bilan IQRH. Ses scores, sa météo et son ordonnance sont détaillés ci-dessus.\n- Il est STRICTEMENT INTERDIT de lui proposer de passer, repasser ou commencer le questionnaire IQRH.\n- Ne génère JAMAIS de lien vers /questionnaire.\n- Oriente-le toujours vers l'approfondissement de ses résultats, ses micro-défis, son [Ordonnance Relationnelle](/dashboard/citoyen/ordonnance) ou son plan d'action !`,
       "\n\nTON STYLE DE COMMUNICATION :",
       "- 🛑 TU DOIS PARLER UNIQUEMENT EN FRANÇAIS. Ne réponds JAMAIS en anglais.",
       "- Utilise exclusivement le vouvoiement ('vous') pour t'adresser à l'utilisateur.",
@@ -499,8 +500,8 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
 
     // En cas d'indisponibilité du LLM distant, fallback analytique local haute cohérence
     if (isDegraded) {
-      const latestAssessment = await prisma.assessment.findFirst({
-        where: { userId, status: "SUBMITTED" },
+      let latestAssessment = await prisma.assessment.findFirst({
+        where: { userId, status: "SUBMITTED", result: { isNot: null } },
         orderBy: { submittedAt: "desc" },
         include: {
           result: {
@@ -512,6 +513,22 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
           },
         },
       });
+
+      if (!latestAssessment) {
+        latestAssessment = await prisma.assessment.findFirst({
+          where: { userId, result: { isNot: null } },
+          orderBy: { updatedAt: "desc" },
+          include: {
+            result: {
+              include: {
+                icr: true,
+                profile: true,
+                prescription: { include: { items: true } },
+              },
+            },
+          },
+        });
+      }
 
       const q = userMessage.toLowerCase();
       const res = latestAssessment?.result;
@@ -526,7 +543,9 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
       } else if (q.includes("iris") || q.includes("coach") || q.includes("ia") || q.includes("fonctionne")) {
         finalResponseText = "En tant que coach d'intelligence relationnelle, mon accompagnement repose sur 4 piliers fondamentaux :\n\n1. **Analyse de votre bilan IQRH** pour identifier vos forces motrices et vos leviers d'amélioration.\n2. **Ordonnance Relationnelle sur-mesure** avec des recommandations personnalisées et des micro-défis hebdomadaires progressifs.\n3. **Dialogue continu** pour surmonter vos blocages, préparer des discussions sensibles ou désamorcer des tensions.\n4. **Validation des défis** et suivi gamifié de votre progression relationnelle.\n\nSur quel défi ou enjeu relationnel souhaiteriez-vous avancer aujourd'hui ?";
       } else if (q.includes("calcul") || q.includes("score") || q.includes("iqrh")) {
-        finalResponseText = "Votre score IQRH (Indice de Qualité Relationnelle et Humaine, sur 100) est issu du questionnaire psychométrique Link Office (~8 à 10 minutes).\n\nIl mesure l'équilibre de vos 5 dimensions de vie fondamentales, enrichi de l'ICR (Complexité Relationnelle), de l'IER (Équilibre Relationnel) et de votre Météo relationnelle dynamique.\n\nPour obtenir votre diagnostic individuel précis, vous pouvez compléter votre évaluation : [Commencer mon évaluation](/questionnaire).";
+        finalResponseText = res
+          ? `Votre score global IQRH s'établit à **${score}/100**, issu de votre évaluation psychométrique sur les 5 dimensions de vie fondamentales (sociale, affective, sentimentale, professionnelle et personnelle), complété par votre Indice d'Équilibre Relationnel (IER) et votre Météo relationnelle dynamique.\n\nVotre plus grand point d'appui s'exprime dans vos **${bestDim}**, tandis que votre axe de vigilance prioritaire concerne vos **${priorityDim}**.\n\nSouhaitez-vous que nous examinions comment consolider cette dimension prioritaire ou consulter votre [Ordonnance Relationnelle](/dashboard/citoyen/ordonnance) ?`
+          : "Votre score IQRH (Indice de Qualité Relationnelle et Humaine, sur 100) est issu du questionnaire psychométrique Link Office (~8 à 10 minutes).\n\nIl mesure l'équilibre de vos 5 dimensions de vie fondamentales, enrichi de l'ICR (Complexité Relationnelle), de l'IER (Équilibre Relationnel) et de votre Météo relationnelle dynamique.\n\nPour obtenir votre diagnostic individuel précis, vous pouvez compléter votre évaluation : [Commencer mon évaluation](/questionnaire).";
       } else if (q.includes("sentimentale") || q.includes("couple") || q.includes("intime")) {
         finalResponseText = "Pour votre dimension sentimentale, le Laboratoire du Lien Humain préconise le protocole d'« attention sanctuarisée » : définir un moment d'écoute mutuelle non négociable chaque semaine, sans écran ni contraintes logistiques. Souhaitez-vous planifier ce temps d'échange cette semaine ?";
       } else if (q.includes("force") || q.includes("point fort") || q.includes("atout")) {
@@ -545,7 +564,7 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
         finalResponseText = "Bravo pour votre passage à l'action ! Chaque micro-défi accompli renforce durablement la santé de votre collectif et crédite votre expérience. Continuons sur cette excellente dynamique ! 🎉";
       } else {
         finalResponseText = res
-          ? `C'est une excellente question. Au regard de votre bilan IQRH (${score}/100), le secret d'un équilibre durable réside dans la régularité des micro-ajustements au quotidien. Souhaitez-vous que nous examinions ensemble une situation relationnelle concrète ?`
+          ? `C'est une excellente question. Au regard de votre bilan IQRH (${score}/100), le secret d'un équilibre durable réside dans la régularité des micro-ajustements au quotidien. Souhaitez-vous que nous examinions ensemble une situation relationnelle concrète ou vos actions dans votre [Ordonnance Relationnelle](/dashboard/citoyen/ordonnance) ?`
           : "C'est une excellente question sur vos dynamiques relationnelles. Le secret d'un équilibre durable réside dans la régularité des micro-ajustements au quotidien. Pour obtenir votre diagnostic personnalisé complet, vous pouvez démarrer votre évaluation : [Commencer mon évaluation](/questionnaire). Avez-vous une situation concrète à partager ?";
       }
     } else {
@@ -558,6 +577,14 @@ RÈGLE D'OR DE COHÉRENCE ET PÉDAGOGIE :
           conversationId,
         });
       }
+    }
+
+    // Garde-fou UX : si l'utilisateur a déjà complété son bilan, empêcher toute fuite de lien /questionnaire
+    if (userIqrhContext !== "NO_ASSESSMENT" && finalResponseText.includes("/questionnaire")) {
+      finalResponseText = finalResponseText.replace(
+        /\[.*?\]\(\/questionnaire\)/gi,
+        "[Consulter mon Ordonnance Relationnelle](/dashboard/citoyen/ordonnance)"
+      );
     }
 
     // ── Persistance de la réponse IRIS en BDD ─────────────────────────────────

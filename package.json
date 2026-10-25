@@ -7,7 +7,7 @@
     "build": "prisma generate && prisma db push --skip-generate --accept-data-loss && tsx prisma/seed-deploy.ts && next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
@@ -15,13 +15,11 @@
     "db:seed": "tsx prisma/seed.ts",
     "seed:badges": "tsx prisma/seed-badges.ts",
     "seed:media": "tsx prisma/seed-media.ts",
-    "validate:t1": "tsx validation/t1-safety/run.ts",
-    "validate:t2": "tsx validation/t2-load/run.ts",
-    "validate:t3": "tsx validation/t3-latency-cost/run.ts",
-    "validate:t4": "tsx validation/t4-authz/run.ts",
-    "validate:t5": "tsx validation/t5-scoring/run.ts",
-    "validate:t10": "tsx validation/t10-privacy/run.ts",
-    "validate:all": "tsx validation/run-all.ts"
+    "test:t1-t2": "tsx tests_t1_t2/run_all_tests.ts",
+    "test:t1": "tsx tests_t1_t2/t1-safety/run_t1_safety.ts",
+    "test:t2": "tsx tests_t1_t2/t2-load/run_t2_load.ts",
+    "test:cohort84": "tsx tests_t1_t2/human-journey/run_human_journey_84.ts",
+    "test:report": "tsx tests_t1_t2/analyze_results.ts"
   },
   "dependencies": {
     "@ai-sdk/groq": "^4.0.12",

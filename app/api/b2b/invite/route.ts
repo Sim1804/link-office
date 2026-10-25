@@ -49,7 +49,10 @@ export async function GET(request: Request) {
     inviteCode = campaign.id;
     organizationName = campaign.organization?.name || "Organisation";
   } else {
-    if (!user?.organizationId) {
+    const requestedOrgId = searchParams.get("orgId") || searchParams.get("organizationId");
+    const targetOrgId = user?.organizationId || (session.user.role === "SUPER_ADMIN" ? requestedOrgId : null);
+
+    if (!targetOrgId) {
       return NextResponse.json(
         { error: "Aucune organisation associée à votre compte." },
         { status: 404 }
@@ -57,7 +60,7 @@ export async function GET(request: Request) {
     }
     // Cas fallback : B2B générique lié à l'organisation globale
     const org = await prisma.organization.findUnique({
-      where: { id: user.organizationId },
+      where: { id: targetOrgId },
       select: { codeAccess: true, name: true },
     });
     if (!org) {

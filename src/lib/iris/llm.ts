@@ -1,22 +1,72 @@
-/**
- * @file llm.ts
- * @module lib/iris/llm
- * @description Point unique et centralisé d'appel au modèle d'IA pour IRIS (Vercel AI SDK + Groq).
- *
- * Expose `generateResponse` et `streamResponse`, pilote le modèle via `IRIS_MODEL`
- * (défaut : `llama-3.3-70b-versatile`), mesure la latence d'inférence, journalise sans
- * exposer le contenu utilisateur, et gère le mode dégradé explicite en cas d'indisponibilité.
- */
-
 import { groq } from "@ai-sdk/groq";
-import { generateText, streamText } from "ai";
+import { generateText, streamText, LanguageModel } from "ai";
 import { EventLogger } from "@/lib/logger";
+import {
+  getLlmConfig,
+  resolveApiKey,
+  type IrisLlmConfig,
+  type LlmProvider,
+} from "./llm-config";
 
 /**
- * Nom du modèle LLM validé pour IRIS (configurable par variable d'environnement).
- * Modèle par défaut ultra-rapide et éprouvé sur Groq avec structured output et streaming : qwen/qwen3.8-27b
+ * Construit l'instance du modèle LLM à partir de la configuration active.
+ * Groq est importé statiquement (provider par défaut du projet).
+ * Les autres providers sont chargés dynamiquement si configurés.
+ * Retourne null si le provider est indisponible (clé API manquante ou SDK absent).
  */
-export const IRIS_MODEL = process.env.IRIS_MODEL || "qwen/qwen3.8-27b";
+async function buildModelInstance(config: IrisLlmConfig): Promise<LanguageModel | null> {
+  const apiKey = resolveApiKey(config);
+  if (!apiKey) {
+    console.warn(
+      `[IRIS_LLM] Clé API manquante pour le provider "${config.provider}" (env: ${config.apiKeyRef})`
+    );
+    return null;
+  }
+
+  switch (config.provider as LlmProvider) {
+    case "groq":
+      // Import statique — provider par défaut du projet (SDK déjà installé)
+      return groq(config.model);
+
+    case "openai": {
+      try {
+        // @ts-expect-error — SDK optionnel, installé uniquement si OpenAI est configuré
+        const { openai } = await import(/* webpackIgnore: true */ "@ai-sdk/openai");
+        return openai(config.model);
+      } catch {
+        console.error("[IRIS_LLM] @ai-sdk/openai non installé. Exécutez : npm install @ai-sdk/openai");
+        return null;
+      }
+    }
+
+    case "anthropic": {
+      try {
+        // @ts-expect-error — SDK optionnel
+        const { anthropic } = await import(/* webpackIgnore: true */ "@ai-sdk/anthropic");
+        return anthropic(config.model);
+      } catch {
+        console.error("[IRIS_LLM] @ai-sdk/anthropic non installé. Exécutez : npm install @ai-sdk/anthropic");
+        return null;
+      }
+    }
+
+    case "mistral": {
+      try {
+        // @ts-expect-error — SDK optionnel
+        const { mistral } = await import(/* webpackIgnore: true */ "@ai-sdk/mistral");
+        return mistral(config.model);
+      } catch {
+        console.error("[IRIS_LLM] @ai-sdk/mistral non installé. Exécutez : npm install @ai-sdk/mistral");
+        return null;
+      }
+    }
+
+    default:
+      console.error(`[IRIS_LLM] Provider non reconnu : ${config.provider}`);
+      return null;
+  }
+}
+
 
 export interface ChatMessage {
   role: "user" | "assistant" | "system";
@@ -39,31 +89,46 @@ export interface LlmResponseOutput {
   degraded: boolean;
   latencyMs: number;
   model: string;
+  provider: string;
 }
+
+const DEGRADED_RESPONSE = "Je suis actuellement en mode de maintenance allégé. Je reste à votre entière disposition pour répondre à vos questions prioritaires sur votre bilan relationnel.";
+const DEGRADED_STREAM_ERROR = "Je rencontre une indisponibilité momentanée avec mon moteur d'analyse. En attendant, je vous invite à explorer les micro-défis recommandés dans votre ordonnance relationnelle.";
 
 /**
  * Génère une réponse textuelle complète (mode unitaire).
- * Journalise la latence et le modèle sans stocker le contenu de l'utilisateur.
+ * Lit la configuration LLM active depuis la BDD (cache 60s).
+ * Journalise la latence et le modèle sans stocker le contenu utilisateur.
  */
 export async function generateResponse(options: LlmCallOptions): Promise<LlmResponseOutput> {
   const startTime = performance.now();
-  const maxOutputTokens = options.maxOutputTokens ?? 800;
 
-  if (!process.env.GROQ_API_KEY) {
+  // Lecture config dynamique (BDD + cache mémoire)
+  const config = await getLlmConfig();
+  const maxOutputTokens = options.maxOutputTokens ?? config.maxOutputTokens;
+
+  // Résolution du modèle LLM
+  const modelInstance = await buildModelInstance(config);
+
+  if (!modelInstance) {
     const latencyMs = Math.round(performance.now() - startTime);
-    console.warn(`[IRIS_LLM] GROQ_API_KEY non définie. Bascule en mode dégradé (${latencyMs}ms).`);
+    console.warn(`[IRIS_LLM] Provider "${config.provider}" indisponible — mode dégradé (${latencyMs}ms).`);
     return {
-      text: "Je suis actuellement en mode de maintenance allégé. Je reste à votre entière disposition pour répondre à vos questions prioritaires sur votre bilan relationnel.",
+      text: DEGRADED_RESPONSE,
       degraded: true,
       latencyMs,
       model: "fallback-local",
+      provider: config.provider,
     };
   }
 
+  // Utilisation du system prompt override si configuré par le superadmin
+  const systemPrompt = config.systemPromptOverride || options.system;
+
   try {
     const generateOptions: any = {
-      model: groq(IRIS_MODEL),
-      system: options.system,
+      model: modelInstance,
+      system: systemPrompt,
       messages: options.messages as any,
       maxOutputTokens,
     };
@@ -75,7 +140,6 @@ export async function generateResponse(options: LlmCallOptions): Promise<LlmResp
     }
 
     const result = await generateText(generateOptions);
-
     const latencyMs = Math.round(performance.now() - startTime);
 
     if (options.userId) {
@@ -83,7 +147,8 @@ export async function generateResponse(options: LlmCallOptions): Promise<LlmResp
         userId: options.userId,
         eventType: "iris_llm_inference",
         eventData: {
-          model: IRIS_MODEL,
+          model: config.model,
+          provider: config.provider,
           latencyMs,
           degraded: false,
           tokenUsage: result.usage,
@@ -95,18 +160,23 @@ export async function generateResponse(options: LlmCallOptions): Promise<LlmResp
       text: result.text,
       degraded: false,
       latencyMs,
-      model: IRIS_MODEL,
+      model: config.model,
+      provider: config.provider,
     };
   } catch (error: any) {
     const latencyMs = Math.round(performance.now() - startTime);
-    console.error(`[IRIS_LLM_ERROR] Échec de l'appel Groq (${IRIS_MODEL}) après ${latencyMs}ms:`, error?.message || error);
+    console.error(
+      `[IRIS_LLM_ERROR] Échec provider "${config.provider}" modèle "${config.model}" après ${latencyMs}ms:`,
+      error?.message || error
+    );
 
     if (options.userId) {
       await EventLogger.log({
         userId: options.userId,
         eventType: "iris_llm_degraded_fallback",
         eventData: {
-          model: IRIS_MODEL,
+          model: config.model,
+          provider: config.provider,
           latencyMs,
           degraded: true,
           errorMessage: error?.message,
@@ -115,28 +185,37 @@ export async function generateResponse(options: LlmCallOptions): Promise<LlmResp
     }
 
     return {
-      text: "Je rencontre une indisponibilité momentanée avec mon moteur d'analyse. En attendant, je vous invite à explorer les micro-défis recommandés dans votre ordonnance relationnelle.",
+      text: DEGRADED_STREAM_ERROR,
       degraded: true,
       latencyMs,
-      model: IRIS_MODEL,
+      model: config.model,
+      provider: config.provider,
     };
   }
 }
 
 /**
  * Diffuse une réponse sous forme de flux en temps réel (Streaming via streamText).
+ * Lit la configuration LLM active depuis la BDD (cache 60s).
  */
 export async function streamResponse(options: LlmCallOptions) {
   const startTime = performance.now();
-  const maxOutputTokens = options.maxOutputTokens ?? 800;
 
-  if (!process.env.GROQ_API_KEY) {
-    throw new Error("GROQ_API_KEY_MISSING");
+  // Lecture config dynamique (BDD + cache mémoire)
+  const config = await getLlmConfig();
+  const maxOutputTokens = options.maxOutputTokens ?? config.maxOutputTokens;
+
+  const modelInstance = await buildModelInstance(config);
+
+  if (!modelInstance) {
+    throw new Error(`LLM_PROVIDER_UNAVAILABLE:${config.provider}`);
   }
 
+  const systemPrompt = config.systemPromptOverride || options.system;
+
   const streamOptions: any = {
-    model: groq(IRIS_MODEL),
-    system: options.system,
+    model: modelInstance,
+    system: systemPrompt,
     messages: options.messages as any,
     maxOutputTokens,
     onFinish: async (event: any) => {
@@ -146,7 +225,8 @@ export async function streamResponse(options: LlmCallOptions) {
           userId: options.userId,
           eventType: "iris_llm_stream_finished",
           eventData: {
-            model: IRIS_MODEL,
+            model: config.model,
+            provider: config.provider,
             latencyMs,
             degraded: false,
             finishReason: event.finishReason,
@@ -162,7 +242,5 @@ export async function streamResponse(options: LlmCallOptions) {
     streamOptions.maxSteps = options.maxSteps ?? 3;
   }
 
-  const stream = streamText(streamOptions);
-
-  return stream;
+  return streamText(streamOptions);
 }

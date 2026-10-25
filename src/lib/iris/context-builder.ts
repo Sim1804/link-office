@@ -49,16 +49,33 @@ import { getDimensionStatusInfo } from "@/lib/iqrh/types";
  * ];
  */
 export async function buildIrisContext(userId: string): Promise<string> {
-  // Récupération de l'utilisateur (pour le prénom/nom)
+  // Récupération de l'utilisateur (pour le prénom/nom et le rôle)
   const user = await prisma.user.findUnique({
     where: { id: userId },
   });
 
-  // Récupération du dernier assessment de l'utilisateur avec toutes ses données associées
+  // ── Cas 1 : Super Administrateur de la plateforme (Opérateur global) ──────
+  if (user?.role === "SUPER_ADMIN") {
+    return `=== CONTEXTE OPÉRATEUR : SUPER ADMINISTRATEUR LINK OFFICE ===
+- Rôle : SUPER_ADMIN (Super Administrateur et Opérateur technique de Link Office).
+- Prénom / Nom : ${user.firstName} ${user.lastName} (${user.email})
+- Périmètre : Gouvernance globale de la plateforme, gestion des organisations partenaires (B2B, B2G, B2B2C), configuration des modèles LLM (Groq, OpenAI, Ollama, etc.), journal d'audit de sécurité et supervision des campagnes.
+- RÈGLE MÉTHODOLOGIQUE : En tant que Super Admin, ce compte est un compte de gouvernance technique. Il n'est PAS un salarié ou bénéficiaire évalué et n'a PAS de bilan individuel IQRH personnel à passer.
+- 🛑 RÈGLE D'OR : Il est STRICTEMENT INTERDIT de lui suggérer de passer, repasser ou commencer une évaluation IQRH, et FORMELLEMENT INTERDIT de lui fournir un lien vers /questionnaire.
+- TON POSITIONNEMENT AVEC LUI : Tu es son Copilot d'administration et son expert méthodologique de référence. Réponds de façon concise, experte, technique ou stratégique selon ses demandes (règles de k-anonymat strict >= 5 répondants, calculs psychométriques IQRH/ICR/IER, architecture des 12 profils, configuration de l'IA, offres Link Office).`;
+  }
+
+  // Récupération du dernier assessment validé de l'utilisateur avec toutes ses données associées
+  // PRIORITÉ 1 : Assessment soumis avec résultat calculé
+  // PRIORITÉ 2 (fallback) : Tout assessment possédant un résultat calculé
   const [latestAssessment, activeBinome] = await Promise.all([
     prisma.assessment.findFirst({
-      where: { userId },
-      orderBy: { updatedAt: "desc" },
+      where: {
+        userId,
+        status: "SUBMITTED",
+        result: { isNot: null },
+      },
+      orderBy: { submittedAt: "desc" },
       include: {
         demographic: true,
         result: {
@@ -75,6 +92,31 @@ export async function buildIrisContext(userId: string): Promise<string> {
           },
         },
       },
+    }).then(async (assessment) => {
+      if (assessment) return assessment;
+      return prisma.assessment.findFirst({
+        where: {
+          userId,
+          result: { isNot: null },
+        },
+        orderBy: { updatedAt: "desc" },
+        include: {
+          demographic: true,
+          result: {
+            include: {
+              icr: true,
+              profile: true,
+              prescription: {
+                include: {
+                  items: {
+                    include: { libraryItem: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
     }),
     prisma.binome.findFirst({
       where: {
@@ -88,7 +130,19 @@ export async function buildIrisContext(userId: string): Promise<string> {
     }),
   ]);
 
-  // Cas : l'utilisateur n'a pas encore fait le questionnaire
+  // Cas 2 : Administrateur d'organisation sans bilan personnel
+  const isOrgAdmin = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE"].includes(user?.role || "");
+  if (isOrgAdmin && !latestAssessment?.result) {
+    return `=== CONTEXTE ADMINISTRATEUR ORGANISATION ===
+- Rôle : ${user?.role} (Gestionnaire RH / Direction QVT de l'organisation).
+- Prénom / Nom : ${user?.firstName} ${user?.lastName} (${user?.email})
+- Périmètre : Pilotage du baromètre d'équipe, lancement des campagnes de mesure du climat social et activation des plans d'actions RH.
+- RÈGLE MÉTHODOLOGIQUE : Ce compte est un compte de gestionnaire d'organisation.
+- 🛑 RÈGLE D'OR : Ne lui propose PAS de passer une évaluation individuelle personnelle. Oriente-le vers le pilotage des campagnes, l'interprétation des résultats collectifs (baromètre, k-anonymat) et les plans d'actions.
+- TON POSITIONNEMENT AVEC LUI : Tu es son Conseiller RH et Stratégie QVT pour l'accompagner dans la compréhension de la dynamique de ses équipes et le déploiement des actions managériales.`;
+  }
+
+  // Cas 3 : Bénéficiaire / salarié n'ayant pas encore finalisé le questionnaire
   if (!latestAssessment?.result) {
     return "NO_ASSESSMENT";
   }

@@ -14,18 +14,23 @@ export async function GET(request: Request) {
       select: { organizationId: true, role: true },
     });
 
-    if (!user?.organizationId) {
-      return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
-    }
-
-    if (user.role !== "ADMIN_B2B" && user.role !== "ADMIN_B2G" && user.role !== "ADMIN_B2B2C" && user.role !== "SUPER_ADMIN") {
+    if (user?.role !== "ADMIN_B2B" && user?.role !== "ADMIN_B2G" && user?.role !== "ADMIN_B2B2C" && user?.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Permission refusée" }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
     const campaignId = searchParams.get("campaignId");
+    const requestedOrgId = searchParams.get("organizationId") || searchParams.get("orgId");
+    const targetOrgId = user?.organizationId || (user?.role === "SUPER_ADMIN" ? requestedOrgId : null);
 
-    const whereClause: any = { organizationId: user.organizationId };
+    if (!targetOrgId && user?.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
+    }
+
+    const whereClause: any = {};
+    if (targetOrgId) {
+      whereClause.organizationId = targetOrgId;
+    }
     if (campaignId && campaignId !== "ALL") {
       whereClause.campaignId = campaignId;
     }
@@ -57,29 +62,40 @@ export async function POST(request: Request) {
       select: { organizationId: true, role: true },
     });
 
-    if (!user?.organizationId) {
-      return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
-    }
-
-    if (user.role !== "ADMIN_B2B" && user.role !== "ADMIN_B2G" && user.role !== "ADMIN_B2B2C" && user.role !== "SUPER_ADMIN") {
+    if (user?.role !== "ADMIN_B2B" && user?.role !== "ADMIN_B2G" && user?.role !== "ADMIN_B2B2C" && user?.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Permission refusée" }, { status: 403 });
     }
 
     const body = await request.json();
-    const { title, description, status, priority, pilot, dueDate, dimension, campaignId } = body;
+    const { title, description, status, priority, pilot, dueDate, dimension, campaignId, organizationId: bodyOrgId } = body;
 
     if (!title) {
       return NextResponse.json({ error: "Titre requis" }, { status: 400 });
     }
+
+    let resolvedOrgId = user?.organizationId;
 
     if (campaignId) {
       const campaign = await prisma.campaign.findUnique({
         where: { id: campaignId },
         select: { organizationId: true },
       });
-      if (!campaign || (campaign.organizationId !== user.organizationId && user.role !== "SUPER_ADMIN")) {
+      if (!campaign || (campaign.organizationId !== user?.organizationId && user?.role !== "SUPER_ADMIN")) {
         return NextResponse.json({ error: "Campagne introuvable ou non autorisée" }, { status: 404 });
       }
+      if (user?.role === "SUPER_ADMIN") {
+        resolvedOrgId = campaign.organizationId;
+      }
+    } else if (user?.role === "SUPER_ADMIN") {
+      resolvedOrgId = bodyOrgId || null;
+      if (!resolvedOrgId) {
+        const fallbackOrg = await prisma.organization.findFirst({ select: { id: true } });
+        resolvedOrgId = fallbackOrg?.id || null;
+      }
+    }
+
+    if (!resolvedOrgId) {
+      return NextResponse.json({ error: "Aucune organisation associée" }, { status: 400 });
     }
 
     const newAction = await prisma.actionItem.create({
@@ -92,7 +108,7 @@ export async function POST(request: Request) {
         dueDate: dueDate ? new Date(dueDate) : null,
         dimension,
         campaignId: campaignId || null,
-        organizationId: user.organizationId,
+        organizationId: resolvedOrgId,
         updatedAt: new Date(),
       },
     });

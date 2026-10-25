@@ -329,6 +329,7 @@ async function seedOrganizationsAndUsers() {
         role: u.role,
         subscription: u.subscription,
         password: passwordHash,
+        mustChangePassword: true,
         points: 450,
         organizationId: u.organizationId || null,
         campaignId: u.campaignId || null,
@@ -338,7 +339,7 @@ async function seedOrganizationsAndUsers() {
         lastName: u.lastName,
         role: u.role,
         subscription: u.subscription,
-        password: passwordHash,
+        // SÉCURITÉ CRITIQUE : Ne JAMAIS écraser le mot de passe ni désactiver le 2FA d'un compte existant
       },
     });
   }

@@ -2,9 +2,15 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/lib/auth";
 
 export async function createMediaContent(data: any) {
   try {
+    const session = await auth();
+    if (!session?.user?.id || session.user.role !== "SUPER_ADMIN") {
+      return { success: false, error: "Action non autorisée. Privilèges SUPER_ADMIN requis." };
+    }
+
     if (!data.title || !data.slug) {
       return { success: false, error: "Le titre et le slug (URL) sont obligatoires." };
     }
@@ -58,6 +64,11 @@ export async function createMediaContent(data: any) {
 
 export async function updateMediaContent(id: string, data: any) {
   try {
+    const session = await auth();
+    if (!session?.user?.id || session.user.role !== "SUPER_ADMIN") {
+      return { success: false, error: "Action non autorisée. Privilèges SUPER_ADMIN requis." };
+    }
+
     if (!data.title || !data.slug) {
       return { success: false, error: "Le titre et le slug (URL) sont obligatoires." };
     }

@@ -38,7 +38,7 @@ function generateCodeAccess(orgName: string, year = new Date().getFullYear()) {
   return `${slug}-${year}-${suffix}`;
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
@@ -49,16 +49,29 @@ export async function GET() {
     select: { organizationId: true, role: true },
   });
 
-  if (!user?.organizationId) {
-    return NextResponse.json({ error: "Aucune organisation associée." }, { status: 404 });
-  }
-
-  if (!ADMIN_ROLES.includes(user.role)) {
+  if (!user || !ADMIN_ROLES.includes(user.role)) {
     return NextResponse.json({ error: "Accès réservé aux administrateurs." }, { status: 403 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const requestedOrgId = searchParams.get("organizationId") || searchParams.get("orgId");
+  let targetOrgId = user.organizationId;
+
+  if (session.user.role === "SUPER_ADMIN") {
+    if (requestedOrgId) {
+      targetOrgId = requestedOrgId;
+    } else {
+      const firstOrg = await prisma.organization.findFirst({ select: { id: true } });
+      targetOrgId = firstOrg?.id || null;
+    }
+  }
+
+  if (!targetOrgId) {
+    return NextResponse.json({ error: "Aucune organisation associée." }, { status: 404 });
+  }
+
   const org = await prisma.organization.findUnique({
-    where: { id: user.organizationId },
+    where: { id: targetOrgId },
     include: {
       campaigns: { orderBy: { startDate: "desc" }, take: 10 },
       services: { orderBy: { createdAt: "desc" } },

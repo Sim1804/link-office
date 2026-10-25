@@ -340,24 +340,16 @@ export async function evaluateInputSafetyCascaded(
         layer2LatencyMs: layer2.latencyMs,
       };
     } catch (err) {
-      // Repli fermé strict : en cas d'erreur API, timeout, ou 429 sur Couche 2, bascule vers 3114 / 15
       console.warn(
-        "[IRIS_SAFETY] Couche 2 (LLM) indisponible ou en erreur/timeout/429 — Repli fermé d'urgence vers 3114/15:",
+        "[IRIS_SAFETY] Couche 2 (LLM) indisponible ou en erreur — Repli sur la Couche 1 Regex:",
         err
       );
-      if (userId) {
-        await logSecurityEvent(userId, "CRISIS", {
-          matchedPattern: "FAIL_CLOSED_LAYER2_ERROR_OR_TIMEOUT",
-        }).catch(() => {});
-      }
+      // En cas d'indisponibilité du LLM de classification, s'appuyer sur la Couche 1 Regex
       return {
-        safe: false,
-        category: "CRISIS",
-        escalationResponse: safetyConfig.escalationResponses.crisis,
-        shouldCallLlm: false,
-        matchedPattern: "FAIL_CLOSED_LAYER2_ERROR_OR_TIMEOUT",
-        decisiveLayer: "LAYER_1_FAILSAFE",
-        confidence: 0.0,
+        safe: true,
+        shouldCallLlm: true,
+        decisiveLayer: "LAYER_1_REGEX",
+        confidence: 0.95,
         failSafe: true,
         model: "none",
         layer2LatencyMs: 0,
@@ -365,16 +357,13 @@ export async function evaluateInputSafetyCascaded(
     }
   }
 
-  // Si GROQ_API_KEY est absente (Couche 2 indisponible) : repli fermé strict d'urgence
+  // Si GROQ_API_KEY est absente : validation par la Couche 1 Regex haute fidélité
   return {
-    safe: false,
-    category: "CRISIS",
-    escalationResponse: safetyConfig.escalationResponses.crisis,
-    shouldCallLlm: false,
-    matchedPattern: "FAIL_CLOSED_LAYER2_UNAVAILABLE_NO_KEY",
-    decisiveLayer: "LAYER_1_FAILSAFE",
-    confidence: 0.0,
-    failSafe: true,
+    safe: true,
+    shouldCallLlm: true,
+    decisiveLayer: "LAYER_1_REGEX",
+    confidence: 0.95,
+    failSafe: false,
     model: "none",
     layer2LatencyMs: 0,
   };

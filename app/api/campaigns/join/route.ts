@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { checkDistributedRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+    }
+
+    const rateLimit = await checkDistributedRateLimit(`campaign_join:${session.user.id}`, { limit: 10, windowMs: 60_000 });
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Trop de tentatives de rattachement. Veuillez patienter." }, { status: 429 });
     }
 
     const { codeAccess } = await request.json();

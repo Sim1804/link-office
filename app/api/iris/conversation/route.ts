@@ -32,11 +32,35 @@ export async function POST() {
       );
     }
 
-    const conversation = await prisma.irisConversation.create({
-      data: { userId: session.user.id },
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { role: true },
     });
+    const isSuperAdmin = user?.role === "SUPER_ADMIN";
+    const isOrgAdmin = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE"].includes(user?.role || "");
 
-    return NextResponse.json({ conversation_id: conversation.id });
+    const [conversation, hasCompletedAssessment] = await Promise.all([
+      prisma.irisConversation.create({
+        data: { userId: session.user.id },
+      }),
+      isSuperAdmin
+        ? Promise.resolve(false)
+        : prisma.assessment.findFirst({
+            where: {
+              userId: session.user.id,
+              result: { isNot: null },
+            },
+            select: { id: true },
+          }).then(res => !!res),
+    ]);
+
+    return NextResponse.json({
+      conversation_id: conversation.id,
+      hasCompletedAssessment,
+      isSuperAdmin,
+      isOrgAdmin,
+      userRole: user?.role,
+    });
 
   } catch (error) {
     console.error("[IRIS_CONVERSATION_START_ERROR]:", error);

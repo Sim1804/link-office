@@ -325,9 +325,10 @@ async function seedOrganizations() {
       email: "superadmin@linkoffice.fr",
       firstName: "Super", lastName: "Admin",
       password: adminPasswordHash,
-      role: "SUPER_ADMIN",
+      isTwoFactorEnabled: false,
+      twoFactorSecret: null,
     },
-    update: { password: adminPasswordHash, role: "SUPER_ADMIN" },
+    update: { password: adminPasswordHash, role: "SUPER_ADMIN", isTwoFactorEnabled: false, twoFactorSecret: null },
   });
 
   await prisma.user.upsert({

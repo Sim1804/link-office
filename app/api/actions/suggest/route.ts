@@ -88,11 +88,7 @@ export async function POST(request: Request) {
       select: { organizationId: true, role: true },
     });
 
-    if (!user?.organizationId) {
-      return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
-    }
-
-    if (user.role !== "ADMIN_B2B" && user.role !== "ADMIN_B2B2C" && user.role !== "ADMIN_B2G" && user.role !== "SUPER_ADMIN") {
+    if (user?.role !== "ADMIN_B2B" && user?.role !== "ADMIN_B2B2C" && user?.role !== "ADMIN_B2G" && user?.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Permission refusée" }, { status: 403 });
     }
 
@@ -107,13 +103,15 @@ export async function POST(request: Request) {
       where: { id: campaignId },
       select: { organizationId: true },
     });
-    if (!campaign || (campaign.organizationId !== user.organizationId && user.role !== "SUPER_ADMIN")) {
+    if (!campaign || (campaign.organizationId !== user?.organizationId && user?.role !== "SUPER_ADMIN")) {
       return NextResponse.json({ error: "Campagne introuvable ou non autorisée" }, { status: 404 });
     }
 
+    const targetOrgId = campaign.organizationId;
+
     // ── Déduplication : ne pas recréer si des actions existent déjà pour cette campagne ──
     const existingActions = await prisma.actionItem.findMany({
-      where: { organizationId: user.organizationId, campaignId },
+      where: { organizationId: targetOrgId, campaignId },
       select: { id: true, title: true, description: true, dimension: true, priority: true },
     });
 
@@ -152,7 +150,7 @@ export async function POST(request: Request) {
     for (const suggestion of finalSuggestions) {
       const newAction = await prisma.actionItem.create({
         data: {
-          organizationId: user.organizationId,
+          organizationId: targetOrgId,
           campaignId,
           title: suggestion.title,
           description: suggestion.description,

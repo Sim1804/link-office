@@ -152,7 +152,7 @@ export default function B2BDashboard() {
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00A99D]/10 text-[#00A99D] font-jakarta font-bold text-xs border border-[#00A99D]/20">
                     <Building2 className="w-3.5 h-3.5" />
-                    {stats?.organization?.name || currentOrg?.name || "Novatech Conseil Paris"}
+                    {stats?.organization?.name || currentOrg?.name || (loading ? "Chargement..." : "Organisation Entreprise")}
                   </span>
                   {availableOrgs && availableOrgs.length > 1 && (
                     <div className="inline-flex items-center gap-1.5 bg-white border border-[#E3EBE6] px-2.5 py-1 rounded-full text-xs font-jakarta shadow-2xs">

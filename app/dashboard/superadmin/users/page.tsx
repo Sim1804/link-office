@@ -244,7 +244,15 @@ export default function SuperAdminUsersPage() {
                     <SubscriptionBadge tier={toSubscriptionTier(user.subscription)} size="sm" />
                   </td>
                   <td className="px-6 py-4">
-                    {user.organization ? (
+                    {user.role === "SUPER_ADMIN" ? (
+                      <div>
+                        <div className="text-[#5965E8] text-xs font-semibold flex items-center gap-1.5">
+                          <span>🌐</span>
+                          <span>Plateforme Globale (Link Office)</span>
+                        </div>
+                        <div className="text-[#123D46]/50 text-[11px] mt-0.5">Opérateur Système SaaS</div>
+                      </div>
+                    ) : user.organization ? (
                       <div>
                         <div className="text-[#123D46] text-xs font-semibold flex items-center gap-1.5">
                           <span>{user.organization.type === "B2G" ? "🏛️" : user.organization.type === "B2B2C" ? "🛡️" : "🏢"}</span>
@@ -258,8 +266,6 @@ export default function SuperAdminUsersPage() {
                       </div>
                     ) : user.role === "CITIZEN" ? (
                       <div className="text-[#123D46]/60 text-xs italic">Client Individuel (B2C)</div>
-                    ) : user.role === "SUPER_ADMIN" ? (
-                      <div className="text-[#5965E8] text-xs font-semibold">Plateforme Link Office</div>
                     ) : (
                       <div className="text-amber-700/70 text-xs italic">Non rattaché</div>
                     )}
@@ -387,42 +393,55 @@ export default function SuperAdminUsersPage() {
 
               <div>
                 <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Organisation de Rattachement</label>
-                <Select
-                  value={editForm.organizationId}
-                  onChange={(val) => {
-                    setEditForm(prev => ({
-                      ...prev,
-                      organizationId: val,
-                      campaignId: campaigns.some(c => c.id === prev.campaignId && c.organizationId === val) ? prev.campaignId : ""
-                    }));
-                  }}
-                  options={[
-                    { value: "", label: "Aucune (Client B2C / Indépendant)" },
-                    ...organizations.map(org => ({
-                      value: org.id,
-                      label: `${org.name} (${org.type})`
-                    }))
-                  ]}
-                  className="w-full"
-                />
+                {selectedUser.role === "SUPER_ADMIN" ? (
+                  <div className="px-3.5 py-2.5 rounded-xl border border-[#E3EBE6] bg-[#F8F9FA] text-xs text-[#5965E8] font-semibold flex items-center gap-2">
+                    <span>🌐</span>
+                    <span>Plateforme Globale (Link Office) — Périmètre transversal</span>
+                  </div>
+                ) : (
+                  <Select
+                    value={editForm.organizationId}
+                    onChange={(val) => {
+                      setEditForm(prev => ({
+                        ...prev,
+                        organizationId: val,
+                        campaignId: campaigns.some(c => c.id === prev.campaignId && c.organizationId === val) ? prev.campaignId : ""
+                      }));
+                    }}
+                    options={[
+                      { value: "", label: "Aucune (Client B2C / Indépendant)" },
+                      ...organizations.map(org => ({
+                        value: org.id,
+                        label: `${org.name} (${org.type})`
+                      }))
+                    ]}
+                    className="w-full"
+                  />
+                )}
               </div>
 
               <div>
                 <label className="block text-[13px] text-[#123D46]/70 font-semibold mb-2">Campagne / Consultation</label>
-                <Select
-                  value={editForm.campaignId}
-                  onChange={(val) => setEditForm(prev => ({ ...prev, campaignId: val }))}
-                  options={[
-                    { value: "", label: "Aucune campagne" },
-                    ...campaigns
-                      .filter(c => !editForm.organizationId || c.organizationId === editForm.organizationId)
-                      .map(c => ({
-                        value: c.id,
-                        label: c.title
-                      }))
-                  ]}
-                  className="w-full"
-                />
+                {selectedUser.role === "SUPER_ADMIN" ? (
+                  <div className="px-3.5 py-2.5 rounded-xl border border-[#E3EBE6] bg-[#F8F9FA] text-xs text-[#123D46]/60 font-medium">
+                    Toutes les campagnes (Accès Super Admin)
+                  </div>
+                ) : (
+                  <Select
+                    value={editForm.campaignId}
+                    onChange={(val) => setEditForm(prev => ({ ...prev, campaignId: val }))}
+                    options={[
+                      { value: "", label: "Aucune campagne" },
+                      ...campaigns
+                        .filter(c => !editForm.organizationId || c.organizationId === editForm.organizationId)
+                        .map(c => ({
+                          value: c.id,
+                          label: c.title
+                        }))
+                    ]}
+                    className="w-full"
+                  />
+                )}
               </div>
 
               <div className="h-px bg-[#E3EBE6]" />

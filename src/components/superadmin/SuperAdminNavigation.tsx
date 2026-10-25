@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 import {
   Building2, Inbox, Users, Newspaper,
-  LayoutDashboard, ListChecks, CreditCard, Handshake, Shield
+  LayoutDashboard, ListChecks, CreditCard, Handshake, Shield,
+  Settings2, Activity
 } from "lucide-react";
 import { IrisDrawer } from "@/components/superadmin/IrisDrawer";
 
@@ -36,6 +37,8 @@ export function SuperAdminNavigation({ stats }: SuperAdminNavigationProps) {
     { name: "Binômes", href: "/dashboard/superadmin/binome", icon: Handshake },
     { name: "Catalogues", href: "/dashboard/superadmin/catalog", icon: ListChecks },
     { name: "Sécurité", href: "/dashboard/superadmin/security", icon: Shield },
+    { name: "Plateforme", href: "/dashboard/superadmin/platform", icon: Settings2 },
+    { name: "Audit LLM", href: "/dashboard/superadmin/audit", icon: Activity },
   ];
 
   return (

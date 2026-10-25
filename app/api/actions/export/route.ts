@@ -16,18 +16,23 @@ export async function GET(request: Request) {
       select: { organizationId: true, role: true },
     });
 
-    if (!user?.organizationId) {
-      return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
-    }
-
-    if (user.role !== "ADMIN_B2B" && user.role !== "ADMIN_B2G" && user.role !== "ADMIN_B2B2C" && user.role !== "SUPER_ADMIN") {
+    if (user?.role !== "ADMIN_B2B" && user?.role !== "ADMIN_B2G" && user?.role !== "ADMIN_B2B2C" && user?.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Permission refusée" }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
     const campaignId = searchParams.get("campaignId");
+    const requestedOrgId = searchParams.get("organizationId") || searchParams.get("orgId");
+    const targetOrgId = user?.organizationId || (user?.role === "SUPER_ADMIN" ? requestedOrgId : null);
 
-    const whereClause: any = { organizationId: user.organizationId };
+    if (!targetOrgId && user?.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
+    }
+
+    const whereClause: any = {};
+    if (targetOrgId) {
+      whereClause.organizationId = targetOrgId;
+    }
     if (campaignId && campaignId !== "ALL") {
       whereClause.campaignId = campaignId;
     }

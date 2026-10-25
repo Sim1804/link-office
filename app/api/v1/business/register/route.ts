@@ -1,15 +1,31 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { PRICING_PLANS } from "@/lib/pricing";
 import { OrganizationType, UserRole } from "@prisma/client";
+import { checkDistributedRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   try {
+    const clientIP =
+      (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() ||
+      req.headers.get("x-real-ip") ||
+      "127.0.0.1";
+
+    const rateLimit = await checkDistributedRateLimit(`biz_register:${clientIP}`, { limit: 5, windowMs: 60_000 });
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Trop de tentatives. Veuillez patienter avant de réessayer." }, { status: 429 });
+    }
+
     const { orgName, email, password, plan } = await req.json();
 
     if (!orgName || !email || !password || !plan) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    if (String(password).length < 8) {
+      return NextResponse.json({ error: "Le mot de passe doit comporter au moins 8 caractères." }, { status: 400 });
     }
 
     // Identify plan
@@ -24,10 +40,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Email already exists" }, { status: 400 });
     }
 
-    // Generate unique code access
-    const slug = orgName.substring(0, 4).toUpperCase().replace(/[^A-Z0-9]/g, '');
-    const randomCode = Math.floor(1000 + Math.random() * 9000);
-    const codeAccess = `${slug}-${randomCode}`;
+    // Generate unique code access with high cryptographic entropy (8 hex chars = 4 billion combinations)
+    const slug = (orgName.substring(0, 4).toUpperCase().replace(/[^A-Z0-9]/g, '') || "ORGA").padEnd(4, 'X');
+    const randomSuffix = crypto.randomBytes(4).toString("hex").toUpperCase();
+    const codeAccess = `${slug}-${randomSuffix}`;
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);

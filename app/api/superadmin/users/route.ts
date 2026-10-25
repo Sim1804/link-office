@@ -9,11 +9,22 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
     }
 
-    // Fetch all users with their organizations and campaigns
+    // Fetch all users with their organizations and campaigns (exclut formellement password et twoFactorSecret)
     const [users, organizations, campaigns] = await Promise.all([
       prisma.user.findMany({
         orderBy: { createdAt: "desc" },
-        include: {
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+          subscription: true,
+          createdAt: true,
+          organizationId: true,
+          campaignId: true,
+          isTwoFactorEnabled: true,
+          mustChangePassword: true,
           organization: { select: { id: true, name: true, type: true } },
           campaign: { select: { id: true, title: true } },
           _count: { select: { assessments: true } },

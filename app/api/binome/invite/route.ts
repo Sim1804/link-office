@@ -26,12 +26,12 @@ export async function POST(req: Request) {
 
     const initiatorUser = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { subscription: true, campaignId: true, campaign: { select: { offer: true, status: true } } }
+      select: { subscription: true, campaignId: true, campaign: { select: { offer: true, status: true, endDate: true } } }
     });
 
     const receiver = await prisma.user.findUnique({
       where: receiverId ? { id: receiverId } : { email },
-      select: { id: true, role: true, subscription: true, campaignId: true, campaign: { select: { offer: true, status: true } } }
+      select: { id: true, role: true, subscription: true, campaignId: true, campaign: { select: { offer: true, status: true, endDate: true } } }
     });
 
     if (!receiver) {
@@ -50,15 +50,19 @@ export async function POST(req: Request) {
       );
     }
 
+    const isCampaignOngoing = (c: any) => !!c && (
+      c.status === "ACTIVE" ||
+      c.status === "EN_CLOTURE" ||
+      (c.status === "CLOSED" && (!c.endDate || new Date(c.endDate) >= new Date()))
+    );
+
     // Verification des accès Premium+ pour l'initiateur
-    const initIsPPlus = initiatorUser?.campaign
-      ? ((initiatorUser.campaign.offer === "PREMIUM_PLUS" || initiatorUser.campaign.offer === "PREMIUM") && initiatorUser.campaign.status === "ACTIVE")
-      : (initiatorUser?.subscription === "PREMIUM_PLUS" || initiatorUser?.subscription === "PREMIUM");
+    const initIsPPlus = initiatorUser?.subscription === "PREMIUM_PLUS" || initiatorUser?.subscription === "PREMIUM" ||
+      (initiatorUser?.campaign && (initiatorUser.campaign.offer === "PREMIUM_PLUS" || initiatorUser.campaign.offer === "PREMIUM") && isCampaignOngoing(initiatorUser.campaign));
 
     // Verification des accès Premium+ pour le receveur
-    const recIsPPlus = receiver?.campaign
-      ? ((receiver.campaign.offer === "PREMIUM_PLUS" || receiver.campaign.offer === "PREMIUM") && receiver.campaign.status === "ACTIVE")
-      : (receiver?.subscription === "PREMIUM_PLUS" || receiver?.subscription === "PREMIUM");
+    const recIsPPlus = receiver?.subscription === "PREMIUM_PLUS" || receiver?.subscription === "PREMIUM" ||
+      (receiver?.campaign && (receiver.campaign.offer === "PREMIUM_PLUS" || receiver.campaign.offer === "PREMIUM") && isCampaignOngoing(receiver.campaign));
 
     if (!initIsPPlus || !recIsPPlus) {
       return NextResponse.json({ error: "Les deux utilisateurs doivent disposer de l'offre Premium ou Premium+" }, { status: 403 });

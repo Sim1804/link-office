@@ -159,6 +159,14 @@ export async function GET(request: Request) {
     );
   }
 
+  // Vérification de souscription active pour les organisations (hors SUPER_ADMIN)
+  if (adminUser?.role !== "SUPER_ADMIN" && targetOrg?.subscription?.status && !["ACTIVE", "TRIALING"].includes(targetOrg.subscription.status)) {
+    return NextResponse.json(
+      { error: "Abonnement en attente d'activation ou expiré.", subscriptionInactive: true },
+      { status: 402 }
+    );
+  }
+
   const demographicFilter: any = {};
   if (ageRange) {
     if (ageRange === "46+" || ageRange === "46") {

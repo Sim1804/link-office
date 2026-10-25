@@ -10,17 +10,45 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
-    // Récupération de l'utilisateur pour vérifier son rôle et son organisation
+    // Récupération de l'utilisateur pour vérifier son rôle, son organisation et son abonnement
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { role: true, organizationId: true }
+      select: {
+        role: true,
+        organizationId: true,
+        organization: { select: { subscription: { select: { status: true } } } }
+      }
     });
 
-    if (!user || (!["ADMIN_B2B", "SUPER_ADMIN"].includes(user.role)) || !user.organizationId) {
-      return NextResponse.json({ error: "Accès interdit ou aucune organisation associée" }, { status: 403 });
+    if (!user || !["ADMIN_B2B", "SUPER_ADMIN"].includes(user.role)) {
+      return NextResponse.json({ error: "Accès interdit" }, { status: 403 });
     }
 
     const { searchParams } = new URL(req.url);
+    const requestedOrgId = searchParams.get("organizationId") || searchParams.get("orgId");
+    let targetOrgId = user.organizationId;
+
+    if (user.role === "SUPER_ADMIN") {
+      if (requestedOrgId) {
+        targetOrgId = requestedOrgId;
+      } else {
+        const fallbackOrg = await prisma.organization.findFirst({
+          where: { type: "B2B" },
+          orderBy: { users: { _count: "desc" } },
+          select: { id: true }
+        });
+        targetOrgId = fallbackOrg?.id || null;
+      }
+    }
+
+    if (!targetOrgId) {
+      return NextResponse.json({ error: "Aucune organisation associée" }, { status: 404 });
+    }
+
+    if (user.role !== "SUPER_ADMIN" && user.organization?.subscription?.status && !["ACTIVE", "TRIALING"].includes(user.organization.subscription.status)) {
+      return NextResponse.json({ error: "Abonnement en attente d'activation ou expiré.", subscriptionInactive: true }, { status: 402 });
+    }
+
     const ageRange = searchParams.get("ageRange");
     const gender = searchParams.get("gender");
     const occupation = searchParams.get("occupation");
@@ -38,7 +66,7 @@ export async function GET(req: Request) {
         assessment: {
           status: "SUBMITTED",
           user: {
-            organizationId: user.organizationId,
+            organizationId: targetOrgId,
             role: "EMPLOYEE"
           },
           ...(Object.keys(demographicFilter).length > 0 && {

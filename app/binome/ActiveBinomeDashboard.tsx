@@ -1,13 +1,77 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { format, differenceInDays } from "date-fns";
 import { fr } from "date-fns/locale";
-import { CheckCircle2, MessageCircle, CalendarDays, Rocket, Info, ChevronRight, Handshake } from "lucide-react";
+import { CheckCircle2, MessageCircle, CalendarDays, Rocket, Info, ChevronRight, Handshake, Loader2, Sparkles } from "lucide-react";
 import { BinomeCheckinModal } from "./BinomeCheckinModal";
 
+function formatActionStatus(rawStatus?: string | null) {
+  if (!rawStatus) return null;
+  const normalized = rawStatus.trim().toUpperCase();
+  if (normalized === "REALISEE" || normalized === "RÉALISÉE" || rawStatus === "Réalisée") {
+    return {
+      label: "Réalisée",
+      bg: "rgba(16,185,129,0.12)",
+      color: "#10b981",
+      border: "rgba(16,185,129,0.25)"
+    };
+  }
+  if (normalized === "EN_COURS" || rawStatus === "En cours") {
+    return {
+      label: "En cours",
+      bg: "rgba(0,169,157,0.12)",
+      color: "var(--primary)",
+      border: "rgba(0,169,157,0.25)"
+    };
+  }
+  if (normalized === "PAS_COMMENCEE" || normalized === "NON_COMMENCEE" || rawStatus === "Pas commencée") {
+    return {
+      label: "Pas commencée",
+      bg: "rgba(148,163,184,0.12)",
+      color: "var(--text-2)",
+      border: "rgba(148,163,184,0.25)"
+    };
+  }
+  return {
+    label: rawStatus,
+    bg: "rgba(0,169,157,0.1)",
+    color: "var(--primary)",
+    border: "rgba(0,169,157,0.2)"
+  };
+}
+
 export function ActiveBinomeDashboard({ binome, currentUserId }: { binome: any, currentUserId: string }) {
+  const router = useRouter();
   const [showCheckin, setShowCheckin] = useState(false);
+  const [checkins, setCheckins] = useState<any[]>(binome.checkins || []);
+  const [updatingCheckinId, setUpdatingCheckinId] = useState<string | null>(null);
+  const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
+
+  const handleMarkAsRealized = async (checkinId: string) => {
+    setUpdatingCheckinId(checkinId);
+    try {
+      const res = await fetch(`/api/binome/${binome.id}/checkin`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ checkinId, actionStatus: "Réalisée" }),
+      });
+      if (res.ok) {
+        setCheckins(prev => prev.map(c => c.id === checkinId ? { ...c, actionStatus: "Réalisée" } : c));
+        setFeedbackMsg("Action marquée comme réalisée ! Félicitations pour votre engagement (+10 pts) 🎉");
+        setTimeout(() => setFeedbackMsg(null), 5000);
+        router.refresh();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Une erreur est survenue lors de la mise à jour.");
+      }
+    } catch {
+      alert("Erreur de connexion. Veuillez réessayer.");
+    } finally {
+      setUpdatingCheckinId(null);
+    }
+  };
 
   const partner = binome.userAId === currentUserId ? binome.userB : binome.userA;
   const startDate = new Date(binome.startDate);
@@ -114,17 +178,42 @@ export function ActiveBinomeDashboard({ binome, currentUserId }: { binome: any, 
 
             {/* Timeline */}
             <div>
-              <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-1)", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-                <CalendarDays size={16} style={{ color: "var(--primary)" }} />
-                Timeline partagée
-              </h3>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-1)", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
+                  <CalendarDays size={16} style={{ color: "var(--primary)" }} />
+                  Timeline partagée
+                </h3>
+                <span style={{ fontSize: 11, color: "var(--text-3)" }}>
+                  Validez vos actions en 1 clic ou via un nouveau check-in
+                </span>
+              </div>
+
+              {feedbackMsg && (
+                <div style={{
+                  marginBottom: 14,
+                  padding: "10px 14px",
+                  borderRadius: 12,
+                  background: "rgba(16,185,129,0.12)",
+                  border: "1px solid rgba(16,185,129,0.25)",
+                  color: "#10b981",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}>
+                  <Sparkles size={16} />
+                  {feedbackMsg}
+                </div>
+              )}
               
-              {binome.checkins && binome.checkins.length > 0 ? (
+              {checkins && checkins.length > 0 ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {binome.checkins.map((checkin: any) => {
+                  {checkins.map((checkin: any) => {
                     const isCurrentUser = checkin.userId === currentUserId;
                     const author = isCurrentUser ? "Vous" : partner.firstName;
                     const checkinDate = format(new Date(checkin.date), "dd MMM à HH:mm", { locale: fr });
+                    const isRealized = checkin.actionStatus === "Réalisée" || checkin.actionStatus === "REALISEE" || (checkin.actionStatus?.trim().toUpperCase() === "RÉALISÉE");
                     
                     return (
                       <div key={checkin.id} style={{
@@ -140,16 +229,58 @@ export function ActiveBinomeDashboard({ binome, currentUserId }: { binome: any, 
                           </span>
                         </div>
                         
-                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: checkin.encouragement ? 12 : 0 }}>
-                          {checkin.actionStatus && (
-                            <span style={{
-                              fontSize: 12, fontWeight: 600,
-                              background: "rgba(0,169,157,0.1)", color: "var(--primary)",
-                              padding: "2px 8px", borderRadius: 999, border: "1px solid rgba(0,169,157,0.2)"
-                            }}>
-                              Action : {checkin.actionStatus}
-                            </span>
+                        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginBottom: checkin.encouragement ? 12 : 0 }}>
+                          {checkin.actionStatus && (() => {
+                            const config = formatActionStatus(checkin.actionStatus);
+                            if (!config) return null;
+                            return (
+                              <span style={{
+                                fontSize: 12, fontWeight: 600,
+                                background: config.bg, color: config.color,
+                                padding: "2px 10px", borderRadius: 999, border: `1px solid ${config.border}`,
+                                display: "inline-flex", alignItems: "center", gap: 4
+                              }}>
+                                Action : {config.label}
+                              </span>
+                            );
+                          })()}
+
+                          {/* Bouton de validation rapide si l'action n'est pas encore réalisée */}
+                          {!isRealized && checkin.actionStatus && (
+                            isCurrentUser ? (
+                              <button
+                                onClick={() => handleMarkAsRealized(checkin.id)}
+                                disabled={updatingCheckinId === checkin.id}
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 6,
+                                  background: "rgba(16,185,129,0.12)",
+                                  color: "#10b981",
+                                  border: "1px solid rgba(16,185,129,0.3)",
+                                  borderRadius: 999,
+                                  padding: "3px 12px",
+                                  fontSize: 12,
+                                  fontWeight: 600,
+                                  cursor: updatingCheckinId === checkin.id ? "wait" : "pointer",
+                                  transition: "all 0.2s ease"
+                                }}
+                                title="Marquer cette action comme réalisée"
+                              >
+                                {updatingCheckinId === checkin.id ? (
+                                  <Loader2 size={12} style={{ animation: "spin 1s linear infinite" }} />
+                                ) : (
+                                  <CheckCircle2 size={13} />
+                                )}
+                                Passer à Réalisée
+                              </button>
+                            ) : (
+                              <span style={{ fontSize: 11, color: "var(--text-3)", fontStyle: "italic" }}>
+                                (En cours par {partner.firstName})
+                              </span>
+                            )
                           )}
+
                           {checkin.checkinType === "RAPIDE" && (
                             <span style={{
                               fontSize: 12, fontWeight: 600,

@@ -21,7 +21,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         password: { label: "Mot de passe", type: "password" },
         twoFactorCode: { label: "Code 2FA", type: "text" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request: any) {
         if (!credentials?.email || !credentials?.password) return null;
 
         // ── Rate limiting distribué : 5 tentatives max par email par minute ──
@@ -30,6 +30,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (!limitRes.success) {
           const retry = await getDistributedRetryAfterSeconds(key, 60_000);
           throw new Error(`RATE_LIMITED:${retry}`);
+        }
+
+        // ── Rate limiting distribué anti-password spraying par IP (max 25 requêtes / min) ──
+        if (request && "headers" in request) {
+          const ipHeader = request.headers?.get?.("x-forwarded-for") || request.headers?.get?.("x-real-ip") || "127.0.0.1";
+          const clientIp = String(ipHeader).split(",")[0].trim();
+          const ipKey = `login_ip:${clientIp}`;
+          const ipLimitRes = await checkDistributedRateLimit(ipKey, { limit: 25, windowMs: 60_000 });
+          if (!ipLimitRes.success) {
+            const retry = await getDistributedRetryAfterSeconds(ipKey, 60_000);
+            throw new Error(`RATE_LIMITED:${retry}`);
+          }
         }
 
         let user: any = null;

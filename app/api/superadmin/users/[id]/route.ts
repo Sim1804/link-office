@@ -28,9 +28,29 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
       return NextResponse.json({ error: "Utilisateur introuvable" }, { status: 404 });
     }
 
+    // Règle d'or multi-tenant SaaS : Un SUPER_ADMIN représente l'opérateur plateforme global.
+    // Il ne doit jamais être rattaché à un tenant client (Novatech, Mutuelle, etc.).
+    if (existing.role === "SUPER_ADMIN" || body.role === "SUPER_ADMIN") {
+      updateData.organizationId = null;
+      updateData.campaignId = null;
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id },
       data: updateData,
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        subscription: true,
+        organizationId: true,
+        campaignId: true,
+        createdAt: true,
+        isTwoFactorEnabled: true,
+        mustChangePassword: true,
+      }
     });
 
     return NextResponse.json({ success: true, user: updatedUser });

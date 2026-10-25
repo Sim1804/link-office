@@ -23,6 +23,7 @@ export async function GET() {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {
+        subscription: true,
         matchingOptIn: true,
         campaignId: true,
         binomePreference: { select: { optIn: true } },
@@ -41,19 +42,25 @@ export async function GET() {
       return NextResponse.json({ error: "Opt-in requis" }, { status: 400 });
     }
 
-    // GUARD: Si l'utilisateur est dans une campagne, elle doit être PREMIUM+
+    // GUARD: Si l'utilisateur est dans une campagne, elle doit être PREMIUM+ ou l'utilisateur doit être PREMIUM+
     if (user.campaignId) {
       const campaign = await prisma.campaign.findUnique({
         where: { id: user.campaignId },
-        select: { offer: true, status: true },
+        select: { offer: true, status: true, endDate: true },
       });
-      if (!campaign || campaign.offer !== "PREMIUM_PLUS") {
+      const isEligibleOffer = campaign?.offer === "PREMIUM_PLUS" || user.subscription === "PREMIUM_PLUS";
+      if (!isEligibleOffer) {
         return NextResponse.json({
           error: "Le module Binôme Relationnel est réservé aux campagnes PREMIUM+.",
           code: "PREMIUM_PLUS_REQUIRED",
         }, { status: 403 });
       }
-      if (campaign.status !== "ACTIVE") {
+      const isCampaignOngoing = campaign && (
+        campaign.status === "ACTIVE" ||
+        campaign.status === "EN_CLOTURE" ||
+        (campaign.status === "CLOSED" && (!campaign.endDate || new Date(campaign.endDate) >= new Date()))
+      );
+      if (!isCampaignOngoing && user.subscription !== "PREMIUM_PLUS") {
         return NextResponse.json({
           error: "La campagne n'est pas active.",
           code: "CAMPAIGN_INACTIVE",

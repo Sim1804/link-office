@@ -1,11 +1,19 @@
 # .vercelignore
 # Fichiers et dossiers exclus du déploiement Vercel en production
 
-# Tests et scripts d'expérimentation
-tests/
-scratch/
-Documentation/
-docs/
+# Tests et bancs d'expérimentation
+/tests_t1_t2/
+/test_t1_t2/
+/tests/
+/validation/
+/scratch/
+/audit/
+/audit[0-9]*/
+/perf*/
+/Documentation/
+/docs/
+/scripts/
+
 *.test.ts
 *.test.js
 *.spec.ts
@@ -15,6 +23,13 @@ test-*.ts
 scratch-*.js
 scratch-*.ts
 trace-*.js
+
+# Données sensibles & exports
+*.csv
+*.dump
+*.backup
+*.sqlite
+*.db
 
 # Fichiers d'environnement locaux
 .env*.local

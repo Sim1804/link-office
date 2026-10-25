@@ -8,7 +8,8 @@ import { Logo } from "@/components/brand/Logo";
 import { NotificationBell } from "@/components/layout/NotificationBell";
 import {
   LayoutDashboard, Building2, Wallet, Newspaper, Users, Handshake, FolderTree, ShieldCheck,
-  ArrowUpRight, ChevronDown, LogOut, Sparkles, Plus, Search, CheckCircle2, AlertTriangle, FileSpreadsheet
+  ArrowUpRight, ChevronDown, LogOut, Sparkles, Plus, Search, CheckCircle2, AlertTriangle, FileSpreadsheet,
+  Settings2, Activity
 } from "lucide-react";
 
 interface SuperAdminHeaderProps {
@@ -32,6 +33,8 @@ export function SuperAdminHeader({ stats }: SuperAdminHeaderProps) {
     { key: "binomes", name: "Binômes", href: "/dashboard/superadmin/binome", icon: Handshake },
     { key: "catalogues", name: "Catalogues", href: "/dashboard/superadmin/catalog", icon: FolderTree },
     { key: "securite", name: "Sécurité", href: "/dashboard/superadmin/security", icon: ShieldCheck },
+    { key: "plateforme", name: "Plateforme", href: "/dashboard/superadmin/platform", icon: Settings2 },
+    { key: "audit", name: "Audit LLM", href: "/dashboard/superadmin/audit", icon: Activity },
   ];
 
   return (

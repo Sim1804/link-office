@@ -54,9 +54,18 @@ export async function POST(req: Request) {
     if (currentUser?.campaignId) {
       const campaign = await prisma.campaign.findUnique({
         where: { id: currentUser.campaignId },
-        select: { offer: true, status: true },
+        select: { offer: true, status: true, endDate: true },
       });
-      if (!campaign || (campaign.offer !== "PREMIUM_PLUS" && campaign.offer !== "PREMIUM") || campaign.status !== "ACTIVE") {
+      const isEligible = (campaign && (campaign.offer === "PREMIUM_PLUS" || campaign.offer === "PREMIUM")) ||
+        currentUser.subscription === "PREMIUM_PLUS" || currentUser.subscription === "PREMIUM";
+
+      const isCampaignOngoing = campaign && (
+        campaign.status === "ACTIVE" ||
+        campaign.status === "EN_CLOTURE" ||
+        (campaign.status === "CLOSED" && (!campaign.endDate || new Date(campaign.endDate) >= new Date()))
+      );
+
+      if (!isEligible || (!isCampaignOngoing && currentUser.subscription !== "PREMIUM_PLUS" && currentUser.subscription !== "PREMIUM")) {
         return NextResponse.json({
           error: "Le module Binôme est réservé aux campagnes PREMIUM ou PREMIUM+ actives.",
           code: "PREMIUM_PLUS_REQUIRED",

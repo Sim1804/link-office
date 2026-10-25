@@ -47,6 +47,10 @@ export interface DashboardData {
 
 export interface IRISConversation {
   conversation_id: string;
+  hasCompletedAssessment?: boolean;
+  isSuperAdmin?: boolean;
+  isOrgAdmin?: boolean;
+  userRole?: string;
 }
 
 export interface IRISMessage {
@@ -84,8 +88,12 @@ export async function getDashboard(userId: string, token?: string): Promise<Dash
 }
 
 /** Explication des résultats par IRIS */
-export async function getIrisExplication(): Promise<{ explication: string }> {
-  return apiFetch<{ explication: string }>(`/api/iris/explication`);
+export async function getIrisExplication(): Promise<{
+  explication: string;
+  hasAssessment?: boolean;
+  isAdminView?: boolean;
+}> {
+  return apiFetch<{ explication: string; hasAssessment?: boolean; isAdminView?: boolean }>(`/api/iris/explication`);
 }
 
 /** Démarre une conversation IRIS Coach */
@@ -102,6 +110,10 @@ export async function getActiveIrisConversation(): Promise<{
     id: string;
     messages: Array<{ id: string; sender: "user" | "iris"; text: string; timestamp: string }>;
   } | null;
+  hasCompletedAssessment?: boolean;
+  isSuperAdmin?: boolean;
+  isOrgAdmin?: boolean;
+  userRole?: string;
 }> {
   return apiFetch("/api/iris/conversation/active");
 }

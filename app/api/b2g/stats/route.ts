@@ -149,18 +149,32 @@ export async function GET(req: Request) {
     select: { organizationId: true },
   });
 
-  if (!user?.organizationId) {
-    return NextResponse.json({ error: "Aucune collectivité associée." }, { status: 404 });
-  }
-
   const url = new URL(req.url);
   const campaignId = url.searchParams.get("campaignId");
+  const requestedOrgId = url.searchParams.get("orgId") || url.searchParams.get("organizationId");
+  let targetOrgId = user?.organizationId;
+
+  if (session.user.role === "SUPER_ADMIN") {
+    if (requestedOrgId) {
+      targetOrgId = requestedOrgId;
+    } else {
+      const b2gOrg = await prisma.organization.findFirst({
+        where: { type: "B2G" },
+        select: { id: true },
+      });
+      targetOrgId = b2gOrg?.id || null;
+    }
+  }
+
+  if (!targetOrgId) {
+    return NextResponse.json({ error: "Aucune collectivité associée." }, { status: 404 });
+  }
 
   const [assessments, campaignsList] = await Promise.all([
     prisma.assessment.findMany({
       where: {
         status: "SUBMITTED",
-        user: { organizationId: user.organizationId },
+        user: { organizationId: targetOrgId },
         ...(campaignId ? { campaignId } : {}),
       },
       select: {
@@ -185,7 +199,7 @@ export async function GET(req: Request) {
     },
   }),
   prisma.campaign.findMany({
-    where: { organizationId: user.organizationId },
+    where: { organizationId: targetOrgId },
     select: { id: true, title: true, status: true },
     orderBy: { startDate: "desc" }
   })

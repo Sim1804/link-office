@@ -33,8 +33,32 @@ export async function GET() {
       },
     });
 
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true },
+    });
+    const isSuperAdmin = user?.role === "SUPER_ADMIN";
+    const isOrgAdmin = ["ADMIN_B2B", "ADMIN_B2B2C", "ADMIN_B2G", "ADMIN_COLLECTIVITE"].includes(user?.role || "");
+
+    // Vérifier si l'utilisateur possède un bilan IQRH complété avec résultats (non applicable à SUPER_ADMIN)
+    const hasCompletedAssessment = isSuperAdmin
+      ? false
+      : await prisma.assessment.findFirst({
+          where: {
+            userId,
+            result: { isNot: null },
+          },
+          select: { id: true },
+        }).then(res => !!res);
+
     if (!activeConversation || activeConversation.messages.length === 0) {
-      return NextResponse.json({ conversation: null });
+      return NextResponse.json({
+        conversation: null,
+        hasCompletedAssessment,
+        userRole: user?.role,
+        isSuperAdmin,
+        isOrgAdmin,
+      });
     }
 
     return NextResponse.json({
@@ -47,6 +71,10 @@ export async function GET() {
           timestamp: m.createdAt,
         })),
       },
+      hasCompletedAssessment,
+      userRole: user?.role,
+      isSuperAdmin,
+      isOrgAdmin,
     });
   } catch (error) {
     console.error("[IRIS_ACTIVE_CONVERSATION_ERROR]:", error);
