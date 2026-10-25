@@ -13,6 +13,7 @@ import { verify as totpVerify } from "otplib";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+  trustHost: true,
   providers: [
     Credentials({
       name: "credentials",
@@ -111,6 +112,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Préserve les URLs relatives (ex: "/" ou "/auth/login") pour rester sur le domaine courant
+      if (url.startsWith("/")) return url;
+      try {
+        if (new URL(url).origin === baseUrl) return url;
+      } catch {
+        // En cas d'URL invalide, repli sur baseUrl
+      }
+      return baseUrl;
+    },
     async jwt({ token, user, trigger, session: updateSession }) {
       if (user) {
         token.userId = user.id;
